@@ -28,6 +28,7 @@ while falling outside the preceding regime and specification.
 
 - [English presentation](docs/primitive-relations-and-perimeter-constitution.en.md)
 - [Présentation française](docs/relations-primitives-constitution-perimetre.fr.md)
+- [Conceptual authorship and AI-generation disclosure](AI_AUTHORSHIP.md)
 
 ## Lean sources
 
