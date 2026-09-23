@@ -2,6 +2,36 @@
 
 ### Circularité, rôle résiduel et tournant périmétral affirmatif
 
+## Avant-propos
+
+*Les mathématiciens disposent désormais, avec Lean, d'un outil de preuve
+suffisamment précis pour comparer non seulement les résultats démontrés, mais
+les acceptions que prennent les preuves en fonction des ontologies formelles
+dans lesquelles elles s'inscrivent.*
+
+*`Relational Perimeter` met cette possibilité à l'épreuve en prenant les
+relations comme primitives de la constitution formelle. À partir de ce choix,
+il réexamine les acceptions de notions usuelles telles que le rôle, le
+périmètre, la circularité, la fermeture, le tout, le résidu, le transport et le
+tournant. Il suit leur constitution dans les types : quelles relations sont
+primitives, quels témoins sont donnés, quelles occurrences sont engendrées,
+quelles relations sont conservées par les transports et quelles données sont
+effectivement consommées par les preuves.*
+
+*Le carrier, entendu comme le support formel muni de sa structure, n'est pas
+neutre. Dans l'exemple à quatre nœuds, des modèles séparateurs montrent que les
+seules données locales ne fixent ni l'ordre ni la participation au tout. Pour
+toute présentation, le retour à une histoire enracinée et composable permet
+ensuite de reconstruire l'ordre, l'adjacence et la factorisation à partir de la
+constitution globale de l'objet.*
+
+*Cette démarche rend comparable ce que les seuls théorèmes terminaux laissent
+invisible. Deux systèmes peuvent établir des résultats propositionnels
+semblables tout en donnant aux objets et aux preuves des constitutions
+relationnelles, et donc des acceptions, différentes. La constitution
+relationnelle du périmètre, la circularité et le tournant périmétral affirmatif
+constituent ici le terrain formel sur lequel cette méthode est déployée.*
+
 Les quatre fichiers étudiés forment une construction continue :
 
 - `SegmentedResidualRole.lean` détermine abstraitement le rôle résiduel ;

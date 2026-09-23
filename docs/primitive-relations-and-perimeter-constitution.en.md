@@ -2,6 +2,34 @@
 
 ### Circularity, residual role, and affirmative perimetral turning
 
+## Foreword
+
+*Mathematicians now have, with Lean, a proof tool precise enough to compare not
+only the results proved, but the meanings that proofs acquire according to the
+formal ontologies in which they are situated.*
+
+*`Relational Perimeter` puts this possibility to the test by treating relations
+as primitives of formal constitution. From this choice, it re-examines the
+meanings of familiar notions such as role, perimeter, circularity, closure,
+whole, residual, transport, and turning. It follows their constitution in the
+types: which relations are primitive, which witnesses are given, which
+occurrences are generated, which relations are preserved by transports, and
+which data are actually consumed by proofs.*
+
+*The carrier, understood as the formal support equipped with its structure, is
+not neutral. In the four-node example, separating models show that local data
+alone determine neither order nor participation in the whole. For every
+presentation, returning to a rooted, composable history then makes it possible
+to reconstruct order, adjacency, and factorization from the global constitution
+of the object.*
+
+*This approach makes comparable what terminal theorems alone leave invisible.
+Two systems may establish similar propositional results while giving objects
+and proofs different relational constitutions, and therefore different
+meanings. The relational constitution of the perimeter, circularity, and the
+affirmative perimetral turning provide the formal setting in which this method
+is deployed.*
+
 The four files studied here form a continuous construction:
 
 - `SegmentedResidualRole.lean` determines the residual role abstractly;
