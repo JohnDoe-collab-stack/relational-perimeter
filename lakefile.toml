@@ -1,0 +1,12 @@
+name = "relational-perimeter"
+version = "0.1.0"
+defaultTargets = ["RelationalPerimeter"]
+
+[[lean_lib]]
+name = "RelationalPerimeter"
+roots = [
+  "SegmentedResidualRole",
+  "AbstractSegmentedTurning",
+  "ExactTypeTransport",
+  "StrongPerimetralTurning",
+]
