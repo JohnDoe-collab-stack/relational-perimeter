@@ -1,7 +1,3 @@
-# Relations primitives et constitution du périmètre
-
-### Circularité, rôle résiduel et tournant périmétral affirmatif
-
 ## Avant-propos
 
 *Les mathématiciens disposent désormais, avec Lean, d'un outil de preuve
@@ -25,12 +21,29 @@ toute présentation, le retour à une histoire enracinée et composable permet
 ensuite de reconstruire l'ordre, l'adjacence et la factorisation à partir de la
 constitution globale de l'objet.*
 
+*La portée de cette formalisation dépasse un simple raffinement terminologique.
+En stratifiant construction, réalisation, admission et satisfaction normative,
+elle déplace les critères mêmes de l'identité et de la complétude. Une occurrence
+reçoit son identité de l'histoire relationnelle qui la constitue, et non de sa
+seule valeur. Un tout est complet lorsque ses relations déterminent
+positivement son domaine intérieur, non lorsqu'il épuise toute continuation
+possible. Ce qui pourrait apparaître comme une incomplétude devient alors la
+non-exhaustion de la génération. Le tournant périmétral affirmatif désigne le
+point exact où un tout déjà constitué et complet continue de produire au-delà
+de son régime.*
+
 *Cette démarche rend comparable ce que les seuls théorèmes terminaux laissent
 invisible. Deux systèmes peuvent établir des résultats propositionnels
 semblables tout en donnant aux objets et aux preuves des constitutions
 relationnelles, et donc des acceptions, différentes. La constitution
 relationnelle du périmètre, la circularité et le tournant périmétral affirmatif
 constituent ici le terrain formel sur lequel cette méthode est déployée.*
+
+<br>
+
+# Relations primitives et constitution du périmètre
+
+### Circularité, rôle résiduel et tournant périmétral affirmatif
 
 Les quatre fichiers étudiés forment une construction continue :
 

@@ -1,7 +1,3 @@
-# Relational Perimeter
-
-**Primitive relations, constituted wholes, and affirmative perimetral turning in Lean**
-
 ## Foreword
 
 *Mathematicians now have, with Lean, a proof tool precise enough to compare not
@@ -23,12 +19,28 @@ presentation, returning to a rooted, composable history then makes it possible
 to reconstruct order, adjacency, and factorization from the global constitution
 of the object.*
 
+*The scope of this formalization goes beyond a mere terminological refinement.
+By stratifying construction, realization, admission, and normative satisfaction,
+it shifts the very criteria of identity and completeness. An occurrence receives
+its identity from the relational history that constitutes it, not from its
+value alone. A whole is complete when its relations positively determine its
+interior domain, not when it exhausts every possible continuation. What might
+appear as incompleteness then becomes the non-exhaustion of generation. The
+affirmative perimetral turning designates the exact point at which an already
+constituted and complete whole continues to produce beyond its regime.*
+
 *This approach makes comparable what terminal theorems alone leave invisible.
 Two systems may establish similar propositional results while giving objects
 and proofs different relational constitutions, and therefore different
 meanings. The relational constitution of the perimeter, circularity, and the
 affirmative perimetral turning provide the formal setting in which this method
 is deployed.*
+
+<br>
+
+# Relational Perimeter
+
+**Primitive relations, constituted wholes, and affirmative perimetral turning in Lean**
 
 This repository contains a constructive Lean formalization in which relations
 are part of the constitution of formal objects rather than annotations added
