@@ -29,6 +29,15 @@ appear as incompleteness then becomes the non-exhaustion of generation. The
 affirmative perimetral turning designates the exact point at which an already
 constituted and complete whole continues to produce beyond its regime.*
 
+*The decisive methodological contrast is that between theorem and chain. The
+theorem isolates a terminal propositional result; the chain retains the
+relations, witnesses, provenances, and typed dependencies within which its
+proof acquires its meaning. The same theorem may be situated in different
+constitutive chains; conversely, a chain may carry more structure than the
+theorem's minimal logical proof actually consumes. Comparison must therefore
+confront what proofs establish with the relational constitution within which
+they establish it.*
+
 *This approach makes comparable what terminal theorems alone leave invisible.
 Two systems may establish similar propositional results while giving objects
 and proofs different relational constitutions, and therefore different

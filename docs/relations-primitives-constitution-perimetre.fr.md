@@ -32,6 +32,15 @@ non-exhaustion de la génération. Le tournant périmétral affirmatif désigne 
 point exact où un tout déjà constitué et complet continue de produire au-delà
 de son régime.*
 
+*L'opposition méthodologique décisive est celle du théorème et de la chaîne. Le
+théorème isole un résultat propositionnel terminal ; la chaîne conserve les
+relations, les témoins, les provenances et les dépendances typées au sein
+desquels sa preuve prend son acception. Un même théorème peut s'inscrire dans
+des chaînes constitutives différentes ; inversement, une chaîne peut porter
+davantage de structure que n'en consomme la preuve logique minimale du
+théorème. La comparaison doit donc confronter ce que les preuves établissent à
+la constitution relationnelle dans laquelle elles l'établissent.*
+
 *Cette démarche rend comparable ce que les seuls théorèmes terminaux laissent
 invisible. Deux systèmes peuvent établir des résultats propositionnels
 semblables tout en donnant aux objets et aux preuves des constitutions
