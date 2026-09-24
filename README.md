@@ -89,13 +89,24 @@ beyond the constituted perimeter. It remains constructed, locally exact,
 faithfully labelable in the unique residual role, and exactly interpretable,
 while falling outside the preceding regime and specification.
 
+The same relational method is extended to computation. The repository exhibits
+a search whose **operational decomposition is produced by the computation**:
+opening creates two structurally distinct alternatives, an executed search
+reconstructs a directed transport between them, and a separate preservation
+proof permits one obligation to be absorbed for the criterion under study.
+Neither equality of the alternatives nor impossibility of the absorbed one is
+asserted. The retained result and its provenance then condition the next
+discovery.
+
 ## Documents
 
 - [English presentation](docs/primitive-relations-and-perimeter-constitution.en.md)
 - [Présentation française](docs/relations-primitives-constitution-perimetre.fr.md)
+- [Endogenous operational decomposition](docs/endogenous-operational-decomposition.en.md)
+- [Décomposition opérationnelle endogène](docs/decomposition-operationnelle-endogene.fr.md)
 - [Conceptual authorship and AI-generation disclosure](AI_AUTHORSHIP.md)
 
-## Lean sources
+## Foundational Lean sources
 
 - `SegmentedResidualRole.lean`: abstract residual-role determination;
 - `AbstractSegmentedTurning.lean`: abstract boundary, continuation, and regime
@@ -103,6 +114,25 @@ while falling outside the preceding regime and specification.
 - `ExactTypeTransport.lean`: constructive two-sided transport between types;
 - `StrongPerimetralTurning.lean`: the constructive circular presentation and
   its perimetral instance.
+
+## Computational construction
+
+- `RelationalPerimeter/Computation/ConstitutiveGeneration.lean` connects the
+  computation directly to the generated histories of the four foundational
+  modules;
+- `RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean` is
+  the public statement layer for the computational phenomenon;
+- `RelationalPerimeter/Computation/ConstitutiveSearch/` contains the complete
+  executable construction, its relational transports, SAT instance, feedback
+  recursion, and production-level measured accounting;
+- `Tests/ComputationalPhenomenonRegression.lean` reproduces the independent
+  adversarial counterprobes;
+- `Tests/ConstitutiveExecutionRegression.lean` protects the complete executed
+  and measured surface.
+
+The computational tree imports the foundational modules directly. It has no
+dependency on an external alignment layer, a separate foundation layer, or a
+readout facade.
 
 ## Build
 
@@ -112,9 +142,17 @@ The repository pins Lean 4.33.1 and has no Mathlib dependency.
 lake build
 ```
 
-The four Lean files are constructive: they contain no `sorry`, `axiom`, or
+The complete repository gate is available on both supported command surfaces:
+
+```text
+powershell -File scripts/verify.ps1
+bash scripts/verify.sh
+```
+
+All Lean sources are constructive: they contain no `sorry`, `axiom`, or
 `noncomputable` declaration, and their final axiom-audit blocks report no axiom
-dependency for the audited declarations.
+dependency for the audited declarations. The default build includes the public
+modules and both regression suites.
 
 ## Résumé français
 
@@ -125,3 +163,14 @@ jonctions successives données. La jonction fermante reste primitive et n'est
 pas parcourue par la génération. Le premier pas au-delà du périmètre constitue
 un tournant périmétral affirmatif : la génération continue, tandis que
 l'incorporation de cette continuation dans le même régime devient impossible.
+
+Cette architecture porte aussi une décomposition opérationnelle endogène de la
+recherche. L’ouverture produit une multiplicité structurelle ; une relation
+dirigée est ensuite reconstruite par l’exécution, sa préservation est prouvée
+séparément, et le résultat retenu conditionne la découverte suivante. Ainsi, le
+nombre d’alternatives engendrées et le nombre d’obligations qui doivent rester
+indépendantes ne sont pas confondus.
+
+## License
+
+Apache-2.0. See [LICENSE](LICENSE).

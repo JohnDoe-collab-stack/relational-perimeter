@@ -508,6 +508,25 @@ en différant dans leur constitution. La comparaison porte donc sur les
 dépendances qui produisent ces théorèmes : relations, témoins, chaînes,
 transports, fermetures et changements de régime.
 
+## Extension à la computation
+
+Le dépôt prolonge cette méthode par une construction où la décomposition
+opérationnelle d’une recherche est elle-même produite pendant l’exécution.
+L’ouverture engendre deux alternatives structurellement distinctes. Une
+recherche effective reconstruit ensuite entre elles un transport dirigé ; ce
+transport agit sur des continuations arbitraires, tandis que la préservation de
+l’acceptation est établie par un théorème séparé. L’absorption d’une obligation
+est ainsi relative au critère de viabilité : elle n’identifie pas les
+alternatives et ne prouve pas l’impossibilité de celle qui est abandonnée.
+
+Le résultat exécuté produit en outre l’état retenu, la graine, les décisions et
+la provenance consommés par l’étape suivante. La multiplicité structurelle et
+l’indépendance opérationnelle ne sont donc pas confondues : la seconde est
+déterminée pendant le calcul à partir de relations et de données que le calcul
+a lui-même reconstruites ou produites. La présentation détaillée et la portée
+exacte de ce résultat figurent dans
+[Décomposition opérationnelle endogène](decomposition-operationnelle-endogene.fr.md).
+
 ## Conclusion
 
 Les quatre fichiers donnent une forme constructive à un cadre

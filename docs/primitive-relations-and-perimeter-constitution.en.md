@@ -494,6 +494,25 @@ constitution. Comparison therefore concerns the dependencies producing those
 theorems: relations, witnesses, chains, transports, closures, and regime
 changes.
 
+## Extension to computation
+
+The repository extends this method with a construction in which the operational
+decomposition of a search is itself produced during execution. Opening
+generates two structurally distinct alternatives. An effective search then
+reconstructs a directed transport between them; this transport acts on
+arbitrary continuations, while acceptance preservation is established by a
+separate theorem. Absorbing one obligation is therefore relative to the
+viability criterion: it neither identifies the alternatives nor proves the
+absorbed one impossible.
+
+The executed result also produces the retained state, seed, decisions, and
+provenance consumed by the next stage. Structural multiplicity and operational
+independence are therefore not conflated: the latter is determined during the
+computation from relations and data that the computation has itself
+reconstructed or produced. The detailed presentation and exact scope of this
+result are given in
+[Endogenous Operational Decomposition](endogenous-operational-decomposition.en.md).
+
 ## Conclusion
 
 The four files give constructive form to a framework of **relative

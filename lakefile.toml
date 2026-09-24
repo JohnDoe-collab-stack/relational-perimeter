@@ -9,4 +9,13 @@ roots = [
   "AbstractSegmentedTurning",
   "ExactTypeTransport",
   "StrongPerimetralTurning",
+  "RelationalPerimeter",
+]
+globs = [
+  "SegmentedResidualRole",
+  "AbstractSegmentedTurning",
+  "ExactTypeTransport",
+  "StrongPerimetralTurning",
+  "RelationalPerimeter.Computation.+",
+  "Tests.+",
 ]
