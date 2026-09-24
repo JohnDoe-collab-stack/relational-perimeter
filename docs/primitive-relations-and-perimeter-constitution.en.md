@@ -67,14 +67,17 @@ is deployed.*
 
 ### Circularity, residual role, and affirmative perimetral turning
 
-The four files studied here form a continuous construction:
+The four foundational entry points studied here form a continuous
+construction:
 
 - `SegmentedResidualRole.lean` determines the residual role abstractly;
 - `AbstractSegmentedTurning.lean` articulates boundary, continuation, and
   regime change;
 - `ExactTypeTransport.lean` defines exact transport between types;
-- `StrongPerimetralTurning.lean` realizes the whole construction in a
-  constructive circular presentation.
+- `StrongPerimetralTurning.lean` re-exports the general circular presentation,
+  now separated in dependency order under `RelationalPerimeter/Foundations/`;
+  its autonomous four-node instance and separating models are isolated in
+  `RelationalPerimeter/Instances/FourNodeExample.lean`.
 
 Their common feature is that they treat relations as constitutive parts of
 formal objects. An occurrence is individuated in the history in which it is
@@ -450,13 +453,15 @@ establish an exact correspondence between free and concrete occurrences while
 merging their states or some of their read values. In particular,
 `ConcreteContinuationAlgebra` does not require `interpretExplicit` to
 distinguish the target of the closing junction from that of the free
-continuation; a one-state algebra identifying them still satisfies
-`exactlyInterpretHistory` (a construction verified outside the four files).
+continuation. `collapsedConcreteAlgebra` sends concrete states and explicit
+targets to one-point carriers while retaining the separate fresh-boundary
+record required by the interface; its `exactHistoryInterpretation` still
+satisfies the exact occurrence round trips.
 The distinction between the two targets is therefore guaranteed at the level
 of the free constitution; preserving it concretely requires an additional
 agreement.
 
-The comparative method arising from the four files follows a short
+The comparative method arising from the four foundational entry points follows a short
 progression:
 
 ```text
@@ -494,9 +499,28 @@ constitution. Comparison therefore concerns the dependencies producing those
 theorems: relations, witnesses, chains, transports, closures, and regime
 changes.
 
+### 4.1. From constitution to the organization of computation
+
+The distinction between what is given and what is generated extends to search
+itself. An operational opening may produce several alternatives without yet
+determining how many independent obligations must be retained. In the
+computational layer of the project, the relation licensing a reduction is
+returned by an executed reconstruction after a prefix of failures recorded by
+that same run. Its action on continuations and the proof that it preserves the
+criterion remain two distinct constructions.
+
+The relation returned by the run then produces a decision and a seed for the
+following situation. That decision effectively filters the next candidate
+list. The outcome of the next reconstruction does not factor through the
+projection which forgets the decision while retaining output, candidate
+provenance, and seed. Relative endogeneity therefore concerns not only the
+constitution of objects and chains, but also the constitution of their
+operational decomposition. The detailed proof is presented in
+[Endogenous operational decomposition](endogenous-operational-decomposition.en.md).
+
 ## Conclusion
 
-The four files give constructive form to a framework of **relative
+The four foundational entry points give constructive form to a framework of **relative
 endogeneity**: a formal architecture receives a primitive relational
 presentation, then constructs the occurrences, roles, and histories that
 proceed from it, while distinguishing their realizations, admissions, and

@@ -71,14 +71,18 @@ constituent ici le terrain formel sur lequel cette méthode est déployée.*
 
 ### Circularité, rôle résiduel et tournant périmétral affirmatif
 
-Les quatre fichiers étudiés forment une construction continue :
+Les quatre points d'entrée fondateurs étudiés forment une construction
+continue :
 
 - `SegmentedResidualRole.lean` détermine abstraitement le rôle résiduel ;
 - `AbstractSegmentedTurning.lean` articule frontière, continuation et changement
   de régime ;
 - `ExactTypeTransport.lean` définit le transport exact entre types ;
-- `StrongPerimetralTurning.lean` réalise l'ensemble dans une présentation
-  circulaire constructive.
+- `StrongPerimetralTurning.lean` réexporte la présentation circulaire générale,
+  désormais découpée par ordre de dépendance dans
+  `RelationalPerimeter/Foundations/` ; son instance autonome à quatre nœuds et
+  ses modèles séparateurs sont isolés dans
+  `RelationalPerimeter/Instances/FourNodeExample.lean`.
 
 Leur point commun est de traiter les relations comme une partie constitutive
 des objets formels. Une occurrence est individuée dans l'histoire où elle est
@@ -464,12 +468,15 @@ peut établir une correspondance exacte entre les occurrences libres et
 concrètes tout en fusionnant leurs états ou certaines valeurs lues. En
 particulier, `ConcreteContinuationAlgebra` n'exige pas que `interpretExplicit`
 distingue la cible de la jonction fermante et celle de la continuation libre ;
-une algèbre à un seul état qui les identifie satisfait encore
-`exactlyInterpretHistory` (construction vérifiée hors des quatre fichiers). La
+`collapsedConcreteAlgebra` envoie les états concrets et les cibles explicites
+vers des porteurs ponctuels, tout en conservant le registre séparé de frontière
+fraîche exigé par l'interface ; son `exactHistoryInterpretation` satisfait
+encore les lois exactes de retour sur les occurrences. La
 distinction des deux cibles est donc garantie au niveau de la constitution
 libre ; sa conservation concrète exige un accord supplémentaire.
 
-La méthode comparative issue des quatre fichiers suit une progression courte :
+La méthode comparative issue des quatre points d'entrée fondateurs suit une
+progression courte :
 
 ```text
 individuer
@@ -508,9 +515,28 @@ en différant dans leur constitution. La comparaison porte donc sur les
 dépendances qui produisent ces théorèmes : relations, témoins, chaînes,
 transports, fermetures et changements de régime.
 
+### 4.1. De la constitution à l'organisation du calcul
+
+La distinction entre donné et engendré s'étend à la recherche elle-même. Une
+ouverture opérationnelle peut produire plusieurs alternatives sans déterminer
+encore combien d'obligations indépendantes doivent être conservées. Dans la
+couche computationnelle du projet, la relation qui autorise une réduction est
+retournée par une reconstruction exécutée, après un préfixe d'échecs lui-même
+enregistré par le run. Son action sur les continuations et la preuve qu'elle
+préserve le critère restent deux constructions distinctes.
+
+La relation issue du run produit ensuite une décision et une graine pour la
+situation suivante. Cette décision filtre effectivement la prochaine liste de
+candidats. Le résultat de la reconstruction suivante ne se factorise pas par la
+projection qui oublie la décision tout en conservant la sortie, la provenance
+des candidats et la graine. L'endogénéité relative concerne ainsi non seulement
+la constitution des objets et des chaînes, mais aussi la constitution de leur
+décomposition opérationnelle. La preuve détaillée est présentée dans
+[Décomposition opérationnelle endogène](decomposition-operationnelle-endogene.fr.md).
+
 ## Conclusion
 
-Les quatre fichiers donnent une forme constructive à un cadre
+Les quatre points d'entrée fondateurs donnent une forme constructive à un cadre
 d'**endogénéité relative** : une architecture formelle reçoit une présentation
 primitive relationnelle, puis construit les occurrences, les rôles et les
 histoires qui en procèdent, tout en distinguant leurs réalisations, leurs

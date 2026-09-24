@@ -1,12 +1,44 @@
 name = "relational-perimeter"
 version = "0.1.0"
-defaultTargets = ["RelationalPerimeter"]
+defaultTargets = ["RelationalPerimeter", "RelationalPerimeterTests"]
 
 [[lean_lib]]
 name = "RelationalPerimeter"
 roots = [
+  "RelationalPerimeter",
   "SegmentedResidualRole",
   "AbstractSegmentedTurning",
   "ExactTypeTransport",
   "StrongPerimetralTurning",
+  "RelationalPerimeter.Foundations.CircularPresentation",
+  "RelationalPerimeter.Foundations.FreeConstitution",
+  "RelationalPerimeter.Foundations.Histories",
+  "RelationalPerimeter.Foundations.PerimeterRealization",
+  "RelationalPerimeter.Foundations.ResidualContinuation",
+  "RelationalPerimeter.Foundations.CircularRegime",
+  "RelationalPerimeter.Foundations.StructuralLength",
+  "RelationalPerimeter.Foundations.ConcreteInterpretation",
+  "RelationalPerimeter.Computation.SearchSystem",
+  "RelationalPerimeter.Computation.StructuralOpening",
+  "RelationalPerimeter.Computation.RelationalAction",
+  "RelationalPerimeter.Computation.ExecutedReconstruction",
+  "RelationalPerimeter.Computation.OperationalReduction",
+  "RelationalPerimeter.Computation.ProducedState",
+  "RelationalPerimeter.Computation.Feedback",
+  "RelationalPerimeter.Computation.NonFactorization",
+  "RelationalPerimeter.Computation.Phenomenon",
+  "RelationalPerimeter.Instances.GrowingReconstruction",
+  "RelationalPerimeter.Instances.GrowingFeedback",
+  "RelationalPerimeter.Instances.FourNodeExample",
+  "RelationalPerimeter.Instances.CollapsedConcreteAlgebra",
+  "RelationalPerimeter.Instances.PerimetralComputation",
+  "RelationalPerimeter.Instances.EndogenousOperationalDecomposition",
+]
+
+[[lean_lib]]
+name = "RelationalPerimeterTests"
+roots = [
+  "Tests.ExecutedReconstructionRegression",
+  "Tests.GrowingReconstructionRegression",
+  "Tests.PerimetralComputationRegression",
 ]

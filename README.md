@@ -89,20 +89,64 @@ beyond the constituted perimeter. It remains constructed, locally exact,
 faithfully labelable in the unique residual role, and exactly interpretable,
 while falling outside the preceding regime and specification.
 
+The project also extends the given/generated distinction to the organization
+of computation itself. A structural opening supplies two alternatives, but the
+relation that makes one obligation operationally absorbable into the other is
+returned only by an executed reconstruction: the run records its failed
+candidates, constructs the relation, and a separate theorem proves preservation
+of a nontrivial criterion. The relation then produces a decision and a seed;
+the decision filters the next candidate extraction. A non-factorization theorem
+shows, at every stage, that forgetting this decision while preserving output,
+candidate provenance, and seed loses information needed to recover the next
+executed outcome.
+
+```text
+primitive relations
+→ constituted whole
+→ generated continuation
+→ operational opening
+→ reconstructed transformation
+→ criterion-preserving reduction
+→ conditioned next situation
+```
+
 ## Documents
 
 - [English presentation](docs/primitive-relations-and-perimeter-constitution.en.md)
 - [Présentation française](docs/relations-primitives-constitution-perimetre.fr.md)
+- [Endogenous operational decomposition](docs/endogenous-operational-decomposition.en.md)
+- [Décomposition opérationnelle endogène](docs/decomposition-operationnelle-endogene.fr.md)
 - [Conceptual authorship and AI-generation disclosure](AI_AUTHORSHIP.md)
 
 ## Lean sources
+
+Foundational core:
 
 - `SegmentedResidualRole.lean`: abstract residual-role determination;
 - `AbstractSegmentedTurning.lean`: abstract boundary, continuation, and regime
   turning;
 - `ExactTypeTransport.lean`: constructive two-sided transport between types;
-- `StrongPerimetralTurning.lean`: the constructive circular presentation and
-  its perimetral instance.
+- `RelationalPerimeter/Foundations/`: the circular presentation, free
+  constitution, rooted histories, exact perimeter realization, residual
+  continuation, regime, structural length, and concrete interpretation,
+  separated in dependency order;
+- `StrongPerimetralTurning.lean`: the compatibility façade that re-exports
+  those foundational layers;
+- `RelationalPerimeter/Instances/FourNodeExample.lean`: the autonomous
+  four-node instance and its separating traces;
+- `RelationalPerimeter/Instances/CollapsedConcreteAlgebra.lean`: a local
+  one-point interpretation showing that exact occurrence transport does not
+  by itself preserve free-level state and target distinctions.
+
+Endogenous operational decomposition:
+
+- `RelationalPerimeter/Computation/`: structural opening, executed
+  reconstruction, relational action, reduction, produced state, feedback, and
+  non-factorization;
+- `RelationalPerimeter/Instances/`: the growing constructive family and its
+  alignment with perimetral histories;
+- `RelationalPerimeter.lean`: the public façade;
+- `Tests/`: closed constructive regressions kept outside the public façade.
 
 ## Build
 
@@ -112,9 +156,40 @@ The repository pins Lean 4.33.1 and has no Mathlib dependency.
 lake build
 ```
 
-The four Lean files are constructive: they contain no `sorry`, `axiom`, or
+All Lean sources are constructive: they contain no `sorry`, `axiom`, or
 `noncomputable` declaration, and their final axiom-audit blocks report no axiom
 dependency for the audited declarations.
+
+Repository checks are available on both supported command surfaces:
+
+```text
+./scripts/verify-constructivity.ps1
+./scripts/verify-axiom-audits.ps1
+./scripts/verify-smoke.ps1
+./scripts/verify-links.ps1
+./scripts/verify-document-parity.ps1
+./scripts/verify-manifest.ps1
+```
+
+```text
+bash scripts/verify-constructivity.sh
+bash scripts/verify-axiom-audits.sh
+bash scripts/verify-smoke.sh
+bash scripts/verify-links.sh
+bash scripts/verify-document-parity.sh
+bash scripts/verify-manifest.sh
+```
+
+`MANIFEST.sha256` records the normalized published contents. The GitHub Actions
+workflow runs the same gates on Linux and Windows.
+
+The executable observation under `Smoke/` is explicitly non-confirmatory. It
+exposes one closed run for inspection; the Lean theorems and regression modules
+carry the general claims.
+
+## License
+
+This repository is licensed under Apache-2.0. See [`LICENSE`](LICENSE).
 
 ## Résumé français
 

@@ -1,0 +1,29 @@
+import SegmentedResidualRole
+import AbstractSegmentedTurning
+import ExactTypeTransport
+import StrongPerimetralTurning
+import RelationalPerimeter.Computation.Phenomenon
+import RelationalPerimeter.Instances.CollapsedConcreteAlgebra
+import RelationalPerimeter.Instances.EndogenousOperationalDecomposition
+
+/-!
+# Relational Perimeter
+
+Public façade for the foundational perimetral construction and the endogenous
+operational-decomposition result.  Regression modules are intentionally kept
+outside this import surface.
+-/
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition
+#print axioms RelationalPerimeter.Computation.SuccessfulRun
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.producedRelation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.viable_iff_after_reduction
+#print axioms RelationalPerimeter.Instances.CollapsedConcreteAlgebra.collapsedConcreteAlgebra
+#print axioms RelationalPerimeter.Instances.EndogenousOperationalDecomposition.growingPhenomenon
+#print axioms RelationalPerimeter.Instances.GrowingReconstruction.candidates_nodup
+#print axioms RelationalPerimeter.Instances.GrowingReconstruction.growingRun_failures_strictMajority
+#print axioms RelationalPerimeter.Instances.PerimetralComputation.perimetralReconstruction_relation_exact
+#print axioms RelationalPerimeter.Instances.PerimetralComputation.perimeter_advance_is_oneStepAfterPerimeter
+#print axioms RelationalPerimeter.Instances.GrowingFeedback.nextReconstruction_notFactors
+/- AXIOM_AUDIT_END -/

@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          test: false
+          use-mathlib-cache: false
+      - name: Verify repository on Linux
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          bash scripts/verify-constructivity.sh
+          bash scripts/verify-axiom-audits.sh
+          bash scripts/verify-smoke.sh
+          bash scripts/verify-links.sh
+          bash scripts/verify-document-parity.sh
+          bash scripts/verify-manifest.sh
+      - name: Verify repository on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          ./scripts/verify-constructivity.ps1
+          ./scripts/verify-axiom-audits.ps1
+          ./scripts/verify-smoke.ps1
+          ./scripts/verify-links.ps1
+          ./scripts/verify-document-parity.ps1
+          ./scripts/verify-manifest.ps1
