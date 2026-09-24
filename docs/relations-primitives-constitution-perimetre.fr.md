@@ -32,14 +32,26 @@ non-exhaustion de la génération. Le tournant périmétral affirmatif désigne 
 point exact où un tout déjà constitué et complet continue de produire au-delà
 de son régime.*
 
-*L'opposition méthodologique décisive est celle du théorème et de la chaîne. Le
-théorème isole un résultat propositionnel terminal ; la chaîne conserve les
-relations, les témoins, les provenances et les dépendances typées au sein
-desquels sa preuve prend son acception. Un même théorème peut s'inscrire dans
-des chaînes constitutives différentes ; inversement, une chaîne peut porter
-davantage de structure que n'en consomme la preuve logique minimale du
-théorème. La comparaison doit donc confronter ce que les preuves établissent à
-la constitution relationnelle dans laquelle elles l'établissent.*
+*Le périmètre est ainsi une mesure quantitative exacte sans évaluation
+numérique constitutive. Sa quantité est portée par la correspondance réversible
+entre les positions successives de la chaîne et les occurrences de l'histoire
+qui les réalise, avec leur ordre et leur adjacence : aucune position intérieure
+n'est omise et aucune occurrence du périmètre ne demeure hors de cette
+correspondance. La place fermante complète le système circulaire des exigences
+sans entrer dans cette quantité intérieure, puisqu'elle n'est pas engendrée
+comme occurrence. La longueur `History.length` disponible dans le développement
+n'est donc qu'une projection numérique secondaire de cette mesure
+relationnelle.*
+
+*La distinction méthodologique du théorème et de la chaîne prolonge cette
+stratification sans les opposer comme deux termes étrangers. Le théorème
+exprime un résultat propositionnel terminal ; la chaîne conserve les relations,
+les témoins, les provenances et les dépendances typées au sein desquels sa
+preuve prend son acception. Un même théorème peut s'inscrire dans des chaînes
+constitutives différentes ; inversement, une chaîne peut porter davantage de
+structure que n'en consomme la preuve logique minimale du théorème. La
+comparaison tient donc ensemble ce que les preuves établissent et la
+constitution relationnelle dans laquelle elles l'établissent.*
 
 *Cette démarche rend comparable ce que les seuls théorèmes terminaux laissent
 invisible. Deux systèmes peuvent établir des résultats propositionnels

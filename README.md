@@ -29,14 +29,24 @@ appear as incompleteness then becomes the non-exhaustion of generation. The
 affirmative perimetral turning designates the exact point at which an already
 constituted and complete whole continues to produce beyond its regime.*
 
-*The decisive methodological contrast is that between theorem and chain. The
-theorem isolates a terminal propositional result; the chain retains the
-relations, witnesses, provenances, and typed dependencies within which its
-proof acquires its meaning. The same theorem may be situated in different
-constitutive chains; conversely, a chain may carry more structure than the
-theorem's minimal logical proof actually consumes. Comparison must therefore
-confront what proofs establish with the relational constitution within which
-they establish it.*
+*The perimeter is thus an exact quantitative measure without constitutive
+numerical evaluation. Its quantity is carried by the reversible correspondence
+between the successive positions of the chain and the occurrences of the
+history that realizes them, together with their order and adjacency: no
+interior position is omitted, and no perimeter occurrence remains outside this
+correspondence. The closing place completes the circular system of requirements
+without entering this interior quantity, since it is not generated as an
+occurrence. The `History.length` available in the development is therefore only
+a secondary numerical projection of this relational measure.*
+
+*The methodological distinction between theorem and chain extends this
+stratification without opposing them as two unrelated terms. The theorem
+expresses a terminal propositional result; the chain retains the relations,
+witnesses, provenances, and typed dependencies within which its proof acquires
+its meaning. The same theorem may be situated in different constitutive chains;
+conversely, a chain may carry more structure than the theorem's minimal logical
+proof actually consumes. Comparison therefore holds together what proofs
+establish and the relational constitution within which they establish it.*
 
 *This approach makes comparable what terminal theorems alone leave invisible.
 Two systems may establish similar propositional results while giving objects
