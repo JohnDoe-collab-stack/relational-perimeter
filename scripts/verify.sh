@@ -52,6 +52,15 @@ if grep -E 'depends on axioms:|sorryAx' "$build_log"; then
   exit 1
 fi
 
+for file in "${lean_files[@]}"; do
+  relative="${file#./}"
+  olean=".lake/build/lib/lean/${relative%.lean}.olean"
+  if [[ ! -f "$olean" ]]; then
+    echo "$file: lake build produced no corresponding olean" >&2
+    exit 1
+  fi
+done
+
 if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   git diff --check
 elif command -v git.exe >/dev/null 2>&1 && command -v wslpath >/dev/null 2>&1; then

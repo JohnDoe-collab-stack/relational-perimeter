@@ -39,6 +39,14 @@ try {
   if ($joinedOutput -match 'depends on axioms:|sorryAx') {
     throw "axiom audit failure detected in lake build output"
   }
+  foreach ($file in $leanFiles) {
+    $relative = $file.FullName.Substring($repoRoot.Length).TrimStart('\', '/')
+    $oleanRelative = [IO.Path]::ChangeExtension($relative, ".olean")
+    $oleanPath = Join-Path $repoRoot (Join-Path ".lake/build/lib/lean" $oleanRelative)
+    if (-not (Test-Path -LiteralPath $oleanPath)) {
+      throw "$($file.FullName): lake build produced no corresponding olean"
+    }
+  }
   & git diff --check
   if ($LASTEXITCODE -ne 0) {
     throw "git diff --check failed"

@@ -62,14 +62,26 @@ theorem discovery_bundle_from_transmitted_seed {depth : Nat}
         state.searchSeedExact :=
   rfl
 
-/-- The produced-state read is genuinely sensitive to the produced state. -/
-def observedSeed : List StructuralBranchDecision → Var
-  | [] => 0
-  | decision :: _ => decision.var
-
-theorem observedSeed_not_constant :
-    observedSeed [⟨3, true⟩] ≠ observedSeed [⟨5, true⟩] := by
+/-- The production seed readout is genuinely nonconstant on executed stages;
+this uses the production function itself rather than a test-local replica. -/
+theorem production_seed_not_constant_across_stages
+    {first : SequentialAssignment 0} {second : SequentialAssignment 1}
+    (stage0 : SequentialStageRun 0 first)
+    (stage1 : SequentialStageRun 1 second) :
+    executedProducedSearchSeed stage0 ≠ executedProducedSearchSeed stage1 := by
+  rw [executedProducedSearchSeed_eq_nextSearchIndex,
+    executedProducedSearchSeed_eq_nextSearchIndex]
+  show constitutedSearchIndex (0 + 1 + 1) ≠ constitutedSearchIndex (1 + 1 + 1)
+  rw [constitutedSearchIndex_linear, constitutedSearchIndex_linear]
   decide
+
+/- The public execution threads the actual measured initialization into the
+first operational state; it does not rebuild an independent canonical source. -/
+theorem execution_initial_state_consumes_initialization (input : Nat) :
+    let run := executeConstitutiveResolution input
+    run.threadedInitialState =
+      initialThreadedConstitutiveStateFromInitialization run.initialization := by
+  exact (executeConstitutiveResolution input).threadedInitialStateFromInitialization
 
 /-- Erasing accumulated history yields a vacuously fresh state. -/
 theorem erasedNextDiscoveryState_fresh (depth : Nat) :
@@ -111,19 +123,24 @@ theorem separator_states_differ (depth : Nat) :
   · intro same
     exact nextDiscovery_outcome_different depth same.symm
 
-/-- A failed discovery constructs no operational stage or descendant artifact. -/
-theorem failure_branch_constructs_nothing {depth : Nat}
-    {assignment : SequentialAssignment depth}
-    (state : ThreadedConstitutiveState depth assignment)
-    (fresh : ThreadedStateFreshForNext state)
-    (failed : (runThreadedNextDiscovery state).outcome.discovered? = none) :
-    executeThreadedConstitutiveStage state fresh = none := by
-  unfold executeThreadedConstitutiveStage
-  dsimp only
-  split
-  · rfl
-  · next discovery found =>
-      cases Eq.trans found.symm failed
+/-- The concrete blocked state genuinely fails and cannot produce a stage. -/
+theorem failure_branch_constructs_nothing (depth : Nat)
+    (built : ConstructedThreadedStageRun (blockedNextDiscoveryState depth).state) :
+    False :=
+  failedDiscovery_noConstructedStage _ (nextDiscovery_blocked_none depth) built
+
+/-- Nor can the blocked state seed any positive-length authoritative history. -/
+theorem failure_branch_has_no_descendant_history (depth count : Nat)
+    (history : ConstitutiveExecutionHistory
+      (count := count + 1) (blockedNextDiscoveryState depth).state) : False :=
+  failedDiscovery_noPositiveHistory _ (nextDiscovery_blocked_none depth) history
+
+/-- The general growth law concerns the counter emitted by the authoritative
+provenance-filtered recursion, not only a finite family of evaluated inputs. -/
+theorem authoritative_attempt_counter_grows (input : Nat) :
+    (executeConstitutiveResolution input).stats.discoveryAttempts <
+      (executeConstitutiveResolution (input + 1)).stats.discoveryAttempts :=
+  executeConstitutiveResolution_attempts_strict input
 
 /-- Opening produces two structurally distinct alternatives. -/
 theorem or_children_structurally_distinct {root : Cnf}
@@ -178,11 +195,14 @@ end RelationalPerimeter.Tests.ComputationalPhenomenon
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.and_decision_reads_output
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.extraction_runs_on_seeded_root
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.discovery_bundle_from_transmitted_seed
-#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.observedSeed_not_constant
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.production_seed_not_constant_across_stages
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.execution_initial_state_consumes_initialization
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.same_reading_different_constitution
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.separator_states_share_projectable_data
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.separator_states_differ
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.failure_branch_constructs_nothing
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.failure_branch_has_no_descendant_history
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.authoritative_attempt_counter_grows
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.or_children_structurally_distinct
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.absorbed_alternative_viability_transported
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.opening_then_absorption_preserves_frontier_viability

@@ -52,6 +52,12 @@ Son résultat est projeté depuis `executeConstitutiveExecutionHistory` ; aucune
 seconde exécution ne fournit parallèlement l’histoire publique, l’état terminal,
 la décision ou la comptabilité.
 
+La frontière d’entrée suit la même discipline causale. Le premier état transmis
+est construit depuis le point terminal enregistré par l’initialisation mesurée
+effectivement exécutée. Sa génération est ensuite prouvée égale à la génération
+canonique ; aucune source reconstruite indépendamment ne remplace celle qui a
+été produite.
+
 ## Ce que les types séparent
 
 Les types maintiennent visibles les distinctions suivantes :
@@ -88,11 +94,16 @@ Il expose des déclarations sans axiome pour :
 - le transport de la viabilité et la préservation exacte de la viabilité de la
   frontière ;
 - l’indépendance du pas complet à l’égard d’une preuve d’acceptation ;
-- l’absence d’étape construite après l’échec de la découverte ;
+- l’absence de toute étape construite et de toute histoire descendante faisant
+  autorité de longueur positive après l’échec de la découverte ;
 - l’échec de chaque relation candidate leurre engendrée et le nombre exact de
   tentatives précédant la réussite de la découverte ;
-- la croissance stricte du nombre de tentatives exécutées par la recherche de
-  relation ;
+- la loi exacte des tentatives filtrées par la provenance et la croissance
+  stricte du compteur total de recherche de relation émis par la récursion
+  faisant autorité, en plus de la croissance de la recherche locale de
+  référence ;
+- la construction du premier état transmis depuis le point terminal de
+  l’initialisation mesurée ;
 - la formation, au niveau des constructeurs, de la graine et du faisceau
   d’extraction suivants à partir de l’état exécuté, distincte des preuves
   ultérieures de leur égalité canonique ;
@@ -119,8 +130,11 @@ la surface plus large de l’exécution et de sa comptabilité.
 Le résultat est constructif, exécutable, uniformément indexé par la profondeur
 et sans axiome. Il est instancié sur une famille SAT explicite engendrée, fondée
 sur une symétrie par inversion de polarité. La découverte accomplit un travail
-décidable réel, rejette des candidats leurres, et le nombre enregistré de ses
-tentatives croît avec l’entrée.
+décidable réel, rejette des candidats leurres, et le compteur de tentatives émis
+par la récursion faisant autorité, filtrée par la provenance, obéit à une loi
+générale exacte et croît strictement avec les entrées successives. L’échec de la
+découverte ne produit ni étape ni histoire descendante faisant autorité de
+longueur positive.
 
 La recherche suivante dépend du résultat précédent en deux sens différents :
 

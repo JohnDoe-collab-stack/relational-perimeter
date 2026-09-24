@@ -585,7 +585,7 @@ theorem regression_production_consumes_initialized_endpoint (input : Nat) :
     let run := executeConstitutiveResolution input
     run.production =
       run.constitutiveFeedbackHistory.toProductionRun
-        (by rw [run.threadedInitialStateExact]; rfl) :=
+        run.threadedInitialGenerationExact :=
   (executeConstitutiveResolution input).productionExact
 
 theorem regression_generated_history_from_counted_producer (input : Nat) :
@@ -602,7 +602,7 @@ theorem regression_production_calls_charged (input : Nat) :
   let run := executeConstitutiveResolution input
   have generationCanonical :
       run.threadedInitialState.generation = generateCanonicalStage input :=
-    congrArg ThreadedConstitutiveState.generation run.threadedInitialStateExact
+    run.threadedInitialGenerationExact
   have stats := run.constitutiveFeedbackHistory.productionStats_exact generationCanonical
   exact Eq.trans
     (congrArg ConstitutiveProductionRun.generateCalls run.productionExact)
@@ -615,7 +615,7 @@ theorem regression_production_material_emitted (input : Nat) :
   let run := executeConstitutiveResolution input
   have generationCanonical :
       run.threadedInitialState.generation = generateCanonicalStage input :=
-    congrArg ThreadedConstitutiveState.generation run.threadedInitialStateExact
+    run.threadedInitialGenerationExact
   have stats := run.constitutiveFeedbackHistory.productionStats_exact generationCanonical
   exact
     ⟨Eq.trans
@@ -851,6 +851,16 @@ theorem regression_failed_discovery_constructs_no_stage (depth : Nat) :
       (blockedNextDiscoveryState depth).state).outcome.discovered? = none :=
   blocked_discovery_constructs_no_stage depth
 
+theorem regression_failed_discovery_has_no_positive_history (depth count : Nat)
+    (history : ConstitutiveExecutionHistory
+      (count := count + 1) (blockedNextDiscoveryState depth).state) : False :=
+  failedDiscovery_noPositiveHistory _ (nextDiscovery_blocked_none depth) history
+
+theorem regression_authoritative_attempts_strict (input : Nat) :
+    (executeConstitutiveResolution input).stats.discoveryAttempts <
+      (executeConstitutiveResolution (input + 1)).stats.discoveryAttempts :=
+  executeConstitutiveResolution_attempts_strict input
+
 theorem regression_blocked_state_is_constructed_from_child (depth : Nat) :
     (blockedNextDiscoveryState depth).state.decisions =
         (blockedNextDiscoveryCarrier depth).context.decisions ∧
@@ -1028,6 +1038,8 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_feedback_code_is_from_discovered_relation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_feedback_failure_produces_nothing
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_failed_discovery_constructs_no_stage
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_failed_discovery_has_no_positive_history
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_authoritative_attempts_strict
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_blocked_state_is_constructed_from_child
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_separator_states_share_executed_origin
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_separator_states_are_complete_and_distinct

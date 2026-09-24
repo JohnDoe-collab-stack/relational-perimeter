@@ -98,10 +98,29 @@ Neither equality of the alternatives nor impossibility of the absorbed one is
 asserted. The retained result and its provenance then condition the next
 discovery.
 
+## Positioning and scope
+
+![Relational Perimeter formal architecture](docs/figures/relational-perimeter-formal-architecture.svg)
+
+`Relational Perimeter` is a relational architecture formalized in dependent
+type theory in Lean, not a competing logical foundation. Its constitutive
+primitive relations, generated histories, exact realizations, interpretations,
+regimes, and specifications remain separate interfaces. In particular, a
+continuation may be positively generated, equipped with an exact concrete
+realization, faithfully classified by its unique residual place, and
+structurally interpreted without being admitted to the circular regime or
+satisfying the circular specification.
+
+The canonical positioning statement, its limits, and the primary references
+for the external comparisons are available in the parallel versions listed
+below.
+
 ## Documents
 
 - [English presentation](docs/primitive-relations-and-perimeter-constitution.en.md)
 - [Présentation française](docs/relations-primitives-constitution-perimetre.fr.md)
+- [Positioning and scope](docs/positioning-and-scope.en.md)
+- [Positionnement et portée](docs/positionnement-et-portee.fr.md)
 - [Endogenous operational decomposition](docs/endogenous-operational-decomposition.en.md)
 - [Décomposition opérationnelle endogène](docs/decomposition-operationnelle-endogene.fr.md)
 - [Conceptual authorship and AI-generation disclosure](AI_AUTHORSHIP.md)
@@ -126,7 +145,8 @@ discovery.
   executable construction, its relational transports, SAT instance, feedback
   recursion, and production-level measured accounting;
 - `Tests/ComputationalPhenomenonRegression.lean` reproduces the independent
-  adversarial counterprobes;
+  adversarial counterprobes, including the production seed and the causal
+  connection between measured initialization and the first threaded state;
 - `Tests/ConstitutiveExecutionRegression.lean` protects the complete executed
   and measured surface.
 

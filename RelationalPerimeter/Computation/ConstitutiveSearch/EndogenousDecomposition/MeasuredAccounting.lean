@@ -373,7 +373,7 @@ theorem ConstitutiveResolutionRun.generationMaterializationWork_exact {input : N
     (initializeConstitutiveHistory_material_counts input).2]
   have generationCanonical : run.threadedInitialState.generation =
       generateCanonicalStage input := by
-    exact congrArg ThreadedConstitutiveState.generation run.threadedInitialStateExact
+    exact run.threadedInitialGenerationExact
   have produced := run.constitutiveFeedbackHistory.productionStats_exact generationCanonical
   unfold ConstitutiveExecutionHistory.toProductionRun
   rw [produced.2.1, produced.2.2.1, produced.2.2.2]

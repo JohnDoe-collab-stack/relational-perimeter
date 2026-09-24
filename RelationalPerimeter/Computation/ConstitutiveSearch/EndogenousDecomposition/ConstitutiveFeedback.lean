@@ -121,22 +121,59 @@ def ThreadedStateFreshForNext {depth : Nat}
   ∀ decision, decision ∈ state.decisions →
     decision.var < stageSelectedVar (depth + 1)
 
-def initialThreadedConstitutiveState (depth : Nat) :
+/- The initial operational state consumes the endpoint actually produced by
+the measured initialization run.  This keeps initialization and feedback on
+one data path instead of reconstructing an extensionally equal source. -/
+def initializationEndpointExact {depth : Nat}
+    (initialization : ConstitutiveInitializationRun depth) :
+    initialization.history.endpoint =
+      (constructStage depth).history.endpoint :=
+  congrArg (fun history => history.endpoint) initialization.historyExact
+
+def initialThreadedConstitutiveStateFromInitialization {depth : Nat}
+    (initialization : ConstitutiveInitializationRun depth) :
     ThreadedConstitutiveState depth (initialSequentialAssignment depth) :=
+  let generation :=
+    generateCanonicalStageFromSource initialization.history.endpoint
+      (initializationEndpointExact initialization)
   { threadedAssignment := initialSequentialAssignment depth
     threadedAssignmentExact := rfl
-    generation := generateCanonicalStage depth
-    searchSeed := generatedSearchSeed (generateCanonicalStage depth)
+    generation := generation
+    searchSeed := generatedSearchSeed generation
     searchSeedExact := rfl
     decisions := []
     provenance := []
     provenanceExact := rfl
     decisionsHold := True.intro }
 
-theorem initialThreadedConstitutiveState_fresh (depth : Nat) :
-    ThreadedStateFreshForNext (initialThreadedConstitutiveState depth) := by
+def initialThreadedConstitutiveState (depth : Nat) :
+    ThreadedConstitutiveState depth (initialSequentialAssignment depth) :=
+  initialThreadedConstitutiveStateFromInitialization
+    (initializeConstitutiveHistory depth)
+
+theorem initialThreadedConstitutiveStateFromInitialization_generation_exact
+    {depth : Nat} (initialization : ConstitutiveInitializationRun depth) :
+    (initialThreadedConstitutiveStateFromInitialization initialization).generation =
+      generateCanonicalStage depth := by
+  change generateCanonicalStageFromSource initialization.history.endpoint
+      (initializationEndpointExact initialization) = generateCanonicalStage depth
+  exact generateCanonicalStageFromSource_exact _ _
+
+theorem initialThreadedConstitutiveState_generation_exact (depth : Nat) :
+    (initialThreadedConstitutiveState depth).generation =
+      generateCanonicalStage depth :=
+  initialThreadedConstitutiveStateFromInitialization_generation_exact _
+
+theorem initialThreadedConstitutiveStateFromInitialization_fresh {depth : Nat}
+    (initialization : ConstitutiveInitializationRun depth) :
+    ThreadedStateFreshForNext
+      (initialThreadedConstitutiveStateFromInitialization initialization) := by
   intro _ impossible
   cases impossible
+
+theorem initialThreadedConstitutiveState_fresh (depth : Nat) :
+    ThreadedStateFreshForNext (initialThreadedConstitutiveState depth) := by
+  exact initialThreadedConstitutiveStateFromInitialization_fresh _
 
 theorem structuralDecisionsAvoid_of_all_lt
     (selected : Var) (decisions : List StructuralBranchDecision)
@@ -347,6 +384,25 @@ theorem memberOfFilter_predicate {alpha : Type} (predicate : alpha → Bool)
         | head => exact accepted
         | tail _ prior => exact memberOfFilter_predicate predicate value tail prior
       · exact memberOfFilter_predicate predicate value tail member
+
+theorem memberOfFilter_of_original_and_predicate {alpha : Type}
+    (predicate : alpha → Bool) (value : alpha) :
+    ∀ values : List alpha, value ∈ values → predicate value = true →
+      value ∈ values.filter predicate
+  | [], member, _ => by cases member
+  | head :: tail, member, accepted => by
+      rw [List.filter]
+      cases member with
+      | head =>
+          rw [accepted]
+          exact List.Mem.head _
+      | tail _ prior =>
+          split
+          · exact List.Mem.tail _
+              (memberOfFilter_of_original_and_predicate predicate value tail
+                prior accepted)
+          · exact memberOfFilter_of_original_and_predicate predicate value tail
+              prior accepted
 
 theorem inspectCandidateHistory_visits_le (candidate : Var) :
     ∀ decisions : List StructuralBranchDecision,
@@ -1456,6 +1512,52 @@ inductive ConstitutiveExecutionHistory :
       (tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next) :
       ConstitutiveExecutionHistory (count := count + 1) state
 
+/-- A failed discovery cannot coexist with a stage whose construction records
+that same discovery as found.  No freshness hypothesis is needed: the result
+follows from the data dependency carried by `ThreadedConstitutiveStageRun`. -/
+theorem failedDiscovery_noStageRun {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (failed : (runThreadedNextDiscovery state).outcome.discovered? = none)
+    (stage : SequentialStageRun depth assignment)
+    (run : ThreadedConstitutiveStageRun state stage) : False := by
+  have found :
+      (runThreadedNextDiscovery state).outcome.discovered? = some run.discovery :=
+    run.discoveryRunExact ▸ run.discoveryFound
+  have impossible := Eq.trans failed.symm found
+  nomatch impossible
+
+/-- Consequently, failure leaves no packaged stage and no produced next state. -/
+theorem failedDiscovery_noConstructedStage {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (failed : (runThreadedNextDiscovery state).outcome.discovered? = none)
+    (built : ConstructedThreadedStageRun state) : False :=
+  failedDiscovery_noStageRun state failed built.stage built.run
+
+/-- Any authoritative history rooted at a state whose discovery failed is
+necessarily empty. -/
+theorem failedDiscovery_historyCount_eq_zero :
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
+      {state : ThreadedConstitutiveState depth assignment} →
+      ConstitutiveExecutionHistory (count := count) state →
+      (runThreadedNextDiscovery state).outcome.discovered? = none → count = 0 := by
+  intro depth count assignment state history
+  induction history with
+  | nil _ => intro _; rfl
+  | step head headRun _ _ =>
+      intro failed
+      exact False.elim (failedDiscovery_noStageRun _ failed head headRun)
+
+/-- A failed discovery therefore admits no positive-length authoritative
+history: no stage, no next state, and no later discovery can descend from it. -/
+theorem failedDiscovery_noPositiveHistory {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (failed : (runThreadedNextDiscovery state).outcome.discovered? = none)
+    (history : ConstitutiveExecutionHistory (count := count + 1) state) : False :=
+  Nat.noConfusion (failedDiscovery_historyCount_eq_zero history failed)
+
 def ConstitutiveExecutionHistory.toSequentialHistory :
     {depth count : Nat} → {assignment : SequentialAssignment depth} →
       {state : ThreadedConstitutiveState depth assignment} →
@@ -2181,6 +2283,604 @@ theorem distinctDecoyVariables_mem_of_lt (candidate : Var) :
           exact List.Mem.tail _ (distinctDecoyVariables_mem_of_lt candidate count below)
       | inr same => cases same; exact List.Mem.head _
 
+theorem provenanceAvoidCheck_false_of_mem (candidate : Var) :
+    ∀ provenance : List Var, candidate ∈ provenance →
+      provenanceAvoidCheck candidate provenance = false
+  | [], member => by cases member
+  | prior :: rest, member => by
+      rw [provenanceAvoidCheck]
+      split
+      · rfl
+      · cases member with
+        | head => contradiction
+        | tail _ priorMember =>
+            exact provenanceAvoidCheck_false_of_mem candidate rest priorMember
+
+theorem provenanceAvoidCheck_false_implies_mem (candidate : Var) :
+    ∀ provenance : List Var,
+      provenanceAvoidCheck candidate provenance = false → candidate ∈ provenance
+  | [], failed => by contradiction
+  | prior :: rest, failed => by
+      rw [provenanceAvoidCheck] at failed
+      by_cases same : prior = candidate
+      · cases same
+        exact List.Mem.head rest
+      · rw [if_neg same] at failed
+        exact List.Mem.tail _
+          (provenanceAvoidCheck_false_implies_mem candidate rest failed)
+
+theorem provenanceAvoidCheck_true_of_not_mem (candidate : Var) :
+    ∀ provenance : List Var, candidate ∉ provenance →
+      provenanceAvoidCheck candidate provenance = true
+  | [], _ => rfl
+  | prior :: rest, absent => by
+      rw [provenanceAvoidCheck]
+      have different : prior ≠ candidate := by
+        intro same
+        cases same
+        exact absent (List.Mem.head rest)
+      rw [if_neg different]
+      apply provenanceAvoidCheck_true_of_not_mem candidate rest
+      intro member
+      exact absent (List.Mem.tail prior member)
+
+theorem filteredList_nodup {alpha : Type} (predicate : alpha → Bool) :
+    ∀ values : List alpha, values.Nodup → (values.filter predicate).Nodup
+  | [], _ => List.Pairwise.nil
+  | head :: tail, nodup => by
+      cases nodup with
+      | cons headAbsent tailNodup =>
+      rw [List.filter]
+      split
+      · apply List.Pairwise.cons
+        · intro candidate member
+          exact headAbsent candidate
+            (memberOfFilter_original predicate candidate tail member)
+        · exact filteredList_nodup predicate tail tailNodup
+      · exact filteredList_nodup predicate tail tailNodup
+
+/-- Executable removal used only by the constructive cardinality argument. -/
+def removeFirstVar (target : Var) : List Var → List Var
+  | [] => []
+  | head :: tail => if head = target then tail else head :: removeFirstVar target tail
+
+theorem removeFirstVar_member_original (target value : Var) :
+    ∀ values, value ∈ removeFirstVar target values → value ∈ values
+  | [], member => by cases member
+  | head :: tail, member => by
+      rw [removeFirstVar] at member
+      split at member
+      · exact List.Mem.tail head member
+      · cases member with
+        | head => exact List.Mem.head tail
+        | tail _ prior =>
+            exact List.Mem.tail head
+              (removeFirstVar_member_original target value tail prior)
+
+theorem removeFirstVar_preserves_other (target value : Var)
+    (different : value ≠ target) :
+    ∀ values, value ∈ values → value ∈ removeFirstVar target values
+  | [], member => by cases member
+  | head :: tail, member => by
+      rw [removeFirstVar]
+      by_cases same : head = target
+      · rw [if_pos same]
+        cases member with
+        | head => exact False.elim (different same)
+        | tail _ prior => exact prior
+      · rw [if_neg same]
+        cases member with
+        | head => exact List.Mem.head _
+        | tail _ prior =>
+            exact List.Mem.tail _
+              (removeFirstVar_preserves_other target value different tail prior)
+
+theorem removeFirstVar_length_plus_one (target : Var) :
+    ∀ values, target ∈ values →
+      (removeFirstVar target values).length + 1 = values.length
+  | [], member => by cases member
+  | head :: tail, member => by
+      rw [removeFirstVar]
+      by_cases same : head = target
+      · rw [if_pos same]
+        rfl
+      · rw [if_neg same]
+        cases member with
+        | head => exact False.elim (same rfl)
+        | tail _ prior =>
+            change (removeFirstVar target tail).length + 1 + 1 = tail.length + 1
+            exact congrArg (fun length => length + 1)
+              (removeFirstVar_length_plus_one target tail prior)
+
+theorem removeFirstVar_nodup (target : Var) :
+    ∀ values, values.Nodup → (removeFirstVar target values).Nodup
+  | [], _ => List.Pairwise.nil
+  | head :: tail, nodup => by
+      cases nodup with
+      | cons headAbsent tailNodup =>
+        rw [removeFirstVar]
+        by_cases same : head = target
+        · rw [if_pos same]
+          exact tailNodup
+        · rw [if_neg same]
+          apply List.Pairwise.cons
+          · intro value member
+            exact headAbsent value
+              (removeFirstVar_member_original target value tail member)
+          · exact removeFirstVar_nodup target tail tailNodup
+
+theorem removeFirstVar_excludes_target (target : Var) :
+    ∀ values, values.Nodup → target ∉ removeFirstVar target values
+  | [], _, member => by cases member
+  | head :: tail, nodup, member => by
+      cases nodup with
+      | cons headAbsent tailNodup =>
+        rw [removeFirstVar] at member
+        by_cases same : head = target
+        · rw [if_pos same] at member
+          cases same
+          exact (headAbsent target member) rfl
+        · rw [if_neg same] at member
+          cases member with
+          | head => exact same rfl
+          | tail _ prior =>
+              exact removeFirstVar_excludes_target target tail tailNodup prior
+
+/-- Constructive finite-cardinality comparison.  The proof removes one
+explicit witness at a time and does not pass through finite sets or quotients. -/
+theorem nodupVarLists_sameLength_of_mutualMembership :
+    ∀ (left right : List Var), left.Nodup → right.Nodup →
+      (∀ value, value ∈ left → value ∈ right) →
+      (∀ value, value ∈ right → value ∈ left) →
+      left.length = right.length
+  | [], [], _, _, _, _ => rfl
+  | [], head :: tail, _, _, _, rightToLeft => by
+      have impossible := rightToLeft head (List.Mem.head tail)
+      cases impossible
+  | head :: tail, right, leftNodup, rightNodup, leftToRight, rightToLeft => by
+      cases leftNodup with
+      | cons headAbsent tailNodup =>
+        have headInRight : head ∈ right :=
+          leftToRight head (List.Mem.head tail)
+        have tailToRemoved : ∀ value, value ∈ tail →
+            value ∈ removeFirstVar head right := by
+          intro value member
+          exact removeFirstVar_preserves_other head value
+            (Ne.symm (headAbsent value member)) right
+            (leftToRight value (List.Mem.tail head member))
+        have removedToTail : ∀ value, value ∈ removeFirstVar head right →
+            value ∈ tail := by
+          intro value member
+          have valueInRight := removeFirstVar_member_original head value right member
+          have valueInLeft := rightToLeft value valueInRight
+          cases valueInLeft with
+          | head =>
+              exact False.elim
+                (removeFirstVar_excludes_target head right rightNodup member)
+          | tail _ prior => exact prior
+        have tailLength := nodupVarLists_sameLength_of_mutualMembership
+          tail (removeFirstVar head right) tailNodup
+          (removeFirstVar_nodup head right rightNodup)
+          tailToRemoved removedToTail
+        have removedLength := removeFirstVar_length_plus_one head right headInRight
+        exact Eq.trans (congrArg (fun length => length + 1) tailLength) removedLength
+
+/-- Filtering by a Boolean predicate and by its Boolean complement partitions
+the input length, proved directly by structural recursion. -/
+theorem filter_complement_lengths (predicate : alpha → Bool) :
+    ∀ values : List alpha,
+      (values.filter predicate).length +
+        (values.filter (fun value => !(predicate value))).length = values.length
+  | [] => rfl
+  | head :: tail => by
+      rw [List.filter, List.filter]
+      cases checked : predicate head with
+      | false =>
+          change (tail.filter predicate).length +
+              ((head :: tail.filter (fun value => !(predicate value)))).length =
+            tail.length + 1
+          simp only [List.length_cons]
+          have prior := filter_complement_lengths predicate tail
+          rw [← Nat.add_assoc, prior]
+      | true =>
+          change ((head :: tail.filter predicate)).length +
+              (tail.filter (fun value => !(predicate value))).length =
+            tail.length + 1
+          simp only [List.length_cons]
+          have prior := filter_complement_lengths predicate tail
+          rw [Nat.add_assoc, Nat.add_comm 1, ← Nat.add_assoc, prior]
+
+theorem filter_append_constructive (predicate : alpha → Bool) :
+    ∀ (left right : List alpha),
+      (left ++ right).filter predicate =
+        left.filter predicate ++ right.filter predicate
+  | [], _ => rfl
+  | head :: tail, right => by
+      rw [List.cons_append, List.filter, List.filter]
+      split
+      · exact congrArg (List.cons head)
+          (filter_append_constructive predicate tail right)
+      · exact filter_append_constructive predicate tail right
+
+theorem rejectedCandidates_length_eq_provenance
+    (candidates provenance : List Var)
+    (candidatesNodup : candidates.Nodup)
+    (provenanceNodup : provenance.Nodup)
+    (contained : ∀ candidate, candidate ∈ provenance → candidate ∈ candidates) :
+    (candidates.filter (fun candidate => !(provenanceAvoidCheck candidate provenance))).length =
+      provenance.length := by
+  apply nodupVarLists_sameLength_of_mutualMembership
+  · exact filteredList_nodup
+      (fun candidate => !(provenanceAvoidCheck candidate provenance))
+      candidates candidatesNodup
+  · exact provenanceNodup
+  · intro candidate member
+    have accepted := memberOfFilter_predicate
+      (fun candidate => !(provenanceAvoidCheck candidate provenance))
+      candidate candidates member
+    have failed : provenanceAvoidCheck candidate provenance = false := by
+      cases checked : provenanceAvoidCheck candidate provenance with
+      | false => rfl
+      | true =>
+          rw [checked] at accepted
+          contradiction
+    exact provenanceAvoidCheck_false_implies_mem candidate provenance failed
+  · intro candidate member
+    apply memberOfFilter_of_original_and_predicate
+    · exact contained candidate member
+    · have failed := provenanceAvoidCheck_false_of_mem candidate provenance member
+      rw [failed]
+      rfl
+
+theorem retainedCandidates_length_add_provenance
+    (candidates provenance : List Var)
+    (candidatesNodup : candidates.Nodup)
+    (provenanceNodup : provenance.Nodup)
+    (contained : ∀ candidate, candidate ∈ provenance → candidate ∈ candidates) :
+    (candidates.filter (fun candidate => provenanceAvoidCheck candidate provenance)).length +
+      provenance.length = candidates.length := by
+  have partition := filter_complement_lengths
+    (fun candidate => provenanceAvoidCheck candidate provenance) candidates
+  rw [rejectedCandidates_length_eq_provenance candidates provenance candidatesNodup
+    provenanceNodup contained] at partition
+  exact partition
+
+theorem exploreFailuresThenSuccess_attempts
+    {rootFormula : Cnf}
+    (state : GeneratedStructuralBranchContext rootFormula)
+    (failures : List Var) (selected : Var) (rest : List Var)
+    (allFail : ∀ candidate, candidate ∈ failures →
+      (tryMeasuredCandidate state candidate).produced? = none)
+    (selectedSucceeds : (tryMeasuredCandidate state selected).produced? ≠ none) :
+    (exploreRecordedCandidates state (failures ++ selected :: rest)).attempts =
+      failures.length + 1 := by
+  induction failures with
+  | nil =>
+      rw [List.nil_append, exploreRecordedCandidates]
+      cases found : (tryMeasuredCandidate state selected).produced? with
+      | none => exact False.elim (selectedSucceeds found)
+      | some produced => rfl
+  | cons candidate tail inductionHypothesis =>
+      rw [List.cons_append, exploreRecordedCandidates]
+      rw [allFail candidate (List.Mem.head tail)]
+      change
+        (exploreRecordedCandidates state (tail ++ selected :: rest)).attempts + 1 =
+          tail.length + 1 + 1
+      rw [inductionHypothesis]
+      intro prior member
+      exact allFail prior (List.Mem.tail candidate member)
+
+/-- The provenance of a canonical feedback state contains no duplicate and
+remains bounded by the most recently exposed selected variable. -/
+structure ThreadedProvenanceInvariant {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment) : Prop where
+  nodup : state.provenance.Nodup
+  bounded : ∀ candidate, candidate ∈ state.provenance →
+    candidate ≤ stageSelectedVar depth
+
+theorem initialThreadedProvenanceInvariant (depth : Nat) :
+    ThreadedProvenanceInvariant (initialThreadedConstitutiveState depth) := by
+  constructor
+  · change ([].Nodup)
+    exact List.Pairwise.nil
+  · intro _ impossible
+    change _ ∈ [] at impossible
+    cases impossible
+
+theorem ThreadedProvenanceInvariant.next {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (invariant : ThreadedProvenanceInvariant state)
+    (run : NextOperationalStateRun state stage) :
+    ThreadedProvenanceInvariant run.next := by
+  constructor
+  · rw [run.provenanceFromExecution]
+    apply List.Pairwise.cons
+    · intro candidate member
+      have belowCurrent := invariant.bounded candidate member
+      have belowNext : stageSelectedVar depth < stageSelectedVar (depth + 1) := by
+        rw [stageSelectedVar_succ]
+        exact Nat.lt_add_of_pos_right (by decide)
+      exact Nat.ne_of_gt (Nat.lt_of_le_of_lt belowCurrent belowNext)
+    · exact invariant.nodup
+  · intro candidate member
+    rw [run.provenanceFromExecution] at member
+    cases member with
+    | head => exact Nat.le_refl _
+    | tail _ prior =>
+        exact Nat.le_trans (invariant.bounded _ prior)
+          (by rw [stageSelectedVar_succ]; exact Nat.le_add_right _ _)
+
+theorem selectedMeasuredCandidate_succeeds (depth : Nat) :
+    (tryMeasuredCandidate (constructStage (depth + 1)).operationalRoot
+      (stageSelectedVar (depth + 1))).produced? ≠ none := by
+  intro failed
+  let measured := tryMeasuredCandidate (constructStage (depth + 1)).operationalRoot
+    (stageSelectedVar (depth + 1))
+  have resultNone : measured.result = none := by
+    unfold MeasuredCandidateRun.result
+    rw [failed]
+    rfl
+  have unmeasuredNone :
+      tryEndogenousFlipCandidate (constructStage (depth + 1)).operationalRoot
+        (stageSelectedVar (depth + 1)) = none := by
+    rw [← tryMeasuredCandidate_exact]
+    exact resultNone
+  exact (distinctGrowingDiscoveryUsefulCandidate_found
+    (constructStage (depth + 1)).searchIndex) unmeasuredNone
+
+/-- The attempts emitted by one authoritative discovery are exactly the
+canonical decoy prefix minus the distinct variables already carried by its
+produced provenance. -/
+theorem threadedDiscovery_attempts_add_provenance_exact {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (invariant : ThreadedProvenanceInvariant state) :
+    (runThreadedNextDiscovery state).outcome.attempts + state.provenance.length =
+      2 * depth + 10 := by
+  let run := runThreadedNextDiscovery state
+  let decoys :=
+    distinctDecoyVariables ((constructStage (depth + 1)).searchIndex + 1)
+  let retainedDecoys := decoys.filter
+    (fun candidate => provenanceAvoidCheck candidate state.provenance)
+  have provenanceContained : ∀ candidate, candidate ∈ state.provenance →
+      candidate ∈ decoys := by
+    intro candidate member
+    apply distinctDecoyVariables_mem_of_lt candidate
+      ((constructStage (depth + 1)).searchIndex + 1)
+    have bounded := invariant.bounded candidate member
+    unfold stageSelectedVar growingDiscoverySplitVar at bounded
+    rw [generateCanonicalStage_searchIndex_advances]
+    exact Nat.lt_succ_of_le bounded
+  have retainedLength : retainedDecoys.length + state.provenance.length =
+      decoys.length :=
+    retainedCandidates_length_add_provenance decoys state.provenance
+      (distinctDecoyVariables_nodup _) invariant.nodup provenanceContained
+  have selectedAccepted :
+      provenanceAvoidCheck (stageSelectedVar (depth + 1)) state.provenance = true := by
+    apply provenanceAvoidCheck_true_of_not_mem
+    intro member
+    have bounded := invariant.bounded _ member
+    exact (Nat.ne_of_lt (Nat.lt_of_le_of_lt bounded
+      (by rw [stageSelectedVar_succ]; exact Nat.lt_add_of_pos_right (by decide)))) rfl
+  have anchorAccepted :
+      provenanceAvoidCheck (stageAnchorVar (depth + 1)) state.provenance = true := by
+    apply provenanceAvoidCheck_true_of_not_mem
+    intro member
+    have bounded := invariant.bounded _ member
+    have selectedBelowAnchor :
+        stageSelectedVar depth < stageAnchorVar (depth + 1) := by
+      unfold stageSelectedVar stageAnchorVar growingDiscoverySplitVar
+        growingDiscoveryAnchorVar
+      rw [generateCanonicalStage_searchIndex_advances]
+      exact Nat.lt_add_of_pos_right (by decide)
+    exact (Nat.ne_of_lt (Nat.lt_of_le_of_lt bounded selectedBelowAnchor)) rfl
+  have candidatesExact : run.candidates =
+      retainedDecoys ++
+        [stageSelectedVar (depth + 1), stageAnchorVar (depth + 1),
+          stageSelectedVar (depth + 1), stageAnchorVar (depth + 1)] := by
+    rw [run.candidatesExact, run.filteringExact,
+      filterCandidatesByProvenance_retained]
+    rw [run.generated.extractionExact]
+    change (stageExtractedCandidates (depth + 1)).filter _ = _
+    rw [stageExtractedCandidates_exact, filter_append_constructive]
+    change provenanceAvoidCheck
+      (growingDiscoverySplitVar (constructStage (depth + 1)).searchIndex)
+      state.provenance = true at selectedAccepted
+    change provenanceAvoidCheck
+      (growingDiscoveryAnchorVar (constructStage (depth + 1)).searchIndex)
+      state.provenance = true at anchorAccepted
+    change _ = retainedDecoys ++
+      [growingDiscoverySplitVar (constructStage (depth + 1)).searchIndex,
+        growingDiscoveryAnchorVar (constructStage (depth + 1)).searchIndex,
+        growingDiscoverySplitVar (constructStage (depth + 1)).searchIndex,
+        growingDiscoveryAnchorVar (constructStage (depth + 1)).searchIndex]
+    simp only [List.filter, selectedAccepted, anchorAccepted]
+    rfl
+  have retainedFail : ∀ candidate, candidate ∈ retainedDecoys →
+      (tryMeasuredCandidate (constructStage (depth + 1)).operationalRoot candidate).produced? =
+        none := by
+    intro candidate member
+    have decoyMember := memberOfFilter_original
+      (fun candidate => provenanceAvoidCheck candidate state.provenance)
+      candidate decoys member
+    have unmeasured := distinctGrowingDiscoveryDecoyCandidate_none
+      (constructStage (depth + 1)).searchIndex candidate decoyMember
+    let measured := tryMeasuredCandidate
+      (constructStage (depth + 1)).operationalRoot candidate
+    have resultNone : measured.result = none := by
+      exact Eq.trans (tryMeasuredCandidate_exact _ _) unmeasured
+    change measured.produced?.map (fun produced => produced.discovery) = none at resultNone
+    exact optionEqNoneOfMapEqNone (fun produced => produced.discovery)
+      measured.produced? resultNone
+  have attempts : run.outcome.attempts = retainedDecoys.length + 1 := by
+    rw [run.outcomeExact, candidatesExact]
+    exact exploreFailuresThenSuccess_attempts
+      (constructStage (depth + 1)).operationalRoot retainedDecoys
+      (stageSelectedVar (depth + 1))
+      [stageAnchorVar (depth + 1), stageSelectedVar (depth + 1),
+        stageAnchorVar (depth + 1)] retainedFail
+      (selectedMeasuredCandidate_succeeds depth)
+  rw [attempts]
+  rw [Nat.add_assoc, Nat.add_comm 1 state.provenance.length, ← Nat.add_assoc,
+    retainedLength, distinctDecoyVariables_length]
+  exact constitutedSearchIndex_next_add_two depth
+
+/-- Sum of the linearly increasing discovery effort produced by causal
+feedback.  The base is itself the attempt count emitted by the first stage. -/
+def threadedAttemptTotal (base : Nat) : Nat → Nat
+  | 0 => 0
+  | count + 1 => threadedAttemptTotal (base + 1) count + base
+
+theorem ThreadedConstitutiveStageRun.stageDiscoveryOutcomeExact
+    {depth : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    stage.discoveryRun.outcome = run.discoveryRun.outcome := by
+  calc
+    stage.discoveryRun.outcome =
+        (executeSequentialStageFromActiveRecorded depth assignment state.generation
+          run.discoveryRun.asRecorded run.discoveryRun.extractionExact run.discovery
+          run.recordedDiscoveryFound run.discoveryExact
+          run.discoveryWorkLeCanonical).discoveryRun.outcome :=
+      congrArg (fun built => built.discoveryRun.outcome) run.stageFromDiscovery
+    _ = run.discoveryRun.outcome := rfl
+
+theorem natAddRightCancelConstructive {left right suffix : Nat}
+    (equal : left + suffix = right + suffix) : left = right := by
+  induction suffix with
+  | zero => exact equal
+  | succ suffix inductionHypothesis =>
+      apply inductionHypothesis
+      exact Nat.succ.inj equal
+
+theorem nextThreadedDiscovery_attempts_succ {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (invariant : ThreadedProvenanceInvariant state)
+    (run : NextOperationalStateRun state stage) :
+    (runThreadedNextDiscovery run.next).outcome.attempts =
+      (runThreadedNextDiscovery state).outcome.attempts + 1 := by
+  have current := threadedDiscovery_attempts_add_provenance_exact state invariant
+  have following := threadedDiscovery_attempts_add_provenance_exact run.next
+    (invariant.next run)
+  have lengthExact : run.next.provenance.length = state.provenance.length + 1 := by
+    rw [run.provenanceFromExecution]
+    rfl
+  rw [lengthExact] at following
+  have rhsExact : 2 * (depth + 1) + 10 = (2 * depth + 10) + 2 := by
+    calc
+      2 * (depth + 1) + 10 = (2 * depth + 2) + 10 := by
+        rw [Nat.mul_add, Nat.mul_one]
+      _ = 2 * depth + (2 + 10) := Nat.add_assoc _ _ _
+      _ = 2 * depth + (10 + 2) :=
+        congrArg (Nat.add (2 * depth)) (Nat.add_comm 2 10)
+      _ = (2 * depth + 10) + 2 := (Nat.add_assoc _ _ _).symm
+  rw [rhsExact, ← current] at following
+  have rearranged :
+      (runThreadedNextDiscovery run.next).outcome.attempts + 1 +
+          state.provenance.length =
+        ((runThreadedNextDiscovery state).outcome.attempts + 1) + 1 +
+          state.provenance.length := by
+    calc
+      (runThreadedNextDiscovery run.next).outcome.attempts + 1 +
+            state.provenance.length =
+          (runThreadedNextDiscovery run.next).outcome.attempts +
+            (state.provenance.length + 1) := by
+              rw [Nat.add_assoc, Nat.add_comm 1 state.provenance.length]
+      _ = ((runThreadedNextDiscovery state).outcome.attempts +
+            state.provenance.length) + 2 := following
+      _ = (runThreadedNextDiscovery state).outcome.attempts +
+            (state.provenance.length + 2) := Nat.add_assoc _ _ _
+      _ = (runThreadedNextDiscovery state).outcome.attempts +
+            (2 + state.provenance.length) :=
+              congrArg
+                (Nat.add (runThreadedNextDiscovery state).outcome.attempts)
+                (Nat.add_comm state.provenance.length 2)
+      _ = ((runThreadedNextDiscovery state).outcome.attempts + 2) +
+            state.provenance.length := (Nat.add_assoc _ _ _).symm
+      _ = ((runThreadedNextDiscovery state).outcome.attempts + 1) + 1 +
+            state.provenance.length := by rfl
+  exact natAddRightCancelConstructive
+    (natAddRightCancelConstructive rearranged)
+
+/-- The counter folded from the authoritative recursive history is exactly the
+sum of the attempts emitted by its causally threaded discoveries. -/
+theorem ConstitutiveExecutionHistory.discoveryAttempts_eq_threadedTotal
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    (history : ConstitutiveExecutionHistory (count := count) state)
+    (invariant : ThreadedProvenanceInvariant state) :
+    history.toSequentialHistory.stats.discoveryAttempts =
+      threadedAttemptTotal
+        (runThreadedNextDiscovery state).outcome.attempts count := by
+  induction history with
+  | nil => rfl
+  | @step depth count assignment state head headRun tailRun inductionHypothesis =>
+      have tailInvariant := invariant.next headRun.nextRun
+      have tailExact := inductionHypothesis tailInvariant
+      have nextAttempts := nextThreadedDiscovery_attempts_succ invariant headRun.nextRun
+      have headAttempts : head.stats.discoveryAttempts =
+          (runThreadedNextDiscovery state).outcome.attempts := by
+        change head.discoveryRun.outcome.attempts = _
+        rw [headRun.stageDiscoveryOutcomeExact, headRun.discoveryRunExact]
+      change tailRun.toSequentialHistory.stats.discoveryAttempts +
+          head.stats.discoveryAttempts = _
+      rw [tailExact, nextAttempts, headAttempts]
+      rfl
+
+theorem threadedAttemptTotal_mono {first second : Nat}
+    (ordered : first ≤ second) (count : Nat) :
+    threadedAttemptTotal first count ≤ threadedAttemptTotal second count := by
+  induction count generalizing first second with
+  | zero => exact Nat.le_refl 0
+  | succ count inductionHypothesis =>
+      exact Nat.add_le_add
+        (inductionHypothesis (Nat.add_le_add_right ordered 1)) ordered
+
+theorem threadedAttemptTotal_integrated_strict (input : Nat) :
+    threadedAttemptTotal (2 * input + 10) (input + 1) <
+      threadedAttemptTotal (2 * (input + 1) + 10) (input + 2) := by
+  change threadedAttemptTotal (2 * input + 10) (input + 1) <
+    threadedAttemptTotal (2 * (input + 1) + 10 + 1) (input + 1) +
+      (2 * (input + 1) + 10)
+  have ordered : 2 * input + 10 ≤ 2 * (input + 1) + 10 + 1 :=
+    Nat.le_trans
+      (Nat.add_le_add_right
+        (Nat.mul_le_mul_left 2 (Nat.le_add_right input 1)) 10)
+      (Nat.le_add_right (2 * (input + 1) + 10) 1)
+  have lower := threadedAttemptTotal_mono
+    (first := 2 * input + 10)
+    (second := 2 * (input + 1) + 10 + 1)
+    ordered (input + 1)
+  have positive : 0 < 2 * (input + 1) + 10 :=
+    Nat.lt_of_le_of_lt (Nat.zero_le _)
+      (Nat.lt_add_of_pos_right (by decide))
+  exact Nat.lt_of_le_of_lt lower (Nat.lt_add_of_pos_right positive)
+
+theorem executedThreadedHistory_attempts_exact (depth count : Nat) :
+    (executeConstitutiveExecutionHistory count
+      (initialThreadedConstitutiveState depth)
+      (initialThreadedConstitutiveState_fresh depth)).toSequentialHistory.stats.discoveryAttempts =
+        threadedAttemptTotal (2 * depth + 10) count := by
+  let history := executeConstitutiveExecutionHistory count
+    (initialThreadedConstitutiveState depth)
+    (initialThreadedConstitutiveState_fresh depth)
+  have exactTotal := history.discoveryAttempts_eq_threadedTotal
+    (initialThreadedProvenanceInvariant depth)
+  have initialAttempts := threadedDiscovery_attempts_add_provenance_exact
+    (initialThreadedConstitutiveState depth)
+    (initialThreadedProvenanceInvariant depth)
+  change (runThreadedNextDiscovery
+    (initialThreadedConstitutiveState depth)).outcome.attempts + 0 =
+      2 * depth + 10 at initialAttempts
+  rw [Nat.add_zero] at initialAttempts
+  rw [exactTotal, initialAttempts]
+
 theorem member_append_left_constructive {alpha : Type} (value : alpha) :
     ∀ {left right : List alpha}, value ∈ left → value ∈ left ++ right
   | [], _, member => nomatch member
@@ -2385,8 +3085,14 @@ def nextDiscoveryConstitution (depth : Nat)
   | .retained => ⟨.retained, retainedNextDiscoveryState depth, rfl⟩
   | .blocked => ⟨.blocked, blockedNextDiscoveryState depth, rfl⟩
 
-def nextDiscoveryProjection {depth : Nat} (_ : NextDiscoveryConstitution depth) : Nat × Cnf :=
-  (depth + 1, (constructStage ((depth + 1) + 1)).operationalRoot.context.formula)
+/-- The projectable state data deliberately exclude decision history and
+provenance.  Unlike the former constant projection, this reads the actual
+assignment, generation witness, and transmitted seed of each constitution. -/
+def nextDiscoveryProjection {depth : Nat}
+    (constitution : NextDiscoveryConstitution depth) :
+    SequentialAssignment (depth + 1) × CanonicalStageGeneration (depth + 1) × Nat :=
+  (constitution.packed.assignment, constitution.packed.state.generation,
+    constitution.packed.state.searchSeed)
 
 def nextDiscoveryOutcome {depth : Nat} (state : NextDiscoveryConstitution depth) :=
   (runThreadedNextDiscovery state.packed.state).outcome.discovered?
@@ -2515,7 +3221,10 @@ theorem nextDiscovery_constitutions_distinct (depth : Nat) :
 theorem nextDiscovery_projection_equal (depth : Nat) :
     nextDiscoveryProjection (nextDiscoveryConstitution depth .retained) =
       nextDiscoveryProjection (nextDiscoveryConstitution depth .blocked) :=
-  rfl
+  by
+    apply Prod.ext
+    · rfl
+    · apply Prod.ext <;> rfl
 
 theorem nextDiscovery_outcome_different (depth : Nat) :
     nextDiscoveryOutcome (nextDiscoveryConstitution depth .retained) ≠
@@ -2557,6 +3266,11 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.structuralDecisionsAvoidCheck_true_of_avoid
 #print axioms ConstitutiveSearch.EndogenousDecomposition.inspectTransmittedDecisions_available_of_all_lt
 #print axioms ConstitutiveSearch.EndogenousDecomposition.inspectTransmittedDecisions_visits_of_all_ne
+#print axioms ConstitutiveSearch.EndogenousDecomposition.initializationEndpointExact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.initialThreadedConstitutiveStateFromInitialization
+#print axioms ConstitutiveSearch.EndogenousDecomposition.initialThreadedConstitutiveStateFromInitialization_generation_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.initialThreadedConstitutiveState_generation_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.initialThreadedConstitutiveStateFromInitialization_fresh
 #print axioms ConstitutiveSearch.EndogenousDecomposition.initialThreadedConstitutiveState
 #print axioms ConstitutiveSearch.EndogenousDecomposition.initialThreadedConstitutiveState_fresh
 #print axioms ConstitutiveSearch.EndogenousDecomposition.structuralDecisionsAvoid_of_all_lt
@@ -2592,7 +3306,40 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveStageRun.nextDiscoveryConsumesRetainedSearchSeed
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeThreadedConstitutiveStage
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeConstitutiveExecutionHistory
+#print axioms ConstitutiveSearch.EndogenousDecomposition.failedDiscovery_noStageRun
+#print axioms ConstitutiveSearch.EndogenousDecomposition.failedDiscovery_noConstructedStage
+#print axioms ConstitutiveSearch.EndogenousDecomposition.failedDiscovery_historyCount_eq_zero
+#print axioms ConstitutiveSearch.EndogenousDecomposition.failedDiscovery_noPositiveHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExecutionHistory.toSequentialHistory
+#print axioms ConstitutiveSearch.EndogenousDecomposition.provenanceAvoidCheck_false_of_mem
+#print axioms ConstitutiveSearch.EndogenousDecomposition.provenanceAvoidCheck_false_implies_mem
+#print axioms ConstitutiveSearch.EndogenousDecomposition.provenanceAvoidCheck_true_of_not_mem
+#print axioms ConstitutiveSearch.EndogenousDecomposition.filteredList_nodup
+#print axioms ConstitutiveSearch.EndogenousDecomposition.removeFirstVar
+#print axioms ConstitutiveSearch.EndogenousDecomposition.removeFirstVar_member_original
+#print axioms ConstitutiveSearch.EndogenousDecomposition.removeFirstVar_preserves_other
+#print axioms ConstitutiveSearch.EndogenousDecomposition.removeFirstVar_length_plus_one
+#print axioms ConstitutiveSearch.EndogenousDecomposition.removeFirstVar_nodup
+#print axioms ConstitutiveSearch.EndogenousDecomposition.removeFirstVar_excludes_target
+#print axioms ConstitutiveSearch.EndogenousDecomposition.nodupVarLists_sameLength_of_mutualMembership
+#print axioms ConstitutiveSearch.EndogenousDecomposition.filter_complement_lengths
+#print axioms ConstitutiveSearch.EndogenousDecomposition.filter_append_constructive
+#print axioms ConstitutiveSearch.EndogenousDecomposition.rejectedCandidates_length_eq_provenance
+#print axioms ConstitutiveSearch.EndogenousDecomposition.retainedCandidates_length_add_provenance
+#print axioms ConstitutiveSearch.EndogenousDecomposition.exploreFailuresThenSuccess_attempts
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedProvenanceInvariant
+#print axioms ConstitutiveSearch.EndogenousDecomposition.initialThreadedProvenanceInvariant
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedProvenanceInvariant.next
+#print axioms ConstitutiveSearch.EndogenousDecomposition.selectedMeasuredCandidate_succeeds
+#print axioms ConstitutiveSearch.EndogenousDecomposition.threadedDiscovery_attempts_add_provenance_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.threadedAttemptTotal
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveStageRun.stageDiscoveryOutcomeExact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.natAddRightCancelConstructive
+#print axioms ConstitutiveSearch.EndogenousDecomposition.nextThreadedDiscovery_attempts_succ
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExecutionHistory.discoveryAttempts_eq_threadedTotal
+#print axioms ConstitutiveSearch.EndogenousDecomposition.threadedAttemptTotal_mono
+#print axioms ConstitutiveSearch.EndogenousDecomposition.threadedAttemptTotal_integrated_strict
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedThreadedHistory_attempts_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.listLengthAppendConstructive
 #print axioms ConstitutiveSearch.EndogenousDecomposition.extractCnfCandidateRun_length
 #print axioms ConstitutiveSearch.EndogenousDecomposition.runCandidateExtraction_length
@@ -2619,6 +3366,7 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.blockedNextDiscoveryState
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_retained_found
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscoveryConstitution
+#print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscoveryProjection
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_blocked_none
 #print axioms ConstitutiveSearch.EndogenousDecomposition.blocked_discovery_constructs_no_stage
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_states_share_executed_origin
@@ -2626,6 +3374,7 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_history_lengths_distinct
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_histories_distinct
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_outcome_different
+#print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_projection_equal
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_not_factors
 #print axioms ConstitutiveSearch.EndogenousDecomposition.feedbackFailureArtifacts_exact
 /- AXIOM_AUDIT_END -/

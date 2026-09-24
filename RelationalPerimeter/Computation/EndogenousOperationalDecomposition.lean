@@ -121,19 +121,24 @@ theorem complete_step_precedes_acceptance {root : Cnf}
   rw [applyFullConstitutiveStep_assignment, applyFullConstitutiveStep_assignment,
     same]
 
-/-- A failed relation discovery produces no operational stage. -/
+/-- A failed relation discovery admits no operational stage or produced next
+state.  This statement applies to every threaded state and does not rely on the
+freshness invariant of the successful canonical execution. -/
 theorem failed_discovery_constructs_no_stage {depth : Nat}
     {assignment : SequentialAssignment depth}
     (state : ThreadedConstitutiveState depth assignment)
-    (fresh : ThreadedStateFreshForNext state)
-    (failed : (runThreadedNextDiscovery state).outcome.discovered? = none) :
-  executeThreadedConstitutiveStage state fresh = none := by
-  unfold executeThreadedConstitutiveStage
-  dsimp only
-  split
-  · rfl
-  · next discovery found =>
-      cases Eq.trans found.symm failed
+    (failed : (runThreadedNextDiscovery state).outcome.discovered? = none)
+    (built : ConstructedThreadedStageRun state) : False :=
+  failedDiscovery_noConstructedStage state failed built
+
+/-- Failure also excludes every positive-length authoritative descendant
+history, rather than merely selecting the `none` branch of a builder. -/
+theorem failed_discovery_constructs_no_descendant_history {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (failed : (runThreadedNextDiscovery state).outcome.discovered? = none)
+    (history : ConstitutiveExecutionHistory (count := count + 1) state) : False :=
+  failedDiscovery_noPositiveHistory state failed history
 
 /-- Every generated decoy candidate fails to produce the required relation. -/
 theorem decoy_relation_candidates_fail
@@ -153,11 +158,34 @@ theorem relation_is_reconstructed_after_exact_attempts (depth : Nat) :
         (constructStage depth).searchIndex + 2 :=
   stageDiscovery_found_after_exact_attempts depth
 
-/-- The executed discovery effort grows strictly from one stage to the next. -/
+/-- The unfiltered stage-local reference effort grows strictly with depth. -/
 theorem executed_relation_search_attempts_grow (depth : Nat) :
     (stageRecordedDiscoveryRun depth).outcome.attempts <
       (stageRecordedDiscoveryRun (depth + 1)).outcome.attempts :=
   stageRecordedDiscovery_attempts_strict depth
+
+/-- The total relation-search effort emitted by the authoritative feedback
+recursion is exactly the recursively accumulated, provenance-filtered effort. -/
+theorem authoritative_relation_search_attempts_exact (input : Nat) :
+    (executeConstitutiveResolution input).stats.discoveryAttempts =
+      threadedAttemptTotal (2 * input + 10) (input + 1) :=
+  executeConstitutiveResolution_attempts_exact input
+
+/-- The total relation-search effort emitted by the authoritative feedback
+recursion grows strictly with successive external inputs.  This is the counter
+of the actual provenance-filtered execution, not the unfiltered reference run. -/
+theorem authoritative_relation_search_attempts_grow (input : Nat) :
+    (executeConstitutiveResolution input).stats.discoveryAttempts <
+      (executeConstitutiveResolution (input + 1)).stats.discoveryAttempts :=
+  executeConstitutiveResolution_attempts_strict input
+
+/- The causal execution begins from the endpoint produced by its measured
+initialization run, rather than from an independently rebuilt source. -/
+theorem initial_state_uses_measured_initialization (input : Nat) :
+    let run := executeConstitutiveResolution input
+    run.threadedInitialState =
+      initialThreadedConstitutiveStateFromInitialization run.initialization := by
+  exact (executeConstitutiveResolution input).threadedInitialStateFromInitialization
 
 /--
 The seed transmitted to the next stage is read definitionally from the state
@@ -309,9 +337,13 @@ end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.opening_then_absorption_preserves_frontier_viability
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.complete_step_precedes_acceptance
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.failed_discovery_constructs_no_stage
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.failed_discovery_constructs_no_descendant_history
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.decoy_relation_candidates_fail
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.relation_is_reconstructed_after_exact_attempts
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_relation_search_attempts_grow
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.authoritative_relation_search_attempts_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.authoritative_relation_search_attempts_grow
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.initial_state_uses_measured_initialization
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.produced_seed_is_read_from_executed_state
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.next_state_stores_produced_seed
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.retained_decision_reads_executed_output

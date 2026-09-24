@@ -103,6 +103,17 @@ une même famille relationnelle typée
 → tournant périmétral affirmatif et changement de régime
 ```
 
+## Positionnement et portée
+
+Cette construction est une architecture relationnelle formalisée dans Lean,
+non une fondation logique concurrente. Sa proof-relevance, la séparation de ses
+interfaces et les limites exactes de ses rapprochements avec les systèmes de
+transition, les sémantiques de traces, les chemins libres et les théories de
+types sont exposées dans la section canonique
+[Positionnement et portée](positionnement-et-portee.fr.md).
+
+![Fondations et architecture formelle de Relational Perimeter](figures/relational-perimeter-formal-architecture.svg)
+
 ## 1. Relations, rôles et occurrences
 
 La relation locale centrale est une famille de types :

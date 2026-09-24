@@ -51,6 +51,12 @@ Its result is projected from
 `executeConstitutiveExecutionHistory`; a second replay does not supply the
 public history, terminal state, decision, or accounting.
 
+The entry boundary follows the same causal discipline. The first threaded
+state is constructed from the endpoint stored by the actual measured
+initialization run. Its generation is then proved equal to the canonical
+generation; an independently reconstructed source is not substituted for the
+one that was produced.
+
 ## What is formally separated
 
 The types keep the following distinctions visible:
@@ -81,10 +87,15 @@ It exposes axiom-free declarations for:
 - the separate acceptance-preservation theorem;
 - viability transport and exact preservation of frontier viability;
 - the independence of the complete step from acceptance evidence;
-- the absence of a constructed stage after failed discovery;
+- the absence of any constructed stage and of every positive-length
+  authoritative descendant history after failed discovery;
 - failure of every generated decoy relation candidate and the exact attempt
   count before discovery succeeds;
-- strict growth of executed relation-search attempts;
+- the exact provenance-filtered attempt law and strict growth of the total
+  relation-search counter emitted by the authoritative recursion, in addition
+  to the stage-local reference growth;
+- construction of the first threaded state from the endpoint of the measured
+  initialization run;
 - constructor-level formation of the next seed and extraction bundle from the
   executed state, distinct from their later canonical-equality proofs;
 - consumption of the produced seed and provenance by the next discovery;
@@ -106,7 +117,10 @@ execution/accounting surface.
 The result is constructive, executable, uniformly indexed by depth, and
 axiom-free. It is instantiated on one explicit generated SAT family based on a
 polarity-flip symmetry. The discovery performs real decidable work, rejects
-decoy candidates, and its recorded number of attempts grows with the input.
+decoy candidates, and the attempt counter emitted by the authoritative
+provenance-filtered recursion obeys an exact general law and grows strictly
+with successive inputs. Failed discovery produces neither a stage nor any
+positive-length authoritative descendant history.
 
 The next search depends on the preceding result in two different senses:
 

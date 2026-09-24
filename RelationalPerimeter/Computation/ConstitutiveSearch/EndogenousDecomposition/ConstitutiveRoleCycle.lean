@@ -16,8 +16,8 @@ structure ConstitutiveRoleStage {depth : Nat} {input : SequentialAssignment dept
     searchState
     (searchState.child run.discovery.var false (by rw [searchStateExact]; exact run.discovery.fresh))
     (searchState.child run.discovery.var true (by rw [searchStateExact]; exact run.discovery.fresh))
-  executedDecision : StructuralBranchDecision
-  executedDecisionExact : executedDecision = ⟨run.discovery.var, true⟩
+  selectedDecision : StructuralBranchDecision
+  selectedDecisionExact : selectedDecision = ⟨run.discovery.var, true⟩
   reconstructedRelation : GeneratedStructuralFlipAtRelation run.storedSchedule.entry.var
     run.storedSchedule.entry.source run.storedSchedule.entry.target
   reconstructedRelationExact : reconstructedRelation = run.storedSchedule.entry.relation
@@ -30,8 +30,8 @@ def constitutiveRoleStage {depth : Nat} {input : SequentialAssignment depth}
   { searchState := searchState
     searchStateExact := rfl
     structuralOpening := generatedStructuralSplit searchState run.discovery.var run.discovery.fresh
-    executedDecision := ⟨run.discovery.var, true⟩
-    executedDecisionExact := rfl
+    selectedDecision := ⟨run.discovery.var, true⟩
+    selectedDecisionExact := rfl
     reconstructedRelation := run.storedSchedule.entry.relation
     reconstructedRelationExact := rfl
     completeExecution := fullStageExecution run
@@ -71,6 +71,7 @@ theorem roleStage_complete_operation_is_next {depth : Nat} {input : SequentialAs
 end ConstitutiveSearch.EndogenousDecomposition
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveRoleStage
 #print axioms ConstitutiveSearch.EndogenousDecomposition.constitutiveRoleStage
 #print axioms ConstitutiveSearch.EndogenousDecomposition.buildConstitutiveRoleHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleStage_relation_is_discovered

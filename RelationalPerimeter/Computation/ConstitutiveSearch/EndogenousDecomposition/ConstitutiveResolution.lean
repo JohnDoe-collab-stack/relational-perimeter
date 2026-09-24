@@ -265,13 +265,18 @@ structure ConstitutiveResolutionRun (input : Nat) where
     ThreadedConstitutiveState input (initialSequentialAssignment input)
   threadedInitialStateExact :
     threadedInitialState = initialThreadedConstitutiveState input
+  threadedInitialStateFromInitialization :
+    threadedInitialState =
+      initialThreadedConstitutiveStateFromInitialization initialization
+  threadedInitialGenerationExact :
+    threadedInitialState.generation = generateCanonicalStage input
   constitutiveFeedbackHistory :
     ConstitutiveExecutionHistory
       (count := resolutionLength input) threadedInitialState
   production : ConstitutiveProductionRun input (resolutionLength input)
   productionExact : production =
     constitutiveFeedbackHistory.toProductionRun
-      (by rw [threadedInitialStateExact]; rfl)
+      threadedInitialGenerationExact
   generatedHistory :
     CanonicalGeneratedHistory input (resolutionLength input)
   generatedHistoryExact :
@@ -337,15 +342,19 @@ structure ConstitutiveResolutionRun (input : Nat) where
 /-- Execute the whole concrete procedure from the input alone. -/
 def executeConstitutiveResolution
     (input : Nat) : ConstitutiveResolutionRun input :=
-  let threadedInitialState := initialThreadedConstitutiveState input
+  let initialization := initializeConstitutiveHistory input
+  let threadedInitialState :=
+    initialThreadedConstitutiveStateFromInitialization initialization
   let feedbackHistory := executeConstitutiveExecutionHistory
     (resolutionLength input) threadedInitialState
-    (initialThreadedConstitutiveState_fresh input)
+    (initialThreadedConstitutiveStateFromInitialization_fresh initialization)
+  have initialGenerationExact : threadedInitialState.generation =
+      generateCanonicalStage input :=
+    initialThreadedConstitutiveStateFromInitialization_generation_exact initialization
   let history := feedbackHistory.toSequentialHistory
   have historyCanonical : history = resolutionHistory input := by
     rfl
-  let initialization := initializeConstitutiveHistory input
-  let production := feedbackHistory.toProductionRun rfl
+  let production := feedbackHistory.toProductionRun initialGenerationExact
   let generatedHistory := production.history
   let traversal := feedbackHistory.toDiscoveryTraversal
   have traversed := feedbackHistory.toDiscoveryTraversal_exact
@@ -355,6 +364,8 @@ def executeConstitutiveResolution
     initializationExact := rfl
     threadedInitialState := threadedInitialState
     threadedInitialStateExact := rfl
+    threadedInitialStateFromInitialization := rfl
+    threadedInitialGenerationExact := initialGenerationExact
     constitutiveFeedbackHistory := feedbackHistory
     production := production
     productionExact := rfl
@@ -408,7 +419,7 @@ theorem executeConstitutiveResolution_generatedSteps (input : Nat) :
   let run := executeConstitutiveResolution input
   rw [run.statsExact, run.historyFromCausalExecution]
   exact (run.constitutiveFeedbackHistory.coreStats_exact
-    (by rw [run.threadedInitialStateExact]; rfl)).2.1
+    run.threadedInitialGenerationExact).2.1
 
 /-- One discovered schedule atom is produced per generated stage. -/
 theorem executeConstitutiveResolution_scheduleAtoms (input : Nat) :
@@ -416,7 +427,7 @@ theorem executeConstitutiveResolution_scheduleAtoms (input : Nat) :
   let run := executeConstitutiveResolution input
   rw [run.statsExact, run.historyFromCausalExecution]
   exact (run.constitutiveFeedbackHistory.coreStats_exact
-    (by rw [run.threadedInitialStateExact]; rfl)).2.2.2.2.1
+    run.threadedInitialGenerationExact).2.2.2.2.1
 
 /-- Validation performs one primitive query per generated stage. -/
 theorem executeConstitutiveResolution_validationQueries (input : Nat) :
@@ -425,7 +436,7 @@ theorem executeConstitutiveResolution_validationQueries (input : Nat) :
   let run := executeConstitutiveResolution input
   rw [run.statsExact, run.historyFromCausalExecution]
   exact (run.constitutiveFeedbackHistory.coreStats_exact
-    (by rw [run.threadedInitialStateExact]; rfl)).2.2.2.2.2.1
+    run.threadedInitialGenerationExact).2.2.2.2.2.1
 
 /-- Local execution performs one primitive query per generated stage. -/
 theorem executeConstitutiveResolution_executionQueries (input : Nat) :
@@ -434,7 +445,7 @@ theorem executeConstitutiveResolution_executionQueries (input : Nat) :
   let run := executeConstitutiveResolution input
   rw [run.statsExact, run.historyFromCausalExecution]
   exact (run.constitutiveFeedbackHistory.coreStats_exact
-    (by rw [run.threadedInitialStateExact]; rfl)).2.2.2.2.2.2.1
+    run.threadedInitialGenerationExact).2.2.2.2.2.2.1
 
 /-- Every code returned by the local runs is actually applied once. -/
 theorem executeConstitutiveResolution_appliedAtoms (input : Nat) :
@@ -442,7 +453,7 @@ theorem executeConstitutiveResolution_appliedAtoms (input : Nat) :
   let run := executeConstitutiveResolution input
   rw [run.statsExact, run.historyFromCausalExecution]
   exact (run.constitutiveFeedbackHistory.coreStats_exact
-    (by rw [run.threadedInitialStateExact]; rfl)).2.2.2.2.2.2.2.2
+    run.threadedInitialGenerationExact).2.2.2.2.2.2.2.2
 
 /-- No global composition candidate is inspected anywhere in the history. -/
 theorem executeConstitutiveResolution_noGlobalComposition (input : Nat) :
@@ -450,7 +461,7 @@ theorem executeConstitutiveResolution_noGlobalComposition (input : Nat) :
   let run := executeConstitutiveResolution input
   rw [run.statsExact, run.historyFromCausalExecution]
   exact (run.constitutiveFeedbackHistory.coreStats_exact
-    (by rw [run.threadedInitialStateExact]; rfl)).2.2.2.2.2.2.2.1
+    run.threadedInitialGenerationExact).2.2.2.2.2.2.2.1
 
 /--
 All structural cardinalities are consequences of the objects already produced
@@ -526,6 +537,37 @@ theorem resolution_generatedSteps_strict (input : Nat) :
     executeConstitutiveResolution_generatedSteps
   ]
   exact Nat.lt_succ_self (input + 1)
+
+/-- Exact discovery-effort law for the counter emitted by the authoritative
+feedback recursion, after its produced provenance has filtered prior variables. -/
+theorem executeConstitutiveResolution_attempts_exact (input : Nat) :
+    (executeConstitutiveResolution input).stats.discoveryAttempts =
+      threadedAttemptTotal (2 * input + 10) (input + 1) := by
+  let run := executeConstitutiveResolution input
+  rw [run.statsExact, run.historyFromCausalExecution]
+  have invariant : ThreadedProvenanceInvariant run.threadedInitialState := by
+    rw [run.threadedInitialStateExact]
+    exact initialThreadedProvenanceInvariant input
+  have exactTotal := run.constitutiveFeedbackHistory.discoveryAttempts_eq_threadedTotal
+    invariant
+  have initialAttempts := threadedDiscovery_attempts_add_provenance_exact
+    run.threadedInitialState invariant
+  have provenanceEmpty : run.threadedInitialState.provenance.length = 0 := by
+    rw [run.threadedInitialStateExact]
+    rfl
+  rw [provenanceEmpty] at initialAttempts
+  rw [Nat.add_zero] at initialAttempts
+  rw [exactTotal, initialAttempts]
+  rfl
+
+/-- Successive external inputs strictly increase the discovery attempts
+actually emitted by the authoritative causally threaded execution. -/
+theorem executeConstitutiveResolution_attempts_strict (input : Nat) :
+    (executeConstitutiveResolution input).stats.discoveryAttempts <
+      (executeConstitutiveResolution (input + 1)).stats.discoveryAttempts := by
+  rw [executeConstitutiveResolution_attempts_exact,
+    executeConstitutiveResolution_attempts_exact]
+  exact threadedAttemptTotal_integrated_strict input
 
 theorem natFunction_strict_of_successor (function : Nat → Nat)
     (successor : ∀ input, function input < function (input + 1))
@@ -653,14 +695,14 @@ def section6OperationalSuccessionEvidence {input : Nat}
         run.stats.appliedCodeAtoms = input + 1 := by
           rw [run.statsExact, run.historyFromCausalExecution]
           exact (run.constitutiveFeedbackHistory.coreStats_exact
-            (by rw [run.threadedInitialStateExact]; rfl)).2.2.2.2.2.2.2.2
+            run.threadedInitialGenerationExact).2.2.2.2.2.2.2.2
         _ = run.generatedHistory.stepCount := by
           rw [run.generatedHistoryExact, resolutionGeneratedHistory_eq_reference]
           exact (producedHistory_stepCount input (resolutionLength input)).symm
     compositionCandidatesAreZero := by
       rw [run.statsExact, run.historyFromCausalExecution]
       exact (run.constitutiveFeedbackHistory.coreStats_exact
-        (by rw [run.threadedInitialStateExact]; rfl)).2.2.2.2.2.2.2.1
+        run.threadedInitialGenerationExact).2.2.2.2.2.2.2.1
     terminalContinuationIsOperationalFold :=
       Eq.trans run.terminal.assignmentExact
         (terminalAssignment_is_operational_fold run.history) }
@@ -817,17 +859,17 @@ def endogenousOperationalDecompositionEvidence
       by
         rw [run.statsExact, run.historyFromCausalExecution]
         exact (run.constitutiveFeedbackHistory.coreStats_exact
-          (by rw [run.threadedInitialStateExact]; rfl)).1
+          run.threadedInitialGenerationExact).1
     provenanceUnitsExact :=
       by
         rw [run.statsExact, run.historyFromCausalExecution]
         exact (run.constitutiveFeedbackHistory.coreStats_exact
-          (by rw [run.threadedInitialStateExact]; rfl)).2.2.1
+          run.threadedInitialGenerationExact).2.2.1
     generationCertificatesExact :=
       by
         rw [run.statsExact, run.historyFromCausalExecution]
         exact (run.constitutiveFeedbackHistory.coreStats_exact
-          (by rw [run.threadedInitialStateExact]; rfl)).2.2.2.1
+          run.threadedInitialGenerationExact).2.2.2.1
     generatedObjectHasExactLength := by
       rw [run.generatedHistoryExact, resolutionGeneratedHistory_eq_reference]
       exact producedHistory_stepCount input (resolutionLength input)
@@ -995,7 +1037,7 @@ theorem ConstitutiveResolutionRun.productionCalls_exact {input : Nat}
   unfold ConstitutiveResolutionRun.productionCalls
   have generationCanonical : run.threadedInitialState.generation =
       generateCanonicalStage input := by
-    exact congrArg ThreadedConstitutiveState.generation run.threadedInitialStateExact
+    exact run.threadedInitialGenerationExact
   have productionExact : run.production.generateCalls = resolutionLength input := by
     calc
       run.production.generateCalls =
@@ -1011,6 +1053,7 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveResolutionRun
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveResolutionRun.terminalReadWork_bound
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveResolutionRun.realizationWork_bound
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveResolutionRun.productionCalls
@@ -1031,6 +1074,8 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeConstitutiveResolution_noGlobalComposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeConstitutiveResolution_correspondences
 #print axioms ConstitutiveSearch.EndogenousDecomposition.resolution_generatedSteps_strict
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executeConstitutiveResolution_attempts_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executeConstitutiveResolution_attempts_strict
 #print axioms ConstitutiveSearch.EndogenousDecomposition.constitutiveCausalStageEvidence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.section6OperationalSuccessionEvidence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.endogenousOperationalDecompositionEvidence

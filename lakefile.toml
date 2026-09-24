@@ -16,6 +16,7 @@ globs = [
   "AbstractSegmentedTurning",
   "ExactTypeTransport",
   "StrongPerimetralTurning",
+  "RelationalPerimeter",
   "RelationalPerimeter.Computation.+",
   "Tests.+",
 ]

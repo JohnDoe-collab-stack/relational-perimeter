@@ -99,6 +99,16 @@ one typed relational family
 → affirmative perimetral turning and regime change
 ```
 
+## Positioning and scope
+
+This construction is a relational architecture formalized in Lean, not a
+competing logical foundation. Its proof relevance, the separation of its
+interfaces, and the exact limits of its affinities with transition systems,
+trace semantics, free paths, and type theories are stated in the canonical
+[Positioning and scope](positioning-and-scope.en.md) section.
+
+![Relational Perimeter foundations and formal architecture](figures/relational-perimeter-formal-architecture.svg)
+
 ## 1. Relations, roles, and occurrences
 
 The central local relation is a type family:
