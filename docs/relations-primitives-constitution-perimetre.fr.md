@@ -22,15 +22,16 @@ ensuite de reconstruire l'ordre, l'adjacence et la factorisation à partir de la
 constitution globale de l'objet.*
 
 *La portée de cette formalisation dépasse un simple raffinement terminologique.
-En stratifiant construction, réalisation, admission et satisfaction normative,
-elle déplace les critères mêmes de l'identité et de la complétude. Une occurrence
-reçoit son identité de l'histoire relationnelle qui la constitue, et non de sa
-seule valeur. Un tout est complet lorsque ses relations déterminent
-positivement son domaine intérieur, non lorsqu'il épuise toute continuation
-possible. Ce qui pourrait apparaître comme une incomplétude devient alors la
-non-exhaustion de la génération. Le tournant périmétral affirmatif désigne le
-point exact où un tout déjà constitué et complet continue de produire au-delà
-de son régime.*
+En stratifiant construction, réalisation, admission et satisfaction d'une
+spécification, elle déplace les critères mêmes de l'identité et de la
+complétude. Une occurrence reçoit son identité de l'histoire relationnelle qui
+la constitue, et non de sa seule valeur. Un tout est complet lorsque ses
+relations déterminent positivement son domaine intérieur, non lorsqu'il épuise
+toute continuation possible. Ce qui pourrait apparaître comme une incomplétude
+devient alors la non-exhaustion de la génération. Le tournant périmétral
+affirmatif désigne le point exact où, au-delà d'un tout déjà constitué et
+complet, la génération produit une continuation hors du régime dans lequel ce
+tout est maximal.*
 
 *Le périmètre détermine ainsi une quantité exacte sans que cette exactitude
 dépende d'une évaluation numérique. Cette quantité est portée par la

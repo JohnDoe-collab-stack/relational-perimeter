@@ -20,14 +20,15 @@ to reconstruct order, adjacency, and factorization from the global constitution
 of the object.*
 
 *The scope of this formalization goes beyond a mere terminological refinement.
-By stratifying construction, realization, admission, and normative satisfaction,
-it shifts the very criteria of identity and completeness. An occurrence receives
-its identity from the relational history that constitutes it, not from its
-value alone. A whole is complete when its relations positively determine its
-interior domain, not when it exhausts every possible continuation. What might
-appear as incompleteness then becomes the non-exhaustion of generation. The
-affirmative perimetral turning designates the exact point at which an already
-constituted and complete whole continues to produce beyond its regime.*
+By stratifying construction, realization, admission, and satisfaction of a
+specification, it shifts the very criteria of identity and completeness. An
+occurrence receives its identity from the relational history that constitutes
+it, not from its value alone. A whole is complete when its relations positively
+determine its interior domain, not when it exhausts every possible continuation.
+What might appear as incompleteness then becomes the non-exhaustion of
+generation. The affirmative perimetral turning designates the exact point at
+which, beyond an already constituted and complete whole, generation produces a
+continuation outside the regime in which that whole is maximal.*
 
 *The perimeter thus determines an exact quantity whose exactness does not
 depend on numerical evaluation. This quantity is carried by the reversible
