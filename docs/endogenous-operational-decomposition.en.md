@@ -26,6 +26,8 @@ In short, **structural multiplicity and operational independence are
 separated, and that separation is decided during the computation, by the
 computation, from material the computation has produced**.
 
+![Executed architecture of the endogenous operational decomposition](figures/endogenous-operational-decomposition.svg)
+
 ## Executed chain
 
 For each input, one authoritative recursion constructs the following chain:
@@ -100,17 +102,25 @@ It exposes axiom-free declarations for:
   executed state, distinct from their later canonical-equality proofs;
 - consumption of the produced seed and provenance by the next discovery;
 - equal projected readings with different constituted candidate traces;
-- separator states that agree on every permitted projectable datum while
-  differing in decision history and discovery outcome;
-- non-factorization of the next outcome through the permitted projection;
+- counterfactual comparisons constructed from one executed origin: comparison
+  of the retained state with the history-erased state separates constituted
+  candidate traces, while comparison with the blocked state separates decision
+  histories and discovery outcomes despite agreement on every permitted
+  projectable datum; the erased and blocked comparators are not themselves
+  emitted by the authoritative run;
+- non-factorization of the next outcome through the permitted projection on
+  that two-point separator domain: the projection reads assignment, generation,
+  and search seed, whose values are deliberately equal for the two comparators;
 - canonical, uniquely owned measured accounting and the polynomial bounds on
   the explicitly instrumented work of the constructed family.
 
 The complete implementation remains under
 `RelationalPerimeter/Computation/ConstitutiveSearch/`. The statement layer is an
 entry point into that implementation, not a substitute for it. Two regression
-suites preserve both the independently audited counterprobes and the larger
-execution/accounting surface.
+suites protect the target production statements corresponding to the fifteen
+independently enumerated adversarial probes, together with the larger
+execution/accounting surface; they do not claim textual identity with
+historical audit files that are not distributed in either repository.
 
 ## Exact scope
 
@@ -124,8 +134,11 @@ positive-length authoritative descendant history.
 
 The next search depends on the preceding result in two different senses:
 
-- materially, the produced decision history and provenance change the candidate
-  domain and can change the next discovery outcome;
+- materially, counterfactual comparison of the produced state with
+  history-erased and blocked states constructed from the same executed
+  origin shows that decision history and provenance can change the candidate
+  domain and the next discovery outcome; the comparator states are analytical
+  constructions, not additional states emitted by the authoritative run;
 - causally, the next root is formed from a seed read from the produced state,
   although the state invariant forces that seed to equal its canonical value.
 

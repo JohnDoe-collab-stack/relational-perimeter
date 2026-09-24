@@ -27,6 +27,8 @@ En bref, **la multiplicité structurelle et l’indépendance opérationnelle so
 séparées, et cette séparation est décidée pendant le calcul, par le calcul, à
 partir de matériaux produits par le calcul**.
 
+![Architecture exécutée de la décomposition opérationnelle endogène](figures/endogenous-operational-decomposition.svg)
+
 ## Chaîne exécutée
 
 Pour chaque entrée, une récursion faisant autorité construit la chaîne suivante :
@@ -111,10 +113,17 @@ Il expose des déclarations sans axiome pour :
   suivante ;
 - des lectures projetées égales dont les traces candidates constituées
   diffèrent ;
-- des états séparateurs qui coïncident sur toute donnée projetable autorisée
-  tout en différant par leur histoire décisionnelle et le résultat de leur
-  découverte ;
-- la non-factorisation du résultat suivant par la projection autorisée ;
+- des comparaisons contrefactuelles construites depuis une même origine
+  exécutée : la comparaison de l’état retenu avec l’état à histoire effacée
+  sépare les traces candidates constituées, tandis que la comparaison avec
+  l’état bloqué sépare les histoires décisionnelles et les résultats de la
+  découverte malgré l’accord de toute donnée projetable autorisée ; les
+  comparateurs effacé et bloqué ne sont pas eux-mêmes émis par la récursion
+  faisant autorité ;
+- la non-factorisation du résultat suivant par la projection autorisée sur ce
+  domaine séparateur à deux points : la projection lit l’affectation, la
+  génération et la graine de recherche, dont les valeurs sont délibérément
+  égales pour les deux comparateurs ;
 - une comptabilité mesurée canonique, à propriétaire unique, et les bornes
   polynomiales portant sur le travail explicitement instrumenté de la famille
   construite.
@@ -122,8 +131,11 @@ Il expose des déclarations sans axiome pour :
 L’implémentation complète demeure sous
 `RelationalPerimeter/Computation/ConstitutiveSearch/`. Le module de formulation
 est un point d’entrée vers cette implémentation, non son remplacement. Deux
-suites de régression conservent les contre-épreuves de l’audit indépendant et
-la surface plus large de l’exécution et de sa comptabilité.
+suites de régression protègent les énoncés de production correspondant aux
+quinze contre-épreuves adversariales énumérées indépendamment, ainsi que la
+surface plus large de l’exécution et de sa comptabilité ; elles ne revendiquent
+pas une identité textuelle avec des fichiers historiques d’audit qui ne sont
+distribués dans aucun des deux dépôts.
 
 ## Portée exacte
 
@@ -138,9 +150,12 @@ longueur positive.
 
 La recherche suivante dépend du résultat précédent en deux sens différents :
 
-- matériellement, l’histoire des décisions et la provenance produites changent
-  le domaine de candidats et peuvent changer le résultat de la découverte
-  suivante ;
+- matériellement, la comparaison contrefactuelle de l’état produit avec des
+  états effacé et bloqué construits depuis la même origine exécutée montre
+  que l’histoire des décisions et la provenance peuvent changer le domaine de
+  candidats et le résultat de la découverte suivante ; les états comparateurs
+  sont des constructions d’analyse, non des états supplémentaires émis par la
+  récursion faisant autorité ;
 - causalement, la racine suivante est formée depuis une graine lue sur l’état
   produit, bien que l’invariant de cet état force cette graine à être égale à sa
   valeur canonique.

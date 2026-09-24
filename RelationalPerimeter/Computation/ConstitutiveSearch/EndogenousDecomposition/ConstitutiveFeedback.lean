@@ -3066,7 +3066,9 @@ def blockedNextDiscoveryState (depth : Nat) :
   let retained := retainedNextDiscoveryState depth
   ⟨retained.assignment, (blockedNextDiscoveryConstruction depth).state⟩
 
-/-- Two reachable organizations produced from one executed origin. -/
+/-- Two organizations sharing one executed origin.  The retained organization
+is produced by execution; the blocked organization is constructed
+counterfactually from that origin. -/
 inductive NextDiscoveryOrganization where
   | retained
   | blocked

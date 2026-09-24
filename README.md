@@ -98,6 +98,8 @@ Neither equality of the alternatives nor impossibility of the absorbed one is
 asserted. The retained result and its provenance then condition the next
 discovery.
 
+![Endogenous operational decomposition](docs/figures/endogenous-operational-decomposition.svg)
+
 ## Positioning and scope
 
 ![Relational Perimeter formal architecture](docs/figures/relational-perimeter-formal-architecture.svg)
@@ -144,9 +146,10 @@ below.
 - `RelationalPerimeter/Computation/ConstitutiveSearch/` contains the complete
   executable construction, its relational transports, SAT instance, feedback
   recursion, and production-level measured accounting;
-- `Tests/ComputationalPhenomenonRegression.lean` reproduces the independent
-  adversarial counterprobes, including the production seed and the causal
-  connection between measured initialization and the first threaded state;
+- `Tests/ComputationalPhenomenonRegression.lean` protects the production
+  statements corresponding to the independently enumerated adversarial probes,
+  including the production seed and the causal connection between measured
+  initialization and the first threaded state;
 - `Tests/ConstitutiveExecutionRegression.lean` protects the complete executed
   and measured surface.
 
