@@ -12,6 +12,12 @@ types: which relations are primitive, which witnesses are given, which
 occurrences are generated, which relations are preserved by transports, and
 which data are actually consumed by proofs.*
 
+*In this sense, the framework is endogenous relative to the primitive
+presentation it receives. It does not generate its own primitives; within a
+single typed architecture, it constructs or establishes the identities, roles,
+histories, exact quantity of the perimeter, and changes of status that proceed
+from them.*
+
 *The carrier, understood as the formal support equipped with its structure, is
 not neutral. In the four-node example, separating models show that local data
 alone determine neither order nor participation in the whole. For every
@@ -146,6 +152,15 @@ and then reintroducing actual composition. The files establish this positive
 reconstruction; they do not state a general converse characterizing every trace
 from order and contiguity.
 
+The framework calls **relative endogeneity** the fact that a determination is
+constructed or proved from primitive data explicitly carried by a typed
+architecture, without a post-constitutive readout serving as its principle.
+This endogeneity does not mean self-generation: relations and their witnesses
+may be given. It indicates that their role, their consequences, and the statuses
+that proceed from them are established within the same architecture. It thus
+cuts across the distinction between given and generated, and does not coincide
+with interiority.
+
 ## 2. The constituted perimeter and circularity
 
 `PerimeterSpine` presents a chain of nodal positions without requiring the node
@@ -203,6 +218,9 @@ not realized by a perimeter occurrence. `History.length` then provides a
 derived numerical reading of the history: it counts its extensions while
 forgetting the relational structure that individuates and relates their
 occurrences.
+This quantitative determination is endogenous to the relational constitution
+of the perimeter: `History.length` provides a numerical reading of it without
+being its principle.
 
 Circularity completes the system of inter-node requirements with a closing
 place:
@@ -378,6 +396,11 @@ favourable or optimal. Inadequacy for the previous regime is established
 afterwards. The regime change thus results from a constituted addition, not
 from a lack: **generation continues, and this continuation opens the turning**.
 
+The turning thus establishes that the endogenous does not coincide with the
+interior: the continuation is produced by the framework's own generation while
+lying beyond the perimeter and outside the regime in which that perimeter is
+maximal.
+
 In the perimetral instance, this turning is the first step generated beyond the
 perimeter. Its occurrence is still faithfully labelable in the circular
 system, whose unique residual place it occupies, and the step remains exactly
@@ -473,9 +496,11 @@ changes.
 
 ## Conclusion
 
-The four files give constructive form to a single idea: a formal architecture
-is constituted by the relations that individuate its occurrences, organize
-their roles, and determine their membership in one whole.
+The four files give constructive form to a framework of **relative
+endogeneity**: a formal architecture receives a primitive relational
+presentation, then constructs the occurrences, roles, and histories that
+proceed from it, while distinguishing their realizations, admissions, and
+regime changes within its own types.
 
 In the circular instance, one relational family appears in three distinct
 places: internal node witnesses, successive junctions, and the closing

@@ -12,6 +12,12 @@ types: which relations are primitive, which witnesses are given, which
 occurrences are generated, which relations are preserved by transports, and
 which data are actually consumed by proofs.*
 
+*In this sense, the framework is endogenous relative to the primitive
+presentation it receives. It does not generate its own primitives; within a
+single typed architecture, it constructs or establishes the identities, roles,
+histories, exact quantity of the perimeter, and changes of status that proceed
+from them.*
+
 *The carrier, understood as the formal support equipped with its structure, is
 not neutral. In the four-node example, separating models show that local data
 alone determine neither order nor participation in the whole. For every

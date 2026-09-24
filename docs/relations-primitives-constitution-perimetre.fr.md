@@ -14,6 +14,12 @@ primitives, quels témoins sont donnés, quelles occurrences sont engendrées,
 quelles relations sont conservées par les transports et quelles données sont
 effectivement consommées par les preuves.*
 
+*Le cadre est en ce sens endogène relativement à la présentation primitive
+qu'il reçoit. Il n'engendre pas ses propres primitives ; il construit ou
+établit dans une même architecture typée les identités, les rôles, les
+histoires, la quantité du périmètre et les changements de statut qui en
+procèdent.*
+
 *Le carrier, entendu comme le support formel muni de sa structure, n'est pas
 neutre. Dans l'exemple à quatre nœuds, des modèles séparateurs montrent que les
 seules données locales ne fixent ni l'ordre ni la participation au tout. Pour
@@ -154,6 +160,15 @@ composition réelle. Les fichiers établissent cette reconstruction positive ;
 ils ne formulent pas de converse général caractérisant toute trace à partir de
 l'ordre et de la contiguïté.
 
+Le cadre appelle **endogénéité relative** le fait qu'une détermination soit
+construite ou démontrée à partir des données primitives explicitement portées
+par une architecture typée, sans qu'une lecture post-constitutive intervienne
+comme son principe. Cette endogénéité ne signifie pas auto-engendrement : les
+relations et leurs témoins peuvent être donnés. Elle indique que leur rôle,
+leurs conséquences et les statuts qui en procèdent sont établis dans la même
+architecture. Elle traverse ainsi la distinction entre donné et engendré, et
+ne se confond pas avec l'intériorité.
+
 ## 2. Le périmètre constitué et la circularité
 
 `PerimeterSpine` présente une chaîne de positions nodales, sans imposer que les
@@ -211,6 +226,9 @@ des exigences, mais non au domaine intérieur ainsi mesuré, puisqu'elle n'est
 pas réalisée par une occurrence du périmètre. `History.length` fournit ensuite
 une lecture numérique dérivée de l'histoire : elle compte ses extensions en
 oubliant la structure relationnelle qui individue et relie leurs occurrences.
+Cette détermination quantitative est endogène à la constitution relationnelle
+du périmètre : `History.length` en fournit une lecture numérique sans en être le
+principe.
 
 La circularité complète le système des exigences inter-nœuds par une place
 fermante :
@@ -390,6 +408,10 @@ favorables ou optimaux. L'inadéquation au régime antérieur est établie ensui
 Le changement de régime résulte ainsi d'un supplément constitué, non d'un
 manque : **la génération continue, et cette continuation ouvre le tournant**.
 
+Le tournant établit ainsi que l'endogène ne coïncide pas avec l'intérieur : la
+continuation est produite par la génération propre au cadre, tout en se situant
+au-delà du périmètre et hors du régime dans lequel celui-ci est maximal.
+
 Dans l'instance périmétrale, ce tournant est le premier pas engendré au-delà du
 périmètre. Son occurrence est encore fidèlement étiquetable dans le système
 circulaire, dont elle occupe l'unique place résiduelle, et le pas reste
@@ -488,10 +510,11 @@ transports, fermetures et changements de régime.
 
 ## Conclusion
 
-Les quatre fichiers donnent une forme constructive à une même idée : une
-architecture formelle est constituée par les relations qui individualisent ses
-occurrences, organisent leurs rôles et déterminent leur appartenance à un même
-tout.
+Les quatre fichiers donnent une forme constructive à un cadre
+d'**endogénéité relative** : une architecture formelle reçoit une présentation
+primitive relationnelle, puis construit les occurrences, les rôles et les
+histoires qui en procèdent, tout en distinguant leurs réalisations, leurs
+admissions et leurs changements de régime dans ses propres types.
 
 Dans l'instance circulaire, une même famille relationnelle apparaît en trois
 places distinctes : témoins internes des nœuds, jonctions successives et
