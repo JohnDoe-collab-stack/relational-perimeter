@@ -29,15 +29,14 @@ appear as incompleteness then becomes the non-exhaustion of generation. The
 affirmative perimetral turning designates the exact point at which an already
 constituted and complete whole continues to produce beyond its regime.*
 
-*The perimeter is thus an exact quantitative measure without constitutive
-numerical evaluation. Its quantity is carried by the reversible correspondence
-between the successive positions of the chain and the occurrences of the
-history that realizes them, together with their order and adjacency: no
-interior position is omitted, and no perimeter occurrence remains outside this
-correspondence. The closing place completes the circular system of requirements
+*The perimeter thus determines an exact quantity whose exactness does not
+depend on numerical evaluation. This quantity is carried by the reversible
+correspondence between the successive positions and the occurrences of the
+deployment; their order and adjacency are established by distinct structural
+relations. The closing place completes the circular system of requirements
 without entering this interior quantity, since it is not generated as an
-occurrence. The `History.length` available in the development is therefore only
-a secondary numerical projection of this relational measure.*
+occurrence. `History.length` provides only a subsequent, derived numerical
+reading of it.*
 
 *The methodological distinction between theorem and chain extends this
 stratification without opposing them as two unrelated terms. The theorem
@@ -186,6 +185,23 @@ realizes exactly the successive junctions. Local exactness reconstructs
 injectivity, order, adjacency, and factorization through the canonical
 deployment. The absence of an admissible strict extension establishes its
 maximality relative to the regime.
+
+The perimeter therefore determines an exact quantity whose exactness does not
+depend on numerical evaluation. This quantity is not primarily a cardinal: it
+is the structured type of non-closing positions, exactly realized by the type
+of occurrences in the canonical deployment. `requirementToOccurrence` and
+`occurrenceToRequirement`, together with their two round-trip laws, establish
+that no position is omitted and no perimeter occurrence remains outside this
+realization. Order and adjacency do not follow from this correspondence alone:
+they are preserved separately by
+`ExactNonClosingRealization.preservesPrecedence` and
+`ExactNonClosingRealization.preservesNext`, by virtue of the history being
+rooted and composable. The closing place belongs to the circular system of
+requirements, but not to the interior domain measured in this way, since it is
+not realized by a perimeter occurrence. `History.length` then provides a
+derived numerical reading of the history: it counts its extensions while
+forgetting the relational structure that individuates and relates their
+occurrences.
 
 Circularity completes the system of inter-node requirements with a closing
 place:

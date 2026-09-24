@@ -32,16 +32,14 @@ non-exhaustion de la génération. Le tournant périmétral affirmatif désigne 
 point exact où un tout déjà constitué et complet continue de produire au-delà
 de son régime.*
 
-*Le périmètre est ainsi une mesure quantitative exacte sans évaluation
-numérique constitutive. Sa quantité est portée par la correspondance réversible
-entre les positions successives de la chaîne et les occurrences de l'histoire
-qui les réalise, avec leur ordre et leur adjacence : aucune position intérieure
-n'est omise et aucune occurrence du périmètre ne demeure hors de cette
-correspondance. La place fermante complète le système circulaire des exigences
-sans entrer dans cette quantité intérieure, puisqu'elle n'est pas engendrée
-comme occurrence. La longueur `History.length` disponible dans le développement
-n'est donc qu'une projection numérique secondaire de cette mesure
-relationnelle.*
+*Le périmètre détermine ainsi une quantité exacte sans que cette exactitude
+dépende d'une évaluation numérique. Cette quantité est portée par la
+correspondance réversible entre les positions successives et les occurrences du
+déploiement ; leur ordre et leur adjacence sont établis par des relations
+structurelles distinctes. La place fermante complète le système circulaire des
+exigences sans entrer dans cette quantité intérieure, puisqu'elle n'est pas
+engendrée comme occurrence. `History.length` n'en fournit qu'ensuite une lecture
+numérique dérivée.*
 
 *La distinction méthodologique du théorème et de la chaîne prolonge cette
 stratification sans les opposer comme deux termes étrangers. Le théorème
@@ -196,6 +194,22 @@ qui réalise exactement les jonctions successives. L'exactitude locale y
 reconstruit l'injectivité, l'ordre, l'adjacence et la factorisation par le
 déploiement canonique. L'absence d'extension stricte admissible en établit la
 maximalité relative au régime.
+
+Le périmètre détermine donc une quantité exacte sans que cette exactitude
+dépende d'une évaluation numérique. Cette quantité n'est pas d'abord un
+cardinal : elle est le type structuré des positions non fermantes, exactement
+réalisé par le type des occurrences du déploiement canonique.
+`requirementToOccurrence` et `occurrenceToRequirement`, avec leurs deux lois de
+retour, établissent qu'aucune position n'est omise et qu'aucune occurrence du
+périmètre ne demeure hors de cette réalisation. L'ordre et l'adjacence ne
+résultent pas de cette seule correspondance : ils sont conservés séparément par
+`ExactNonClosingRealization.preservesPrecedence` et
+`ExactNonClosingRealization.preservesNext`, grâce à l'enracinement et à la
+composabilité de l'histoire. La place fermante appartient au système circulaire
+des exigences, mais non au domaine intérieur ainsi mesuré, puisqu'elle n'est
+pas réalisée par une occurrence du périmètre. `History.length` fournit ensuite
+une lecture numérique dérivée de l'histoire : elle compte ses extensions en
+oubliant la structure relationnelle qui individue et relie leurs occurrences.
 
 La circularité complète le système des exigences inter-nœuds par une place
 fermante :

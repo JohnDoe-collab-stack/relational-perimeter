@@ -29,15 +29,14 @@ appear as incompleteness then becomes the non-exhaustion of generation. The
 affirmative perimetral turning designates the exact point at which an already
 constituted and complete whole continues to produce beyond its regime.*
 
-*The perimeter is thus an exact quantitative measure without constitutive
-numerical evaluation. Its quantity is carried by the reversible correspondence
-between the successive positions of the chain and the occurrences of the
-history that realizes them, together with their order and adjacency: no
-interior position is omitted, and no perimeter occurrence remains outside this
-correspondence. The closing place completes the circular system of requirements
+*The perimeter thus determines an exact quantity whose exactness does not
+depend on numerical evaluation. This quantity is carried by the reversible
+correspondence between the successive positions and the occurrences of the
+deployment; their order and adjacency are established by distinct structural
+relations. The closing place completes the circular system of requirements
 without entering this interior quantity, since it is not generated as an
-occurrence. The `History.length` available in the development is therefore only
-a secondary numerical projection of this relational measure.*
+occurrence. `History.length` provides only a subsequent, derived numerical
+reading of it.*
 
 *The methodological distinction between theorem and chain extends this
 stratification without opposing them as two unrelated terms. The theorem
