@@ -104,13 +104,53 @@ source singleton [parent]
 La première équivalence est l’ouverture structurelle exacte. La seconde est
 l’absorption préservant l’acceptation, fournie par la relation reconstruite à
 ce stade. Elle ne prouve ni l’égalité des deux enfants ni l’impossibilité de
-l’enfant absorbé. La queue dépendante part de la condition produite par le
-singleton retenu ; sa largeur initiale est donc définitionnellement la largeur
-retenue du stade précédent.
+l’enfant absorbé ; celui-ci est au contraire constructivement prouvé viable à
+chaque stade exécuté. Le type du stade de rôles impose aussi que l’absorption
+soit exactement le transport reconstruit depuis la découverte de ce stade.
+
+La connexion causale est pertinente par ses preuves, non par une simple
+égalité numérique. La continuation retenue contient l’affectation produite par
+le pas complet exécuté. Un `RetainedNextConditionRaccord`, indexé à la fois par
+le rôle de tête et par sa queue dépendante exacte, prouve que cette affectation
+est celle que consomme la continuation source de la queue. Une queue étrangère
+ne peut pas habiter ce raccord.
 
 `OperationalStabilityCertificate` est calculé depuis la même
 `ThreadedConstitutiveRoleHistory` qui indexe l’exécution causale faisant
-autorité. Pour une exécution de `n` stades, il établit :
+autorité. Chaque pas de son témoin causal contient un
+`ExecutedStageOperationalReduction`. Ce type réunit dans un seul objet
+l’ouverture issue de la génération, l’absorption issue de la découverte, la
+continuation matériellement calculée par l’opération complète, sa coïncidence
+avec la sortie exécutée, la préservation du critère, la viabilité de l’enfant
+absorbé et le raccord vers la queue exacte.
+
+Pour une exécution de `n` stades, l’histoire de rôles indexe un carrier
+structurel explicite : une obligation est un choix gauche ou droit à chacun des
+`n` stades de cette histoire exacte. Lean prouve que ce carrier est complet,
+qu’il ne contient aucun doublon et que sa largeur vaut `2^n`. La chaîne causale
+calcule récursivement l’obligation effectivement retenue depuis les
+continuations produites. Le normaliseur exécutable
+`materiallyNormalizedDecisionPath` consomme chaque chemin source stade par
+stade et remplace chaque tête structurelle par la décision lue sur la
+continuation matériellement produite. `collapseStructuralObligation` est prouvé
+suivre cette normalisation pour toute obligation structurelle. Son image
+opérationnelle est prouvée exactement constituée de l’obligation retenue :
+
+```text
+obligations structurelles distinctes indexées par l’histoire = 2^n
+image du collapse causal                                  = 1
+```
+
+Ce collapse n’est pas une identification structurelle. À chaque ouverture,
+Lean prouve que les obligations gauche et droite sont inégales, tandis que le
+collapse causal prouve qu’elles reçoivent le même statut opérationnel porté.
+La distinction entre multiplicité structurelle et indépendance opérationnelle
+est donc présente dans les types et les théorèmes ; elle n’est pas ajoutée par
+le commentaire.
+
+Pour toute histoire positive, la largeur retenue est prouvée strictement
+inférieure à la largeur structurelle sans absorption. Le certificat fournit
+également la lecture numérique :
 
 ```text
 trace des largeurs = [1, 2, 1, 2, ..., 1]
@@ -119,23 +159,33 @@ toute largeur enregistrée vaut 1 ou 2
 toute largeur enregistrée est inférieure ou égale à 2
 ```
 
-La stabilité sous les transformations reconstruites empêche ainsi que la
-répétition de l’ouverture binaire structurelle s’accumule en largeur
-opérationnelle exponentielle dans la famille construite. Cet énoncé porte sur
-le nombre d’obligations qui doivent demeurer simultanément indépendantes. Il se
-distingue du travail total : la recherche de relation, les candidats en échec,
-la compilation, la validation, l’exécution, la transmission et la lecture
-restent mesurés séparément.
+Dans la comparaison explicite formalisée ici, les absorptions découvertes et
+préservant le critère maintiennent donc une obligation entre les ouvertures, au
+lieu des `2^n` obligations obtenues en portant indépendamment chaque choix
+structurel. Ce résultat n’est pas déduit de la forme fixe d’une liste : la
+construction de l’obligation retenue et la normalisation de chaque chemin
+source consomment la sortie matérielle de chaque réduction exécutée, tandis que
+leur incorporation au certificat exige aussi la
+provenance de la découverte, la préservation du critère, la viabilité de
+l’alternative absorbée et le raccord de contenu. L’énoncé porte sur les
+obligations opérationnelles portées. Il se distingue du travail total :
+la recherche de relation, les candidats en échec, la compilation, la
+validation, l’exécution, la transmission et la lecture restent mesurés
+séparément.
 
 La construction situe également la frontière exacte d’une description par
 l’état seul. L’état produit par l’exécution et une constitution bloquée construite
 contrefactuellement depuis la même origine exécutée ont la même projection
 autorisée : affectation, génération et graine. La constitution retenue construit
-positivement un témoin complet de stabilisation en un stade et porte le profil
-`some [1, 2, 1]` ; la constitution
-bloquée n’admet aucun tel témoin et porte le profil `none`. Ni l’habitabilité du
-témoin ni le profil ne se factorisent donc par cette projection, et aucune vue
-calculée uniquement depuis elle ne permet de les retrouver.
+positivement un témoin complet de stabilisation en un stade et porte la lecture
+numérique grossière `some [1, 2, 1]` ; la constitution bloquée n’admet aucun tel
+témoin et porte la lecture `none`. Ces trois nombres ne sont délibérément qu’une
+projection de largeur ; le témoin retenu complet contient l’histoire, les rôles
+dépendants, les absorptions causales et le raccord. Ni l’habitabilité du témoin
+ni même cette lecture grossière ne se factorisent donc par la projection
+autorisée, et aucune vue calculée uniquement depuis elle ne permet de les
+retrouver. Un état de référence de même profondeur est séparément distingué
+par la projection, de sorte que celle-ci n’est pas constante.
 
 Le rapport aux analyses classiques de stabilité est ainsi délimité avec
 précision. Une telle analyse peut étudier une dynamique après fixation de ses
@@ -157,11 +207,22 @@ Il expose des déclarations sans axiome pour :
 - la preuve séparée de préservation de l’acceptation ;
 - le transport de la viabilité et la préservation exacte de la viabilité de la
   frontière ;
-- le profil exact `1 → 2 → 1` à chaque stade exécuté, la trace alternée de
+- l’égalité typée de chaque absorption enregistrée avec le transport engendré
+  par sa découverte exécutée, ainsi que la viabilité inconditionnelle de
+  l’enfant absorbé à chaque stade exécuté ;
+- le raccord pertinent par ses preuves entre l’affectation de la continuation
+  retenue et celle que consomme la continuation source de sa queue dépendante
+  exacte ;
+- le carrier structurel indexé par l’histoire exacte, sa complétude, l’absence
+  de doublons et sa largeur `2^n`, ainsi que le collapse causal de chacun de ses
+  membres vers son image singleton exacte, la conservation de l’inégalité
+  structurelle sous leur co-classification opérationnelle et la séparation
+  stricte des largeurs sur toute histoire positive faisant autorité ;
+- le profil exact des frontières `1 → 2 → 1` à chaque stade exécuté, la trace alternée de
   longueur `2n + 1` et sa borne uniforme par `2` sur l’histoire faisant
   autorité ;
-- le raccord définitionnel entre le singleton retenu et la condition dépendante
-  suivante ;
+- l’égalité numérique des largeurs singleton comme corollaire, distincte du
+  raccord de contenu pertinent par ses preuves ;
 - l’indépendance du pas complet à l’égard d’une preuve d’acceptation ;
 - l’absence de toute étape construite et de toute histoire descendante faisant
   autorité de longueur positive après l’échec de la découverte ;
@@ -194,9 +255,9 @@ Il expose des déclarations sans axiome pour :
   prouve que la projection elle-même est non constante ;
 - la construction positive d’un témoin complet de stabilisation pour la
   constitution retenue, l’impossibilité d’un tel témoin pour la constitution
-  bloquée, leurs profils exacts `some [1, 2, 1]` et `none`, ainsi que la
-  non-factorisation de l’habitabilité du témoin et du profil par la projection
-  autorisée ou par toute vue de celle-ci ;
+  bloquée, leurs lectures grossières exactes `some [1, 2, 1]` et `none`, ainsi
+  que la non-factorisation de l’habitabilité du témoin et de cette lecture par
+  la projection autorisée ou par toute vue de celle-ci ;
 - une comptabilité mesurée canonique, à propriétaire unique, et les bornes
   polynomiales portant sur le travail explicitement instrumenté de la famille
   construite.

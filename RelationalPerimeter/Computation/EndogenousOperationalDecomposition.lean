@@ -14,12 +14,19 @@ exposes the exact properties that jointly establish the phenomenon:
    acceptance proof;
 4. acceptance preservation is proved separately and licenses frontier
    absorption without identifying the alternatives;
-5. the unique dependent execution history has the exact operational-width
+5. a recursive causal certificate pins every absorption to the executed
+   discovery and raccords the retained content to the exact dependent tail;
+6. the certified causal collapse has an exact singleton image while the
+   complete, duplicate-free carrier that keeps every binary choice independent
+   has width `2^n`; structurally unequal obligations may receive the same
+   operational status without being identified;
+7. the unique dependent execution history has the exact operational-width
    trace `1, 2, 1, 2, ..., 1`, uniformly bounded by two;
-6. the executed result supplies both the seed and the provenance consumed by
+8. the executed result supplies both the seed and the provenance consumed by
    the next discovery;
-7. stabilization availability and its calculable profile do not factor through
-   the permitted projected state, nor through any view of that projection.
+9. stabilization availability and its coarse calculable width readout do not
+   factor through the permitted projected state, nor through any view of that
+   projection.
 
 The construction is instantiated on the explicit generated SAT family used by
 the implementation.  No classical complexity-class conclusion is stated here.
@@ -50,6 +57,111 @@ def endogenousOperationalStability (input : Nat) :
     EndogenousOperationalStabilityEvidence input :=
   (evidence input).core.operationalStability
 
+/-- One structural obligation indexed by the authoritative role history. -/
+abbrev StructuralObligation (input : Nat) : Type 2 :=
+  IndependentStructuralObligation
+    (evidence input).core.feedbackRolesFollowThreadedHistory
+
+/-- All structurally independent obligations constituted by the exact run. -/
+def structuralObligationFrontier (input : Nat) :
+    List (StructuralObligation input) :=
+  (evidence input).core.feedbackRolesFollowThreadedHistory
+    |>.independentStructuralObligationFrontier
+
+/-- The unique obligation selected by the executed causal reduction chain. -/
+def retainedOperationalObligation (input : Nat) : StructuralObligation input :=
+  (endogenousOperationalStability input).causalStability
+    |>.retainedOperationalObligation
+
+/-- Classify any structural obligation by the operational status computed by
+the authoritative reduction chain.  The result does not change the structural
+identity of the source obligation. -/
+def collapseOperationalObligation (input : Nat)
+    (obligation : StructuralObligation input) : StructuralObligation input :=
+  (endogenousOperationalStability input).causalStability
+    |>.collapseStructuralObligation obligation
+
+theorem collapse_operational_obligation_exact (input : Nat)
+    (obligation : StructuralObligation input) :
+    collapseOperationalObligation input obligation =
+      retainedOperationalObligation input :=
+  (endogenousOperationalStability input).causalStability
+    |>.collapseStructuralObligation_exact obligation
+
+/-- Decision path obtained by consuming one structural obligation through the
+material output of every reduction in the authoritative run. -/
+def materiallyNormalizedDecisionPath (input : Nat)
+    (obligation : StructuralObligation input) :
+    List StructuralBranchDecision :=
+  (evidence input).core.feedbackRolesFollowThreadedHistory
+    |>.materiallyNormalizedDecisionPath obligation
+
+/-- Decision path of the unique obligation retained by the authoritative run. -/
+def retainedOperationalDecisionPath (input : Nat) :
+    List StructuralBranchDecision :=
+  (evidence input).core.feedbackRolesFollowThreadedHistory
+    |>.retainedOperationalDecisionPath
+
+/-- Every complete structural path is normalized, stage by stage, to the path
+read from the materially produced continuations. -/
+theorem materially_normalized_decision_path_exact (input : Nat)
+    (obligation : StructuralObligation input) :
+    materiallyNormalizedDecisionPath input obligation =
+      retainedOperationalDecisionPath input :=
+  (endogenousOperationalStability input).materialNormalizationExact obligation
+
+/-- The obligation-level collapse follows the material decision-path
+normalization; the collapse is not merely a numerical width assertion. -/
+theorem collapse_decisions_follow_material_normalization (input : Nat)
+    (obligation : StructuralObligation input) :
+    (collapseOperationalObligation input obligation).decisions =
+      materiallyNormalizedDecisionPath input obligation :=
+  (endogenousOperationalStability input).materialCollapseFollowsNormalization
+    obligation
+
+theorem collapse_operational_obligation_mem_retained (input : Nat)
+    (obligation : StructuralObligation input)
+    (member : obligation ∈ structuralObligationFrontier input) :
+    collapseOperationalObligation input obligation ∈
+      [retainedOperationalObligation input] :=
+  (endogenousOperationalStability input).causalStability
+    |>.collapseStructuralObligation_mem_retained obligation member
+
+/-- The retained operational obligation belongs to the complete structural
+carrier from which it was computed. -/
+theorem retained_operational_obligation_is_structural (input : Nat) :
+    retainedOperationalObligation input ∈ structuralObligationFrontier input :=
+  (endogenousOperationalStability input).causalStability
+    |>.retainedOperationalObligation_mem_structural
+
+/-- The operational image is exactly the retained obligation.  This is the
+public statement that operational co-classification does not require equality
+of the structural obligations. -/
+theorem operational_image_iff_eq_retained (input : Nat)
+    (target : StructuralObligation input) :
+    ((endogenousOperationalStability input).causalStability
+        |>.InOperationalImage target) ↔
+      target = retainedOperationalObligation input :=
+  (endogenousOperationalStability input).causalCollapseImageExact target
+
+/-- Every two structural obligations receive the same carried operational
+status from the executed causal chain, without becoming structurally equal. -/
+theorem all_structural_obligations_share_operational_status (input : Nat)
+    (left right : StructuralObligation input) :
+    collapseOperationalObligation input left =
+      collapseOperationalObligation input right :=
+  (endogenousOperationalStability input).causalStability
+    |>.allStructuralObligationsOperationallyIdentified left right
+
+/-- The stronger material statement: the two source paths are actually
+consumed by the normalizer and yield the same executed operational path. -/
+theorem all_structural_obligations_share_material_status (input : Nat)
+    (left right : StructuralObligation input) :
+    materiallyNormalizedDecisionPath input left =
+      materiallyNormalizedDecisionPath input right :=
+  (endogenousOperationalStability input).materialOperationalIdentification
+    left right
+
 /-- The exact operational-width trace alternates singleton and binary frontiers. -/
 theorem operational_width_trace_exact (input : Nat) :
     (evidence input).core.feedbackRolesFollowThreadedHistory.operationalWidthTrace =
@@ -76,6 +188,36 @@ theorem operational_width_uniformly_bounded (input width : Nat)
     width ≤ 2 :=
   (endogenousOperationalStability input).widthUniformlyBounded width member
 
+/-- If every binary alternative were retained as an independent obligation,
+the explicit structural carrier would have width `2^(input+1)`. -/
+theorem unabsorbed_structural_width_is_exponential (input : Nat) :
+    (structuralObligationFrontier input).length =
+      2 ^ (resolutionLength input) :=
+  (endogenousOperationalStability input).structuralWidthExponential
+
+/-- The exponential structural carrier counts genuinely distinct obligations,
+not repeated encodings of the same obligation. -/
+theorem unabsorbed_structural_obligations_are_distinct (input : Nat) :
+    (structuralObligationFrontier input).Nodup :=
+  (endogenousOperationalStability input).structuralObligationsDistinct
+
+/-- The criterion-preserving absorptions reconstructed along the authoritative
+run carry exactly one obligation between openings. -/
+theorem retained_operational_width_is_one (input : Nat) :
+    (CausalOperationalStability.retainedOperationalObligationFrontier
+      (endogenousOperationalStability input).causalStability).length = 1 :=
+  (endogenousOperationalStability input).retainedOperationalWidthOne
+
+/-- The causal certificate, not a preselected numerical trace, establishes the
+strict separation between retained operational width and the unabsorbed
+structural carrier on every public run. -/
+theorem certified_absorption_prevents_exponential_accumulation (input : Nat) :
+    (CausalOperationalStability.retainedOperationalObligationFrontier
+      (endogenousOperationalStability input).causalStability).length <
+      (structuralObligationFrontier input).length :=
+  OperationalStabilityCertificate.preventsExponentialOperationalAccumulation
+    (endogenousOperationalStability input)
+
 /-- Constructive boundary evidence attached to the same public input package. -/
 abbrev ProjectedStabilizationBoundaryEvidence (input : Nat) : Type 2 :=
   ProjectedStabilizationBoundaryCertificate input
@@ -84,13 +226,14 @@ def projectedStabilizationBoundary (input : Nat) :
     ProjectedStabilizationBoundaryEvidence input :=
   (evidence input).core.projectedStabilizationBoundary
 
-/-- The retained state produced by execution has the exact calculable profile. -/
+/-- The retained state produced by execution has the exact coarse width
+readout.  Its full stabilization witness carries the causal evidence. -/
 theorem retained_stabilization_profile_exact (input : Nat) :
     operationalStabilizationProfile
         (nextDiscoveryConstitution input .retained) = some [1, 2, 1] :=
   (projectedStabilizationBoundary input).retainedProfileExact
 
-/-- The blocked counterfactual has no stabilization profile. -/
+/-- The blocked counterfactual has no stabilization width readout. -/
 theorem blocked_stabilization_profile_absent (input : Nat) :
     operationalStabilizationProfile
         (nextDiscoveryConstitution input .blocked) = none :=
@@ -111,7 +254,8 @@ theorem stabilization_availability_not_determined_by_projected_state
       (OperationalStabilizationAvailable (depth := input)) :=
   (projectedStabilizationBoundary input).stabilizationAvailabilityNotProjected
 
-/-- The projected state does not determine the calculable stabilization profile. -/
+/-- The projected state does not determine even the coarse stabilization
+width readout. -/
 theorem stabilization_profile_not_determined_by_projected_state
     (input : Nat) :
     ¬ ValueFactorsThrough
@@ -128,7 +272,8 @@ theorem stabilization_availability_not_determined_by_projected_view
       (OperationalStabilizationAvailable (depth := input)) :=
   operationalStabilizationAvailability_not_factors_through_view input view
 
-/-- No further view computed only from the projection determines the profile. -/
+/-- No further view computed only from the projection determines the coarse
+width readout. -/
 theorem stabilization_profile_not_determined_by_projected_view
     (input : Nat) {View : Type}
     (view : NextDiscoveryProjectedState input → View) :
@@ -433,10 +578,28 @@ end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.evidence
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.EndogenousOperationalStabilityEvidence
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.endogenousOperationalStability
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.StructuralObligation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.structuralObligationFrontier
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.retainedOperationalObligation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.collapseOperationalObligation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.collapse_operational_obligation_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.materiallyNormalizedDecisionPath
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.retainedOperationalDecisionPath
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.materially_normalized_decision_path_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.collapse_decisions_follow_material_normalization
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.collapse_operational_obligation_mem_retained
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.retained_operational_obligation_is_structural
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_image_iff_eq_retained
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.all_structural_obligations_share_operational_status
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.all_structural_obligations_share_material_status
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_width_trace_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_width_trace_length_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_width_is_one_or_two
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_width_uniformly_bounded
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.unabsorbed_structural_width_is_exponential
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.unabsorbed_structural_obligations_are_distinct
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.retained_operational_width_is_one
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.certified_absorption_prevents_exponential_accumulation
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.ProjectedStabilizationBoundaryEvidence
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.projectedStabilizationBoundary
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.retained_stabilization_profile_exact

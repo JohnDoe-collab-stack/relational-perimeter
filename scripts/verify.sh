@@ -32,7 +32,7 @@ for file in "${lean_files[@]}"; do
   fi
 done
 
-forbidden_terms='^[[:space:]]*(axiom|unsafe)[[:space:]]|\b(noncomputable|Classical|propext|Quot\.sound|native_decide|implemented_by|sorry|admit)\b'
+forbidden_terms='^[[:space:]]*((private|protected)[[:space:]]+)*(axiom|unsafe)([[:space:]]|$)|\b(noncomputable|Classical|propext|Quot\.sound|native_decide|implemented_by|sorry|admit)\b'
 if grep -nER "$forbidden_terms" --include='*.lean' --exclude-dir='.lake' .; then
   echo 'forbidden Lean construct detected' >&2
   exit 1

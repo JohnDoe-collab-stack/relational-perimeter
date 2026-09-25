@@ -981,6 +981,59 @@ def regression_public_core_carries_operational_stability (input : Nat) :
       package.core.feedbackRolesFollowThreadedHistory :=
   (endogenousOperationalDecompositionPerInputEvidence input).core.operationalStability
 
+/-- Regression: the public core carries the recursive causal certificate, not
+only its numerical width trace. -/
+def regression_public_core_carries_causal_stability (input : Nat) :
+    let package := endogenousOperationalDecompositionPerInputEvidence input
+    CausalOperationalStability
+      package.core.feedbackRolesFollowThreadedHistory :=
+  (endogenousOperationalDecompositionPerInputEvidence input).core
+    |>.operationalStability.causalStability
+
+/-- Regression: retaining every binary structural choice gives the explicit
+`2^n` counterfactual obligation carrier. -/
+theorem regression_unabsorbed_obligation_width
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history) :
+    roles.independentStructuralObligationFrontier.length = 2 ^ count :=
+  roles.independentStructuralObligationFrontier_length
+
+theorem regression_unabsorbed_obligations_nodup
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history) :
+    roles.independentStructuralObligationFrontier.Nodup :=
+  roles.independentStructuralObligationFrontier_nodup
+
+/-- Regression: the causal absorption certificate, and not the fixed shape of
+the numerical trace alone, controls the carried operational frontier. -/
+theorem regression_certified_absorption_controls_width (input : Nat) :
+    let package := endogenousOperationalDecompositionPerInputEvidence input
+    package.core.operationalStability.causalStability
+        |>.retainedOperationalObligationFrontier.length <
+      (ThreadedConstitutiveRoleHistory.independentStructuralObligationFrontier
+        (EndogenousOperationalDecompositionEvidence.feedbackRolesFollowThreadedHistory
+          (endogenousOperationalDecompositionPerInputEvidence input).core)).length :=
+  (endogenousOperationalDecompositionPerInputEvidence input).core
+    |>.operationalStability.preventsExponentialOperationalAccumulation
+
+/-- Regression: the certificate's collapse is connected to an executable
+normalizer that consumes the structural source path and every retained output. -/
+theorem regression_material_normalizer_controls_collapse
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history)
+    (obligation : IndependentStructuralObligation roles) :
+    (roles.causalOperationalStability.collapseStructuralObligation
+      obligation).decisions =
+        roles.materiallyNormalizedDecisionPath obligation :=
+  roles.operationalStabilityCertificate
+    |>.materialCollapseFollowsNormalization obligation
+
 theorem regression_stabilization_availability_not_projected (depth : Nat) :
     ¬ PredicateFactorsThrough
       (nextDiscoveryProjection (depth := depth))
@@ -1121,6 +1174,11 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_operational_width_trace_length
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_operational_width_values
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_public_core_carries_operational_stability
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_public_core_carries_causal_stability
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_unabsorbed_obligation_width
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_unabsorbed_obligations_nodup
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_certified_absorption_controls_width
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_material_normalizer_controls_collapse
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_stabilization_availability_not_projected
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_stabilization_profile_not_projected
 /- AXIOM_AUDIT_END -/

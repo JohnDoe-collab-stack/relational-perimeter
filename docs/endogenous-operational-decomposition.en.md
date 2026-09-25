@@ -98,13 +98,50 @@ singleton source [parent]
 The first equivalence is the exact structural opening. The second is the
 acceptance-preserving absorption supplied by the relation reconstructed at that
 stage. It proves neither that the siblings are equal nor that the absorbed
-sibling is impossible. The dependent tail starts from the condition produced
-by the retained singleton, so its initial width is definitionally the retained
-width of the preceding stage.
+sibling is impossible; on the contrary, the absorbed sibling is constructively
+proved viable at every executed stage. The type of the role stage also pins the
+absorption to the transport reconstructed from that stage's discovery.
+
+The causal connection is proof-relevant rather than numerical. The retained
+continuation contains the assignment produced by the full executed step. A
+`RetainedNextConditionRaccord` is indexed by both the head role and its exact
+dependent tail, and proves that this assignment is the one consumed by the
+tail's source continuation. An unrelated tail cannot inhabit this raccord.
 
 `OperationalStabilityCertificate` is computed from the same
 `ThreadedConstitutiveRoleHistory` that indexes the authoritative causal run. For
-an execution of `n` stages it proves:
+each step, its causal witness contains an `ExecutedStageOperationalReduction`.
+This single typed object binds the generation-produced opening, the
+discovery-produced absorption, the continuation materially computed by the
+complete operation, its equality with the executed output, criterion
+preservation, viability of the absorbed sibling, and the raccord to the exact
+tail.
+
+For an execution of `n` stages, the role history indexes an explicit structural
+carrier: an obligation is one left or right choice at every stage of that exact
+history. Lean proves that this carrier is complete, duplicate-free, and has
+width `2^n`. The causal chain recursively computes the actually retained
+obligation from the produced continuations. The executable
+`materiallyNormalizedDecisionPath` consumes every source path stage by stage
+and replaces each structural head with the decision read from the materially
+produced continuation. `collapseStructuralObligation` is proved to follow this
+normalization for every structural obligation. Its operational image is proved
+to consist exactly of the retained obligation:
+
+```text
+distinct history-indexed structural obligations = 2^n
+image of the causal collapse                      = 1
+```
+
+This collapse is not structural identification. At every opening Lean proves
+that the left and right obligations are unequal, while the causal collapse
+proves that they receive the same carried operational status. The distinction
+between structural multiplicity and operational independence is therefore
+present in the types and theorems, not supplied by the prose.
+
+For every positive history, the retained width is proved strictly smaller than
+the unabsorbed structural width. The certificate also provides the numerical
+readout:
 
 ```text
 width trace = [1, 2, 1, 2, ..., 1]
@@ -113,22 +150,32 @@ every recorded width is 1 or 2
 every recorded width is at most 2
 ```
 
-Thus stability under the reconstructed transformations prevents repeated
-binary structural opening from accumulating as exponential operational width
-in the constructed family. The statement concerns the number of obligations
-that must remain simultaneously independent. It is distinct from total work:
-the relation search, failed candidates, compilation, validation, execution,
+Thus, in the explicit comparison formalized here, the discovered and
+criterion-preserving absorptions keep one obligation between openings instead
+of the `2^n` obligations obtained by carrying every structural choice
+independently. This is not inferred from the fixed shape of a list: construction
+of the retained obligation and normalization of every source path consume the
+material output of every executed reduction, while their incorporation into the
+certificate also requires
+discovery provenance, criterion preservation, viability of the absorbed
+alternative, and the content-level raccord. The statement concerns carried
+operational obligations. It is distinct from total work: relation search,
+failed candidates, compilation, validation, execution,
 transmission, and readout remain measured separately.
 
 The construction also identifies the exact boundary of a state-only account.
 The state produced by execution and a blocked constitution built
 counterfactually from the same executed origin have the same permitted
 projection: assignment, generation, and seed. The retained constitution
-positively constructs a complete one-step stabilization witness and has profile
-`some [1, 2, 1]`; the blocked constitution admits no such witness
-and has profile `none`. Consequently, neither witness availability nor the
-profile factors through the projection, and neither can be recovered by any
-further view computed only from it.
+positively constructs a complete one-step stabilization witness and has the
+coarse numerical readout `some [1, 2, 1]`; the blocked constitution admits no
+such witness and has readout `none`. The three numbers are deliberately only a
+width projection; the full retained witness contains the history, dependent
+roles, causal absorptions, and raccord. Consequently, neither witness
+availability nor even this coarse readout factors through the permitted
+projection, and neither can be recovered by any further view computed only
+from it. A same-depth reference state is separately distinguished by the
+projection, so the projection itself is not constant.
 
 This is the precise relation to classical stability analyses. Such an analysis
 may study a dynamics after its state variables and evolution law have been
@@ -148,10 +195,20 @@ It exposes axiom-free declarations for:
 - the total transformation of arbitrary continuations;
 - the separate acceptance-preservation theorem;
 - viability transport and exact preservation of frontier viability;
-- the exact `1 → 2 → 1` profile at every executed stage, the alternating trace
+- type-level equality of every stored absorption with the transport generated
+  by its executed discovery, and unconditional viability of the absorbed
+  sibling at every executed stage;
+- the proof-relevant assignment raccord between the retained continuation and
+  the source continuation of its exact dependent tail;
+- the structural carrier indexed by the exact history, its completeness,
+  duplicate-freedom and width `2^n`, together with the causal collapse of every
+  member into its exact singleton image, the preservation of structural
+  inequality under operational co-classification, and the strict width
+  separation on every positive authoritative history;
+- the exact `1 → 2 → 1` frontier profile at every executed stage, the alternating trace
   of length `2n + 1`, and its uniform bound by `2` on the authoritative history;
-- the definitional raccord between the retained singleton and the next
-  dependent condition;
+- the numerical singleton-width equality as a corollary, distinct from the
+  proof-relevant content raccord;
 - the independence of the complete step from acceptance evidence;
 - the absence of any constructed stage and of every positive-length
   authoritative descendant history after failed discovery;
@@ -179,9 +236,9 @@ It exposes axiom-free declarations for:
   itself is nonconstant;
 - positive construction of a full stabilization witness for the retained
   constitution, impossibility of such a witness for the blocked constitution,
-  their exact profiles `some [1, 2, 1]` and `none`, and non-factorization of both
-  witness availability and profile through the permitted projection or any
-  view of it;
+  their exact coarse width readouts `some [1, 2, 1]` and `none`, and
+  non-factorization of both witness availability and that readout through the
+  permitted projection or any view of it;
 - canonical, uniquely owned measured accounting and the polynomial bounds on
   the explicitly instrumented work of the constructed family.
 

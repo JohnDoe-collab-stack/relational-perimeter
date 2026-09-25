@@ -101,13 +101,22 @@ discovery.
 The framework first constitutes the structured objects on which the
 computation acts. The computation then constitutes their operational status by
 determining whether structurally distinct alternatives must be carried as
-independent obligations. On the authoritative dependent history, every stage
-has the exact width profile `1 → 2 → 1`; the complete trace alternates in this
-way, has length `2n + 1`, and is uniformly bounded by `2`. Stability under the
-reconstructed transformations therefore prevents the structural binary
-opening from accumulating as exponential operational width in this constructed
-family. This is a theorem about operational width, distinct from the total
-executed work measured elsewhere in the repository.
+independent obligations. At every stage, one typed executed reduction binds
+the generated opening, the absorption reconstructed from the executed
+discovery, the materially computed retained continuation, criterion
+preservation, viability of the absorbed sibling, and the content raccord to the
+exact dependent tail. The exact role history indexes a complete,
+duplicate-free structural carrier of `2^n` obligations. The recursive causal
+chain computes one retained obligation; an executable normalizer consumes every
+structural decision path stage by stage, reading the materially produced output
+at each reduction, and the collapse is proved to follow that normalization into
+its exact singleton image. Lean separately proves that the left
+and right obligations remain structurally unequal even when the computation
+assigns them the same operational status. For every positive run, Lean proves
+the retained width `1` strictly smaller than the structural width `2^n`. The
+accompanying stage trace is `1 → 2 → 1 → ...`, has length `2n + 1`, and is
+uniformly bounded by `2`. These are theorems about carried operational width,
+distinct from the total executed work measured elsewhere in the repository.
 
 ![Endogenous operational decomposition](docs/figures/endogenous-operational-decomposition.svg)
 
@@ -154,13 +163,16 @@ below.
   modules;
 - `RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean` is
   the public statement layer for the computational phenomenon;
-- `OperationalStability.lean` reads the exact alternating width trace and its
-  uniform bound from the authoritative dependent role history;
+- `OperationalStability.lean` constructs the recursive causal certificate,
+  the complete executed-stage reductions, the history-indexed and
+  duplicate-free `2^n` structural carrier, the causal collapse into the
+  retained singleton, the content-level raccord to the exact dependent tail,
+  and the alternating numerical trace;
 - `ProjectedStabilizationBoundary.lean` proves constructively that neither the
-  availability of a complete stabilization witness nor its calculable profile
-  is determined by the permitted projected state, or by any view computed only
-  from that projection; a canonical reference state separately proves that the
-  permitted projection itself is nonconstant;
+  availability of a complete stabilization witness nor even its coarse
+  calculable width readout is determined by the permitted projected state, or
+  by any view computed only from that projection; a canonical reference state
+  separately proves that the permitted projection itself is nonconstant;
 - `RelationalPerimeter/Computation/ConstitutiveSearch/` contains the complete
   executable construction, its relational transports, SAT instance, feedback
   recursion, and production-level measured accounting;
@@ -210,11 +222,21 @@ recherche. L’ouverture produit une multiplicité structurelle ; une relation
 dirigée est ensuite reconstruite par l’exécution, sa préservation est prouvée
 séparément, et le résultat retenu conditionne la découverte suivante. Ainsi, le
 nombre d’alternatives engendrées et le nombre d’obligations qui doivent rester
-indépendantes ne sont pas confondus. Sur l’histoire dépendante faisant autorité,
-chaque étape porte le profil exact `1 → 2 → 1` et la largeur opérationnelle
-reste uniformément bornée par `2` : l’ouverture binaire structurelle ne
-s’accumule donc pas en largeur opérationnelle exponentielle dans la famille
-construite.
+indépendantes ne sont pas confondus. À chaque stade, une réduction exécutée
+typée réunit l’ouverture engendrée, l’absorption reconstruite par la découverte
+exécutée, la continuation retenue effectivement calculée, la préservation du
+critère, la viabilité de l’enfant absorbé et le raccord à la queue dépendante
+exacte. L’histoire de rôles indexe un carrier structurel complet, sans doublons,
+de `2^n` obligations. La chaîne causale calcule une obligation retenue et rabat
+sur elle chaque membre de ce carrier. Un normaliseur exécutable consomme chaque
+chemin de décisions structurelles stade par stade, en lisant la sortie
+matériellement produite par chaque réduction, et le collapse est prouvé suivre
+cette normalisation ; son image est exactement ce singleton.
+Lean prouve séparément que les obligations gauche et droite restent
+structurellement inégales même lorsque le calcul leur attribue le même statut
+opérationnel. La largeur retenue `1` est strictement inférieure à `2^n` pour
+toute exécution positive. La trace locale `1 → 2 → 1 → ...` reste en outre
+uniformément bornée par `2`.
 
 ## License
 

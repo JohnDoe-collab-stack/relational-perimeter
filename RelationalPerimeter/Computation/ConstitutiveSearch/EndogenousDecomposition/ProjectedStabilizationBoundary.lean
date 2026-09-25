@@ -9,8 +9,8 @@ The authoritative retained constitution and a counterfactual blocked
 constitution share one executed origin and the same projectable assignment,
 generation and seed.  They differ in whether a complete one-step operational
 stabilization witness can be constructed.  This gives constructive
-non-factorization results for both witness availability and the calculable
-width profile.
+non-factorization results for both witness availability and a deliberately
+coarse calculable width readout.  The full witness retains the causal evidence.
 -/
 
 namespace ConstitutiveSearch.EndogenousDecomposition
@@ -90,7 +90,10 @@ theorem operationalStabilizationAvailability_not_factors_through_view
   · exact blocked_operationalStabilizationUnavailable depth
   · exact retained_operationalStabilizationAvailable depth
 
-/-- Width profile computed from the actual typed frontiers of one discovery. -/
+/-- Coarse width readout computed from the actual typed frontiers of one
+successful discovery.  The proof-relevant stabilization evidence remains in
+`OperationalStabilizationWitness`; this projection intentionally records only
+the local numerical shape. -/
 def discoveryWidthProfile {root : Cnf}
     {state : GeneratedStructuralBranchContext root}
     (discovery : EndogenousFlipDiscovery state) : List Nat :=
@@ -107,7 +110,8 @@ theorem discoveryWidthProfile_exact {root : Cnf}
     discoveryWidthProfile discovery = [1, 2, 1] := by
   rfl
 
-/-- `none` records failed discovery; `some` carries its typed width profile. -/
+/-- `none` records failed discovery; `some` carries its coarse typed-frontier
+width readout. -/
 def operationalStabilizationProfile {depth : Nat}
     (constitution : NextDiscoveryConstitution depth) : Option (List Nat) :=
   (nextDiscoveryOutcome constitution).map discoveryWidthProfile
@@ -140,7 +144,8 @@ theorem operationalStabilizationProfiles_different (depth : Nat) :
     blocked_operationalStabilizationProfile]
   decide
 
-/-- The calculable profile cannot be recovered from the projected state. -/
+/-- Even the coarse calculable readout cannot be recovered from the projected
+state. -/
 theorem operationalStabilizationProfile_not_factors (depth : Nat) :
     ¬ ValueFactorsThrough
       (nextDiscoveryProjection (depth := depth))
@@ -151,7 +156,8 @@ theorem operationalStabilizationProfile_not_factors (depth : Nat) :
   · exact nextDiscovery_projection_equal depth
   · exact operationalStabilizationProfiles_different depth
 
-/-- No further view computed solely from the projection recovers the profile. -/
+/-- No further view computed solely from the projection recovers the coarse
+readout. -/
 theorem operationalStabilizationProfile_not_factors_through_view
     (depth : Nat) {View : Type}
     (view : NextDiscoveryProjectedState depth → View) :

@@ -2138,6 +2138,12 @@ structure ThreadedConstitutiveRoleStage {depth : Nat}
     (constructStage (depth + 1)).operationalRoot
     ((constructStage (depth + 1)).operationalRoot.child stage.discovery.var false stage.discovery.fresh)
     ((constructStage (depth + 1)).operationalRoot.child stage.discovery.var true stage.discovery.fresh)
+  structuralOpeningFromGeneration :
+    structuralOpening =
+      generatedStructuralSplit
+        (constructStage (depth + 1)).operationalRoot
+        stage.discovery.var
+        stage.discovery.fresh
   operationalAbsorption : AcceptedFrontierPreservation
     (generatedStructuralBranchSystem
       (distinctGrowingDiscoveryFormula (constructStage (depth + 1)).searchIndex))
@@ -2151,6 +2157,10 @@ structure ThreadedConstitutiveRoleStage {depth : Nat}
       (constructStage (depth + 1)).operationalRoot.child
         stage.discovery.var true stage.discovery.fresh
     ]
+  operationalAbsorptionFromDiscovery :
+    operationalAbsorption =
+      AcceptedFrontierPreservation.absorbFirstIntoSecond
+        stage.discovery.relation.toAcceptingTransport
   executedDecision : StructuralBranchDecision
   decisionFromExecution : executedDecision = executedBranchDecision stage
   executedDecisionExact : executedDecision = ⟨stageSelectedVar (depth + 1), true⟩
@@ -2175,8 +2185,10 @@ def threadedConstitutiveRoleStage {depth : Nat}
     searchStateExact := rfl
     structuralOpening := generatedStructuralSplit
       (constructStage (depth + 1)).operationalRoot stage.discovery.var stage.discovery.fresh
+    structuralOpeningFromGeneration := rfl
     operationalAbsorption := AcceptedFrontierPreservation.absorbFirstIntoSecond
       stage.discovery.relation.toAcceptingTransport
+    operationalAbsorptionFromDiscovery := rfl
     executedDecision := executedBranchDecision stage
     decisionFromExecution := rfl
     executedDecisionExact := executedBranchDecision_eq_selected_true stage

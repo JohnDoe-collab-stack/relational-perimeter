@@ -1,11 +1,17 @@
 $ErrorActionPreference = "Stop"
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+$lakeRoot = [IO.Path]::GetFullPath((Join-Path $repoRoot ".lake"))
+$lakePrefix = $lakeRoot + [IO.Path]::DirectorySeparatorChar
 $leanFiles = Get-ChildItem -LiteralPath $repoRoot -Recurse -File -Filter "*.lean" |
-  Where-Object { $_.FullName -notlike "*\.lake\*" }
+  Where-Object {
+    -not $_.FullName.StartsWith(
+      $lakePrefix,
+      [StringComparison]::OrdinalIgnoreCase)
+  }
 
 $forbiddenTerms =
-  '(?m)^\s*(axiom|unsafe)\s|\b(noncomputable|Classical|propext|Quot\.sound|native_decide|implemented_by|sorry|admit)\b'
+  '(?m)^\s*(?:(?:private|protected)\s+)*(axiom|unsafe)\b|\b(noncomputable|Classical|propext|Quot\.sound|native_decide|implemented_by|sorry|admit)\b'
 $forbiddenArchitecture =
   '\b(NPAndOrP|RequestProject|LoggedAlgebra|ConstitutivePersistence|IteratedConstitutivePersistence|StructuralEntrypoint)\b|(?m)^\s*(import|open)\s+(Alignment|Foundations)(\.|\s|$)'
 
