@@ -121,10 +121,10 @@ Dans l'instance circulaire étudiée, admission et satisfaction reconnaissent le
 même carrier d'histoires, mais par des interfaces et des témoins distincts.
 Leur adéquation est démontrée ; elle ne les identifie pas comme structures.
 
-## Proximités externes et limites des revendications
+## Proximités externes et spécificité du cadre
 
-L'architecture présente des proximités précises, mais aucune des équivalences
-suivantes n'est revendiquée par le dépôt :
+L'architecture entretient des proximités précises avec plusieurs familles de
+constructions. Ces rapprochements la situent sans l'identifier à celles-ci :
 
 - `Step`, `History` et les occurrences rapprochent la construction des
   systèmes de transition typés et de la sémantique opérationnelle ;
@@ -136,23 +136,20 @@ suivantes n'est revendiquée par le dépôt :
   proof-relevance de plusieurs théories intensionales, sans introduire pour
   autant univalence, types d'identité supérieurs ou contenu homotopique.
 
-Un graphe, un automate ou un système de transition enrichi pourrait encoder
-une part importante de ces données. La contribution formalisée ici est leur
-organisation explicite en couches dont les dépendances et les changements de
-statut sont contrôlés dans les types.
+Les graphes, automates et systèmes de transition enrichis fournissent ainsi des
+points de comparaison partiels. La contribution formalisée ici réside dans
+l'organisation explicite de ces données en couches dont les dépendances et les
+changements de statut sont contrôlés dans les types.
 
-## Question de recherche externe
+## Programme de positionnement externe
 
-Le code Lean établit les séparations internes décrites ci-dessus. La question
-ouverte n'est donc plus leur validité formelle, mais leur positionnement dans
-la littérature : déterminer quelles parties sont équivalentes à des
-constructions connues, lesquelles s'y réduisent, lesquelles leur sont
-simplement apparentées et si leur combinaison précise contient des éléments
-effectivement nouveaux.
-
-Cette question exige une comparaison déclaration par déclaration et
-hypothèse par hypothèse. Le projet ne revendique pas encore une nouveauté
-mathématique établie par une telle étude.
+Le code Lean établit les séparations internes décrites ci-dessus. Leur
+positionnement dans la littérature constitue un travail distinct de comparaison
+déclaration par déclaration et hypothèse par hypothèse : il précise quelles
+parties sont équivalentes à des constructions connues, lesquelles s'y
+réduisent, lesquelles leur sont apparentées et quels écarts formels leur
+organisation conjointe fait apparaître. Ce positionnement externe complète le
+résultat formel ; il n'en conditionne ni la validité ni la portée.
 
 ## Références primaires pour le positionnement
 

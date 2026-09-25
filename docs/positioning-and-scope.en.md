@@ -116,10 +116,10 @@ In the circular instance studied here, admission and satisfaction recognize
 the same carrier of histories through distinct interfaces and witnesses. Their
 adequacy is proved; it does not identify them as structures.
 
-## External affinities and limits of the claims
+## External affinities and the framework's specificity
 
-The architecture has precise affinities, but the repository claims none of
-the following as established equivalences:
+The architecture has precise affinities with several families of
+constructions. These comparisons situate it without identifying it with them:
 
 - `Step`, `History`, and occurrences relate the construction to typed
   transition systems and operational semantics;
@@ -131,22 +131,20 @@ the following as established equivalences:
   several intensional theories, without introducing univalence, higher
   identity types, or homotopical content.
 
-An enriched graph, automaton, or transition system could encode a substantial
-part of these data. The contribution formalized here is their explicit
-organization into layers whose dependencies and changes of status are
-controlled in the types.
+Enriched graphs, automata, and transition systems thus provide partial points
+of comparison. The contribution formalized here lies in the explicit
+organization of these data into layers whose dependencies and changes of
+status are controlled in the types.
 
-## External research question
+## External positioning programme
 
-The Lean code establishes the internal separations described above. The open
-question is therefore no longer their formal validity, but their position in
-the literature: which parts are equivalent to known constructions, which
-reduce to them, which are merely related to them, and whether their precise
-combination contains genuinely new elements.
-
-Answering this question requires a declaration-by-declaration and
-assumption-by-assumption comparison. The project does not yet claim
-mathematical novelty established by such a study.
+The Lean code establishes the internal separations described above. Their
+position in the literature calls for a distinct declaration-by-declaration and
+assumption-by-assumption comparison: it clarifies which parts are equivalent
+to known constructions, which reduce to them, which are related to them, and
+which formal differences their joint organization brings into view. This
+external positioning complements the formal result; it conditions neither its
+validity nor its scope.
 
 ## Primary references for the positioning
 
