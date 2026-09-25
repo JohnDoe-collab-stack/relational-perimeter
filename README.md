@@ -98,6 +98,17 @@ Neither equality of the alternatives nor impossibility of the absorbed one is
 asserted. The retained result and its provenance then condition the next
 discovery.
 
+The framework first constitutes the structured objects on which the
+computation acts. The computation then constitutes their operational status by
+determining whether structurally distinct alternatives must be carried as
+independent obligations. On the authoritative dependent history, every stage
+has the exact width profile `1 → 2 → 1`; the complete trace alternates in this
+way, has length `2n + 1`, and is uniformly bounded by `2`. Stability under the
+reconstructed transformations therefore prevents the structural binary
+opening from accumulating as exponential operational width in this constructed
+family. This is a theorem about operational width, distinct from the total
+executed work measured elsewhere in the repository.
+
 ![Endogenous operational decomposition](docs/figures/endogenous-operational-decomposition.svg)
 
 ## Positioning and scope
@@ -143,6 +154,13 @@ below.
   modules;
 - `RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean` is
   the public statement layer for the computational phenomenon;
+- `OperationalStability.lean` reads the exact alternating width trace and its
+  uniform bound from the authoritative dependent role history;
+- `ProjectedStabilizationBoundary.lean` proves constructively that neither the
+  availability of a complete stabilization witness nor its calculable profile
+  is determined by the permitted projected state, or by any view computed only
+  from that projection; a canonical reference state separately proves that the
+  permitted projection itself is nonconstant;
 - `RelationalPerimeter/Computation/ConstitutiveSearch/` contains the complete
   executable construction, its relational transports, SAT instance, feedback
   recursion, and production-level measured accounting;
@@ -192,7 +210,11 @@ recherche. L’ouverture produit une multiplicité structurelle ; une relation
 dirigée est ensuite reconstruite par l’exécution, sa préservation est prouvée
 séparément, et le résultat retenu conditionne la découverte suivante. Ainsi, le
 nombre d’alternatives engendrées et le nombre d’obligations qui doivent rester
-indépendantes ne sont pas confondus.
+indépendantes ne sont pas confondus. Sur l’histoire dépendante faisant autorité,
+chaque étape porte le profil exact `1 → 2 → 1` et la largeur opérationnelle
+reste uniformément bornée par `2` : l’ouverture binaire structurelle ne
+s’accumule donc pas en largeur opérationnelle exponentielle dans la famille
+construite.
 
 ## License
 

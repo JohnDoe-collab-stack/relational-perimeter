@@ -14,8 +14,12 @@ exposes the exact properties that jointly establish the phenomenon:
    acceptance proof;
 4. acceptance preservation is proved separately and licenses frontier
    absorption without identifying the alternatives;
-5. the executed result supplies both the seed and the provenance consumed by
-   the next discovery.
+5. the unique dependent execution history has the exact operational-width
+   trace `1, 2, 1, 2, ..., 1`, uniformly bounded by two;
+6. the executed result supplies both the seed and the provenance consumed by
+   the next discovery;
+7. stabilization availability and its calculable profile do not factor through
+   the permitted projected state, nor through any view of that projection.
 
 The construction is instantiated on the explicit generated SAT family used by
 the implementation.  No classical complexity-class conclusion is stated here.
@@ -34,6 +38,104 @@ abbrev Evidence (input : Nat) : Type 3 :=
 /-- Construct the complete evidence package; no operational premise is open. -/
 def evidence (input : Nat) : Evidence input :=
   endogenousOperationalDecompositionPerInputEvidence input
+
+/-- Stability evidence carried by the same authoritative run as the public result. -/
+abbrev EndogenousOperationalStabilityEvidence (input : Nat) : Type 2 :=
+    OperationalStabilityCertificate
+      (evidence input).core.run.constitutiveFeedbackHistory
+      (evidence input).core.feedbackRolesFollowThreadedHistory
+
+/-- Construct the endogenous stability certificate of the authoritative run. -/
+def endogenousOperationalStability (input : Nat) :
+    EndogenousOperationalStabilityEvidence input :=
+  (evidence input).core.operationalStability
+
+/-- The exact operational-width trace alternates singleton and binary frontiers. -/
+theorem operational_width_trace_exact (input : Nat) :
+    (evidence input).core.feedbackRolesFollowThreadedHistory.operationalWidthTrace =
+      alternatingOperationalWidthTrace (resolutionLength input) :=
+  (endogenousOperationalStability input).widthTraceExact
+
+/-- There are two width readings per executed opening and one terminal reading. -/
+theorem operational_width_trace_length_exact (input : Nat) :
+    (evidence input).core.feedbackRolesFollowThreadedHistory.operationalWidthTrace.length =
+      2 * (input + 1) + 1 :=
+  (endogenousOperationalStability input).widthTraceLength
+
+/-- Every width in the authoritative trace is exactly one or two. -/
+theorem operational_width_is_one_or_two (input width : Nat)
+    (member : width ∈
+      (evidence input).core.feedbackRolesFollowThreadedHistory.operationalWidthTrace) :
+    width = 1 ∨ width = 2 :=
+  (endogenousOperationalStability input).widthValuesAreOneOrTwo width member
+
+/-- Operational width is uniformly bounded by two for every public input. -/
+theorem operational_width_uniformly_bounded (input width : Nat)
+    (member : width ∈
+      (evidence input).core.feedbackRolesFollowThreadedHistory.operationalWidthTrace) :
+    width ≤ 2 :=
+  (endogenousOperationalStability input).widthUniformlyBounded width member
+
+/-- Constructive boundary evidence attached to the same public input package. -/
+abbrev ProjectedStabilizationBoundaryEvidence (input : Nat) : Type 2 :=
+  ProjectedStabilizationBoundaryCertificate input
+
+def projectedStabilizationBoundary (input : Nat) :
+    ProjectedStabilizationBoundaryEvidence input :=
+  (evidence input).core.projectedStabilizationBoundary
+
+/-- The retained state produced by execution has the exact calculable profile. -/
+theorem retained_stabilization_profile_exact (input : Nat) :
+    operationalStabilizationProfile
+        (nextDiscoveryConstitution input .retained) = some [1, 2, 1] :=
+  (projectedStabilizationBoundary input).retainedProfileExact
+
+/-- The blocked counterfactual has no stabilization profile. -/
+theorem blocked_stabilization_profile_absent (input : Nat) :
+    operationalStabilizationProfile
+        (nextDiscoveryConstitution input .blocked) = none :=
+  (projectedStabilizationBoundary input).blockedProfileExact
+
+/-- The permitted observation is nondegenerate: it distinguishes the executed
+retained state from the canonical reference state. -/
+theorem permitted_projection_is_nonconstant (input : Nat) :
+    nextDiscoveryProjection (nextDiscoveryConstitution input .retained) ≠
+      nextDiscoveryProjection (nextDiscoveryConstitution input .reference) :=
+  (projectedStabilizationBoundary input).projectedStateNonconstant
+
+/-- The projected state does not determine stabilization-witness availability. -/
+theorem stabilization_availability_not_determined_by_projected_state
+    (input : Nat) :
+    ¬ PredicateFactorsThrough
+      (nextDiscoveryProjection (depth := input))
+      (OperationalStabilizationAvailable (depth := input)) :=
+  (projectedStabilizationBoundary input).stabilizationAvailabilityNotProjected
+
+/-- The projected state does not determine the calculable stabilization profile. -/
+theorem stabilization_profile_not_determined_by_projected_state
+    (input : Nat) :
+    ¬ ValueFactorsThrough
+      (nextDiscoveryProjection (depth := input))
+      (operationalStabilizationProfile (depth := input)) :=
+  (projectedStabilizationBoundary input).stabilizationProfileNotProjected
+
+/-- No further view computed only from the projection determines availability. -/
+theorem stabilization_availability_not_determined_by_projected_view
+    (input : Nat) {View : Type}
+    (view : NextDiscoveryProjectedState input → View) :
+    ¬ PredicateFactorsThrough
+      (fun constitution => view (nextDiscoveryProjection constitution))
+      (OperationalStabilizationAvailable (depth := input)) :=
+  operationalStabilizationAvailability_not_factors_through_view input view
+
+/-- No further view computed only from the projection determines the profile. -/
+theorem stabilization_profile_not_determined_by_projected_view
+    (input : Nat) {View : Type}
+    (view : NextDiscoveryProjectedState input → View) :
+    ¬ ValueFactorsThrough
+      (fun constitution => view (nextDiscoveryProjection constitution))
+      (operationalStabilizationProfile (depth := input)) :=
+  operationalStabilizationProfile_not_factors_through_view input view
 
 /-- The uniformly indexed, measured family constructed by the implementation. -/
 abbrev Family : Type 3 :=
@@ -329,6 +431,21 @@ end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.evidence
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.EndogenousOperationalStabilityEvidence
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.endogenousOperationalStability
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_width_trace_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_width_trace_length_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_width_is_one_or_two
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_width_uniformly_bounded
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.ProjectedStabilizationBoundaryEvidence
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.projectedStabilizationBoundary
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.retained_stabilization_profile_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.blocked_stabilization_profile_absent
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.permitted_projection_is_nonconstant
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.stabilization_availability_not_determined_by_projected_state
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.stabilization_profile_not_determined_by_projected_state
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.stabilization_availability_not_determined_by_projected_view
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.stabilization_profile_not_determined_by_projected_view
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.family
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.opening_produces_structurally_distinct_alternatives
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.transformContinuation

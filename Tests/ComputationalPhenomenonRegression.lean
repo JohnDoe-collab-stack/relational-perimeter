@@ -187,6 +187,99 @@ theorem full_step_output_independent_of_acceptance {root : Cnf}
   rw [applyFullConstitutiveStep_assignment, applyFullConstitutiveStep_assignment,
     same]
 
+/-- Every role stage carries the exact certified absorption from its opened
+binary frontier to its retained singleton frontier. -/
+def operational_absorption_has_exact_frontiers {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    (roles : ThreadedConstitutiveRoleStage run) :
+    AcceptedFrontierPreservation
+      (generatedStructuralBranchSystem
+        (distinctGrowingDiscoveryFormula
+          (constructStage (depth + 1)).searchIndex))
+      roles.openedFrontier roles.retainedFrontier :=
+  roles.operationalAbsorption
+
+/-- The retained width is exactly the width of the next dependent condition. -/
+theorem retained_width_raccords_with_next_condition
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) :
+    headRole.retainedFrontier.length = tailRoles.initialOperationalWidth :=
+  retainedWidth_eq_nextInitialWidth headRole tailRoles
+
+/-- The authoritative public run has the exact alternating width trace. -/
+theorem authoritative_operational_width_trace_exact (input : Nat) :
+    let evidence := endogenousOperationalDecompositionEvidence input
+    evidence.feedbackRolesFollowThreadedHistory.operationalWidthTrace =
+      alternatingOperationalWidthTrace (resolutionLength input) :=
+  (endogenousOperationalDecompositionEvidence input).operationalStability.widthTraceExact
+
+/-- The operational width of the authoritative public run is uniformly two. -/
+theorem authoritative_operational_width_bounded (input width : Nat)
+    (member : width ∈
+      ThreadedConstitutiveRoleHistory.operationalWidthTrace
+        (endogenousOperationalDecompositionEvidence input).feedbackRolesFollowThreadedHistory) :
+    width ≤ 2 :=
+  OperationalStabilityCertificate.widthUniformlyBounded
+    (endogenousOperationalDecompositionEvidence input).operationalStability
+    width member
+
+/-- The retained state constructs a complete one-step stabilization witness. -/
+def retained_stabilization_witness_regression (depth : Nat) :
+    OperationalStabilizationWitness
+      (nextDiscoveryConstitution depth .retained) :=
+  retainedOperationalStabilizationWitness depth
+
+/-- The blocked counterfactual cannot construct such a witness. -/
+theorem blocked_stabilization_unavailable_regression (depth : Nat) :
+    ¬ OperationalStabilizationAvailable
+      (nextDiscoveryConstitution depth .blocked) :=
+  blocked_operationalStabilizationUnavailable depth
+
+/-- The separator has equal projected state but exact different profiles. -/
+theorem projected_stabilization_separator_regression (depth : Nat) :
+    nextDiscoveryProjection (nextDiscoveryConstitution depth .retained) =
+        nextDiscoveryProjection (nextDiscoveryConstitution depth .blocked) ∧
+      operationalStabilizationProfile
+          (nextDiscoveryConstitution depth .retained) = some [1, 2, 1] ∧
+      operationalStabilizationProfile
+          (nextDiscoveryConstitution depth .blocked) = none :=
+  ⟨nextDiscovery_projection_equal depth,
+    retained_operationalStabilizationProfile depth,
+    blocked_operationalStabilizationProfile depth⟩
+
+/-- The permitted projection is not globally constant; its equality on the
+separator is caused by the specifically omitted history and provenance. -/
+theorem permitted_projection_nonconstant_regression (depth : Nat) :
+    nextDiscoveryProjection (nextDiscoveryConstitution depth .retained) ≠
+      nextDiscoveryProjection (nextDiscoveryConstitution depth .reference) :=
+  nextDiscovery_projection_nonconstant depth
+
+/-- No arbitrary view of the permitted projection determines availability. -/
+theorem projected_view_cannot_determine_stabilization_availability
+    (depth : Nat) {View : Type}
+    (view : NextDiscoveryProjectedState depth → View) :
+    ¬ PredicateFactorsThrough
+      (fun constitution => view (nextDiscoveryProjection constitution))
+      (OperationalStabilizationAvailable (depth := depth)) :=
+  operationalStabilizationAvailability_not_factors_through_view depth view
+
+/-- No arbitrary view of the permitted projection determines the profile. -/
+theorem projected_view_cannot_determine_stabilization_profile
+    (depth : Nat) {View : Type}
+    (view : NextDiscoveryProjectedState depth → View) :
+    ¬ ValueFactorsThrough
+      (fun constitution => view (nextDiscoveryProjection constitution))
+      (operationalStabilizationProfile (depth := depth)) :=
+  operationalStabilizationProfile_not_factors_through_view depth view
+
 end RelationalPerimeter.Tests.ComputationalPhenomenon
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -207,6 +300,16 @@ end RelationalPerimeter.Tests.ComputationalPhenomenon
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.absorbed_alternative_viability_transported
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.opening_then_absorption_preserves_frontier_viability
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.full_step_output_independent_of_acceptance
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.operational_absorption_has_exact_frontiers
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.retained_width_raccords_with_next_condition
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.authoritative_operational_width_trace_exact
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.authoritative_operational_width_bounded
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.retained_stabilization_witness_regression
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.blocked_stabilization_unavailable_regression
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.projected_stabilization_separator_regression
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.permitted_projection_nonconstant_regression
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.projected_view_cannot_determine_stabilization_availability
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.projected_view_cannot_determine_stabilization_profile
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeConstitutiveExecutionHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeConstitutiveResolution
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_not_factors

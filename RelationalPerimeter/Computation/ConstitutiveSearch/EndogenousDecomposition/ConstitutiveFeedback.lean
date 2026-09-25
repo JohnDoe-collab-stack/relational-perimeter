@@ -2138,6 +2138,19 @@ structure ThreadedConstitutiveRoleStage {depth : Nat}
     (constructStage (depth + 1)).operationalRoot
     ((constructStage (depth + 1)).operationalRoot.child stage.discovery.var false stage.discovery.fresh)
     ((constructStage (depth + 1)).operationalRoot.child stage.discovery.var true stage.discovery.fresh)
+  operationalAbsorption : AcceptedFrontierPreservation
+    (generatedStructuralBranchSystem
+      (distinctGrowingDiscoveryFormula (constructStage (depth + 1)).searchIndex))
+    [
+      (constructStage (depth + 1)).operationalRoot.child
+        stage.discovery.var false stage.discovery.fresh,
+      (constructStage (depth + 1)).operationalRoot.child
+        stage.discovery.var true stage.discovery.fresh
+    ]
+    [
+      (constructStage (depth + 1)).operationalRoot.child
+        stage.discovery.var true stage.discovery.fresh
+    ]
   executedDecision : StructuralBranchDecision
   decisionFromExecution : executedDecision = executedBranchDecision stage
   executedDecisionExact : executedDecision = ⟨stageSelectedVar (depth + 1), true⟩
@@ -2162,6 +2175,8 @@ def threadedConstitutiveRoleStage {depth : Nat}
     searchStateExact := rfl
     structuralOpening := generatedStructuralSplit
       (constructStage (depth + 1)).operationalRoot stage.discovery.var stage.discovery.fresh
+    operationalAbsorption := AcceptedFrontierPreservation.absorbFirstIntoSecond
+      stage.discovery.relation.toAcceptingTransport
     executedDecision := executedBranchDecision stage
     decisionFromExecution := rfl
     executedDecisionExact := executedBranchDecision_eq_selected_true stage
@@ -3066,12 +3081,22 @@ def blockedNextDiscoveryState (depth : Nat) :
   let retained := retainedNextDiscoveryState depth
   ⟨retained.assignment, (blockedNextDiscoveryConstruction depth).state⟩
 
-/-- Two organizations sharing one executed origin.  The retained organization
-is produced by execution; the blocked organization is constructed
-counterfactually from that origin. -/
+/-- A canonical reference state at the same depth as the separator.  It keeps
+the permitted projection nondegenerate without entering either side of the
+retained/blocked comparison. -/
+def referenceNextDiscoveryState (depth : Nat) :
+    PackedThreadedConstitutiveState (depth + 1) :=
+  ⟨initialSequentialAssignment (depth + 1),
+    initialThreadedConstitutiveState (depth + 1)⟩
+
+/-- The domain contains the two organizations sharing one executed origin and
+a canonical reference organization.  The retained organization is produced by
+execution; the blocked organization is constructed counterfactually from that
+origin. -/
 inductive NextDiscoveryOrganization where
   | retained
   | blocked
+  | reference
   deriving DecidableEq
 
 structure NextDiscoveryConstitution (depth : Nat) where
@@ -3080,12 +3105,14 @@ structure NextDiscoveryConstitution (depth : Nat) where
   stateExact : packed = match organization with
     | .retained => retainedNextDiscoveryState depth
     | .blocked => blockedNextDiscoveryState depth
+    | .reference => referenceNextDiscoveryState depth
 
 def nextDiscoveryConstitution (depth : Nat)
     (organization : NextDiscoveryOrganization) : NextDiscoveryConstitution depth :=
   match organization with
   | .retained => ⟨.retained, retainedNextDiscoveryState depth, rfl⟩
   | .blocked => ⟨.blocked, blockedNextDiscoveryState depth, rfl⟩
+  | .reference => ⟨.reference, referenceNextDiscoveryState depth, rfl⟩
 
 /-- The projectable state data deliberately exclude decision history and
 provenance.  Unlike the former constant projection, this reads the actual
@@ -3228,6 +3255,42 @@ theorem nextDiscovery_projection_equal (depth : Nat) :
     · rfl
     · apply Prod.ext <;> rfl
 
+/-- The permitted projection is a genuine observation rather than a constant
+map: it distinguishes the executed retained assignment from the canonical
+reference assignment.  Its failure on the retained/blocked separator is
+therefore specific to the omitted history and provenance. -/
+theorem nextDiscovery_projection_nonconstant (depth : Nat) :
+    nextDiscoveryProjection (nextDiscoveryConstitution depth .retained) ≠
+      nextDiscoveryProjection (nextDiscoveryConstitution depth .reference) := by
+  intro projectionEqual
+  have assignmentsEqual := congrArg Prod.fst projectionEqual
+  have valuesEqual := congrArg
+    (fun assignment : SequentialAssignment (depth + 1) =>
+      assignment.assignment (stageSelectedVar (depth + 1))) assignmentsEqual
+  have retainedTrue :
+      (retainedNextDiscoveryState depth).assignment.assignment
+          (stageSelectedVar (depth + 1)) = true := by
+    change (nextDiscoveryCommonOrigin depth).stage.next.assignment
+      (stageSelectedVar (depth + 1)) = true
+    rw [(nextDiscoveryCommonOrigin depth).stage.nextAssignmentExact]
+    have selected := sequentialStage_selected_exact
+      (nextDiscoveryCommonOrigin depth).stage
+    rw [← selected, (nextDiscoveryCommonOrigin depth).stage.output_selected]
+  have referenceFalse :
+      (referenceNextDiscoveryState depth).assignment.assignment
+          (stageSelectedVar (depth + 1)) = false := by
+    change alternatingAssignmentBit (stageSelectedVar (depth + 1)) = false
+    unfold stageSelectedVar growingDiscoverySplitVar
+    rw [constructStage_searchIndex]
+    exact alternatingAssignmentBit_even _
+  change
+    (retainedNextDiscoveryState depth).assignment.assignment
+        (stageSelectedVar (depth + 1)) =
+      (referenceNextDiscoveryState depth).assignment.assignment
+        (stageSelectedVar (depth + 1)) at valuesEqual
+  rw [retainedTrue, referenceFalse] at valuesEqual
+  cases valuesEqual
+
 theorem nextDiscovery_outcome_different (depth : Nat) :
     nextDiscoveryOutcome (nextDiscoveryConstitution depth .retained) ≠
       nextDiscoveryOutcome (nextDiscoveryConstitution depth .blocked) := by
@@ -3356,6 +3419,7 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExecutionHistory.inspections_bound
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedFeedbackHistory_provenanceVisits
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedFeedbackHistory_inspections_bound
+#print axioms ConstitutiveSearch.EndogenousDecomposition.threadedConstitutiveRoleStage
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleStage_decision_reads_executedOutput
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleStage_output_constitutes_nextOperationalState
 #print axioms ConstitutiveSearch.EndogenousDecomposition.buildThreadedConstitutiveRoleHistory
@@ -3366,17 +3430,23 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.blockedNextDiscoveryCarrier
 #print axioms ConstitutiveSearch.EndogenousDecomposition.blockedNextDiscoveryConstruction
 #print axioms ConstitutiveSearch.EndogenousDecomposition.blockedNextDiscoveryState
+#print axioms ConstitutiveSearch.EndogenousDecomposition.referenceNextDiscoveryState
+#print axioms ConstitutiveSearch.EndogenousDecomposition.NextDiscoveryOrganization
+#print axioms ConstitutiveSearch.EndogenousDecomposition.NextDiscoveryConstitution
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_retained_found
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscoveryConstitution
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscoveryProjection
+#print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscoveryOutcome
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_blocked_none
 #print axioms ConstitutiveSearch.EndogenousDecomposition.blocked_discovery_constructs_no_stage
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_states_share_executed_origin
 #print axioms ConstitutiveSearch.EndogenousDecomposition.blockedNextDiscovery_history_length
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_history_lengths_distinct
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_histories_distinct
+#print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_constitutions_distinct
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_outcome_different
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_projection_equal
+#print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_projection_nonconstant
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nextDiscovery_not_factors
 #print axioms ConstitutiveSearch.EndogenousDecomposition.feedbackFailureArtifacts_exact
 /- AXIOM_AUDIT_END -/

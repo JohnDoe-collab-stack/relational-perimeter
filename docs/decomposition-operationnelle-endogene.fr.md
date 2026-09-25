@@ -72,8 +72,8 @@ Les types maintiennent visibles les distinctions suivantes :
 - l’absorption d’une obligation n’est pas une preuve que l’alternative absorbée
   est impossible ;
 - l’égalité d’une lecture n’est pas l’égalité de la recherche constituée ;
-- une graine formée depuis un état produit n’est pas nécessairement une valeur
-  informationnellement nouvelle ;
+- la formation causale d’une graine est distinguée de la variation de sa
+  valeur ;
 - un transport exact réversible n’est pas le transport dirigé utilisé pour
   l’absorption.
 
@@ -83,6 +83,68 @@ entre carriers. `AcceptingContinuationTransport`, au contraire, contient une
 application dirigée et une loi de préservation séparée. Le résultat
 computationnel dépend de ce second transport sans le renforcer silencieusement
 en équivalence.
+
+## Stabilité opérationnelle endogène et branchement exponentiel
+
+Le cadre constitue d’abord les objets structurés sur lesquels la computation
+agit. La computation constitue ensuite leur statut opérationnel en déterminant
+si des alternatives structurellement distinctes doivent être portées comme des
+obligations indépendantes.
+
+Cet énoncé est désormais explicite dans les types. Chaque
+`ThreadedConstitutiveRoleStage` porte trois frontières typées issues de la même
+découverte exécutée :
+
+```text
+source singleton [parent]
+  ↔ ouverture binaire [left, right]
+  ↔ singleton retenu [right]
+```
+
+La première équivalence est l’ouverture structurelle exacte. La seconde est
+l’absorption préservant l’acceptation, fournie par la relation reconstruite à
+ce stade. Elle ne prouve ni l’égalité des deux enfants ni l’impossibilité de
+l’enfant absorbé. La queue dépendante part de la condition produite par le
+singleton retenu ; sa largeur initiale est donc définitionnellement la largeur
+retenue du stade précédent.
+
+`OperationalStabilityCertificate` est calculé depuis la même
+`ThreadedConstitutiveRoleHistory` qui indexe l’exécution causale faisant
+autorité. Pour une exécution de `n` stades, il établit :
+
+```text
+trace des largeurs = [1, 2, 1, 2, ..., 1]
+longueur de la trace = 2 * n + 1
+toute largeur enregistrée vaut 1 ou 2
+toute largeur enregistrée est inférieure ou égale à 2
+```
+
+La stabilité sous les transformations reconstruites empêche ainsi que la
+répétition de l’ouverture binaire structurelle s’accumule en largeur
+opérationnelle exponentielle dans la famille construite. Cet énoncé porte sur
+le nombre d’obligations qui doivent demeurer simultanément indépendantes. Il se
+distingue du travail total : la recherche de relation, les candidats en échec,
+la compilation, la validation, l’exécution, la transmission et la lecture
+restent mesurés séparément.
+
+La construction situe également la frontière exacte d’une description par
+l’état seul. L’état produit par l’exécution et une constitution bloquée construite
+contrefactuellement depuis la même origine exécutée ont la même projection
+autorisée : affectation, génération et graine. La constitution retenue construit
+positivement un témoin complet de stabilisation en un stade et porte le profil
+`some [1, 2, 1]` ; la constitution
+bloquée n’admet aucun tel témoin et porte le profil `none`. Ni l’habitabilité du
+témoin ni le profil ne se factorisent donc par cette projection, et aucune vue
+calculée uniquement depuis elle ne permet de les retrouver.
+
+Le rapport aux analyses classiques de stabilité est ainsi délimité avec
+précision. Une telle analyse peut étudier une dynamique après fixation de ses
+variables d’état et de sa loi d’évolution. Le résultat formel porte ici sur une
+question constitutive antérieure : le statut d’alternatives structurellement
+distinctes comme obligations opérationnelles indépendantes est lui-même
+reconstruit pendant l’exécution. Une description d’état enrichie pourrait bien
+sûr porter cette évidence constitutive ; le théorème établit exactement que la
+projection spécifiée, et toute vue se factorisant par elle, ne la porte pas.
 
 ## Évidence exposée par le dépôt
 
@@ -95,6 +157,11 @@ Il expose des déclarations sans axiome pour :
 - la preuve séparée de préservation de l’acceptation ;
 - le transport de la viabilité et la préservation exacte de la viabilité de la
   frontière ;
+- le profil exact `1 → 2 → 1` à chaque stade exécuté, la trace alternée de
+  longueur `2n + 1` et sa borne uniforme par `2` sur l’histoire faisant
+  autorité ;
+- le raccord définitionnel entre le singleton retenu et la condition dépendante
+  suivante ;
 - l’indépendance du pas complet à l’égard d’une preuve d’acceptation ;
 - l’absence de toute étape construite et de toute histoire descendante faisant
   autorité de longueur positive après l’échec de la découverte ;
@@ -120,10 +187,16 @@ Il expose des déclarations sans axiome pour :
   découverte malgré l’accord de toute donnée projetable autorisée ; les
   comparateurs effacé et bloqué ne sont pas eux-mêmes émis par la récursion
   faisant autorité ;
-- la non-factorisation du résultat suivant par la projection autorisée sur ce
-  domaine séparateur à deux points : la projection lit l’affectation, la
-  génération et la graine de recherche, dont les valeurs sont délibérément
-  égales pour les deux comparateurs ;
+- la non-factorisation du résultat suivant par la projection autorisée sur la
+  paire séparatrice : la projection lit l’affectation, la génération et la
+  graine de recherche, dont les valeurs sont délibérément égales pour les deux
+  comparateurs, tandis qu’un élément canonique de référence du même domaine
+  prouve que la projection elle-même est non constante ;
+- la construction positive d’un témoin complet de stabilisation pour la
+  constitution retenue, l’impossibilité d’un tel témoin pour la constitution
+  bloquée, leurs profils exacts `some [1, 2, 1]` et `none`, ainsi que la
+  non-factorisation de l’habitabilité du témoin et du profil par la projection
+  autorisée ou par toute vue de celle-ci ;
 - une comptabilité mesurée canonique, à propriétaire unique, et les bornes
   polynomiales portant sur le travail explicitement instrumenté de la famille
   construite.
@@ -157,8 +230,8 @@ La recherche suivante dépend du résultat précédent en deux sens différents 
   sont des constructions d’analyse, non des états supplémentaires émis par la
   récursion faisant autorité ;
 - causalement, la racine suivante est formée depuis une graine lue sur l’état
-  produit, bien que l’invariant de cet état force cette graine à être égale à sa
-  valeur canonique.
+  produit, tandis que l’invariant de cet état établit aussi sa valeur canonique
+  exacte.
 
 Le dépôt n’établit ni `P = NP`, ni `P ≠ NP`, ni un solveur polynomial pour des
 instances SAT arbitraires, ni un théorème portant sur tout espace de recherche.

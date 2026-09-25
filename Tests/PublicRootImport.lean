@@ -16,9 +16,27 @@ def publicEvidence :=
 def publicFamily :=
   RelationalPerimeter.Computation.EndogenousOperationalDecomposition.family
 
+def publicOperationalStability :=
+  RelationalPerimeter.Computation.EndogenousOperationalDecomposition.endogenousOperationalStability
+
+def publicProjectedStabilizationBoundary :=
+  RelationalPerimeter.Computation.EndogenousOperationalDecomposition.projectedStabilizationBoundary
+
+theorem publicPermittedProjectionIsNonconstant (input : Nat) :
+    ConstitutiveSearch.EndogenousDecomposition.nextDiscoveryProjection
+        (ConstitutiveSearch.EndogenousDecomposition.nextDiscoveryConstitution
+          input .retained) ≠
+      ConstitutiveSearch.EndogenousDecomposition.nextDiscoveryProjection
+        (ConstitutiveSearch.EndogenousDecomposition.nextDiscoveryConstitution
+          input .reference) :=
+  RelationalPerimeter.Computation.EndogenousOperationalDecomposition.permitted_projection_is_nonconstant input
+
 end RelationalPerimeter.Tests.PublicRootImport
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicEvidence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicFamily
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicOperationalStability
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicProjectedStabilizationBoundary
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicPermittedProjectionIsNonconstant
 /- AXIOM_AUDIT_END -/

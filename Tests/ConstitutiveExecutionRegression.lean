@@ -813,6 +813,11 @@ theorem regression_same_depth_projection_different_next_discovery (depth : Nat) 
         nextDiscoveryOutcome (nextDiscoveryConstitution depth .blocked) :=
   ⟨nextDiscovery_projection_equal depth, nextDiscovery_outcome_different depth⟩
 
+theorem regression_next_discovery_projection_is_not_constant (depth : Nat) :
+    nextDiscoveryProjection (nextDiscoveryConstitution depth .retained) ≠
+      nextDiscoveryProjection (nextDiscoveryConstitution depth .reference) :=
+  nextDiscovery_projection_nonconstant depth
+
 theorem regression_next_discovery_not_depth_factor (depth : Nat) :
     ¬ ValueFactorsThrough (nextDiscoveryProjection (depth := depth))
         (nextDiscoveryOutcome (depth := depth)) :=
@@ -928,6 +933,66 @@ theorem regression_filtering_cost_is_owned_once (input : Nat) :
     run.constitutiveFeedbackHistory.feedbackStats.historyFilteringVisits
   exact congrArg (fun stats => stats.historyFilteringVisits) run.feedbackStatsExact
 
+theorem regression_empty_operational_width_trace
+    {depth : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := 0) state}
+    (roles : ThreadedConstitutiveRoleHistory history) :
+    roles.operationalWidthTrace = [1] :=
+  roles.operationalWidthTrace_exact
+
+theorem regression_one_step_operational_width_trace
+    {depth : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := 1) state}
+    (roles : ThreadedConstitutiveRoleHistory history) :
+    roles.operationalWidthTrace = [1, 2, 1] :=
+  roles.oneStep_operationalWidthTrace
+
+theorem regression_operational_width_trace_exact
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history) :
+    roles.operationalWidthTrace = alternatingOperationalWidthTrace count :=
+  roles.operationalWidthTrace_exact
+
+theorem regression_operational_width_trace_length
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history) :
+    roles.operationalWidthTrace.length = 2 * count + 1 :=
+  roles.operationalWidthTrace_length
+
+theorem regression_operational_width_values
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history)
+    (width : Nat) (member : width ∈ roles.operationalWidthTrace) :
+    width = 1 ∨ width = 2 :=
+  roles.operationalWidthTrace_value width member
+
+def regression_public_core_carries_operational_stability (input : Nat) :
+    let package := endogenousOperationalDecompositionPerInputEvidence input
+    OperationalStabilityCertificate
+      package.core.run.constitutiveFeedbackHistory
+      package.core.feedbackRolesFollowThreadedHistory :=
+  (endogenousOperationalDecompositionPerInputEvidence input).core.operationalStability
+
+theorem regression_stabilization_availability_not_projected (depth : Nat) :
+    ¬ PredicateFactorsThrough
+      (nextDiscoveryProjection (depth := depth))
+      (OperationalStabilizationAvailable (depth := depth)) :=
+  operationalStabilizationAvailability_not_factors depth
+
+theorem regression_stabilization_profile_not_projected (depth : Nat) :
+    ¬ ValueFactorsThrough
+      (nextDiscoveryProjection (depth := depth))
+      (operationalStabilizationProfile (depth := depth)) :=
+  operationalStabilizationProfile_not_factors depth
+
 end EndogenousDecomposition
 end ConstitutiveSearch
 
@@ -1033,6 +1098,7 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_old_input_cannot_replace_feedback_output
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_other_decision_history_changes_next_discovery
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_same_depth_projection_different_next_discovery
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_next_discovery_projection_is_not_constant
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_next_discovery_not_depth_factor
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_feedback_relation_is_from_transmitted_run
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_feedback_code_is_from_discovered_relation
@@ -1049,4 +1115,12 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_public_run_is_single_pass
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_reachable_history_changes_candidate_trace
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_filtering_cost_is_owned_once
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_empty_operational_width_trace
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_one_step_operational_width_trace
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_operational_width_trace_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_operational_width_trace_length
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_operational_width_values
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_public_core_carries_operational_stability
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_stabilization_availability_not_projected
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_stabilization_profile_not_projected
 /- AXIOM_AUDIT_END -/

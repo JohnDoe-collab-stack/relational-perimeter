@@ -69,7 +69,7 @@ The types keep the following distinctions visible:
 - absorption of one obligation is not a proof that the absorbed alternative is
   impossible;
 - equality of a readout is not equality of the constituted search;
-- a seed formed from a produced state is not an informationally novel value;
+- causal formation of a seed is distinguished from variation of its value;
 - exact two-sided transport is not the directed transport used for absorption.
 
 The last distinction directly connects the computation to the four foundational
@@ -77,6 +77,66 @@ modules. `ExactTypeTransport` records reversible carrier transport. By contrast,
 `AcceptingContinuationTransport` contains a directed map and a separate
 preservation law. The computational result depends on the latter and does not
 silently strengthen it into an equivalence.
+
+## Endogenous operational stability and exponential branching
+
+The framework first constitutes the structured objects on which the
+computation acts. The computation then constitutes their operational status by
+determining whether structurally distinct alternatives must be carried as
+independent obligations.
+
+This statement is now explicit in the types. Every
+`ThreadedConstitutiveRoleStage` carries three typed frontiers from the same
+executed discovery:
+
+```text
+singleton source [parent]
+  ↔ binary opening [left, right]
+  ↔ retained singleton [right]
+```
+
+The first equivalence is the exact structural opening. The second is the
+acceptance-preserving absorption supplied by the relation reconstructed at that
+stage. It proves neither that the siblings are equal nor that the absorbed
+sibling is impossible. The dependent tail starts from the condition produced
+by the retained singleton, so its initial width is definitionally the retained
+width of the preceding stage.
+
+`OperationalStabilityCertificate` is computed from the same
+`ThreadedConstitutiveRoleHistory` that indexes the authoritative causal run. For
+an execution of `n` stages it proves:
+
+```text
+width trace = [1, 2, 1, 2, ..., 1]
+trace length = 2 * n + 1
+every recorded width is 1 or 2
+every recorded width is at most 2
+```
+
+Thus stability under the reconstructed transformations prevents repeated
+binary structural opening from accumulating as exponential operational width
+in the constructed family. The statement concerns the number of obligations
+that must remain simultaneously independent. It is distinct from total work:
+the relation search, failed candidates, compilation, validation, execution,
+transmission, and readout remain measured separately.
+
+The construction also identifies the exact boundary of a state-only account.
+The state produced by execution and a blocked constitution built
+counterfactually from the same executed origin have the same permitted
+projection: assignment, generation, and seed. The retained constitution
+positively constructs a complete one-step stabilization witness and has profile
+`some [1, 2, 1]`; the blocked constitution admits no such witness
+and has profile `none`. Consequently, neither witness availability nor the
+profile factors through the projection, and neither can be recovered by any
+further view computed only from it.
+
+This is the precise relation to classical stability analyses. Such an analysis
+may study a dynamics after its state variables and evolution law have been
+fixed. Here the formal result concerns a prior constitutive question: which
+structurally distinct alternatives count as independent operational obligations
+is itself reconstructed during execution. An enriched state description could
+of course carry this constitutive evidence; the theorem says exactly that the
+specified projection, and every view factoring through it, does not.
 
 ## Evidence exposed by the repository
 
@@ -88,6 +148,10 @@ It exposes axiom-free declarations for:
 - the total transformation of arbitrary continuations;
 - the separate acceptance-preservation theorem;
 - viability transport and exact preservation of frontier viability;
+- the exact `1 → 2 → 1` profile at every executed stage, the alternating trace
+  of length `2n + 1`, and its uniform bound by `2` on the authoritative history;
+- the definitional raccord between the retained singleton and the next
+  dependent condition;
 - the independence of the complete step from acceptance evidence;
 - the absence of any constructed stage and of every positive-length
   authoritative descendant history after failed discovery;
@@ -109,8 +173,15 @@ It exposes axiom-free declarations for:
   projectable datum; the erased and blocked comparators are not themselves
   emitted by the authoritative run;
 - non-factorization of the next outcome through the permitted projection on
-  that two-point separator domain: the projection reads assignment, generation,
-  and search seed, whose values are deliberately equal for the two comparators;
+  the separator pair: the projection reads assignment, generation, and search
+  seed, whose values are deliberately equal for the two comparators, while a
+  canonical reference element of the same domain proves that the projection
+  itself is nonconstant;
+- positive construction of a full stabilization witness for the retained
+  constitution, impossibility of such a witness for the blocked constitution,
+  their exact profiles `some [1, 2, 1]` and `none`, and non-factorization of both
+  witness availability and profile through the permitted projection or any
+  view of it;
 - canonical, uniquely owned measured accounting and the polynomial bounds on
   the explicitly instrumented work of the constructed family.
 
@@ -140,7 +211,7 @@ The next search depends on the preceding result in two different senses:
   domain and the next discovery outcome; the comparator states are analytical
   constructions, not additional states emitted by the authoritative run;
 - causally, the next root is formed from a seed read from the produced state,
-  although the state invariant forces that seed to equal its canonical value.
+  while the state invariant also proves its exact canonical value.
 
 The repository does not claim `P = NP`, `P ≠ NP`, a polynomial-time solver for
 arbitrary SAT instances, or a theorem about every search space. Its polynomial

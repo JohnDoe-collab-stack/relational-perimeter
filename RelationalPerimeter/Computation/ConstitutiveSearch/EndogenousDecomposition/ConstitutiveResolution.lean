@@ -6,7 +6,7 @@ import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecompositio
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.MeasuredAssignmentBounds
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveFullStep
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveRoleCycle
-import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveFeedback
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ProjectedStabilizationBoundary
 
 set_option linter.unusedVariables false
 
@@ -767,11 +767,17 @@ structure EndogenousOperationalDecompositionEvidence (input : Nat) : Type 3 wher
     run.history = run.constitutiveFeedbackHistory.toSequentialHistory
   feedbackRolesFollowThreadedHistory :
     ThreadedConstitutiveRoleHistory run.constitutiveFeedbackHistory
+  operationalStability :
+    OperationalStabilityCertificate
+      run.constitutiveFeedbackHistory
+      feedbackRolesFollowThreadedHistory
   feedbackAccountingIsProduced :
     run.feedbackStats = run.constitutiveFeedbackHistory.feedbackStats
   nextDiscoveryDependsOnConstitution :
     ¬ ValueFactorsThrough (nextDiscoveryProjection (depth := input))
         (nextDiscoveryOutcome (depth := input))
+  projectedStabilizationBoundary :
+    ProjectedStabilizationBoundaryCertificate input
   feedbackFailureProducesNothing :
     feedbackFailureArtifacts input = ⟨0, false, false⟩
   acceptedExecutionHistory : AcceptedSequentialHistory run.history
@@ -884,8 +890,12 @@ def endogenousOperationalDecompositionEvidence
     constitutiveFeedbackIsThreaded := run.constitutiveFeedbackHistory
     publicHistoryComesFromCausalExecution := run.historyFromCausalExecution
     feedbackRolesFollowThreadedHistory := run.feedbackRoleHistory
+    operationalStability :=
+      run.feedbackRoleHistory.operationalStabilityCertificate
     feedbackAccountingIsProduced := run.feedbackStatsExact
     nextDiscoveryDependsOnConstitution := nextDiscovery_not_factors input
+    projectedStabilizationBoundary :=
+      projectedStabilizationBoundaryCertificate input
     feedbackFailureProducesNothing := feedbackFailureArtifacts_exact input
     acceptedExecutionHistory := run.acceptedHistory
     compiledPathIsReturnedCode := localPath_compiles_to_returnedCodes run.history
@@ -1078,5 +1088,6 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeConstitutiveResolution_attempts_strict
 #print axioms ConstitutiveSearch.EndogenousDecomposition.constitutiveCausalStageEvidence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.section6OperationalSuccessionEvidence
+#print axioms ConstitutiveSearch.EndogenousDecomposition.EndogenousOperationalDecompositionEvidence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.endogenousOperationalDecompositionEvidence
 /- AXIOM_AUDIT_END -/
