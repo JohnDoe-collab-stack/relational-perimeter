@@ -229,7 +229,9 @@ regression suites include `EndogenousOperationalStabilityRegression.lean`,
 which tests the public widths, the status-indexed local width change, every
 field of the exact executed reduction, the measured failed prefix, the
 discovered map, the exact causal histories and normalizer, the wrong-singleton
-distinction, and both non-factorization separators.
+distinction, the public action-factorization statement, and a generic
+projection collision whose projection equality is propositional rather than
+definitional.
 
 ## Exact scope
 
