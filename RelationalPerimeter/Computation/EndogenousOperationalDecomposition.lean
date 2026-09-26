@@ -215,39 +215,20 @@ theorem comparison_transport_matches_executed_observation {depth : Nat}
       (executedStepToExtensionalView run).observedRetained :=
   ExecutedExtensionalSeparator.comparison_matches_executed_observation run
 
-/-- The non-factorization boundary holds on the generated system of an actual
-executed stage, using the two separately projected views of the discovered and
-comparison transports. The views coincide, but their total actions do not. -/
+/-- On an actual executed stage, the total operational action does not
+factor through the state-and-quantity view. This is the public instance of the
+generic projection-collision theorem: the discovered and comparison transports
+have equal projections but different total actions. -/
 theorem executed_state_width_view_does_not_determine_total_action {depth : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
     {stage : SequentialStageRun depth assignment}
-    (run : ThreadedConstitutiveStageRun state stage)
-    (recover : ExtensionalOperationalStabilityView
-      (generatedStructuralBranchSystem
-        (distinctGrowingDiscoveryFormula
-          (constructStage (depth + 1)).searchIndex)) →
-      GeneratedStructuralBranchContinuation stage.schedule.entry.source →
-      GeneratedStructuralBranchContinuation stage.schedule.entry.target)
-    (recoversDiscovered : ∀ continuation,
-      recover
-          (transportToExtensionalStabilityView
-            (ExecutedExtensionalSeparator.discoveredTransport run)
-            stage.sourceContinuation stage.sourceAccepted
-            (executedStageWidthTrace run) (executedStageWidthReadoutBound run))
-          continuation =
-        (ExecutedExtensionalSeparator.discoveredTransport run).map continuation)
-    (recoversComparison : ∀ continuation,
-      recover
-          (transportToExtensionalStabilityView
-            (ExecutedExtensionalSeparator.observedConstantTransport run)
-            stage.sourceContinuation stage.sourceAccepted
-            (executedStageWidthTrace run) (executedStageWidthReadoutBound run))
-          continuation =
-        (ExecutedExtensionalSeparator.observedConstantTransport run).map
-          continuation) : False :=
+    (run : ThreadedConstitutiveStageRun state stage) :
+    ¬ ActionFactorsThrough
+      (ExecutedExtensionalSeparator.executedTransportProjection run)
+      (ExecutedExtensionalSeparator.executedTransportAction run) :=
   ExecutedExtensionalSeparator.operational_action_not_factors_on_executed_system
-    run recover recoversDiscovered recoversComparison
+    run
 
 /-- In the canonical initial-origin discovery associated with each input depth,
 at least nine tenths of the tested candidates belong to the proved failed
