@@ -29,6 +29,74 @@ partir de matériaux produits par le calcul**.
 
 ![Architecture exécutée de la décomposition opérationnelle endogène](figures/endogenous-operational-decomposition.svg)
 
+## Stabilité opérationnelle et branchement exponentiel
+
+Le cadre constitue d’abord les objets structurés sur lesquels le calcul agit.
+Le calcul constitue ensuite leur statut opérationnel en déterminant, depuis un
+transport qu’il a effectivement découvert et une loi de préservation prouvée
+séparément, si des alternatives structurellement distinctes doivent encore être
+portées comme des obligations indépendantes.
+
+Pour une histoire exécutée contenant `n` ouvertures, le dépôt construit trois
+carriers finis à partir des mêmes ouvertures :
+
+- le carrier complet et sans doublon des profils structurels a pour largeur
+  exacte `2^n` ;
+- avant qu’un transport ne licence une réduction, le carrier des profils
+  opérationnels en attente possède la même largeur exacte `2^n` ;
+- après que chaque découverte exécutée a fourni son transport et sa preuve de
+  préservation, le carrier des positions opérationnelles retenues a pour
+  largeur exacte `1`.
+
+Ces nombres sont lus sur des carriers énumérés, et non stockés comme des
+annotations indépendantes. Chaque rôle structurel possède une charge locale
+acceptée construite positivement. La réduction de largeur utilise la frontière
+réellement retenue à chaque étape exécutée. Un singleton de même largeur
+numérique, mais construit depuis le mauvais frère, est rejeté par le raccord
+exact à la cible retenue. L’égalité des largeurs ne remplace donc pas la
+réduction sémantique.
+
+La trace transitoire est dérivée des frontières réelles d’entrée, d’ouverture
+et de rétention de chaque étape. Elle est exactement `1 → 2 → 1`, uniformément
+bornée par `2`, tandis que le produit non réduit des choix structurels croît
+comme `2^n`. La construction exhibe ainsi, sur cette famille explicite, comment
+la stabilité sous les transformations reconstruites par l’exécution empêche la
+multiplicité structurelle de devenir une largeur opérationnelle exponentielle.
+Le carrier `2^n` représente le statut indépendant de tous les choix
+structurels ; il n’est pas présenté comme une liste de `2^n` états spontanément
+émis par le moteur séquentiel.
+
+Le contenu causal est typé indépendamment de cette arithmétique. Le préfixe des
+candidats en échec est extrait de la recherche exécutée elle-même, chacun de ses
+membres est prouvé en échec, le candidat sélectionné est prouvé réussi, et le
+nombre mesuré de tentatives est exactement la longueur de ce préfixe augmentée
+d’une unité. Pour la découverte initiale canonique réellement exécutée à chaque
+profondeur, au moins neuf dixièmes des tentatives mesurées appartiennent à ce
+préfixe d’échecs prouvés. L’application découverte agit sur des continuations
+arbitraires. Sa loi de préservation est consommée séparément. Le frère absorbé
+reste viable et distinct, et la sortie retenue est la donnée transmise à la
+situation constituée suivante.
+
+![Stabilité opérationnelle endogène](figures/endogenous-operational-stability.svg)
+
+### Limite exacte d’une projection par état et quantité
+
+Le dépôt construit également une vue extensionnelle de stabilité qui conserve
+les états source et retenu, une entrée acceptée observée et sa sortie, la trace
+de largeur et sa borne. Il fournit ensuite deux transports totaux ayant cette
+même vue et la même sortie observée, mais agissant différemment sur une autre
+continuation admissible. Aucune fonction de cette vue par état et quantité ne
+peut donc reconstruire l’action opérationnelle totale.
+
+Cela identifie la limite relative exacte d’une lecture de type Lyapunov dans la
+présente construction. Une description par états, trajectoire observée et
+quantité bornée est une projection par oubli du processus opérationnel
+constitué : elle enregistre la stabilité, mais elle ne détermine pas la
+transformation dont la reconstruction exécutée a produit cette stabilité. Il
+s’agit d’un résultat formel de non-factorisation pour la projection définie ici,
+et non de la prétention d’avoir formalisé toute version de la théorie classique
+de la stabilité.
+
 ## Chaîne exécutée
 
 Pour chaque entrée, une récursion faisant autorité construit la chaîne suivante :
@@ -126,16 +194,32 @@ Il expose des déclarations sans axiome pour :
   égales pour les deux comparateurs ;
 - une comptabilité mesurée canonique, à propriétaire unique, et les bornes
   polynomiales portant sur le travail explicitement instrumenté de la famille
-  construite.
+  construite ;
+- des carriers structurels complets et sans doublon de largeur exacte `2^n`,
+  des carriers en attente de largeur exacte `2^n` et des carriers opérationnels
+  retenus de largeur exacte `1` ;
+- des charges locales acceptées pour chaque rôle structurel, avec la trace
+  transitoire exacte `1 → 2 → 1` et sa borne uniforme `2` ;
+- l’extraction du préfixe des candidats effectivement en échec et l’équation
+  exacte entre sa longueur et le nombre mesuré de tentatives ;
+- le rejet d’un mauvais singleton qui possède la bonne largeur numérique sans
+  posséder la cible sémantique retenue ;
+- la non-factorisation de l’action opérationnelle totale par la vue
+  extensionnelle de stabilité fondée sur l’état et la quantité.
 
 L’implémentation complète demeure sous
-`RelationalPerimeter/Computation/ConstitutiveSearch/`. Le module de formulation
-est un point d’entrée vers cette implémentation, non son remplacement. Deux
-suites de régression protègent les énoncés de production correspondant aux
-quinze contre-épreuves adversariales énumérées indépendamment, ainsi que la
-surface plus large de l’exécution et de sa comptabilité ; elles ne revendiquent
-pas une identité textuelle avec des fichiers historiques d’audit qui ne sont
-distribués dans aucun des deux dépôts.
+`RelationalPerimeter/Computation/ConstitutiveSearch/`. En particulier,
+`OperationalFrontierStatus.lean` définit la frontière générique entre attente
+et réduction, tandis que `ExecutedOperationalReduction.lean`,
+`ExecutedOperationalReductionHistory.lean`,
+`ExtensionalOperationalStability.lean` et
+`EndogenousOperationalStability.lean` établissent la chaîne causale exécutée,
+ses carriers, ses largeurs exactes et la frontière de projection. Le module de
+formulation est un point d’entrée vers cette implémentation, non son
+remplacement. Les suites de régression comprennent
+`EndogenousOperationalStabilityRegression.lean`, qui vérifie les largeurs
+publiques, le préfixe mesuré d’échecs, l’application découverte, le rejet du
+mauvais singleton et le séparateur de non-factorisation.
 
 ## Portée exacte
 

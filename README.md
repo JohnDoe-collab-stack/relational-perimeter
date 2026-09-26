@@ -100,6 +100,26 @@ discovery.
 
 ![Endogenous operational decomposition](docs/figures/endogenous-operational-decomposition.svg)
 
+The framework first constitutes the structured objects on which the computation
+acts. The computation then constitutes their operational status as independent
+obligations. For `n` executed openings, the complete structural carrier and the
+pending carrier both have exact width `2^n`, while the carrier of positions
+retained by the discovered transports has exact width `1`. The actual transient
+frontiers follow `1 → 2 → 1` at every stage and are uniformly bounded by `2`.
+These widths are derived from their carriers. The causal certificate also
+contains the executed failed-candidate prefix, the discovered total map, its
+separate preservation proof, the viable distinct absorbed sibling, and the
+output transmitted to the next situation.
+
+A state-and-quantity projection preserves the observed states, output, width
+trace, and bound, but does not determine the total operational action. The
+formal separator gives two transports with the same projection and observed
+output that act differently on another continuation. In this exact sense, the
+extensional stability reading is a forgetful projection of the constituted
+operational process.
+
+![Endogenous operational stability](docs/figures/endogenous-operational-stability.svg)
+
 ## Positioning and scope
 
 ![Relational Perimeter formal architecture](docs/figures/relational-perimeter-formal-architecture.svg)
@@ -151,7 +171,10 @@ below.
   including the production seed and the causal connection between measured
   initialization and the first threaded state;
 - `Tests/ConstitutiveExecutionRegression.lean` protects the complete executed
-  and measured surface.
+  and measured surface;
+- `Tests/EndogenousOperationalStabilityRegression.lean` protects the exact
+  structural, pending, executed, and transient widths together with the causal
+  map, measured-failure, wrong-singleton, and non-factorization boundaries.
 
 The computational tree imports the foundational modules directly. It has no
 dependency on an external alignment layer, a separate foundation layer, or a
@@ -175,7 +198,7 @@ bash scripts/verify.sh
 All Lean sources are constructive: they contain no `sorry`, `axiom`, or
 `noncomputable` declaration, and their final axiom-audit blocks report no axiom
 dependency for the audited declarations. The default build includes the public
-modules and both regression suites.
+modules and the regression suites.
 
 ## Résumé français
 
@@ -193,6 +216,13 @@ dirigée est ensuite reconstruite par l’exécution, sa préservation est prouv
 séparément, et le résultat retenu conditionne la découverte suivante. Ainsi, le
 nombre d’alternatives engendrées et le nombre d’obligations qui doivent rester
 indépendantes ne sont pas confondus.
+
+Pour `n` ouvertures exécutées, les carriers structurel et opérationnel en
+attente ont une largeur exacte `2^n`, tandis que le carrier des positions
+retenues par les transports découverts a une largeur exacte `1`. Les frontières
+transitoires réelles suivent `1 → 2 → 1` et restent uniformément bornées par
+`2`. Une projection par état et quantité conserve cette stabilité observée sans
+déterminer l’action opérationnelle totale qui l’a produite.
 
 ## License
 

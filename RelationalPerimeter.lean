@@ -15,4 +15,5 @@ construction of endogenous operational decomposition.
 #print axioms StrongPerimetralTurning.Example.examplePresentation
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.evidence
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.family
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operationalStabilityEvidence
 /- AXIOM_AUDIT_END -/

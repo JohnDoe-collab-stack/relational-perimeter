@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="940" viewBox="0 0 1440 940" role="img" aria-labelledby="title desc">
+  <title id="title">Endogenous operational stability</title>
+  <desc id="desc">The relational framework constitutes openings, executed search discovers a total transport and a separate preservation proof, and the resulting reduction changes structural multiplicity into one retained operational obligation while conditioning the next stage. An extensional state-and-width view forgets the total action and cannot reconstruct it.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#081426"/>
+      <stop offset="1" stop-color="#102843"/>
+    </linearGradient>
+    <linearGradient id="constitutive" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#123f57"/>
+      <stop offset="1" stop-color="#0d2c43"/>
+    </linearGradient>
+    <linearGradient id="executed" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#51336d"/>
+      <stop offset="1" stop-color="#2f244b"/>
+    </linearGradient>
+    <linearGradient id="retained" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d5a4d"/>
+      <stop offset="1" stop-color="#113a35"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#020914" flood-opacity="0.45"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8fd3ff"/>
+    </marker>
+    <marker id="feedbackArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#76e0b7"/>
+    </marker>
+    <style>
+      .title { font: 700 34px system-ui, sans-serif; fill: #f4f8ff; }
+      .subtitle { font: 400 17px system-ui, sans-serif; fill: #b9cce1; }
+      .section { font: 700 19px system-ui, sans-serif; letter-spacing: .8px; fill: #9bdcff; }
+      .label { font: 650 18px system-ui, sans-serif; fill: #f4f8ff; }
+      .body { font: 400 15px system-ui, sans-serif; fill: #d5e2ef; }
+      .small { font: 400 13px system-ui, sans-serif; fill: #b9cce1; }
+      .metric { font: 750 24px ui-monospace, SFMono-Regular, Consolas, monospace; fill: #ffffff; }
+      .mono { font: 600 14px ui-monospace, SFMono-Regular, Consolas, monospace; fill: #d7f1ff; }
+      .card { stroke: #4d7795; stroke-width: 1.4; rx: 18; filter: url(#shadow); }
+      .arrow { fill: none; stroke: #8fd3ff; stroke-width: 3; marker-end: url(#arrow); }
+      .feedback { fill: none; stroke: #76e0b7; stroke-width: 3.2; marker-end: url(#feedbackArrow); }
+      .divider { stroke: #38536c; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect width="1440" height="940" fill="url(#background)"/>
+  <text x="70" y="62" class="title">Endogenous operational stability</text>
+  <text x="70" y="92" class="subtitle">Structural multiplicity is constituted first; operational independence is then constituted by executed discovery and proved preservation.</text>
+
+  <text x="70" y="144" class="section">1 · CONSTITUTED OPENING</text>
+  <rect x="70" y="165" width="360" height="245" fill="url(#constitutive)" class="card"/>
+  <text x="98" y="205" class="label">Relation-free opening view</text>
+  <text x="98" y="237" class="body">A rooted state is opened into two</text>
+  <text x="98" y="260" class="body">distinct sibling positions.</text>
+  <circle cx="250" cy="299" r="19" fill="#9bdcff"/>
+  <path d="M250 318 L166 358 M250 318 L334 358" stroke="#9bdcff" stroke-width="3" fill="none"/>
+  <circle cx="158" cy="368" r="24" fill="#183a54" stroke="#9bdcff" stroke-width="2"/>
+  <circle cx="342" cy="368" r="24" fill="#183a54" stroke="#9bdcff" stroke-width="2"/>
+  <text x="150" y="375" class="mono">L</text>
+  <text x="334" y="375" class="mono">R</text>
+  <text x="98" y="397" class="small">No operational transport is stored in this view.</text>
+
+  <text x="540" y="144" class="section">2 · EXECUTED RECONSTRUCTION</text>
+  <rect x="540" y="165" width="360" height="245" fill="url(#executed)" class="card"/>
+  <text x="568" y="205" class="label">Measured search</text>
+  <text x="568" y="238" class="body">candidate₁ → none</text>
+  <text x="568" y="264" class="body">candidate₂ → none</text>
+  <text x="568" y="290" class="body">⋮</text>
+  <text x="568" y="316" class="body">candidateₖ → discovered transport</text>
+  <line x1="568" y1="338" x2="872" y2="338" class="divider"/>
+  <text x="568" y="366" class="mono">map : arbitrary continuations</text>
+  <text x="568" y="390" class="mono">preservesAccept : separate proof</text>
+
+  <text x="1010" y="144" class="section">3 · OPERATIONAL STATUS</text>
+  <rect x="1010" y="165" width="360" height="245" fill="url(#retained)" class="card"/>
+  <text x="1038" y="205" class="label">Certified retention</text>
+  <text x="1038" y="240" class="body">L remains viable and distinct.</text>
+  <text x="1038" y="265" class="body">Its obligation is transported to R.</text>
+  <rect x="1040" y="292" width="300" height="76" rx="12" fill="#0c2c2a" stroke="#76e0b7"/>
+  <text x="1062" y="324" class="metric">[ L , R ] → [ R ]</text>
+  <text x="1062" y="351" class="small">absorption ≠ equality ≠ impossibility</text>
+  <text x="1038" y="397" class="small">The retained output constitutes the next state.</text>
+
+  <path d="M430 287 C470 287 500 287 538 287" class="arrow"/>
+  <path d="M900 287 C940 287 970 287 1008 287" class="arrow"/>
+
+  <text x="70" y="476" class="section">EXACT WIDTHS DERIVED FROM THE CARRIERS</text>
+  <rect x="70" y="497" width="1300" height="165" fill="#0c1d31" class="card"/>
+  <line x1="395" y1="517" x2="395" y2="642" class="divider"/>
+  <line x1="720" y1="517" x2="720" y2="642" class="divider"/>
+  <line x1="1045" y1="517" x2="1045" y2="642" class="divider"/>
+  <text x="99" y="538" class="label">Structural profiles</text>
+  <text x="99" y="581" class="metric">2ⁿ</text>
+  <text x="99" y="611" class="small">complete · duplicate-free</text>
+  <text x="99" y="632" class="small">each role has accepted local payload</text>
+  <text x="424" y="538" class="label">Pending status</text>
+  <text x="424" y="581" class="metric">2ⁿ</text>
+  <text x="424" y="611" class="small">same openings, no transport license</text>
+  <text x="749" y="538" class="label">Executed status</text>
+  <text x="749" y="581" class="metric">1</text>
+  <text x="749" y="611" class="small">product of actual retained positions</text>
+  <text x="1074" y="538" class="label">Transient trace</text>
+  <text x="1074" y="581" class="metric">1 → 2 → 1</text>
+  <text x="1074" y="611" class="small">uniform bound ≤ 2 at every stage</text>
+
+  <path d="M1190 410 C1190 448 1140 456 1050 476" class="feedback"/>
+  <path d="M1215 410 C1350 445 1365 710 1280 742 C1030 835 280 824 248 412" class="feedback"/>
+  <text x="1015" y="730" class="small" fill="#76e0b7">retained output · seed · provenance → next constituted opening</text>
+
+  <text x="70" y="724" class="section">EXTENSIONAL PROJECTION AND ITS EXACT LIMIT</text>
+  <rect x="70" y="745" width="1300" height="145" fill="#10192b" class="card"/>
+  <text x="99" y="783" class="label">State-and-quantity view keeps</text>
+  <text x="99" y="813" class="body">source state · retained state · observed accepted output · width trace · bound</text>
+  <text x="99" y="851" class="small">Two transports can share all of these observations and the same executed output,</text>
+  <text x="99" y="874" class="small">yet act differently on another admissible continuation.</text>
+  <rect x="930" y="774" width="402" height="79" rx="12" fill="#281f3a" stroke="#c8a6ff" stroke-width="1.5"/>
+  <text x="954" y="807" class="mono">same extensional stability view</text>
+  <text x="954" y="833" class="mono">≠ recoverable operational action</text>
+</svg>
