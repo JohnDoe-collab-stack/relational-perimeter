@@ -5,9 +5,8 @@
 The construction exhibits a search whose **operational decomposition is an
 output of the computation rather than a datum of its branching structure**.
 
-Opening produces structural multiplicity. What determines whether that
-multiplicity must be carried as multiple independent obligations is a
-transformation that:
+Opening produces structural multiplicity. The computation equips that
+multiplicity with an operational status using a transformation that:
 
 1. does not exist as data until the run reconstructs it;
 2. is found by executed work that genuinely fails on most candidate relations;
@@ -23,18 +22,17 @@ reconstruction therefore takes place under conditions produced by the previous
 one.
 
 In short, **structural multiplicity and operational independence are
-separated, and that separation is decided during the computation, by the
-computation, from material the computation has produced**.
+separated, and their operational status is constituted during the computation
+from material the computation has produced**.
 
 ![Executed architecture of the endogenous operational decomposition](figures/endogenous-operational-decomposition.svg)
 
 ## Operational stability and exponential branching
 
 The framework first constitutes the structured objects on which the computation
-acts. The computation then constitutes their operational status by determining,
-from a transport it has actually discovered and a separately proved
-preservation law, whether structurally distinct alternatives must still be
-carried as independent obligations.
+acts. The executed discovery then supplies the transport witness that indexes
+the operational status of an opening; a separately proved preservation law
+licenses the corresponding absorption for the criterion under study.
 
 For an executed history containing `n` openings, the repository constructs
 three finite carriers from the same openings:
@@ -56,29 +54,30 @@ singleton of the same numerical width built from the other sibling is proved
 distinct from the exact retained frontier. Thus equality of widths does not
 replace the semantic reduction.
 
-The transient trace is derived from the actual entry, opened, and retained
-frontiers of every step. It is exactly `1 → 2 → 1`, uniformly bounded by `2`,
-while the unreduced product of the structural choices grows as `2^n`. The
-construction therefore exhibits, on this explicit family, the precise typed
-mechanism by which a reconstructed acceptance-preserving transport prevents a
-structural opening from remaining two independent operational positions:
-erasing the status transport restores width `2`, while incorporating the
-executed discovery gives width `1`. Iterating the same distinction separates
-the pending width `2^n` from the retained width `1`. The `2^n` carrier
-represents the independent status of all structural choices; it is not
-presented as a list of `2^n` states spontaneously emitted by the sequential
-engine.
+The transient trace `1 → 2 → 1` is a numerical readout of the entry, opened,
+and retained frontiers of each step and is uniformly bounded by `2`. In this
+explicit family those lengths reduce definitionally to the same literal
+readout, so the trace is not a load-bearing causal premise. The causal statement
+is carried instead by the status-indexed position types and the transport
+actions: erasing the operational status transport indexes the same opening by
+two pending positions, while incorporating the transport returned by executed
+discovery indexes it by the single retained position. Iterating this distinction
+separates the pending width `2^n` from the retained width `1`. The `2^n`
+carrier represents the independent structural choices; it is not presented as
+a list of `2^n` states spontaneously emitted by the sequential engine.
 
 The causal content is typed independently of this arithmetic. The failed
 candidate prefix is extracted from the executed search itself, every member of
 that prefix is proved to have failed, the selected candidate is proved to have
 succeeded, and the measured attempt count is exactly the length of that prefix
-plus one. For the canonical initial discovery actually executed at every
-depth, at least nine
-tenths of the measured attempts belong to this proved failed prefix. The
-discovered map acts on arbitrary continuations. Its preservation law is
-consumed separately. The absorbed sibling remains viable and distinct, and the
-retained output is the datum transmitted to the next constituted situation.
+plus one. For the canonical initial-origin discovery associated with each input
+depth, at least nine tenths of the measured attempts belong to this proved
+failed prefix; this statement is scoped to that initial run, not to every stage
+of the public history. The discovered map acts on arbitrary continuations. Its
+preservation law is consumed separately. The absorbed sibling remains viable
+and distinct as standalone positive theorems rather than premises of the
+reduction certificate, and the retained output is the datum transmitted to the
+next constituted situation.
 On this explicit family, the successful relation has a canonical value at each
 fixed depth; its operational status is nevertheless constituted by the
 executed search that returns it, records the failed prefix, supplies its typed
@@ -89,14 +88,14 @@ transport, and feeds its result into the next state.
 ### Exact limit of a state-and-quantity projection
 
 The repository also constructs an extensional stability view that retains the
-source and retained states, one observed accepted input and output, the width
-trace, and its bound. On the generated system of an actual executed stage, it
-compares the discovered transport with a total comparison transport having the
-same executed source and target. The two transports agree on every datum
-retained by the view at the observed executed continuation, but they act
-differently on another admissible continuation.
-Consequently, no function of that state-and-quantity view can recover both
-total operational actions.
+source and retained states, one observed accepted input and output, an
+explicitly supplied numerical width readout, and its bound. On the generated
+system of an actual executed stage, it separately projects the discovered
+transport and a total comparison transport having the same executed source and
+target. The two projected views are equal at the observed executed continuation,
+while the two total actions differ on another admissible continuation.
+Consequently, no single recovery function of those extensionally equal views
+can reconstruct both total operational actions.
 
 This identifies the exact relative limitation of a Lyapunov-style reading in
 the present construction. A description by states, an observed trajectory, and
