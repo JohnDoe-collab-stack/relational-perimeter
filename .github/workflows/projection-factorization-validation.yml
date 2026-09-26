@@ -1,0 +1,23 @@
+name: Projection factorization validation
+
+on:
+  push:
+    branches:
+      - codex/operational-stability-projection-factorization
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          test: false
+          use-mathlib-cache: false
+      - name: Build public root
+        run: lake clean && lake build +RelationalPerimeter
+      - name: Build all
+        run: lake clean && lake build
+      - name: Verify
+        run: bash scripts/verify.sh
