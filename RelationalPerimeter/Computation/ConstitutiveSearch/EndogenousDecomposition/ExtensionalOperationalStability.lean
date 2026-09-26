@@ -29,7 +29,25 @@ structure ExtensionalOperationalStabilityView (system : SearchSystem) where
   widthTrace : List Nat
   widthBound : WidthTraceAtMost 2 widthTrace
 
-/-- Extensional view of the reduction actually executed at one stage. -/
+/-- Canonical bound for the numerical one-stage width readout. -/
+def singleStageWidthReadoutBound : WidthTraceAtMost 2 [1, 2, 1] :=
+  .cons (Nat.succ_le_succ (Nat.zero_le 1))
+    (.cons (Nat.le_refl 2)
+      (.cons (Nat.succ_le_succ (Nat.zero_le 1)) .nil))
+
+/-- The executed width readout carries the same numerical bound. -/
+def executedStageWidthReadoutBound {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    WidthTraceAtMost 2 (executedStageWidthTrace run) := by
+  rw [executedStageWidthTrace_exact]
+  exact singleStageWidthReadoutBound
+
+/-- Extensional view of the reduction actually executed at one stage. The width
+trace is a derived numerical observation, not a premise used to constitute the
+reduction. -/
 def executedStepToExtensionalView {depth : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -46,11 +64,7 @@ def executedStepToExtensionalView {depth : Nat}
     sourceAccepted := stage.sourceAccepted
     retainedAccepted := stage.outputAccepted
     widthTrace := executedStageWidthTrace run
-    widthBound := by
-      change WidthTraceAtMost 2 [1, 2, 1]
-      exact .cons (Nat.succ_le_succ (Nat.zero_le 1))
-        (.cons (Nat.le_refl 2)
-          (.cons (Nat.succ_le_succ (Nat.zero_le 1)) .nil)) }
+    widthBound := executedStageWidthReadoutBound run }
 
 /-- The observed output in the view is exactly the discovered map application. -/
 theorem extensionalView_observedOutput_exact {depth : Nat}
@@ -74,13 +88,17 @@ theorem extensionalView_widthTrace_exact {depth : Nat}
   rfl
 
 /-- Forget a total transport after recording one accepted source observation,
-its transported output, and the common transient width profile. -/
+its transported output, and an explicitly supplied numerical width readout.
+The projector does not manufacture the trace: callers must provide both the
+readout and its bound. -/
 def transportToExtensionalStabilityView
     {system : SearchSystem}
     {source retained : system.State}
     (transport : AcceptingContinuationTransport system source retained)
     (observed : system.Continuation source)
-    (accepted : system.Accept source observed) :
+    (accepted : system.Accept source observed)
+    (widthTrace : List Nat)
+    (widthBound : WidthTraceAtMost 2 widthTrace) :
     ExtensionalOperationalStabilityView system :=
   { sourceState := source
     retainedState := retained
@@ -88,11 +106,8 @@ def transportToExtensionalStabilityView
     observedRetained := transport.map observed
     sourceAccepted := accepted
     retainedAccepted := transport.preservesAccept observed accepted
-    widthTrace := [1, 2, 1]
-    widthBound :=
-      .cons (Nat.succ_le_succ (Nat.zero_le 1))
-        (.cons (Nat.le_refl 2)
-          (.cons (Nat.succ_le_succ (Nat.zero_le 1)) .nil)) }
+    widthTrace := widthTrace
+    widthBound := widthBound }
 
 namespace ExecutedExtensionalSeparator
 
@@ -194,17 +209,37 @@ theorem different_total_action {depth : Nat}
     rw [value] at sameAt <;> cases sameAt
 
 /-- Both transports induce the same complete extensional view on the executed
-system and its actually observed source continuation. -/
+system and its actually observed source continuation, when projected with the
+same executed numerical readout. -/
 theorem same_extensional_view {depth : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
     {stage : SequentialStageRun depth assignment}
     (run : ThreadedConstitutiveStageRun state stage) :
     transportToExtensionalStabilityView (discoveredTransport run)
-        stage.sourceContinuation stage.sourceAccepted =
+        stage.sourceContinuation stage.sourceAccepted
+        (executedStageWidthTrace run) (executedStageWidthReadoutBound run) =
       transportToExtensionalStabilityView (observedConstantTransport run)
-        stage.sourceContinuation stage.sourceAccepted :=
+        stage.sourceContinuation stage.sourceAccepted
+        (executedStageWidthTrace run) (executedStageWidthReadoutBound run) :=
   rfl
+
+/-- The extensional view produced by the authoritative execution is exactly the
+projection of the discovered total transport at the executed observation and
+with the executed numerical readout. -/
+theorem executed_view_is_projection_of_discovered {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    executedStepToExtensionalView run =
+      transportToExtensionalStabilityView
+        (discoveredTransport run)
+        stage.sourceContinuation stage.sourceAccepted
+        (executedStageWidthTrace run) (executedStageWidthReadoutBound run) := by
+  unfold executedStepToExtensionalView transportToExtensionalStabilityView
+  congr 1
+  exact stageApplication_eq_returnedRelationMap run
 
 /-- The comparison transport agrees with the output recorded by the actual
 executed projection at its observed source continuation. -/
@@ -218,8 +253,10 @@ theorem comparison_matches_executed_observation {depth : Nat}
       (executedStepToExtensionalView run).observedRetained :=
   (stageApplication_eq_returnedRelationMap run).symm
 
-/-- On the executed family itself, no function of the extensional view can
-recover both the discovered action and the comparison action. -/
+/-- On the executed family itself, no single recovery function can reconstruct
+both total actions from their two separately projected extensional views.
+The projections are equal, while the total actions differ on an admissible
+continuation. -/
 theorem operational_action_not_factors_on_executed_system {depth : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -233,17 +270,39 @@ theorem operational_action_not_factors_on_executed_system {depth : Nat}
       GeneratedStructuralBranchContinuation stage.schedule.entry.target)
     (recoversDiscovered : ∀ continuation,
       recover
-          (executedStepToExtensionalView run)
+          (transportToExtensionalStabilityView
+            (discoveredTransport run)
+            stage.sourceContinuation stage.sourceAccepted
+            (executedStageWidthTrace run) (executedStageWidthReadoutBound run))
           continuation =
         (discoveredTransport run).map continuation)
     (recoversConstant : ∀ continuation,
       recover
-          (executedStepToExtensionalView run)
+          (transportToExtensionalStabilityView
+            (observedConstantTransport run)
+            stage.sourceContinuation stage.sourceAccepted
+            (executedStageWidthTrace run) (executedStageWidthReadoutBound run))
           continuation =
         (observedConstantTransport run).map continuation) : False := by
-  exact different_total_action run
-    ((recoversDiscovered (alternateContinuation run)).symm.trans
-      (recoversConstant (alternateContinuation run)))
+  apply different_total_action run
+  calc
+    (discoveredTransport run).map (alternateContinuation run) =
+        recover
+          (transportToExtensionalStabilityView
+            (discoveredTransport run)
+            stage.sourceContinuation stage.sourceAccepted
+            (executedStageWidthTrace run) (executedStageWidthReadoutBound run))
+          (alternateContinuation run) :=
+      (recoversDiscovered (alternateContinuation run)).symm
+    _ = recover
+          (transportToExtensionalStabilityView
+            (observedConstantTransport run)
+            stage.sourceContinuation stage.sourceAccepted
+            (executedStageWidthTrace run) (executedStageWidthReadoutBound run))
+          (alternateContinuation run) := by
+      rw [same_extensional_view run]
+    _ = (observedConstantTransport run).map (alternateContinuation run) :=
+      recoversConstant (alternateContinuation run)
 
 end ExecutedExtensionalSeparator
 
@@ -267,13 +326,17 @@ def collapsingTransport :
   { map := fun _ => false
     preservesAccept := fun _ _ => True.intro }
 
-/-- Extensional projection of the identity-like total transport. -/
+/-- Extensional projection of the identity-like total transport. The finite
+separator supplies its numerical readout explicitly. -/
 def preservingView : ExtensionalOperationalStabilityView system :=
   transportToExtensionalStabilityView preservingTransport false True.intro
+    [1, 2, 1] singleStageWidthReadoutBound
 
-/-- Extensional projection of the collapsing total transport. -/
+/-- Extensional projection of the collapsing total transport, with the same
+explicit numerical readout. -/
 def collapsingView : ExtensionalOperationalStabilityView system :=
   transportToExtensionalStabilityView collapsingTransport false True.intro
+    [1, 2, 1] singleStageWidthReadoutBound
 
 /-- Backward-compatible name for the shared observed view. -/
 def commonView : ExtensionalOperationalStabilityView system :=
@@ -322,6 +385,8 @@ end ConstitutiveSearch.EndogenousDecomposition
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExtensionalOperationalStabilityView
+#print axioms ConstitutiveSearch.EndogenousDecomposition.singleStageWidthReadoutBound
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedStageWidthReadoutBound
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedStepToExtensionalView
 #print axioms ConstitutiveSearch.EndogenousDecomposition.extensionalView_observedOutput_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.extensionalView_widthTrace_exact
@@ -332,6 +397,7 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.same_observed_output
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.different_total_action
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.same_extensional_view
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.executed_view_is_projection_of_discovered
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.comparison_matches_executed_observation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.operational_action_not_factors_on_executed_system
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExtensionalSeparator.system
