@@ -36,6 +36,9 @@ try {
     throw "lake build failed with exit code $LASTEXITCODE"
   }
   $joinedOutput = $buildOutput -join "`n"
+  if ($joinedOutput -match 'warning:') {
+    throw "Lean warning detected in lake build output"
+  }
   if ($joinedOutput -match 'depends on axioms:|sorryAx') {
     throw "axiom audit failure detected in lake build output"
   }
