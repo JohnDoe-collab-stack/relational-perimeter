@@ -197,8 +197,8 @@ It exposes axiom-free declarations for:
 - the local type-indexed comparison on one executed opening: width `2` without
   an operational transport and width `1` with the transport returned by the
   executed discovery;
-- accepted local payloads for every structural role, together with the exact
-  transient trace `1 → 2 → 1` and its uniform bound `2`;
+- accepted local payloads for every structural role, together with the derived
+  numerical transient readout `1 → 2 → 1` and its uniform bound `2`;
 - extraction of the actually failed candidate prefix and the exact equation
   between its length and the measured attempt count;
 - proof that a wrong singleton can have the correct numerical width while
