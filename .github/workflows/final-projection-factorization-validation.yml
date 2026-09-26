@@ -1,0 +1,52 @@
+name: Final projection factorization validation
+
+on:
+  push:
+    branches:
+      - codex/operational-stability-projection-factorization
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          test: false
+          use-mathlib-cache: false
+      - name: Clean public build with zero warnings
+        shell: bash
+        run: |
+          set -o pipefail
+          lake clean
+          lake build +RelationalPerimeter 2>&1 | tee /tmp/build-public.log
+          if grep -q "warning:" /tmp/build-public.log; then
+            echo "Lean warning detected in public build"
+            grep "warning:" /tmp/build-public.log
+            exit 1
+          fi
+      - name: Clean full build with zero warnings
+        shell: bash
+        run: |
+          set -o pipefail
+          lake clean
+          lake build 2>&1 | tee /tmp/build-all.log
+          if grep -q "warning:" /tmp/build-all.log; then
+            echo "Lean warning detected in full build"
+            grep "warning:" /tmp/build-all.log
+            exit 1
+          fi
+      - name: Verify bash
+        run: bash scripts/verify.sh
+      - name: Verify PowerShell
+        shell: pwsh
+        run: ./scripts/verify.ps1
+      - name: Diff and manifest integrity
+        shell: bash
+        run: |
+          git diff --check
+          cp lake-manifest.json /tmp/lake-manifest.before.json
+          lake update
+          cmp /tmp/lake-manifest.before.json lake-manifest.json
+          echo "Lean files: $(find . -path './.lake' -prune -o -name '*.lean' -print | wc -l)"
