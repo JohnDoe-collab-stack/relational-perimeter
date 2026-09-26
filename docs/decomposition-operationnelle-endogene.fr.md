@@ -230,10 +230,10 @@ Il expose des déclarations sans axiome pour :
   exacte entre sa longueur et le nombre mesuré de tentatives ;
 - la preuve qu’un mauvais singleton peut posséder la bonne largeur numérique
   tout en différant de la cible sémantique exactement retenue ;
-- la non-factorisation de l’action opérationnelle totale par la vue
-  extensionnelle de stabilité fondée sur l’état et la quantité, à la fois dans
-  un séparateur générique fini et sur le système engendré d’une étape
-  effectivement exécutée.
+- la non-factorisation générique d’une action totale à partir d’une collision
+  de projection possédant des valeurs projetées égales et des actions
+  différentes sur un argument, instanciée à la fois par un séparateur fini et
+  par le système engendré d’une étape effectivement exécutée.
 
 L’implémentation complète demeure sous
 `RelationalPerimeter/Computation/ConstitutiveSearch/`. En particulier,
