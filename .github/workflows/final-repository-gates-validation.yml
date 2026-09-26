@@ -1,0 +1,109 @@
+name: Final repository-gate validation
+
+on:
+  push:
+    branches:
+      - codex/operational-stability-final-repository-gates
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          test: false
+          use-mathlib-cache: false
+
+      - name: Verify executable bit
+        shell: bash
+        run: |
+          test -x scripts/verify.sh
+          test "$(git ls-files -s scripts/verify.sh | awk '{print $1}')" = "100755"
+
+      - name: Clean public build with zero warnings
+        shell: bash
+        run: |
+          set -o pipefail
+          lake clean
+          lake build +RelationalPerimeter 2>&1 | tee /tmp/public-build.log
+          ! grep -F 'warning:' /tmp/public-build.log
+
+      - name: Clean full build with zero warnings
+        shell: bash
+        run: |
+          set -o pipefail
+          lake clean
+          lake build 2>&1 | tee /tmp/full-build.log
+          ! grep -F 'warning:' /tmp/full-build.log
+
+      - name: Run bash verifier directly
+        shell: bash
+        run: ./scripts/verify.sh
+
+      - name: Run PowerShell verifier
+        shell: pwsh
+        run: ./scripts/verify.ps1
+
+      - name: Bash verifier rejects a Lean warning
+        shell: bash
+        run: |
+          set -euo pipefail
+          target=RelationalPerimeter/Computation/ConstitutiveSearch/SearchSystem.lean
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path("RelationalPerimeter/Computation/ConstitutiveSearch/SearchSystem.lean")
+          text = path.read_text()
+          marker = "/- AXIOM_AUDIT_BEGIN -/"
+          assert marker in text
+          text = text.replace(marker, "def verificationWarningProbe : True := True.intro\n\n" + marker, 1)
+          path.write_text(text)
+          PY
+          set +e
+          ./scripts/verify.sh > /tmp/warning-sh.log 2>&1
+          status=$?
+          set -e
+          git restore -- "$target"
+          if [ "$status" -eq 0 ]; then
+            cat /tmp/warning-sh.log
+            echo "bash verifier unexpectedly accepted a Lean warning" >&2
+            exit 1
+          fi
+          grep -F 'Lean warning detected in lake build output' /tmp/warning-sh.log
+
+      - name: PowerShell verifier rejects a Lean warning
+        shell: bash
+        run: |
+          set -euo pipefail
+          target=RelationalPerimeter/Computation/ConstitutiveSearch/SearchSystem.lean
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path("RelationalPerimeter/Computation/ConstitutiveSearch/SearchSystem.lean")
+          text = path.read_text()
+          marker = "/- AXIOM_AUDIT_BEGIN -/"
+          assert marker in text
+          text = text.replace(marker, "def verificationWarningProbe : True := True.intro\n\n" + marker, 1)
+          path.write_text(text)
+          PY
+          set +e
+          pwsh -File scripts/verify.ps1 > /tmp/warning-ps.log 2>&1
+          status=$?
+          set -e
+          git restore -- "$target"
+          if [ "$status" -eq 0 ]; then
+            cat /tmp/warning-ps.log
+            echo "PowerShell verifier unexpectedly accepted a Lean warning" >&2
+            exit 1
+          fi
+          grep -F 'Lean warning detected in lake build output' /tmp/warning-ps.log
+
+      - name: Final integrity
+        shell: bash
+        run: |
+          git diff --check
+          test -z "$(git status --porcelain)"
+          cp lake-manifest.json /tmp/lake-manifest.before.json
+          lake update
+          cmp /tmp/lake-manifest.before.json lake-manifest.json
+          echo "Lean files: $(find . -path './.lake' -prune -o -name '*.lean' -print | wc -l)"
