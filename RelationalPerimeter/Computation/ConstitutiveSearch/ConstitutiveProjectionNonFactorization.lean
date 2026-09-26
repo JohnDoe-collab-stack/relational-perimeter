@@ -4,16 +4,26 @@
 The closure program needs a precise notion of information loss.
 
 A property factors through a projection when it can be recovered solely from
-the projected value.  A numeric observation factors through a projection when
-one function of the projected value reproduces that observation exactly.
+the projected value. A value-valued observation factors through a projection
+when one function of the projected value reproduces that observation exactly.
+A total action factors through a projection when one projected action recovers
+its result on every argument.
 
-The two generic separator theorems below are constructive:
+The generic separator theorems below are constructive:
 * equal projections with opposite predicate truth values refute predicate
   factorization;
-* equal projections with distinct observed values refute value factorization.
+* equal projections with distinct observed values refute value factorization;
+* equal projections with total actions that differ at one argument refute
+  action factorization.
+
+The last statement isolates the information-loss principle needed by the
+operational-stability layer. The equality of projections is an explicit
+hypothesis and is consumed by the proof; it need not be definitional.
 -/
 
 namespace ConstitutiveSearch
+
+universe uA uB uC uX uY
 
 /-- A predicate is recoverable from a projection alone. -/
 def PredicateFactorsThrough
@@ -36,6 +46,36 @@ def ValueFactorsThrough
       projectedObservation
           (project value) =
         observe value
+
+/-- A total action is recoverable from a projection alone. -/
+def ActionFactorsThrough
+    {A : Type uA}
+    {B : Type uB}
+    {X : Type uX}
+    {Y : Type uY}
+    (project : A → B)
+    (action : A → X → Y) : Prop :=
+  ∃ projectedAction : B → X → Y,
+    ∀ value argument,
+      projectedAction (project value) argument =
+        action value argument
+
+/--
+A collision in a projection whose two preimages still induce different total
+actions at one admissible argument.
+-/
+structure ActionProjectionCollision
+    {A : Type uA}
+    {B : Type uB}
+    {X : Type uX}
+    {Y : Type uY}
+    (project : A → B)
+    (action : A → X → Y) where
+  first : A
+  second : A
+  sameProjection : project first = project second
+  argument : X
+  differentAction : action first argument ≠ action second argument
 
 /--
 Two states with the same projection but different predicate truth values
@@ -112,11 +152,45 @@ theorem value_not_factors_of_same_projection
       observe second :=
         exactFactor second
 
+/--
+A projection collision with different total actions constructively refutes
+factorization of that action through the projection.
+
+The middle equality necessarily consumes `collision.sameProjection`; therefore
+the theorem applies equally when the projected values are only propositionally
+equal and not definitionally identical.
+-/
+theorem action_not_factors_of_projection_collision
+    {A : Type uA}
+    {B : Type uB}
+    {X : Type uX}
+    {Y : Type uY}
+    {project : A → B}
+    {action : A → X → Y}
+    (collision : ActionProjectionCollision project action) :
+    ¬ ActionFactorsThrough project action := by
+  intro factors
+  rcases factors with
+    ⟨projectedAction, exactFactor⟩
+  apply collision.differentAction
+  calc
+    action collision.first collision.argument =
+        projectedAction (project collision.first) collision.argument :=
+      (exactFactor collision.first collision.argument).symm
+    _ =
+        projectedAction (project collision.second) collision.argument := by
+      rw [collision.sameProjection]
+    _ = action collision.second collision.argument :=
+      exactFactor collision.second collision.argument
+
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.PredicateFactorsThrough
 #print axioms ConstitutiveSearch.ValueFactorsThrough
+#print axioms ConstitutiveSearch.ActionFactorsThrough
+#print axioms ConstitutiveSearch.ActionProjectionCollision
 #print axioms ConstitutiveSearch.predicate_not_factors_of_same_projection
 #print axioms ConstitutiveSearch.value_not_factors_of_same_projection
+#print axioms ConstitutiveSearch.action_not_factors_of_projection_collision
 /- AXIOM_AUDIT_END -/
