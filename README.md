@@ -115,14 +115,17 @@ extensional projection, and output transmitted to the next situation. Sibling
 viability and distinction remain separately proved positive consequences.
 
 A state-and-quantity projection preserves the observed states, output, width
-readout, and bound, but does not determine the total operational action. On the
-actual executed generated system, the formal separator projects the discovered
-transport and a total comparison transport on the same source and target into
-two extensionally equal views. The two transports agree on every datum retained
-by those projections at the observed executed continuation and act differently
-on another admissible continuation. In this exact sense, the extensional
-stability reading is a forgetful projection of the constituted operational
-process.
+readout, and bound, but does not determine the total operational action. At the
+generic level, `ActionFactorsThrough` expresses recoverability of a total
+action from a projection, while `ActionProjectionCollision` records equal
+projected values whose total actions differ at one argument; the generic
+non-factorization theorem explicitly consumes that projection equality. On the
+actual executed generated system, the discovered transport and a total
+comparison transport instantiate this collision: their separately constructed
+views are equal, they agree at the observed executed continuation, and their
+total actions differ on another admissible continuation. In this exact sense,
+the extensional stability reading is a forgetful projection of the constituted
+operational process.
 
 ![Endogenous operational stability](docs/figures/endogenous-operational-stability.svg)
 
@@ -180,7 +183,10 @@ below.
   and measured surface;
 - `Tests/EndogenousOperationalStabilityRegression.lean` protects the exact
   structural, pending, executed, and transient widths together with the causal
-  map, measured-failure, wrong-singleton, and non-factorization boundaries.
+  map, measured-failure, wrong-singleton, and non-factorization boundaries. In
+  particular, it checks the public `ActionFactorsThrough` statement and a
+  generic projection collision whose equality is propositional rather than
+  definitional.
 
 The computational tree imports the foundational modules directly. It has no
 dependency on an external alignment layer, a separate foundation layer, or a
@@ -225,10 +231,15 @@ indépendantes ne sont pas confondus.
 
 Pour `n` ouvertures exécutées, les carriers structurel et opérationnel en
 attente ont une largeur exacte `2^n`, tandis que le carrier des positions
-retenues par les transports découverts a une largeur exacte `1`. Les frontières
-transitoires réelles suivent `1 → 2 → 1` et restent uniformément bornées par
-`2`. Une projection par état et quantité conserve cette stabilité observée sans
-déterminer l’action opérationnelle totale qui l’a produite.
+retenues par les transports découverts a une largeur exacte `1`. La lecture
+numérique transitoire `1 → 2 → 1` est dérivée des frontières constituées et
+reste uniformément bornée par `2` ; elle n’est pas une prémisse causale de la
+réduction. Une projection par état et quantité conserve cette stabilité
+observée sans déterminer l’action opérationnelle totale. Le transport découvert
+et le transport de comparaison sont projetés séparément vers deux vues égales,
+alors que leurs actions totales diffèrent sur une autre continuation admissible.
+Le théorème générique de non-factorisation consomme explicitement cette égalité
+de projections.
 
 ## License
 
