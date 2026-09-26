@@ -380,36 +380,29 @@ theorem executedViewIsDiscoveredProjection {depth : Nat}
         (executedStageWidthTrace run) (executedStageWidthReadoutBound run) :=
   executed_extensional_view_is_discovered_projection run
 
-theorem executedSeparateViewsCannotRecoverBothActions {depth : Nat}
+theorem executedProjectedViewsAreEqual {depth : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
     {stage : SequentialStageRun depth assignment}
-    (run : ThreadedConstitutiveStageRun state stage)
-    (recover : ExtensionalOperationalStabilityView
-      (generatedStructuralBranchSystem
-        (distinctGrowingDiscoveryFormula
-          (constructStage (depth + 1)).searchIndex)) →
-      GeneratedStructuralBranchContinuation stage.schedule.entry.source →
-      GeneratedStructuralBranchContinuation stage.schedule.entry.target)
-    (recoversDiscovered : ∀ continuation,
-      recover
-          (transportToExtensionalStabilityView
-            (ExecutedExtensionalSeparator.discoveredTransport run)
-            stage.sourceContinuation stage.sourceAccepted
-            (executedStageWidthTrace run) (executedStageWidthReadoutBound run))
-          continuation =
-        (ExecutedExtensionalSeparator.discoveredTransport run).map continuation)
-    (recoversComparison : ∀ continuation,
-      recover
-          (transportToExtensionalStabilityView
-            (ExecutedExtensionalSeparator.observedConstantTransport run)
-            stage.sourceContinuation stage.sourceAccepted
-            (executedStageWidthTrace run) (executedStageWidthReadoutBound run))
-          continuation =
-        (ExecutedExtensionalSeparator.observedConstantTransport run).map
-          continuation) : False :=
-  executed_state_width_view_does_not_determine_total_action
-    run recover recoversDiscovered recoversComparison
+    (run : ThreadedConstitutiveStageRun state stage) :
+    ExecutedExtensionalSeparator.executedTransportProjection run
+        (ExecutedExtensionalSeparator.discoveredTransport run) =
+      ExecutedExtensionalSeparator.executedTransportProjection run
+        (ExecutedExtensionalSeparator.observedConstantTransport run) :=
+  ExecutedExtensionalSeparator.same_extensional_view run
+
+/-- Regression on the public theorem's abstract factorization type. Replacing
+the public result by the former pair-specific one-view statement no longer
+inhabits this type. -/
+theorem executedTotalActionDoesNotFactorThroughProjectedView {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    ¬ ActionFactorsThrough
+      (ExecutedExtensionalSeparator.executedTransportProjection run)
+      (ExecutedExtensionalSeparator.executedTransportAction run) :=
+  executed_state_width_view_does_not_determine_total_action run
 
 /-- Equal width does not license a wrong retained target. -/
 theorem wrongSingletonStillRejected {depth : Nat}
@@ -441,17 +434,54 @@ theorem separatorDifferentTotalAction :
       ExtensionalSeparator.collapsingTransport.map true :=
   ExtensionalSeparator.different_arbitrary_continuation_action
 
-theorem stateWidthViewCannotRecoverBothActions
-    (recover : ExtensionalOperationalStabilityView
-      ExtensionalSeparator.system → Bool → Bool)
-    (leftExact : ∀ continuation,
-      recover ExtensionalSeparator.preservingView continuation =
-        ExtensionalSeparator.preservingTransport.map continuation)
-    (rightExact : ∀ continuation,
-      recover ExtensionalSeparator.collapsingView continuation =
-        ExtensionalSeparator.collapsingTransport.map continuation) : False :=
+theorem stateWidthViewCannotRecoverTotalAction :
+    ¬ ActionFactorsThrough
+      ExtensionalSeparator.projection
+      ExtensionalSeparator.action :=
   ExtensionalSeparator.operational_action_not_factors_through_extensional_view
-    recover leftExact rightExact
+
+namespace ProjectionCollisionRegression
+
+/-- A projection whose two selected values are propositionally equal but not
+definitionally the same expression for an arbitrary tail. -/
+def projection (tail : List Nat) : Bool → List Nat
+  | false => tail ++ []
+  | true => tail
+
+def action : Bool → Bool → Bool
+  | false => fun value => value
+  | true => fun _ => false
+
+theorem sameProjection (tail : List Nat) :
+    projection tail false = projection tail true := by
+  change tail ++ [] = tail
+  induction tail with
+  | nil => rfl
+  | cons head rest ih =>
+      change head :: (rest ++ []) = head :: rest
+      rw [ih]
+
+theorem differentAction :
+    action false true ≠ action true true := by
+  intro impossible
+  exact Bool.noConfusion impossible
+
+def collision (tail : List Nat) :
+    ActionProjectionCollision (projection tail) action :=
+  { first := false
+    second := true
+    sameProjection := sameProjection tail
+    argument := true
+    differentAction := differentAction }
+
+/-- The generic theorem genuinely consumes a propositional projection equality;
+the regression does not rely on the executed separator's definitional equality. -/
+theorem actionDoesNotFactorThroughPropositionallyEqualProjection
+    (tail : List Nat) :
+    ¬ ActionFactorsThrough (projection tail) action :=
+  action_not_factors_of_projection_collision (collision tail)
+
+end ProjectionCollisionRegression
 
 end Tests.EndogenousOperationalStabilityRegression
 
@@ -497,10 +527,17 @@ end Tests.EndogenousOperationalStabilityRegression
 #print axioms Tests.EndogenousOperationalStabilityRegression.projectedObservedActionIsExecuted
 #print axioms Tests.EndogenousOperationalStabilityRegression.projectedTraceIsExecuted
 #print axioms Tests.EndogenousOperationalStabilityRegression.executedViewIsDiscoveredProjection
-#print axioms Tests.EndogenousOperationalStabilityRegression.executedSeparateViewsCannotRecoverBothActions
+#print axioms Tests.EndogenousOperationalStabilityRegression.executedProjectedViewsAreEqual
+#print axioms Tests.EndogenousOperationalStabilityRegression.executedTotalActionDoesNotFactorThroughProjectedView
 #print axioms Tests.EndogenousOperationalStabilityRegression.wrongSingletonStillRejected
 #print axioms Tests.EndogenousOperationalStabilityRegression.separatorSameExecutedOutput
 #print axioms Tests.EndogenousOperationalStabilityRegression.separatorProjectedViewsEqual
 #print axioms Tests.EndogenousOperationalStabilityRegression.separatorDifferentTotalAction
-#print axioms Tests.EndogenousOperationalStabilityRegression.stateWidthViewCannotRecoverBothActions
+#print axioms Tests.EndogenousOperationalStabilityRegression.stateWidthViewCannotRecoverTotalAction
+#print axioms Tests.EndogenousOperationalStabilityRegression.ProjectionCollisionRegression.projection
+#print axioms Tests.EndogenousOperationalStabilityRegression.ProjectionCollisionRegression.action
+#print axioms Tests.EndogenousOperationalStabilityRegression.ProjectionCollisionRegression.sameProjection
+#print axioms Tests.EndogenousOperationalStabilityRegression.ProjectionCollisionRegression.differentAction
+#print axioms Tests.EndogenousOperationalStabilityRegression.ProjectionCollisionRegression.collision
+#print axioms Tests.EndogenousOperationalStabilityRegression.ProjectionCollisionRegression.actionDoesNotFactorThroughPropositionallyEqualProjection
 /- AXIOM_AUDIT_END -/
