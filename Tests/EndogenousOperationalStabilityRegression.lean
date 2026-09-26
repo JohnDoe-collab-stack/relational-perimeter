@@ -240,8 +240,8 @@ theorem absorbedSiblingRemainsViableAndDistinct {depth : Nat}
           stage.discovery.var false stage.discovery.fresh ≠
         (constructStage (depth + 1)).operationalRoot.child
           stage.discovery.var true stage.discovery.fresh :=
-  ⟨(executedOperationalReductionEvidence run).sourceSiblingViable,
-    (executedOperationalReductionEvidence run).siblingsDistinct⟩
+  ⟨executedSourceSibling_viable run,
+    executedSiblingStates_distinct run⟩
 
 theorem retainedSiblingRemainsViable {depth : Nat}
     {assignment : SequentialAssignment depth}
@@ -252,7 +252,7 @@ theorem retainedSiblingRemainsViable {depth : Nat}
       (distinctGrowingDiscoveryFormula
         (constructStage (depth + 1)).searchIndex)).Viable
         stage.schedule.entry.target :=
-  (executedOperationalReductionEvidence run).targetSiblingViable
+  executedTargetSibling_viable run
 
 theorem executedApplicationUsesReturnedRelation {depth : Nat}
     {assignment : SequentialAssignment depth}
