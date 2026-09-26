@@ -368,6 +368,49 @@ theorem projectedTraceIsExecuted {depth : Nat}
       executedStageWidthTrace run :=
   extensionalView_widthTrace_exact run
 
+theorem executedViewIsDiscoveredProjection {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    executedStepToExtensionalView run =
+      transportToExtensionalStabilityView
+        (ExecutedExtensionalSeparator.discoveredTransport run)
+        stage.sourceContinuation stage.sourceAccepted
+        (executedStageWidthTrace run) (executedStageWidthReadoutBound run) :=
+  executed_extensional_view_is_discovered_projection run
+
+theorem executedSeparateViewsCannotRecoverBothActions {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage)
+    (recover : ExtensionalOperationalStabilityView
+      (generatedStructuralBranchSystem
+        (distinctGrowingDiscoveryFormula
+          (constructStage (depth + 1)).searchIndex)) →
+      GeneratedStructuralBranchContinuation stage.schedule.entry.source →
+      GeneratedStructuralBranchContinuation stage.schedule.entry.target)
+    (recoversDiscovered : ∀ continuation,
+      recover
+          (transportToExtensionalStabilityView
+            (ExecutedExtensionalSeparator.discoveredTransport run)
+            stage.sourceContinuation stage.sourceAccepted
+            (executedStageWidthTrace run) (executedStageWidthReadoutBound run))
+          continuation =
+        (ExecutedExtensionalSeparator.discoveredTransport run).map continuation)
+    (recoversComparison : ∀ continuation,
+      recover
+          (transportToExtensionalStabilityView
+            (ExecutedExtensionalSeparator.observedConstantTransport run)
+            stage.sourceContinuation stage.sourceAccepted
+            (executedStageWidthTrace run) (executedStageWidthReadoutBound run))
+          continuation =
+        (ExecutedExtensionalSeparator.observedConstantTransport run).map
+          continuation) : False :=
+  executed_state_width_view_does_not_determine_total_action
+    run recover recoversDiscovered recoversComparison
+
 /-- Equal width does not license a wrong retained target. -/
 theorem wrongSingletonStillRejected {depth : Nat}
     {assignment : SequentialAssignment depth}
@@ -453,6 +496,8 @@ end Tests.EndogenousOperationalStabilityRegression
 #print axioms Tests.EndogenousOperationalStabilityRegression.comparisonMatchesActualExecutedObservation
 #print axioms Tests.EndogenousOperationalStabilityRegression.projectedObservedActionIsExecuted
 #print axioms Tests.EndogenousOperationalStabilityRegression.projectedTraceIsExecuted
+#print axioms Tests.EndogenousOperationalStabilityRegression.executedViewIsDiscoveredProjection
+#print axioms Tests.EndogenousOperationalStabilityRegression.executedSeparateViewsCannotRecoverBothActions
 #print axioms Tests.EndogenousOperationalStabilityRegression.wrongSingletonStillRejected
 #print axioms Tests.EndogenousOperationalStabilityRegression.separatorSameExecutedOutput
 #print axioms Tests.EndogenousOperationalStabilityRegression.separatorProjectedViewsEqual
