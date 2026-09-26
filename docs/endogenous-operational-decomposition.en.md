@@ -211,9 +211,10 @@ It exposes axiom-free declarations for:
   between its length and the measured attempt count;
 - proof that a wrong singleton can have the correct numerical width while
   differing from the exact retained semantic target;
-- non-factorization of total operational action through the extensional
-  state-and-quantity stability view, both in a finite generic separator and on
-  the generated system of an actually executed stage.
+- generic non-factorization of a total action from any projection collision
+  with equal projected values and different action at one argument, instantiated
+  both by a finite separator and by the generated system of an actually
+  executed stage.
 
 The complete implementation remains under
 `RelationalPerimeter/Computation/ConstitutiveSearch/`. In particular,
