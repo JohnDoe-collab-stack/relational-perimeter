@@ -391,9 +391,23 @@ theorem executedProjectedViewsAreEqual {depth : Nat}
         (ExecutedExtensionalSeparator.observedConstantTransport run) :=
   ExecutedExtensionalSeparator.same_extensional_view run
 
-/-- Regression on the public theorem's abstract factorization type. Replacing
-the public result by the former pair-specific one-view statement no longer
-inhabits this type. -/
+/-- Regression on the production theorem's exact abstract factorization type.
+This pins `operational_action_not_factors_on_executed_system` itself, not only
+the public wrapper, so the production declaration cannot regress to the former
+pair-specific recovery-hypothesis statement while the wrapper is re-proved
+elsewhere. -/
+theorem productionExecutedNonFactorizationHasAbstractType {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    ¬ ActionFactorsThrough
+      (ExecutedExtensionalSeparator.executedTransportProjection run)
+      (ExecutedExtensionalSeparator.executedTransportAction run) :=
+  ExecutedExtensionalSeparator.operational_action_not_factors_on_executed_system
+    run
+
+/-- Regression on the public wrapper's matching abstract factorization type. -/
 theorem executedTotalActionDoesNotFactorThroughProjectedView {depth : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -528,6 +542,7 @@ end Tests.EndogenousOperationalStabilityRegression
 #print axioms Tests.EndogenousOperationalStabilityRegression.projectedTraceIsExecuted
 #print axioms Tests.EndogenousOperationalStabilityRegression.executedViewIsDiscoveredProjection
 #print axioms Tests.EndogenousOperationalStabilityRegression.executedProjectedViewsAreEqual
+#print axioms Tests.EndogenousOperationalStabilityRegression.productionExecutedNonFactorizationHasAbstractType
 #print axioms Tests.EndogenousOperationalStabilityRegression.executedTotalActionDoesNotFactorThroughProjectedView
 #print axioms Tests.EndogenousOperationalStabilityRegression.wrongSingletonStillRejected
 #print axioms Tests.EndogenousOperationalStabilityRegression.separatorSameExecutedOutput
