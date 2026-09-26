@@ -93,13 +93,23 @@ résultat à l’état suivant.
 
 Le dépôt construit également une vue extensionnelle de stabilité qui conserve
 les états source et retenu, une entrée acceptée observée et sa sortie, une
-lecture numérique de largeur fournie explicitement et sa borne. Sur le système
-engendré d’une étape effectivement exécutée, il projette séparément le transport
+lecture numérique de largeur fournie explicitement et sa borne. La couche
+générique définit `ActionFactorsThrough` : une action totale se factorise par
+une projection lorsqu’une seule action sur les valeurs projetées la reconstruit
+sur tout argument. Elle définit aussi `ActionProjectionCollision` : deux
+antécédents possèdent des projections égales mais leurs actions totales
+diffèrent sur un argument. Le théorème générique
+`action_not_factors_of_projection_collision` consomme explicitement cette
+égalité de projection et réfute constructivement la factorisation.
+
+Sur le système engendré d’une étape effectivement exécutée, le transport
 découvert et un transport total de comparaison possédant la même source et la
-même cible exécutées. Les deux vues projetées sont égales pour la continuation
-exécutée observée, tandis que les deux actions totales diffèrent sur une autre
-continuation admissible. Aucune fonction unique de ces vues extensionnellement
-égales ne peut donc reconstruire les deux actions opérationnelles totales.
+même cible exécutées constituent une telle collision. Ils sont projetés
+séparément ; leurs vues projetées sont égales pour la continuation exécutée
+observée, tandis que leurs actions totales diffèrent sur une autre continuation
+admissible. La non-factorisation exécutée est donc une instance du théorème
+générique de collision de projection, et non une contradiction particulière
+formulée sur une seule vue syntaxique.
 
 Cela identifie la limite relative exacte d’une lecture de type Lyapunov dans la
 présente construction. Une description par états, trajectoire observée et
