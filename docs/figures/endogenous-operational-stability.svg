@@ -106,7 +106,7 @@
   <text x="1074" y="635" class="small">derived numeric readout</text>
   <text x="1074" y="656" class="small">uniform bound ≤ 2 at every stage</text>
 
-  <path d="M1355 410 L1355 478 L250 478 L250 412" class="feedback"/>
+  <path d="M1355 410 L1355 478 L86 478 L86 412" class="feedback"/>
   <rect x="474" y="426" width="558" height="34" rx="17" fill="#0c2c2a" stroke="#76e0b7" stroke-width="1"/>
   <text x="500" y="448" class="small" fill="#76e0b7">retained output · seed · provenance constitute the next opening</text>
   <rect x="1040" y="426" width="300" height="34" rx="17" fill="#10233a" stroke="#9bdcff" stroke-width="1"/>
