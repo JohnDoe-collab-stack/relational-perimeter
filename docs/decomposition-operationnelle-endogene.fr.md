@@ -5,9 +5,8 @@
 La construction exhibe une recherche dont la **décomposition opérationnelle
 est un produit du calcul, et non une donnée de sa structure de branchement**.
 
-L’ouverture produit une multiplicité structurelle. Ce qui détermine si cette
-multiplicité doit être portée comme plusieurs obligations indépendantes est une
-transformation qui :
+L’ouverture produit une multiplicité structurelle. Le calcul dote cette
+multiplicité d’un statut opérationnel à partir d’une transformation qui :
 
 1. n’existe pas comme donnée avant que l’exécution ne la reconstruise ;
 2. est trouvée par un travail effectivement exécuté, qui échoue sur la plupart
@@ -24,18 +23,17 @@ reconstruction suivante a donc lieu sous des conditions produites par la
 précédente.
 
 En bref, **la multiplicité structurelle et l’indépendance opérationnelle sont
-séparées, et cette séparation est décidée pendant le calcul, par le calcul, à
-partir de matériaux produits par le calcul**.
+séparées, et leur statut opérationnel est constitué pendant le calcul à partir
+de matériaux produits par le calcul**.
 
 ![Architecture exécutée de la décomposition opérationnelle endogène](figures/endogenous-operational-decomposition.svg)
 
 ## Stabilité opérationnelle et branchement exponentiel
 
 Le cadre constitue d’abord les objets structurés sur lesquels le calcul agit.
-Le calcul constitue ensuite leur statut opérationnel en déterminant, depuis un
-transport qu’il a effectivement découvert et une loi de préservation prouvée
-séparément, si des alternatives structurellement distinctes doivent encore être
-portées comme des obligations indépendantes.
+La découverte exécutée fournit ensuite le témoin de transport qui indexe le
+statut opérationnel d’une ouverture ; une loi de préservation prouvée
+séparément autorise l’absorption correspondante pour le critère étudié.
 
 Pour une histoire exécutée contenant `n` ouvertures, le dépôt construit trois
 carriers finis à partir des mêmes ouvertures :
@@ -58,28 +56,31 @@ indexés par leur statut. Un singleton de même largeur numérique construit
 depuis l’autre frère est prouvé distinct de la frontière exactement retenue.
 L’égalité des largeurs ne remplace donc pas la réduction sémantique.
 
-La trace transitoire est dérivée des frontières réelles d’entrée, d’ouverture
-et de rétention de chaque étape. Elle est exactement `1 → 2 → 1`, uniformément
-bornée par `2`, tandis que le produit non réduit des choix structurels croît
-comme `2^n`. La construction exhibe ainsi, sur cette famille explicite, le
-mécanisme typé précis par lequel un transport reconstruit et préservant
-l’acceptation empêche une ouverture structurelle de demeurer deux positions
-opérationnelles indépendantes : effacer le transport du statut rétablit la
-largeur `2`, tandis qu’incorporer la découverte exécutée donne la largeur `1`.
-L’itération de cette même distinction sépare la largeur en attente `2^n` de la
-largeur retenue `1`. Le carrier `2^n` représente le statut indépendant de tous
-les choix structurels ; il n’est pas présenté comme une liste de `2^n` états
-spontanément émis par le moteur séquentiel.
+La trace transitoire `1 → 2 → 1` est une lecture numérique des frontières
+d’entrée, d’ouverture et de rétention de chaque étape, uniformément bornée par
+`2`. Dans cette famille explicite, ces longueurs se réduisent
+définitionnellement à la même lecture littérale ; la trace n’est donc pas une
+prémisse causale porteuse. L’énoncé causal est porté par les types de positions
+indexés par le statut et par les actions de transport : effacer le transport du
+statut indexe la même ouverture par deux positions en attente, tandis que
+l’incorporation du transport retourné par la découverte exécutée l’indexe par
+la seule position retenue. L’itération de cette distinction sépare la largeur
+en attente `2^n` de la largeur retenue `1`. Le carrier `2^n` représente les
+choix structurels indépendants ; il n’est pas présenté comme une liste de
+`2^n` états spontanément émis par le moteur séquentiel.
 
 Le contenu causal est typé indépendamment de cette arithmétique. Le préfixe des
 candidats en échec est extrait de la recherche exécutée elle-même, chacun de ses
 membres est prouvé en échec, le candidat sélectionné est prouvé réussi, et le
 nombre mesuré de tentatives est exactement la longueur de ce préfixe augmentée
-d’une unité. Pour la découverte initiale canonique réellement exécutée à chaque
-profondeur, au moins neuf dixièmes des tentatives mesurées appartiennent à ce
-préfixe d’échecs prouvés. L’application découverte agit sur des continuations
-arbitraires. Sa loi de préservation est consommée séparément. Le frère absorbé
-reste viable et distinct, et la sortie retenue est la donnée transmise à la
+d’une unité. Pour la découverte canonique d’origine initiale associée à chaque
+profondeur d’entrée, au moins neuf dixièmes des tentatives mesurées
+appartiennent à ce préfixe d’échecs prouvés ; cet énoncé est limité à cette
+exécution initiale et non à toutes les étapes de l’histoire publique.
+L’application découverte agit sur des continuations arbitraires. Sa loi de
+préservation est consommée séparément. Le frère absorbé reste viable et
+distinct comme conséquence positive prouvée séparément, et non comme prémisse
+du certificat de réduction ; la sortie retenue est la donnée transmise à la
 situation constituée suivante. Sur cette famille explicite, la relation
 réussie possède une valeur canonique à chaque profondeur fixée ; son statut
 opérationnel est néanmoins constitué par la recherche exécutée qui la retourne,
@@ -91,14 +92,14 @@ résultat à l’état suivant.
 ### Limite exacte d’une projection par état et quantité
 
 Le dépôt construit également une vue extensionnelle de stabilité qui conserve
-les états source et retenu, une entrée acceptée observée et sa sortie, la trace
-de largeur et sa borne. Sur le système engendré d’une étape effectivement
-exécutée, il compare le transport découvert avec un transport total de
-comparaison possédant la même source et la même cible exécutées. Les deux
-transports s’accordent sur chaque donnée retenue par la vue pour la continuation
-exécutée observée, mais agissent différemment sur une autre continuation
-admissible. Aucune fonction de cette vue par état et quantité ne peut donc
-reconstruire les deux actions opérationnelles totales.
+les états source et retenu, une entrée acceptée observée et sa sortie, une
+lecture numérique de largeur fournie explicitement et sa borne. Sur le système
+engendré d’une étape effectivement exécutée, il projette séparément le transport
+découvert et un transport total de comparaison possédant la même source et la
+même cible exécutées. Les deux vues projetées sont égales pour la continuation
+exécutée observée, tandis que les deux actions totales diffèrent sur une autre
+continuation admissible. Aucune fonction unique de ces vues extensionnellement
+égales ne peut donc reconstruire les deux actions opérationnelles totales.
 
 Cela identifie la limite relative exacte d’une lecture de type Lyapunov dans la
 présente construction. Une description par états, trajectoire observée et
