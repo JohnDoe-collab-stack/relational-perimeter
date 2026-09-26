@@ -249,7 +249,9 @@ remplacement. Les suites de régression comprennent
 publiques, le changement local de largeur indexé par le statut, chaque champ de
 la réduction exécutée exacte, le préfixe mesuré d’échecs, l’application
 découverte, les histoires causales et le normaliseur exacts, la distinction du
-mauvais singleton et les deux séparateurs de non-factorisation.
+mauvais singleton, l’énoncé public de factorisation d’action et une collision de
+projection générique dont l’égalité de projection est propositionnelle plutôt
+que définitionnelle.
 
 ## Portée exacte
 
