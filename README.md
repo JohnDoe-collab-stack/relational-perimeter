@@ -101,27 +101,28 @@ discovery.
 ![Endogenous operational decomposition](docs/figures/endogenous-operational-decomposition.svg)
 
 The framework first constitutes the structured objects on which the computation
-acts. The computation then constitutes their operational status as independent
-obligations. For `n` executed openings, the complete structural carrier and the
-pending carrier both have exact width `2^n`, while the carrier of positions
-retained by the discovered transports has exact width `1`. The actual transient
-frontiers follow `1 → 2 → 1` at every stage and are uniformly bounded by `2`.
-These widths are derived from their carriers. At each executed opening, the
-position type indexed by the absence of a transport has width `2`, whereas the
-same position type indexed by the transport returned by discovery has width
-`1`. The closed evidence package is canonically built from the executed role
-history and records the exact reduction history, failed-candidate work,
-discovered total map, separate preservation proof, viable distinct absorbed
-sibling, extensional projection, and output transmitted to the next situation.
+acts. The executed discovery then supplies the operational status used to index
+the same opening either as a pending two-position carrier or as a retained
+one-position carrier. For `n` executed openings, the complete structural
+carrier and the pending carrier both have exact width `2^n`, while the carrier
+of positions retained by the discovered transports has exact width `1`. The
+numerical transient trace `1 → 2 → 1` at each stage is a derived readout of
+those frontier objects and is uniformly bounded by `2`; it is not a causal
+premise of the reduction. The closed causal evidence package is canonically
+built from the executed role history and records the exact reduction history,
+failed-candidate work, discovered total map, separate preservation proof,
+extensional projection, and output transmitted to the next situation. Sibling
+viability and distinction remain separately proved positive consequences.
 
 A state-and-quantity projection preserves the observed states, output, width
-trace, and bound, but does not determine the total operational action. On the
-actual executed generated system, the formal separator compares the discovered
-transport with a total comparison transport on the same source and target.
-They agree on every datum retained by the projection at the observed executed
-continuation and act differently on another admissible continuation. In this
-exact sense, the extensional stability reading is a forgetful projection of
-the constituted operational process.
+readout, and bound, but does not determine the total operational action. On the
+actual executed generated system, the formal separator projects the discovered
+transport and a total comparison transport on the same source and target into
+two extensionally equal views. The two transports agree on every datum retained
+by those projections at the observed executed continuation and act differently
+on another admissible continuation. In this exact sense, the extensional
+stability reading is a forgetful projection of the constituted operational
+process.
 
 ![Endogenous operational stability](docs/figures/endogenous-operational-stability.svg)
 
