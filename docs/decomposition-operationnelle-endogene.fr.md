@@ -214,8 +214,8 @@ Il expose des déclarations sans axiome pour :
 - la comparaison locale indexée par le type sur une ouverture exécutée :
   largeur `2` en l’absence de transport opérationnel et largeur `1` avec le
   transport retourné par la découverte exécutée ;
-- des charges locales acceptées pour chaque rôle structurel, avec la trace
-  transitoire exacte `1 → 2 → 1` et sa borne uniforme `2` ;
+- des charges locales acceptées pour chaque rôle structurel, avec la lecture
+  numérique transitoire dérivée `1 → 2 → 1` et sa borne uniforme `2` ;
 - l’extraction du préfixe des candidats effectivement en échec et l’équation
   exacte entre sa longueur et le nombre mesuré de tentatives ;
 - la preuve qu’un mauvais singleton peut posséder la bonne largeur numérique
