@@ -120,6 +120,6 @@
   <text x="99" y="893" class="small">On an actual executed stage, separately projected discovered and comparison transports give equal views,</text>
   <text x="99" y="916" class="small">yet their total actions differ on another admissible continuation.</text>
   <rect x="930" y="795" width="402" height="90" rx="12" fill="#281f3a" stroke="#c8a6ff" stroke-width="1.5"/>
-  <text x="954" y="833" class="mono">same observed stability view</text>
+  <text x="954" y="833" class="mono">equal projected stability views</text>
   <text x="954" y="859" class="mono">≠ recoverable total action</text>
 </svg>
