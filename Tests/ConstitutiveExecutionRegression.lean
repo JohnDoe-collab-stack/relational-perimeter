@@ -990,6 +990,15 @@ def regression_public_core_carries_causal_stability (input : Nat) :
   (endogenousOperationalDecompositionPerInputEvidence input).core
     |>.operationalStability.causalStability
 
+/-- Regression: the public core carries one source-indexed causal prevention
+certificate at every executed opening. -/
+def regression_public_core_carries_causal_prevention (input : Nat) :
+    let package := endogenousOperationalDecompositionPerInputEvidence input
+    CausalExponentialPreventionHistory
+      package.core.feedbackRolesFollowThreadedHistory :=
+  (endogenousOperationalDecompositionPerInputEvidence input).core
+    |>.operationalStability.causalExponentialPrevention
+
 /-- Regression: retaining every binary structural choice gives the explicit
 `2^n` counterfactual obligation carrier. -/
 theorem regression_unabsorbed_obligation_width
@@ -1008,8 +1017,8 @@ theorem regression_unabsorbed_obligations_nodup
     roles.independentStructuralObligationFrontier.Nodup :=
   roles.independentStructuralObligationFrontier_nodup
 
-/-- Regression: the causal absorption certificate, and not the fixed shape of
-the numerical trace alone, controls the carried operational frontier. -/
+/-- Regression: the retained width is the numerical corollary paired with the
+source-indexed prevention history above. -/
 theorem regression_certified_absorption_controls_width (input : Nat) :
     let package := endogenousOperationalDecompositionPerInputEvidence input
     package.core.operationalStability.causalStability
@@ -1020,8 +1029,8 @@ theorem regression_certified_absorption_controls_width (input : Nat) :
   (endogenousOperationalDecompositionPerInputEvidence input).core
     |>.operationalStability.preventsExponentialOperationalAccumulation
 
-/-- Regression: the certificate's collapse is connected to an executable
-normalizer that consumes the structural source path and every retained output. -/
+/-- Regression: the legacy constant-image collapse remains extensionally
+consistent with its executable decision-path normalizer. -/
 theorem regression_material_normalizer_controls_collapse
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -1175,6 +1184,7 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_operational_width_values
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_public_core_carries_operational_stability
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_public_core_carries_causal_stability
+#print axioms ConstitutiveSearch.EndogenousDecomposition.regression_public_core_carries_causal_prevention
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_unabsorbed_obligation_width
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_unabsorbed_obligations_nodup
 #print axioms ConstitutiveSearch.EndogenousDecomposition.regression_certified_absorption_controls_width

@@ -4,14 +4,15 @@ import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecompositio
 # Endogenous operational stability
 
 The exact dependent role history constitutes a complete, duplicate-free
-carrier of structural obligations.  A recursive causal witness then reads the
-material output of every executed opening-and-absorption reduction, computes
-the retained obligation, and collapses the structural carrier onto its exact
-operational image.  Every reduction is tied to the discovery that produced it,
-to criterion preservation, to a viable absorbed sibling, and to the content
-consumed by the exact dependent tail.  The numerical width trace is a derived
-readout of this proof-relevant construction.  No parallel trajectory is
-introduced.
+carrier of structural obligations.  A source-indexed licensed plan is then
+constructed for every member: crossing from a left source requires the complete
+executed absorption reduction, whereas a right source uses an independently
+typed retention execution.  These plans constitute a singleton operational
+carrier.  Deleting the absorption constructor while preserving retained-side
+execution makes every left source unreachable and complete singleton coverage
+impossible.  The older constant-image collapse and the numerical width trace
+remain derived readouts of this proof-relevant construction.  No parallel
+trajectory is introduced.
 -/
 
 namespace ConstitutiveSearch.EndogenousDecomposition
@@ -917,11 +918,565 @@ def CausalOperationalStability.retainedOperationalObligation :
   | _, _, _, _, _, _, .step _ _ reduction tailStability =>
       reduction.reduceHeadObligation tailStability.retainedOperationalObligation
 
-/-- Normalize a structural decision path through the exact executed reduction
-chain.  The source path is consumed one stage at a time; at each stage its head
-is replaced by the decision read from the materially produced continuation.
-The empty-source clause is total but is unreachable for a complete obligation
-over a positive history. -/
+/-!
+## Licensed operational reduction
+
+The numerical fact that a singleton is smaller than a `2^n` carrier does not
+by itself justify carrying only that singleton.  The following layer records
+the missing constitutive content: every structural obligation must reach the
+retained representative through a source-indexed plan.  A left step contains
+the generated opening, discovered absorption, materially executed output,
+criterion preservation, viability of the absorbed sibling, and exact
+dependent-tail raccord.  A right step uses the separately typed retained-side
+execution license, whose type and constructor contain no complete absorption
+reduction.
+
+The target of the normalization is deliberately allowed to be the same for
+many sources.  What varies with the source is the typed reduction witness:
+`left` sources use the discovered absorption constructor, whereas `right`
+sources use the retained constructor.  Operational co-classification is thus
+licensed by executed evidence rather than defined as equality under an
+arbitrary constant function.
+-/
+
+/-- Evidence needed to keep the already-retained side.  Unlike the complete
+`ExecutedStageOperationalReduction` required by `absorbLeft`, this record
+contains no absorption and no source-to-retained preservation obtained through
+absorption.  It therefore remains available in the ablated grammar below,
+where crossing from the left sibling is deliberately impossible. -/
+structure RetainedStageExecutionLicense
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    {tailRun : ConstitutiveExecutionHistory (count := count) run.nextRun.next}
+    (roles : ThreadedConstitutiveRoleStage run)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) : Type 2 where
+  openingFromGeneration :
+    roles.structuralOpening =
+      generatedStructuralSplit
+        (constructStage (depth + 1)).operationalRoot
+        stage.discovery.var
+        stage.discovery.fresh
+  materializedRetained : GeneratedStructuralBranchContinuation
+    ((constructStage (depth + 1)).operationalRoot.child
+      stage.discovery.var true stage.discovery.fresh)
+  materializedFromDiscoveredOperation :
+    materializedRetained = roles.materializedRetainedContinuation
+  materializedIsExecuted :
+    materializedRetained = roles.retainedContinuation
+  materializedSelectsRetained :
+    materializedRetained.1 stage.discovery.var = true
+  raccord : RetainedNextConditionRaccord roles tailRoles
+
+/-- Construct the non-absorptive retained-side evidence directly from the
+authoritative role stage.  Its type and construction do not mention
+`ExecutedStageOperationalReduction`; deleting the absorption-bearing witness
+therefore leaves this operation available. -/
+def ThreadedConstitutiveRoleStage.retentionLicense
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    {tailRun : ConstitutiveExecutionHistory (count := count) run.nextRun.next}
+    (roles : ThreadedConstitutiveRoleStage run)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) :
+    RetainedStageExecutionLicense roles tailRoles :=
+  { openingFromGeneration := roles.structuralOpeningFromGeneration
+    materializedRetained := roles.materializedRetainedContinuation
+    materializedFromDiscoveredOperation := rfl
+    materializedIsExecuted := roles.materializedRetainedContinuation_exact
+    materializedSelectsRetained :=
+      roles.materializedRetainedContinuation_selected
+    raccord := roles.retainedNextConditionRaccord tailRoles }
+
+/-- The retained-side operation reads its branch from the materialized output
+without requiring an absorption witness. -/
+def RetainedStageExecutionLicense.retainHeadObligation
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    {tailRun : ConstitutiveExecutionHistory (count := count) run.nextRun.next}
+    {roles : ThreadedConstitutiveRoleStage run}
+    {tailRoles : ThreadedConstitutiveRoleHistory tailRun}
+    (license : RetainedStageExecutionLicense roles tailRoles)
+    (tail : IndependentStructuralObligation tailRoles) :
+    IndependentStructuralObligation
+      (ThreadedConstitutiveRoleHistory.step roles tailRoles) :=
+  if license.materializedRetained.1 stage.discovery.var = false then
+    .left tail
+  else
+    .right tail
+
+/-- The materialized retained-side operation selects the right constructor. -/
+theorem RetainedStageExecutionLicense.retainHeadObligation_is_right
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    {tailRun : ConstitutiveExecutionHistory (count := count) run.nextRun.next}
+    {roles : ThreadedConstitutiveRoleStage run}
+    {tailRoles : ThreadedConstitutiveRoleHistory tailRun}
+    (license : RetainedStageExecutionLicense roles tailRoles)
+    (tail : IndependentStructuralObligation tailRoles) :
+    license.retainHeadObligation tail = .right tail := by
+  unfold RetainedStageExecutionLicense.retainHeadObligation
+  rw [license.materializedSelectsRetained]
+  rfl
+
+/-- Canonical representative constructed solely from non-absorptive
+retained-side execution.  It remains defined in the exact ablated grammar. -/
+def ThreadedConstitutiveRoleHistory.retentionLicensedOperationalObligation :
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
+      {state : ThreadedConstitutiveState depth assignment} →
+      {history : ConstitutiveExecutionHistory (count := count) state} →
+      (roles : ThreadedConstitutiveRoleHistory history) →
+      IndependentStructuralObligation roles
+  | _, _, _, _, _, .nil => .terminal
+  | _, _, _, _, _, .step headRole tailRoles =>
+      (headRole.retentionLicense tailRoles).retainHeadObligation
+        tailRoles.retentionLicensedOperationalObligation
+
+/-- Compatibility with the earlier complete-reduction representative.  The
+new representative is constructed without reading absorption; equality with
+the previous one is then proved separately. -/
+theorem ThreadedConstitutiveRoleHistory.retentionLicensedOperationalObligation_eq_causal
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history) :
+    roles.retentionLicensedOperationalObligation =
+      roles.causalOperationalStability.retainedOperationalObligation := by
+  induction roles with
+  | nil => rfl
+  | step headRole tailRoles inductionHypothesis =>
+      change (headRole.retentionLicense tailRoles).retainHeadObligation
+          tailRoles.retentionLicensedOperationalObligation =
+        (headRole.executedStageOperationalReduction tailRoles).reduceHeadObligation
+          tailRoles.causalOperationalStability.retainedOperationalObligation
+      rw [RetainedStageExecutionLicense.retainHeadObligation_is_right,
+        ExecutedStageOperationalReduction.reduceHeadObligation_is_right,
+        inductionHypothesis]
+
+/-- A source-specific plan whose constructors retain every executed stage
+license.  The target is the canonical retained obligation of the same role
+history; indexing only by the source avoids identifying sources in order to
+classify them. -/
+inductive ThreadedConstitutiveRoleHistory.LicensedReductionPlan :
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
+      {state : ThreadedConstitutiveState depth assignment} →
+      {history : ConstitutiveExecutionHistory (count := count) state} →
+      (roles : ThreadedConstitutiveRoleHistory history) →
+      IndependentStructuralObligation roles → Type 2 where
+  | terminal {depth : Nat} {assignment : SequentialAssignment depth}
+      {state : ThreadedConstitutiveState depth assignment} :
+      LicensedReductionPlan
+        (ThreadedConstitutiveRoleHistory.nil (state := state)) .terminal
+  | absorbLeft {depth count : Nat} {assignment : SequentialAssignment depth}
+      {state : ThreadedConstitutiveState depth assignment}
+      {head : SequentialStageRun depth assignment}
+      {headRun : ThreadedConstitutiveStageRun state head}
+      {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+      {headRole : ThreadedConstitutiveRoleStage headRun}
+      {tailRoles : ThreadedConstitutiveRoleHistory tailRun}
+      {source : IndependentStructuralObligation tailRoles}
+      (reduction : ExecutedStageOperationalReduction headRole tailRoles)
+      (tailPlan : LicensedReductionPlan tailRoles source) :
+      LicensedReductionPlan
+        (ThreadedConstitutiveRoleHistory.step headRole tailRoles) (.left source)
+  | retainRight {depth count : Nat} {assignment : SequentialAssignment depth}
+      {state : ThreadedConstitutiveState depth assignment}
+      {head : SequentialStageRun depth assignment}
+      {headRun : ThreadedConstitutiveStageRun state head}
+      {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+      {headRole : ThreadedConstitutiveRoleStage headRun}
+      {tailRoles : ThreadedConstitutiveRoleHistory tailRun}
+      {source : IndependentStructuralObligation tailRoles}
+      (license :
+        RetainedStageExecutionLicense headRole tailRoles)
+      (tailPlan : LicensedReductionPlan tailRoles source) :
+      LicensedReductionPlan
+        (ThreadedConstitutiveRoleHistory.step headRole tailRoles) (.right source)
+
+/-- Construct the reduction plan directly from the source obligation.  A left
+choice necessarily consumes the complete discovered reduction; a right choice
+necessarily consumes the retained-side license. -/
+def ThreadedConstitutiveRoleHistory.licensedReductionPlan :
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
+      {state : ThreadedConstitutiveState depth assignment} →
+      {history : ConstitutiveExecutionHistory (count := count) state} →
+      {roles : ThreadedConstitutiveRoleHistory history} →
+      (source : IndependentStructuralObligation roles) →
+      roles.LicensedReductionPlan source
+  | _, _, _, _, _, _, .terminal => .terminal
+  | _, _, _, _, _, _, .left (headRole := headRole) (tailRoles := tailRoles) source =>
+      .absorbLeft
+        (headRole.executedStageOperationalReduction tailRoles)
+        (licensedReductionPlan source)
+  | _, _, _, _, _, _, .right (headRole := headRole) (tailRoles := tailRoles) source =>
+      .retainRight
+        (headRole.retentionLicense tailRoles)
+        (licensedReductionPlan source)
+
+/-- Observable record of the source-specific licensed acts. -/
+def ThreadedConstitutiveRoleHistory.LicensedReductionPlan.absorptionTrace :
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
+      {state : ThreadedConstitutiveState depth assignment} →
+      {history : ConstitutiveExecutionHistory (count := count) state} →
+      {roles : ThreadedConstitutiveRoleHistory history} →
+      {source : IndependentStructuralObligation roles} →
+      roles.LicensedReductionPlan source → List Bool
+  | _, _, _, _, _, _, _, .terminal => []
+  | _, _, _, _, _, _, _, .absorbLeft _ tailPlan =>
+      true :: tailPlan.absorptionTrace
+  | _, _, _, _, _, _, _, .retainRight _ tailPlan =>
+      false :: tailPlan.absorptionTrace
+
+/-- The plan trace is computed from the source: left choices are precisely the
+stages that require absorption. -/
+theorem ThreadedConstitutiveRoleHistory.licensedReductionPlan_trace
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    {roles : ThreadedConstitutiveRoleHistory history}
+    (source : IndependentStructuralObligation roles) :
+    (roles.licensedReductionPlan source).absorptionTrace =
+      source.decisions.map (fun decision => !decision.value) := by
+  induction source with
+  | terminal => rfl
+  | left tail ih =>
+      change true :: _ = true :: _
+      rw [ih]
+  | right tail ih =>
+      change false :: _ = false :: _
+      rw [ih]
+
+/-- Sibling sources require observably different licensed acts. -/
+theorem ThreadedConstitutiveRoleHistory.siblingReductionPlanTraces_ne
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun)
+    (source : IndependentStructuralObligation tailRoles) :
+    ((ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+      |>.licensedReductionPlan (.left source)).absorptionTrace ≠
+    ((ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+      |>.licensedReductionPlan (.right source)).absorptionTrace := by
+  intro same
+  have headSame := congrArg List.head? same
+  change some true = some false at headSame
+  cases headSame
+
+/-- A positive history exhibits distinct sibling sources, their common
+retained representative, and distinct source-indexed license plans. -/
+structure ThreadedConstitutiveRoleHistory.SiblingLicenseSeparation
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) : Type 2 where
+  leftSource : IndependentStructuralObligation
+    (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+  rightSource : IndependentStructuralObligation
+    (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+  representative : IndependentStructuralObligation
+    (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+  sourcesDistinct : leftSource ≠ rightSource
+  leftPlan :
+    ThreadedConstitutiveRoleHistory.LicensedReductionPlan
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles) leftSource
+  rightPlan :
+    ThreadedConstitutiveRoleHistory.LicensedReductionPlan
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles) rightSource
+  operationalActsDistinct :
+    leftPlan.absorptionTrace ≠ rightPlan.absorptionTrace
+
+/-- The first opening constructs the sibling separation from the exact
+executed role history. -/
+def ThreadedConstitutiveRoleHistory.siblingLicenseSeparation
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) :
+    ThreadedConstitutiveRoleHistory.SiblingLicenseSeparation
+      headRole tailRoles :=
+  let tailSource :=
+    tailRoles.retentionLicensedOperationalObligation
+  { leftSource := .left tailSource
+    rightSource := .right tailSource
+    representative :=
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+        |>.retentionLicensedOperationalObligation
+    sourcesDistinct := IndependentStructuralObligation.left_ne_right _
+    leftPlan :=
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+        |>.licensedReductionPlan (.left tailSource)
+    rightPlan :=
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+        |>.licensedReductionPlan (.right tailSource)
+    operationalActsDistinct :=
+      siblingReductionPlanTraces_ne headRole tailRoles tailSource }
+
+/-- A source-indexed normalization retains both the computed representative
+and the complete plan licensing it. -/
+structure ThreadedConstitutiveRoleHistory.LicensedNormalization
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history)
+    (source : IndependentStructuralObligation roles) : Type 2 where
+  target : IndependentStructuralObligation roles
+  targetIsRetained :
+    target = roles.retentionLicensedOperationalObligation
+  plan : roles.LicensedReductionPlan source
+
+def ThreadedConstitutiveRoleHistory.normalizeWithLicense
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history)
+    (source : IndependentStructuralObligation roles) :
+    roles.LicensedNormalization source :=
+  { target := roles.retentionLicensedOperationalObligation
+    targetIsRetained := rfl
+    plan := roles.licensedReductionPlan source }
+
+/-- Operational co-classification retains two distinct source plans to one
+computed representative. -/
+structure ThreadedConstitutiveRoleHistory.OperationalCoClassification
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history)
+    (left right : IndependentStructuralObligation roles) : Type 2 where
+  representative : IndependentStructuralObligation roles
+  representativeIsRetained :
+    representative = roles.retentionLicensedOperationalObligation
+  leftPlan : roles.LicensedReductionPlan left
+  rightPlan : roles.LicensedReductionPlan right
+
+def ThreadedConstitutiveRoleHistory.coClassify
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history)
+    (left right : IndependentStructuralObligation roles) :
+    roles.OperationalCoClassification left right :=
+  { representative :=
+      roles.retentionLicensedOperationalObligation
+    representativeIsRetained := rfl
+    leftPlan := roles.licensedReductionPlan left
+    rightPlan := roles.licensedReductionPlan right }
+
+/-- One structural source reaches a representative that is actually carried by
+the proposed operational carrier. -/
+structure ThreadedConstitutiveRoleHistory.LicensedCoverageOfSource
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history)
+    (representatives : List (IndependentStructuralObligation roles))
+    (source : IndependentStructuralObligation roles) : Type 2 where
+  normalization : roles.LicensedNormalization source
+  targetMember : normalization.target ∈ representatives
+
+/-- An operational carrier is legitimate only if it contains the computed
+representative and every structural source carries its complete license plan. -/
+structure ThreadedConstitutiveRoleHistory.LicensedOperationalCarrier
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history) : Type 2 where
+  representatives : List (IndependentStructuralObligation roles)
+  representativesNodup : representatives.Nodup
+  representativesStructural :
+    ∀ target, target ∈ representatives →
+      target ∈ roles.independentStructuralObligationFrontier
+  retainedMember :
+    roles.retentionLicensedOperationalObligation ∈
+      representatives
+  covers :
+    (source : IndependentStructuralObligation roles) →
+      source ∈ roles.independentStructuralObligationFrontier →
+        roles.LicensedCoverageOfSource representatives source
+
+/-- The executed reductions and retention licenses construct a legitimate
+singleton carrier. -/
+def ThreadedConstitutiveRoleHistory.licensedOperationalCarrier
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history) :
+    roles.LicensedOperationalCarrier :=
+  { representatives :=
+      [roles.retentionLicensedOperationalObligation]
+    representativesNodup := by
+      apply List.Pairwise.cons
+      · intro other member
+        cases member
+      · exact .nil
+    representativesStructural := by
+      intro target member
+      cases member with
+      | head =>
+          exact roles.independentStructuralObligationFrontier_complete _
+      | tail _ impossible => cases impossible
+    retainedMember := .head _
+    covers := by
+      intro source _sourceMember
+      exact
+        { normalization := roles.normalizeWithLicense source
+          targetMember := .head _ } }
+
+/-- The exact grammar obtained from `LicensedReductionPlan` by deleting only
+`absorbLeft`.  The terminal and retained-side constructors remain, including
+the material output and dependent-tail raccord, but no constructor can cross
+from a left source.  Unlike an equality-based encoding, the reachable sources
+are determined by the constructors themselves. -/
+inductive ThreadedConstitutiveRoleHistory.AbsorptionFreeReductionPlan :
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
+      {state : ThreadedConstitutiveState depth assignment} →
+      {history : ConstitutiveExecutionHistory (count := count) state} →
+      (roles : ThreadedConstitutiveRoleHistory history) →
+      IndependentStructuralObligation roles → Type 2 where
+  | terminal {depth : Nat} {assignment : SequentialAssignment depth}
+      {state : ThreadedConstitutiveState depth assignment} :
+      AbsorptionFreeReductionPlan
+        (ThreadedConstitutiveRoleHistory.nil (state := state)) .terminal
+  | retainRight {depth count : Nat} {assignment : SequentialAssignment depth}
+      {state : ThreadedConstitutiveState depth assignment}
+      {head : SequentialStageRun depth assignment}
+      {headRun : ThreadedConstitutiveStageRun state head}
+      {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+      {headRole : ThreadedConstitutiveRoleStage headRun}
+      {tailRoles : ThreadedConstitutiveRoleHistory tailRun}
+      {source : IndependentStructuralObligation tailRoles}
+      (license :
+        RetainedStageExecutionLicense headRole tailRoles)
+      (tailPlan : AbsorptionFreeReductionPlan tailRoles source) :
+      AbsorptionFreeReductionPlan
+        (ThreadedConstitutiveRoleHistory.step headRole tailRoles) (.right source)
+
+/-- The constructor grammar itself forces every absorption-free source to be
+the recursively retained obligation.  This equality is derived from the plan;
+it is not stored as a premise. -/
+theorem ThreadedConstitutiveRoleHistory.AbsorptionFreeReductionPlan.sourceIsRetained
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    {roles : ThreadedConstitutiveRoleHistory history}
+    {source : IndependentStructuralObligation roles}
+    (plan : roles.AbsorptionFreeReductionPlan source) :
+    source = roles.retentionLicensedOperationalObligation := by
+  induction plan with
+  | terminal => rfl
+  | @retainRight depth count assignment state head headRun tailRun headRole
+      tailRoles source license tailPlan inductionHypothesis =>
+      change IndependentStructuralObligation.right source =
+        (headRole.retentionLicense tailRoles).retainHeadObligation
+          tailRoles.retentionLicensedOperationalObligation
+      rw [RetainedStageExecutionLicense.retainHeadObligation_is_right]
+      exact congrArg IndependentStructuralObligation.right inductionHypothesis
+
+/-- The retained obligation remains executable in the absorption-free grammar;
+the ablation removes only the ability to cross from a left source. -/
+def ThreadedConstitutiveRoleHistory.absorptionFreeRetainedPlan :
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
+      {state : ThreadedConstitutiveState depth assignment} →
+      {history : ConstitutiveExecutionHistory (count := count) state} →
+      (roles : ThreadedConstitutiveRoleHistory history) →
+      roles.AbsorptionFreeReductionPlan
+        roles.retentionLicensedOperationalObligation
+  | _, _, _, _, _, .nil => .terminal
+  | _, _, _, _, _, .step headRole tailRoles => by
+      change AbsorptionFreeReductionPlan
+        (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+        ((headRole.retentionLicense tailRoles).retainHeadObligation
+          tailRoles.retentionLicensedOperationalObligation)
+      rw [RetainedStageExecutionLicense.retainHeadObligation_is_right]
+      exact .retainRight (headRole.retentionLicense tailRoles)
+        tailRoles.absorptionFreeRetainedPlan
+
+/-- Removing the absorption constructor makes every left source unreducible,
+even though retained-side execution and every dependent-tail raccord remain. -/
+theorem noAbsorptionFreeReductionFromLeft
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun)
+    (source : IndependentStructuralObligation tailRoles) :
+    ¬ Nonempty
+        (ThreadedConstitutiveRoleHistory.AbsorptionFreeReductionPlan
+          (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+          (.left source)) := by
+  rintro ⟨plan⟩
+  have impossible := plan.sourceIsRetained
+  change IndependentStructuralObligation.left source =
+    (headRole.retentionLicense tailRoles).retainHeadObligation
+      tailRoles.retentionLicensedOperationalObligation at impossible
+  rw [RetainedStageExecutionLicense.retainHeadObligation_is_right]
+    at impossible
+  cases impossible
+
+/-- A proposed singleton carrier in the exact absorption-free grammar.  It
+retains every non-absorptive stage operation but must provide a reduction plan
+for every structural source. -/
+structure AbsorptionFreeSingletonCoverage
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history) : Type 2 where
+  representative : IndependentStructuralObligation roles
+  representativeIsRetained :
+    representative = roles.retentionLicensedOperationalObligation
+  covers :
+    (source : IndependentStructuralObligation roles) →
+      source ∈ roles.independentStructuralObligationFrontier →
+        roles.AbsorptionFreeReductionPlan source
+
+/-- At a positive opening, the absorption-free grammar cannot cover the left
+sibling and therefore cannot constitute singleton operational coverage. -/
+theorem noAbsorptionFreeSingletonCoverage
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) :
+    ¬ Nonempty
+      (AbsorptionFreeSingletonCoverage
+        (ThreadedConstitutiveRoleHistory.step headRole tailRoles)) := by
+  rintro ⟨coverage⟩
+  let tailSource :=
+    tailRoles.retentionLicensedOperationalObligation
+  have leftMember :
+      (IndependentStructuralObligation.left tailSource :
+        IndependentStructuralObligation
+          (ThreadedConstitutiveRoleHistory.step headRole tailRoles)) ∈
+        ((ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+          |>.independentStructuralObligationFrontier) :=
+    (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+      |>.independentStructuralObligationFrontier_complete _
+  exact noAbsorptionFreeReductionFromLeft headRole tailRoles tailSource
+    ⟨coverage.covers (.left tailSource) leftMember⟩
+
+/-- Extensional decision-path normalizer retained for compatibility.  It reads
+the executed retained decision at every stage and consumes only the source
+tail.  Source-sensitive causal evidence is carried instead by
+`LicensedReductionPlan`. -/
 def CausalOperationalStability.normalizeDecisionPath :
     {depth count : Nat} → {assignment : SequentialAssignment depth} →
       {state : ThreadedConstitutiveState depth assignment} →
@@ -936,10 +1491,9 @@ def CausalOperationalStability.normalizeDecisionPath :
       reduction.retainedDecision ::
         tailStability.normalizeDecisionPath sourceTail
 
-/-- Collapse every structural index to the unique obligation materially
-selected by the executed causal reduction chain.  The constant image is the
-mathematical content of collapsing independence; its value is computed from
-the reductions rather than supplied independently. -/
+/-- Constant projection to the retained obligation.  Its singleton image is an
+extensional corollary only; causal authorization is supplied separately by the
+source-indexed licensed plans and the absorption-free impossibility theorem. -/
 def CausalOperationalStability.collapseStructuralObligation
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -950,8 +1504,7 @@ def CausalOperationalStability.collapseStructuralObligation
     IndependentStructuralObligation roles :=
   stability.retainedOperationalObligation
 
-/-- Every structural obligation is collapsed to the same retained obligation
-by the recursive chain of actually executed reductions. -/
+/-- The constant projection has the retained obligation as its exact value. -/
 theorem CausalOperationalStability.collapseStructuralObligation_exact
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -963,8 +1516,7 @@ theorem CausalOperationalStability.collapseStructuralObligation_exact
       stability.retainedOperationalObligation := by
   rfl
 
-/-- Normalize the decisions of one complete obligation through the canonical
-causal witness computed from its exact authoritative role history. -/
+/-- Apply the extensional decision-path normalizer to one complete obligation. -/
 def ThreadedConstitutiveRoleHistory.materiallyNormalizedDecisionPath
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -1018,8 +1570,7 @@ theorem ThreadedConstitutiveRoleHistory.materiallyNormalizedDecisionPath_exact
             reduction.retainedDecision_exact)
           reducedDecisions.symm)
 
-/-- Canonical operational co-classification by material decision-path
-normalization. -/
+/-- Extensional co-classification by decision-path normalization. -/
 def ThreadedConstitutiveRoleHistory.MateriallyOperationallyIdentified
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -1029,8 +1580,9 @@ def ThreadedConstitutiveRoleHistory.MateriallyOperationallyIdentified
   roles.materiallyNormalizedDecisionPath left =
     roles.materiallyNormalizedDecisionPath right
 
-/-- Every pair of complete structural obligations is sent to one operational
-class by the material normalizer, without identifying the obligations. -/
+/-- Every pair has the same extensional normalized path.  This theorem does not
+by itself license the classification; that role belongs to the reduction
+plans. -/
 theorem ThreadedConstitutiveRoleHistory.allStructuralObligationsMateriallyIdentified
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -1060,9 +1612,9 @@ theorem ThreadedConstitutiveRoleHistory.collapseDecisionsFollowMaterialNormaliza
         obligation))
     (roles.materiallyNormalizedDecisionPath_exact obligation).symm
 
-/-- Two structural obligations have the same operational status exactly when
-the executed causal collapse sends them to the same retained obligation.  This
-relation does not identify the structural obligations themselves. -/
+/-- Extensional equality under the constant retained projection.  This
+relation does not identify the structural obligations and is not the causal
+license for their co-classification. -/
 def CausalOperationalStability.OperationallyIdentified
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -1073,9 +1625,8 @@ def CausalOperationalStability.OperationallyIdentified
   stability.collapseStructuralObligation left =
     stability.collapseStructuralObligation right
 
-/-- Every pair of structural obligations belongs to one operational class
-under the criterion-licensed causal collapse.  This is classification, not
-structural equality. -/
+/-- Every pair has the same image under the constant retained projection.
+Licensed operational coverage is established separately. -/
 theorem CausalOperationalStability.allStructuralObligationsOperationallyIdentified
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -1100,7 +1651,7 @@ def CausalOperationalStability.InOperationalImage
     source ∈ roles.independentStructuralObligationFrontier ∧
       stability.collapseStructuralObligation source = target
 
-/-- The retained carrier is the singleton produced by the causal collapse. -/
+/-- Singleton image of the extensional retained projection. -/
 def CausalOperationalStability.retainedOperationalObligationFrontier
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -1132,8 +1683,7 @@ theorem CausalOperationalStability.retainedOperationalObligation_mem_structural
   roles.independentStructuralObligationFrontier_complete
     stability.retainedOperationalObligation
 
-/-- The operational image of the complete structural carrier is exactly the
-singleton retained by the executed causal reduction chain. -/
+/-- The image of the constant retained projection is exactly its singleton. -/
 theorem CausalOperationalStability.inOperationalImage_iff_eq_retained
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -1156,8 +1706,8 @@ theorem CausalOperationalStability.inOperationalImage_iff_eq_retained
         stability.collapseStructuralObligation_exact
           stability.retainedOperationalObligation⟩
 
-/-- The collapse sends every member of the full structural carrier into the
-retained singleton carrier. -/
+/-- The constant projection sends every structural member into its singleton
+image. -/
 theorem CausalOperationalStability.collapseStructuralObligation_mem_retained
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -1171,9 +1721,9 @@ theorem CausalOperationalStability.collapseStructuralObligation_mem_retained
   rw [stability.collapseStructuralObligation_exact obligation]
   exact .head _
 
-/-- For every positive exact role history, the singleton obtained by the
-executed causal collapse is strictly smaller than its duplicate-free `2^n`
-structural carrier. -/
+/-- Bare numerical comparison between the retained singleton and the `2^n`
+structural carrier.  The causal prevention result is the stronger
+`CausalExponentialPreventionCertificate` below. -/
 theorem CausalOperationalStability.retainedWidth_lt_structuralWidth
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -1186,6 +1736,166 @@ theorem CausalOperationalStability.retainedWidth_lt_structuralWidth
     roles.independentStructuralObligationFrontier_length]
   simpa only [Nat.pow_zero] using
     (Constructive.two_pow_strictly_grows (Nat.zero_lt_succ count))
+
+/-- The causal prevention result is not the bare inequality `1 < 2^n`.
+It packages the complete structural carrier, a singleton operational carrier
+whose coverage is witnessed source by source by executed reductions and
+retention licenses, an observable sibling distinction in the plans, and the constructive
+failure of singleton coverage when absorption is unavailable. -/
+structure CausalExponentialPreventionCertificate
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) : Type 2 where
+  licensedCarrier :
+    ThreadedConstitutiveRoleHistory.LicensedOperationalCarrier
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+  licensedCarrierWidthOne : licensedCarrier.representatives.length = 1
+  structuralCarrierWidthExponential :
+    ((ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+      |>.independentStructuralObligationFrontier).length =
+      2 ^ (count + 1)
+  structuralCarrierDistinct :
+    ((ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+      |>.independentStructuralObligationFrontier).Nodup
+  absorptionComesFromExecutedDiscovery :
+    headRole.operationalAbsorption =
+      AcceptedFrontierPreservation.absorbFirstIntoSecond
+        head.discovery.relation.toAcceptingTransport
+  sourceToRetainedPreservationUsesAbsorption :
+    headRole.fullOperationalPreservation =
+      headRole.openingPreservation.trans headRole.operationalAbsorption
+  retainedMaterialIsExecuted :
+    headRole.materializedRetainedContinuation = headRole.retainedContinuation
+  absorbedSiblingRemainsViable :
+    FrontierViable
+      (generatedStructuralBranchSystem
+        (distinctGrowingDiscoveryFormula
+          (constructStage (depth + 1)).searchIndex))
+      [(constructStage (depth + 1)).operationalRoot.child
+        head.discovery.var false head.discovery.fresh]
+  siblingLicensesAreSourceSpecific :
+    ThreadedConstitutiveRoleHistory.SiblingLicenseSeparation headRole tailRoles
+  retainedSurvivesWithoutAbsorption :
+    (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+      |>.AbsorptionFreeReductionPlan
+        ((ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+          |>.retentionLicensedOperationalObligation)
+  withoutAbsorptionNoSingletonCoverage :
+    ¬ Nonempty (AbsorptionFreeSingletonCoverage
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles))
+  licensedWidthStrictlySmaller :
+    licensedCarrier.representatives.length <
+      ((ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+        |>.independentStructuralObligationFrontier).length
+
+/-- Construct the full causal prevention certificate from the authoritative
+recursive stability witness.  The construction necessarily exposes a positive
+head stage: that stage supplies the absorption reduction whose removal leaves no
+singleton coverage. -/
+def ThreadedConstitutiveRoleHistory.causalExponentialPreventionCertificate
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) :
+    ConstitutiveSearch.EndogenousDecomposition.CausalExponentialPreventionCertificate
+      headRole tailRoles :=
+  let completeRoles :=
+    ThreadedConstitutiveRoleHistory.step headRole tailRoles
+  let carrier := completeRoles.licensedOperationalCarrier
+  { licensedCarrier := carrier
+    licensedCarrierWidthOne := by rfl
+    structuralCarrierWidthExponential :=
+      completeRoles.independentStructuralObligationFrontier_length
+    structuralCarrierDistinct :=
+      completeRoles.independentStructuralObligationFrontier_nodup
+    absorptionComesFromExecutedDiscovery :=
+      headRole.operationalAbsorption_from_discovery
+    sourceToRetainedPreservationUsesAbsorption := rfl
+    retainedMaterialIsExecuted :=
+      headRole.materializedRetainedContinuation_exact
+    absorbedSiblingRemainsViable := headRole.absorbedSiblingViable
+    siblingLicensesAreSourceSpecific :=
+      siblingLicenseSeparation headRole tailRoles
+    retainedSurvivesWithoutAbsorption :=
+      completeRoles.absorptionFreeRetainedPlan
+    withoutAbsorptionNoSingletonCoverage :=
+      noAbsorptionFreeSingletonCoverage headRole tailRoles
+    licensedWidthStrictlySmaller := by
+      exact completeRoles.causalOperationalStability
+        |>.retainedWidth_lt_structuralWidth }
+
+/-- Recursive causal prevention evidence aligned with the exact role history.
+Every positive constructor contains its local prevention certificate; the
+terminal constructor contains no invented opening. -/
+inductive CausalExponentialPreventionHistory :
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
+      {state : ThreadedConstitutiveState depth assignment} →
+      {history : ConstitutiveExecutionHistory (count := count) state} →
+      (roles : ThreadedConstitutiveRoleHistory history) → Type 2 where
+  | nil {depth : Nat} {assignment : SequentialAssignment depth}
+      {state : ThreadedConstitutiveState depth assignment} :
+      CausalExponentialPreventionHistory
+        (ThreadedConstitutiveRoleHistory.nil (state := state))
+  | step {depth count : Nat} {assignment : SequentialAssignment depth}
+      {state : ThreadedConstitutiveState depth assignment}
+      {head : SequentialStageRun depth assignment}
+      {headRun : ThreadedConstitutiveStageRun state head}
+      {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+      {headRole : ThreadedConstitutiveRoleStage headRun}
+      {tailRoles : ThreadedConstitutiveRoleHistory tailRun}
+      (headCertificate :
+        CausalExponentialPreventionCertificate headRole tailRoles)
+      (tailCertificate : CausalExponentialPreventionHistory tailRoles) :
+      CausalExponentialPreventionHistory
+        (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+
+/-- Build prevention evidence at every opening, from the same recursive role
+history that carries the executed reductions. -/
+def ThreadedConstitutiveRoleHistory.causalExponentialPreventionHistory :
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
+      {state : ThreadedConstitutiveState depth assignment} →
+      {history : ConstitutiveExecutionHistory (count := count) state} →
+      (roles : ThreadedConstitutiveRoleHistory history) →
+      CausalExponentialPreventionHistory roles
+  | _, _, _, _, _, .nil => .nil
+  | _, _, _, _, _, .step headRole tailRoles =>
+      .step
+        (causalExponentialPreventionCertificate headRole tailRoles)
+        tailRoles.causalExponentialPreventionHistory
+
+/-- Number of openings for which the recursive prevention evidence carries a
+local causal certificate. -/
+def CausalExponentialPreventionHistory.stageCount :
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
+      {state : ThreadedConstitutiveState depth assignment} →
+      {history : ConstitutiveExecutionHistory (count := count) state} →
+      {roles : ThreadedConstitutiveRoleHistory history} →
+      CausalExponentialPreventionHistory roles → Nat
+  | _, _, _, _, _, _, .nil => 0
+  | _, _, _, _, _, _, .step _ tailCertificate =>
+      tailCertificate.stageCount + 1
+
+/-- Prevention evidence has one local certificate for every exact opening in
+the authoritative role history. -/
+theorem CausalExponentialPreventionHistory.stageCount_exact
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    {roles : ThreadedConstitutiveRoleHistory history}
+    (prevention : CausalExponentialPreventionHistory roles) :
+    prevention.stageCount = count := by
+  induction prevention with
+  | nil => rfl
+  | step _ tailCertificate inductionHypothesis =>
+      change tailCertificate.stageCount + 1 = _
+      rw [inductionHypothesis]
 
 /-- Numerical corollary: the retained and next carriers are both singleton.
 The proof-relevant raccord is `RetainedNextConditionRaccord`; this equality is
@@ -1220,6 +1930,8 @@ structure OperationalStabilityCertificate
     (history : ConstitutiveExecutionHistory (count := count) state)
     (roles : ThreadedConstitutiveRoleHistory history) : Type 2 where
   causalStability : CausalOperationalStability roles
+  causalExponentialPrevention :
+    CausalExponentialPreventionHistory roles
   retainedOperationalWidthOne :
     causalStability.retainedOperationalObligationFrontier.length = 1
   structuralWidthExponential :
@@ -1267,6 +1979,8 @@ def ThreadedConstitutiveRoleHistory.operationalStabilityCertificate
     OperationalStabilityCertificate history roles :=
   let causal := roles.causalOperationalStability
   { causalStability := causal
+    causalExponentialPrevention :=
+      roles.causalExponentialPreventionHistory
     retainedOperationalWidthOne :=
       causal.retainedOperationalObligationFrontier_length
     structuralWidthExponential :=
@@ -1364,6 +2078,32 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedStageOperationalReduction.retainedDecision_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalStability.collapseStructuralObligation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalStability.retainedOperationalObligation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RetainedStageExecutionLicense
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleStage.retentionLicense
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RetainedStageExecutionLicense.retainHeadObligation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RetainedStageExecutionLicense.retainHeadObligation_is_right
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.retentionLicensedOperationalObligation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.retentionLicensedOperationalObligation_eq_causal
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.LicensedReductionPlan
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.licensedReductionPlan
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.LicensedReductionPlan.absorptionTrace
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.licensedReductionPlan_trace
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.siblingReductionPlanTraces_ne
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.SiblingLicenseSeparation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.siblingLicenseSeparation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.LicensedNormalization
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.normalizeWithLicense
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.OperationalCoClassification
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.coClassify
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.LicensedCoverageOfSource
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.LicensedOperationalCarrier
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.licensedOperationalCarrier
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.AbsorptionFreeReductionPlan
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.AbsorptionFreeReductionPlan.sourceIsRetained
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.absorptionFreeRetainedPlan
+#print axioms ConstitutiveSearch.EndogenousDecomposition.noAbsorptionFreeReductionFromLeft
+#print axioms ConstitutiveSearch.EndogenousDecomposition.AbsorptionFreeSingletonCoverage
+#print axioms ConstitutiveSearch.EndogenousDecomposition.noAbsorptionFreeSingletonCoverage
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalStability.normalizeDecisionPath
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalStability.collapseStructuralObligation_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.materiallyNormalizedDecisionPath
@@ -1381,6 +2121,12 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalStability.inOperationalImage_iff_eq_retained
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalStability.collapseStructuralObligation_mem_retained
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalStability.retainedWidth_lt_structuralWidth
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalExponentialPreventionCertificate
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.causalExponentialPreventionCertificate
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalExponentialPreventionHistory
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.causalExponentialPreventionHistory
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalExponentialPreventionHistory.stageCount
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalExponentialPreventionHistory.stageCount_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.retainedWidth_eq_nextInitialWidth
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveRoleHistory.oneStep_operationalWidthTrace
 #print axioms ConstitutiveSearch.EndogenousDecomposition.OperationalStabilityCertificate

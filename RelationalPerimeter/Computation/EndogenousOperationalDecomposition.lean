@@ -16,10 +16,13 @@ exposes the exact properties that jointly establish the phenomenon:
    absorption without identifying the alternatives;
 5. a recursive causal certificate pins every absorption to the executed
    discovery and raccords the retained content to the exact dependent tail;
-6. the certified causal collapse has an exact singleton image while the
-   complete, duplicate-free carrier that keeps every binary choice independent
-   has width `2^n`; structurally unequal obligations may receive the same
-   operational status without being identified;
+6. every opening carries a source-indexed licensed reduction plan: left sources
+   consume the discovered absorption, right sources consume retention, and the
+   two plans remain observably distinct even when they reach one representative;
+   the licensed singleton covers the complete duplicate-free `2^n` structural
+   carrier, whereas the exact grammar obtained by deleting `absorbLeft` while
+   retaining right-side execution cannot reduce a left source and therefore
+   admits no singleton coverage of the complete carrier;
 7. the unique dependent execution history has the exact operational-width
    trace `1, 2, 1, 2, ..., 1`, uniformly bounded by two;
 8. the executed result supplies both the seed and the provenance consumed by
@@ -57,6 +60,26 @@ def endogenousOperationalStability (input : Nat) :
     EndogenousOperationalStabilityEvidence input :=
   (evidence input).core.operationalStability
 
+/-- Recursive causal prevention evidence carried by the public authoritative
+run, with one local certificate at every executed opening. -/
+abbrev EndogenousCausalExponentialPreventionEvidence (input : Nat) : Type 2 :=
+  CausalExponentialPreventionHistory
+    (evidence input).core.feedbackRolesFollowThreadedHistory
+
+/-- Expose the complete proof-relevant prevention history.  Each positive node
+contains the executed absorption reduction, source-specific plans, licensed
+singleton coverage, and the failure of absorption-free singleton coverage. -/
+def endogenousCausalExponentialPrevention (input : Nat) :
+    EndogenousCausalExponentialPreventionEvidence input :=
+  (endogenousOperationalStability input).causalExponentialPrevention
+
+/-- The public prevention history contains exactly one local causal
+certificate per executed opening. -/
+theorem endogenous_causal_prevention_stage_count_exact (input : Nat) :
+    (endogenousCausalExponentialPrevention input).stageCount =
+      resolutionLength input :=
+  (endogenousCausalExponentialPrevention input).stageCount_exact
+
 /-- One structural obligation indexed by the authoritative role history. -/
 abbrev StructuralObligation (input : Nat) : Type 2 :=
   IndependentStructuralObligation
@@ -68,14 +91,14 @@ def structuralObligationFrontier (input : Nat) :
   (evidence input).core.feedbackRolesFollowThreadedHistory
     |>.independentStructuralObligationFrontier
 
-/-- The unique obligation selected by the executed causal reduction chain. -/
+/-- The unique representative constructed by the non-absorptive retention
+execution and reached from every source by its licensed reduction plan. -/
 def retainedOperationalObligation (input : Nat) : StructuralObligation input :=
-  (endogenousOperationalStability input).causalStability
-    |>.retainedOperationalObligation
+  (evidence input).core.feedbackRolesFollowThreadedHistory
+    |>.retentionLicensedOperationalObligation
 
-/-- Classify any structural obligation by the operational status computed by
-the authoritative reduction chain.  The result does not change the structural
-identity of the source obligation. -/
+/-- Legacy extensional projection to the retained obligation.  The public
+causal classification is carried by `endogenousCausalExponentialPrevention`. -/
 def collapseOperationalObligation (input : Nat)
     (obligation : StructuralObligation input) : StructuralObligation input :=
   (endogenousOperationalStability input).causalStability
@@ -85,11 +108,13 @@ theorem collapse_operational_obligation_exact (input : Nat)
     (obligation : StructuralObligation input) :
     collapseOperationalObligation input obligation =
       retainedOperationalObligation input :=
-  (endogenousOperationalStability input).causalStability
-    |>.collapseStructuralObligation_exact obligation
+  Eq.trans
+    ((endogenousOperationalStability input).causalStability
+      |>.collapseStructuralObligation_exact obligation)
+    ((evidence input).core.feedbackRolesFollowThreadedHistory
+      |>.retentionLicensedOperationalObligation_eq_causal).symm
 
-/-- Decision path obtained by consuming one structural obligation through the
-material output of every reduction in the authoritative run. -/
+/-- Extensional normalized decision path associated with one obligation. -/
 def materiallyNormalizedDecisionPath (input : Nat)
     (obligation : StructuralObligation input) :
     List StructuralBranchDecision :=
@@ -110,8 +135,8 @@ theorem materially_normalized_decision_path_exact (input : Nat)
       retainedOperationalDecisionPath input :=
   (endogenousOperationalStability input).materialNormalizationExact obligation
 
-/-- The obligation-level collapse follows the material decision-path
-normalization; the collapse is not merely a numerical width assertion. -/
+/-- Compatibility of the extensional retained projection with the legacy
+decision-path normalizer. -/
 theorem collapse_decisions_follow_material_normalization (input : Nat)
     (obligation : StructuralObligation input) :
     (collapseOperationalObligation input obligation).decisions =
@@ -123,29 +148,36 @@ theorem collapse_operational_obligation_mem_retained (input : Nat)
     (obligation : StructuralObligation input)
     (member : obligation ∈ structuralObligationFrontier input) :
     collapseOperationalObligation input obligation ∈
-      [retainedOperationalObligation input] :=
-  (endogenousOperationalStability input).causalStability
+      [retainedOperationalObligation input] := by
+  unfold retainedOperationalObligation
+  rw [(evidence input).core.feedbackRolesFollowThreadedHistory
+    |>.retentionLicensedOperationalObligation_eq_causal]
+  exact (endogenousOperationalStability input).causalStability
     |>.collapseStructuralObligation_mem_retained obligation member
 
 /-- The retained operational obligation belongs to the complete structural
 carrier from which it was computed. -/
 theorem retained_operational_obligation_is_structural (input : Nat) :
-    retainedOperationalObligation input ∈ structuralObligationFrontier input :=
-  (endogenousOperationalStability input).causalStability
+    retainedOperationalObligation input ∈ structuralObligationFrontier input := by
+  unfold retainedOperationalObligation
+  rw [(evidence input).core.feedbackRolesFollowThreadedHistory
+    |>.retentionLicensedOperationalObligation_eq_causal]
+  exact (endogenousOperationalStability input).causalStability
     |>.retainedOperationalObligation_mem_structural
 
-/-- The operational image is exactly the retained obligation.  This is the
-public statement that operational co-classification does not require equality
-of the structural obligations. -/
+/-- Exact image of the extensional retained projection. -/
 theorem operational_image_iff_eq_retained (input : Nat)
     (target : StructuralObligation input) :
     ((endogenousOperationalStability input).causalStability
         |>.InOperationalImage target) ↔
-      target = retainedOperationalObligation input :=
-  (endogenousOperationalStability input).causalCollapseImageExact target
+      target = retainedOperationalObligation input := by
+  unfold retainedOperationalObligation
+  rw [(evidence input).core.feedbackRolesFollowThreadedHistory
+    |>.retentionLicensedOperationalObligation_eq_causal]
+  exact (endogenousOperationalStability input).causalCollapseImageExact target
 
-/-- Every two structural obligations receive the same carried operational
-status from the executed causal chain, without becoming structurally equal. -/
+/-- Every two structural obligations have the same extensional retained image.
+Their causal co-classification is licensed by the source-indexed plans. -/
 theorem all_structural_obligations_share_operational_status (input : Nat)
     (left right : StructuralObligation input) :
     collapseOperationalObligation input left =
@@ -153,8 +185,7 @@ theorem all_structural_obligations_share_operational_status (input : Nat)
   (endogenousOperationalStability input).causalStability
     |>.allStructuralObligationsOperationallyIdentified left right
 
-/-- The stronger material statement: the two source paths are actually
-consumed by the normalizer and yield the same executed operational path. -/
+/-- The two source paths have the same extensional normalized path. -/
 theorem all_structural_obligations_share_material_status (input : Nat)
     (left right : StructuralObligation input) :
     materiallyNormalizedDecisionPath input left =
@@ -208,9 +239,9 @@ theorem retained_operational_width_is_one (input : Nat) :
       (endogenousOperationalStability input).causalStability).length = 1 :=
   (endogenousOperationalStability input).retainedOperationalWidthOne
 
-/-- The causal certificate, not a preselected numerical trace, establishes the
-strict separation between retained operational width and the unabsorbed
-structural carrier on every public run. -/
+/-- Numerical corollary of the public construction.  The causal result itself
+is the source-indexed `endogenousCausalExponentialPrevention` evidence, which
+also contains the impossibility of absorption-free singleton coverage. -/
 theorem certified_absorption_prevents_exponential_accumulation (input : Nat) :
     (CausalOperationalStability.retainedOperationalObligationFrontier
       (endogenousOperationalStability input).causalStability).length <
@@ -578,6 +609,9 @@ end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.evidence
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.EndogenousOperationalStabilityEvidence
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.endogenousOperationalStability
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.EndogenousCausalExponentialPreventionEvidence
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.endogenousCausalExponentialPrevention
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.endogenous_causal_prevention_stage_count_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.StructuralObligation
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.structuralObligationFrontier
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.retainedOperationalObligation

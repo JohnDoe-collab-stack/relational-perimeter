@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1705" viewBox="0 0 1800 1705" role="img" aria-labelledby="title description">
   <title id="title">Relational Perimeter: endogenous operational decomposition</title>
-  <desc id="description">The computational layer connected to the four foundational Lean modules through the local import closure. One authoritative run constructs the measured entry, then recursively constructs a seeded root, extracts and filters candidates, opens two distinct alternatives, discovers a directed transport after failed decoys, compiles, validates and applies it, and transmits the retained output, next generation, decision history, provenance and seed to the next stage. Every executed reduction binds the generated opening, discovered absorption, materially computed output, criterion preservation, viable absorbed sibling and exact-tail raccord. The exact role history indexes a complete duplicate-free structural carrier of width two to the n; an executable normalizer consumes every structural path stage by stage from the material outputs, and the causal collapse is proved to follow that normalization into the computed retained singleton. A projected-state separator proves that stabilization witness availability and its coarse width readout do not factor through the permitted projection; a reference state shows that the projection is nonconstant. Failure constructs no descendant stage.</desc>
+  <desc id="description">The computational layer connected to the four foundational Lean modules through the local import closure. One authoritative run constructs the measured entry, then recursively constructs a seeded root, extracts and filters candidates, opens two distinct alternatives, discovers a directed transport after failed decoys, compiles, validates and applies it, and transmits the retained output, next generation, decision history, provenance and seed to the next stage. Every executed reduction binds the generated opening, discovered absorption, materially computed output, criterion preservation, viable absorbed sibling and exact-tail raccord. The exact role history indexes a complete duplicate-free structural carrier of width two to the n. Every structural source has its own licensed reduction plan: left choices require the complete executed absorption reduction, right choices require a non-absorptive retention license, and sibling traces remain distinct. These plans cover one retained representative. The exact ablated operation grammar removes the left-absorption constructor while retaining right-side execution and the dependent-tail raccord; Lean proves that it cannot reduce a left source and therefore cannot cover the complete carrier by a singleton. A projected-state separator proves that stabilization witness availability and its coarse width readout do not factor through the permitted projection; a reference state shows that the projection is nonconstant. Failure constructs no descendant stage.</desc>
   <defs>
     <linearGradient id="foundation" x1="0" x2="1">
       <stop offset="0" stop-color="#edf7eb"/>
@@ -237,13 +237,13 @@
   <text x="265" y="1281" text-anchor="middle" class="body">obligations indexed by the exact role history</text>
   <text x="265" y="1301" text-anchor="middle" class="small">complete · duplicate-free · exact width 2ⁿ</text>
   <rect x="550" y="1230" width="530" height="82" rx="7" fill="#f3efff" stroke="#7063be" stroke-width="1.5"/>
-  <text x="815" y="1257" text-anchor="middle" class="boxTitle">Executed causal collapse</text>
-  <text x="815" y="1281" text-anchor="middle" class="body">material normalizer consumes every structural path</text>
-  <text x="815" y="1301" text-anchor="middle" class="small">executed outputs · discovered absorptions · exact-tail raccord</text>
+  <text x="815" y="1257" text-anchor="middle" class="boxTitle">Source-indexed licensed plans</text>
+  <text x="815" y="1281" text-anchor="middle" class="body">left: absorb · right: retain · traces stay distinct</text>
+  <text x="815" y="1301" text-anchor="middle" class="small">left crossing: absorption · right retention: no crossing</text>
   <rect x="1165" y="1230" width="540" height="82" rx="7" fill="#f8fff9" stroke="#37876a" stroke-width="1.5"/>
-  <text x="1435" y="1257" text-anchor="middle" class="boxTitle">Certified retained operational carrier</text>
-  <text x="1435" y="1281" text-anchor="middle" class="body">exact image = computed retained obligation</text>
-  <text x="1435" y="1301" text-anchor="middle" class="small">identities stay distinct · singleton width 1 &lt; 2ⁿ for n &gt; 0</text>
+  <text x="1435" y="1257" text-anchor="middle" class="boxTitle">Causal prevention certificate</text>
+  <text x="1435" y="1281" text-anchor="middle" class="body">licensed carrier = 1 · absorption-free coverage impossible</text>
+  <text x="1435" y="1301" text-anchor="middle" class="small">identities stay distinct · certified width 1 &lt; 2ⁿ for n &gt; 0</text>
   <path d="M 465 1271 L 550 1271" class="arrow"/>
   <path d="M 1080 1271 L 1165 1271" class="feedbackArrow"/>
   <text x="900" y="1340" text-anchor="middle" class="body">secondary numerical trace: 1 → 2 → 1 → 2 → … → 1 · length 2n + 1 · every width ≤ 2</text>

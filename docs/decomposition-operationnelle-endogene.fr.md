@@ -127,26 +127,54 @@ absorbé et le raccord vers la queue exacte.
 Pour une exécution de `n` stades, l’histoire de rôles indexe un carrier
 structurel explicite : une obligation est un choix gauche ou droit à chacun des
 `n` stades de cette histoire exacte. Lean prouve que ce carrier est complet,
-qu’il ne contient aucun doublon et que sa largeur vaut `2^n`. La chaîne causale
-calcule récursivement l’obligation effectivement retenue depuis les
-continuations produites. Le normaliseur exécutable
-`materiallyNormalizedDecisionPath` consomme chaque chemin source stade par
-stade et remplace chaque tête structurelle par la décision lue sur la
-continuation matériellement produite. `collapseStructuralObligation` est prouvé
-suivre cette normalisation pour toute obligation structurelle. Son image
-opérationnelle est prouvée exactement constituée de l’obligation retenue :
+qu’il ne contient aucun doublon et que sa largeur vaut `2^n`.
+
+La réduction opérationnelle est indexée par sa source. Pour toute obligation
+structurelle, `LicensedReductionPlan` enregistre récursivement ce qui advient de
+cette source à chaque ouverture. Une source gauche ne peut entrer dans la
+classe retenue que par `absorbLeft`, dont l’argument est la réduction exécutée
+complète ; une source droite emploie `retainRight` avec une licence de rétention
+sans absorption. La réduction exécutée complète contient l’ouverture engendrée,
+l’absorption reconstruite par la découverte, la sortie matériellement exécutée,
+la préservation du critère, la viabilité de l’enfant absorbé et le raccord à la
+queue exacte. La licence de rétention conserve l’ouverture engendrée, la sortie
+retenue exécutée, le choix retenu et le raccord à la queue exacte, mais son type
+et son constructeur n’importent ni ne projettent la réduction porteuse de
+l’absorption. Lean prouve que la trace d’absorption du plan est
+calculée depuis les décisions de la source elle-même. Deux sources sœurs ont
+donc des traces de plan différentes, même lorsqu’elles atteignent le même
+représentant.
+
+`LicensedOperationalCarrier` n’est donc pas un singleton arbitraire. Il
+contient l’obligation retenue calculée et, pour chaque membre du carrier
+structurel complet, un plan licencié propre à cette source. En regard,
+`AbsorptionFreeReductionPlan` est obtenu en retirant exactement le constructeur
+`absorbLeft`, tout en conservant la réduction terminale, la rétention à droite,
+son matériau exécuté et le raccord à la queue dépendante. L’invariant qui
+caractérise ses sources atteignables est dérivé de ces constructeurs, et non
+fourni comme prémisse. Lean prouve alors que cette grammaire d’opérations
+ablatée ne peut réduire une source gauche ; la source retenue reste positivement
+exécutable et se construit sans la réduction complète porteuse de l’absorption.
+Par conséquent, aucune `AbsorptionFreeSingletonCoverage` ne peut
+couvrir le carrier structurel complet à une ouverture positive. L’absorption
+est ainsi nécessaire à la couverture singleton certifiée ; elle n’est pas une
+donnée placée à côté d’une borne de largeur obtenue indépendamment.
+
+`CausalExponentialPreventionCertificate` réunit ces faits :
 
 ```text
-obligations structurelles distinctes indexées par l’histoire = 2^n
-image du collapse causal                                  = 1
+carrier structurel complet sans doublon                 = 2^n
+carrier opérationnel licencié et indexé par ses sources = 1
+couverture singleton sans absorption licenciée          = impossible
 ```
 
-Ce collapse n’est pas une identification structurelle. À chaque ouverture,
-Lean prouve que les obligations gauche et droite sont inégales, tandis que le
-collapse causal prouve qu’elles reçoivent le même statut opérationnel porté.
-La distinction entre multiplicité structurelle et indépendance opérationnelle
-est donc présente dans les types et les théorèmes ; elle n’est pas ajoutée par
-le commentaire.
+Le certificat est construit à chaque nœud de
+`CausalExponentialPreventionHistory`, et Lean prouve que cette histoire porte
+un certificat local par ouverture exécutée. Le collapse à image constante et
+son normaliseur exécutable restent disponibles comme corollaires extensionnels,
+mais le résultat causal ne repose plus sur leur image singleton. Il repose sur
+la couverture licenciée et sur l’impossibilité de la couverture correspondante
+sans absorption. Les obligations sœurs demeurent structurellement inégales.
 
 Pour toute histoire positive, la largeur retenue est prouvée strictement
 inférieure à la largeur structurelle sans absorption. Le certificat fournit
@@ -159,17 +187,15 @@ toute largeur enregistrée vaut 1 ou 2
 toute largeur enregistrée est inférieure ou égale à 2
 ```
 
-Dans la comparaison explicite formalisée ici, les absorptions découvertes et
-préservant le critère maintiennent donc une obligation entre les ouvertures, au
-lieu des `2^n` obligations obtenues en portant indépendamment chaque choix
-structurel. Ce résultat n’est pas déduit de la forme fixe d’une liste : la
-construction de l’obligation retenue et la normalisation de chaque chemin
-source consomment la sortie matérielle de chaque réduction exécutée, tandis que
-leur incorporation au certificat exige aussi la
-provenance de la découverte, la préservation du critère, la viabilité de
-l’alternative absorbée et le raccord de contenu. L’énoncé porte sur les
-obligations opérationnelles portées. Il se distingue du travail total :
-la recherche de relation, les candidats en échec, la compilation, la
+Dans la comparaison explicite formalisée ici, l’absorption découverte et
+préservant le critère est exactement ce qui autorise à porter un représentant
+opérationnel au lieu de conserver comme obligations indépendantes les `2^n`
+choix structurels. Ce résultat n’est pas déduit de la forme fixe d’une liste :
+chaque source fournit un plan de réduction différent, chaque franchissement
+depuis la gauche contient la réduction exécutée complète, et retirer le droit de
+franchir le côté ouvert rend la couverture singleton inhabitable. L’énoncé
+porte sur les obligations opérationnelles portées. Il se distingue du travail
+total : la recherche de relation, les candidats en échec, la compilation, la
 validation, l’exécution, la transmission et la lecture restent mesurés
 séparément.
 
@@ -214,10 +240,19 @@ Il expose des déclarations sans axiome pour :
   retenue et celle que consomme la continuation source de sa queue dépendante
   exacte ;
 - le carrier structurel indexé par l’histoire exacte, sa complétude, l’absence
-  de doublons et sa largeur `2^n`, ainsi que le collapse causal de chacun de ses
-  membres vers son image singleton exacte, la conservation de l’inégalité
-  structurelle sous leur co-classification opérationnelle et la séparation
-  stricte des largeurs sur toute histoire positive faisant autorité ;
+  de doublons et sa largeur `2^n` ;
+- les plans de réduction licenciés et indexés par leur source, dont la trace est
+  calculée depuis chaque source, dont les traces sœurs sont distinctes et dont
+  les constructeurs gauches portent la réduction exécutée complète produite
+  depuis la découverte ;
+- le carrier singleton licencié qui couvre chaque source structurelle,
+  l’impossibilité constructive d’une couverture singleton complète dans la
+  grammaire exacte obtenue en supprimant `absorbLeft`, la survie positive de la
+  source retenue dans cette grammaire, et l’histoire récursive de prévention
+  qui porte un certificat local par ouverture exécutée ;
+- la conservation de l’inégalité structurelle sous la co-classification
+  opérationnelle et la séparation stricte des largeurs sur toute histoire
+  positive faisant autorité ;
 - le profil exact des frontières `1 → 2 → 1` à chaque stade exécuté, la trace alternée de
   longueur `2n + 1` et sa borne uniforme par `2` sur l’histoire faisant
   autorité ;
@@ -266,7 +301,7 @@ L’implémentation complète demeure sous
 `RelationalPerimeter/Computation/ConstitutiveSearch/`. Le module de formulation
 est un point d’entrée vers cette implémentation, non son remplacement. Deux
 suites de régression protègent les énoncés de production correspondant aux
-quinze contre-épreuves adversariales énumérées indépendamment, ainsi que la
+contre-épreuves adversariales énumérées indépendamment, ainsi que la
 surface plus large de l’exécution et de sa comptabilité ; elles ne revendiquent
 pas une identité textuelle avec des fichiers historiques d’audit qui ne sont
 distribués dans aucun des deux dépôts.

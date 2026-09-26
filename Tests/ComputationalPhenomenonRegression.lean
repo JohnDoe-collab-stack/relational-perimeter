@@ -355,8 +355,171 @@ def authoritative_causal_stability (input : Nat) :
     (EndogenousOperationalDecompositionEvidence.operationalStability
       (endogenousOperationalDecompositionEvidence input))
 
-/-- Every index in the history-indexed structural carrier is sent by the
-causal collapse into the retained singleton. -/
+/-- The public certificate carries the recursive prevention evidence itself,
+not only the numerical width consequence. -/
+def authoritative_causal_prevention (input : Nat) :
+    CausalExponentialPreventionHistory
+      (EndogenousOperationalDecompositionEvidence.feedbackRolesFollowThreadedHistory
+        (endogenousOperationalDecompositionEvidence input)) :=
+  OperationalStabilityCertificate.causalExponentialPrevention
+    (EndogenousOperationalDecompositionEvidence.operationalStability
+      (endogenousOperationalDecompositionEvidence input))
+
+/-- There is one causal prevention certificate per executed opening. -/
+theorem authoritative_causal_prevention_stage_count (input : Nat) :
+    (authoritative_causal_prevention input).stageCount =
+      resolutionLength input :=
+  (authoritative_causal_prevention input).stageCount_exact
+
+/-- Regression gate: retained-side execution is constructible with a type that
+does not take the complete absorption-bearing reduction as an index or input. -/
+def retention_license_without_absorption_reduction
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    {tailRun : ConstitutiveExecutionHistory (count := count) run.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage run)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) :
+    RetainedStageExecutionLicense headRole tailRoles :=
+  headRole.retentionLicense tailRoles
+
+/-- Regression gate: reachability in the ablated grammar derives its retained
+source invariant from the plan constructors. -/
+theorem absorption_free_plan_forces_retained_source
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    {roles : ThreadedConstitutiveRoleHistory history}
+    {source : IndependentStructuralObligation roles}
+    (plan : roles.AbsorptionFreeReductionPlan source) :
+    source = roles.retentionLicensedOperationalObligation :=
+  plan.sourceIsRetained
+
+/-- The non-absorptive representative agrees with the earlier complete
+reduction representative, but is constructed independently of it. -/
+theorem retention_licensed_representative_matches_legacy
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history) :
+    roles.retentionLicensedOperationalObligation =
+      roles.causalOperationalStability.retainedOperationalObligation :=
+  roles.retentionLicensedOperationalObligation_eq_causal
+
+/-- Semantic ablation gate: a source-indexed plan records exactly which source
+choices require absorption; it cannot be replaced by a source-independent
+constant trace. -/
+theorem licensed_reduction_plan_is_source_sensitive
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    {roles : ThreadedConstitutiveRoleHistory history}
+    (source : IndependentStructuralObligation roles) :
+    (roles.licensedReductionPlan source).absorptionTrace =
+      source.decisions.map (fun decision => !decision.value) :=
+  roles.licensedReductionPlan_trace source
+
+/-- Semantic ablation gate: sibling sources have distinct reduction traces,
+even though the licensed operational carrier retains one representative. -/
+theorem sibling_sources_require_distinct_licensed_acts
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    {tailRun : ConstitutiveExecutionHistory (count := count) run.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage run)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun)
+    (tail : IndependentStructuralObligation tailRoles) :
+    ((ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+      |>.licensedReductionPlan (.left tail)).absorptionTrace ≠
+    ((ThreadedConstitutiveRoleHistory.step headRole tailRoles)
+      |>.licensedReductionPlan (.right tail)).absorptionTrace :=
+  ThreadedConstitutiveRoleHistory.siblingReductionPlanTraces_ne
+    headRole tailRoles tail
+
+/-- Causal necessity gate: if no operation may cross the opened left/right
+side, no singleton can cover both siblings. -/
+theorem no_singleton_operational_coverage_without_absorption
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    {tailRun : ConstitutiveExecutionHistory (count := count) run.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage run)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) :
+    ¬ Nonempty (AbsorptionFreeSingletonCoverage
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles)) :=
+  noAbsorptionFreeSingletonCoverage headRole tailRoles
+
+/-- The full local result jointly carries licensed singleton coverage and its
+failure in the exact absorption-free regime. -/
+def local_causal_exponential_prevention
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    {tailRun : ConstitutiveExecutionHistory (count := count) run.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage run)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) :
+    CausalExponentialPreventionCertificate headRole tailRoles :=
+  ThreadedConstitutiveRoleHistory.causalExponentialPreventionCertificate
+    headRole tailRoles
+
+/-- The central prevention certificate states the discovery provenance of the
+absorption directly, rather than hiding it behind the numerical width result. -/
+theorem prevention_certificate_binds_executed_absorption
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    {tailRun : ConstitutiveExecutionHistory (count := count) run.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage run)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) :
+    headRole.operationalAbsorption =
+      AcceptedFrontierPreservation.absorbFirstIntoSecond
+        stage.discovery.relation.toAcceptingTransport :=
+  (local_causal_exponential_prevention headRole tailRoles)
+    |>.absorptionComesFromExecutedDiscovery
+
+/-- The central certificate exposes the complete causal chain independently of
+its numerical width field. -/
+theorem prevention_certificate_exposes_complete_causal_chain
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    {tailRun : ConstitutiveExecutionHistory (count := count) run.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage run)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) :
+    headRole.fullOperationalPreservation =
+        headRole.openingPreservation.trans headRole.operationalAbsorption ∧
+      headRole.materializedRetainedContinuation =
+        headRole.retainedContinuation ∧
+      FrontierViable
+        (generatedStructuralBranchSystem
+          (distinctGrowingDiscoveryFormula
+            (constructStage (depth + 1)).searchIndex))
+        [(constructStage (depth + 1)).operationalRoot.child
+          stage.discovery.var false stage.discovery.fresh] := by
+  let certificate := local_causal_exponential_prevention headRole tailRoles
+  exact
+    ⟨certificate.sourceToRetainedPreservationUsesAbsorption,
+      certificate.retainedMaterialIsExecuted,
+      certificate.absorbedSiblingRemainsViable⟩
+
+/-- The ablated grammar is non-vacuous: the retained source still has its full
+retention-only execution after `absorbLeft` is removed. -/
+def retained_source_survives_absorption_ablation
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {history : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory history) :
+    roles.AbsorptionFreeReductionPlan
+      roles.retentionLicensedOperationalObligation :=
+  roles.absorptionFreeRetainedPlan
+
+/-- Legacy extensional image regression. -/
 theorem causal_collapse_maps_structural_to_retained
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -369,8 +532,8 @@ theorem causal_collapse_maps_structural_to_retained
       stability.retainedOperationalObligationFrontier :=
   stability.collapseStructuralObligation_mem_retained obligation member
 
-/-- The causal classification can merge operational status while preserving
-the inequality of the structural alternatives themselves. -/
+/-- Structural inequality remains available beside the extensional retained
+projection.  The causal license is tested by the plan gates above. -/
 theorem structurally_distinct_obligations_share_operational_status
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -392,8 +555,8 @@ theorem structurally_distinct_obligations_share_operational_status
   ⟨IndependentStructuralObligation.left_ne_right tail,
     stability.allStructuralObligationsOperationallyIdentified _ _⟩
 
-/-- Stronger ablation gate: both source paths are consumed by the canonical
-material normalizer, while their structural inequality remains available. -/
+/-- Compatibility regression for the legacy normalizer, while structural
+inequality remains available. -/
 theorem structurally_distinct_obligations_materially_normalize_together
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -415,8 +578,7 @@ theorem structurally_distinct_obligations_materially_normalize_together
     (ThreadedConstitutiveRoleHistory.step roles tailRoles)
       |>.allStructuralObligationsMateriallyIdentified _ _⟩
 
-/-- The image of the causal classification is propositionally the exact
-retained singleton, not merely a list declared to have length one. -/
+/-- The extensional projection has the exact retained singleton image. -/
 theorem causal_collapse_image_is_exact_singleton
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -428,8 +590,7 @@ theorem causal_collapse_image_is_exact_singleton
       target = stability.retainedOperationalObligation :=
   stability.inOperationalImage_iff_eq_retained target
 
-/-- The integrated certificate retains the exact image theorem; it is not
-reduced to the numerical width trace. -/
+/-- The integrated certificate retains the legacy exact-image corollary. -/
 theorem certificate_carries_exact_causal_image
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -441,9 +602,8 @@ theorem certificate_carries_exact_causal_image
       target = certificate.causalStability.retainedOperationalObligation :=
   certificate.causalCollapseImageExact target
 
-/-- The integrated certificate protects the non-numerical causal link: collapse
-decisions must agree with the material normalizer that consumes the source path
-and the executed reduction outputs. -/
+/-- The integrated certificate preserves extensional compatibility between the
+constant retained projection and its decision-path normalizer. -/
 theorem certificate_carries_material_normalization
     {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -476,8 +636,8 @@ theorem unabsorbed_obligations_are_distinct (input : Nat) :
     (EndogenousOperationalDecompositionEvidence.operationalStability
       (endogenousOperationalDecompositionEvidence input))
 
-/-- The discovered absorptions make the carried operational frontier strictly
-smaller than the unabsorbed structural frontier on every public run. -/
+/-- Numerical width corollary paired with the source-indexed causal prevention
+evidence above. -/
 theorem certified_absorption_controls_operational_width (input : Nat) :
     (CausalOperationalStability.retainedOperationalObligationFrontier
       (authoritative_causal_stability input)).length <
@@ -573,6 +733,18 @@ end RelationalPerimeter.Tests.ComputationalPhenomenon
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.authoritative_operational_width_trace_exact
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.authoritative_operational_width_bounded
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.authoritative_causal_stability
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.authoritative_causal_prevention
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.authoritative_causal_prevention_stage_count
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.retention_license_without_absorption_reduction
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.absorption_free_plan_forces_retained_source
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.retention_licensed_representative_matches_legacy
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.licensed_reduction_plan_is_source_sensitive
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.sibling_sources_require_distinct_licensed_acts
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.no_singleton_operational_coverage_without_absorption
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.local_causal_exponential_prevention
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.prevention_certificate_binds_executed_absorption
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.prevention_certificate_exposes_complete_causal_chain
+#print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.retained_source_survives_absorption_ablation
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.causal_collapse_maps_structural_to_retained
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.structurally_distinct_obligations_share_operational_status
 #print axioms RelationalPerimeter.Tests.ComputationalPhenomenon.structurally_distinct_obligations_materially_normalize_together

@@ -120,24 +120,53 @@ tail.
 For an execution of `n` stages, the role history indexes an explicit structural
 carrier: an obligation is one left or right choice at every stage of that exact
 history. Lean proves that this carrier is complete, duplicate-free, and has
-width `2^n`. The causal chain recursively computes the actually retained
-obligation from the produced continuations. The executable
-`materiallyNormalizedDecisionPath` consumes every source path stage by stage
-and replaces each structural head with the decision read from the materially
-produced continuation. `collapseStructuralObligation` is proved to follow this
-normalization for every structural obligation. Its operational image is proved
-to consist exactly of the retained obligation:
+width `2^n`.
+
+The operational reduction is source-indexed. For every structural obligation,
+`LicensedReductionPlan` recursively records what happens to that source at
+each opening. A left source can enter the retained class only through
+`absorbLeft`, whose argument is the complete executed reduction; a right source
+uses `retainRight` with a non-absorptive retention license. The absorption
+reduction contains the generated opening, the absorption reconstructed from
+discovery, the materially executed output, criterion preservation, viability
+of the absorbed sibling, and the exact-tail raccord. The retention license
+keeps the generated opening, executed retained output, retained choice, and
+exact-tail raccord, but its type and constructor neither import nor project the
+absorption-bearing reduction. Lean proves that the plan's
+absorption trace is computed from the source decisions themselves. In
+particular, sibling sources have different plan traces even though they reach
+the same representative.
+
+`LicensedOperationalCarrier` is therefore not an arbitrary singleton. It
+contains the computed retained obligation and, for every member of the full
+structural carrier, a source-specific licensed plan. The complementary
+`AbsorptionFreeReductionPlan` is obtained by removing exactly the
+`absorbLeft` constructor while keeping terminal reduction, right retention,
+its executed material, and the dependent-tail raccord. Its reachable-source
+invariant is derived from those constructors rather than supplied as a premise.
+Lean then proves that this ablated operation grammar cannot reduce a left
+source; the retained source remains positively executable and is constructed
+without the complete absorption-bearing reduction.
+Consequently, no `AbsorptionFreeSingletonCoverage` can cover the complete
+structural carrier at a positive opening. Thus absorption is necessary for the
+certified singleton coverage, not merely data stored beside an independently
+obtained width bound.
+
+`CausalExponentialPreventionCertificate` packages these facts together:
 
 ```text
-distinct history-indexed structural obligations = 2^n
-image of the causal collapse                      = 1
+complete duplicate-free structural carrier       = 2^n
+source-indexed licensed operational carrier       = 1
+singleton coverage without licensed absorption    = impossible
 ```
 
-This collapse is not structural identification. At every opening Lean proves
-that the left and right obligations are unequal, while the causal collapse
-proves that they receive the same carried operational status. The distinction
-between structural multiplicity and operational independence is therefore
-present in the types and theorems, not supplied by the prose.
+The certificate is constructed at every node of
+`CausalExponentialPreventionHistory`, and Lean proves that this history has one
+local certificate per executed opening. The older constant-image collapse and
+its executable decision-path normalizer remain available as extensional
+corollaries, but the causal result no longer rests on their singleton image.
+It rests on licensed coverage and on the failure of the corresponding
+absorption-free coverage. Structural siblings remain unequal throughout.
 
 For every positive history, the retained width is proved strictly smaller than
 the unabsorbed structural width. The certificate also provides the numerical
@@ -150,18 +179,16 @@ every recorded width is 1 or 2
 every recorded width is at most 2
 ```
 
-Thus, in the explicit comparison formalized here, the discovered and
-criterion-preserving absorptions keep one obligation between openings instead
-of the `2^n` obligations obtained by carrying every structural choice
-independently. This is not inferred from the fixed shape of a list: construction
-of the retained obligation and normalization of every source path consume the
-material output of every executed reduction, while their incorporation into the
-certificate also requires
-discovery provenance, criterion preservation, viability of the absorbed
-alternative, and the content-level raccord. The statement concerns carried
-operational obligations. It is distinct from total work: relation search,
-failed candidates, compilation, validation, execution,
-transmission, and readout remain measured separately.
+Thus, in the explicit comparison formalized here, discovered and
+criterion-preserving absorption is exactly what licenses carrying one
+operational representative instead of preserving all `2^n` structural choices
+as independent obligations. This is not inferred from the fixed shape of a
+list: each source supplies a different reduction plan, each left crossing
+contains the complete executed reduction, and removing the right to cross the
+opened side makes singleton coverage uninhabitable. The statement concerns
+carried operational obligations. It is distinct from total work: relation
+search, failed candidates, compilation, validation, execution, transmission,
+and readout remain measured separately.
 
 The construction also identifies the exact boundary of a state-only account.
 The state produced by execution and a blocked constitution built
@@ -201,10 +228,18 @@ It exposes axiom-free declarations for:
 - the proof-relevant assignment raccord between the retained continuation and
   the source continuation of its exact dependent tail;
 - the structural carrier indexed by the exact history, its completeness,
-  duplicate-freedom and width `2^n`, together with the causal collapse of every
-  member into its exact singleton image, the preservation of structural
-  inequality under operational co-classification, and the strict width
-  separation on every positive authoritative history;
+  duplicate-freedom and width `2^n`;
+- source-indexed licensed reduction plans whose trace is computed from each
+  source, whose sibling traces are distinct, and whose left constructors carry
+  the complete executed reduction produced from discovery;
+- the licensed singleton carrier covering every structural source, the
+  constructive impossibility of complete singleton coverage in the exact
+  grammar obtained by deleting `absorbLeft`, the positive survival of the
+  retained source in that grammar, and the recursive prevention history
+  carrying one local certificate per executed opening;
+- the preservation of structural inequality under operational
+  co-classification and the strict width separation on every positive
+  authoritative history;
 - the exact `1 → 2 → 1` frontier profile at every executed stage, the alternating trace
   of length `2n + 1`, and its uniform bound by `2` on the authoritative history;
 - the numerical singleton-width equality as a corollary, distinct from the
@@ -245,7 +280,7 @@ It exposes axiom-free declarations for:
 The complete implementation remains under
 `RelationalPerimeter/Computation/ConstitutiveSearch/`. The statement layer is an
 entry point into that implementation, not a substitute for it. Two regression
-suites protect the target production statements corresponding to the fifteen
+suites protect the target production statements corresponding to the
 independently enumerated adversarial probes, together with the larger
 execution/accounting surface; they do not claim textual identity with
 historical audit files that are not distributed in either repository.

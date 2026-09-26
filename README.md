@@ -101,20 +101,27 @@ discovery.
 The framework first constitutes the structured objects on which the
 computation acts. The computation then constitutes their operational status by
 determining whether structurally distinct alternatives must be carried as
-independent obligations. At every stage, one typed executed reduction binds
-the generated opening, the absorption reconstructed from the executed
-discovery, the materially computed retained continuation, criterion
-preservation, viability of the absorbed sibling, and the content raccord to the
-exact dependent tail. The exact role history indexes a complete,
-duplicate-free structural carrier of `2^n` obligations. The recursive causal
-chain computes one retained obligation; an executable normalizer consumes every
-structural decision path stage by stage, reading the materially produced output
-at each reduction, and the collapse is proved to follow that normalization into
-its exact singleton image. Lean separately proves that the left
-and right obligations remain structurally unequal even when the computation
-assigns them the same operational status. For every positive run, Lean proves
-the retained width `1` strictly smaller than the structural width `2^n`. The
-accompanying stage trace is `1 → 2 → 1 → ...`, has length `2n + 1`, and is
+independent obligations. The exact role history indexes a complete,
+duplicate-free structural carrier of `2^n` obligations. For each member, Lean
+constructs a source-indexed `LicensedReductionPlan`: a left choice necessarily
+uses the discovered absorption, whereas a right choice uses a distinct
+non-absorptive retention license. The complete executed reduction carried by a
+left step contains the materially executed output, criterion preservation,
+viable absorbed sibling, and exact dependent-tail raccord. The retention
+license carries the executed retained output and raccord without importing,
+indexing, or projecting any absorption-bearing reduction. The plan trace is
+proved to depend on the source decisions, so sibling sources remain observably
+different even when they reach one representative.
+
+The licensed operational carrier has width `1` and covers every structural
+source through its own plan. Lean also proves the causal necessity statement:
+the exact operation grammar obtained by deleting `absorbLeft`, while retaining
+right-side execution and the dependent-tail raccord, cannot reduce a left
+source and therefore cannot cover the complete carrier by a singleton. The
+recursive prevention history contains one such local certificate per executed
+opening. Hence the separation between structural width `2^n` and carried width
+`1` is certified by the absorption, not merely accompanied by it. The numerical
+trace `1 → 2 → 1 → ...` remains a separate readout, of length `2n + 1` and
 uniformly bounded by `2`. These are theorems about carried operational width,
 distinct from the total executed work measured elsewhere in the repository.
 
@@ -165,9 +172,10 @@ below.
   the public statement layer for the computational phenomenon;
 - `OperationalStability.lean` constructs the recursive causal certificate,
   the complete executed-stage reductions, the history-indexed and
-  duplicate-free `2^n` structural carrier, the causal collapse into the
-  retained singleton, the content-level raccord to the exact dependent tail,
-  and the alternating numerical trace;
+  duplicate-free `2^n` structural carrier, the source-indexed licensed
+  reduction plans, the licensed singleton carrier, the impossibility of
+  singleton coverage without absorption, the content-level raccord to the
+  exact dependent tail, and the alternating numerical trace;
 - `ProjectedStabilizationBoundary.lean` proves constructively that neither the
   availability of a complete stabilization witness nor even its coarse
   calculable width readout is determined by the permitted projected state, or
@@ -228,14 +236,18 @@ exécutée, la continuation retenue effectivement calculée, la préservation du
 critère, la viabilité de l’enfant absorbé et le raccord à la queue dépendante
 exacte. L’histoire de rôles indexe un carrier structurel complet, sans doublons,
 de `2^n` obligations. La chaîne causale calcule une obligation retenue et rabat
-sur elle chaque membre de ce carrier. Un normaliseur exécutable consomme chaque
-chemin de décisions structurelles stade par stade, en lisant la sortie
-matériellement produite par chaque réduction, et le collapse est prouvé suivre
-cette normalisation ; son image est exactement ce singleton.
-Lean prouve séparément que les obligations gauche et droite restent
-structurellement inégales même lorsque le calcul leur attribue le même statut
-opérationnel. La largeur retenue `1` est strictement inférieure à `2^n` pour
-toute exécution positive. La trace locale `1 → 2 → 1 → ...` reste en outre
+sur elle chaque membre de ce carrier au moyen d’un plan licencié propre à sa
+source. Un choix gauche requiert l’absorption découverte ; un choix droit est
+retenu par une licence distincte dont ni le type ni la construction ne
+mentionnent le témoin de réduction porteur de l’absorption, et les
+traces des deux plans demeurent distinctes. Lean prouve aussi la nécessité
+causale : la grammaire exacte obtenue en supprimant `absorbLeft`, tout en
+conservant la rétention droite et le raccord dépendant, ne peut réduire une
+source gauche et ne peut donc couvrir le carrier complet par un singleton.
+L’histoire de prévention porte un tel certificat local à chaque ouverture
+exécutée. La largeur opérationnelle `1` est ainsi licenciée par l’absorption
+face à la largeur structurelle `2^n`, et non seulement comparée numériquement
+avec elle. La trace locale `1 → 2 → 1 → ...` reste une lecture séparée,
 uniformément bornée par `2`.
 
 ## License

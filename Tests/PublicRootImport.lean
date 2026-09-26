@@ -27,6 +27,15 @@ discovered absorption and the transmitted-content raccord. -/
 def publicCausalOperationalStability (input : Nat) :=
   (endogenousOperationalStability input).causalStability
 
+/-- The public root exposes the recursive source-indexed prevention evidence,
+including the exact absorption-free impossibility at every opening. -/
+def publicCausalExponentialPrevention (input : Nat) :=
+  endogenousCausalExponentialPrevention input
+
+theorem publicCausalPreventionStageCountExact (input : Nat) :
+    (publicCausalExponentialPrevention input).stageCount = input + 1 :=
+  endogenous_causal_prevention_stage_count_exact input
+
 /-- The public root exposes the explicit counterfactual carrier obtained when
 every binary structural alternative is kept independent. -/
 theorem publicUnabsorbedWidthIsExponential (input : Nat) :
@@ -103,6 +112,8 @@ end RelationalPerimeter.Tests.PublicRootImport
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicFamily
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicOperationalStability
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicCausalOperationalStability
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicCausalExponentialPrevention
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicCausalPreventionStageCountExact
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicUnabsorbedWidthIsExponential
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicUnabsorbedObligationsAreDistinct
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicCertifiedAbsorptionControlsWidth
