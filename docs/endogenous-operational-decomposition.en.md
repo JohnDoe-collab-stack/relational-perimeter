@@ -89,13 +89,21 @@ transport, and feeds its result into the next state.
 
 The repository also constructs an extensional stability view that retains the
 source and retained states, one observed accepted input and output, an
-explicitly supplied numerical width readout, and its bound. On the generated
-system of an actual executed stage, it separately projects the discovered
-transport and a total comparison transport having the same executed source and
-target. The two projected views are equal at the observed executed continuation,
-while the two total actions differ on another admissible continuation.
-Consequently, no single recovery function of those extensionally equal views
-can reconstruct both total operational actions.
+explicitly supplied numerical width readout, and its bound. The generic layer
+defines `ActionFactorsThrough`: a total action factors through a projection
+when one action on projected values recovers it on every argument. It also
+defines `ActionProjectionCollision`: two preimages have equal projections but
+their total actions differ at one argument. The generic theorem
+`action_not_factors_of_projection_collision` consumes that projection equality
+explicitly and constructively refutes factorization.
+
+On the generated system of an actual executed stage, the discovered transport
+and a total comparison transport with the same executed source and target form
+such a collision. They are separately projected; their projected views are
+equal at the observed executed continuation, while the two total actions differ
+on another admissible continuation. The executed non-factorization theorem is
+therefore an instance of the generic projection-collision theorem, rather than
+a pair-specific one-view contradiction.
 
 This identifies the exact relative limitation of a Lyapunov-style reading in
 the present construction. A description by states, an observed trajectory, and
