@@ -372,7 +372,9 @@ def extensionalOperationalStabilityHistoryTail
     ExtensionalOperationalStabilityHistory tailRoles :=
   history.2
 
-/-- Closed exact evidence package over the authoritative dependent role history. -/
+/-- Closed exact causal evidence package over the authoritative dependent role
+history. Numerical width traces remain derived readouts of the constituted
+frontiers and are proved separately rather than stored as causal premises. -/
 structure EndogenousOperationalStabilityEvidence
     {depth count : Nat}
     {assignment : SequentialAssignment depth}
@@ -395,7 +397,6 @@ structure EndogenousOperationalStabilityEvidence
   acceptedPayload : ∀ profile, StructuralAcceptedPayload roles profile
   normalizeAcceptedPayload : ∀ profile,
     StructuralAcceptedPayload roles profile → OperationalAcceptedPayload roles
-  transientBound : WidthTraceAtMost 2 (executedWidthTrace roles)
   reductionsExact : reductions = buildExecutedOperationalReductionHistory roles
   discoveryWorkExact : discoveryWork = buildExecutedDiscoveryWorkHistory roles
   extensionalProjectionExact :
@@ -428,7 +429,6 @@ def endogenousOperationalStabilityEvidence
     operationalNoDuplicates := operationalFrontier_nodup roles
     acceptedPayload := everyStructuralObligationHasAcceptedPayload roles
     normalizeAcceptedPayload := normalizeStructuralAcceptedPayload roles
-    transientBound := executedWidthTrace_le_two roles
     reductionsExact := rfl
     discoveryWorkExact := rfl
     extensionalProjectionExact := rfl
