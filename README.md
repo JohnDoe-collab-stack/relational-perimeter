@@ -106,17 +106,22 @@ obligations. For `n` executed openings, the complete structural carrier and the
 pending carrier both have exact width `2^n`, while the carrier of positions
 retained by the discovered transports has exact width `1`. The actual transient
 frontiers follow `1 → 2 → 1` at every stage and are uniformly bounded by `2`.
-These widths are derived from their carriers. The causal certificate also
-contains the executed failed-candidate prefix, the discovered total map, its
-separate preservation proof, the viable distinct absorbed sibling, and the
-output transmitted to the next situation.
+These widths are derived from their carriers. At each executed opening, the
+position type indexed by the absence of a transport has width `2`, whereas the
+same position type indexed by the transport returned by discovery has width
+`1`. The closed evidence package is canonically built from the executed role
+history and records the exact reduction history, failed-candidate work,
+discovered total map, separate preservation proof, viable distinct absorbed
+sibling, extensional projection, and output transmitted to the next situation.
 
 A state-and-quantity projection preserves the observed states, output, width
-trace, and bound, but does not determine the total operational action. The
-formal separator gives two transports with the same projection and observed
-output that act differently on another continuation. In this exact sense, the
-extensional stability reading is a forgetful projection of the constituted
-operational process.
+trace, and bound, but does not determine the total operational action. On the
+actual executed generated system, the formal separator compares the discovered
+transport with a total comparison transport on the same source and target.
+They agree on every datum retained by the projection at the observed executed
+continuation and act differently on another admissible continuation. In this
+exact sense, the extensional stability reading is a forgetful projection of
+the constituted operational process.
 
 ![Endogenous operational stability](docs/figures/endogenous-operational-stability.svg)
 

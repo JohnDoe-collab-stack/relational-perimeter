@@ -66,6 +66,34 @@ def normalizeEveryPublicStructuralProfileZero
   publicEvidenceZero.normalizeAcceptedPayload profile
     (publicEvidenceZero.acceptedPayload profile)
 
+theorem publicReductionHistoryIsExactZero :
+    publicEvidenceZero.reductions =
+      buildExecutedOperationalReductionHistory
+        (executeConstitutiveResolution 0).feedbackRoleHistory :=
+  publicEvidenceZero.reductionsExact
+
+theorem publicDiscoveryWorkIsExactZero :
+    publicEvidenceZero.discoveryWork =
+      buildExecutedDiscoveryWorkHistory
+        (executeConstitutiveResolution 0).feedbackRoleHistory :=
+  publicEvidenceZero.discoveryWorkExact
+
+theorem publicProjectionHistoryIsExactZero :
+    publicEvidenceZero.extensionalProjection =
+      buildExtensionalOperationalStabilityHistory
+        (executeConstitutiveResolution 0).feedbackRoleHistory :=
+  publicEvidenceZero.extensionalProjectionExact
+
+theorem publicNormalizerIsExecutedZero
+    (profile : StructuralObligation
+      (executeConstitutiveResolution 0).feedbackRoleHistory)
+    (payload : StructuralAcceptedPayload
+      (executeConstitutiveResolution 0).feedbackRoleHistory profile) :
+    publicEvidenceZero.normalizeAcceptedPayload profile payload =
+      normalizeStructuralAcceptedPayload
+        (executeConstitutiveResolution 0).feedbackRoleHistory profile payload :=
+  publicEvidenceZero.normalizeAcceptedPayloadExact profile payload
+
 /-- The measured prefix, not a decorative counter, determines attempts. -/
 theorem measuredPrefixDeterminesAttempts {depth : Nat}
     {assignment : SequentialAssignment depth}
@@ -109,7 +137,32 @@ theorem actualDiscoveryOutcomeIsAuthoritative {depth : Nat}
     {stage : SequentialStageRun depth assignment}
     (run : ThreadedConstitutiveStageRun state stage) :
     run.discoveryRun.outcome.discovered? = some stage.discovery :=
-  executedTransformation_from_discoveryOutcome run
+  (executedOperationalReductionEvidence run).outcomeExact
+
+theorem actualDiscoveredTransportChangesSameOpeningWidth {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    stageOperationalWidth
+        (system := generatedStructuralBranchSystem
+          (distinctGrowingDiscoveryFormula
+            (constructStage (depth + 1)).searchIndex))
+        (left := (executedOpening run).left)
+        (right := (executedOpening run).right)
+        none = 2 ∧
+      stageOperationalWidth (executedOperationalStatus run) = 1 :=
+  discovered_transport_reduces_same_opening_width run
+
+theorem actualRetainedTargetIsExact {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    (executedSiblingReduction run).retained =
+      [(constructStage (depth + 1)).operationalRoot.child
+        stage.discovery.var true stage.discovery.fresh] :=
+  (executedOperationalReductionEvidence run).retainedExact
 
 /-- The left branch of the reduction uses the discovered total map. -/
 theorem actualLeftActionUsesDiscovery {depth : Nat}
@@ -123,7 +176,7 @@ theorem actualLeftActionUsesDiscovery {depth : Nat}
     (executedSiblingReduction run).preservation.forward.map
         (.head continuation) =
       .head (stage.discovery.relation.mapContinuation continuation) :=
-  executedSiblingReduction_left_eq_discoveredMap run continuation
+  (executedOperationalReductionEvidence run).leftActionExact continuation
 
 theorem actualRightActionIsRetained {depth : Nat}
     {assignment : SequentialAssignment depth}
@@ -135,7 +188,7 @@ theorem actualRightActionIsRetained {depth : Nat}
         stage.discovery.var true stage.discovery.fresh)) :
     (executedSiblingReduction run).preservation.forward.map
         (.tail (.head continuation)) = .head continuation :=
-  executedSiblingReduction_right_eq_identity run continuation
+  (executedOperationalReductionEvidence run).rightActionExact continuation
 
 theorem actualLeftActionPreservesCriterion {depth : Nat}
     {assignment : SequentialAssignment depth}
@@ -152,7 +205,8 @@ theorem actualLeftActionPreservesCriterion {depth : Nat}
       ((constructStage (depth + 1)).operationalRoot.child
         stage.discovery.var true stage.discovery.fresh)
       (stage.discovery.relation.mapContinuation continuation) :=
-  executedSiblingReduction_preservesAccept run continuation accepted
+  (executedOperationalReductionEvidence run).criterionPreserved
+    continuation accepted
 
 theorem fullReductionIsEstablishedConstitutiveStep {depth : Nat}
     {assignment : SequentialAssignment depth}
@@ -186,7 +240,28 @@ theorem absorbedSiblingRemainsViableAndDistinct {depth : Nat}
           stage.discovery.var false stage.discovery.fresh ≠
         (constructStage (depth + 1)).operationalRoot.child
           stage.discovery.var true stage.discovery.fresh :=
-  ⟨executedSourceSibling_viable run, executedSiblingStates_distinct run⟩
+  ⟨(executedOperationalReductionEvidence run).sourceSiblingViable,
+    (executedOperationalReductionEvidence run).siblingsDistinct⟩
+
+theorem retainedSiblingRemainsViable {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    (generatedStructuralBranchSystem
+      (distinctGrowingDiscoveryFormula
+        (constructStage (depth + 1)).searchIndex)).Viable
+        stage.schedule.entry.target :=
+  (executedOperationalReductionEvidence run).targetSiblingViable
+
+theorem executedApplicationUsesReturnedRelation {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    stage.application.output =
+      stage.schedule.entry.relation.mapContinuation stage.sourceContinuation :=
+  (executedOperationalReductionEvidence run).applicationUsesReturnedRelation
 
 theorem executedOutputFeedsNextState {depth : Nat}
     {assignment : SequentialAssignment depth}
@@ -195,7 +270,7 @@ theorem executedOutputFeedsNextState {depth : Nat}
     (run : ThreadedConstitutiveStageRun state stage) :
     stage.application.output.1 =
       run.nextRun.next.threadedAssignment.assignment :=
-  executedOutput_eq_nextOperationalAssignment run
+  (executedOperationalReductionEvidence run).outputConstitutesNext
 
 theorem publicStructuralCarrierCompleteZero
     (profile : StructuralObligation
@@ -209,6 +284,19 @@ theorem publicStructuralCarrierNoDuplicatesZero :
     (structuralFrontier
       (executeConstitutiveResolution 0).feedbackRoleHistory).Nodup :=
   structuralFrontier_nodup _
+
+theorem publicPendingCarrierCompleteZero
+    (profile : PendingOperationalObligation
+      (executeConstitutiveResolution 0).feedbackRoleHistory) :
+    List.Mem profile
+      (pendingFrontier
+        (executeConstitutiveResolution 0).feedbackRoleHistory) :=
+  publicEvidenceZero.pendingComplete profile
+
+theorem publicPendingCarrierNoDuplicatesZero :
+    (pendingFrontier
+      (executeConstitutiveResolution 0).feedbackRoleHistory).Nodup :=
+  publicEvidenceZero.pendingNoDuplicates
 
 theorem publicOperationalCarrierCompleteZero
     (profile : OperationalObligation
@@ -230,6 +318,36 @@ theorem actualStageTraceComesFromFrontiers {depth : Nat}
     (run : ThreadedConstitutiveStageRun state stage) :
     executedStageWidthTrace run = [1, 2, 1] :=
   executedStageWidthTrace_exact run
+
+theorem actualStageTraceIsFrontierProjection {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    executedStageWidthTrace run =
+      (executedStageFrontiers run).map List.length :=
+  executedStageWidthTrace_from_frontiers run
+
+theorem executedSystemHasNonFactorizingTotalActions {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    (ExecutedExtensionalSeparator.discoveredTransport run).map
+        (ExecutedExtensionalSeparator.alternateContinuation run) ≠
+      (ExecutedExtensionalSeparator.observedConstantTransport run).map
+        (ExecutedExtensionalSeparator.alternateContinuation run) :=
+  ExecutedExtensionalSeparator.different_total_action run
+
+theorem comparisonMatchesActualExecutedObservation {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    (ExecutedExtensionalSeparator.observedConstantTransport run).map
+        (executedStepToExtensionalView run).observedSource =
+      (executedStepToExtensionalView run).observedRetained :=
+  comparison_transport_matches_executed_observation run
 
 theorem projectedObservedActionIsExecuted {depth : Nat}
     {assignment : SequentialAssignment depth}
@@ -304,22 +422,35 @@ end Tests.EndogenousOperationalStabilityRegression
 #print axioms Tests.EndogenousOperationalStabilityRegression.publicStrictSeparationZero
 #print axioms Tests.EndogenousOperationalStabilityRegression.publicMeasuredFailedMajorityZero
 #print axioms Tests.EndogenousOperationalStabilityRegression.normalizeEveryPublicStructuralProfileZero
+#print axioms Tests.EndogenousOperationalStabilityRegression.publicReductionHistoryIsExactZero
+#print axioms Tests.EndogenousOperationalStabilityRegression.publicDiscoveryWorkIsExactZero
+#print axioms Tests.EndogenousOperationalStabilityRegression.publicProjectionHistoryIsExactZero
+#print axioms Tests.EndogenousOperationalStabilityRegression.publicNormalizerIsExecutedZero
 #print axioms Tests.EndogenousOperationalStabilityRegression.measuredPrefixDeterminesAttempts
 #print axioms Tests.EndogenousOperationalStabilityRegression.measuredPrefixContainsOnlyFailures
 #print axioms Tests.EndogenousOperationalStabilityRegression.actualOpeningIsRelationFree
 #print axioms Tests.EndogenousOperationalStabilityRegression.actualDiscoveryOutcomeIsAuthoritative
+#print axioms Tests.EndogenousOperationalStabilityRegression.actualDiscoveredTransportChangesSameOpeningWidth
+#print axioms Tests.EndogenousOperationalStabilityRegression.actualRetainedTargetIsExact
 #print axioms Tests.EndogenousOperationalStabilityRegression.actualLeftActionUsesDiscovery
 #print axioms Tests.EndogenousOperationalStabilityRegression.actualRightActionIsRetained
 #print axioms Tests.EndogenousOperationalStabilityRegression.actualLeftActionPreservesCriterion
 #print axioms Tests.EndogenousOperationalStabilityRegression.fullReductionIsEstablishedConstitutiveStep
 #print axioms Tests.EndogenousOperationalStabilityRegression.acceptedLeftPayloadUsesDiscovery
 #print axioms Tests.EndogenousOperationalStabilityRegression.absorbedSiblingRemainsViableAndDistinct
+#print axioms Tests.EndogenousOperationalStabilityRegression.retainedSiblingRemainsViable
+#print axioms Tests.EndogenousOperationalStabilityRegression.executedApplicationUsesReturnedRelation
 #print axioms Tests.EndogenousOperationalStabilityRegression.executedOutputFeedsNextState
 #print axioms Tests.EndogenousOperationalStabilityRegression.publicStructuralCarrierCompleteZero
 #print axioms Tests.EndogenousOperationalStabilityRegression.publicStructuralCarrierNoDuplicatesZero
+#print axioms Tests.EndogenousOperationalStabilityRegression.publicPendingCarrierCompleteZero
+#print axioms Tests.EndogenousOperationalStabilityRegression.publicPendingCarrierNoDuplicatesZero
 #print axioms Tests.EndogenousOperationalStabilityRegression.publicOperationalCarrierCompleteZero
 #print axioms Tests.EndogenousOperationalStabilityRegression.publicOperationalCarrierNoDuplicatesZero
 #print axioms Tests.EndogenousOperationalStabilityRegression.actualStageTraceComesFromFrontiers
+#print axioms Tests.EndogenousOperationalStabilityRegression.actualStageTraceIsFrontierProjection
+#print axioms Tests.EndogenousOperationalStabilityRegression.executedSystemHasNonFactorizingTotalActions
+#print axioms Tests.EndogenousOperationalStabilityRegression.comparisonMatchesActualExecutedObservation
 #print axioms Tests.EndogenousOperationalStabilityRegression.projectedObservedActionIsExecuted
 #print axioms Tests.EndogenousOperationalStabilityRegression.projectedTraceIsExecuted
 #print axioms Tests.EndogenousOperationalStabilityRegression.wrongSingletonStillRejected

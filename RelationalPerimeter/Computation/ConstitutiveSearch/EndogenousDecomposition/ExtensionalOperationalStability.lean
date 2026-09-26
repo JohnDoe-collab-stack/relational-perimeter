@@ -8,9 +8,10 @@ continuation actually observed at each state, acceptance, and the measured
 width trace.  It deliberately does not contain the total action of the
 transport on arbitrary continuations.
 
-The finite separator at the end proves that this omission is substantive:
-two acceptance-preserving transports have the same executed observation and
-the same width trace, yet differ on another admissible continuation.
+Both the executed-system separator and the finite explanatory separator prove
+that this omission is substantive: two acceptance-preserving transports agree
+on the recorded observation and width trace, yet differ on another admissible
+continuation.
 -/
 
 namespace ConstitutiveSearch.EndogenousDecomposition
@@ -93,6 +94,159 @@ def transportToExtensionalStabilityView
         (.cons (Nat.le_refl 2)
           (.cons (Nat.succ_le_succ (Nat.zero_le 1)) .nil)) }
 
+namespace ExecutedExtensionalSeparator
+
+/-- The acceptance-preserving transport reconstructed by the executed run. -/
+def discoveredTransport {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (_run : ThreadedConstitutiveStageRun state stage) :
+    AcceptingContinuationTransport
+      (generatedStructuralBranchSystem
+        (distinctGrowingDiscoveryFormula
+          (constructStage (depth + 1)).searchIndex))
+      stage.schedule.entry.source stage.schedule.entry.target :=
+  stage.discovery.relation.toAcceptingTransport
+
+/-- A comparison transport on the same executed source and target.  It agrees
+with the discovered transport at the continuation actually executed, while
+forgetting the discovered action everywhere else. -/
+def observedConstantTransport {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (_run : ThreadedConstitutiveStageRun state stage) :
+    AcceptingContinuationTransport
+      (generatedStructuralBranchSystem
+        (distinctGrowingDiscoveryFormula
+          (constructStage (depth + 1)).searchIndex))
+      stage.schedule.entry.source stage.schedule.entry.target :=
+  { map := fun _ =>
+      stage.discovery.relation.mapContinuation stage.sourceContinuation
+    preservesAccept := fun _ _ =>
+      stage.discovery.relation.mapContinuation_accept
+        stage.sourceContinuation stage.sourceAccepted }
+
+/-- A second source continuation obtained by changing the anchor coordinate.
+The anchor is distinct from the selected branch variable, so the constituted
+source decision remains realized. -/
+def alternateContinuation {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (_run : ThreadedConstitutiveStageRun state stage) :
+    GeneratedStructuralBranchContinuation stage.schedule.entry.source := by
+  let anchor := stageAnchorVar (depth + 1)
+  refine ⟨Assignment.flipAt anchor stage.sourceContinuation.1, ?_⟩
+  change
+    Assignment.flipAt anchor stage.sourceContinuation.1 stage.discovery.var = false ∧
+      True
+  constructor
+  · rw [Assignment.flipAt_other]
+    · exact stage.sourceContinuation.2.1
+    · have selected := sequentialStage_selected_exact stage
+      change stage.discovery.var = stageSelectedVar (depth + 1) at selected
+      dsimp only [anchor]
+      rw [selected, stageAnchorVar_eq_selected_succ]
+      exact Nat.ne_of_lt (Nat.lt_succ_self _)
+  · exact True.intro
+
+/-- The discovered and comparison transports produce the same observed output. -/
+theorem same_observed_output {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    (discoveredTransport run).map stage.sourceContinuation =
+      (observedConstantTransport run).map stage.sourceContinuation :=
+  rfl
+
+/-- The comparison does not collapse into equality of total actions: on the
+alternate continuation, the discovered map retains the changed anchor bit and
+the constant map does not. -/
+theorem different_total_action {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    (discoveredTransport run).map (alternateContinuation run) ≠
+      (observedConstantTransport run).map (alternateContinuation run) := by
+  intro same
+  have sameAt := congrArg
+    (fun continuation => continuation.1 (stageAnchorVar (depth + 1))) same
+  change
+    Assignment.flipAt stage.discovery.var
+        (Assignment.flipAt (stageAnchorVar (depth + 1))
+          stage.sourceContinuation.1)
+        (stageAnchorVar (depth + 1)) =
+      Assignment.flipAt stage.discovery.var stage.sourceContinuation.1
+        (stageAnchorVar (depth + 1)) at sameAt
+  have anchorDifferent : stageAnchorVar (depth + 1) ≠ stage.discovery.var := by
+    have selected := sequentialStage_selected_exact stage
+    change stage.discovery.var = stageSelectedVar (depth + 1) at selected
+    rw [selected, stageAnchorVar_eq_selected_succ]
+    exact Nat.ne_of_gt (Nat.lt_succ_self _)
+  rw [Assignment.flipAt_other _ _ _ anchorDifferent,
+    Assignment.flipAt_selected,
+    Assignment.flipAt_other _ _ _ anchorDifferent] at sameAt
+  cases value : stage.sourceContinuation.1 (stageAnchorVar (depth + 1)) <;>
+    rw [value] at sameAt <;> cases sameAt
+
+/-- Both transports induce the same complete extensional view on the executed
+system and its actually observed source continuation. -/
+theorem same_extensional_view {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    transportToExtensionalStabilityView (discoveredTransport run)
+        stage.sourceContinuation stage.sourceAccepted =
+      transportToExtensionalStabilityView (observedConstantTransport run)
+        stage.sourceContinuation stage.sourceAccepted :=
+  rfl
+
+/-- The comparison transport agrees with the output recorded by the actual
+executed projection at its observed source continuation. -/
+theorem comparison_matches_executed_observation {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    (observedConstantTransport run).map
+        (executedStepToExtensionalView run).observedSource =
+      (executedStepToExtensionalView run).observedRetained :=
+  (stageApplication_eq_returnedRelationMap run).symm
+
+/-- On the executed family itself, no function of the extensional view can
+recover both the discovered action and the comparison action. -/
+theorem operational_action_not_factors_on_executed_system {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage)
+    (recover : ExtensionalOperationalStabilityView
+      (generatedStructuralBranchSystem
+        (distinctGrowingDiscoveryFormula
+          (constructStage (depth + 1)).searchIndex)) →
+      GeneratedStructuralBranchContinuation stage.schedule.entry.source →
+      GeneratedStructuralBranchContinuation stage.schedule.entry.target)
+    (recoversDiscovered : ∀ continuation,
+      recover
+          (executedStepToExtensionalView run)
+          continuation =
+        (discoveredTransport run).map continuation)
+    (recoversConstant : ∀ continuation,
+      recover
+          (executedStepToExtensionalView run)
+          continuation =
+        (observedConstantTransport run).map continuation) : False := by
+  exact different_total_action run
+    ((recoversDiscovered (alternateContinuation run)).symm.trans
+      (recoversConstant (alternateContinuation run)))
+
+end ExecutedExtensionalSeparator
+
 namespace ExtensionalSeparator
 
 /-- Minimal system in which every Boolean continuation is admissible. -/
@@ -172,6 +326,14 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.extensionalView_observedOutput_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.extensionalView_widthTrace_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.transportToExtensionalStabilityView
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.discoveredTransport
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.observedConstantTransport
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.alternateContinuation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.same_observed_output
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.different_total_action
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.same_extensional_view
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.comparison_matches_executed_observation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.operational_action_not_factors_on_executed_system
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExtensionalSeparator.system
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExtensionalSeparator.preservingTransport
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExtensionalSeparator.collapsingTransport

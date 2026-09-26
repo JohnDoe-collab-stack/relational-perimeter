@@ -280,6 +280,36 @@ def buildExecutedDiscoveryWorkHistory :
       ⟨executedDiscoveryWorkEvidence headRun,
         buildExecutedDiscoveryWorkHistory tailRoles⟩
 
+/-- Read the exact head work record from the causally indexed discovery history. -/
+def executedDiscoveryWorkHistoryHead
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun)
+    (history : ExecutedDiscoveryWorkHistory
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles)) :
+    ExecutedDiscoveryWorkEvidence headRun :=
+  history.1
+
+/-- The discovery-work tail is indexed by the state produced by its head. -/
+def executedDiscoveryWorkHistoryTail
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun)
+    (history : ExecutedDiscoveryWorkHistory
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles)) :
+    ExecutedDiscoveryWorkHistory tailRoles :=
+  history.2
+
 /-- History of extensional projections, indexed by the same causal chain. -/
 def ExtensionalOperationalStabilityHistory :
     {depth count : Nat} →
@@ -309,13 +339,47 @@ def buildExtensionalOperationalStabilityHistory :
       ⟨executedStepToExtensionalView headRun,
         buildExtensionalOperationalStabilityHistory tailRoles⟩
 
-/-- Joined causal certificate over the authoritative dependent role history. -/
+/-- Read the exact executed projection at the head of the dependent history. -/
+def extensionalOperationalStabilityHistoryHead
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun)
+    (history : ExtensionalOperationalStabilityHistory
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles)) :
+    ExtensionalOperationalStabilityView
+      (generatedStructuralBranchSystem
+        (distinctGrowingDiscoveryFormula
+          (constructStage (depth + 1)).searchIndex)) :=
+  history.1
+
+/-- The projected tail remains indexed by the next state of the head run. -/
+def extensionalOperationalStabilityHistoryTail
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun)
+    (history : ExtensionalOperationalStabilityHistory
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles)) :
+    ExtensionalOperationalStabilityHistory tailRoles :=
+  history.2
+
+/-- Closed exact evidence package over the authoritative dependent role history. -/
 structure EndogenousOperationalStabilityEvidence
     {depth count : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
     {run : ConstitutiveExecutionHistory (count := count) state}
     (roles : ThreadedConstitutiveRoleHistory run) : Type 2 where
+  private mk ::
   reductions : ExecutedOperationalReductionHistory roles
   discoveryWork : ExecutedDiscoveryWorkHistory roles
   extensionalProjection : ExtensionalOperationalStabilityHistory roles
@@ -324,12 +388,24 @@ structure EndogenousOperationalStabilityEvidence
   executedExact : executedWidth roles = 1
   structuralComplete : ∀ profile, List.Mem profile (structuralFrontier roles)
   structuralNoDuplicates : (structuralFrontier roles).Nodup
+  pendingComplete : ∀ profile, List.Mem profile (pendingFrontier roles)
+  pendingNoDuplicates : (pendingFrontier roles).Nodup
   operationalComplete : ∀ profile, List.Mem profile (operationalFrontier roles)
   operationalNoDuplicates : (operationalFrontier roles).Nodup
   acceptedPayload : ∀ profile, StructuralAcceptedPayload roles profile
   normalizeAcceptedPayload : ∀ profile,
     StructuralAcceptedPayload roles profile → OperationalAcceptedPayload roles
   transientBound : WidthTraceAtMost 2 (executedWidthTrace roles)
+  reductionsExact : reductions = buildExecutedOperationalReductionHistory roles
+  discoveryWorkExact : discoveryWork = buildExecutedDiscoveryWorkHistory roles
+  extensionalProjectionExact :
+    extensionalProjection = buildExtensionalOperationalStabilityHistory roles
+  acceptedPayloadExact : ∀ profile,
+    acceptedPayload profile =
+      everyStructuralObligationHasAcceptedPayload roles profile
+  normalizeAcceptedPayloadExact : ∀ profile payload,
+    normalizeAcceptedPayload profile payload =
+      normalizeStructuralAcceptedPayload roles profile payload
 
 def endogenousOperationalStabilityEvidence
     {depth count : Nat}
@@ -346,11 +422,18 @@ def endogenousOperationalStabilityEvidence
     executedExact := executedWidth_eq_one roles
     structuralComplete := structuralFrontier_complete roles
     structuralNoDuplicates := structuralFrontier_nodup roles
+    pendingComplete := pendingFrontier_complete roles
+    pendingNoDuplicates := pendingFrontier_nodup roles
     operationalComplete := operationalFrontier_complete roles
     operationalNoDuplicates := operationalFrontier_nodup roles
     acceptedPayload := everyStructuralObligationHasAcceptedPayload roles
     normalizeAcceptedPayload := normalizeStructuralAcceptedPayload roles
-    transientBound := executedWidthTrace_le_two roles }
+    transientBound := executedWidthTrace_le_two roles
+    reductionsExact := rfl
+    discoveryWorkExact := rfl
+    extensionalProjectionExact := rfl
+    acceptedPayloadExact := fun _ => rfl
+    normalizeAcceptedPayloadExact := fun _ _ => rfl }
 
 /-- Public evidence built from the unique causal execution of an input. -/
 def publicEndogenousOperationalStability (input : Nat) :
@@ -419,8 +502,12 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.initialExecutedDiscovery_failed_candidate_rate
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedDiscoveryWorkHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.buildExecutedDiscoveryWorkHistory
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedDiscoveryWorkHistoryHead
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedDiscoveryWorkHistoryTail
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExtensionalOperationalStabilityHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.buildExtensionalOperationalStabilityHistory
+#print axioms ConstitutiveSearch.EndogenousDecomposition.extensionalOperationalStabilityHistoryHead
+#print axioms ConstitutiveSearch.EndogenousDecomposition.extensionalOperationalStabilityHistoryTail
 #print axioms ConstitutiveSearch.EndogenousDecomposition.EndogenousOperationalStabilityEvidence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.endogenousOperationalStabilityEvidence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicEndogenousOperationalStability

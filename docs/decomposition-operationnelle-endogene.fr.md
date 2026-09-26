@@ -50,21 +50,26 @@ carriers finis à partir des mêmes ouvertures :
 
 Ces nombres sont lus sur des carriers énumérés, et non stockés comme des
 annotations indépendantes. Chaque rôle structurel possède une charge locale
-acceptée construite positivement. La réduction de largeur utilise la frontière
-réellement retenue à chaque étape exécutée. Un singleton de même largeur
-numérique, mais construit depuis le mauvais frère, est rejeté par le raccord
-exact à la cible retenue. L’égalité des largeurs ne remplace donc pas la
-réduction sémantique.
+acceptée construite positivement. Pour une même ouverture exécutée, le type des
+positions indexé par `none` contient les deux positions sœurs, tandis que le
+type indexé par `some discoveredTransport` contient exactement la position
+retenue. Le carrier retenu global combine récursivement ces types de positions
+indexés par leur statut. Un singleton de même largeur numérique construit
+depuis l’autre frère est prouvé distinct de la frontière exactement retenue.
+L’égalité des largeurs ne remplace donc pas la réduction sémantique.
 
 La trace transitoire est dérivée des frontières réelles d’entrée, d’ouverture
 et de rétention de chaque étape. Elle est exactement `1 → 2 → 1`, uniformément
 bornée par `2`, tandis que le produit non réduit des choix structurels croît
-comme `2^n`. La construction exhibe ainsi, sur cette famille explicite, comment
-la stabilité sous les transformations reconstruites par l’exécution empêche la
-multiplicité structurelle de devenir une largeur opérationnelle exponentielle.
-Le carrier `2^n` représente le statut indépendant de tous les choix
-structurels ; il n’est pas présenté comme une liste de `2^n` états spontanément
-émis par le moteur séquentiel.
+comme `2^n`. La construction exhibe ainsi, sur cette famille explicite, le
+mécanisme typé précis par lequel un transport reconstruit et préservant
+l’acceptation empêche une ouverture structurelle de demeurer deux positions
+opérationnelles indépendantes : effacer le transport du statut rétablit la
+largeur `2`, tandis qu’incorporer la découverte exécutée donne la largeur `1`.
+L’itération de cette même distinction sépare la largeur en attente `2^n` de la
+largeur retenue `1`. Le carrier `2^n` représente le statut indépendant de tous
+les choix structurels ; il n’est pas présenté comme une liste de `2^n` états
+spontanément émis par le moteur séquentiel.
 
 Le contenu causal est typé indépendamment de cette arithmétique. Le préfixe des
 candidats en échec est extrait de la recherche exécutée elle-même, chacun de ses
@@ -75,7 +80,11 @@ profondeur, au moins neuf dixièmes des tentatives mesurées appartiennent à ce
 préfixe d’échecs prouvés. L’application découverte agit sur des continuations
 arbitraires. Sa loi de préservation est consommée séparément. Le frère absorbé
 reste viable et distinct, et la sortie retenue est la donnée transmise à la
-situation constituée suivante.
+situation constituée suivante. Sur cette famille explicite, la relation
+réussie possède une valeur canonique à chaque profondeur fixée ; son statut
+opérationnel est néanmoins constitué par la recherche exécutée qui la retourne,
+enregistre le préfixe d’échecs, fournit son transport typé et transmet son
+résultat à l’état suivant.
 
 ![Stabilité opérationnelle endogène](figures/endogenous-operational-stability.svg)
 
@@ -83,10 +92,13 @@ situation constituée suivante.
 
 Le dépôt construit également une vue extensionnelle de stabilité qui conserve
 les états source et retenu, une entrée acceptée observée et sa sortie, la trace
-de largeur et sa borne. Il fournit ensuite deux transports totaux ayant cette
-même vue et la même sortie observée, mais agissant différemment sur une autre
-continuation admissible. Aucune fonction de cette vue par état et quantité ne
-peut donc reconstruire l’action opérationnelle totale.
+de largeur et sa borne. Sur le système engendré d’une étape effectivement
+exécutée, il compare le transport découvert avec un transport total de
+comparaison possédant la même source et la même cible exécutées. Les deux
+transports s’accordent sur chaque donnée retenue par la vue pour la continuation
+exécutée observée, mais agissent différemment sur une autre continuation
+admissible. Aucune fonction de cette vue par état et quantité ne peut donc
+reconstruire les deux actions opérationnelles totales.
 
 Cela identifie la limite relative exacte d’une lecture de type Lyapunov dans la
 présente construction. Une description par états, trajectoire observée et
@@ -140,8 +152,8 @@ Les types maintiennent visibles les distinctions suivantes :
 - l’absorption d’une obligation n’est pas une preuve que l’alternative absorbée
   est impossible ;
 - l’égalité d’une lecture n’est pas l’égalité de la recherche constituée ;
-- une graine formée depuis un état produit n’est pas nécessairement une valeur
-  informationnellement nouvelle ;
+- la formation causale d’une graine par un état produit demeure distincte de
+  l’invariant qui détermine sa valeur canonique ;
 - un transport exact réversible n’est pas le transport dirigé utilisé pour
   l’absorption.
 
@@ -198,14 +210,19 @@ Il expose des déclarations sans axiome pour :
 - des carriers structurels complets et sans doublon de largeur exacte `2^n`,
   des carriers en attente de largeur exacte `2^n` et des carriers opérationnels
   retenus de largeur exacte `1` ;
+- la comparaison locale indexée par le type sur une ouverture exécutée :
+  largeur `2` en l’absence de transport opérationnel et largeur `1` avec le
+  transport retourné par la découverte exécutée ;
 - des charges locales acceptées pour chaque rôle structurel, avec la trace
   transitoire exacte `1 → 2 → 1` et sa borne uniforme `2` ;
 - l’extraction du préfixe des candidats effectivement en échec et l’équation
   exacte entre sa longueur et le nombre mesuré de tentatives ;
-- le rejet d’un mauvais singleton qui possède la bonne largeur numérique sans
-  posséder la cible sémantique retenue ;
+- la preuve qu’un mauvais singleton peut posséder la bonne largeur numérique
+  tout en différant de la cible sémantique exactement retenue ;
 - la non-factorisation de l’action opérationnelle totale par la vue
-  extensionnelle de stabilité fondée sur l’état et la quantité.
+  extensionnelle de stabilité fondée sur l’état et la quantité, à la fois dans
+  un séparateur générique fini et sur le système engendré d’une étape
+  effectivement exécutée.
 
 L’implémentation complète demeure sous
 `RelationalPerimeter/Computation/ConstitutiveSearch/`. En particulier,
@@ -218,8 +235,10 @@ ses carriers, ses largeurs exactes et la frontière de projection. Le module de
 formulation est un point d’entrée vers cette implémentation, non son
 remplacement. Les suites de régression comprennent
 `EndogenousOperationalStabilityRegression.lean`, qui vérifie les largeurs
-publiques, le préfixe mesuré d’échecs, l’application découverte, le rejet du
-mauvais singleton et le séparateur de non-factorisation.
+publiques, le changement local de largeur indexé par le statut, chaque champ de
+la réduction exécutée exacte, le préfixe mesuré d’échecs, l’application
+découverte, les histoires causales et le normaliseur exacts, la distinction du
+mauvais singleton et les deux séparateurs de non-factorisation.
 
 ## Portée exacte
 

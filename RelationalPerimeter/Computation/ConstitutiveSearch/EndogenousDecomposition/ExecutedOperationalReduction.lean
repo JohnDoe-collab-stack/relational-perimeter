@@ -52,6 +52,104 @@ def EndogenousFlipDiscovery.openingView {root : Cnf}
     fresh := discovery.fresh
     split := generatedStructuralSplit state discovery.var discovery.fresh }
 
+/-- The relation-free opening actually consumed by the executed reduction. -/
+def executedOpening {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (_run : ThreadedConstitutiveStageRun state stage) :
+    ConstitutedOpeningView (constructStage (depth + 1)).operationalRoot :=
+  EndogenousFlipDiscovery.openingView stage.discovery
+
+/-- Singleton frontier before the executed opening. -/
+def executedEntryFrontier {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (_run : ThreadedConstitutiveStageRun state stage) :
+    List (GeneratedStructuralBranchContext
+      (distinctGrowingDiscoveryFormula
+        (constructStage (depth + 1)).searchIndex)) :=
+  [(constructStage (depth + 1)).operationalRoot]
+
+/-- The two-position frontier produced by the relation-free opening. -/
+def executedOpenedFrontier {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    List (GeneratedStructuralBranchContext
+      (distinctGrowingDiscoveryFormula
+        (constructStage (depth + 1)).searchIndex)) :=
+  [(executedOpening run).left, (executedOpening run).right]
+
+/-- Operational status computed from the transport returned by the executed
+discovery.  Replacing this `some` by `none` changes the position type from a
+singleton retained frontier back to the unreduced two-position frontier. -/
+def executedOperationalStatus {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    Option (AcceptingContinuationTransport
+      (generatedStructuralBranchSystem
+        (distinctGrowingDiscoveryFormula
+          (constructStage (depth + 1)).searchIndex))
+      (executedOpening run).left (executedOpening run).right) :=
+  some stage.discovery.relation.toAcceptingTransport
+
+@[simp] theorem executedOperationalStatus_exact {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    executedOperationalStatus run =
+      some stage.discovery.relation.toAcceptingTransport :=
+  rfl
+
+/-- Before the executed discovery is incorporated, the same opening carries
+both of its structurally distinct alternatives as operational positions. -/
+@[simp] theorem executedPendingStatus_width {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    stageOperationalWidth
+        (system := generatedStructuralBranchSystem
+          (distinctGrowingDiscoveryFormula
+            (constructStage (depth + 1)).searchIndex))
+        (left := (executedOpening run).left)
+        (right := (executedOpening run).right)
+        none = 2 :=
+  rfl
+
+/-- Incorporating the transport returned by the executed discovery changes the
+position type for the same opening to the single retained alternative. -/
+@[simp] theorem executedDiscoveredStatus_width {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    stageOperationalWidth (executedOperationalStatus run) = 1 :=
+  rfl
+
+/-- The local operational-width reduction is induced by changing only the
+status of the executed opening from no transport to its discovered transport. -/
+theorem executedDiscovery_reduces_sameOpening_width {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    stageOperationalWidth
+        (system := generatedStructuralBranchSystem
+          (distinctGrowingDiscoveryFormula
+            (constructStage (depth + 1)).searchIndex))
+        (left := (executedOpening run).left)
+        (right := (executedOpening run).right)
+        none = 2 ∧
+      stageOperationalWidth (executedOperationalStatus run) = 1 :=
+  ⟨executedPendingStatus_width run, executedDiscoveredStatus_width run⟩
+
 /-- The exact sibling reduction licensed by the executed discovery. -/
 def executedSiblingReduction {depth : Nat}
     {assignment : SequentialAssignment depth}
@@ -66,18 +164,9 @@ def executedSiblingReduction {depth : Nat}
         (distinctGrowingDiscoveryFormula
           (constructStage (depth + 1)).searchIndex)
         stage.discovery.var)
-      [
-        (constructStage (depth + 1)).operationalRoot.child
-          stage.discovery.var false stage.discovery.fresh,
-        (constructStage (depth + 1)).operationalRoot.child
-          stage.discovery.var true stage.discovery.fresh
-      ] :=
-  { retained :=
-      [(constructStage (depth + 1)).operationalRoot.child
-        stage.discovery.var true stage.discovery.fresh]
-    preservation :=
-      AcceptedFrontierPreservation.absorbFirstIntoSecond
-        stage.discovery.relation.toAcceptingTransport
+      (executedOpenedFrontier _run) :=
+  { retained := retainedFrontier (executedOperationalStatus _run)
+    preservation := outcomePreservation (executedOperationalStatus _run)
     irreducible :=
       SearchIrreducible.singleton
         (generatedStructuralFlipAtSearch
@@ -277,6 +366,14 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutedOpeningView.left
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutedOpeningView.right
 #print axioms ConstitutiveSearch.EndogenousDecomposition.EndogenousFlipDiscovery.openingView
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedOpening
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedEntryFrontier
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedOpenedFrontier
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedOperationalStatus
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedOperationalStatus_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedPendingStatus_width
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedDiscoveredStatus_width
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedDiscovery_reduces_sameOpening_width
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedSiblingReduction
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedFullPreservation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedOpening_exact

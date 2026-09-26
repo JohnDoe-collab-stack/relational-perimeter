@@ -19,6 +19,7 @@ structure ExecutedOperationalReductionEvidence {depth : Nat}
     {state : ThreadedConstitutiveState depth assignment}
     {stage : SequentialStageRun depth assignment}
     (run : ThreadedConstitutiveStageRun state stage) : Type where
+  private mk ::
   outcomeExact :
     run.discoveryRun.outcome.discovered? = some stage.discovery
   retainedExact :
@@ -119,6 +120,38 @@ def buildExecutedOperationalReductionHistory :
       ⟨executedOperationalReductionEvidence headRun,
         buildExecutedOperationalReductionHistory tailRoles⟩
 
+/-- The head of a reduction history is indexed by the exact executed head run.
+This eliminator makes the causal dependency of the history computationally
+observable; a homogeneous list cannot implement its result type. -/
+def executedOperationalReductionHistoryHead
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun)
+    (history : ExecutedOperationalReductionHistory
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles)) :
+    ExecutedOperationalReductionEvidence headRun :=
+  history.1
+
+/-- The tail remains indexed by the state produced by the exact head run. -/
+def executedOperationalReductionHistoryTail
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {head : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state head}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (tailRoles : ThreadedConstitutiveRoleHistory tailRun)
+    (history : ExecutedOperationalReductionHistory
+      (ThreadedConstitutiveRoleHistory.step headRole tailRoles)) :
+    ExecutedOperationalReductionHistory tailRoles :=
+  history.2
+
 /-- Number of openings read recursively from the dependent role history. -/
 def operationalStageCount :
     {depth count : Nat} →
@@ -153,13 +186,49 @@ def StructuralObligation :
   | _, _, _, _, _, .nil => Unit
   | _, _, _, _, _, .step _ tail => Bool × StructuralObligation tail
 
-/-- Pending profiles retain the same two roles at every opening. -/
-abbrev PendingOperationalObligation {depth count : Nat}
+/-- Positions of one executed opening before any transport is incorporated. -/
+abbrev PendingStagePosition {depth : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
-    {run : ConstitutiveExecutionHistory (count := count) state}
-    (roles : ThreadedConstitutiveRoleHistory run) :=
-  StructuralObligation roles
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :=
+  StageOperationalPosition
+    (system := generatedStructuralBranchSystem
+      (distinctGrowingDiscoveryFormula
+        (constructStage (depth + 1)).searchIndex))
+    (left := (executedOpening run).left)
+    (right := (executedOpening run).right)
+    none
+
+/-- The first position of an executed opening with pending status. -/
+def pendingLeftPosition {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    PendingStagePosition run :=
+  ⟨0, Nat.zero_lt_succ 1⟩
+
+/-- The second position of an executed opening with pending status. -/
+def pendingRightPosition {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    PendingStagePosition run :=
+  ⟨1, Nat.lt_succ_self 1⟩
+
+/-- Pending profiles retain both status-indexed positions at every opening. -/
+def PendingOperationalObligation :
+    {depth count : Nat} →
+    {assignment : SequentialAssignment depth} →
+    {state : ThreadedConstitutiveState depth assignment} →
+    {run : ConstitutiveExecutionHistory (count := count) state} →
+    ThreadedConstitutiveRoleHistory run → Type
+  | _, _, _, _, _, .nil => Unit
+  | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
+      _ _ _ _ _ headRun _ _ tailRoles =>
+      PendingStagePosition headRun × PendingOperationalObligation tailRoles
 
 /-- The unique position of a singleton retained frontier. -/
 def executedRetainedPosition {depth : Nat}
@@ -167,8 +236,8 @@ def executedRetainedPosition {depth : Nat}
     {state : ThreadedConstitutiveState depth assignment}
     {stage : SequentialStageRun depth assignment}
     (run : ThreadedConstitutiveStageRun state stage) :
-    Fin (executedSiblingReduction run).retained.length :=
-  ⟨0, by rw [executedSiblingReduction_retained]; exact Nat.zero_lt_succ 0⟩
+    StageOperationalPosition (executedOperationalStatus run) :=
+  ⟨0, Nat.zero_lt_succ 0⟩
 
 /-- Operational profiles use the positions of the actually retained lists. -/
 def OperationalObligation :
@@ -180,7 +249,7 @@ def OperationalObligation :
   | _, _, _, _, _, .nil => Unit
   | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
       _ _ _ _ _ headRun _ _ tailRoles =>
-      Fin (executedSiblingReduction headRun).retained.length ×
+      StageOperationalPosition (executedOperationalStatus headRun) ×
         OperationalObligation tailRoles
 
 /-- Enumerate every structural role profile constructively. -/
@@ -196,14 +265,21 @@ def structuralFrontier :
       (structuralFrontier tail).map (fun rest => (false, rest)) ++
         (structuralFrontier tail).map (fun rest => (true, rest))
 
-/-- Pending enumeration is the relation-erased structural enumeration. -/
-def pendingFrontier {depth count : Nat}
-    {assignment : SequentialAssignment depth}
-    {state : ThreadedConstitutiveState depth assignment}
-    {run : ConstitutiveExecutionHistory (count := count) state}
-    (roles : ThreadedConstitutiveRoleHistory run) :
-    List (PendingOperationalObligation roles) :=
-  structuralFrontier roles
+/-- Enumerate both pending positions of every executed opening. -/
+def pendingFrontier :
+    {depth count : Nat} →
+    {assignment : SequentialAssignment depth} →
+    {state : ThreadedConstitutiveState depth assignment} →
+    {run : ConstitutiveExecutionHistory (count := count) state} →
+    (roles : ThreadedConstitutiveRoleHistory run) →
+      List (PendingOperationalObligation roles)
+  | _, _, _, _, _, .nil => [()]
+  | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
+      _ _ _ _ _ headRun _ _ tailRoles =>
+      (pendingFrontier tailRoles).map
+          (fun rest => (pendingLeftPosition headRun, rest)) ++
+        (pendingFrontier tailRoles).map
+          (fun rest => (pendingRightPosition headRun, rest))
 
 /-- Enumerate profiles of retained positions from the executed reductions. -/
 def operationalFrontier :
@@ -312,21 +388,58 @@ theorem structuralWidth_eq_two_pow_stageCount :
         _ = 2 ^ (operationalStageCount tail + 1) :=
               (Nat.pow_succ 2 (operationalStageCount tail)).symm
 
+theorem pendingWidth_eq_two_pow_stageCount :
+    ∀ {depth count : Nat}
+      {assignment : SequentialAssignment depth}
+      {state : ThreadedConstitutiveState depth assignment}
+      {run : ConstitutiveExecutionHistory (count := count) state}
+      (roles : ThreadedConstitutiveRoleHistory run),
+      pendingWidth roles = 2 ^ operationalStageCount roles
+  | _, _, _, _, _, .nil => rfl
+  | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
+      _ _ _ _ _ headRun _ _ tailRoles => by
+      change
+        ((pendingFrontier tailRoles).map
+            (fun rest => (pendingLeftPosition headRun, rest)) ++
+          (pendingFrontier tailRoles).map
+            (fun rest => (pendingRightPosition headRun, rest))).length =
+          2 ^ (operationalStageCount tailRoles + 1)
+      have tailWidth : (pendingFrontier tailRoles).length =
+          2 ^ operationalStageCount tailRoles :=
+        pendingWidth_eq_two_pow_stageCount tailRoles
+      calc
+        ((pendingFrontier tailRoles).map
+            (fun rest => (pendingLeftPosition headRun, rest)) ++
+          (pendingFrontier tailRoles).map
+            (fun rest => (pendingRightPosition headRun, rest))).length =
+            ((pendingFrontier tailRoles).map
+              (fun rest => (pendingLeftPosition headRun, rest))).length +
+            ((pendingFrontier tailRoles).map
+              (fun rest => (pendingRightPosition headRun, rest))).length :=
+                length_append_constructive _ _
+        _ = (pendingFrontier tailRoles).length +
+            (pendingFrontier tailRoles).length :=
+              nat_add_congr
+                (length_map_constructive
+                  (fun rest => (pendingLeftPosition headRun, rest)) _)
+                (length_map_constructive
+                  (fun rest => (pendingRightPosition headRun, rest)) _)
+        _ = 2 ^ operationalStageCount tailRoles +
+            2 ^ operationalStageCount tailRoles :=
+              nat_add_congr tailWidth tailWidth
+        _ = 2 ^ operationalStageCount tailRoles * 2 :=
+              (Nat.mul_two _).symm
+        _ = 2 ^ (operationalStageCount tailRoles + 1) :=
+              (Nat.pow_succ 2 (operationalStageCount tailRoles)).symm
+
 theorem pendingWidth_eq_structuralWidth {depth count : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
     {run : ConstitutiveExecutionHistory (count := count) state}
     (roles : ThreadedConstitutiveRoleHistory run) :
     pendingWidth roles = structuralWidth roles :=
-  rfl
-
-theorem pendingWidth_eq_two_pow_stageCount {depth count : Nat}
-    {assignment : SequentialAssignment depth}
-    {state : ThreadedConstitutiveState depth assignment}
-    {run : ConstitutiveExecutionHistory (count := count) state}
-    (roles : ThreadedConstitutiveRoleHistory run) :
-    pendingWidth roles = 2 ^ operationalStageCount roles := by
-  exact structuralWidth_eq_two_pow_stageCount roles
+  (pendingWidth_eq_two_pow_stageCount roles).trans
+    (structuralWidth_eq_two_pow_stageCount roles).symm
 
 theorem executedWidth_eq_one :
     ∀ {depth count : Nat}
@@ -488,6 +601,115 @@ theorem structuralFrontier_nodup :
           have pairSame : (false, leftSource) = (true, rightSource) :=
             Eq.trans leftExact (Eq.trans same rightExact.symm)
           exact Bool.noConfusion (congrArg Prod.fst pairSame))
+
+/-- Every pending position is one of the two positions of its opening. -/
+theorem pendingPosition_eq_left_or_right {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage)
+    (position : PendingStagePosition run) :
+    position = pendingLeftPosition run ∨
+      position = pendingRightPosition run := by
+  cases value : position.val with
+  | zero =>
+      apply Or.inl
+      apply Fin.ext
+      exact value
+  | succ remaining =>
+      apply Or.inr
+      apply Fin.ext
+      have positionBelowTwo : position.val < 2 := position.isLt
+      rw [value] at positionBelowTwo
+      have belowOne : remaining < 1 :=
+        Nat.lt_of_succ_lt_succ positionBelowTwo
+      have isZero : remaining = 0 :=
+        Nat.eq_zero_of_le_zero (Nat.le_of_lt_succ belowOne)
+      rw [value, isZero]
+      rfl
+
+/-- The two pending positions of an opening remain distinct. -/
+theorem pendingPositions_distinct {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    pendingLeftPosition run ≠ pendingRightPosition run := by
+  intro same
+  exact Nat.noConfusion (congrArg Fin.val same)
+
+/-- Every pending status profile occurs in the pending frontier. -/
+theorem pendingFrontier_complete :
+    ∀ {depth count : Nat}
+      {assignment : SequentialAssignment depth}
+      {state : ThreadedConstitutiveState depth assignment}
+      {run : ConstitutiveExecutionHistory (count := count) state}
+      (roles : ThreadedConstitutiveRoleHistory run)
+      (profile : PendingOperationalObligation roles),
+      List.Mem profile (pendingFrontier roles)
+  | _, _, _, _, _, .nil, profile => by
+      change Unit at profile
+      cases profile
+      exact .head _
+  | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
+      _ _ _ _ _ headRun _ _ tailRoles, profile => by
+      change PendingStagePosition headRun ×
+        PendingOperationalObligation tailRoles at profile
+      cases profile with
+      | mk position rest =>
+          cases pendingPosition_eq_left_or_right headRun position with
+          | inl leftExact =>
+              cases leftExact
+              exact mem_append_left_constructive _
+                (mem_map_constructive
+                  (fun value => (pendingLeftPosition headRun, value))
+                  (pendingFrontier_complete tailRoles rest))
+          | inr rightExact =>
+              cases rightExact
+              exact mem_append_right_constructive _
+                (mem_map_constructive
+                  (fun value => (pendingRightPosition headRun, value))
+                  (pendingFrontier_complete tailRoles rest))
+
+/-- The pending frontier enumerates every pending status profile once. -/
+theorem pendingFrontier_nodup :
+    ∀ {depth count : Nat}
+      {assignment : SequentialAssignment depth}
+      {state : ThreadedConstitutiveState depth assignment}
+      {run : ConstitutiveExecutionHistory (count := count) state}
+      (roles : ThreadedConstitutiveRoleHistory run),
+      (pendingFrontier roles).Nodup
+  | _, _, _, _, _, .nil =>
+      .cons (fun _ impossible _ => nomatch impossible) .nil
+  | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
+      _ _ _ _ _ headRun _ _ tailRoles => by
+      change
+        ((pendingFrontier tailRoles).map
+            (fun value => (pendingLeftPosition headRun, value)) ++
+          (pendingFrontier tailRoles).map
+            (fun value => (pendingRightPosition headRun, value))).Nodup
+      have tailNodup := pendingFrontier_nodup tailRoles
+      have leftNodup := nodup_map_constructive
+        (fun value => (pendingLeftPosition headRun, value))
+        (fun same => congrArg Prod.snd same)
+        tailNodup
+      have rightNodup := nodup_map_constructive
+        (fun value => (pendingRightPosition headRun, value))
+        (fun same => congrArg Prod.snd same)
+        tailNodup
+      exact nodup_append_constructive leftNodup rightNodup
+        (fun leftValue leftMem rightValue rightMem same => by
+          let ⟨leftSource, _, leftExact⟩ :=
+            mem_map_preimage_constructive
+              (fun value => (pendingLeftPosition headRun, value)) leftMem
+          let ⟨rightSource, _, rightExact⟩ :=
+            mem_map_preimage_constructive
+              (fun value => (pendingRightPosition headRun, value)) rightMem
+          have pairSame :
+              (pendingLeftPosition headRun, leftSource) =
+                (pendingRightPosition headRun, rightSource) :=
+            Eq.trans leftExact (Eq.trans same rightExact.symm)
+          exact pendingPositions_distinct headRun (congrArg Prod.fst pairSame))
 
 /-- The unique index of a retained singleton is its constructed index zero. -/
 theorem retainedPosition_eq_executedPosition {depth : Nat}
@@ -691,22 +913,39 @@ def everyStructuralObligationHasAcceptedPayload :
               exact ⟨⟨_, headStage.outputAccepted⟩,
                 everyStructuralObligationHasAcceptedPayload tailRoles rest⟩
 
-/-- Width trace of one stage, computed from its actual three frontiers. -/
+/-- The three actual frontier objects of one executed stage. -/
+def executedStageFrontiers {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    List (List (GeneratedStructuralBranchContext
+      (distinctGrowingDiscoveryFormula
+        (constructStage (depth + 1)).searchIndex))) :=
+  [
+    executedEntryFrontier run,
+    executedOpenedFrontier run,
+    (executedSiblingReduction run).retained
+  ]
+
+/-- Width trace of one stage, projected from its three stored frontiers. -/
 def executedStageWidthTrace {depth : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
     {stage : SequentialStageRun depth assignment}
     (run : ThreadedConstitutiveStageRun state stage) : List Nat :=
-  [
-    [(constructStage (depth + 1)).operationalRoot].length,
-    [
-      (constructStage (depth + 1)).operationalRoot.child
-        stage.discovery.var false stage.discovery.fresh,
-      (constructStage (depth + 1)).operationalRoot.child
-        stage.discovery.var true stage.discovery.fresh
-    ].length,
-    (executedSiblingReduction run).retained.length
-  ]
+  (executedStageFrontiers run).map List.length
+
+/-- The stage trace is definitionally the length projection of the actual
+frontier objects; it is not an independently supplied numeric annotation. -/
+theorem executedStageWidthTrace_from_frontiers {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    executedStageWidthTrace run =
+      (executedStageFrontiers run).map List.length :=
+  rfl
 
 /-- Full transient trace, recursively read from the executed role history. -/
 def executedWidthTrace :
@@ -773,9 +1012,14 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedOperationalReductionEvidence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalReductionHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.buildExecutedOperationalReductionHistory
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedOperationalReductionHistoryHead
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedOperationalReductionHistoryTail
 #print axioms ConstitutiveSearch.EndogenousDecomposition.operationalStageCount
 #print axioms ConstitutiveSearch.EndogenousDecomposition.operationalStageCount_eq_historyCount
 #print axioms ConstitutiveSearch.EndogenousDecomposition.StructuralObligation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.PendingStagePosition
+#print axioms ConstitutiveSearch.EndogenousDecomposition.pendingLeftPosition
+#print axioms ConstitutiveSearch.EndogenousDecomposition.pendingRightPosition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.PendingOperationalObligation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedRetainedPosition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.OperationalObligation
@@ -803,6 +1047,10 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.nodup_append_constructive
 #print axioms ConstitutiveSearch.EndogenousDecomposition.structuralFrontier_complete
 #print axioms ConstitutiveSearch.EndogenousDecomposition.structuralFrontier_nodup
+#print axioms ConstitutiveSearch.EndogenousDecomposition.pendingPosition_eq_left_or_right
+#print axioms ConstitutiveSearch.EndogenousDecomposition.pendingPositions_distinct
+#print axioms ConstitutiveSearch.EndogenousDecomposition.pendingFrontier_complete
+#print axioms ConstitutiveSearch.EndogenousDecomposition.pendingFrontier_nodup
 #print axioms ConstitutiveSearch.EndogenousDecomposition.retainedPosition_eq_executedPosition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.operationalFrontier_complete
 #print axioms ConstitutiveSearch.EndogenousDecomposition.operationalFrontier_nodup
@@ -815,7 +1063,9 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.OperationalAcceptedPayload
 #print axioms ConstitutiveSearch.EndogenousDecomposition.normalizeStructuralAcceptedPayload
 #print axioms ConstitutiveSearch.EndogenousDecomposition.everyStructuralObligationHasAcceptedPayload
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedStageFrontiers
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedStageWidthTrace
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedStageWidthTrace_from_frontiers
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedWidthTrace
 #print axioms ConstitutiveSearch.EndogenousDecomposition.WidthTraceAtMost
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedStageWidthTrace_exact

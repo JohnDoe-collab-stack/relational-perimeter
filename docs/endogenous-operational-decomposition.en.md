@@ -48,19 +48,26 @@ three finite carriers from the same openings:
 
 These numbers are read from enumerated carriers, not stored as independent
 annotations. Every structural role has a positively constructed accepted local
-payload. The width reduction uses the actual retained frontier of every
-executed step. A singleton of the same numerical width, but built from the
-wrong sibling, is rejected by the exact retained-target raccord. Thus the
-equality of widths does not replace the semantic reduction.
+payload. For the same executed opening, the position type indexed by `none`
+contains its two sibling positions, while the position type indexed by
+`some discoveredTransport` contains exactly the retained one. The global
+retained carrier recursively combines these status-indexed position types. A
+singleton of the same numerical width built from the other sibling is proved
+distinct from the exact retained frontier. Thus equality of widths does not
+replace the semantic reduction.
 
 The transient trace is derived from the actual entry, opened, and retained
 frontiers of every step. It is exactly `1 → 2 → 1`, uniformly bounded by `2`,
 while the unreduced product of the structural choices grows as `2^n`. The
-construction therefore exhibits, on this explicit family, how stability under
-transformations reconstructed by the run prevents structural multiplicity from
-becoming exponential operational width. The `2^n` carrier represents the
-independent status of all structural choices; it is not presented as a list of
-`2^n` states spontaneously emitted by the sequential engine.
+construction therefore exhibits, on this explicit family, the precise typed
+mechanism by which a reconstructed acceptance-preserving transport prevents a
+structural opening from remaining two independent operational positions:
+erasing the status transport restores width `2`, while incorporating the
+executed discovery gives width `1`. Iterating the same distinction separates
+the pending width `2^n` from the retained width `1`. The `2^n` carrier
+represents the independent status of all structural choices; it is not
+presented as a list of `2^n` states spontaneously emitted by the sequential
+engine.
 
 The causal content is typed independently of this arithmetic. The failed
 candidate prefix is extracted from the executed search itself, every member of
@@ -72,6 +79,10 @@ tenths of the measured attempts belong to this proved failed prefix. The
 discovered map acts on arbitrary continuations. Its preservation law is
 consumed separately. The absorbed sibling remains viable and distinct, and the
 retained output is the datum transmitted to the next constituted situation.
+On this explicit family, the successful relation has a canonical value at each
+fixed depth; its operational status is nevertheless constituted by the
+executed search that returns it, records the failed prefix, supplies its typed
+transport, and feeds its result into the next state.
 
 ![Endogenous operational stability](figures/endogenous-operational-stability.svg)
 
@@ -79,10 +90,13 @@ retained output is the datum transmitted to the next constituted situation.
 
 The repository also constructs an extensional stability view that retains the
 source and retained states, one observed accepted input and output, the width
-trace, and its bound. It then gives two total transports with the same such view
-and the same observed output, but different actions on another admissible
-continuation. Consequently, no function of that state-and-quantity view can
-recover the total operational action.
+trace, and its bound. On the generated system of an actual executed stage, it
+compares the discovered transport with a total comparison transport having the
+same executed source and target. The two transports agree on every datum
+retained by the view at the observed executed continuation, but they act
+differently on another admissible continuation.
+Consequently, no function of that state-and-quantity view can recover both
+total operational actions.
 
 This identifies the exact relative limitation of a Lyapunov-style reading in
 the present construction. A description by states, an observed trajectory, and
@@ -133,7 +147,8 @@ The types keep the following distinctions visible:
 - absorption of one obligation is not a proof that the absorbed alternative is
   impossible;
 - equality of a readout is not equality of the constituted search;
-- a seed formed from a produced state is not an informationally novel value;
+- causal formation of a seed by a produced state remains distinct from the
+  invariant that determines its canonical value;
 - exact two-sided transport is not the directed transport used for absorption.
 
 The last distinction directly connects the computation to the four foundational
@@ -180,14 +195,18 @@ It exposes axiom-free declarations for:
 - complete and duplicate-free structural carriers of exact width `2^n`,
   pending carriers of exact width `2^n`, and retained operational carriers of
   exact width `1`;
+- the local type-indexed comparison on one executed opening: width `2` without
+  an operational transport and width `1` with the transport returned by the
+  executed discovery;
 - accepted local payloads for every structural role, together with the exact
   transient trace `1 → 2 → 1` and its uniform bound `2`;
 - extraction of the actually failed candidate prefix and the exact equation
   between its length and the measured attempt count;
-- rejection of a wrong singleton that has the correct numerical width but not
-  the retained semantic target;
+- proof that a wrong singleton can have the correct numerical width while
+  differing from the exact retained semantic target;
 - non-factorization of total operational action through the extensional
-  state-and-quantity stability view.
+  state-and-quantity stability view, both in a finite generic separator and on
+  the generated system of an actually executed stage.
 
 The complete implementation remains under
 `RelationalPerimeter/Computation/ConstitutiveSearch/`. In particular,
@@ -199,8 +218,10 @@ while `ExecutedOperationalReduction.lean`,
 carriers, its exact widths, and the projection boundary. The statement layer is
 an entry point into that implementation, not a substitute for it. The
 regression suites include `EndogenousOperationalStabilityRegression.lean`,
-which tests the public widths, the measured failed prefix, the discovered map,
-the wrong-singleton rejection, and the non-factorization separator.
+which tests the public widths, the status-indexed local width change, every
+field of the exact executed reduction, the measured failed prefix, the
+discovered map, the exact causal histories and normalizer, the wrong-singleton
+distinction, and both non-factorization separators.
 
 ## Exact scope
 

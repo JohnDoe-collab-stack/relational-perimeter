@@ -58,6 +58,44 @@ def operationalStabilityEvidence (input : Nat) :
     OperationalStabilityEvidence input :=
   publicEndogenousOperationalStability input
 
+/-- The public certificate's reduction history is definitionally the one built
+from the authoritative dependent role history. -/
+theorem operational_reduction_history_is_exact (input : Nat) :
+    (operationalStabilityEvidence input).reductions =
+      buildExecutedOperationalReductionHistory
+        (executeConstitutiveResolution input).feedbackRoleHistory :=
+  (operationalStabilityEvidence input).reductionsExact
+
+/-- The candidate-work history in the public certificate is the executed one. -/
+theorem operational_discovery_work_is_exact (input : Nat) :
+    (operationalStabilityEvidence input).discoveryWork =
+      buildExecutedDiscoveryWorkHistory
+        (executeConstitutiveResolution input).feedbackRoleHistory :=
+  (operationalStabilityEvidence input).discoveryWorkExact
+
+/-- The certificate cannot carry an arbitrary extensional annotation: its
+projection history is exactly the history computed from executed reductions. -/
+theorem operational_projection_history_is_exact (input : Nat) :
+    (operationalStabilityEvidence input).extensionalProjection =
+      buildExtensionalOperationalStabilityHistory
+        (executeConstitutiveResolution input).feedbackRoleHistory :=
+  (operationalStabilityEvidence input).extensionalProjectionExact
+
+/-- The public normalizer is specified pointwise by the executed transport
+history.  A profile-independent replacement does not inhabit this law. -/
+theorem operational_normalizer_is_exact (input : Nat)
+    (profile : StructuralObligation
+      (executeConstitutiveResolution input).feedbackRoleHistory)
+    (payload : StructuralAcceptedPayload
+      (executeConstitutiveResolution input).feedbackRoleHistory profile) :
+    (operationalStabilityEvidence input).normalizeAcceptedPayload
+        profile payload =
+      normalizeStructuralAcceptedPayload
+        (executeConstitutiveResolution input).feedbackRoleHistory
+        profile payload :=
+  (operationalStabilityEvidence input).normalizeAcceptedPayloadExact
+    profile payload
+
 /-- The public causal history contains exactly `input + 1` openings. -/
 theorem operational_stage_count_exact (input : Nat) :
     operationalStageCount
@@ -108,6 +146,84 @@ theorem retained_width_is_strictly_below_pending (input : Nat) :
   rw [operational_stage_count_exact]
   exact Nat.zero_lt_succ input
 
+/-- The canonical public evidence supplies both the exact executed normalizer
+and the global strict width separation.  Their conjunction is exposed here;
+the local type-indexed causal comparison is stated separately by
+`discovered_transport_reduces_same_opening_width`. -/
+theorem executed_transports_induce_operational_width_reduction (input : Nat) :
+    (∀ (profile : StructuralObligation
+        (executeConstitutiveResolution input).feedbackRoleHistory)
+      (payload : StructuralAcceptedPayload
+        (executeConstitutiveResolution input).feedbackRoleHistory profile),
+      (operationalStabilityEvidence input).normalizeAcceptedPayload
+          profile payload =
+        normalizeStructuralAcceptedPayload
+          (executeConstitutiveResolution input).feedbackRoleHistory
+          profile payload) ∧
+    executedWidth
+        (executeConstitutiveResolution input).feedbackRoleHistory <
+      pendingWidth
+        (executeConstitutiveResolution input).feedbackRoleHistory :=
+  ⟨operational_normalizer_is_exact input,
+    retained_width_is_strictly_below_pending input⟩
+
+/-- On this explicit family the successful discovery is canonical at fixed
+depth, although its availability, measured failed prefix, and production as
+data are determined by the executed state-dependent search. -/
+theorem executed_discovery_value_is_canonical_at_depth {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    (stageRecordedDiscoveryRun (depth + 1)).outcome.discovered? =
+      some stage.discovery := by
+  have found := run.discoveryFound
+  have returned := run.relationFromTransmittedState
+  have same : run.discovery = stage.discovery :=
+    Option.some.inj (found.symm.trans returned)
+  rw [← same]
+  exact run.discoveryExact
+
+/-- On an actual executed stage, the comparison transport agrees with the
+recorded projection at the observed source while remaining a distinct total
+action on another continuation. -/
+theorem comparison_transport_matches_executed_observation {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    (ExecutedExtensionalSeparator.observedConstantTransport run).map
+        (executedStepToExtensionalView run).observedSource =
+      (executedStepToExtensionalView run).observedRetained :=
+  ExecutedExtensionalSeparator.comparison_matches_executed_observation run
+
+/-- The non-factorization boundary holds on the generated system of an actual
+executed stage, not only on the finite explanatory separator. -/
+theorem executed_state_width_view_does_not_determine_total_action {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage)
+    (recover : ExtensionalOperationalStabilityView
+      (generatedStructuralBranchSystem
+        (distinctGrowingDiscoveryFormula
+          (constructStage (depth + 1)).searchIndex)) →
+      GeneratedStructuralBranchContinuation stage.schedule.entry.source →
+      GeneratedStructuralBranchContinuation stage.schedule.entry.target)
+    (recoversDiscovered : ∀ continuation,
+      recover
+          (executedStepToExtensionalView run)
+          continuation =
+        (ExecutedExtensionalSeparator.discoveredTransport run).map continuation)
+    (recoversComparison : ∀ continuation,
+      recover
+          (executedStepToExtensionalView run)
+          continuation =
+        (ExecutedExtensionalSeparator.observedConstantTransport run).map
+          continuation) : False :=
+  ExecutedExtensionalSeparator.operational_action_not_factors_on_executed_system
+    run recover recoversDiscovered recoversComparison
+
 /-- In the canonical initial discovery actually executed at every input depth, at least
 nine tenths of the tested candidates belong to the proved failed prefix. -/
 theorem initial_discovery_has_measured_failed_majority (input : Nat) :
@@ -128,6 +244,25 @@ theorem opening_produces_structurally_distinct_alternatives {root : Cnf}
         ⟨discovery.var, true⟩ :=
     List.head_eq_of_cons_eq same
   exact Bool.noConfusion (congrArg StructuralBranchDecision.value head)
+
+/-- For the same executed opening, the absence of an operational transport
+retains two positions while the transport returned by the executed discovery
+retains exactly one.  The width change is therefore indexed by the discovered
+status, not supplied as an independent numerical annotation. -/
+theorem discovered_transport_reduces_same_opening_width {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    stageOperationalWidth
+        (system := generatedStructuralBranchSystem
+          (distinctGrowingDiscoveryFormula
+            (constructStage (depth + 1)).searchIndex))
+        (left := (executedOpening run).left)
+        (right := (executedOpening run).right)
+        none = 2 ∧
+      stageOperationalWidth (executedOperationalStatus run) = 1 :=
+  executedDiscovery_reduces_sameOpening_width run
 
 /--
 The reconstructed relation supplies a total map on arbitrary continuations.
@@ -405,14 +540,23 @@ end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.family
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.OperationalStabilityEvidence
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operationalStabilityEvidence
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_reduction_history_is_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_discovery_work_is_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_projection_history_is_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_normalizer_is_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_stage_count_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.structural_width_is_exponential
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.pending_operational_width_is_exponential
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.retained_operational_width_is_one
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.transient_operational_width_is_bounded
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.retained_width_is_strictly_below_pending
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_transports_induce_operational_width_reduction
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_discovery_value_is_canonical_at_depth
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.comparison_transport_matches_executed_observation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_state_width_view_does_not_determine_total_action
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.initial_discovery_has_measured_failed_majority
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.opening_produces_structurally_distinct_alternatives
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.discovered_transport_reduces_same_opening_width
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.transformContinuation
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.transformContinuation_preserves_acceptance
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.reconstructed_transport_preserves_viability
