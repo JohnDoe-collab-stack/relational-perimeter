@@ -13,7 +13,9 @@ namespace ConstitutiveSearch.EndogenousDecomposition
 
 open SAT
 
-/-- Proof-only certificate for the reduction computed from one executed run. -/
+/-- Minimal proof-only certificate for the reduction computed from one executed
+run. Viability and sibling distinction remain separate positive theorems; they
+are not prerequisites of the reduction certificate itself. -/
 structure ExecutedOperationalReductionEvidence {depth : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -50,21 +52,6 @@ structure ExecutedOperationalReductionEvidence {depth : Nat}
           ((constructStage (depth + 1)).operationalRoot.child
             stage.discovery.var true stage.discovery.fresh)
           (stage.discovery.relation.mapContinuation continuation)
-  sourceSiblingViable :
-    (generatedStructuralBranchSystem
-      (distinctGrowingDiscoveryFormula
-        (constructStage (depth + 1)).searchIndex)).Viable
-      stage.schedule.entry.source
-  targetSiblingViable :
-    (generatedStructuralBranchSystem
-      (distinctGrowingDiscoveryFormula
-        (constructStage (depth + 1)).searchIndex)).Viable
-      stage.schedule.entry.target
-  siblingsDistinct :
-    (constructStage (depth + 1)).operationalRoot.child
-        stage.discovery.var false stage.discovery.fresh ≠
-      (constructStage (depth + 1)).operationalRoot.child
-        stage.discovery.var true stage.discovery.fresh
   applicationUsesReturnedRelation :
     stage.application.output =
       stage.schedule.entry.relation.mapContinuation stage.sourceContinuation
@@ -84,9 +71,6 @@ def executedOperationalReductionEvidence {depth : Nat}
     leftActionExact := executedSiblingReduction_left_eq_discoveredMap run
     rightActionExact := executedSiblingReduction_right_eq_identity run
     criterionPreserved := executedSiblingReduction_preservesAccept run
-    sourceSiblingViable := executedSourceSibling_viable run
-    targetSiblingViable := executedTargetSibling_viable run
-    siblingsDistinct := executedSiblingStates_distinct run
     applicationUsesReturnedRelation := stageApplication_eq_returnedRelationMap run
     outputConstitutesNext := executedOutput_eq_nextOperationalAssignment run }
 
@@ -928,7 +912,9 @@ def executedStageFrontiers {depth : Nat}
     (executedSiblingReduction run).retained
   ]
 
-/-- Width trace of one stage, projected from its three stored frontiers. -/
+/-- Numerical width readout of one stage. It is intentionally treated as a
+derived observation: the causal reduction is carried by the frontier/status
+objects above, not by this list of numbers. -/
 def executedStageWidthTrace {depth : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -936,8 +922,9 @@ def executedStageWidthTrace {depth : Nat}
     (run : ThreadedConstitutiveStageRun state stage) : List Nat :=
   (executedStageFrontiers run).map List.length
 
-/-- The stage trace is definitionally the length projection of the actual
-frontier objects; it is not an independently supplied numeric annotation. -/
+/-- For the canonical implementation, the numerical readout agrees with the
+length projection of the three frontier objects. This theorem records that
+agreement; the readout itself is not a causal premise of the reduction. -/
 theorem executedStageWidthTrace_from_frontiers {depth : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
