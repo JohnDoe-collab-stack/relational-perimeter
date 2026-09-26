@@ -532,9 +532,9 @@ alternatives et ne prouve pas l’impossibilité de celle qui est abandonnée.
 
 Le résultat exécuté produit en outre l’état retenu, la graine, les décisions et
 la provenance consommés par l’étape suivante. La multiplicité structurelle et
-l’indépendance opérationnelle ne sont donc pas confondues : la seconde est
-déterminée pendant le calcul à partir de relations et de données que le calcul
-a lui-même reconstruites ou produites. La présentation détaillée et la portée
+l’indépendance opérationnelle ne sont donc pas confondues : le statut
+opérationnel est constitué pendant le calcul à partir de relations et de données
+que le calcul a lui-même reconstruites ou produites. La présentation détaillée et la portée
 exacte de ce résultat figurent dans
 [Décomposition opérationnelle endogène](decomposition-operationnelle-endogene.fr.md).
 
