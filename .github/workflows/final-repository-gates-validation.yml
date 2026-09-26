@@ -46,6 +46,71 @@ jobs:
         shell: pwsh
         run: ./scripts/verify.ps1
 
+      - name: Regression rejects F6c production-theorem reversion
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > /tmp/F6c.patch <<'PATCH'
+          diff --git a/RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExtensionalOperationalStability.lean b/RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExtensionalOperationalStability.lean
+          --- a/RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExtensionalOperationalStability.lean
+          +++ b/RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExtensionalOperationalStability.lean
+          @@ -310,12 +310,22 @@ theorem operational_action_not_factors_on_executed_system {depth : Nat}
+               {assignment : SequentialAssignment depth}
+               {state : ThreadedConstitutiveState depth assignment}
+               {stage : SequentialStageRun depth assignment}
+          -    (run : ThreadedConstitutiveStageRun state stage) :
+          -    ¬ ActionFactorsThrough
+          -      (executedTransportProjection run)
+          -      (executedTransportAction run) :=
+          -  action_not_factors_of_projection_collision
+          -    (actionProjectionCollision run)
+          +    (run : ThreadedConstitutiveStageRun state stage)
+          +    (recover : ExtensionalOperationalStabilityView
+          +      (generatedStructuralBranchSystem
+          +        (distinctGrowingDiscoveryFormula
+          +          (constructStage (depth + 1)).searchIndex)) →
+          +      GeneratedStructuralBranchContinuation stage.schedule.entry.source →
+          +      GeneratedStructuralBranchContinuation stage.schedule.entry.target)
+          +    (recoversDiscovered : ∀ continuation,
+          +      recover (executedTransportProjection run (discoveredTransport run)) continuation =
+          +        (discoveredTransport run).map continuation)
+          +    (recoversConstant : ∀ continuation,
+          +      recover (executedTransportProjection run (observedConstantTransport run))
+          +          continuation =
+          +        (observedConstantTransport run).map continuation) : False :=
+          +  different_total_action run
+          +    ((recoversDiscovered _).symm.trans (recoversConstant _))
+           
+           end ExecutedExtensionalSeparator
+           
+          diff --git a/RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean b/RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean
+          --- a/RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean
+          +++ b/RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean
+          @@ -227,8 +227,8 @@ theorem executed_state_width_view_does_not_determine_total_action {depth : Nat}
+               ¬ ActionFactorsThrough
+                 (ExecutedExtensionalSeparator.executedTransportProjection run)
+                 (ExecutedExtensionalSeparator.executedTransportAction run) :=
+          -  ExecutedExtensionalSeparator.operational_action_not_factors_on_executed_system
+          -    run
+          +  action_not_factors_of_projection_collision
+          +    (ExecutedExtensionalSeparator.actionProjectionCollision run)
+           
+           /-- In the canonical initial-origin discovery associated with each input depth,
+           at least nine tenths of the tested candidates belong to the proved failed
+          PATCH
+          git apply /tmp/F6c.patch
+          set +e
+          lake build > /tmp/f6c.log 2>&1
+          status=$?
+          set -e
+          git restore --             RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExtensionalOperationalStability.lean             RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean
+          if [ "$status" -eq 0 ]; then
+            cat /tmp/f6c.log
+            echo "F6c unexpectedly survived the frozen regression suite" >&2
+            exit 1
+          fi
+          grep -F 'productionExecutedNonFactorizationHasAbstractType' /tmp/f6c.log
+
       - name: Bash verifier rejects a Lean warning
         shell: bash
         run: |
