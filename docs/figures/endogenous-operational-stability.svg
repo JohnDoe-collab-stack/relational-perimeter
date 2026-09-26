@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="990" viewBox="0 0 1440 990" role="img" aria-labelledby="title desc">
   <title id="title">Endogenous operational stability</title>
-  <desc id="desc">The relational framework constitutes openings, executed search discovers a total transport and a separate preservation proof, and the resulting reduction changes structural multiplicity into one retained operational obligation while conditioning the next stage. An extensional state-and-width view forgets the total action and cannot reconstruct it.</desc>
+  <desc id="desc">The relational framework constitutes openings, executed search discovers a total transport and a separate preservation proof, and the discovered transport supplies the operational status indexing one retained position while conditioning the next stage. The numerical width trace is a derived readout. An extensional state-and-width view forgets the total action and cannot reconstruct it.</desc>
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#081426"/>
@@ -45,7 +45,7 @@
 
   <rect width="1440" height="990" fill="url(#background)"/>
   <text x="70" y="62" class="title">Endogenous operational stability</text>
-  <text x="70" y="92" class="subtitle">Structural multiplicity is constituted first; operational independence is then constituted by executed discovery and proved preservation.</text>
+  <text x="70" y="92" class="subtitle">Structural multiplicity is constituted first; operational status is then indexed by executed discovery and proved preservation.</text>
 
   <text x="70" y="144" class="section">1 · CONSTITUTED OPENING</text>
   <rect x="70" y="165" width="360" height="245" fill="url(#constitutive)" class="card"/>
@@ -58,7 +58,7 @@
   <circle cx="342" cy="368" r="24" fill="#183a54" stroke="#9bdcff" stroke-width="2"/>
   <text x="150" y="375" class="mono">L</text>
   <text x="334" y="375" class="mono">R</text>
-  <text x="98" y="397" class="small">No operational transport is stored in this view.</text>
+  <text x="98" y="404" class="small">Opening view stores no operational transport.</text>
 
   <text x="540" y="144" class="section">2 · EXECUTED RECONSTRUCTION</text>
   <rect x="540" y="165" width="360" height="245" fill="url(#executed)" class="card"/>
@@ -103,7 +103,7 @@
   <text x="749" y="656" class="small">one retained position per opening</text>
   <text x="1074" y="562" class="label">Transient trace</text>
   <text x="1074" y="605" class="metric">1 → 2 → 1</text>
-  <text x="1074" y="635" class="small">actual frontier lengths</text>
+  <text x="1074" y="635" class="small">derived numeric readout</text>
   <text x="1074" y="656" class="small">uniform bound ≤ 2 at every stage</text>
 
   <path d="M1260 410 L1260 472 L250 472 L250 412" class="feedback"/>
@@ -114,9 +114,9 @@
   <rect x="70" y="763" width="1300" height="177" fill="#10192b" class="card"/>
   <text x="99" y="801" class="label">State-and-quantity view keeps</text>
   <text x="99" y="831" class="body">source state · retained state · observed accepted input</text>
-  <text x="99" y="855" class="body">observed output · frontier-width trace · bound</text>
-  <text x="99" y="893" class="small">On an actual executed stage, discovered and comparison transports agree on every datum shown here,</text>
-  <text x="99" y="916" class="small">yet act differently on another admissible continuation.</text>
+  <text x="99" y="855" class="body">observed output · supplied width readout · bound</text>
+  <text x="99" y="893" class="small">On an actual executed stage, separately projected discovered and comparison transports give equal views,</text>
+  <text x="99" y="916" class="small">yet their total actions differ on another admissible continuation.</text>
   <rect x="930" y="795" width="402" height="90" rx="12" fill="#281f3a" stroke="#c8a6ff" stroke-width="1.5"/>
   <text x="954" y="833" class="mono">same observed stability view</text>
   <text x="954" y="859" class="mono">≠ recoverable total action</text>
