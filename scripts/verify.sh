@@ -47,6 +47,10 @@ fi
 build_log="$(mktemp)"
 trap 'rm -f "$build_log"' EXIT
 "${lake_command[@]}" build 2>&1 | tee "$build_log"
+if grep -F 'warning:' "$build_log"; then
+  echo 'Lean warning detected in lake build output' >&2
+  exit 1
+fi
 if grep -E 'depends on axioms:|sorryAx' "$build_log"; then
   echo 'axiom audit failure detected in lake build output' >&2
   exit 1
