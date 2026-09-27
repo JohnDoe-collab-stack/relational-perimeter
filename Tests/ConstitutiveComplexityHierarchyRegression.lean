@@ -63,10 +63,31 @@ theorem everyInstructionDoublesTailExpansion
       tailRoles) :
     (ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerProgram.step
         headRole instruction tail).profileFrontier =
-      (tail.profileFrontier.map (fun rest => (false, rest))) ++
-        (tail.profileFrontier.map (fun rest => (true, rest))) :=
+      (tail.profileFrontier.map (fun rest =>
+        (ConstitutiveNormalizerInstruction.Alternative.transformed
+          (instruction := instruction), rest))) ++
+        (tail.profileFrontier.map (fun rest =>
+          (ConstitutiveNormalizerInstruction.Alternative.retained
+            (instruction := instruction), rest))) :=
   ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerProgram.profileFrontier_step
     headRole instruction tail
+
+/-- The two head alternatives are inhabitants of the family indexed by the
+stored instruction, not free Boolean data attached only to the program depth. -/
+theorem headAlternativesAreIndexedByStoredInstruction
+    {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state stage}
+    (instruction : ConstitutiveNormalizerInstruction headRun) :
+    ConstitutiveNormalizerInstruction.Alternative.choice
+        (ConstitutiveNormalizerInstruction.Alternative.transformed
+          (instruction := instruction)) = false ∧
+      ConstitutiveNormalizerInstruction.Alternative.choice
+        (ConstitutiveNormalizerInstruction.Alternative.retained
+          (instruction := instruction)) = true :=
+  ⟨rfl, rfl⟩
 
 theorem programProfilesRequireExponentialSlots (input : Nat)
     (addressing : IndependentProgramProfileAddressing input) :
@@ -117,18 +138,39 @@ theorem everyProgramStepConsumesStoredInstruction
     {tailRoles : ThreadedConstitutiveRoleHistory tailRun}
     (tail : ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerProgram
       tailRoles)
-    (choice : Bool) (rest : tail.Profile)
-    (headPayload : LocalAcceptedPayload headRun choice)
+    (alternative : instruction.Alternative) (rest : tail.Profile)
+    (headPayload : LocalAcceptedPayload headRun alternative.choice)
     (tailPayload : tail.AcceptedProfilePayload rest) :
     interpretConstitutiveNormalizerProgramProfile
         (ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerProgram.step
           headRole instruction tail)
-        (choice, rest) (headPayload, tailPayload) =
+        (alternative, rest) (headPayload, tailPayload) =
       (interpretConstitutiveNormalizerInstruction headRun instruction
-          choice headPayload,
+          alternative.choice headPayload,
         interpretConstitutiveNormalizerProgramProfile tail rest tailPayload) :=
   interpretConstitutiveNormalizerProgramProfile_step
-    headRole instruction tail choice rest headPayload tailPayload
+    headRole instruction tail alternative rest headPayload tailPayload
+
+/-- The interpreter's dependence on a raw instruction is semantic: differing
+instruction actions force differing interpreted outputs on the same accepted
+source payload. -/
+theorem rawInterpreterSeparatesDifferentInstructionActions
+    {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage)
+    (first second : ConstitutiveNormalizerInstruction run)
+    (payload : LocalAcceptedPayload run false)
+    (different :
+      (first.toAcceptingTransport run).map
+          (leftPayloadAtScheduleSource run payload).1 ≠
+        (second.toAcceptingTransport run).map
+          (leftPayloadAtScheduleSource run payload).1) :
+    (interpretConstitutiveNormalizerInstruction run first false payload).1 ≠
+      (interpretConstitutiveNormalizerInstruction run second false payload).1 :=
+  interpretConstitutiveNormalizerInstruction_sensitive
+    run first second payload different
 
 theorem authoritativeInstructionProjectsToExecutedView
     {depth : Nat}
@@ -152,6 +194,25 @@ theorem projectedViewDoesNotDetermineAuthoritativeAction
       (ExecutedExtensionalSeparator.executedTransportAction run) :=
   executed_state_width_view_does_not_determine_total_action run
 
+/-- The collision statement itself, not only its proof, is anchored at the
+authoritative instruction returned by the execution. -/
+theorem authoritativeInstructionHasTypedProjectionCollision
+    {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    ∃ comparison argument,
+      ExecutedExtensionalSeparator.executedTransportProjection run
+          ((authoritativeNormalizerInstruction run).toAcceptingTransport run) =
+        ExecutedExtensionalSeparator.executedTransportProjection run comparison ∧
+      ExecutedExtensionalSeparator.executedTransportAction run
+          ((authoritativeNormalizerInstruction run).toAcceptingTransport run)
+          argument ≠
+        ExecutedExtensionalSeparator.executedTransportAction run
+          comparison argument :=
+  authoritative_instruction_has_projection_collision run
+
 theorem instrumentedWorkRemainsSeparate (input : Nat) :
     (executeConstitutiveResolution input).instrumentedWork ≤
       resolutionInstrumentedPolynomial.eval input :=
@@ -168,13 +229,16 @@ end RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression
 #print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.programExpansionNoDuplicates
 #print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.everyProgramProfileAccepted
 #print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.everyInstructionDoublesTailExpansion
+#print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.headAlternativesAreIndexedByStoredInstruction
 #print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.programProfilesRequireExponentialSlots
 #print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.programInstructionCountEqualsCodeSize
 #print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.programCodeSize
 #print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.programReturnsExecutedCodes
 #print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.programInterpretsItsExpansion
 #print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.everyProgramStepConsumesStoredInstruction
+#print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.rawInterpreterSeparatesDifferentInstructionActions
 #print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.authoritativeInstructionProjectsToExecutedView
+#print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.authoritativeInstructionHasTypedProjectionCollision
 #print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.projectedViewDoesNotDetermineAuthoritativeAction
 #print axioms RelationalPerimeter.Tests.ConstitutiveComplexityHierarchyRegression.instrumentedWorkRemainsSeparate
 /- AXIOM_AUDIT_END -/

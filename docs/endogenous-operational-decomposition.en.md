@@ -92,8 +92,12 @@ history constructs `ConstitutiveNormalizerProgram`, whose canonical value has
 one instruction per opening. `StructuralObligation roles` is an abbreviation
 for that program's `Profile` type, while `structuralFrontier roles` is the
 program's recursively generated `profileFrontier`. The extensive carrier is
-therefore produced by the program's binary instruction shape; it is not a
-second carrier derived independently from the role count.
+therefore produced by the program's instructions; it is not a second carrier
+derived independently from the role count. At each step, the head alternative
+has type `instruction.Alternative`: its two constructors are indexed by the
+stored instruction. An alternative, profile, or addressing for another
+instruction cannot be substituted directly merely because both openings are
+binary.
 
 The program expansion is proved complete and duplicate-free, and satisfies
 
@@ -121,9 +125,13 @@ by the same program and is proved, through constructive structural adapters,
 exactly equal to `normalizeStructuralAcceptedPayload` on every accepted
 expanded profile. Every generated profile has a positively constructed
 accepted payload indexed by that exact program, so this semantic statement is
-non-vacuous on the complete expansion. The code erasure equals the public run's exact
-`returnedCodes` history. The raw program metric equals `compiledLocalSize`, and
-both are exactly `n = input + 1`.
+non-vacuous on the complete expansion. On raw instructions,
+`interpretConstitutiveNormalizerInstruction_sensitive` states the semantic
+dependence explicitly: if two instruction actions differ on the accepted
+source payload, their interpreted left outputs differ. Instruction consumption
+is therefore not protected only by a definitional equation. The code erasure
+equals the public run's exact `returnedCodes` history. The raw program metric
+equals `compiledLocalSize`, and both are exactly `n = input + 1`.
 
 The resulting hierarchy is exact:
 
@@ -134,10 +142,12 @@ executed relational constitution
   -> independent finite addressing           : at least 2^n slots
 ```
 
-The program produces the frontier's cardinality in this precise typed sense:
-the frontier is its recursive binary expansion. This is a
-representation-relative result; it does not say that every representation
-must materialize the frontier or prove a universal time or memory lower bound.
+The program produces the frontier in this precise typed sense: the carrier is
+recursively indexed by its stored instructions. Its exact cardinality depends
+only on the instruction count because each instruction-indexed alternative has
+exactly two constructors. This is a representation-relative result; it does
+not say that every representation must materialize the frontier or prove a
+universal time or memory lower bound.
 The retained operational width and internal instrumented cost remain separate
 results. The state-and-quantity projection is further downstream: it is
 obtained from the authoritative instruction's total action, but does not
@@ -153,9 +163,11 @@ explicitly supplied numerical width readout, and its bound. The generic layer
 defines `ActionFactorsThrough`: a total action factors through a projection
 when one action on projected values recovers it on every argument. It also
 defines `ActionProjectionCollision`: two preimages have equal projections but
-their total actions differ at one argument. The generic theorem
-`action_not_factors_of_projection_collision` consumes that projection equality
-explicitly and constructively refutes factorization.
+their total actions differ at one argument. Its indexed form,
+`AnchoredActionProjectionCollision project action first`, fixes the first
+preimage in the witness type itself. The generic theorem
+`action_not_factors_of_anchored_projection_collision` consumes that anchored
+collision and constructively refutes factorization.
 
 On the generated system of an actual executed stage, the total transport
 denoted by the authoritative instruction and a comparison transport with the
@@ -164,16 +176,17 @@ instruction acts pointwise as the discovered relation on every continuation.
 The two transports are separately projected; their projected views are equal
 at the observed executed continuation, while their total actions differ on
 another admissible continuation. The executed non-factorization theorem is
-therefore an instance of the generic projection-collision theorem whose first
-preimage is the program instruction itself, rather than a pair-specific
-one-view contradiction.
+therefore an instance of the anchored generic theorem. Its public statement,
+`authoritative_instruction_projection_collision`, explicitly exhibits a
+collision whose first preimage is the authoritative program instruction; that
+preimage is not a freely assignable field of the witness.
 
-This identifies the exact relative limitation of a Lyapunov-style reading in
-the present construction. A description by states, an observed trajectory, and
-a bounded quantity is a forgetful projection of the constituted operational
-process: it records the stability, but it does not determine the transformation
-whose executed reconstruction produced that stability. This is a formal
-non-factorization result for the projection defined here, not a claim that every
+This identifies the exact relative limitation of the state-and-quantity
+projection defined here. That projection retains states, one observed
+trajectory segment, and a bounded quantity, but forgets part of the constituted
+operational process: it records the stability readout without determining the
+transformation whose executed reconstruction produced it. This is a formal
+non-factorization result for this specified projection, not a claim that every
 formulation of classical stability theory has been formalized.
 
 ## Executed chain

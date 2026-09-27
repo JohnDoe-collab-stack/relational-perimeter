@@ -117,16 +117,18 @@ viability and distinction remain separately proved positive consequences.
 A state-and-quantity projection preserves the observed states, output, width
 readout, and bound, but does not determine the total operational action. At the
 generic level, `ActionFactorsThrough` expresses recoverability of a total
-action from a projection, while `ActionProjectionCollision` records equal
-projected values whose total actions differ at one argument; the generic
-non-factorization theorem explicitly consumes that projection equality. On the
+action from a projection, while `AnchoredActionProjectionCollision` records
+equal projected values whose total actions differ at one argument and fixes
+its first preimage in the witness type. On the
 actual executed generated system, the total transport stored by the
 authoritative instruction and a comparison transport instantiate this
 collision: their separately constructed views are equal, they agree at the
 observed executed continuation, and their total actions differ on another
 admissible continuation. The instruction acts pointwise as the discovered
-relation on every continuation. In this exact sense, the extensional stability
-reading is a forgetful projection of the constituted operational process.
+relation on every continuation. The public collision theorem mentions that
+authoritative instruction explicitly in its conclusion. In this exact sense,
+the specified state-and-quantity view is a forgetful projection of the
+constituted operational process.
 
 ![Endogenous operational stability](docs/figures/endogenous-operational-stability.svg)
 
@@ -135,13 +137,19 @@ comparison. For a public run with `n = input + 1` constituted openings, the
 executed role history constructs an authoritative typed program with exactly
 `n` transport instructions. `StructuralObligation` is literally the profile
 type of that program, and `structuralFrontier` is literally its complete,
-duplicate-free binary expansion, of exact width `2^n`. Any finite interface
+duplicate-free binary expansion, of exact width `2^n`. At every step the two
+profile constructors belong to the stored instruction's own indexed
+`Alternative` type; profiles for distinct instructions are not directly
+interchangeable. The exact cardinality depends only on the instruction count
+because each indexed alternative has exactly two constructors. Any finite interface
 that keeps those program-produced profiles independently addressable therefore
 requires at least `2^n` distinct slots. The same program interprets every
 accepted profile in its expansion exactly as the canonical normalizer and
 every generated profile has a positively constructed accepted payload indexed
-by that program. It erases to the exact returned-code history. Its raw atom
-count is proved equal to `compiledLocalSize` and to `n`.
+by that program. A separate sensitivity theorem states that different raw
+instruction actions produce different interpreted left outputs whenever they
+differ on the accepted payload. It erases to the exact returned-code history.
+Its raw atom count is proved equal to `compiledLocalSize` and to `n`.
 
 The extensive profile space is thus a deployment of the constituted program,
 not a parallel carrier sharing only a common index. The audited
@@ -229,9 +237,17 @@ lake build
 The complete repository gate is available on both supported command surfaces:
 
 ```text
-powershell -File scripts/verify.ps1
+pwsh -NoProfile -File scripts/verify.ps1
 bash scripts/verify.sh
 ```
+
+Both gates traverse the declared import boundaries and compile four
+expected-failure fixtures. These fixtures verify that the public certificate
+constructor remains private, that profiles from distinct stored instructions
+are not directly interchangeable, that the projection collision remains indexed
+by the authoritative instruction transport, and that an interpreter which
+ignores an arbitrary raw instruction cannot satisfy its semantic output
+specification.
 
 All Lean sources are constructive: they contain no `sorry`, `axiom`, or
 `noncomputable` declaration, and their final axiom-audit blocks report no axiom
@@ -280,15 +296,23 @@ conserve ces profils produits par le programme comme adresses indépendantes
 exige donc au moins `2^n` emplacements distincts. Le même programme interprète
 exactement toute charge acceptée de son expansion comme le normalisateur
 canonique, et chaque profil engendré possède une charge acceptée construite
-positivement et indexée par ce programme. Il s’efface vers l’histoire exacte
-des codes retournés. Son nombre d’atomes brut est prouvé égal à
-`compiledLocalSize` et à `n`.
+positivement et indexée par ce programme. À chaque étape, les deux constructeurs
+du profil appartiennent au type `Alternative` indexé par l’instruction stockée ;
+les profils d’instructions distinctes ne sont pas directement interchangeables.
+La cardinalité exacte ne dépend que du nombre d’instructions parce que chaque
+alternative indexée possède exactement deux constructeurs. Un théorème de
+sensibilité séparé établit que deux actions brutes distinctes donnent des
+sorties gauches interprétées distinctes dès qu’elles diffèrent sur la charge
+acceptée. Le programme s’efface vers l’histoire exacte des codes retournés. Son
+nombre d’atomes brut est prouvé égal à `compiledLocalSize` et à `n`.
 
 L’espace extensif des profils est ainsi un déploiement du programme constitué,
 et non un carrier parallèle partageant seulement un même index. La vue auditée
 par état et quantité se trouve encore en aval : elle est une projection de
-l’action totale d’une instruction faisant autorité, et le théorème de collision
-établit que cette projection ne reconstruit pas l’action totale. La largeur
+l’action totale d’une instruction faisant autorité. La collision est ancrée
+dans son type sur cette instruction, que son énoncé public mentionne
+explicitement, et elle établit que cette projection déterminée ne reconstruit
+pas l’action totale. La largeur
 opérationnelle dérivée et le coût instrumenté interne restent des résultats
 séparés. L’énoncé est relatif à la représentation : il prouve la borne exacte
 de l’adressage fini indépendant, non une borne universelle en temps ou en

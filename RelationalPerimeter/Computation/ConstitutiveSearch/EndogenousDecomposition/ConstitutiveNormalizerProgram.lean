@@ -113,6 +113,44 @@ theorem interpretConstitutiveNormalizerInstruction_false
           transport.preservesAccept source.1 source.2⟩ :=
   rfl
 
+/-- The left-output specification is written in terms of the supplied raw
+instruction itself.  It therefore distinguishes two instructions whenever
+their total actions differ on the accepted payload under consideration. -/
+theorem interpretConstitutiveNormalizerInstruction_output_exact
+    {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage)
+    (instruction : ConstitutiveNormalizerInstruction run)
+    (payload : LocalAcceptedPayload run false) :
+    (interpretConstitutiveNormalizerInstruction run instruction false payload).1 =
+      (instruction.toAcceptingTransport run).map
+        (leftPayloadAtScheduleSource run payload).1 :=
+  rfl
+
+/-- Semantic sensitivity of the raw interpreter to its instruction.  A bypass
+through a fixed discovered map cannot satisfy this theorem for arbitrary raw
+instructions whose actions differ on an accepted source payload. -/
+theorem interpretConstitutiveNormalizerInstruction_sensitive
+    {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage)
+    (first second : ConstitutiveNormalizerInstruction run)
+    (payload : LocalAcceptedPayload run false)
+    (different :
+      (first.toAcceptingTransport run).map
+          (leftPayloadAtScheduleSource run payload).1 ≠
+        (second.toAcceptingTransport run).map
+          (leftPayloadAtScheduleSource run payload).1) :
+    (interpretConstitutiveNormalizerInstruction run first false payload).1 ≠
+      (interpretConstitutiveNormalizerInstruction run second false payload).1 := by
+  rw [interpretConstitutiveNormalizerInstruction_output_exact]
+  rw [interpretConstitutiveNormalizerInstruction_output_exact]
+  exact different
+
 /-- The retained right payload is definitionally unchanged by one local
 instruction. -/
 theorem interpretConstitutiveNormalizerInstruction_true
@@ -312,7 +350,7 @@ def ConstitutiveNormalizerProgram.AcceptedProfilePayload :
   | _, _, _, _, _, _, .nil, _ => Unit
   | _, _, _, _, _, _, @ConstitutiveNormalizerProgram.step
       _ _ _ _ _ headRun _ _ _ _ tail, profile =>
-      LocalAcceptedPayload headRun profile.1 ×
+      LocalAcceptedPayload headRun profile.1.choice ×
         tail.AcceptedProfilePayload profile.2
 
 /-- Output payload produced by executing every instruction of one typed
@@ -345,7 +383,7 @@ def interpretConstitutiveNormalizerProgramProfile :
   | _, _, _, _, _, _, @ConstitutiveNormalizerProgram.step
       _ _ _ _ _ headRun _ _ instruction _ tail, profile, payload =>
       ⟨interpretConstitutiveNormalizerInstruction headRun instruction
-          profile.1 payload.1,
+          profile.1.choice payload.1,
         interpretConstitutiveNormalizerProgramProfile tail profile.2 payload.2⟩
 
 /-- One program step necessarily evaluates its stored instruction and then the
@@ -362,14 +400,14 @@ theorem interpretConstitutiveNormalizerProgramProfile_step
     (instruction : ConstitutiveNormalizerInstruction headRun)
     {tailRoles : ThreadedConstitutiveRoleHistory tailRun}
     (tail : ConstitutiveNormalizerProgram tailRoles)
-    (choice : Bool) (rest : tail.Profile)
-    (headPayload : LocalAcceptedPayload headRun choice)
+    (alternative : instruction.Alternative) (rest : tail.Profile)
+    (headPayload : LocalAcceptedPayload headRun alternative.choice)
     (tailPayload : tail.AcceptedProfilePayload rest) :
     interpretConstitutiveNormalizerProgramProfile
         (ConstitutiveNormalizerProgram.step headRole instruction tail)
-        (choice, rest) (headPayload, tailPayload) =
+        (alternative, rest) (headPayload, tailPayload) =
       (interpretConstitutiveNormalizerInstruction headRun instruction
-          choice headPayload,
+          alternative.choice headPayload,
         interpretConstitutiveNormalizerProgramProfile tail rest tailPayload) :=
   rfl
 
@@ -465,7 +503,7 @@ theorem interpretBuiltConstitutiveNormalizerProgramProfile_exact
       cases profile with
       | mk choice rest =>
           cases choice with
-          | false =>
+          | transformed =>
               cases payload with
               | mk headPayload tailPayload =>
                   exact Eq.trans
@@ -484,7 +522,7 @@ theorem interpretBuiltConstitutiveNormalizerProgramProfile_exact
                         (normalizeLocalAcceptedPayload _ false headPayload,
                           tailValue))
                       (inductionHypothesis rest tailPayload))
-          | true =>
+          | retained =>
               cases payload with
               | mk headPayload tailPayload =>
                   exact Eq.trans
@@ -519,7 +557,7 @@ def interpretConstitutiveNormalizerProgram :
   | _, _, _, _, _, _, @ConstitutiveNormalizerProgram.step
       _ _ _ _ _ headRun _ _ instruction _ tail, profile, payload =>
       ⟨interpretConstitutiveNormalizerInstruction headRun instruction
-          profile.1 payload.1,
+          profile.1.choice payload.1,
         interpretConstitutiveNormalizerProgram tail profile.2 payload.2⟩
 
 /-- Program interpretation equals the canonical structural normalization when
@@ -543,7 +581,7 @@ theorem interpretAuthoritativeConstitutiveNormalizerProgram_exact
       cases profile with
       | mk choice rest =>
           cases choice with
-          | false =>
+          | transformed =>
               cases payload with
               | mk headPayload tailPayload =>
                   change
@@ -563,7 +601,7 @@ theorem interpretAuthoritativeConstitutiveNormalizerProgram_exact
                       (fun tailValue =>
                         (normalizeLocalAcceptedPayload _ false headPayload, tailValue))
                       (inductionHypothesis authority.2 rest tailPayload))
-          | true =>
+          | retained =>
               cases payload with
               | mk headPayload tailPayload =>
                   change
@@ -598,6 +636,8 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.scheduledTarget_from_discovery_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.interpretConstitutiveNormalizerInstruction
 #print axioms ConstitutiveSearch.EndogenousDecomposition.interpretConstitutiveNormalizerInstruction_false
+#print axioms ConstitutiveSearch.EndogenousDecomposition.interpretConstitutiveNormalizerInstruction_output_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.interpretConstitutiveNormalizerInstruction_sensitive
 #print axioms ConstitutiveSearch.EndogenousDecomposition.interpretConstitutiveNormalizerInstruction_true
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedCode_map_eq_discoveredMap
 #print axioms ConstitutiveSearch.EndogenousDecomposition.interpretAuthoritativeNormalizerInstruction_exact

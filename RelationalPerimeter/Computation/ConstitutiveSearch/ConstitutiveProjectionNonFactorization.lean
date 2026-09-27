@@ -77,6 +77,39 @@ structure ActionProjectionCollision
   argument : X
   differentAction : action first argument ≠ action second argument
 
+/-- A projection collision anchored at a specified first preimage.  The anchor
+is an index of the witness type rather than a freely replaceable field. -/
+structure AnchoredActionProjectionCollision
+    {A : Type uA}
+    {B : Type uB}
+    {X : Type uX}
+    {Y : Type uY}
+    (project : A → B)
+    (action : A → X → Y)
+    (first : A) where
+  second : A
+  sameProjection : project first = project second
+  argument : X
+  differentAction : action first argument ≠ action second argument
+
+/-- Forget only the fixed-anchor index after it has served to type the
+collision witness. -/
+def AnchoredActionProjectionCollision.toCollision
+    {A : Type uA}
+    {B : Type uB}
+    {X : Type uX}
+    {Y : Type uY}
+    {project : A → B}
+    {action : A → X → Y}
+    {first : A}
+    (collision : AnchoredActionProjectionCollision project action first) :
+    ActionProjectionCollision project action :=
+  { first := first
+    second := collision.second
+    sameProjection := collision.sameProjection
+    argument := collision.argument
+    differentAction := collision.differentAction }
+
 /--
 Two states with the same projection but different predicate truth values
 constructively refute predicate factorization.
@@ -183,6 +216,20 @@ theorem action_not_factors_of_projection_collision
     _ = action collision.second collision.argument :=
       exactFactor collision.second collision.argument
 
+/-- An anchored collision refutes factorization while retaining the designated
+first preimage in the witness type consumed by the proof. -/
+theorem action_not_factors_of_anchored_projection_collision
+    {A : Type uA}
+    {B : Type uB}
+    {X : Type uX}
+    {Y : Type uY}
+    {project : A → B}
+    {action : A → X → Y}
+    {first : A}
+    (collision : AnchoredActionProjectionCollision project action first) :
+    ¬ ActionFactorsThrough project action :=
+  action_not_factors_of_projection_collision collision.toCollision
+
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -190,7 +237,10 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.ValueFactorsThrough
 #print axioms ConstitutiveSearch.ActionFactorsThrough
 #print axioms ConstitutiveSearch.ActionProjectionCollision
+#print axioms ConstitutiveSearch.AnchoredActionProjectionCollision
+#print axioms ConstitutiveSearch.AnchoredActionProjectionCollision.toCollision
 #print axioms ConstitutiveSearch.predicate_not_factors_of_same_projection
 #print axioms ConstitutiveSearch.value_not_factors_of_same_projection
 #print axioms ConstitutiveSearch.action_not_factors_of_projection_collision
+#print axioms ConstitutiveSearch.action_not_factors_of_anchored_projection_collision
 /- AXIOM_AUDIT_END -/

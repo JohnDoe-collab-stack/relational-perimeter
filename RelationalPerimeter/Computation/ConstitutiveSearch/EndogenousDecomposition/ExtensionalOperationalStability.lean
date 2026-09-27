@@ -363,14 +363,34 @@ def authoritativeInstructionActionProjectionCollision {depth : Nat}
     {state : ThreadedConstitutiveState depth assignment}
     {stage : SequentialStageRun depth assignment}
     (run : ThreadedConstitutiveStageRun state stage) :
-    ActionProjectionCollision
+    AnchoredActionProjectionCollision
       (executedTransportProjection run)
-      (executedTransportAction run) :=
-  { first := (authoritativeNormalizerInstruction run).toAcceptingTransport run
-    second := observedConstantTransport run
+      (executedTransportAction run)
+      ((authoritativeNormalizerInstruction run).toAcceptingTransport run) :=
+  { second := observedConstantTransport run
     sameProjection := authoritative_instruction_same_extensional_view run
     argument := alternateContinuation run
     differentAction := authoritative_instruction_different_total_action run }
+
+/-- Statement-level collision anchored at the authoritative program
+instruction.  Unlike the unanchored non-factorization proposition, this public
+statement records which total action the projection fails to determine. -/
+theorem authoritative_instruction_projection_collision {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    ∃ comparison argument,
+      executedTransportProjection run
+          ((authoritativeNormalizerInstruction run).toAcceptingTransport run) =
+        executedTransportProjection run comparison ∧
+      executedTransportAction run
+          ((authoritativeNormalizerInstruction run).toAcceptingTransport run)
+          argument ≠
+        executedTransportAction run comparison argument :=
+  let collision := authoritativeInstructionActionProjectionCollision run
+  ⟨collision.second, collision.argument,
+    collision.sameProjection, collision.differentAction⟩
 
 /-- The determined state-and-width projection cannot reconstruct the total
 action stored by the authoritative instruction. -/
@@ -383,7 +403,7 @@ theorem authoritative_instruction_action_not_factors_on_executed_system
     ¬ ActionFactorsThrough
       (executedTransportProjection run)
       (executedTransportAction run) :=
-  action_not_factors_of_projection_collision
+  action_not_factors_of_anchored_projection_collision
     (authoritativeInstructionActionProjectionCollision run)
 
 /-- On the executed family itself, the total transport action does not factor
@@ -511,6 +531,7 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.comparison_matches_executed_observation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.actionProjectionCollision
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.authoritativeInstructionActionProjectionCollision
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.authoritative_instruction_projection_collision
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.authoritative_instruction_action_not_factors_on_executed_system
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.operational_action_not_factors_on_executed_system
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExtensionalSeparator.system

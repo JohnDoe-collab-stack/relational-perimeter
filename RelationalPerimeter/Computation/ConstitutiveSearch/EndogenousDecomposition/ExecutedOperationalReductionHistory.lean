@@ -570,7 +570,7 @@ def StructuralAcceptedPayload :
   | _, _, _, _, _, .nil, _ => Unit
   | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
       _ _ _ _ _ headRun _ _ tailRoles, profile =>
-      LocalAcceptedPayload headRun profile.1 ×
+      LocalAcceptedPayload headRun profile.1.choice ×
         StructuralAcceptedPayload tailRoles profile.2
 
 /-- Accepted payloads after every structural role has been carried to the
@@ -603,7 +603,7 @@ def normalizeStructuralAcceptedPayload :
   | _, _, _, _, _, .nil, _, _ => ()
   | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
       _ _ _ _ _ headRun _ _ tailRoles, profile, payload =>
-      ⟨normalizeLocalAcceptedPayload headRun profile.1 payload.1,
+      ⟨normalizeLocalAcceptedPayload headRun profile.1.choice payload.1,
         normalizeStructuralAcceptedPayload tailRoles profile.2 payload.2⟩
 
 /-- Positive accepted payload for every structural role profile. -/
@@ -620,14 +620,15 @@ def everyStructuralObligationHasAcceptedPayload :
       exact ()
   | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
       _ _ _ _ headStage headRun _ _ tailRoles, profile => by
-      change Bool × StructuralObligation tailRoles at profile
+      change (authoritativeNormalizerInstruction headRun).Alternative ×
+        StructuralObligation tailRoles at profile
       cases profile with
       | mk choice rest =>
           cases choice with
-          | false =>
+          | transformed =>
               exact ⟨⟨_, headStage.sourceAccepted⟩,
                 everyStructuralObligationHasAcceptedPayload tailRoles rest⟩
-          | true =>
+          | retained =>
               exact ⟨⟨_, headStage.outputAccepted⟩,
                 everyStructuralObligationHasAcceptedPayload tailRoles rest⟩
 

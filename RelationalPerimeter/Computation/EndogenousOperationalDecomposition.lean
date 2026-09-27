@@ -382,6 +382,25 @@ theorem comparison_transport_matches_executed_observation {depth : Nat}
       (executedStepToExtensionalView run).observedRetained :=
   ExecutedExtensionalSeparator.comparison_matches_executed_observation run
 
+/-- The public collision statement keeps the authoritative instruction in its
+type: the specified projection identifies its total action with a comparison
+at the recorded view while their actions differ on another continuation. -/
+theorem authoritative_instruction_has_projection_collision {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    ∃ comparison argument,
+      ExecutedExtensionalSeparator.executedTransportProjection run
+          ((authoritativeNormalizerInstruction run).toAcceptingTransport run) =
+        ExecutedExtensionalSeparator.executedTransportProjection run comparison ∧
+      ExecutedExtensionalSeparator.executedTransportAction run
+          ((authoritativeNormalizerInstruction run).toAcceptingTransport run)
+          argument ≠
+        ExecutedExtensionalSeparator.executedTransportAction run
+          comparison argument :=
+  ExecutedExtensionalSeparator.authoritative_instruction_projection_collision run
+
 /-- On an actual executed stage, the total operational action does not
 factor through the state-and-quantity view. This is the public instance of the
 generic projection-collision theorem: the discovered and comparison transports
@@ -753,6 +772,7 @@ end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_extensional_view_is_discovered_projection
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_extensional_view_is_authoritative_instruction_projection
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.comparison_transport_matches_executed_observation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.authoritative_instruction_has_projection_collision
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_state_width_view_does_not_determine_total_action
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.initial_discovery_has_measured_failed_majority
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.opening_produces_structurally_distinct_alternatives

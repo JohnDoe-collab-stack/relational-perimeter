@@ -96,9 +96,13 @@ L’histoire exécutée de rôles construit `ConstitutiveNormalizerProgram`, don
 la valeur canonique contient une instruction par ouverture.
 `StructuralObligation roles` est une abréviation du type `Profile` de ce
 programme, tandis que `structuralFrontier roles` est son `profileFrontier`
-engendré récursivement. Le carrier extensif est donc produit par la forme
-binaire des instructions du programme ; ce n’est pas un second carrier dérivé
-indépendamment du nombre de rôles.
+engendré récursivement. Le carrier extensif est donc produit par les
+instructions du programme ; ce n’est pas un second carrier dérivé
+indépendamment du nombre de rôles. À chaque étape, l’alternative de tête a pour
+type `instruction.Alternative` : ses deux constructeurs sont indexés par
+l’instruction stockée. Une alternative, un profil ou un adressage appartenant
+à une autre instruction ne peut donc pas être substitué directement au seul
+motif que les deux ouvertures sont binaires.
 
 L’expansion du programme est prouvée complète, sans doublon, et vérifie
 
@@ -127,9 +131,14 @@ programme et est prouvé, au moyen d’adaptateurs structurels constructifs,
 exactement égal à `normalizeStructuralAcceptedPayload` sur tout profil
 développé et accepté. Chaque profil engendré possède une charge acceptée
 construite positivement et indexée par ce programme exact ; l’énoncé sémantique
-n’est donc pas vide sur l’expansion complète. L’effacement des codes est égal à l’histoire publique
-exacte `returnedCodes`. La métrique brute du programme est égale à
-`compiledLocalSize`, et toutes deux valent exactement `n = input + 1`.
+n’est donc pas vide sur l’expansion complète. Sur les instructions brutes,
+`interpretConstitutiveNormalizerInstruction_sensitive` énonce explicitement la
+dépendance sémantique : si deux actions diffèrent sur la charge source acceptée,
+leurs sorties gauches interprétées diffèrent. La consommation de l’instruction
+n’est donc pas protégée seulement par une égalité définitionnelle.
+L’effacement des codes est égal à l’histoire publique exacte `returnedCodes`.
+La métrique brute du programme est égale à `compiledLocalSize`, et toutes deux
+valent exactement `n = input + 1`.
 
 La hiérarchie obtenue est exacte :
 
@@ -140,10 +149,13 @@ constitution relationnelle exécutée
   -> adressage fini indépendant              : au moins 2^n emplacements
 ```
 
-Le programme produit la cardinalité de la frontière dans ce sens typé précis :
-la frontière est son expansion binaire récursive. Le résultat reste relatif à
-la représentation ; il n’affirme pas que toute représentation doit matérialiser
-la frontière et ne démontre pas une borne universelle en temps ou en mémoire.
+Le programme produit la frontière dans ce sens typé précis : le carrier est
+indexé récursivement par les instructions stockées. Sa cardinalité exacte ne
+dépend que du nombre d’instructions parce que chaque alternative indexée par
+une instruction possède exactement deux constructeurs. Le résultat reste
+relatif à la représentation ; il n’affirme pas que toute représentation doit
+matérialiser la frontière et ne démontre pas une borne universelle en temps ou
+en mémoire.
 La largeur opérationnelle retenue et le coût instrumenté interne restent des
 résultats séparés. La projection par état et quantité se trouve encore en aval :
 elle est obtenue depuis l’action totale de l’instruction faisant autorité, mais
@@ -160,9 +172,11 @@ générique définit `ActionFactorsThrough` : une action totale se factorise par
 une projection lorsqu’une seule action sur les valeurs projetées la reconstruit
 sur tout argument. Elle définit aussi `ActionProjectionCollision` : deux
 antécédents possèdent des projections égales mais leurs actions totales
-diffèrent sur un argument. Le théorème générique
-`action_not_factors_of_projection_collision` consomme explicitement cette
-égalité de projection et réfute constructivement la factorisation.
+diffèrent sur un argument. Sa forme indexée,
+`AnchoredActionProjectionCollision project action first`, fixe le premier
+antécédent dans le type même du témoin. Le théorème générique
+`action_not_factors_of_anchored_projection_collision` consomme cette collision
+ancrée et réfute constructivement la factorisation.
 
 Sur le système engendré d’une étape effectivement exécutée, le transport total
 porté par l’instruction faisant autorité et un transport de comparaison
@@ -172,18 +186,19 @@ relation découverte sur toute continuation. Les deux transports sont projetés
 séparément ; leurs vues projetées sont égales pour la continuation exécutée
 observée, tandis que leurs actions totales diffèrent sur une autre continuation
 admissible. La non-factorisation exécutée est donc une instance du théorème
-générique de collision de projection dont le premier antécédent est
-l’instruction du programme elle-même, et non une contradiction particulière
-formulée sur une seule vue syntaxique.
+générique ancré. Son énoncé public,
+`authoritative_instruction_projection_collision`, exhibe explicitement une
+collision dont le premier antécédent est l’instruction faisant autorité ; cet
+antécédent n’est pas un champ librement assignable du témoin.
 
-Cela identifie la limite relative exacte d’une lecture de type Lyapunov dans la
-présente construction. Une description par états, trajectoire observée et
-quantité bornée est une projection par oubli du processus opérationnel
-constitué : elle enregistre la stabilité, mais elle ne détermine pas la
-transformation dont la reconstruction exécutée a produit cette stabilité. Il
-s’agit d’un résultat formel de non-factorisation pour la projection définie ici,
-et non de la prétention d’avoir formalisé toute version de la théorie classique
-de la stabilité.
+Cela identifie la limite relative exacte de la projection par état et quantité
+définie ici. Cette projection conserve des états, un segment de trajectoire
+observé et une quantité bornée, mais oublie une partie du processus opérationnel
+constitué : elle enregistre la lecture de stabilité sans déterminer la
+transformation dont la reconstruction exécutée l’a produite. Il s’agit d’un
+résultat formel de non-factorisation pour cette projection déterminée, et non
+de la prétention d’avoir formalisé toute version de la théorie classique de la
+stabilité.
 
 ## Chaîne exécutée
 

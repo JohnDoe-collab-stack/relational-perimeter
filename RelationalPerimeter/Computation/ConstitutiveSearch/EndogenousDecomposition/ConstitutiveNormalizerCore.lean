@@ -133,6 +133,32 @@ theorem authoritativeNormalizerInstruction_transport_map_exact
   rw [executedDiscoverySchedule_code stage.execution]
   rfl
 
+/-- The two structural alternatives opened by one instruction.  The family is
+indexed by the instruction that constitutes the opening: alternatives from a
+different instruction are not interchangeable merely because both openings
+have two branches. -/
+inductive ConstitutiveNormalizerInstruction.Alternative
+    {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    (instruction : ConstitutiveNormalizerInstruction run) : Type where
+  | transformed : instruction.Alternative
+  | retained : instruction.Alternative
+
+/-- Operational branch readout of an instruction-indexed alternative. -/
+def ConstitutiveNormalizerInstruction.Alternative.choice
+    {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {run : ThreadedConstitutiveStageRun state stage}
+    {instruction : ConstitutiveNormalizerInstruction run} :
+    instruction.Alternative -> Bool
+  | .transformed => false
+  | .retained => true
+
 /-- A raw program has exactly one instruction for each role-stage constructor.
 The dependent tail is indexed by the state produced by the head execution. -/
 inductive ConstitutiveNormalizerProgram :
@@ -242,7 +268,7 @@ def ConstitutiveNormalizerProgram.codeSize :
   | _, _, _, _, _, _, .step _ instruction tail =>
       instruction.code.size + tail.codeSize
 
-/-- One independent binary structural choice for every program instruction. -/
+/-- One instruction-indexed structural alternative for every program step. -/
 def ConstitutiveNormalizerProgram.Profile :
     {depth count : Nat} ->
     {assignment : SequentialAssignment depth} ->
@@ -251,9 +277,11 @@ def ConstitutiveNormalizerProgram.Profile :
     {roles : ThreadedConstitutiveRoleHistory run} ->
     (program : ConstitutiveNormalizerProgram roles) -> Type
   | _, _, _, _, _, _, .nil => Unit
-  | _, _, _, _, _, _, .step _ _ tail => Bool × tail.Profile
+  | _, _, _, _, _, _, .step _ instruction tail =>
+      instruction.Alternative × tail.Profile
 
-/-- Complete extensive expansion of a program's binary branching shape. -/
+/-- Complete extensive expansion of the alternatives constituted by the
+program's own instructions. -/
 def ConstitutiveNormalizerProgram.profileFrontier :
     {depth count : Nat} ->
     {assignment : SequentialAssignment depth} ->
@@ -262,9 +290,13 @@ def ConstitutiveNormalizerProgram.profileFrontier :
     {roles : ThreadedConstitutiveRoleHistory run} ->
     (program : ConstitutiveNormalizerProgram roles) -> List program.Profile
   | _, _, _, _, _, _, .nil => [()]
-  | _, _, _, _, _, _, .step _ _ tail =>
-      (tail.profileFrontier.map (fun rest => (false, rest))) ++
-        (tail.profileFrontier.map (fun rest => (true, rest)))
+  | _, _, _, _, _, _, .step _ instruction tail =>
+      (tail.profileFrontier.map (fun rest =>
+        (ConstitutiveNormalizerInstruction.Alternative.transformed
+          (instruction := instruction), rest))) ++
+        (tail.profileFrontier.map (fun rest =>
+          (ConstitutiveNormalizerInstruction.Alternative.retained
+            (instruction := instruction), rest)))
 
 /-- Each program instruction contributes the two Boolean profile extensions
 of the tail frontier.  This reduction equation is the typed source of the
@@ -281,8 +313,12 @@ theorem ConstitutiveNormalizerProgram.profileFrontier_step
     {tailRoles : ThreadedConstitutiveRoleHistory tailRun}
     (tail : ConstitutiveNormalizerProgram tailRoles) :
     (ConstitutiveNormalizerProgram.step headRole instruction tail).profileFrontier =
-      (tail.profileFrontier.map (fun rest => (false, rest))) ++
-        (tail.profileFrontier.map (fun rest => (true, rest))) :=
+      (tail.profileFrontier.map (fun rest =>
+        (ConstitutiveNormalizerInstruction.Alternative.transformed
+          (instruction := instruction), rest))) ++
+        (tail.profileFrontier.map (fun rest =>
+          (ConstitutiveNormalizerInstruction.Alternative.retained
+            (instruction := instruction), rest))) :=
   rfl
 
 def ConstitutiveNormalizerProgram.profileWidth
@@ -335,24 +371,40 @@ theorem ConstitutiveNormalizerProgram.profileWidth_eq_two_pow_instructionCount :
       (program : ConstitutiveNormalizerProgram roles),
       program.profileWidth = 2 ^ program.instructionCount
   | _, _, _, _, _, _, .nil => rfl
-  | _, _, _, _, _, _, .step _ _ tail => by
+  | _, _, _, _, _, _, .step _ instruction tail => by
       change
-        ((tail.profileFrontier.map (fun rest => (false, rest))) ++
-          (tail.profileFrontier.map (fun rest => (true, rest)))).length =
+        ((tail.profileFrontier.map (fun rest =>
+            (ConstitutiveNormalizerInstruction.Alternative.transformed
+              (instruction := instruction), rest))) ++
+          (tail.profileFrontier.map (fun rest =>
+            (ConstitutiveNormalizerInstruction.Alternative.retained
+              (instruction := instruction), rest)))).length =
             2 ^ (tail.instructionCount + 1)
       have tailWidth : tail.profileFrontier.length =
           2 ^ tail.instructionCount :=
         tail.profileWidth_eq_two_pow_instructionCount
       calc
-        ((tail.profileFrontier.map (fun rest => (false, rest))) ++
-          (tail.profileFrontier.map (fun rest => (true, rest)))).length =
-            (tail.profileFrontier.map (fun rest => (false, rest))).length +
-              (tail.profileFrontier.map (fun rest => (true, rest))).length :=
+        ((tail.profileFrontier.map (fun rest =>
+            (ConstitutiveNormalizerInstruction.Alternative.transformed
+              (instruction := instruction), rest))) ++
+          (tail.profileFrontier.map (fun rest =>
+            (ConstitutiveNormalizerInstruction.Alternative.retained
+              (instruction := instruction), rest)))).length =
+            (tail.profileFrontier.map (fun rest =>
+              (ConstitutiveNormalizerInstruction.Alternative.transformed
+                (instruction := instruction), rest))).length +
+              (tail.profileFrontier.map (fun rest =>
+                (ConstitutiveNormalizerInstruction.Alternative.retained
+                  (instruction := instruction), rest))).length :=
           length_append_constructive _ _
         _ = tail.profileFrontier.length + tail.profileFrontier.length :=
           nat_add_congr
-            (length_map_constructive (fun rest => (false, rest)) _)
-            (length_map_constructive (fun rest => (true, rest)) _)
+            (length_map_constructive (fun rest =>
+              (ConstitutiveNormalizerInstruction.Alternative.transformed
+                (instruction := instruction), rest)) _)
+            (length_map_constructive (fun rest =>
+              (ConstitutiveNormalizerInstruction.Alternative.retained
+                (instruction := instruction), rest)) _)
         _ = 2 ^ tail.instructionCount + 2 ^ tail.instructionCount :=
           nat_add_congr tailWidth tailWidth
         _ = 2 ^ tail.instructionCount * 2 := (Nat.mul_two _).symm
@@ -446,18 +498,22 @@ theorem ConstitutiveNormalizerProgram.profileFrontier_complete :
       change Unit at profile
       cases profile
       exact .head _
-  | _, _, _, _, _, _, .step _ _ tail, profile => by
-      change Bool × tail.Profile at profile
+  | _, _, _, _, _, _, .step _ instruction tail, profile => by
+      change instruction.Alternative × tail.Profile at profile
       cases profile with
       | mk choice rest =>
           cases choice with
-          | false =>
+          | transformed =>
               exact mem_append_left_constructive _
-                (mem_map_constructive (fun value => (false, value))
+                (mem_map_constructive (fun value =>
+                  (ConstitutiveNormalizerInstruction.Alternative.transformed
+                    (instruction := instruction), value))
                   (tail.profileFrontier_complete rest))
-          | true =>
+          | retained =>
               exact mem_append_right_constructive _
-                (mem_map_constructive (fun value => (true, value))
+                (mem_map_constructive (fun value =>
+                  (ConstitutiveNormalizerInstruction.Alternative.retained
+                    (instruction := instruction), value))
                   (tail.profileFrontier_complete rest))
 
 /-- The program expansion contains each binary profile exactly once. -/
@@ -471,30 +527,51 @@ theorem ConstitutiveNormalizerProgram.profileFrontier_nodup :
       program.profileFrontier.Nodup
   | _, _, _, _, _, _, .nil =>
       .cons (fun _ impossible _ => nomatch impossible) .nil
-  | _, _, _, _, _, _, .step _ _ tail => by
+  | _, _, _, _, _, _, .step _ instruction tail => by
       change
-        ((tail.profileFrontier.map (fun value => (false, value))) ++
-          (tail.profileFrontier.map (fun value => (true, value)))).Nodup
+        ((tail.profileFrontier.map (fun value =>
+            (ConstitutiveNormalizerInstruction.Alternative.transformed
+              (instruction := instruction), value))) ++
+          (tail.profileFrontier.map (fun value =>
+            (ConstitutiveNormalizerInstruction.Alternative.retained
+              (instruction := instruction), value)))).Nodup
       have tailNodup := tail.profileFrontier_nodup
       have leftNodup := nodup_map_constructive
-        (fun value => (false, value))
+        (fun value =>
+          (ConstitutiveNormalizerInstruction.Alternative.transformed
+            (instruction := instruction), value))
         (fun same => congrArg Prod.snd same)
         tailNodup
       have rightNodup := nodup_map_constructive
-        (fun value => (true, value))
+        (fun value =>
+          (ConstitutiveNormalizerInstruction.Alternative.retained
+            (instruction := instruction), value))
         (fun same => congrArg Prod.snd same)
         tailNodup
       exact nodup_append_constructive leftNodup rightNodup
         (fun leftValue leftMem rightValue rightMem same => by
           let ⟨leftSource, _, leftExact⟩ :=
             mem_map_preimage_constructive
-              (fun value => (false, value)) leftMem
+              (fun value =>
+                (ConstitutiveNormalizerInstruction.Alternative.transformed
+                  (instruction := instruction), value)) leftMem
           let ⟨rightSource, _, rightExact⟩ :=
             mem_map_preimage_constructive
-              (fun value => (true, value)) rightMem
-          have pairSame : (false, leftSource) = (true, rightSource) :=
+              (fun value =>
+                (ConstitutiveNormalizerInstruction.Alternative.retained
+                  (instruction := instruction), value)) rightMem
+          have pairSame :
+              (ConstitutiveNormalizerInstruction.Alternative.transformed
+                  (instruction := instruction), leftSource) =
+                (ConstitutiveNormalizerInstruction.Alternative.retained
+                  (instruction := instruction), rightSource) :=
             Eq.trans leftExact (Eq.trans same rightExact.symm)
-          exact Bool.noConfusion (congrArg Prod.fst pairSame))
+          have choiceSame : false = true :=
+            congrArg
+              (fun pair : instruction.Alternative × tail.Profile =>
+                ConstitutiveNormalizerInstruction.Alternative.choice pair.1)
+              pairSame
+          exact Bool.noConfusion choiceSame)
 
 /-- Recursive authority predicate for the whole program. -/
 def ConstitutiveNormalizerProgram.IsAuthoritative :
@@ -634,6 +711,8 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.authoritativeNormalizerInstruction_isAuthoritative
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerInstruction.toAcceptingTransport
 #print axioms ConstitutiveSearch.EndogenousDecomposition.authoritativeNormalizerInstruction_transport_map_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerInstruction.Alternative
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerInstruction.Alternative.choice
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerProgram
 #print axioms ConstitutiveSearch.EndogenousDecomposition.buildConstitutiveNormalizerProgram
 #print axioms ConstitutiveSearch.EndogenousDecomposition.buildConstitutiveNormalizerProgram_step

@@ -22,6 +22,8 @@ bash scripts/check-import-boundaries.sh --self-test
 bash scripts/check-import-boundaries.sh
 bash scripts/check-import-boundaries.sh scripts/constitutive-normalizer-core-import-boundaries.txt
 bash scripts/check-import-boundaries.sh scripts/executed-history-import-boundaries.txt
+bash scripts/check-import-boundaries.sh scripts/measured-accounting-import-boundaries.txt
+bash scripts/check-expected-failures.sh
 
 for file in "${lean_files[@]}"; do
   begin_count="$(grep -cF -- '/- AXIOM_AUDIT_BEGIN -/' "$file" || true)"
