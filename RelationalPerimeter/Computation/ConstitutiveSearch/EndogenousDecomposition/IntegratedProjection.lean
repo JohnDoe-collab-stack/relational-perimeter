@@ -1,4 +1,5 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.SequentialHistory
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.OperationalProjection
 
 /-!
 The separator is built from a stage's retained discovered endpoints and its

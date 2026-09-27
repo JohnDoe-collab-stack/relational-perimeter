@@ -100,19 +100,18 @@ discovery.
 
 ![Endogenous operational decomposition](docs/figures/endogenous-operational-decomposition.svg)
 
-The framework first constitutes the structured objects on which the computation
-acts. The executed discovery then supplies the operational status used to index
-the same opening either as a pending two-position carrier or as a retained
-one-position carrier. For `n` executed openings, the complete structural
-carrier and the pending carrier both have exact width `2^n`, while the carrier
-of positions retained by the discovered transports has exact width `1`. The
-numerical transient trace `1 → 2 → 1` at each stage is a derived readout of
-those frontier objects and is uniformly bounded by `2`; it is not a causal
-premise of the reduction. The closed causal evidence package is canonically
-built from the executed role history and records the exact reduction history,
-failed-candidate work, discovered total map, separate preservation proof,
-extensional projection, and output transmitted to the next situation. Sibling
-viability and distinction remain separately proved positive consequences.
+The framework first constitutes the role occurrences and the complete profile
+carrier on which the computation acts. For `n` binary openings this source has
+exact width `2^n`. A downstream regime has that full exponential width exactly
+when it keeps the constituted profiles as distinct, separately addressable
+obligations. The executed reduction instead consumes, at every role, the
+reconstructed total action and its separate preservation proof; it groups the
+same source identities into one operational obligation without identifying the
+two local occurrences. Its local `2 → 1` readings are recursively derived from
+the actual reduction history, not supplied as a causal premise. The public
+certificate ties this reduction to the same executed roles, program,
+interpreter, failed-candidate work, and output transmitted to the next
+situation.
 
 A state-and-quantity projection preserves the observed states, output, width
 readout, and bound, but does not determine the total operational action. At the
@@ -132,36 +131,44 @@ constituted operational process.
 
 ![Endogenous operational stability](docs/figures/endogenous-operational-stability.svg)
 
-The repository now proves the production hierarchy behind the representation
-comparison. For a public run with `n = input + 1` constituted openings, the
-executed role history constructs an authoritative typed program with exactly
-`n` transport instructions. `StructuralObligation` is literally the profile
-type of that program, and `structuralFrontier` is literally its complete,
-duplicate-free binary expansion, of exact width `2^n`. At every step the two
-profile constructors belong to the stored instruction's own indexed
-`Alternative` type; profiles for distinct instructions are not directly
-interchangeable. The exact cardinality depends only on the instruction count
-because each indexed alternative has exactly two constructors. Any finite interface
-that keeps those program-produced profiles independently addressable therefore
-requires at least `2^n` distinct slots. The same program interprets every
-accepted profile in its expansion exactly as the canonical normalizer and
-every generated profile has a positively constructed accepted payload indexed
-by that program. A separate sensitivity theorem states that different raw
-instruction actions produce different interpreted left outputs whenever they
-differ on the accepted payload. It erases to the exact returned-code history.
-Its raw atom count is proved equal to `compiledLocalSize` and to `n`.
+The repository now proves the extensive equivalence at the level of a general
+relational class. Primitive source, formation, target, and provenance relations
+constitute a dependent history of role occurrences. Complete occurrence
+profiles are derived from that history before any program or operational
+regime. Their width is the product of the realized local arities; uniform
+binary histories therefore have exact width `2^n`. The class is unbounded and
+has an inhabitant independent of the public SAT execution; the wider class also
+contains variable-arity histories.
 
-The extensive profile space is thus a deployment of the constituted program,
-not a parallel carrier sharing only a common index. The audited
-state-and-quantity view is further downstream: it is a projection of an
-authoritative instruction's total action, and the existing collision theorem
-shows that this projection does not reconstruct the total action. The derived
-operational-width reading and the internal instrumented cost remain separate
-results. The statement is representation-relative: it proves the exact lower
-bound for independent finite addressing, not a universal time or memory lower
-bound for every possible representation.
+An operational regime may preserve those profile identities as distinct
+obligations or group them. Lean proves, for every problem in every binary
+relational extensive family:
 
-![Constitutive complexity hierarchy](docs/figures/constitutive-complexity-hierarchy.svg)
+```text
+regime width = 2^stageCount
+  ↔ constituted identities remain distinct and separately addressable
+     through that regime.
+```
+
+The same condition is equivalent to exact minimum addressing capacity
+factorized through the regime. On the public carrier, the certificate
+constructs the full-width identity regime and positively proves its complete
+conservation condition; on the same constituted identities, the executed
+regime has width one and fails separate preservation. A single certificate
+ties the roles, profile carrier, downstream program, exact interpreter, and
+executed reduction to the same run. The program consumes the already
+constituted profiles; it does not create their alternatives. Its transformed
+case uses the reconstructed total action, its preservation proof is separate,
+and the action is positively non-identity on the executed source. The resulting
+reduction groups distinct viable identities into one operational obligation;
+its local `2 → 1` readings are recursively derived from the reduction history.
+
+![Relational extensivity and operational obligations](docs/figures/relational-extensive-iff.svg)
+
+This is a theorem about exact carrier width and factorized finite addressing in
+the formalized class, not a universal time or memory lower bound. The audited
+state-and-quantity projection and instrumented execution costs remain distinct
+downstream results.
 
 ## Positioning and scope
 
@@ -221,6 +228,10 @@ below.
   particular, it checks the public `ActionFactorsThrough` statement and a
   generic projection collision whose equality is propositional rather than
   definitional.
+- `Tests/RelationalExtensiveIffRegression.lean` protects the class-level
+  exponential `iff`, its exact factorized-capacity form, the independent
+  unbounded members of the relational classes, and the one-chain public
+  reduction from action and preservation to grouped obligations.
 
 The computational tree imports the foundational modules directly. It has no
 dependency on an external alignment layer, a separate foundation layer, or a
@@ -271,12 +282,14 @@ séparément, et le résultat retenu conditionne la découverte suivante. Ainsi,
 nombre d’alternatives engendrées et le nombre d’obligations qui doivent rester
 indépendantes ne sont pas confondus.
 
-Pour `n` ouvertures exécutées, les carriers structurel et opérationnel en
-attente ont une largeur exacte `2^n`, tandis que le carrier des positions
-retenues par les transports découverts a une largeur exacte `1`. La lecture
-numérique transitoire `1 → 2 → 1` est dérivée des frontières constituées et
-reste uniformément bornée par `2` ; elle n’est pas une prémisse causale de la
-réduction. Une projection par état et quantité conserve cette stabilité
+Pour `n` ouvertures binaires exécutées, le carrier source des profils constitués
+a une largeur exacte `2^n`. Un régime aval possède cette largeur exponentielle
+complète si et seulement s’il conserve ces profils comme identités distinctes
+et séparément adressables. La réduction exécutée consomme au contraire, à
+chaque rôle, l’action totale reconstruite et sa preuve séparée de préservation ;
+elle regroupe les mêmes identités sources en une obligation sans identifier les
+deux occurrences locales. Ses lectures `2 → 1` sont dérivées récursivement de
+l’histoire de réduction effective. Une projection par état et quantité conserve cette stabilité
 observée sans déterminer l’action opérationnelle totale. Le transport total
 porté par l’instruction faisant autorité et le transport de comparaison sont
 projetés séparément vers deux vues égales, alors que leurs actions totales
@@ -285,40 +298,47 @@ point comme la relation découverte sur toute continuation. Le théorème
 générique de non-factorisation consomme explicitement cette égalité de
 projections.
 
-Le dépôt prouve désormais la hiérarchie de production qui fonde la comparaison
-de représentations. Pour une exécution publique comportant
-`n = input + 1` ouvertures constituées, l’histoire exécutée de rôles construit
-un programme typé faisant autorité avec exactement `n` instructions de
-transport. `StructuralObligation` est littéralement le type des profils de ce
-programme, et `structuralFrontier` est littéralement son expansion binaire
-complète, sans doublon, de largeur exacte `2^n`. Toute interface finie qui
-conserve ces profils produits par le programme comme adresses indépendantes
-exige donc au moins `2^n` emplacements distincts. Le même programme interprète
-exactement toute charge acceptée de son expansion comme le normalisateur
-canonique, et chaque profil engendré possède une charge acceptée construite
-positivement et indexée par ce programme. À chaque étape, les deux constructeurs
-du profil appartiennent au type `Alternative` indexé par l’instruction stockée ;
-les profils d’instructions distinctes ne sont pas directement interchangeables.
-La cardinalité exacte ne dépend que du nombre d’instructions parce que chaque
-alternative indexée possède exactement deux constructeurs. Un théorème de
-sensibilité séparé établit que deux actions brutes distinctes donnent des
-sorties gauches interprétées distinctes dès qu’elles diffèrent sur la charge
-acceptée. Le programme s’efface vers l’histoire exacte des codes retournés. Son
-nombre d’atomes brut est prouvé égal à `compiledLocalSize` et à `n`.
+Le dépôt prouve désormais l’équivalence extensive au niveau d’une classe
+relationnelle générale. Des relations primitives de source, de formation, de
+cible et de provenance constituent une histoire dépendante d’occurrences de
+rôle. Les profils complets d’occurrences sont dérivés de cette histoire avant
+tout programme et tout régime opérationnel. Leur largeur est le produit des
+arités locales réalisées ; une histoire uniformément binaire de longueur `n`
+a donc une largeur exacte `2^n`. La classe est non bornée et possède un membre
+indépendant de l’exécution SAT publique ; la classe plus large contient aussi
+des histoires à arités variables.
 
-L’espace extensif des profils est ainsi un déploiement du programme constitué,
-et non un carrier parallèle partageant seulement un même index. La vue auditée
-par état et quantité se trouve encore en aval : elle est une projection de
-l’action totale d’une instruction faisant autorité. La collision est ancrée
-dans son type sur cette instruction, que son énoncé public mentionne
-explicitement, et elle établit que cette projection déterminée ne reconstruit
-pas l’action totale. La largeur
-opérationnelle dérivée et le coût instrumenté interne restent des résultats
-séparés. L’énoncé est relatif à la représentation : il prouve la borne exacte
-de l’adressage fini indépendant, non une borne universelle en temps ou en
-mémoire pour toute représentation possible.
+Un régime opérationnel peut conserver ces identités de profil comme obligations
+distinctes ou les regrouper. Lean prouve, pour tout problème de toute famille
+extensive relationnelle binaire :
 
-![Hiérarchie de complexité constitutive](docs/figures/constitutive-complexity-hierarchy.svg)
+```text
+largeur du régime = 2^stageCount
+  ↔ les identités constituées restent distinctes et séparément adressables
+     à travers ce régime.
+```
+
+La même condition équivaut à la capacité minimale exacte d’un adressage
+factorisé par le régime. Sur le carrier public, le certificat construit le
+régime identitaire de pleine largeur et prouve positivement sa condition
+complète de conservation ; sur les mêmes identités constituées, le régime
+exécuté a une largeur un et ne conserve pas les identités séparément. Un
+certificat unique rattache
+les rôles, le carrier de profils, le programme aval, l’interprète exact et la
+réduction exécutée à une même exécution. Le programme consomme les profils déjà
+constitués ; il ne crée pas leurs alternatives. Son cas transformé emploie
+l’action totale reconstruite, sa preuve de préservation demeure distincte, et
+l’action est positivement non identique sur la source exécutée. La réduction
+obtenue regroupe des identités distinctes et viables en une seule obligation
+opérationnelle ; ses lectures locales `2 → 1` sont dérivées récursivement de
+l’histoire de réduction.
+
+![Extensivité relationnelle et obligations opérationnelles](docs/figures/relational-extensive-iff.svg)
+
+Il s’agit d’un théorème sur la largeur exacte d’un carrier et l’adressage fini
+factorisé dans la classe formalisée, non d’une borne universelle en temps ou en
+mémoire. La projection auditée par état et quantité et les coûts instrumentés
+de l’exécution restent des résultats aval distincts.
 
 ## License
 

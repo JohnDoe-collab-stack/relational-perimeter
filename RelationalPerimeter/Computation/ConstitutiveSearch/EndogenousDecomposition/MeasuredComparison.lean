@@ -25,6 +25,17 @@ def ComparisonWork.visit (work : ComparisonWork) : ComparisonWork :=
 
 def ComparisonWork.total (work : ComparisonWork) : Nat := work.nodes + work.labelSteps
 
+/-- Total work is additive across the semantic composition of two runs. -/
+theorem ComparisonWork.total_add (first second : ComparisonWork) :
+    (first.add second).total = first.total + second.total :=
+  Nat.add_add_add_comm _ _ _ _
+
+/-- Visiting one structural node adds exactly one unit of total work. -/
+theorem ComparisonWork.total_visit (work : ComparisonWork) :
+    work.visit.total = work.total + 1 := by
+  change (work.nodes + 1) + work.labelSteps = (work.nodes + work.labelSteps) + 1
+  rw [Nat.add_assoc, Nat.add_comm 1 work.labelSteps, ← Nat.add_assoc]
+
 structure MeasuredEquality {α : Type} (left right : α) where
   result : Decidable (left = right)
   work : ComparisonWork
@@ -132,6 +143,8 @@ theorem measuredComparison_label_work_grows (value : Nat) :
 end ConstitutiveSearch.EndogenousDecomposition
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ComparisonWork.total_add
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ComparisonWork.total_visit
 #print axioms ConstitutiveSearch.EndogenousDecomposition.compareUnary
 #print axioms ConstitutiveSearch.EndogenousDecomposition.compareUnary_steps_le
 #print axioms ConstitutiveSearch.EndogenousDecomposition.compareUnary_self_steps

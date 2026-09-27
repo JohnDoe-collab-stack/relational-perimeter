@@ -23,6 +23,8 @@ bash scripts/check-import-boundaries.sh
 bash scripts/check-import-boundaries.sh scripts/constitutive-normalizer-core-import-boundaries.txt
 bash scripts/check-import-boundaries.sh scripts/executed-history-import-boundaries.txt
 bash scripts/check-import-boundaries.sh scripts/measured-accounting-import-boundaries.txt
+bash scripts/check-stratification.sh --self-test
+bash scripts/check-stratification.sh
 bash scripts/check-expected-failures.sh
 
 for file in "${lean_files[@]}"; do

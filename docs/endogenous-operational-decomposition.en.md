@@ -27,133 +27,88 @@ from material the computation has produced**.
 
 ![Executed architecture of the endogenous operational decomposition](figures/endogenous-operational-decomposition.svg)
 
-## Operational stability and exponential branching
+## Operational obligations and relational extensivity
 
-The framework first constitutes the structured objects on which the computation
-acts. The executed discovery then supplies the transport witness that indexes
-the operational status of an opening; a separately proved preservation law
-licenses the corresponding absorption for the criterion under study.
+The order of constitution is explicit in the types. Primitive source,
+formation, target, and provenance relations positively witness each opening.
+A dependent history of those openings then constitutes local occurrence
+identities. `RelationalOccurrenceProfile` selects one such identity at every
+role. Its complete duplicate-free frontier, its list of arities, and its width
+are all derived from that history before any program or operational regime is
+introduced.
 
-For an executed history containing `n` openings, the repository constructs
-three finite carriers from the same openings:
+For every relational history, Lean proves
 
-- the complete, duplicate-free carrier of structural profiles has exact width
-  `2^n`;
-- before a transport licenses any reduction, the carrier of pending
-  operational profiles has the same exact width `2^n`;
-- after each executed discovery has supplied its transport and preservation
-  proof, the carrier of retained operational positions has exact width `1`.
+```text
+profile width = product of the realized local arities.
+```
 
-These numbers are read from enumerated carriers, not stored as independent
-annotations. Every structural role has a positively constructed accepted local
-payload. For the same executed opening, the position type indexed by `none`
-contains its two sibling positions, while the position type indexed by
-`some discoveredTransport` contains exactly the retained one. The global
-retained carrier recursively combines these status-indexed position types. A
-singleton of the same numerical width built from the other sibling is proved
-distinct from the exact retained frontier. Thus equality of widths does not
-replace the semantic reduction.
+Uniform arity `k` over `n` roles therefore gives `k^n`; local arity at least
+two gives a lower bound `2^n`. The repository contains an unbounded
+variable-arity family and, separately, an unbounded binary family independent
+of the public SAT execution. The theorem is consequently stated over a general
+class rather than inferred from one example.
 
-The transient trace `1 → 2 → 1` is a numerical readout of the entry, opened,
-and retained frontiers of each step and is uniformly bounded by `2`. In this
-explicit family those lengths reduce definitionally to the same literal
-readout, so the trace is not a load-bearing causal premise. The causal statement
-is carried instead by the status-indexed position types and the transport
-actions: erasing the operational status transport indexes the same opening by
-two pending positions, while incorporating the transport returned by executed
-discovery indexes it by the single retained position. Iterating this distinction
-separates the pending width `2^n` from the retained width `1`. The `2^n`
-carrier represents the independent structural choices; it is not presented as
-a list of `2^n` states spontaneously emitted by the sequential engine.
+An `ObligationRegime` is downstream of that carrier. Its surjective `carry`
+map may preserve every constituted profile identity as a distinct operational
+obligation or may group several identities. Separate addressing is required to
+factor through those obligations. For every problem in every
+`BinaryRelationalRoleExtensiveFamily`, the public theorem proves the genuine
+equivalence
 
-The causal content is typed independently of this arithmetic. The failed
-candidate prefix is extracted from the executed search itself, every member of
-that prefix is proved to have failed, the selected candidate is proved to have
-succeeded, and the measured attempt count is exactly the length of that prefix
-plus one. For the canonical initial-origin discovery associated with each input
-depth, at least nine tenths of the measured attempts belong to this proved
-failed prefix; this statement is scoped to that initial run, not to every stage
-of the public history. The discovered map acts on arbitrary continuations. Its
-preservation law is consumed separately. The absorbed sibling remains viable
-and distinct as standalone positive theorems rather than premises of the
-reduction certificate, and the retained output is the datum transmitted to the
-next constituted situation.
-On this explicit family, the successful relation has a canonical value at each
-fixed depth; its operational status is nevertheless constituted by the
-executed search that returns it, records the failed prefix, supplies its typed
-transport, and feeds its result into the next state.
+```text
+regime width = 2^stageCount
+  ↔ constituted identities remain distinct and separately addressable
+     through that regime.
+```
+
+The same condition is equivalent to exact minimum factorized address capacity.
+Neither side of the equivalence is stored in the other: exponential width is a
+cardinality read from the regime frontier, whereas conservation is injectivity
+of `carry` together with an address on obligations. The general finite proof is
+constructive; the binary equation follows from the relationally constituted
+local frontiers.
+
+Both sides are positively inhabited on the same public carrier. The certificate
+constructs the full-width identity regime and its complete factorized
+conservation witness. Over those same constituted identities, the executed
+regime has width one and does not preserve them as separate obligations.
+
+On the public execution, one certificate joins the already executed history,
+its authoritative relational roles, the occurrence-profile carrier, the
+compiled role program, its interpreter, and the executed reduction. The
+program is downstream: it does not constitute the profile alternatives. Each
+`RoleStageAtom` is tied to the relation reconstructed by its role and acts on
+the actual occurrence selected by a profile. The left occurrence applies that
+total action, the right occurrence retains its continuation, and the compiled
+action is positively proved to change the executed source. Interpreting every
+complete profile produces the executed completed outputs exactly.
+
+The reduction is likewise typed by this same program. Every local license
+records the transformed and retained occurrences, exact application of the
+discovered action, the separate acceptance-preservation proof, acceptance of
+the retained output, non-identity of the action on the executed source, and
+continued distinction of the two occurrences. The resulting regime has width
+one and is proved not to preserve the source profiles as separate obligations.
+Its local `2 → 1` width records are computed recursively from the actual
+reduction history; no literal trace is accepted as the cause of the result.
+Thus the source identities persist while their operational independence
+changes.
+
+The executed search remains essential to this public instance. Its failed
+candidate prefix is extracted from the run, its selected relation is proved
+successful, its map acts on arbitrary continuations, and its preservation law
+is separate. The output, seed, decision history, and provenance then constitute
+the conditions consumed by the next discovery.
+
+![Relational extensivity and operational obligations](figures/relational-extensive-iff.svg)
+
+This is an exact theorem about carrier width and factorized operational
+addressing in the formal class above. It is not a universal time- or
+memory-complexity lower bound. Instrumented execution cost and the
+state-and-quantity projection remain separate downstream results.
 
 ![Endogenous operational stability](figures/endogenous-operational-stability.svg)
-
-### Constitutive production, exhaustive expansion, and independent addressing
-
-The comparison now follows one typed production chain. The executed role
-history constructs `ConstitutiveNormalizerProgram`, whose canonical value has
-one instruction per opening. `StructuralObligation roles` is an abbreviation
-for that program's `Profile` type, while `structuralFrontier roles` is the
-program's recursively generated `profileFrontier`. The extensive carrier is
-therefore produced by the program's instructions; it is not a second carrier
-derived independently from the role count. At each step, the head alternative
-has type `instruction.Alternative`: its two constructors are indexed by the
-stored instruction. An alternative, profile, or addressing for another
-instruction cannot be substituted directly merely because both openings are
-binary.
-
-The program expansion is proved complete and duplicate-free, and satisfies
-
-```text
-program.profileWidth = 2 ^ program.instructionCount.
-```
-
-`IndependentProgramProfileAddressing roles program` assigns a finite slot and
-an injective address to every profile of that particular program. The
-repository proves constructively
-
-```text
-program.profileWidth ≤ slotCount.
-```
-
-For the public program, `instructionCount = n`, hence every independently
-addressing interface for its complete expansion needs at least `2^n` slots.
-The bound follows from injectivity, completeness, and absence of duplicates in
-the program-produced frontier; the interface stores no numerical width.
-
-Each instruction stores the typed code returned by one executed opening. A
-separate recursive `IsAuthoritative` proof identifies every instruction with
-that returned code. The program-indexed interpreter consumes profiles produced
-by the same program and is proved, through constructive structural adapters,
-exactly equal to `normalizeStructuralAcceptedPayload` on every accepted
-expanded profile. Every generated profile has a positively constructed
-accepted payload indexed by that exact program, so this semantic statement is
-non-vacuous on the complete expansion. On raw instructions,
-`interpretConstitutiveNormalizerInstruction_sensitive` states the semantic
-dependence explicitly: if two instruction actions differ on the accepted
-source payload, their interpreted left outputs differ. Instruction consumption
-is therefore not protected only by a definitional equation. The code erasure
-equals the public run's exact `returnedCodes` history. The raw program metric
-equals `compiledLocalSize`, and both are exactly `n = input + 1`.
-
-The resulting hierarchy is exact:
-
-```text
-executed relational constitution
-  -> authoritative typed program            : exactly n instructions
-  -> complete extensive profile expansion   : exactly 2^n profiles
-  -> independent finite addressing           : at least 2^n slots
-```
-
-The program produces the frontier in this precise typed sense: the carrier is
-recursively indexed by its stored instructions. Its exact cardinality depends
-only on the instruction count because each instruction-indexed alternative has
-exactly two constructors. This is a representation-relative result; it does
-not say that every representation must materialize the frontier or prove a
-universal time or memory lower bound.
-The retained operational width and internal instrumented cost remain separate
-results. The state-and-quantity projection is further downstream: it is
-obtained from the authoritative instruction's total action, but does not
-determine that action, as the next section proves.
-
-![Constitutive complexity hierarchy](figures/constitutive-complexity-hierarchy.svg)
 
 ### Exact limit of a state-and-quantity projection
 
@@ -246,6 +201,19 @@ The public statement module is
 [`EndogenousOperationalDecomposition.lean`](../RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean).
 It exposes axiom-free declarations for:
 
+- the general unbounded class of relation-constituted extensive families and
+  its binary subclass, together with an independent binary inhabitant and a
+  variable-arity inhabitant of the wider class;
+- the class-level equivalence between exact exponential regime width and
+  conservation of constituted identities as distinct and separately
+  addressable through that regime;
+- the exact minimum factorized-capacity form of that equivalence;
+- one public certificate tying the executed run, authoritative roles,
+  occurrence profiles, downstream program, exact interpreter, and causal
+  reduction to the same chain;
+- the executed width-one regime that groups source identities without
+  identifying them, with local widths recursively read from its reduction
+  history;
 - structural distinction of the opened alternatives;
 - the total transformation of arbitrary continuations;
 - the separate acceptance-preservation theorem;
@@ -294,6 +262,16 @@ It exposes axiom-free declarations for:
 
 The complete implementation remains under
 `RelationalPerimeter/Computation/ConstitutiveSearch/`. In particular,
+`RelationalRoleExtensiveFamily.lean` defines the general relational classes and
+the class-level `iff`; `RoleIndexedProfiles.lean` and
+`RoleProfileArityTransport.lean` derive the concrete carrier and its arities;
+`RoleIndexedProgram.lean` supplies the downstream interpreter;
+`RolewiseObligationPolicy.lean` proves the local/global conservation
+equivalence; and `ExecutedRoleIndexedReduction.lean` constructs the causal
+grouping regime. `ConstitutiveExtensiveSeparation.lean` joins these components
+on the public run.
+
+The earlier operational account remains available:
 `OperationalFrontierStatus.lean` defines the generic pending/reduced boundary,
 while `ExecutedOperationalReduction.lean`,
 `ExecutedOperationalReductionHistory.lean`,
@@ -307,13 +285,17 @@ field of the exact executed reduction, the measured failed prefix, the
 discovered map, the exact causal histories and normalizer, the wrong-singleton
 distinction, the public action-factorization statement, and a generic
 projection collision whose projection equality is propositional rather than
-definitional.
+definitional. `RelationalExtensiveIffRegression.lean` separately protects the
+class-level equivalence, its exact-capacity form, the independent general-class
+witnesses, the material program action, the separate preservation field, and
+the recursively derived reduction widths.
 
 ## Exact scope
 
-The result is constructive, executable, uniformly indexed by depth, and
-axiom-free. It is instantiated on one explicit generated SAT family based on a
-polarity-flip symmetry. The discovery performs real decidable work, rejects
+The results are constructive, executable, uniformly indexed, and axiom-free.
+The extensive `iff` ranges over the general binary relational family class;
+the complete computational phenomenon is instantiated on one explicit
+generated SAT family based on a polarity-flip symmetry. The discovery performs real decidable work, rejects
 decoy candidates, and the attempt counter emitted by the authoritative
 provenance-filtered recursion obeys an exact general law and grows strictly
 with successive inputs. Failed discovery produces neither a stage nor any

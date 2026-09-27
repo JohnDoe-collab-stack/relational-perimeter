@@ -1,5 +1,6 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.MeasuredDiscovery
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.MeasuredRealization
+import RelationalPerimeter.Computation.ConstitutiveSearch.SAT.GrowingDiscoveryBenchmark
 
 /-!
 # Endogenous discovery after constitution

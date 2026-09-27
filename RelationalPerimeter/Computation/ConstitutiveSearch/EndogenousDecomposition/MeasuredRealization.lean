@@ -1,4 +1,4 @@
-import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.MeasuredComparisonBounds
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.MeasuredStateConstruction
 
 namespace ConstitutiveSearch.EndogenousDecomposition
 

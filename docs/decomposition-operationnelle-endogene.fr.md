@@ -28,140 +28,91 @@ de matériaux produits par le calcul**.
 
 ![Architecture exécutée de la décomposition opérationnelle endogène](figures/endogenous-operational-decomposition.svg)
 
-## Stabilité opérationnelle et branchement exponentiel
+## Obligations opérationnelles et extensivité relationnelle
 
-Le cadre constitue d’abord les objets structurés sur lesquels le calcul agit.
-La découverte exécutée fournit ensuite le témoin de transport qui indexe le
-statut opérationnel d’une ouverture ; une loi de préservation prouvée
-séparément autorise l’absorption correspondante pour le critère étudié.
+L’ordre de constitution est explicite dans les types. Des relations primitives
+de source, de formation, de cible et de provenance témoignent positivement
+chaque ouverture. Une histoire dépendante de ces ouvertures constitue ensuite
+les identités locales d’occurrence. `RelationalOccurrenceProfile` sélectionne
+une telle identité à chaque rôle. Sa frontière complète et sans doublon, sa
+liste d’arités et sa largeur sont toutes dérivées de cette histoire avant
+l’introduction de tout programme ou régime opérationnel.
 
-Pour une histoire exécutée contenant `n` ouvertures, le dépôt construit trois
-carriers finis à partir des mêmes ouvertures :
+Pour toute histoire relationnelle, Lean prouve
 
-- le carrier complet et sans doublon des profils structurels a pour largeur
-  exacte `2^n` ;
-- avant qu’un transport ne licence une réduction, le carrier des profils
-  opérationnels en attente possède la même largeur exacte `2^n` ;
-- après que chaque découverte exécutée a fourni son transport et sa preuve de
-  préservation, le carrier des positions opérationnelles retenues a pour
-  largeur exacte `1`.
+```text
+largeur des profils = produit des arités locales réalisées.
+```
 
-Ces nombres sont lus sur des carriers énumérés, et non stockés comme des
-annotations indépendantes. Chaque rôle structurel possède une charge locale
-acceptée construite positivement. Pour une même ouverture exécutée, le type des
-positions indexé par `none` contient les deux positions sœurs, tandis que le
-type indexé par `some discoveredTransport` contient exactement la position
-retenue. Le carrier retenu global combine récursivement ces types de positions
-indexés par leur statut. Un singleton de même largeur numérique construit
-depuis l’autre frère est prouvé distinct de la frontière exactement retenue.
-L’égalité des largeurs ne remplace donc pas la réduction sémantique.
+Une arité uniforme `k` sur `n` rôles donne donc `k^n` ; des arités locales au
+moins binaires donnent une borne inférieure `2^n`. Le dépôt contient une
+famille non bornée à arités variables et, séparément, une famille binaire non
+bornée indépendante de l’exécution SAT publique. Le théorème est ainsi énoncé
+sur une classe générale et non inféré d’un seul exemple.
 
-La trace transitoire `1 → 2 → 1` est une lecture numérique des frontières
-d’entrée, d’ouverture et de rétention de chaque étape, uniformément bornée par
-`2`. Dans cette famille explicite, ces longueurs se réduisent
-définitionnellement à la même lecture littérale ; la trace n’est donc pas une
-prémisse causale porteuse. L’énoncé causal est porté par les types de positions
-indexés par le statut et par les actions de transport : effacer le transport du
-statut indexe la même ouverture par deux positions en attente, tandis que
-l’incorporation du transport retourné par la découverte exécutée l’indexe par
-la seule position retenue. L’itération de cette distinction sépare la largeur
-en attente `2^n` de la largeur retenue `1`. Le carrier `2^n` représente les
-choix structurels indépendants ; il n’est pas présenté comme une liste de
-`2^n` états spontanément émis par le moteur séquentiel.
+Un `ObligationRegime` vient en aval de ce carrier. Son application surjective
+`carry` peut conserver chaque identité de profil constituée comme obligation
+opérationnelle distincte, ou regrouper plusieurs identités. L’adressage séparé
+doit se factoriser par ces obligations. Pour tout problème de toute
+`BinaryRelationalRoleExtensiveFamily`, le théorème public établit le véritable
+équivalent :
 
-Le contenu causal est typé indépendamment de cette arithmétique. Le préfixe des
-candidats en échec est extrait de la recherche exécutée elle-même, chacun de ses
-membres est prouvé en échec, le candidat sélectionné est prouvé réussi, et le
-nombre mesuré de tentatives est exactement la longueur de ce préfixe augmentée
-d’une unité. Pour la découverte canonique d’origine initiale associée à chaque
-profondeur d’entrée, au moins neuf dixièmes des tentatives mesurées
-appartiennent à ce préfixe d’échecs prouvés ; cet énoncé est limité à cette
-exécution initiale et non à toutes les étapes de l’histoire publique.
-L’application découverte agit sur des continuations arbitraires. Sa loi de
-préservation est consommée séparément. Le frère absorbé reste viable et
-distinct comme conséquence positive prouvée séparément, et non comme prémisse
-du certificat de réduction ; la sortie retenue est la donnée transmise à la
-situation constituée suivante. Sur cette famille explicite, la relation
-réussie possède une valeur canonique à chaque profondeur fixée ; son statut
-opérationnel est néanmoins constitué par la recherche exécutée qui la retourne,
-enregistre le préfixe d’échecs, fournit son transport typé et transmet son
-résultat à l’état suivant.
+```text
+largeur du régime = 2^stageCount
+  ↔ les identités constituées restent distinctes et séparément adressables
+     à travers ce régime.
+```
+
+La même condition équivaut à la capacité minimale exacte d’un adressage
+factorisé. Aucun côté de l’équivalence n’est stocké dans l’autre : la largeur
+exponentielle est une cardinalité lue sur la frontière du régime, tandis que la
+conservation est l’injectivité de `carry` accompagnée d’un adressage des
+obligations. La preuve finie générale est constructive ; l’équation binaire
+provient des frontières locales constituées relationnellement.
+
+Les deux côtés sont positivement habités sur le même carrier public. Le
+certificat construit le régime identitaire de pleine largeur et son témoin
+complet de conservation factorisée. Sur ces mêmes identités constituées, le
+régime exécuté a une largeur un et ne les conserve pas comme obligations
+séparées.
+
+Sur l’exécution publique, un certificat unique réunit l’histoire déjà
+exécutée, ses rôles relationnels faisant autorité, le carrier des profils
+d’occurrences, le programme compilé sur les rôles, son interprète et la
+réduction exécutée. Le programme est en aval : il ne constitue pas les
+alternatives du profil. Chaque `RoleStageAtom` est attaché à la relation
+reconstruite par son rôle et agit sur l’occurrence effectivement sélectionnée
+par un profil. L’occurrence gauche applique cette action totale, l’occurrence
+droite conserve sa continuation, et l’action compilée est positivement prouvée
+modifier la source exécutée. L’interprétation de chaque profil complet produit
+exactement les sorties exécutées achevées.
+
+La réduction est pareillement indexée par ce même programme. Chaque licence
+locale enregistre les occurrences transformée et retenue, l’application exacte
+de l’action découverte, la preuve séparée de préservation de l’acceptation,
+l’acceptation de la sortie retenue, la non-identité de l’action sur la source
+exécutée et la distinction persistante des deux occurrences. Le régime obtenu
+a pour largeur un et il est prouvé qu’il ne conserve pas les profils sources
+comme obligations séparées. Ses lectures locales `2 → 1` sont calculées
+récursivement depuis l’histoire de réduction effective ; aucune trace littérale
+n’est admise comme cause du résultat. Les identités sources persistent donc
+alors que leur indépendance opérationnelle change.
+
+La recherche exécutée reste essentielle à cette instance publique. Son préfixe
+de candidats en échec est extrait de l’exécution, sa relation sélectionnée est
+prouvée réussie, son application agit sur des continuations arbitraires et sa
+loi de préservation est distincte. La sortie, la graine, l’histoire des
+décisions et la provenance constituent ensuite les conditions consommées par
+la découverte suivante.
+
+![Extensivité relationnelle et obligations opérationnelles](figures/relational-extensive-iff.svg)
+
+Il s’agit d’un théorème exact sur la largeur d’un carrier et l’adressage
+opérationnel factorisé dans la classe formelle ci-dessus, non d’une borne
+universelle de complexité en temps ou en mémoire. Le coût instrumenté et la
+projection par état et quantité restent des résultats aval distincts.
 
 ![Stabilité opérationnelle endogène](figures/endogenous-operational-stability.svg)
-
-### Production constitutive, expansion exhaustive et adressage indépendant
-
-La comparaison suit désormais une unique chaîne de production typée.
-L’histoire exécutée de rôles construit `ConstitutiveNormalizerProgram`, dont
-la valeur canonique contient une instruction par ouverture.
-`StructuralObligation roles` est une abréviation du type `Profile` de ce
-programme, tandis que `structuralFrontier roles` est son `profileFrontier`
-engendré récursivement. Le carrier extensif est donc produit par les
-instructions du programme ; ce n’est pas un second carrier dérivé
-indépendamment du nombre de rôles. À chaque étape, l’alternative de tête a pour
-type `instruction.Alternative` : ses deux constructeurs sont indexés par
-l’instruction stockée. Une alternative, un profil ou un adressage appartenant
-à une autre instruction ne peut donc pas être substitué directement au seul
-motif que les deux ouvertures sont binaires.
-
-L’expansion du programme est prouvée complète, sans doublon, et vérifie
-
-```text
-program.profileWidth = 2 ^ program.instructionCount.
-```
-
-`IndependentProgramProfileAddressing roles program` attribue un emplacement
-fini et une adresse injective à chaque profil de ce programme précis. Le dépôt
-prouve constructivement
-
-```text
-program.profileWidth ≤ slotCount.
-```
-
-Pour le programme public, `instructionCount = n` ; toute interface qui adresse
-indépendamment son expansion complète exige donc au moins `2^n` emplacements.
-La borne résulte de l’injectivité, de la complétude et de l’absence de doublons
-de la frontière produite par le programme ; l’interface ne stocke aucune
-largeur numérique.
-
-Chaque instruction stocke le code typé retourné par une ouverture exécutée.
-Une preuve récursive `IsAuthoritative` identifie chaque instruction à ce code.
-L’interprète indexé par le programme consomme les profils produits par ce même
-programme et est prouvé, au moyen d’adaptateurs structurels constructifs,
-exactement égal à `normalizeStructuralAcceptedPayload` sur tout profil
-développé et accepté. Chaque profil engendré possède une charge acceptée
-construite positivement et indexée par ce programme exact ; l’énoncé sémantique
-n’est donc pas vide sur l’expansion complète. Sur les instructions brutes,
-`interpretConstitutiveNormalizerInstruction_sensitive` énonce explicitement la
-dépendance sémantique : si deux actions diffèrent sur la charge source acceptée,
-leurs sorties gauches interprétées diffèrent. La consommation de l’instruction
-n’est donc pas protégée seulement par une égalité définitionnelle.
-L’effacement des codes est égal à l’histoire publique exacte `returnedCodes`.
-La métrique brute du programme est égale à `compiledLocalSize`, et toutes deux
-valent exactement `n = input + 1`.
-
-La hiérarchie obtenue est exacte :
-
-```text
-constitution relationnelle exécutée
-  -> programme typé faisant autorité         : exactement n instructions
-  -> expansion extensive complète des profils : exactement 2^n profils
-  -> adressage fini indépendant              : au moins 2^n emplacements
-```
-
-Le programme produit la frontière dans ce sens typé précis : le carrier est
-indexé récursivement par les instructions stockées. Sa cardinalité exacte ne
-dépend que du nombre d’instructions parce que chaque alternative indexée par
-une instruction possède exactement deux constructeurs. Le résultat reste
-relatif à la représentation ; il n’affirme pas que toute représentation doit
-matérialiser la frontière et ne démontre pas une borne universelle en temps ou
-en mémoire.
-La largeur opérationnelle retenue et le coût instrumenté interne restent des
-résultats séparés. La projection par état et quantité se trouve encore en aval :
-elle est obtenue depuis l’action totale de l’instruction faisant autorité, mais
-ne détermine pas cette action, comme le prouve la section suivante.
-
-![Hiérarchie de complexité constitutive](figures/constitutive-complexity-hierarchy.svg)
 
 ### Limite exacte d’une projection par état et quantité
 
@@ -261,6 +212,19 @@ Le module public de formulation est
 [`EndogenousOperationalDecomposition.lean`](../RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean).
 Il expose des déclarations sans axiome pour :
 
+- la classe générale non bornée de familles extensives constituées par des
+  relations et sa sous-classe binaire, avec un membre binaire indépendant et
+  un membre à arités variables de la classe plus large ;
+- l’équivalence, au niveau de la classe, entre largeur exponentielle exacte du
+  régime et conservation des identités constituées comme distinctes et
+  séparément adressables à travers ce régime ;
+- la forme équivalente en capacité minimale exacte d’adressage factorisé ;
+- un certificat public unique rattachant la même chaîne exécutée, les rôles
+  faisant autorité, les profils d’occurrences, le programme aval, l’interprète
+  exact et la réduction causale ;
+- le régime exécuté de largeur un qui regroupe les identités sources sans les
+  identifier, avec ses largeurs locales lues récursivement sur l’histoire de
+  réduction ;
 - la distinction structurelle des alternatives ouvertes ;
 - la transformation totale de continuations arbitraires ;
 - la preuve séparée de préservation de l’acceptation ;
@@ -317,6 +281,16 @@ Il expose des déclarations sans axiome pour :
 
 L’implémentation complète demeure sous
 `RelationalPerimeter/Computation/ConstitutiveSearch/`. En particulier,
+`RelationalRoleExtensiveFamily.lean` définit les classes relationnelles
+générales et l’`iff` au niveau de la classe ; `RoleIndexedProfiles.lean` et
+`RoleProfileArityTransport.lean` dérivent le carrier concret et ses arités ;
+`RoleIndexedProgram.lean` fournit l’interprète aval ;
+`RolewiseObligationPolicy.lean` prouve l’équivalence locale/globale de la
+conservation ; `ExecutedRoleIndexedReduction.lean` construit le régime causal
+de regroupement. `ConstitutiveExtensiveSeparation.lean` réunit ces composants
+sur l’exécution publique.
+
+Le compte rendu opérationnel antérieur reste disponible :
 `OperationalFrontierStatus.lean` définit la frontière générique entre attente
 et réduction, tandis que `ExecutedOperationalReduction.lean`,
 `ExecutedOperationalReductionHistory.lean`,
@@ -331,13 +305,18 @@ la réduction exécutée exacte, le préfixe mesuré d’échecs, l’applicatio
 découverte, les histoires causales et le normaliseur exacts, la distinction du
 mauvais singleton, l’énoncé public de factorisation d’action et une collision de
 projection générique dont l’égalité de projection est propositionnelle plutôt
-que définitionnelle.
+que définitionnelle. `RelationalExtensiveIffRegression.lean` protège
+séparément l’équivalence au niveau de la classe, sa forme en capacité exacte,
+les témoins indépendants des classes générales, l’action matérielle du
+programme, le champ de préservation distinct et les largeurs dérivées
+récursivement de la réduction.
 
 ## Portée exacte
 
-Le résultat est constructif, exécutable, uniformément indexé par la profondeur
-et sans axiome. Il est instancié sur une famille SAT explicite engendrée, fondée
-sur une symétrie par inversion de polarité. La découverte accomplit un travail
+Les résultats sont constructifs, exécutables, uniformément indexés et sans
+axiome. L’`iff` extensif porte sur la classe générale des familles relationnelles
+binaires ; le phénomène computationnel complet est instancié sur une famille
+SAT explicite engendrée, fondée sur une symétrie par inversion de polarité. La découverte accomplit un travail
 décidable réel, rejette des candidats leurres, et le compteur de tentatives émis
 par la récursion faisant autorité, filtrée par la provenance, obéit à une loi
 générale exacte et croît strictement avec les entrées successives. L’échec de la

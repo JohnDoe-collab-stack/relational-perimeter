@@ -1,6 +1,19 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.MeasuredAccounting
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.EndogenousOperationalStability
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.InstrumentedExecutionRealization
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparation
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.OperationalProjection
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerSuccinctness
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleIndexedProfiles
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleProfileArityTransport
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleIndexedProgram
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RolewiseObligationRegime
+import RelationalPerimeter.Computation.ConstitutiveSearch.FiniteExtensiveAddressing
+import RelationalPerimeter.Computation.ConstitutiveSearch.RelationalRoleExtensiveFamily
+import RelationalPerimeter.Computation.ConstitutiveSearch.SearchableTransportCodeValidation
+import RelationalPerimeter.Computation.ConstitutiveSearch.SAT.ExplicitFamilyInputComplexity
+import RelationalPerimeter.Computation.ConstitutiveSearch.SAT.GrowingDiscoveryBenchmark
+import RelationalPerimeter.Computation.ConstitutiveSearch.SAT.TrajectoryDerivedClosure
 
 /-!
 # Endogenous operational decomposition
@@ -28,6 +41,8 @@ namespace RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 open ConstitutiveSearch
 open ConstitutiveSearch.SAT
 open ConstitutiveSearch.EndogenousDecomposition
+open ConstitutiveSearch.Extensive
+open ConstitutiveSearch.RelationalExtensive
 
 set_option maxHeartbeats 800000
 
@@ -85,6 +100,106 @@ abbrev ConstitutiveNormalizerSuccinctnessEvidence (input : Nat) : Type 3 :=
 def constitutiveNormalizerSuccinctnessEvidence (input : Nat) :
     ConstitutiveNormalizerSuccinctnessEvidence input :=
   publicConstitutiveNormalizerSuccinctness input
+
+/-- Public name for the general class of relation-constituted extensive
+families with nontrivial, unbounded histories. -/
+abbrev RelationalRoleExtensiveFamily :=
+  ConstitutiveSearch.RelationalExtensive.RelationalRoleExtensiveFamily
+
+/-- Public name for its general binary subclass. -/
+abbrev BinaryRelationalRoleExtensiveFamily :=
+  ConstitutiveSearch.RelationalExtensive.BinaryRelationalRoleExtensiveFamily
+
+/-- The existing executed family, viewed through the general binary class. -/
+def publicBinaryExtensiveFamily : BinaryRelationalRoleExtensiveFamily :=
+  publicBinaryRelationalRoleExtensiveFamily
+
+/--
+General target theorem. For every problem in every binary relational extensive
+family, exact exponential obligation width occurs if and only if the regime
+preserves the constituted identities separately.
+-/
+theorem binary_family_exponential_width_iff_separate_preservation
+    (family : BinaryRelationalRoleExtensiveFamily)
+    {index : Nat} (problem : family.Problem index)
+    (regime : ObligationRegime (family.sourceCarrier problem)) :
+    regime.frontier.length = 2 ^ family.stageCount problem ↔
+      PreservesIdentitiesSeparately regime :=
+  family.exponentialWidth_iff_preservesConstitutedIdentities problem regime
+
+/--
+Exact public formulation of the target at class level: the right-hand side
+contains both identity distinction and separate addressing through the regime.
+-/
+theorem binary_family_exponential_width_iff_distinct_separate_conservation
+    (family : BinaryRelationalRoleExtensiveFamily)
+    {index : Nat} (problem : family.Problem index)
+    (regime : ObligationRegime (family.sourceCarrier problem)) :
+    regime.frontier.length = 2 ^ family.stageCount problem ↔
+      ConservesConstitutedIdentitiesDistinctlyAndSeparatelyAddressably
+        regime :=
+  family.exponentialWidth_iff_distinctSeparateConservation problem regime
+
+/-- The same general target through exact factorized address capacity. -/
+theorem binary_family_exponential_width_iff_exact_separate_capacity
+    (family : BinaryRelationalRoleExtensiveFamily)
+    {index : Nat} (problem : family.Problem index)
+    (regime : ObligationRegime (family.sourceCarrier problem)) :
+    regime.frontier.length = 2 ^ family.stageCount problem ↔
+      Nonempty
+        (ExactRegimeSeparateCapacity regime
+          (family.sourceCarrier problem).frontier.length) :=
+  family.exponentialWidth_iff_exactRegimeCapacity problem regime
+
+/-- The complete one-chain certificate on the public executed instance. -/
+abbrev ConstitutiveExtensiveSeparationCertificate (input : Nat) :=
+  ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate
+    input
+
+def constitutiveExtensiveSeparationEvidence (input : Nat) :
+    ConstitutiveExtensiveSeparationCertificate input :=
+  constitutiveExtensiveSeparationCertificate input
+
+/-- Public-instance target with the stronger role-identity/addressing wording. -/
+theorem constituted_exponential_width_iff_distinct_separate_conservation
+    (input : Nat)
+    (regime : ObligationRegime
+      (roleProfileFiniteCarrier
+        (constitutiveExtensiveSeparationEvidence input).roles)) :
+    regime.frontier.length = 2 ^ (input + 1) ↔
+      ConservesRoleIdentitiesAsDistinctSeparatelyAddressable regime :=
+  publicCertificate_exponential_iff_conservation input regime
+
+/-- Explicit full-width regime on the same constituted public identities. -/
+def constitutedDistinctSeparateRegime (input : Nat) :
+    ObligationRegime
+      (roleProfileFiniteCarrier
+        (constitutiveExtensiveSeparationEvidence input).roles) :=
+  publicCertificateSeparateRegime input
+
+/-- The explicit conservative regime realizes the exponential side. -/
+theorem constituted_distinct_separate_regime_has_exponential_width
+    (input : Nat) :
+    (constitutedDistinctSeparateRegime input).frontier.length =
+      2 ^ (input + 1) :=
+  publicCertificate_separateRegime_exponentialWidth input
+
+/-- Its distinction and separate addressing are positively witnessed. -/
+theorem constituted_distinct_separate_regime_conserves
+    (input : Nat) :
+    ConservesConstitutedIdentitiesDistinctlyAndSeparatelyAddressably
+      (constitutedDistinctSeparateRegime input) :=
+  publicCertificate_separateRegime_conserves input
+
+/-- The executed reduction acts on that source carrier while refusing the
+separate-obligation regime; it groups identities without identifying them. -/
+theorem executed_reduction_does_not_preserve_separate_obligations
+    (input : Nat) :
+    ¬ PreservesIdentitiesSeparately
+      (executedObligationRegimeOfReduction
+        (constitutiveExtensiveSeparationEvidence input).roles
+        (constitutiveExtensiveSeparationEvidence input).reduction) :=
+  publicCertificate_reduction_separates_identity_from_obligation input
 
 theorem independent_profile_addressing_requires_exponential_slots
     (input : Nat) (addressing : IndependentProfileAddressing input) :
@@ -739,6 +854,19 @@ end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.IndependentProgramProfileAddressing
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.ConstitutiveNormalizerSuccinctnessEvidence
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutiveNormalizerSuccinctnessEvidence
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.RelationalRoleExtensiveFamily
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.BinaryRelationalRoleExtensiveFamily
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.publicBinaryExtensiveFamily
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.binary_family_exponential_width_iff_separate_preservation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.binary_family_exponential_width_iff_distinct_separate_conservation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.binary_family_exponential_width_iff_exact_separate_capacity
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.ConstitutiveExtensiveSeparationCertificate
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutiveExtensiveSeparationEvidence
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constituted_exponential_width_iff_distinct_separate_conservation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutedDistinctSeparateRegime
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constituted_distinct_separate_regime_has_exponential_width
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constituted_distinct_separate_regime_conserves
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_reduction_does_not_preserve_separate_obligations
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.independent_profile_addressing_requires_exponential_slots
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutive_program_instruction_count_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.structural_frontier_is_program_expansion
