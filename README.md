@@ -129,6 +129,24 @@ operational process.
 
 ![Endogenous operational stability](docs/figures/endogenous-operational-stability.svg)
 
+The repository now makes the representation comparison exact. For a public run
+with `n = input + 1` constituted openings, every finite interface that keeps all
+structural profiles independently addressable by distinct slots requires at
+least `2^n` slots. The same run produces an authoritative normalizer program of
+exactly `n` transport atoms. Each instruction is the code returned by its
+indexed execution; its interpreter acts on every accepted structural profile,
+equals the canonical normalizer, and erases to the exact returned-code history.
+The comparison is between `slotCount` for independently addressable profiles
+and the number of transport atoms according to `compiledLocalSize`; the raw
+program metric is proved equal to that erased-code metric. The derived
+operational-width reading and the internal instrumented cost remain separate
+results. Constitutive succinctness is also distinct from the independently
+proved non-factorization of the total action through the audited
+state-and-quantity projection. No universal time or memory lower bound is
+claimed.
+
+![Constitutive normalizer succinctness](docs/figures/constitutive-normalizer-succinctness.svg)
+
 ## Positioning and scope
 
 ![Relational Perimeter formal architecture](docs/figures/relational-perimeter-formal-architecture.svg)
@@ -240,6 +258,26 @@ et le transport de comparaison sont projetés séparément vers deux vues égale
 alors que leurs actions totales diffèrent sur une autre continuation admissible.
 Le théorème générique de non-factorisation consomme explicitement cette égalité
 de projections.
+
+Le dépôt rend désormais exacte la comparaison de représentations. Pour une
+exécution publique comportant `n = input + 1` ouvertures constituées, toute
+interface finie qui conserve tous les profils structurels comme adresses
+indépendantes et distinctes exige au moins `2^n` emplacements. La même exécution
+produit un programme normalisateur faisant autorité de taille exacte `n` dans
+la métrique des atomes de transport. Chaque instruction est le code retourné
+par l’exécution qu’indexe l’histoire ; son interprète agit sur toute charge
+structurelle acceptée, coïncide avec le normalisateur canonique et s’efface vers
+l’histoire exacte des codes retournés. La comparaison porte sur `slotCount`
+pour une représentation à profils indépendamment adressables et sur le nombre
+d’atomes de transport selon `compiledLocalSize` ; la métrique du programme brut
+est prouvée égale à cette métrique des codes effacés. La lecture dérivée de
+largeur opérationnelle et le coût instrumenté interne demeurent des résultats
+séparés. Cette succinctness constitutive reste aussi distincte de la
+non-factorisation, prouvée indépendamment, de l’action totale par la projection
+état-quantité auditée. Aucune borne universelle en temps ou en mémoire n’est
+revendiquée.
+
+![Succinctness du normalisateur constitutif](docs/figures/constitutive-normalizer-succinctness.svg)
 
 ## License
 

@@ -85,6 +85,56 @@ transport, and feeds its result into the next state.
 
 ![Endogenous operational stability](figures/endogenous-operational-stability.svg)
 
+### Independent addressing and executed succinctness
+
+The exact carriers also support a representation comparison that is stronger
+than a bare equality of widths. `IndependentProfileAddressing roles` is an
+interface with a finite number of slots and an injective address for every
+`StructuralObligation roles`. The repository proves constructively that any
+such interface satisfies
+
+```text
+structuralWidth roles ≤ slotCount.
+```
+
+Because the structural frontier is complete, duplicate-free, and has width
+`2^n`, every independently addressing interface therefore needs at least
+`2^n` slots. This lower bound is not obtained by storing `2^n` as an
+annotation: it is proved from injectivity and the exact constituted frontier.
+
+On the same dependent role history, `ConstitutiveNormalizerProgram` stores one
+typed transport instruction per executed opening. A separate recursive
+`IsAuthoritative` proof identifies every stored instruction with the code
+actually returned by that opening's execution. Its interpreter consumes each
+stored code on arbitrary accepted structural payloads. It is proved pointwise
+equal to `normalizeStructuralAcceptedPayload`, and its code erasure is proved
+equal to the public run's exact `returnedCodes` history. In the public family,
+the raw program metric is proved equal to the number of transport atoms
+according to `compiledLocalSize`, and both are exactly `n = input + 1`.
+
+The resulting comparison is exact:
+
+```text
+independently addressable structural cases : at least 2^n slots
+authoritative executed normalizer          : exactly n code atoms
+retained operational carrier               : exactly 1 profile
+transient executed width                    : at most 2
+```
+
+This is a constructive succinctness statement relative to the explicitly
+typed representation with independently addressable profiles, its slot bound,
+and the explicit primitive-atom metric.
+It does not assert that every representation must materialize the structural
+frontier, that the program causes the frontier's cardinality, or that a
+universal algorithmic time or memory lower bound has been proved. The derived
+operational-width reading and the internal instrumented cost are separate
+results carried by the same closed public certificate. Constitutive
+succinctness also remains distinct from the independently proved
+non-factorization of the total action through the audited state-and-quantity
+projection in the next section.
+
+![Constitutive normalizer succinctness](figures/constitutive-normalizer-succinctness.svg)
+
 ### Exact limit of a state-and-quantity projection
 
 The repository also constructs an extensional stability view that retains the

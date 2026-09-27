@@ -1,5 +1,6 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.MeasuredAccounting
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.EndogenousOperationalStability
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerSuccinctness
 
 /-!
 # Endogenous operational decomposition
@@ -57,6 +58,71 @@ abbrev OperationalStabilityEvidence (input : Nat) :=
 def operationalStabilityEvidence (input : Nat) :
     OperationalStabilityEvidence input :=
   publicEndogenousOperationalStability input
+
+/-- Public type of independent finite addressings of the exact structural
+profiles constituted for one input. -/
+abbrev IndependentProfileAddressing (input : Nat) :=
+  ConstitutiveSearch.EndogenousDecomposition.IndependentProfileAddressing
+    (PublicConstitutiveRoles input)
+
+/-- Public closed certificate joining exponential independent-profile
+addressing with the exact linear-size normalizer program returned by the same
+execution. -/
+abbrev ConstitutiveNormalizerSuccinctnessEvidence (input : Nat) : Type 3 :=
+  ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerSuccinctness input
+
+def constitutiveNormalizerSuccinctnessEvidence (input : Nat) :
+    ConstitutiveNormalizerSuccinctnessEvidence input :=
+  publicConstitutiveNormalizerSuccinctness input
+
+theorem independent_profile_addressing_requires_exponential_slots
+    (input : Nat) (addressing : IndependentProfileAddressing input) :
+    2 ^ (input + 1) <= addressing.slotCount :=
+  public_independent_profile_slots_exponential input addressing
+
+theorem constitutive_normalizer_program_code_size_exact (input : Nat) :
+    (constitutiveNormalizerSuccinctnessEvidence input).program.program.codeSize =
+      input + 1 :=
+  public_constitutive_normalizer_programCodeSize_exact input
+
+theorem constitutive_normalizer_code_metric_exact (input : Nat) :
+    let certificate := constitutiveNormalizerSuccinctnessEvidence input
+    certificate.program.program.codeSize =
+      compiledLocalSize
+        (authoritativeNormalizerProgramReturnedCodes
+          certificate.program.program certificate.program.authoritative) :=
+  public_constitutive_normalizer_codeMetric_exact input
+
+theorem constitutive_normalizer_code_size_exact (input : Nat) :
+    let certificate := constitutiveNormalizerSuccinctnessEvidence input
+    compiledLocalSize
+        (authoritativeNormalizerProgramReturnedCodes
+          certificate.program.program certificate.program.authoritative) =
+      input + 1 :=
+  public_constitutive_normalizer_codeSize_exact input
+
+theorem constitutive_normalizer_interpreter_exact (input : Nat)
+    (profile : StructuralObligation (PublicConstitutiveRoles input))
+    (payload : StructuralAcceptedPayload
+      (PublicConstitutiveRoles input) profile) :
+    let certificate := constitutiveNormalizerSuccinctnessEvidence input
+    interpretConstitutiveNormalizerProgram certificate.program.program
+        profile payload =
+      normalizeStructuralAcceptedPayload
+        (PublicConstitutiveRoles input) profile payload :=
+  public_constitutive_normalizer_interpreter_exact input profile payload
+
+theorem constitutive_normalizer_returns_executed_codes (input : Nat) :
+    let certificate := constitutiveNormalizerSuccinctnessEvidence input
+    authoritativeNormalizerProgramReturnedCodes
+        certificate.program.program certificate.program.authoritative =
+      (executeConstitutiveResolution input).history.returnedCodes :=
+  public_constitutive_normalizer_returns_executed_codes input
+
+theorem constitutive_normalizer_instrumented_work_bound (input : Nat) :
+    (executeConstitutiveResolution input).instrumentedWork <=
+      resolutionInstrumentedPolynomial.eval input :=
+  public_constitutive_normalizer_instrumentedWork_bound input
 
 /-- The public certificate's reduction history is definitionally the one built
 from the authoritative dependent role history. -/
@@ -548,6 +614,16 @@ end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.family
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.OperationalStabilityEvidence
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operationalStabilityEvidence
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.IndependentProfileAddressing
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.ConstitutiveNormalizerSuccinctnessEvidence
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutiveNormalizerSuccinctnessEvidence
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.independent_profile_addressing_requires_exponential_slots
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutive_normalizer_program_code_size_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutive_normalizer_code_metric_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutive_normalizer_code_size_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutive_normalizer_interpreter_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutive_normalizer_returns_executed_codes
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutive_normalizer_instrumented_work_bound
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_reduction_history_is_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_discovery_work_is_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.operational_projection_history_is_exact

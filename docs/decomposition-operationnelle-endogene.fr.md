@@ -89,6 +89,58 @@ résultat à l’état suivant.
 
 ![Stabilité opérationnelle endogène](figures/endogenous-operational-stability.svg)
 
+### Adressage indépendant et succinctness exécutée
+
+Les carriers exacts permettent aussi une comparaison de représentations plus
+forte qu’une simple égalité de largeurs. `IndependentProfileAddressing roles`
+est une interface dotée d’un nombre fini d’emplacements et d’une adresse
+injective pour chaque `StructuralObligation roles`. Le dépôt prouve
+constructivement que toute interface de ce type vérifie
+
+```text
+structuralWidth roles ≤ slotCount.
+```
+
+Puisque la frontière structurelle est complète, sans doublon et de largeur
+`2^n`, toute interface qui maintient ces profils comme adresses indépendantes
+exige donc au moins `2^n` emplacements. Cette borne ne provient pas d’une
+annotation qui stockerait `2^n` : elle est démontrée à partir de l’injectivité
+et de la frontière constituée exacte.
+
+Sur la même histoire dépendante de rôles, `ConstitutiveNormalizerProgram`
+stocke une instruction de transport typée par ouverture exécutée. Une preuve
+récursive `IsAuthoritative`, séparée du programme brut, identifie chaque
+instruction au code effectivement retourné par l’exécution correspondante.
+L’interprète consomme ces codes sur toute charge structurelle acceptée. Il est
+prouvé égal point par point à `normalizeStructuralAcceptedPayload`, et
+l’effacement des codes du programme est prouvé égal à l’histoire publique
+exacte `returnedCodes`. La métrique récursive du programme brut est prouvée
+égale au nombre d’atomes de transport selon `compiledLocalSize`. Dans la
+famille publique, ces deux métriques valent exactement `n = input + 1`.
+
+La comparaison obtenue est exacte :
+
+```text
+cas structurels adressables indépendamment : au moins 2^n emplacements
+normalisateur exécuté faisant autorité      : exactement n atomes de code
+carrier opérationnel retenu                 : exactement 1 profil
+largeur exécutée transitoire                : au plus 2
+```
+
+Il s’agit d’un énoncé constructif de succinctness relatif à une représentation
+à profils indépendamment adressables, à sa borne de slots et à la métrique
+explicite des atomes primitifs. Il
+n’affirme ni que toute représentation doit matérialiser la frontière
+structurelle, ni que le programme cause la cardinalité de cette frontière, ni
+qu’une borne algorithmique universelle en temps ou en mémoire a été démontrée.
+La lecture dérivée de largeur opérationnelle et le coût instrumenté interne
+restent des résultats séparés, tous deux portés par le même certificat public
+fermé. Enfin, la succinctness ne remplace pas la non-factorisation de l’action
+totale par la projection auditée, qui est prouvée indépendamment dans la section
+suivante.
+
+![Succinctness du normalisateur constitutif](figures/constitutive-normalizer-succinctness.svg)
+
 ### Limite exacte d’une projection par état et quantité
 
 Le dépôt construit également une vue extensionnelle de stabilité qui conserve

@@ -16,7 +16,10 @@ else
   exit 1
 fi
 
-mapfile -t lean_files < <(find . -path './.lake' -prune -o -type f -name '*.lean' -print | sort)
+mapfile -t lean_files < <(git ls-files --cached --others --exclude-standard -- '*.lean' | sort)
+
+bash scripts/check-import-boundaries.sh --self-test
+bash scripts/check-import-boundaries.sh
 
 for file in "${lean_files[@]}"; do
   begin_count="$(grep -cF -- '/- AXIOM_AUDIT_BEGIN -/' "$file" || true)"
@@ -73,4 +76,4 @@ else
   echo 'git worktree metadata could not be resolved' >&2
   exit 1
 fi
-echo "Verified ${#lean_files[@]} Lean files: build, constructivity, audit blocks, and migration boundaries are clean."
+echo "Verified ${#lean_files[@]} Lean files: build, constructivity, audit blocks, import boundaries, and migration boundaries are clean."

@@ -1,8 +1,20 @@
 $ErrorActionPreference = "Stop"
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
-$leanFiles = Get-ChildItem -LiteralPath $repoRoot -Recurse -File -Filter "*.lean" |
-  Where-Object { $_.FullName -notlike "*\.lake\*" }
+Push-Location $repoRoot
+try {
+  $relativeLeanFiles = @(& git ls-files --cached --others --exclude-standard -- '*.lean') |
+    Sort-Object
+  if ($LASTEXITCODE -ne 0) { throw "git ls-files failed" }
+} finally {
+  Pop-Location
+}
+$leanFiles = $relativeLeanFiles | ForEach-Object { Get-Item -LiteralPath (Join-Path $repoRoot $_) }
+
+& (Join-Path $PSScriptRoot "check-import-boundaries.ps1") --self-test
+if ($LASTEXITCODE -ne 0) { throw "import-boundary self-test failed" }
+& (Join-Path $PSScriptRoot "check-import-boundaries.ps1")
+if ($LASTEXITCODE -ne 0) { throw "import-boundary check failed" }
 
 $forbiddenTerms =
   '(?m)^\s*(axiom|unsafe)\s|\b(noncomputable|Classical|propext|Quot\.sound|native_decide|implemented_by|sorry|admit)\b'
@@ -58,4 +70,4 @@ try {
   Pop-Location
 }
 
-Write-Output "Verified $($leanFiles.Count) Lean files: build, constructivity, audit blocks, and migration boundaries are clean."
+Write-Output "Verified $($leanFiles.Count) Lean files: build, constructivity, audit blocks, import boundaries, and migration boundaries are clean."
