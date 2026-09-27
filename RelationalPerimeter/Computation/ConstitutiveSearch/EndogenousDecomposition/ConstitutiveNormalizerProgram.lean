@@ -1,3 +1,4 @@
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerCore
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalReductionHistory
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedLocalSchedule
 
@@ -14,64 +15,6 @@ on arbitrary accepted structural payloads, before any one profile is selected.
 namespace ConstitutiveSearch.EndogenousDecomposition
 
 open SAT
-
-/-- One typed instruction at an executed stage.  Its endpoints are the actual
-schedule endpoints, so an unrelated transport cannot inhabit this field. -/
-structure ConstitutiveNormalizerInstruction
-    {depth : Nat}
-    {assignment : SequentialAssignment depth}
-    {state : ThreadedConstitutiveState depth assignment}
-    {stage : SequentialStageRun depth assignment}
-    (_run : ThreadedConstitutiveStageRun state stage) where
-  code :
-    TransportCode
-      (GeneratedStructuralFlipAtRelation
-        (rootFormula := distinctGrowingDiscoveryFormula
-          (constructStage (depth + 1)).searchIndex)
-        stage.schedule.entry.var)
-      stage.schedule.entry.source
-      stage.schedule.entry.target
-
-/-- The instruction is authoritative exactly when it is the code returned by
-the execution stored at this stage. -/
-def ConstitutiveNormalizerInstruction.IsAuthoritative
-    {depth : Nat}
-    {assignment : SequentialAssignment depth}
-    {state : ThreadedConstitutiveState depth assignment}
-    {stage : SequentialStageRun depth assignment}
-    {run : ThreadedConstitutiveStageRun state stage}
-    (instruction : ConstitutiveNormalizerInstruction run) : Prop :=
-  instruction.code = stage.execution.code
-
-/-- The actual returned code, reified as one instruction. -/
-def authoritativeNormalizerInstruction
-    {depth : Nat}
-    {assignment : SequentialAssignment depth}
-    {state : ThreadedConstitutiveState depth assignment}
-    {stage : SequentialStageRun depth assignment}
-    (run : ThreadedConstitutiveStageRun state stage) :
-    ConstitutiveNormalizerInstruction run :=
-  ⟨stage.execution.code⟩
-
-/-- The canonical instruction stores the returned execution code itself.  This
-is definitional, not a later propositional comparison with a recompiled code. -/
-theorem authoritativeNormalizerInstruction_code_exact
-    {depth : Nat}
-    {assignment : SequentialAssignment depth}
-    {state : ThreadedConstitutiveState depth assignment}
-    {stage : SequentialStageRun depth assignment}
-    (run : ThreadedConstitutiveStageRun state stage) :
-    (authoritativeNormalizerInstruction run).code = stage.execution.code :=
-  rfl
-
-theorem authoritativeNormalizerInstruction_isAuthoritative
-    {depth : Nat}
-    {assignment : SequentialAssignment depth}
-    {state : ThreadedConstitutiveState depth assignment}
-    {stage : SequentialStageRun depth assignment}
-    (run : ThreadedConstitutiveStageRun state stage) :
-    (authoritativeNormalizerInstruction run).IsAuthoritative :=
-  rfl
 
 /-- View an accepted left payload at the scheduled source.  This is
 definitionally exact: `DiscoverySchedule.entry` is reconstructed from the
@@ -145,11 +88,7 @@ def interpretConstitutiveNormalizerInstruction
       RetainedAcceptedPayload run
   | false, payload =>
       let source := leftPayloadAtScheduleSource run payload
-      let transport := instruction.code.eval
-          (generatedStructuralFlipAtAction
-            (distinctGrowingDiscoveryFormula
-              (constructStage (depth + 1)).searchIndex)
-            stage.schedule.entry.var)
+      let transport := instruction.toAcceptingTransport run
       scheduleTargetAsRetainedPayload run
         ⟨transport.map source.1,
           transport.preservesAccept source.1 source.2⟩
@@ -168,11 +107,7 @@ theorem interpretConstitutiveNormalizerInstruction_false
     (payload : LocalAcceptedPayload run false) :
     interpretConstitutiveNormalizerInstruction run instruction false payload =
       let source := leftPayloadAtScheduleSource run payload
-      let transport := instruction.code.eval
-          (generatedStructuralFlipAtAction
-            (distinctGrowingDiscoveryFormula
-              (constructStage (depth + 1)).searchIndex)
-            stage.schedule.entry.var)
+      let transport := instruction.toAcceptingTransport run
       scheduleTargetAsRetainedPayload run
         ⟨transport.map source.1,
           transport.preservesAccept source.1 source.2⟩ :=
@@ -234,79 +169,6 @@ theorem interpretAuthoritativeNormalizerInstruction_exact
           rfl
   | true => rfl
 
-/-- A raw program has exactly one instruction for each role-stage constructor.
-The explicit head role keeps the dependent tail tied to the state produced by
-the hidden `headRun`; no independently assembled list can be substituted. -/
-inductive ConstitutiveNormalizerProgram :
-    {depth count : Nat} ->
-    {assignment : SequentialAssignment depth} ->
-    {state : ThreadedConstitutiveState depth assignment} ->
-    {run : ConstitutiveExecutionHistory (count := count) state} ->
-    (roles : ThreadedConstitutiveRoleHistory run) -> Type 2 where
-  | nil {depth : Nat}
-      {assignment : SequentialAssignment depth}
-      {state : ThreadedConstitutiveState depth assignment} :
-      ConstitutiveNormalizerProgram
-        (ThreadedConstitutiveRoleHistory.nil (state := state))
-  | step {depth count : Nat}
-      {assignment : SequentialAssignment depth}
-      {state : ThreadedConstitutiveState depth assignment}
-      {stage : SequentialStageRun depth assignment}
-      {headRun : ThreadedConstitutiveStageRun state stage}
-      {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
-      (headRole : ThreadedConstitutiveRoleStage headRun)
-      (instruction : ConstitutiveNormalizerInstruction headRun)
-      {tailRoles : ThreadedConstitutiveRoleHistory tailRun}
-      (tail : ConstitutiveNormalizerProgram tailRoles) :
-      ConstitutiveNormalizerProgram
-        (ThreadedConstitutiveRoleHistory.step headRole tailRoles)
-
-/-- Reify the returned execution code at every stage of the role history. -/
-def buildConstitutiveNormalizerProgram :
-    {depth count : Nat} ->
-    {assignment : SequentialAssignment depth} ->
-    {state : ThreadedConstitutiveState depth assignment} ->
-    {run : ConstitutiveExecutionHistory (count := count) state} ->
-    (roles : ThreadedConstitutiveRoleHistory run) ->
-      ConstitutiveNormalizerProgram roles
-  | _, _, _, _, _, .nil => .nil
-  | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
-      _ _ _ _ _ headRun _ headRole tailRoles =>
-      .step headRole (authoritativeNormalizerInstruction headRun)
-        (buildConstitutiveNormalizerProgram tailRoles)
-
-/-- Construction follows the role history by reduction and places the exact
-returned instruction at its head. -/
-theorem buildConstitutiveNormalizerProgram_step
-    {depth count : Nat}
-    {assignment : SequentialAssignment depth}
-    {state : ThreadedConstitutiveState depth assignment}
-    {stage : SequentialStageRun depth assignment}
-    {headRun : ThreadedConstitutiveStageRun state stage}
-    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
-    (headRole : ThreadedConstitutiveRoleStage headRun)
-    (tailRoles : ThreadedConstitutiveRoleHistory tailRun) :
-    buildConstitutiveNormalizerProgram
-        (ThreadedConstitutiveRoleHistory.step headRole tailRoles) =
-      ConstitutiveNormalizerProgram.step headRole
-        (authoritativeNormalizerInstruction headRun)
-        (buildConstitutiveNormalizerProgram tailRoles) :=
-  rfl
-
-/-- Number of transport atoms stored by a raw dependent program.  This counts
-only run-specific code data; the common interpreter, dependent indices and
-proofs are not included in this metric. -/
-def ConstitutiveNormalizerProgram.codeSize :
-    {depth count : Nat} ->
-    {assignment : SequentialAssignment depth} ->
-    {state : ThreadedConstitutiveState depth assignment} ->
-    {run : ConstitutiveExecutionHistory (count := count) state} ->
-    {roles : ThreadedConstitutiveRoleHistory run} ->
-      ConstitutiveNormalizerProgram roles -> Nat
-  | _, _, _, _, _, _, .nil => 0
-  | _, _, _, _, _, _, .step _ instruction tail =>
-      instruction.code.size + tail.codeSize
-
 /-- The program constructed from an executed role history contains exactly one
 transport atom per stage. -/
 theorem buildConstitutiveNormalizerProgram_codeSize :
@@ -333,51 +195,6 @@ theorem buildConstitutiveNormalizerProgram_codeSize :
         _ = operationalStageCount tailRoles + 1 :=
           congrArg (fun size => size + 1)
             (buildConstitutiveNormalizerProgram_codeSize tailRoles)
-
-/-- Recursive authority predicate for the whole program. -/
-def ConstitutiveNormalizerProgram.IsAuthoritative :
-    {depth count : Nat} ->
-    {assignment : SequentialAssignment depth} ->
-    {state : ThreadedConstitutiveState depth assignment} ->
-    {run : ConstitutiveExecutionHistory (count := count) state} ->
-    {roles : ThreadedConstitutiveRoleHistory run} ->
-      ConstitutiveNormalizerProgram roles -> Prop
-  | _, _, _, _, _, _, .nil => True
-  | _, _, _, _, _, _, .step _ instruction tail =>
-      instruction.IsAuthoritative ∧ tail.IsAuthoritative
-
-theorem buildConstitutiveNormalizerProgram_isAuthoritative :
-    forall {depth count : Nat}
-      {assignment : SequentialAssignment depth}
-      {state : ThreadedConstitutiveState depth assignment}
-      {run : ConstitutiveExecutionHistory (count := count) state}
-      (roles : ThreadedConstitutiveRoleHistory run),
-      (buildConstitutiveNormalizerProgram roles).IsAuthoritative
-  | _, _, _, _, _, .nil => True.intro
-  | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
-      _ _ _ _ _ _ _ _ tailRoles =>
-      ⟨rfl, buildConstitutiveNormalizerProgram_isAuthoritative tailRoles⟩
-
-/-- A program bundled with the recursive proof that every instruction came
-from the indexed execution. -/
-structure AuthoritativeConstitutiveNormalizerProgram
-    {depth count : Nat}
-    {assignment : SequentialAssignment depth}
-    {state : ThreadedConstitutiveState depth assignment}
-    {run : ConstitutiveExecutionHistory (count := count) state}
-    (roles : ThreadedConstitutiveRoleHistory run) where
-  program : ConstitutiveNormalizerProgram roles
-  authoritative : program.IsAuthoritative
-
-def buildAuthoritativeConstitutiveNormalizerProgram
-    {depth count : Nat}
-    {assignment : SequentialAssignment depth}
-    {state : ThreadedConstitutiveState depth assignment}
-    {run : ConstitutiveExecutionHistory (count := count) state}
-    (roles : ThreadedConstitutiveRoleHistory run) :
-    AuthoritativeConstitutiveNormalizerProgram roles :=
-  ⟨buildConstitutiveNormalizerProgram roles,
-    buildConstitutiveNormalizerProgram_isAuthoritative roles⟩
 
 /-- Erase an authoritative program to the ordinary list of compiled local
 atoms.  Construction of each atom consumes the corresponding authority proof;
@@ -480,6 +297,212 @@ theorem authoritativeNormalizerProgram_compiledSize_eq_stageCount
     (Eq.trans
       (returnedCodes_size run.toSequentialHistory)
       (operationalStageCount_eq_historyCount roles).symm)
+
+/-- Accepted data indexed by a profile of the program that will consume it.
+This program-indexed family prevents a separately manufactured profile carrier
+from being passed to the interpreter. -/
+def ConstitutiveNormalizerProgram.AcceptedProfilePayload :
+    {depth count : Nat} ->
+    {assignment : SequentialAssignment depth} ->
+    {state : ThreadedConstitutiveState depth assignment} ->
+    {run : ConstitutiveExecutionHistory (count := count) state} ->
+    {roles : ThreadedConstitutiveRoleHistory run} ->
+    (program : ConstitutiveNormalizerProgram roles) ->
+      program.Profile -> Type
+  | _, _, _, _, _, _, .nil, _ => Unit
+  | _, _, _, _, _, _, @ConstitutiveNormalizerProgram.step
+      _ _ _ _ _ headRun _ _ _ _ tail, profile =>
+      LocalAcceptedPayload headRun profile.1 ×
+        tail.AcceptedProfilePayload profile.2
+
+/-- Output payload produced by executing every instruction of one typed
+program. -/
+def ConstitutiveNormalizerProgram.NormalizedProfilePayload :
+    {depth count : Nat} ->
+    {assignment : SequentialAssignment depth} ->
+    {state : ThreadedConstitutiveState depth assignment} ->
+    {run : ConstitutiveExecutionHistory (count := count) state} ->
+    {roles : ThreadedConstitutiveRoleHistory run} ->
+      ConstitutiveNormalizerProgram roles -> Type
+  | _, _, _, _, _, _, .nil => Unit
+  | _, _, _, _, _, _, @ConstitutiveNormalizerProgram.step
+      _ _ _ _ _ headRun _ _ _ _ tail =>
+      RetainedAcceptedPayload headRun × tail.NormalizedProfilePayload
+
+/-- Interpret a program on a profile produced by that same program.  Both the
+domain and its accepted payload are indexed by the program value. -/
+def interpretConstitutiveNormalizerProgramProfile :
+    {depth count : Nat} ->
+    {assignment : SequentialAssignment depth} ->
+    {state : ThreadedConstitutiveState depth assignment} ->
+    {run : ConstitutiveExecutionHistory (count := count) state} ->
+    {roles : ThreadedConstitutiveRoleHistory run} ->
+    (program : ConstitutiveNormalizerProgram roles) ->
+    (profile : program.Profile) ->
+      program.AcceptedProfilePayload profile ->
+        program.NormalizedProfilePayload
+  | _, _, _, _, _, _, .nil, _, _ => ()
+  | _, _, _, _, _, _, @ConstitutiveNormalizerProgram.step
+      _ _ _ _ _ headRun _ _ instruction _ tail, profile, payload =>
+      ⟨interpretConstitutiveNormalizerInstruction headRun instruction
+          profile.1 payload.1,
+        interpretConstitutiveNormalizerProgramProfile tail profile.2 payload.2⟩
+
+/-- One program step necessarily evaluates its stored instruction and then the
+typed tail.  A profile interpreter that bypasses the instruction does not
+satisfy this equation. -/
+theorem interpretConstitutiveNormalizerProgramProfile_step
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    {headRun : ThreadedConstitutiveStageRun state stage}
+    {tailRun : ConstitutiveExecutionHistory (count := count) headRun.nextRun.next}
+    (headRole : ThreadedConstitutiveRoleStage headRun)
+    (instruction : ConstitutiveNormalizerInstruction headRun)
+    {tailRoles : ThreadedConstitutiveRoleHistory tailRun}
+    (tail : ConstitutiveNormalizerProgram tailRoles)
+    (choice : Bool) (rest : tail.Profile)
+    (headPayload : LocalAcceptedPayload headRun choice)
+    (tailPayload : tail.AcceptedProfilePayload rest) :
+    interpretConstitutiveNormalizerProgramProfile
+        (ConstitutiveNormalizerProgram.step headRole instruction tail)
+        (choice, rest) (headPayload, tailPayload) =
+      (interpretConstitutiveNormalizerInstruction headRun instruction
+          choice headPayload,
+        interpretConstitutiveNormalizerProgramProfile tail rest tailPayload) :=
+  rfl
+
+/-- Convert accepted data indexed by the canonical program to the historical
+structural-payload interface.  The conversion is structural and contains no
+choice or erased proof. -/
+def canonicalProgramAcceptedPayloadToStructural :
+    {depth count : Nat} ->
+    {assignment : SequentialAssignment depth} ->
+    {state : ThreadedConstitutiveState depth assignment} ->
+    {run : ConstitutiveExecutionHistory (count := count) state} ->
+    (roles : ThreadedConstitutiveRoleHistory run) ->
+    (profile : (buildConstitutiveNormalizerProgram roles).Profile) ->
+      (buildConstitutiveNormalizerProgram roles).AcceptedProfilePayload profile ->
+        StructuralAcceptedPayload roles profile
+  | _, _, _, _, _, .nil, _, _ => ()
+  | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
+      _ _ _ _ _ _ _ _ tailRoles, profile, payload =>
+      ⟨payload.1,
+        canonicalProgramAcceptedPayloadToStructural tailRoles profile.2 payload.2⟩
+
+/-- Convert the historical structural payload of the canonical program back
+to the payload family indexed by that same program.  No witness is invented or
+erased: the conversion follows the program/role constructors and retains every
+local accepted payload verbatim. -/
+def structuralAcceptedPayloadToCanonicalProgram :
+    {depth count : Nat} ->
+    {assignment : SequentialAssignment depth} ->
+    {state : ThreadedConstitutiveState depth assignment} ->
+    {run : ConstitutiveExecutionHistory (count := count) state} ->
+    (roles : ThreadedConstitutiveRoleHistory run) ->
+    (profile : (buildConstitutiveNormalizerProgram roles).Profile) ->
+      StructuralAcceptedPayload roles profile ->
+        (buildConstitutiveNormalizerProgram roles).AcceptedProfilePayload profile
+  | _, _, _, _, _, .nil, _, payload => payload
+  | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
+      _ _ _ _ _ _ _ _ tailRoles, profile, payload =>
+      ⟨payload.1,
+        structuralAcceptedPayloadToCanonicalProgram
+          tailRoles profile.2 payload.2⟩
+
+/-- Every profile generated by the canonical program has a positively
+constructed accepted payload indexed by that very program. -/
+def everyCanonicalProgramProfileHasAcceptedPayload
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {run : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory run)
+    (profile : (buildConstitutiveNormalizerProgram roles).Profile) :
+    (buildConstitutiveNormalizerProgram roles).AcceptedProfilePayload profile :=
+  structuralAcceptedPayloadToCanonicalProgram roles profile
+    (everyStructuralObligationHasAcceptedPayload roles profile)
+
+/-- Convert the canonical program-indexed output to the historical operational
+payload.  This only exposes the same dependent product under its public name. -/
+def canonicalProgramNormalizedPayloadToOperational :
+    {depth count : Nat} ->
+    {assignment : SequentialAssignment depth} ->
+    {state : ThreadedConstitutiveState depth assignment} ->
+    {run : ConstitutiveExecutionHistory (count := count) state} ->
+    (roles : ThreadedConstitutiveRoleHistory run) ->
+      (buildConstitutiveNormalizerProgram roles).NormalizedProfilePayload ->
+        OperationalAcceptedPayload roles
+  | _, _, _, _, _, .nil, _ => ()
+  | _, _, _, _, _, @ThreadedConstitutiveRoleHistory.step
+      _ _ _ _ _ _ _ _ tailRoles, payload =>
+      ⟨payload.1,
+        canonicalProgramNormalizedPayloadToOperational tailRoles payload.2⟩
+
+/-- The canonical program-indexed interpreter realizes the historical
+normalizer exactly after the two structural interface conversions above. -/
+theorem interpretBuiltConstitutiveNormalizerProgramProfile_exact
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {run : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory run)
+    (profile : (buildConstitutiveNormalizerProgram roles).Profile)
+    (payload :
+      (buildConstitutiveNormalizerProgram roles).AcceptedProfilePayload profile) :
+    canonicalProgramNormalizedPayloadToOperational roles
+        (interpretConstitutiveNormalizerProgramProfile
+          (buildConstitutiveNormalizerProgram roles) profile payload) =
+      normalizeStructuralAcceptedPayload roles profile
+        (canonicalProgramAcceptedPayloadToStructural roles profile payload) := by
+  induction roles with
+  | nil =>
+      cases profile
+      cases payload
+      rfl
+  | step headRole tailRoles inductionHypothesis =>
+      cases profile with
+      | mk choice rest =>
+          cases choice with
+          | false =>
+              cases payload with
+              | mk headPayload tailPayload =>
+                  exact Eq.trans
+                    (congrArg
+                      (fun headValue =>
+                        (headValue,
+                          canonicalProgramNormalizedPayloadToOperational tailRoles
+                            (interpretConstitutiveNormalizerProgramProfile
+                              (buildConstitutiveNormalizerProgram tailRoles)
+                              rest tailPayload)))
+                      (interpretAuthoritativeNormalizerInstruction_exact _ _
+                        (authoritativeNormalizerInstruction_isAuthoritative _)
+                        false headPayload))
+                    (congrArg
+                      (fun tailValue =>
+                        (normalizeLocalAcceptedPayload _ false headPayload,
+                          tailValue))
+                      (inductionHypothesis rest tailPayload))
+          | true =>
+              cases payload with
+              | mk headPayload tailPayload =>
+                  exact Eq.trans
+                    (congrArg
+                      (fun headValue =>
+                        (headValue,
+                          canonicalProgramNormalizedPayloadToOperational tailRoles
+                            (interpretConstitutiveNormalizerProgramProfile
+                              (buildConstitutiveNormalizerProgram tailRoles)
+                              rest tailPayload)))
+                      (interpretAuthoritativeNormalizerInstruction_exact _ _
+                        (authoritativeNormalizerInstruction_isAuthoritative _)
+                        true headPayload))
+                    (congrArg
+                      (fun tailValue =>
+                        (normalizeLocalAcceptedPayload _ true headPayload,
+                          tailValue))
+                      (inductionHypothesis rest tailPayload))
 
 /-- Interpret a raw program on every accepted structural profile. -/
 def interpretConstitutiveNormalizerProgram :
@@ -591,6 +614,15 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.authoritativeNormalizerProgram_codeSize_eq_compiledLocalSize
 #print axioms ConstitutiveSearch.EndogenousDecomposition.authoritativeNormalizerProgramReturnedCodes_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.authoritativeNormalizerProgram_compiledSize_eq_stageCount
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerProgram.AcceptedProfilePayload
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerProgram.NormalizedProfilePayload
+#print axioms ConstitutiveSearch.EndogenousDecomposition.interpretConstitutiveNormalizerProgramProfile
+#print axioms ConstitutiveSearch.EndogenousDecomposition.interpretConstitutiveNormalizerProgramProfile_step
+#print axioms ConstitutiveSearch.EndogenousDecomposition.canonicalProgramAcceptedPayloadToStructural
+#print axioms ConstitutiveSearch.EndogenousDecomposition.structuralAcceptedPayloadToCanonicalProgram
+#print axioms ConstitutiveSearch.EndogenousDecomposition.everyCanonicalProgramProfileHasAcceptedPayload
+#print axioms ConstitutiveSearch.EndogenousDecomposition.canonicalProgramNormalizedPayloadToOperational
+#print axioms ConstitutiveSearch.EndogenousDecomposition.interpretBuiltConstitutiveNormalizerProgramProfile_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.interpretConstitutiveNormalizerProgram
 #print axioms ConstitutiveSearch.EndogenousDecomposition.interpretAuthoritativeConstitutiveNormalizerProgram_exact
 /- AXIOM_AUDIT_END -/

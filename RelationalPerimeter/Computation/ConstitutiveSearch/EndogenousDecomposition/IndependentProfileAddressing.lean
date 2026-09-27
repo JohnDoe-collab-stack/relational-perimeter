@@ -26,6 +26,35 @@ structure IndependentProfileAddressing
   slotOf_injective :
     forall {left right}, slotOf left = slotOf right -> left = right
 
+/-- Independent finite addressing of the profiles expanded by one particular
+typed normalizer program.  Unlike the compatibility interface above, this
+structure makes the program whose exhaustive expansion is being addressed an
+explicit index of the type. -/
+structure IndependentProgramProfileAddressing
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {run : ConstitutiveExecutionHistory (count := count) state}
+    (roles : ThreadedConstitutiveRoleHistory run)
+    (program : ConstitutiveNormalizerProgram roles) where
+  slotCount : Nat
+  slotOf : program.Profile -> Fin slotCount
+  slotOf_injective :
+    forall {left right}, slotOf left = slotOf right -> left = right
+
+/-- The historical public addressing interface is exactly addressing of the
+canonical program expansion, not an independently generated carrier. -/
+def IndependentProfileAddressing.toCanonicalProgramAddressing
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {run : ConstitutiveExecutionHistory (count := count) state}
+    {roles : ThreadedConstitutiveRoleHistory run}
+    (addressing : IndependentProfileAddressing roles) :
+    IndependentProgramProfileAddressing roles
+      (buildConstitutiveNormalizerProgram roles) :=
+  ⟨addressing.slotCount, addressing.slotOf, addressing.slotOf_injective⟩
+
 /-- Remove the first occurrence of a natural number using its constructive
 decidable equality. -/
 def removeFirstNat (target : Nat) : List Nat -> List Nat
@@ -110,22 +139,25 @@ theorem naturalsBelow_length :
   | 0 => rfl
   | bound + 1 => congrArg Nat.succ (naturalsBelow_length bound)
 
-/-- Exact lower bound for any injective finite addressing of the profiles. -/
-theorem independentProfileAddressing_slots_ge_structuralWidth
+/-- Exact lower bound for independently addressing the exhaustive expansion of
+an arbitrary typed program.  The proof enumerates the program's own profiles;
+no role-indexed carrier is substituted for them. -/
+theorem independentProgramProfileAddressing_slots_ge_profileWidth
     {depth count : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
     {run : ConstitutiveExecutionHistory (count := count) state}
     {roles : ThreadedConstitutiveRoleHistory run}
-    (addressing : IndependentProfileAddressing roles) :
-    structuralWidth roles <= addressing.slotCount := by
+    {program : ConstitutiveNormalizerProgram roles}
+    (addressing : IndependentProgramProfileAddressing roles program) :
+    program.profileWidth <= addressing.slotCount := by
   let addressed :=
-    (structuralFrontier roles).map (fun profile => (addressing.slotOf profile).val)
+    program.profileFrontier.map (fun profile => (addressing.slotOf profile).val)
   have addressedNodup : addressed.Nodup :=
     nodup_map_constructive
       (fun profile => (addressing.slotOf profile).val)
       (fun same => addressing.slotOf_injective (Fin.ext same))
-      (structuralFrontier_nodup roles)
+      (ConstitutiveNormalizerProgram.profileFrontier_nodup program)
   have contained : forall value, List.Mem value addressed ->
       List.Mem value (naturalsBelow addressing.slotCount) := by
     intro value member
@@ -145,8 +177,35 @@ theorem independentProfileAddressing_slots_ge_structuralWidth
     (congrArg (fun length => length <= addressing.slotCount)
       (length_map_constructive
         (fun profile => (addressing.slotOf profile).val)
-        (structuralFrontier roles)))
+        program.profileFrontier))
     slotBound
+
+/-- The program-indexed bound read through the exact binary expansion of its
+instruction constructors. -/
+theorem independentProgramProfileAddressing_slots_ge_two_pow_instructionCount
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {run : ConstitutiveExecutionHistory (count := count) state}
+    {roles : ThreadedConstitutiveRoleHistory run}
+    {program : ConstitutiveNormalizerProgram roles}
+    (addressing : IndependentProgramProfileAddressing roles program) :
+    2 ^ program.instructionCount <= addressing.slotCount := by
+  rw [<- ConstitutiveNormalizerProgram.profileWidth_eq_two_pow_instructionCount
+    program]
+  exact independentProgramProfileAddressing_slots_ge_profileWidth addressing
+
+/-- Exact lower bound for any injective finite addressing of the profiles. -/
+theorem independentProfileAddressing_slots_ge_structuralWidth
+    {depth count : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {run : ConstitutiveExecutionHistory (count := count) state}
+    {roles : ThreadedConstitutiveRoleHistory run}
+    (addressing : IndependentProfileAddressing roles) :
+    structuralWidth roles <= addressing.slotCount := by
+  exact independentProgramProfileAddressing_slots_ge_profileWidth
+    addressing.toCanonicalProgramAddressing
 
 /-- The same lower bound read through the exact `2^stageCount` frontier. -/
 theorem independentProfileAddressing_slots_ge_two_pow_stageCount
@@ -164,6 +223,8 @@ end ConstitutiveSearch.EndogenousDecomposition
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.EndogenousDecomposition.IndependentProfileAddressing
+#print axioms ConstitutiveSearch.EndogenousDecomposition.IndependentProgramProfileAddressing
+#print axioms ConstitutiveSearch.EndogenousDecomposition.IndependentProfileAddressing.toCanonicalProgramAddressing
 #print axioms ConstitutiveSearch.EndogenousDecomposition.removeFirstNat
 #print axioms ConstitutiveSearch.EndogenousDecomposition.removeFirstNat_preserves_other
 #print axioms ConstitutiveSearch.EndogenousDecomposition.removeFirstNat_length_of_mem
@@ -171,6 +232,8 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.naturalsBelow
 #print axioms ConstitutiveSearch.EndogenousDecomposition.naturalsBelow_complete
 #print axioms ConstitutiveSearch.EndogenousDecomposition.naturalsBelow_length
+#print axioms ConstitutiveSearch.EndogenousDecomposition.independentProgramProfileAddressing_slots_ge_profileWidth
+#print axioms ConstitutiveSearch.EndogenousDecomposition.independentProgramProfileAddressing_slots_ge_two_pow_instructionCount
 #print axioms ConstitutiveSearch.EndogenousDecomposition.independentProfileAddressing_slots_ge_structuralWidth
 #print axioms ConstitutiveSearch.EndogenousDecomposition.independentProfileAddressing_slots_ge_two_pow_stageCount
 /- AXIOM_AUDIT_END -/

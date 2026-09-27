@@ -1,4 +1,5 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.ConstitutiveProjectionNonFactorization
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerCore
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalReductionHistory
 
 /-!
@@ -274,6 +275,59 @@ theorem executed_view_is_projection_of_discovered {depth : Nat}
   congr 1
   exact stageApplication_eq_returnedRelationMap run
 
+/-- The same extensional readout is obtained by projecting the authoritative
+typed instruction.  Thus the readout is downstream of the instruction's total
+action; it is not an alternative source for that action. -/
+theorem executed_view_is_projection_of_authoritative_instruction {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    executedStepToExtensionalView run =
+      executedTransportProjection run
+        ((authoritativeNormalizerInstruction run).toAcceptingTransport run) := by
+  unfold executedStepToExtensionalView executedTransportProjection
+    transportToExtensionalStabilityView
+  congr 1
+  exact Eq.trans
+    (stageApplication_eq_returnedRelationMap run)
+    (authoritativeNormalizerInstruction_transport_map_exact
+      run stage.sourceContinuation).symm
+
+/-- The authoritative instruction itself, rather than a separately named
+transport, has the same projected view as the comparison transport. -/
+theorem authoritative_instruction_same_extensional_view {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    executedTransportProjection run
+        ((authoritativeNormalizerInstruction run).toAcceptingTransport run) =
+      executedTransportProjection run (observedConstantTransport run) :=
+  Eq.trans
+    (executed_view_is_projection_of_authoritative_instruction run).symm
+    (Eq.trans
+      (executed_view_is_projection_of_discovered run)
+      (same_extensional_view run))
+
+/-- The total action denoted by the authoritative instruction remains distinct
+from the comparison action on an admissible continuation hidden by the common
+projection. -/
+theorem authoritative_instruction_different_total_action {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    ((authoritativeNormalizerInstruction run).toAcceptingTransport run).map
+        (alternateContinuation run) ≠
+      (observedConstantTransport run).map (alternateContinuation run) := by
+  intro same
+  exact different_total_action run
+    (Eq.trans
+      (authoritativeNormalizerInstruction_transport_map_exact
+        run (alternateContinuation run)).symm
+      same)
+
 /-- The comparison transport agrees with the output recorded by the actual
 executed projection at its observed source continuation. -/
 theorem comparison_matches_executed_observation {depth : Nat}
@@ -301,6 +355,36 @@ def actionProjectionCollision {depth : Nat}
     sameProjection := same_extensional_view run
     argument := alternateContinuation run
     differentAction := different_total_action run }
+
+/-- Concrete projection collision whose first term is the total action stored
+by the authoritative program instruction. -/
+def authoritativeInstructionActionProjectionCollision {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    ActionProjectionCollision
+      (executedTransportProjection run)
+      (executedTransportAction run) :=
+  { first := (authoritativeNormalizerInstruction run).toAcceptingTransport run
+    second := observedConstantTransport run
+    sameProjection := authoritative_instruction_same_extensional_view run
+    argument := alternateContinuation run
+    differentAction := authoritative_instruction_different_total_action run }
+
+/-- The determined state-and-width projection cannot reconstruct the total
+action stored by the authoritative instruction. -/
+theorem authoritative_instruction_action_not_factors_on_executed_system
+    {depth : Nat}
+    {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {stage : SequentialStageRun depth assignment}
+    (run : ThreadedConstitutiveStageRun state stage) :
+    ¬ ActionFactorsThrough
+      (executedTransportProjection run)
+      (executedTransportAction run) :=
+  action_not_factors_of_projection_collision
+    (authoritativeInstructionActionProjectionCollision run)
 
 /-- On the executed family itself, the total transport action does not factor
 through the extensional state-and-quantity projection. The proof is an
@@ -419,10 +503,15 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.alternateContinuation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.same_observed_output
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.different_total_action
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.authoritative_instruction_same_extensional_view
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.authoritative_instruction_different_total_action
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.same_extensional_view
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.executed_view_is_projection_of_discovered
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.executed_view_is_projection_of_authoritative_instruction
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.comparison_matches_executed_observation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.actionProjectionCollision
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.authoritativeInstructionActionProjectionCollision
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.authoritative_instruction_action_not_factors_on_executed_system
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedExtensionalSeparator.operational_action_not_factors_on_executed_system
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExtensionalSeparator.system
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExtensionalSeparator.preservingTransport

@@ -120,32 +120,40 @@ generic level, `ActionFactorsThrough` expresses recoverability of a total
 action from a projection, while `ActionProjectionCollision` records equal
 projected values whose total actions differ at one argument; the generic
 non-factorization theorem explicitly consumes that projection equality. On the
-actual executed generated system, the discovered transport and a total
-comparison transport instantiate this collision: their separately constructed
-views are equal, they agree at the observed executed continuation, and their
-total actions differ on another admissible continuation. In this exact sense,
-the extensional stability reading is a forgetful projection of the constituted
-operational process.
+actual executed generated system, the total transport stored by the
+authoritative instruction and a comparison transport instantiate this
+collision: their separately constructed views are equal, they agree at the
+observed executed continuation, and their total actions differ on another
+admissible continuation. The instruction acts pointwise as the discovered
+relation on every continuation. In this exact sense, the extensional stability
+reading is a forgetful projection of the constituted operational process.
 
 ![Endogenous operational stability](docs/figures/endogenous-operational-stability.svg)
 
-The repository now makes the representation comparison exact. For a public run
-with `n = input + 1` constituted openings, every finite interface that keeps all
-structural profiles independently addressable by distinct slots requires at
-least `2^n` slots. The same run produces an authoritative normalizer program of
-exactly `n` transport atoms. Each instruction is the code returned by its
-indexed execution; its interpreter acts on every accepted structural profile,
-equals the canonical normalizer, and erases to the exact returned-code history.
-The comparison is between `slotCount` for independently addressable profiles
-and the number of transport atoms according to `compiledLocalSize`; the raw
-program metric is proved equal to that erased-code metric. The derived
-operational-width reading and the internal instrumented cost remain separate
-results. Constitutive succinctness is also distinct from the independently
-proved non-factorization of the total action through the audited
-state-and-quantity projection. No universal time or memory lower bound is
-claimed.
+The repository now proves the production hierarchy behind the representation
+comparison. For a public run with `n = input + 1` constituted openings, the
+executed role history constructs an authoritative typed program with exactly
+`n` transport instructions. `StructuralObligation` is literally the profile
+type of that program, and `structuralFrontier` is literally its complete,
+duplicate-free binary expansion, of exact width `2^n`. Any finite interface
+that keeps those program-produced profiles independently addressable therefore
+requires at least `2^n` distinct slots. The same program interprets every
+accepted profile in its expansion exactly as the canonical normalizer and
+every generated profile has a positively constructed accepted payload indexed
+by that program. It erases to the exact returned-code history. Its raw atom
+count is proved equal to `compiledLocalSize` and to `n`.
 
-![Constitutive normalizer succinctness](docs/figures/constitutive-normalizer-succinctness.svg)
+The extensive profile space is thus a deployment of the constituted program,
+not a parallel carrier sharing only a common index. The audited
+state-and-quantity view is further downstream: it is a projection of an
+authoritative instruction's total action, and the existing collision theorem
+shows that this projection does not reconstruct the total action. The derived
+operational-width reading and the internal instrumented cost remain separate
+results. The statement is representation-relative: it proves the exact lower
+bound for independent finite addressing, not a universal time or memory lower
+bound for every possible representation.
+
+![Constitutive complexity hierarchy](docs/figures/constitutive-complexity-hierarchy.svg)
 
 ## Positioning and scope
 
@@ -253,31 +261,40 @@ retenues par les transports découverts a une largeur exacte `1`. La lecture
 numérique transitoire `1 → 2 → 1` est dérivée des frontières constituées et
 reste uniformément bornée par `2` ; elle n’est pas une prémisse causale de la
 réduction. Une projection par état et quantité conserve cette stabilité
-observée sans déterminer l’action opérationnelle totale. Le transport découvert
-et le transport de comparaison sont projetés séparément vers deux vues égales,
-alors que leurs actions totales diffèrent sur une autre continuation admissible.
-Le théorème générique de non-factorisation consomme explicitement cette égalité
-de projections.
+observée sans déterminer l’action opérationnelle totale. Le transport total
+porté par l’instruction faisant autorité et le transport de comparaison sont
+projetés séparément vers deux vues égales, alors que leurs actions totales
+diffèrent sur une autre continuation admissible. L’instruction agit point par
+point comme la relation découverte sur toute continuation. Le théorème
+générique de non-factorisation consomme explicitement cette égalité de
+projections.
 
-Le dépôt rend désormais exacte la comparaison de représentations. Pour une
-exécution publique comportant `n = input + 1` ouvertures constituées, toute
-interface finie qui conserve tous les profils structurels comme adresses
-indépendantes et distinctes exige au moins `2^n` emplacements. La même exécution
-produit un programme normalisateur faisant autorité de taille exacte `n` dans
-la métrique des atomes de transport. Chaque instruction est le code retourné
-par l’exécution qu’indexe l’histoire ; son interprète agit sur toute charge
-structurelle acceptée, coïncide avec le normalisateur canonique et s’efface vers
-l’histoire exacte des codes retournés. La comparaison porte sur `slotCount`
-pour une représentation à profils indépendamment adressables et sur le nombre
-d’atomes de transport selon `compiledLocalSize` ; la métrique du programme brut
-est prouvée égale à cette métrique des codes effacés. La lecture dérivée de
-largeur opérationnelle et le coût instrumenté interne demeurent des résultats
-séparés. Cette succinctness constitutive reste aussi distincte de la
-non-factorisation, prouvée indépendamment, de l’action totale par la projection
-état-quantité auditée. Aucune borne universelle en temps ou en mémoire n’est
-revendiquée.
+Le dépôt prouve désormais la hiérarchie de production qui fonde la comparaison
+de représentations. Pour une exécution publique comportant
+`n = input + 1` ouvertures constituées, l’histoire exécutée de rôles construit
+un programme typé faisant autorité avec exactement `n` instructions de
+transport. `StructuralObligation` est littéralement le type des profils de ce
+programme, et `structuralFrontier` est littéralement son expansion binaire
+complète, sans doublon, de largeur exacte `2^n`. Toute interface finie qui
+conserve ces profils produits par le programme comme adresses indépendantes
+exige donc au moins `2^n` emplacements distincts. Le même programme interprète
+exactement toute charge acceptée de son expansion comme le normalisateur
+canonique, et chaque profil engendré possède une charge acceptée construite
+positivement et indexée par ce programme. Il s’efface vers l’histoire exacte
+des codes retournés. Son nombre d’atomes brut est prouvé égal à
+`compiledLocalSize` et à `n`.
 
-![Succinctness du normalisateur constitutif](docs/figures/constitutive-normalizer-succinctness.svg)
+L’espace extensif des profils est ainsi un déploiement du programme constitué,
+et non un carrier parallèle partageant seulement un même index. La vue auditée
+par état et quantité se trouve encore en aval : elle est une projection de
+l’action totale d’une instruction faisant autorité, et le théorème de collision
+établit que cette projection ne reconstruit pas l’action totale. La largeur
+opérationnelle dérivée et le coût instrumenté interne restent des résultats
+séparés. L’énoncé est relatif à la représentation : il prouve la borne exacte
+de l’adressage fini indépendant, non une borne universelle en temps ou en
+mémoire pour toute représentation possible.
+
+![Hiérarchie de complexité constitutive](docs/figures/constitutive-complexity-hierarchy.svg)
 
 ## License
 

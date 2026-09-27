@@ -86,7 +86,19 @@ if [[ "${1:-}" == "--self-test" ]]; then
   set -e
   expected='forbidden import path: Root -> Middle -> Forbidden'
   if [[ "$fixture_status" != 1 || "$fixture_output" != "$expected" ]]; then
-    echo "import-boundary self-test failed" >&2
+    echo "indirect import-boundary self-test failed" >&2
+    echo "$fixture_output" >&2
+    exit 1
+  fi
+
+  printf 'import Forbidden\n' > "$fixture/Root.lean"
+  set +e
+  fixture_output="$(check_graph "$fixture" "$fixture/boundaries.txt" "${fixture_files[@]}" 2>&1)"
+  fixture_status=$?
+  set -e
+  expected='forbidden import path: Root -> Forbidden'
+  if [[ "$fixture_status" != 1 || "$fixture_output" != "$expected" ]]; then
+    echo "direct import-boundary self-test failed" >&2
     echo "$fixture_output" >&2
     exit 1
   fi
@@ -94,9 +106,15 @@ if [[ "${1:-}" == "--self-test" ]]; then
 fi
 
 cd "$repo_root"
+manifest_argument="${1:-scripts/import-boundaries.txt}"
+if [[ "$manifest_argument" = /* ]]; then
+  manifest_path="$manifest_argument"
+else
+  manifest_path="$repo_root/$manifest_argument"
+fi
 mapfile -t tracked_lean < <(git ls-files --cached --others --exclude-standard -- '*.lean' | sort)
 files=()
 for file in "${tracked_lean[@]}"; do
   files+=("$repo_root/$file")
 done
-check_graph "$repo_root" "$repo_root/scripts/import-boundaries.txt" "${files[@]}"
+check_graph "$repo_root" "$manifest_path" "${files[@]}"

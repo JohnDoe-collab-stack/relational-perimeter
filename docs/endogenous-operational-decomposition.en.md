@@ -85,55 +85,65 @@ transport, and feeds its result into the next state.
 
 ![Endogenous operational stability](figures/endogenous-operational-stability.svg)
 
-### Independent addressing and executed succinctness
+### Constitutive production, exhaustive expansion, and independent addressing
 
-The exact carriers also support a representation comparison that is stronger
-than a bare equality of widths. `IndependentProfileAddressing roles` is an
-interface with a finite number of slots and an injective address for every
-`StructuralObligation roles`. The repository proves constructively that any
-such interface satisfies
+The comparison now follows one typed production chain. The executed role
+history constructs `ConstitutiveNormalizerProgram`, whose canonical value has
+one instruction per opening. `StructuralObligation roles` is an abbreviation
+for that program's `Profile` type, while `structuralFrontier roles` is the
+program's recursively generated `profileFrontier`. The extensive carrier is
+therefore produced by the program's binary instruction shape; it is not a
+second carrier derived independently from the role count.
 
-```text
-structuralWidth roles ≤ slotCount.
-```
-
-Because the structural frontier is complete, duplicate-free, and has width
-`2^n`, every independently addressing interface therefore needs at least
-`2^n` slots. This lower bound is not obtained by storing `2^n` as an
-annotation: it is proved from injectivity and the exact constituted frontier.
-
-On the same dependent role history, `ConstitutiveNormalizerProgram` stores one
-typed transport instruction per executed opening. A separate recursive
-`IsAuthoritative` proof identifies every stored instruction with the code
-actually returned by that opening's execution. Its interpreter consumes each
-stored code on arbitrary accepted structural payloads. It is proved pointwise
-equal to `normalizeStructuralAcceptedPayload`, and its code erasure is proved
-equal to the public run's exact `returnedCodes` history. In the public family,
-the raw program metric is proved equal to the number of transport atoms
-according to `compiledLocalSize`, and both are exactly `n = input + 1`.
-
-The resulting comparison is exact:
+The program expansion is proved complete and duplicate-free, and satisfies
 
 ```text
-independently addressable structural cases : at least 2^n slots
-authoritative executed normalizer          : exactly n code atoms
-retained operational carrier               : exactly 1 profile
-transient executed width                    : at most 2
+program.profileWidth = 2 ^ program.instructionCount.
 ```
 
-This is a constructive succinctness statement relative to the explicitly
-typed representation with independently addressable profiles, its slot bound,
-and the explicit primitive-atom metric.
-It does not assert that every representation must materialize the structural
-frontier, that the program causes the frontier's cardinality, or that a
-universal algorithmic time or memory lower bound has been proved. The derived
-operational-width reading and the internal instrumented cost are separate
-results carried by the same closed public certificate. Constitutive
-succinctness also remains distinct from the independently proved
-non-factorization of the total action through the audited state-and-quantity
-projection in the next section.
+`IndependentProgramProfileAddressing roles program` assigns a finite slot and
+an injective address to every profile of that particular program. The
+repository proves constructively
 
-![Constitutive normalizer succinctness](figures/constitutive-normalizer-succinctness.svg)
+```text
+program.profileWidth ≤ slotCount.
+```
+
+For the public program, `instructionCount = n`, hence every independently
+addressing interface for its complete expansion needs at least `2^n` slots.
+The bound follows from injectivity, completeness, and absence of duplicates in
+the program-produced frontier; the interface stores no numerical width.
+
+Each instruction stores the typed code returned by one executed opening. A
+separate recursive `IsAuthoritative` proof identifies every instruction with
+that returned code. The program-indexed interpreter consumes profiles produced
+by the same program and is proved, through constructive structural adapters,
+exactly equal to `normalizeStructuralAcceptedPayload` on every accepted
+expanded profile. Every generated profile has a positively constructed
+accepted payload indexed by that exact program, so this semantic statement is
+non-vacuous on the complete expansion. The code erasure equals the public run's exact
+`returnedCodes` history. The raw program metric equals `compiledLocalSize`, and
+both are exactly `n = input + 1`.
+
+The resulting hierarchy is exact:
+
+```text
+executed relational constitution
+  -> authoritative typed program            : exactly n instructions
+  -> complete extensive profile expansion   : exactly 2^n profiles
+  -> independent finite addressing           : at least 2^n slots
+```
+
+The program produces the frontier's cardinality in this precise typed sense:
+the frontier is its recursive binary expansion. This is a
+representation-relative result; it does not say that every representation
+must materialize the frontier or prove a universal time or memory lower bound.
+The retained operational width and internal instrumented cost remain separate
+results. The state-and-quantity projection is further downstream: it is
+obtained from the authoritative instruction's total action, but does not
+determine that action, as the next section proves.
+
+![Constitutive complexity hierarchy](figures/constitutive-complexity-hierarchy.svg)
 
 ### Exact limit of a state-and-quantity projection
 
@@ -147,13 +157,16 @@ their total actions differ at one argument. The generic theorem
 `action_not_factors_of_projection_collision` consumes that projection equality
 explicitly and constructively refutes factorization.
 
-On the generated system of an actual executed stage, the discovered transport
-and a total comparison transport with the same executed source and target form
-such a collision. They are separately projected; their projected views are
-equal at the observed executed continuation, while the two total actions differ
-on another admissible continuation. The executed non-factorization theorem is
-therefore an instance of the generic projection-collision theorem, rather than
-a pair-specific one-view contradiction.
+On the generated system of an actual executed stage, the total transport
+denoted by the authoritative instruction and a comparison transport with the
+same executed source and target form such a collision. The authoritative
+instruction acts pointwise as the discovered relation on every continuation.
+The two transports are separately projected; their projected views are equal
+at the observed executed continuation, while their total actions differ on
+another admissible continuation. The executed non-factorization theorem is
+therefore an instance of the generic projection-collision theorem whose first
+preimage is the program instruction itself, rather than a pair-specific
+one-view contradiction.
 
 This identifies the exact relative limitation of a Lyapunov-style reading in
 the present construction. A description by states, an observed trajectory, and

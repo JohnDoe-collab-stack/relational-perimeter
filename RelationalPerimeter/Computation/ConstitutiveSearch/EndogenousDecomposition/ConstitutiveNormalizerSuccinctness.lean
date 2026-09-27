@@ -26,6 +26,10 @@ set_option maxHeartbeats 800000
 abbrev PublicConstitutiveRoles (input : Nat) :=
   (executeConstitutiveResolution input).feedbackRoleHistory
 
+/-- The authoritative raw program constructed from the public execution. -/
+abbrev PublicConstitutiveNormalizerProgram (input : Nat) :=
+  buildConstitutiveNormalizerProgram (PublicConstitutiveRoles input)
+
 /-- Closed certificate joining the exact structural case space, its finite
 independent-addressing lower bound, and the authoritative executed normalizer.
 The constructor is private so clients consume the built witness rather than
@@ -144,6 +148,120 @@ def publicConstitutiveNormalizerSuccinctness
         (congrArg (fun count => 2 ^ count) stageCount))
       (independentProfileAddressing_slots_ge_two_pow_stageCount addressing)
 
+/-- The public program contains one instruction for each executed stage. -/
+theorem public_constitutive_program_instructionCount_exact (input : Nat) :
+    (PublicConstitutiveNormalizerProgram input).instructionCount = input + 1 :=
+  Eq.trans
+    (buildConstitutiveNormalizerProgram_instructionCount
+      (PublicConstitutiveRoles input))
+    (operationalStageCount_eq_historyCount (PublicConstitutiveRoles input))
+
+/-- The complete structural carrier is literally the profile type generated
+by the public program, rather than a parallel role-indexed construction. -/
+theorem public_structural_frontier_is_program_expansion (input : Nat) :
+    structuralFrontier (PublicConstitutiveRoles input) =
+      (PublicConstitutiveNormalizerProgram input).profileFrontier :=
+  rfl
+
+/-- The public program's exhaustive profile expansion has exactly the claimed
+exponential cardinality. -/
+theorem public_constitutive_program_profileWidth_exact (input : Nat) :
+    (PublicConstitutiveNormalizerProgram input).profileWidth =
+      2 ^ (input + 1) :=
+  Eq.trans
+    (ConstitutiveNormalizerProgram.profileWidth_eq_two_pow_instructionCount
+      (PublicConstitutiveNormalizerProgram input))
+    (congrArg (fun count => 2 ^ count)
+      (public_constitutive_program_instructionCount_exact input))
+
+/-- Every profile of the public program occurs in its own exhaustive
+expansion. -/
+theorem public_constitutive_program_profiles_complete (input : Nat)
+    (profile : (PublicConstitutiveNormalizerProgram input).Profile) :
+    List.Mem profile
+      (PublicConstitutiveNormalizerProgram input).profileFrontier :=
+  ConstitutiveNormalizerProgram.profileFrontier_complete
+    (PublicConstitutiveNormalizerProgram input) profile
+
+/-- The public program's exhaustive expansion contains no duplicate profile. -/
+theorem public_constitutive_program_profiles_nodup (input : Nat) :
+    (PublicConstitutiveNormalizerProgram input).profileFrontier.Nodup :=
+  ConstitutiveNormalizerProgram.profileFrontier_nodup
+    (PublicConstitutiveNormalizerProgram input)
+
+/-- Every profile produced by the public program has an accepted payload in
+the payload family indexed by that exact program. -/
+def public_constitutive_program_everyProfileAccepted (input : Nat)
+    (profile : (PublicConstitutiveNormalizerProgram input).Profile) :
+    (PublicConstitutiveNormalizerProgram input).AcceptedProfilePayload profile :=
+  everyCanonicalProgramProfileHasAcceptedPayload
+    (PublicConstitutiveRoles input) profile
+
+/-- The interpreter of the same program realizes the canonical normalizer on
+each of the profiles expanded by that program. -/
+theorem public_constitutive_program_profile_interpreter_exact (input : Nat)
+    (profile : (PublicConstitutiveNormalizerProgram input).Profile)
+    (payload : (PublicConstitutiveNormalizerProgram input).AcceptedProfilePayload
+      profile) :
+    canonicalProgramNormalizedPayloadToOperational
+        (PublicConstitutiveRoles input)
+        (interpretConstitutiveNormalizerProgramProfile
+          (PublicConstitutiveNormalizerProgram input) profile payload) =
+      normalizeStructuralAcceptedPayload
+        (PublicConstitutiveRoles input) profile
+        (canonicalProgramAcceptedPayloadToStructural
+          (PublicConstitutiveRoles input) profile payload) :=
+  interpretBuiltConstitutiveNormalizerProgramProfile_exact
+    (PublicConstitutiveRoles input) profile payload
+
+/-- Any interface that keeps every profile of the public program independently
+addressable needs at least `2^(input+1)` slots. -/
+theorem public_independent_program_profile_slots_exponential (input : Nat)
+    (addressing : IndependentProgramProfileAddressing
+      (PublicConstitutiveRoles input)
+      (PublicConstitutiveNormalizerProgram input)) :
+    2 ^ (input + 1) <= addressing.slotCount := by
+  rw [<- public_constitutive_program_instructionCount_exact input]
+  exact
+    independentProgramProfileAddressing_slots_ge_two_pow_instructionCount
+      addressing
+
+/-- The canonical public program stores exactly one transport atom per typed
+instruction.  Both metrics are computed from the same program value. -/
+theorem public_constitutive_program_instructionCount_eq_codeSize (input : Nat) :
+    (PublicConstitutiveNormalizerProgram input).instructionCount =
+      (PublicConstitutiveNormalizerProgram input).codeSize :=
+  Eq.trans
+    (buildConstitutiveNormalizerProgram_instructionCount
+      (PublicConstitutiveRoles input))
+    (buildConstitutiveNormalizerProgram_codeSize
+      (PublicConstitutiveRoles input)).symm
+
+/-- Direct code-size readout on the same public program whose profiles are
+expanded above. -/
+theorem public_constitutive_program_codeSize_exact (input : Nat) :
+    (PublicConstitutiveNormalizerProgram input).codeSize = input + 1 :=
+  Eq.trans
+    (buildConstitutiveNormalizerProgram_codeSize
+      (PublicConstitutiveRoles input))
+    (operationalStageCount_eq_historyCount (PublicConstitutiveRoles input))
+
+/-- Erasing the same canonical program yields exactly the codes returned by
+the public execution. -/
+theorem public_constitutive_program_returns_executed_codes (input : Nat) :
+    authoritativeNormalizerProgramReturnedCodes
+        (PublicConstitutiveNormalizerProgram input)
+        (buildConstitutiveNormalizerProgram_isAuthoritative
+          (PublicConstitutiveRoles input)) =
+      (executeConstitutiveResolution input).history.returnedCodes :=
+  Eq.trans
+    (authoritativeNormalizerProgramReturnedCodes_exact
+      (PublicConstitutiveNormalizerProgram input)
+      (buildConstitutiveNormalizerProgram_isAuthoritative
+        (PublicConstitutiveRoles input)))
+    (congrArg SequentialHistory.returnedCodes
+      (executeConstitutiveResolution input).historyFromCausalExecution.symm)
+
 /-- Exact raw-program metric: one stored transport atom per public stage. -/
 theorem public_constitutive_normalizer_programCodeSize_exact (input : Nat) :
     (publicConstitutiveNormalizerSuccinctness input).program.program.codeSize =
@@ -211,8 +329,20 @@ end ConstitutiveSearch.EndogenousDecomposition
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.EndogenousDecomposition.PublicConstitutiveRoles
+#print axioms ConstitutiveSearch.EndogenousDecomposition.PublicConstitutiveNormalizerProgram
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerSuccinctness
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicConstitutiveNormalizerSuccinctness
+#print axioms ConstitutiveSearch.EndogenousDecomposition.public_constitutive_program_instructionCount_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.public_structural_frontier_is_program_expansion
+#print axioms ConstitutiveSearch.EndogenousDecomposition.public_constitutive_program_profileWidth_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.public_constitutive_program_profiles_complete
+#print axioms ConstitutiveSearch.EndogenousDecomposition.public_constitutive_program_profiles_nodup
+#print axioms ConstitutiveSearch.EndogenousDecomposition.public_constitutive_program_everyProfileAccepted
+#print axioms ConstitutiveSearch.EndogenousDecomposition.public_constitutive_program_profile_interpreter_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.public_independent_program_profile_slots_exponential
+#print axioms ConstitutiveSearch.EndogenousDecomposition.public_constitutive_program_instructionCount_eq_codeSize
+#print axioms ConstitutiveSearch.EndogenousDecomposition.public_constitutive_program_codeSize_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.public_constitutive_program_returns_executed_codes
 #print axioms ConstitutiveSearch.EndogenousDecomposition.public_constitutive_normalizer_programCodeSize_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.public_constitutive_normalizer_codeMetric_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.public_independent_profile_slots_exponential

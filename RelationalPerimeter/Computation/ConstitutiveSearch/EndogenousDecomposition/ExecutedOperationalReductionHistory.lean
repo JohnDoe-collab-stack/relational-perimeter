@@ -1,4 +1,5 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalReduction
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerCore
 
 /-!
 # Causally threaded operational reductions
@@ -136,40 +137,6 @@ def executedOperationalReductionHistoryTail
     ExecutedOperationalReductionHistory tailRoles :=
   history.2
 
-/-- Number of openings read recursively from the dependent role history. -/
-def operationalStageCount :
-    {depth count : Nat} →
-    {assignment : SequentialAssignment depth} →
-    {state : ThreadedConstitutiveState depth assignment} →
-    {run : ConstitutiveExecutionHistory (count := count) state} →
-    ThreadedConstitutiveRoleHistory run → Nat
-  | _, _, _, _, _, .nil => 0
-  | _, _, _, _, _, .step _ tail => operationalStageCount tail + 1
-
-/-- The dependent role history contains exactly the openings of its indexed
-authoritative execution history. -/
-theorem operationalStageCount_eq_historyCount :
-    ∀ {depth count : Nat}
-      {assignment : SequentialAssignment depth}
-      {state : ThreadedConstitutiveState depth assignment}
-      {run : ConstitutiveExecutionHistory (count := count) state}
-      (roles : ThreadedConstitutiveRoleHistory run),
-      operationalStageCount roles = count
-  | _, _, _, _, _, .nil => rfl
-  | _, _, _, _, _, .step _ tail =>
-      congrArg (fun value => value + 1)
-        (operationalStageCount_eq_historyCount tail)
-
-/-- One independent left/right role for every constituted opening. -/
-def StructuralObligation :
-    {depth count : Nat} →
-    {assignment : SequentialAssignment depth} →
-    {state : ThreadedConstitutiveState depth assignment} →
-    {run : ConstitutiveExecutionHistory (count := count) state} →
-    ThreadedConstitutiveRoleHistory run → Type
-  | _, _, _, _, _, .nil => Unit
-  | _, _, _, _, _, .step _ tail => Bool × StructuralObligation tail
-
 /-- Positions of one executed opening before any transport is incorporated. -/
 abbrev PendingStagePosition {depth : Nat}
     {assignment : SequentialAssignment depth}
@@ -236,19 +203,6 @@ def OperationalObligation :
       StageOperationalPosition (executedOperationalStatus headRun) ×
         OperationalObligation tailRoles
 
-/-- Enumerate every structural role profile constructively. -/
-def structuralFrontier :
-    {depth count : Nat} →
-    {assignment : SequentialAssignment depth} →
-    {state : ThreadedConstitutiveState depth assignment} →
-    {run : ConstitutiveExecutionHistory (count := count) state} →
-    (roles : ThreadedConstitutiveRoleHistory run) →
-      List (StructuralObligation roles)
-  | _, _, _, _, _, .nil => [()]
-  | _, _, _, _, _, .step _ tail =>
-      (structuralFrontier tail).map (fun rest => (false, rest)) ++
-        (structuralFrontier tail).map (fun rest => (true, rest))
-
 /-- Enumerate both pending positions of every executed opening. -/
 def pendingFrontier :
     {depth count : Nat} →
@@ -279,13 +233,6 @@ def operationalFrontier :
       (operationalFrontier tailRoles).map
         (fun rest => (executedRetainedPosition headRun, rest))
 
-def structuralWidth {depth count : Nat}
-    {assignment : SequentialAssignment depth}
-    {state : ThreadedConstitutiveState depth assignment}
-    {run : ConstitutiveExecutionHistory (count := count) state}
-    (roles : ThreadedConstitutiveRoleHistory run) : Nat :=
-  (structuralFrontier roles).length
-
 def pendingWidth {depth count : Nat}
     {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -299,78 +246,6 @@ def executedWidth {depth count : Nat}
     {run : ConstitutiveExecutionHistory (count := count) state}
     (roles : ThreadedConstitutiveRoleHistory run) : Nat :=
   (operationalFrontier roles).length
-
-/-- Constructive length preservation for maps, independent of the core theorem. -/
-theorem length_map_constructive {α β : Type} (f : α → β) :
-    ∀ values : List α, (values.map f).length = values.length
-  | [] => rfl
-  | _ :: tail => congrArg Nat.succ (length_map_constructive f tail)
-
-/-- Left zero for natural addition, proved by structural recursion. -/
-theorem zero_add_constructive : ∀ value : Nat, 0 + value = value
-  | 0 => rfl
-  | value + 1 => congrArg Nat.succ (zero_add_constructive value)
-
-/-- A successor in the left summand commutes with structural addition. -/
-theorem succ_add_constructive (left : Nat) :
-    ∀ right : Nat,
-      Nat.succ left + right = Nat.succ (left + right)
-  | 0 => rfl
-  | right + 1 => congrArg Nat.succ (succ_add_constructive left right)
-
-/-- Constructive length of append, independent of the core theorem. -/
-theorem length_append_constructive {α : Type} :
-    ∀ left right : List α,
-      (left ++ right).length = left.length + right.length
-  | [], right => (zero_add_constructive right.length).symm
-  | _ :: tail, right => Eq.trans
-      (congrArg Nat.succ (length_append_constructive tail right))
-      (succ_add_constructive tail.length right.length).symm
-
-/-- Combine two equalities under natural-number addition. -/
-theorem nat_add_congr {left left' right right' : Nat}
-    (hLeft : left = left') (hRight : right = right') :
-    left + right = left' + right' := by
-  cases hLeft
-  cases hRight
-  rfl
-
-theorem structuralWidth_eq_two_pow_stageCount :
-    ∀ {depth count : Nat}
-      {assignment : SequentialAssignment depth}
-      {state : ThreadedConstitutiveState depth assignment}
-      {run : ConstitutiveExecutionHistory (count := count) state}
-      (roles : ThreadedConstitutiveRoleHistory run),
-      structuralWidth roles = 2 ^ operationalStageCount roles
-  | _, _, _, _, _, .nil => rfl
-  | _, _, _, _, _, .step _ tail => by
-      change
-        ((structuralFrontier tail).map (fun rest => (false, rest)) ++
-          (structuralFrontier tail).map (fun rest => (true, rest))).length =
-            2 ^ (operationalStageCount tail + 1)
-      have tailWidth : (structuralFrontier tail).length =
-          2 ^ operationalStageCount tail :=
-        structuralWidth_eq_two_pow_stageCount tail
-      calc
-        ((structuralFrontier tail).map (fun rest => (false, rest)) ++
-          (structuralFrontier tail).map (fun rest => (true, rest))).length =
-            ((structuralFrontier tail).map
-              (fun rest => (false, rest))).length +
-            ((structuralFrontier tail).map
-              (fun rest => (true, rest))).length :=
-                length_append_constructive _ _
-        _ = (structuralFrontier tail).length +
-            (structuralFrontier tail).length :=
-              nat_add_congr
-                (length_map_constructive (fun rest => (false, rest)) _)
-                (length_map_constructive (fun rest => (true, rest)) _)
-        _ = 2 ^ operationalStageCount tail +
-            2 ^ operationalStageCount tail :=
-              nat_add_congr tailWidth tailWidth
-        _ = 2 ^ operationalStageCount tail * 2 :=
-              (Nat.mul_two _).symm
-        _ = 2 ^ (operationalStageCount tail + 1) :=
-              (Nat.pow_succ 2 (operationalStageCount tail)).symm
 
 theorem pendingWidth_eq_two_pow_stageCount :
     ∀ {depth count : Nat}
@@ -444,147 +319,6 @@ theorem executedWidth_eq_one :
         (length_map_constructive
           (fun rest => (executedRetainedPosition headRun, rest)) _)
         tailWidth
-
-/-- Constructively transport membership through a list map. -/
-theorem mem_map_constructive {α β : Type} (f : α → β) {value : α} :
-    ∀ {values : List α}, List.Mem value values →
-      List.Mem (f value) (values.map f)
-  | _ :: _, .head _ => .head _
-  | _ :: _, .tail _ prior => .tail _ (mem_map_constructive f prior)
-
-/-- Constructively preserve membership in the left side of an append. -/
-theorem mem_append_left_constructive {α : Type} {value : α} :
-    ∀ {left : List α} (right : List α), List.Mem value left →
-      List.Mem value (left ++ right)
-  | _ :: _, _, .head _ => .head _
-  | _ :: _, _, .tail _ prior =>
-      .tail _ (mem_append_left_constructive _ prior)
-
-/-- Constructively preserve membership in the right side of an append. -/
-theorem mem_append_right_constructive {α : Type} {value : α} :
-    ∀ (left : List α) {right : List α}, List.Mem value right →
-      List.Mem value (left ++ right)
-  | [], _, prior => prior
-  | _ :: tail, _, prior =>
-      .tail _ (mem_append_right_constructive tail prior)
-
-/-- Recover a constructive source witness from membership in a mapped list. -/
-theorem mem_map_preimage_constructive {α β : Type} (f : α → β)
-    {target : β} :
-    ∀ {values : List α}, List.Mem target (values.map f) →
-      ∃ source, List.Mem source values ∧ f source = target
-  | _ :: _, .head _ => ⟨_, .head _, rfl⟩
-  | _ :: _, .tail _ prior =>
-      let ⟨source, sourceMem, exactValue⟩ :=
-        mem_map_preimage_constructive f prior
-      ⟨source, .tail _ sourceMem, exactValue⟩
-
-/-- Split membership in an append without propositional extensionality. -/
-theorem mem_append_cases_constructive {α : Type} {value : α} :
-    ∀ {left right : List α}, List.Mem value (left ++ right) →
-      List.Mem value left ∨ List.Mem value right
-  | [], _, prior => Or.inr prior
-  | _ :: _, _, .head _ => Or.inl (.head _)
-  | _ :: tail, _, .tail _ prior =>
-      match mem_append_cases_constructive (left := tail) prior with
-      | Or.inl inTail => Or.inl (.tail _ inTail)
-      | Or.inr inRight => Or.inr inRight
-
-/-- An injective map preserves duplicate-freeness constructively. -/
-theorem nodup_map_constructive {α β : Type} (f : α → β)
-    (injective : ∀ {left right : α}, f left = f right → left = right) :
-    ∀ {values : List α}, values.Nodup → (values.map f).Nodup
-  | [], .nil => .nil
-  | _head :: _, .cons headFresh tailNodup =>
-      .cons
-        (fun _mapped mappedMem same =>
-          let ⟨source, sourceMem, sourceExact⟩ :=
-            mem_map_preimage_constructive f mappedMem
-          headFresh source sourceMem
-            (injective (Eq.trans same sourceExact.symm)))
-        (nodup_map_constructive f injective tailNodup)
-
-/-- Two duplicate-free and disjoint lists append without duplicates. -/
-theorem nodup_append_constructive {α : Type} :
-    ∀ {left right : List α},
-      left.Nodup → right.Nodup →
-      (∀ leftValue, List.Mem leftValue left →
-        ∀ rightValue, List.Mem rightValue right →
-          leftValue ≠ rightValue) →
-      (left ++ right).Nodup
-  | [], _, .nil, rightNodup, _ => rightNodup
-  | head :: _tail, _right, .cons headFresh tailNodup, rightNodup, disjoint =>
-      .cons
-        (fun value valueMem same =>
-          match mem_append_cases_constructive valueMem with
-          | .inl inTail => headFresh value inTail same
-          | .inr inRight =>
-              disjoint head (.head _) value inRight same)
-        (nodup_append_constructive tailNodup rightNodup
-          (fun leftValue inTail rightValue inRight =>
-            disjoint leftValue (.tail _ inTail) rightValue inRight))
-
-/-- Every structural profile occurs in the recursively produced frontier. -/
-theorem structuralFrontier_complete :
-    ∀ {depth count : Nat}
-      {assignment : SequentialAssignment depth}
-      {state : ThreadedConstitutiveState depth assignment}
-      {run : ConstitutiveExecutionHistory (count := count) state}
-      (roles : ThreadedConstitutiveRoleHistory run)
-      (profile : StructuralObligation roles),
-      List.Mem profile (structuralFrontier roles)
-  | _, _, _, _, _, .nil, profile => by
-      change Unit at profile
-      cases profile
-      exact .head _
-  | _, _, _, _, _, .step _ tail, profile => by
-      change Bool × StructuralObligation tail at profile
-      cases profile with
-      | mk choice rest =>
-          cases choice with
-          | false =>
-              exact mem_append_left_constructive _
-                (mem_map_constructive (fun value => (false, value))
-                  (structuralFrontier_complete tail rest))
-          | true =>
-              exact mem_append_right_constructive _
-                (mem_map_constructive (fun value => (true, value))
-                  (structuralFrontier_complete tail rest))
-
-/-- The structural enumeration contains each left/right profile once. -/
-theorem structuralFrontier_nodup :
-    ∀ {depth count : Nat}
-      {assignment : SequentialAssignment depth}
-      {state : ThreadedConstitutiveState depth assignment}
-      {run : ConstitutiveExecutionHistory (count := count) state}
-      (roles : ThreadedConstitutiveRoleHistory run),
-      (structuralFrontier roles).Nodup
-  | _, _, _, _, _, .nil =>
-      .cons (fun _ impossible _ => nomatch impossible) .nil
-  | _, _, _, _, _, .step _ tail => by
-      change
-        ((structuralFrontier tail).map (fun value => (false, value)) ++
-          (structuralFrontier tail).map (fun value => (true, value))).Nodup
-      have tailNodup := structuralFrontier_nodup tail
-      have leftNodup := nodup_map_constructive
-        (fun value => (false, value))
-        (fun same => congrArg Prod.snd same)
-        tailNodup
-      have rightNodup := nodup_map_constructive
-        (fun value => (true, value))
-        (fun same => congrArg Prod.snd same)
-        tailNodup
-      exact nodup_append_constructive leftNodup rightNodup
-        (fun leftValue leftMem rightValue rightMem same => by
-          let ⟨leftSource, _, leftExact⟩ :=
-            mem_map_preimage_constructive
-              (fun value => (false, value)) leftMem
-          let ⟨rightSource, _, rightExact⟩ :=
-            mem_map_preimage_constructive
-              (fun value => (true, value)) rightMem
-          have pairSame : (false, leftSource) = (true, rightSource) :=
-            Eq.trans leftExact (Eq.trans same rightExact.symm)
-          exact Bool.noConfusion (congrArg Prod.fst pairSame))
 
 /-- Every pending position is one of the two positions of its opening. -/
 theorem pendingPosition_eq_left_or_right {depth : Nat}

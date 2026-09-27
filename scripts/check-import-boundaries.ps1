@@ -81,7 +81,19 @@ if ($args.Count -gt 0 -and $args[0] -eq "--self-test") {
     }
     $expected = "forbidden import path: Root -> Middle -> Forbidden"
     if ($message -ne $expected) {
-      throw "import-boundary self-test failed: $message"
+      throw "indirect import-boundary self-test failed: $message"
+    }
+
+    Set-Content -LiteralPath (Join-Path $fixture "Root.lean") -Value "import Forbidden" -NoNewline
+    $message = $null
+    try {
+      Test-ImportBoundaryGraph -SourceRoot $fixture -Manifest (Join-Path $fixture "boundaries.txt") -Files $fixtureFiles
+    } catch {
+      $message = $_.Exception.Message
+    }
+    $expected = "forbidden import path: Root -> Forbidden"
+    if ($message -ne $expected) {
+      throw "direct import-boundary self-test failed: $message"
     }
   } finally {
     Remove-Item -LiteralPath $fixture -Recurse -Force
@@ -94,7 +106,13 @@ try {
   $relativeFiles = @(& git ls-files --cached --others --exclude-standard -- '*.lean') | Sort-Object
   if ($LASTEXITCODE -ne 0) { throw "git ls-files failed" }
   $files = $relativeFiles | ForEach-Object { Join-Path $repoRoot $_ }
-  Test-ImportBoundaryGraph -SourceRoot $repoRoot -Manifest (Join-Path $repoRoot "scripts/import-boundaries.txt") -Files $files
+  $manifestArgument = if ($args.Count -gt 0) { $args[0] } else { "scripts/import-boundaries.txt" }
+  $manifestPath = if ([IO.Path]::IsPathRooted($manifestArgument)) {
+    $manifestArgument
+  } else {
+    Join-Path $repoRoot $manifestArgument
+  }
+  Test-ImportBoundaryGraph -SourceRoot $repoRoot -Manifest $manifestPath -Files $files
 } finally {
   Pop-Location
 }

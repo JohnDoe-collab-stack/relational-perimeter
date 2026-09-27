@@ -89,57 +89,67 @@ résultat à l’état suivant.
 
 ![Stabilité opérationnelle endogène](figures/endogenous-operational-stability.svg)
 
-### Adressage indépendant et succinctness exécutée
+### Production constitutive, expansion exhaustive et adressage indépendant
 
-Les carriers exacts permettent aussi une comparaison de représentations plus
-forte qu’une simple égalité de largeurs. `IndependentProfileAddressing roles`
-est une interface dotée d’un nombre fini d’emplacements et d’une adresse
-injective pour chaque `StructuralObligation roles`. Le dépôt prouve
-constructivement que toute interface de ce type vérifie
+La comparaison suit désormais une unique chaîne de production typée.
+L’histoire exécutée de rôles construit `ConstitutiveNormalizerProgram`, dont
+la valeur canonique contient une instruction par ouverture.
+`StructuralObligation roles` est une abréviation du type `Profile` de ce
+programme, tandis que `structuralFrontier roles` est son `profileFrontier`
+engendré récursivement. Le carrier extensif est donc produit par la forme
+binaire des instructions du programme ; ce n’est pas un second carrier dérivé
+indépendamment du nombre de rôles.
 
-```text
-structuralWidth roles ≤ slotCount.
-```
-
-Puisque la frontière structurelle est complète, sans doublon et de largeur
-`2^n`, toute interface qui maintient ces profils comme adresses indépendantes
-exige donc au moins `2^n` emplacements. Cette borne ne provient pas d’une
-annotation qui stockerait `2^n` : elle est démontrée à partir de l’injectivité
-et de la frontière constituée exacte.
-
-Sur la même histoire dépendante de rôles, `ConstitutiveNormalizerProgram`
-stocke une instruction de transport typée par ouverture exécutée. Une preuve
-récursive `IsAuthoritative`, séparée du programme brut, identifie chaque
-instruction au code effectivement retourné par l’exécution correspondante.
-L’interprète consomme ces codes sur toute charge structurelle acceptée. Il est
-prouvé égal point par point à `normalizeStructuralAcceptedPayload`, et
-l’effacement des codes du programme est prouvé égal à l’histoire publique
-exacte `returnedCodes`. La métrique récursive du programme brut est prouvée
-égale au nombre d’atomes de transport selon `compiledLocalSize`. Dans la
-famille publique, ces deux métriques valent exactement `n = input + 1`.
-
-La comparaison obtenue est exacte :
+L’expansion du programme est prouvée complète, sans doublon, et vérifie
 
 ```text
-cas structurels adressables indépendamment : au moins 2^n emplacements
-normalisateur exécuté faisant autorité      : exactement n atomes de code
-carrier opérationnel retenu                 : exactement 1 profil
-largeur exécutée transitoire                : au plus 2
+program.profileWidth = 2 ^ program.instructionCount.
 ```
 
-Il s’agit d’un énoncé constructif de succinctness relatif à une représentation
-à profils indépendamment adressables, à sa borne de slots et à la métrique
-explicite des atomes primitifs. Il
-n’affirme ni que toute représentation doit matérialiser la frontière
-structurelle, ni que le programme cause la cardinalité de cette frontière, ni
-qu’une borne algorithmique universelle en temps ou en mémoire a été démontrée.
-La lecture dérivée de largeur opérationnelle et le coût instrumenté interne
-restent des résultats séparés, tous deux portés par le même certificat public
-fermé. Enfin, la succinctness ne remplace pas la non-factorisation de l’action
-totale par la projection auditée, qui est prouvée indépendamment dans la section
-suivante.
+`IndependentProgramProfileAddressing roles program` attribue un emplacement
+fini et une adresse injective à chaque profil de ce programme précis. Le dépôt
+prouve constructivement
 
-![Succinctness du normalisateur constitutif](figures/constitutive-normalizer-succinctness.svg)
+```text
+program.profileWidth ≤ slotCount.
+```
+
+Pour le programme public, `instructionCount = n` ; toute interface qui adresse
+indépendamment son expansion complète exige donc au moins `2^n` emplacements.
+La borne résulte de l’injectivité, de la complétude et de l’absence de doublons
+de la frontière produite par le programme ; l’interface ne stocke aucune
+largeur numérique.
+
+Chaque instruction stocke le code typé retourné par une ouverture exécutée.
+Une preuve récursive `IsAuthoritative` identifie chaque instruction à ce code.
+L’interprète indexé par le programme consomme les profils produits par ce même
+programme et est prouvé, au moyen d’adaptateurs structurels constructifs,
+exactement égal à `normalizeStructuralAcceptedPayload` sur tout profil
+développé et accepté. Chaque profil engendré possède une charge acceptée
+construite positivement et indexée par ce programme exact ; l’énoncé sémantique
+n’est donc pas vide sur l’expansion complète. L’effacement des codes est égal à l’histoire publique
+exacte `returnedCodes`. La métrique brute du programme est égale à
+`compiledLocalSize`, et toutes deux valent exactement `n = input + 1`.
+
+La hiérarchie obtenue est exacte :
+
+```text
+constitution relationnelle exécutée
+  -> programme typé faisant autorité         : exactement n instructions
+  -> expansion extensive complète des profils : exactement 2^n profils
+  -> adressage fini indépendant              : au moins 2^n emplacements
+```
+
+Le programme produit la cardinalité de la frontière dans ce sens typé précis :
+la frontière est son expansion binaire récursive. Le résultat reste relatif à
+la représentation ; il n’affirme pas que toute représentation doit matérialiser
+la frontière et ne démontre pas une borne universelle en temps ou en mémoire.
+La largeur opérationnelle retenue et le coût instrumenté interne restent des
+résultats séparés. La projection par état et quantité se trouve encore en aval :
+elle est obtenue depuis l’action totale de l’instruction faisant autorité, mais
+ne détermine pas cette action, comme le prouve la section suivante.
+
+![Hiérarchie de complexité constitutive](figures/constitutive-complexity-hierarchy.svg)
 
 ### Limite exacte d’une projection par état et quantité
 
@@ -154,13 +164,16 @@ diffèrent sur un argument. Le théorème générique
 `action_not_factors_of_projection_collision` consomme explicitement cette
 égalité de projection et réfute constructivement la factorisation.
 
-Sur le système engendré d’une étape effectivement exécutée, le transport
-découvert et un transport total de comparaison possédant la même source et la
-même cible exécutées constituent une telle collision. Ils sont projetés
+Sur le système engendré d’une étape effectivement exécutée, le transport total
+porté par l’instruction faisant autorité et un transport de comparaison
+possédant la même source et la même cible exécutées constituent une telle
+collision. L’instruction faisant autorité agit point par point comme la
+relation découverte sur toute continuation. Les deux transports sont projetés
 séparément ; leurs vues projetées sont égales pour la continuation exécutée
 observée, tandis que leurs actions totales diffèrent sur une autre continuation
 admissible. La non-factorisation exécutée est donc une instance du théorème
-générique de collision de projection, et non une contradiction particulière
+générique de collision de projection dont le premier antécédent est
+l’instruction du programme elle-même, et non une contradiction particulière
 formulée sur une seule vue syntaxique.
 
 Cela identifie la limite relative exacte d’une lecture de type Lyapunov dans la

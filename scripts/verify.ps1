@@ -15,6 +15,10 @@ $leanFiles = $relativeLeanFiles | ForEach-Object { Get-Item -LiteralPath (Join-P
 if ($LASTEXITCODE -ne 0) { throw "import-boundary self-test failed" }
 & (Join-Path $PSScriptRoot "check-import-boundaries.ps1")
 if ($LASTEXITCODE -ne 0) { throw "import-boundary check failed" }
+& (Join-Path $PSScriptRoot "check-import-boundaries.ps1") "scripts/constitutive-normalizer-core-import-boundaries.txt"
+if ($LASTEXITCODE -ne 0) { throw "constitutive core import-boundary check failed" }
+& (Join-Path $PSScriptRoot "check-import-boundaries.ps1") "scripts/executed-history-import-boundaries.txt"
+if ($LASTEXITCODE -ne 0) { throw "executed history import-boundary check failed" }
 
 $forbiddenTerms =
   '(?m)^\s*(axiom|unsafe)\s|\b(noncomputable|Classical|propext|Quot\.sound|native_decide|implemented_by|sorry|admit)\b'
