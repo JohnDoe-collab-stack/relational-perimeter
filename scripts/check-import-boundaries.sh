@@ -115,6 +115,7 @@ fi
 mapfile -t tracked_lean < <(git ls-files --cached --others --exclude-standard -- '*.lean' | sort)
 files=()
 for file in "${tracked_lean[@]}"; do
+  [[ -f "$repo_root/$file" ]] || continue
   files+=("$repo_root/$file")
 done
 check_graph "$repo_root" "$manifest_path" "${files[@]}"

@@ -2,24 +2,21 @@ import RelationalPerimeter.Computation.ConstitutiveSearch.ExactOperationalImage
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleIndexedReduction
 
 /-!
-# Exact target image of the executed role-indexed reduction
+# Operational image computed by the executed role reduction
 
-The target of this normalizer is the dependent profile of full operational
-outputs actually returned by the interpreted role atoms. It is not a
-homogeneous assignment readout or a structural occurrence chosen in advance.
-Every source profile carries a proof-relevant executed trace to that target.
-Only after trace convergence has been proved is the exact image realized as a
-finite obligation regime; assignments are exposed strictly downstream as a
-representation readout.
+The relation-indexed reduction is executed first. For every constituted source
+profile it produces a target profile together with the dependent trace that
+produced it. The obligation regime is then the duplicate-free image of that
+very target map. Its carrier, frontier and carry map are therefore not
+independent data and no width is prescribed in advance.
 -/
 
 namespace ConstitutiveSearch
 namespace EndogenousDecomposition
 
-open SAT
 open Extensive
 
-/-- A produced operational target accompanied by its executed reduction trace. -/
+/-- Source-indexed results actually produced by one executed reduction. -/
 structure ExecutedCausalNormalization
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -28,11 +25,10 @@ structure ExecutedCausalNormalization
     (reduction : ExecutedRoleReductionHistory program) where
   result :
     (sourceProfile : RoleOccurrenceProfile roles) →
-      Sigma fun targetOutput : RoleOperationalOutputProfile roles =>
-        ExecutedRoleProfileOutputReduction
-          reduction sourceProfile targetOutput
+      Sigma fun targetProfile : RoleOccurrenceProfile roles =>
+        ExecutedRoleProfileReduction reduction sourceProfile targetProfile
 
-/-- Canonical normalization computed by the executed reduction history. -/
+/-- Canonical normalization is the execution of the reduction history. -/
 def executedCausalNormalization
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -40,9 +36,9 @@ def executedCausalNormalization
     {program : RoleIndexedProgram roles}
     (reduction : ExecutedRoleReductionHistory program) :
     ExecutedCausalNormalization reduction :=
-  { result := normalizeExecutedRoleProfileOutput reduction }
+  { result := normalizeExecutedRoleProfile reduction }
 
-/-- Full dependent operational target produced for one constituted profile. -/
+/-- Target profile produced for one constituted source profile. -/
 def ExecutedCausalNormalization.target
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -51,10 +47,10 @@ def ExecutedCausalNormalization.target
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction)
     (sourceProfile : RoleOccurrenceProfile roles) :
-    RoleOperationalOutputProfile roles :=
+    RoleOccurrenceProfile roles :=
   (normalization.result sourceProfile).1
 
-/-- Proof-relevant trace producing that operational target. -/
+/-- Dependent executed trace producing that target. -/
 def ExecutedCausalNormalization.trace
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -63,11 +59,11 @@ def ExecutedCausalNormalization.trace
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction)
     (sourceProfile : RoleOccurrenceProfile roles) :
-    ExecutedRoleProfileOutputReduction
+    ExecutedRoleProfileReduction
       reduction sourceProfile (normalization.target sourceProfile) :=
   (normalization.result sourceProfile).2
 
-/-- Every produced target is fixed by the outputs of its executed trace. -/
+/-- Each target is fixed by the executed decisions in its trace. -/
 theorem ExecutedCausalNormalization.target_exact
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -76,51 +72,11 @@ theorem ExecutedCausalNormalization.target_exact
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction)
     (sourceProfile : RoleOccurrenceProfile roles) :
-    normalization.target sourceProfile =
-      completedRoleOperationalOutputProfile roles :=
-  executedRoleProfileOutputReduction_target_exact
+    normalization.target sourceProfile = retainedRoleProfile reduction :=
+  executedRoleProfileReduction_target_exact
     (normalization.trace sourceProfile)
 
-/-- Homogeneous representation readout of one typed operational target. -/
-def ExecutedCausalNormalization.targetAssignments
-    {count : Nat} {state : CausalConstitutiveState}
-    {run : CausalConstitutiveExecutionHistory count state}
-    {roles : RelationalConstitutiveRoleHistory run}
-    {program : RoleIndexedProgram roles}
-    {reduction : ExecutedRoleReductionHistory program}
-    (normalization : ExecutedCausalNormalization reduction)
-    (sourceProfile : RoleOccurrenceProfile roles) : List Assignment :=
-  roleOperationalOutputAssignments (normalization.target sourceProfile)
-
-/--
-The representation readout of the produced operational target is exactly the
-result of interpreting the compiled role program on the same constituted
-profile and its canonical typed payload.
--/
-theorem ExecutedCausalNormalization.targetAssignments_eq_interpreted_profile
-    {count : Nat} {state : CausalConstitutiveState}
-    {run : CausalConstitutiveExecutionHistory count state}
-    {roles : RelationalConstitutiveRoleHistory run}
-    {program : RoleIndexedProgram roles}
-    {reduction : ExecutedRoleReductionHistory program}
-    (normalization : ExecutedCausalNormalization reduction)
-    (sourceProfile : RoleOccurrenceProfile roles) :
-    normalization.targetAssignments sourceProfile =
-      interpretRoleOccurrenceProfile
-        (compileRoleHistory roles) sourceProfile
-        (canonicalRoleProfilePayload roles sourceProfile) :=
-  Eq.trans
-    (congrArg roleOperationalOutputAssignments
-      (normalization.target_exact sourceProfile))
-    (Eq.trans
-      (completedRoleOperationalOutputProfile_assignments roles)
-      (interpretCompiledRoleHistory_exact roles sourceProfile).symm)
-
-/--
-One positive occurrence of a produced operational target. Source, target and
-the executed trace connecting them remain available before representation of
-the finite image forgets that provenance.
--/
+/-- Positive occurrence of one target with its source and executed trace. -/
 structure ProducedOperationalTargetOccurrence
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -129,11 +85,11 @@ structure ProducedOperationalTargetOccurrence
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction) where
   source : RoleOccurrenceProfile roles
-  target : RoleOperationalOutputProfile roles
-  trace : ExecutedRoleProfileOutputReduction reduction source target
+  target : RoleOccurrenceProfile roles
+  trace : ExecutedRoleProfileReduction reduction source target
   targetExact : target = normalization.target source
 
-/-- Retain the source, computed target and exact trace for one source profile. -/
+/-- Construct the positive target occurrence produced from one source. -/
 def ExecutedCausalNormalization.producedTargetOccurrence
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -148,10 +104,7 @@ def ExecutedCausalNormalization.producedTargetOccurrence
     trace := normalization.trace sourceProfile
     targetExact := rfl }
 
-/--
-Complete positive enumeration of produced targets with source and trace
-provenance still attached.
--/
+/-- Complete source-indexed list of produced occurrences before deduplication. -/
 def ExecutedCausalNormalization.rawProducedTargetOccurrences
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -163,44 +116,70 @@ def ExecutedCausalNormalization.rawProducedTargetOccurrences
   (roleProfileFiniteCarrier roles).frontier.map
     normalization.producedTargetOccurrence
 
-/-- Raw operational readout before any finite image realization. -/
-def ExecutedCausalNormalization.rawTargetReadout
+/-- Duplicate-free image computed from the executed target map. -/
+def ExecutedCausalNormalization.producedTargetFrontier
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
     {roles : RelationalConstitutiveRoleHistory run}
     {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction) :
-    List (RoleOperationalOutputProfile roles) :=
-  normalization.rawProducedTargetOccurrences.map
-    ProducedOperationalTargetOccurrence.target
+    List (RoleOccurrenceProfile roles) :=
+  exactTargetImageFrontier
+    (roleProfileFiniteCarrier roles)
+    (roleOccurrenceProfileDecEq roles)
+    normalization.target
 
-/-- Forgetting provenance yields exactly the direct target readout. -/
-theorem ExecutedCausalNormalization.rawTargetReadout_exact
+/--
+The operational regime is definitionally the computed image of the executed
+target map. There is no separately supplied obligation carrier or carry map.
+-/
+def ExecutedCausalNormalization.operationalRegime
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
     {roles : RelationalConstitutiveRoleHistory run}
     {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction) :
-    normalization.rawTargetReadout =
-      (roleProfileFiniteCarrier roles).frontier.map normalization.target := by
-  unfold ExecutedCausalNormalization.rawTargetReadout
-  unfold ExecutedCausalNormalization.rawProducedTargetOccurrences
-  unfold roleProfileFiniteCarrier
-  change
-    List.map ProducedOperationalTargetOccurrence.target
-        (List.map normalization.producedTargetOccurrence
-          (roleProfileFrontier roles)) =
-      List.map normalization.target (roleProfileFrontier roles)
-  induction roleProfileFrontier roles with
-  | nil => rfl
-  | cons head tail inductionHypothesis =>
-      exact congrArg
-        (List.cons (normalization.target head))
-        inductionHypothesis
+    ObligationRegime (roleProfileFiniteCarrier roles) :=
+  computedTargetImageRegime
+    (roleProfileFiniteCarrier roles)
+    (roleOccurrenceProfileDecEq roles)
+    normalization.target
 
-/-- Executed traces force all produced operational targets to coincide. -/
+/-- The public regime is exactly, not merely extensionally, that computed image. -/
+theorem ExecutedCausalNormalization.operationalRegime_exact
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    (normalization : ExecutedCausalNormalization reduction) :
+    normalization.operationalRegime =
+      computedTargetImageRegime
+        (roleProfileFiniteCarrier roles)
+        (roleOccurrenceProfileDecEq roles)
+        normalization.target :=
+  rfl
+
+/-- Obligation equality is exactly equality of targets produced by execution. -/
+theorem ExecutedCausalNormalization.carry_eq_iff_target_eq
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    (normalization : ExecutedCausalNormalization reduction)
+    (left right : RoleOccurrenceProfile roles) :
+    normalization.operationalRegime.carry left =
+        normalization.operationalRegime.carry right ↔
+      normalization.target left = normalization.target right :=
+  computedTargetImageRegime_carry_eq_iff_target_eq
+    (roleProfileFiniteCarrier roles)
+    (roleOccurrenceProfileDecEq roles)
+    normalization.target left right
+
+/-- The executed traces prove convergence of the computed targets. -/
 theorem ExecutedCausalNormalization.targets_converge
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -213,89 +192,7 @@ theorem ExecutedCausalNormalization.targets_converge
   Eq.trans (normalization.target_exact left)
     (normalization.target_exact right).symm
 
-/-- Positive convergence witness extracted from the executed traces. -/
-theorem ExecutedCausalNormalization.targetImageConvergence
-    {count : Nat} {state : CausalConstitutiveState}
-    {run : CausalConstitutiveExecutionHistory count state}
-    {roles : RelationalConstitutiveRoleHistory run}
-    {program : RoleIndexedProgram roles}
-    {reduction : ExecutedRoleReductionHistory program}
-    (normalization : ExecutedCausalNormalization reduction) :
-    ConvergentExactTargetImage
-      (roleProfileFiniteCarrier roles)
-      normalization.target
-      (defaultRoleOccurrenceProfile roles) :=
-  { targetConverges := fun identity =>
-      normalization.targets_converge identity
-        (defaultRoleOccurrenceProfile roles) }
-
-/-- Exact finite realization of the image of the executed target computation. -/
-def ExecutedCausalNormalization.targetRealization
-    {count : Nat} {state : CausalConstitutiveState}
-    {run : CausalConstitutiveExecutionHistory count state}
-    {roles : RelationalConstitutiveRoleHistory run}
-    {program : RoleIndexedProgram roles}
-    {reduction : ExecutedRoleReductionHistory program}
-    (normalization : ExecutedCausalNormalization reduction) :
-    ExactTargetImageRealization
-      (roleProfileFiniteCarrier roles) normalization.target :=
-  convergentExactTargetImageRealization
-    (roleProfileFiniteCarrier roles)
-    normalization.target
-    (defaultRoleOccurrenceProfile roles)
-    normalization.targetImageConvergence
-
-/-- The generic regime is only the downstream projection of that exact image. -/
-def ExecutedCausalNormalization.toObligationRegime
-    {count : Nat} {state : CausalConstitutiveState}
-    {run : CausalConstitutiveExecutionHistory count state}
-    {roles : RelationalConstitutiveRoleHistory run}
-    {program : RoleIndexedProgram roles}
-    {reduction : ExecutedRoleReductionHistory program}
-    (normalization : ExecutedCausalNormalization reduction) :
-    ObligationRegime (roleProfileFiniteCarrier roles) :=
-  normalization.targetRealization.toObligationRegime
-
-/-- Equality of carried obligations is exactly equality of executed targets. -/
-theorem ExecutedCausalNormalization.carry_eq_iff_target_eq
-    {count : Nat} {state : CausalConstitutiveState}
-    {run : CausalConstitutiveExecutionHistory count state}
-    {roles : RelationalConstitutiveRoleHistory run}
-    {program : RoleIndexedProgram roles}
-    {reduction : ExecutedRoleReductionHistory program}
-    (normalization : ExecutedCausalNormalization reduction)
-    (left right : RoleOccurrenceProfile roles) :
-    normalization.toObligationRegime.carry left =
-        normalization.toObligationRegime.carry right ↔
-      normalization.target left = normalization.target right :=
-  normalization.targetRealization.carry_eq_iff_target_eq left right
-
-/-- The finite frontier realizing the exact produced-target image. -/
-def ExecutedCausalNormalization.producedTargetFrontier
-    {count : Nat} {state : CausalConstitutiveState}
-    {run : CausalConstitutiveExecutionHistory count state}
-    {roles : RelationalConstitutiveRoleHistory run}
-    {program : RoleIndexedProgram roles}
-    {reduction : ExecutedRoleReductionHistory program}
-    (normalization : ExecutedCausalNormalization reduction) :
-    List normalization.targetRealization.Obligation :=
-  normalization.targetRealization.frontier
-
-/-- Each realized obligation evaluates to exactly its source's produced target. -/
-theorem ExecutedCausalNormalization.realizedTarget_exact
-    {count : Nat} {state : CausalConstitutiveState}
-    {run : CausalConstitutiveExecutionHistory count state}
-    {roles : RelationalConstitutiveRoleHistory run}
-    {program : RoleIndexedProgram roles}
-    {reduction : ExecutedRoleReductionHistory program}
-    (normalization : ExecutedCausalNormalization reduction)
-    (sourceProfile : RoleOccurrenceProfile roles) :
-    normalization.targetRealization.value
-        (normalization.targetRealization.carry sourceProfile) =
-      normalization.target sourceProfile :=
-  normalization.targetRealization.carry_exact sourceProfile
-
-/-- The one-element shape is downstream of trace convergence and realization. -/
+/-- The computed target image, not a prescribed carrier, is a singleton. -/
 theorem ExecutedCausalNormalization.producedTargetFrontier_exact
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -303,43 +200,18 @@ theorem ExecutedCausalNormalization.producedTargetFrontier_exact
     {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction) :
-    normalization.producedTargetFrontier = [()] := by
-  unfold ExecutedCausalNormalization.producedTargetFrontier
-  unfold ExecutedCausalNormalization.targetRealization
-  unfold convergentExactTargetImageRealization
-  rfl
-
-/-- Numeric width one is downstream of the exact target realization. -/
-theorem ExecutedCausalNormalization.producedTargetWidth_exact
-    {count : Nat} {state : CausalConstitutiveState}
-    {run : CausalConstitutiveExecutionHistory count state}
-    {roles : RelationalConstitutiveRoleHistory run}
-    {program : RoleIndexedProgram roles}
-    {reduction : ExecutedRoleReductionHistory program}
-    (normalization : ExecutedCausalNormalization reduction) :
-    normalization.producedTargetFrontier.length = 1 :=
-  congrArg List.length normalization.producedTargetFrontier_exact
-
-/--
-For this exact realization, width one is equivalent to convergence of all
-trace-produced targets; no additional quotienting can explain the width.
--/
-theorem ExecutedCausalNormalization.producedTargetWidth_one_iff_targets_converge
-    {count : Nat} {state : CausalConstitutiveState}
-    {run : CausalConstitutiveExecutionHistory count state}
-    {roles : RelationalConstitutiveRoleHistory run}
-    {program : RoleIndexedProgram roles}
-    {reduction : ExecutedRoleReductionHistory program}
-    (normalization : ExecutedCausalNormalization reduction) :
-    normalization.producedTargetFrontier.length = 1 ↔
-      ∀ left right : RoleOccurrenceProfile roles,
-        normalization.target left = normalization.target right :=
-  normalization.targetRealization.width_one_iff_all_targets_equal
+    normalization.producedTargetFrontier = [retainedRoleProfile reduction] := by
+  have imageExact := exactTargetImage_eq_singleton_of_all_targets_equal
     (roleProfileFiniteCarrier roles)
+    (roleOccurrenceProfileDecEq roles)
     normalization.target
     (defaultRoleOccurrenceProfile roles)
+    normalization.targets_converge
+  exact Eq.trans imageExact
+    (congrArg (fun target => [target])
+      (normalization.target_exact (defaultRoleOccurrenceProfile roles)))
 
-/-- The projected regime frontier is literally the exact-image frontier. -/
+/-- The regime width is the width of the image computed from execution. -/
 theorem ExecutedCausalNormalization.regimeWidth_eq_producedTargetWidth
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -347,8 +219,24 @@ theorem ExecutedCausalNormalization.regimeWidth_eq_producedTargetWidth
     {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction) :
-    normalization.toObligationRegime.frontier.length =
+    normalization.operationalRegime.frontier.length =
       normalization.producedTargetFrontier.length :=
+  computedTargetImageRegime_width_eq_image_width
+    (roleProfileFiniteCarrier roles)
+    (roleOccurrenceProfileDecEq roles)
+    normalization.target
+
+/-- Width one is the terminal readout of the computed singleton image. -/
+theorem ExecutedCausalNormalization.width_exact
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    (normalization : ExecutedCausalNormalization reduction) :
+    normalization.operationalRegime.frontier.length = 1 := by
+  rw [normalization.regimeWidth_eq_producedTargetWidth]
+  rw [normalization.producedTargetFrontier_exact]
   rfl
 
 end EndogenousDecomposition
@@ -360,22 +248,15 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.target
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.trace
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.target_exact
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.targetAssignments
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.targetAssignments_eq_interpreted_profile
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedOperationalTargetOccurrence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.producedTargetOccurrence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.rawProducedTargetOccurrences
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.rawTargetReadout
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.rawTargetReadout_exact
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.targets_converge
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.targetImageConvergence
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.targetRealization
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.toObligationRegime
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.carry_eq_iff_target_eq
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.producedTargetFrontier
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.realizedTarget_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.operationalRegime
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.operationalRegime_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.carry_eq_iff_target_eq
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.targets_converge
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.producedTargetFrontier_exact
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.producedTargetWidth_exact
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.producedTargetWidth_one_iff_targets_converge
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.regimeWidth_eq_producedTargetWidth
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.width_exact
 /- AXIOM_AUDIT_END -/

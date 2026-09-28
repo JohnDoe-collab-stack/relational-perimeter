@@ -67,26 +67,21 @@ Le régime exécuté est construit sur exactement le même carrier. Sa réductio
 est lue dans une histoire dépendante construite étape par étape. La
 décomposition de l’étape courante dépend uniquement de cette étape ; sa suite
 commence dans l’état que celle-ci a produit. Pour chaque profil source,
-`executedCausalNormalization` produit une cible dans
-`RoleOperationalOutputProfile` et une trace
-`ExecutedRoleProfileOutputReduction` exactement indexée par cette source et
+`executedCausalNormalization` produit un profil d’occurrences cible et une
+trace `ExecutedRoleProfileReduction` exactement indexée par cette source et
 cette cible. Le cas transformé requiert l’action relationnelle effectivement
 reconstruite, sa sortie exacte, la preuve séparée de préservation, la
 non-identité de l’action sur la source exécutée et la distinction persistante
-des occurrences ; le cas retenu requiert sa viabilité positive.
+des occurrences ; le cas retenu requiert sa viabilité positive. Le profil
+retenu est dérivé récursivement des licences exécutées.
 
-La cible est un profil dépendamment typé des continuations opérationnelles
-produites. La liste homogène d’assignations est obtenue seulement ensuite par
-`targetAssignments` ; elle appartient à la représentation aval. La construction
-`rawProducedTargetOccurrences` rassemble les cibles de tous les profils sources
-sans perdre les traces qui les produisent. La convergence de ces traces est
-alors démontrée : toutes atteignent le même profil opérationnel complet.
-
-Ce n’est qu’après cette convergence que `ExactTargetImageRealization` réalise
-leur image comme une obligation unique. Cette réalisation est exacte dans les
-deux sens pertinents : chaque obligation possède une provenance source, et deux
-profils reçoivent la même obligation si et seulement si leurs cibles produites
-sont égales. La frontière des obligations contient donc exactement un élément :
+`rawProducedTargetOccurrences` rassemble ensuite les cibles de tous les profils
+sources sans perdre les traces qui les produisent. `producedTargetFrontier`
+calcule leur image sans doublon. `computedTargetImageRegime` construit alors le
+carrier d’obligations, sa frontière et son `carry` directement depuis cette
+image : deux profils reçoivent la même obligation si et seulement si leurs
+cibles produites sont égales. La convergence des traces démontre que cette
+frontière contient exactement un élément :
 
 ```text
 régime exécuté
@@ -94,12 +89,8 @@ régime exécuté
 ```
 
 L’unicité de cette obligation n’est donc pas utilisée comme substitut à la
-réduction. Les cibles et leurs traces sont construites avant leur réalisation
-finie. L’admission relative au critère conserve séparément les preuves de
-préservation et de viabilité portées par les licences exécutées. Le régime brut
-n’apparaît qu’ensuite, par projection du paquet causalement admis. Son
-constructeur privé empêche une fonction constante arbitraire d’être présentée
-par l’API comme le régime exécuté sans fournir cette construction.
+réduction. Les cibles et leurs traces sont construites avant le régime, dont le
+carrier et le `carry` ne peuvent pas être fournis indépendamment.
 
 Dans l'instance publique positive, deux profils sources sont construits comme
 distincts tout en ayant la même obligation exécutée. Leur égalité d'obligation

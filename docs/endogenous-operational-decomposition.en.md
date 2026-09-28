@@ -76,7 +76,7 @@ regime has width one and does not preserve them as separate obligations.
 
 On the public execution, one certificate joins the executed history, its
 stagewise operational decomposition, the occurrence-profile carrier, and the
-causal package of the executed regime. One stage decomposition receives only
+executed normalization. One stage decomposition receives only
 that stage and no future tail. The dependent tail then begins at the state that
 the stage actually produced. Roles and reduction licenses are read from this
 same stagewise history. The program is downstream: it does not constitute the
@@ -86,27 +86,20 @@ occurrence applies that total action, the right occurrence retains its
 continuation, and the compiled action is positively proved to change the
 executed source.
 
-For every source profile, `executedCausalNormalization` constructs a target in
-`RoleOperationalOutputProfile` and an `ExecutedRoleProfileOutputReduction`
-trace indexed exactly by that source and target. The target retains the full
-dependently typed continuations returned by the local decisions. The homogeneous
-assignment list is obtained separately through `targetAssignments`: it is a
-downstream representation readout, not the operational target itself. Every
-transformed decision consumes the exact application of the discovered action,
+For every source profile, `executedCausalNormalization` constructs a target
+occurrence profile and an `ExecutedRoleProfileReduction` trace indexed exactly
+by that source and target. Every transformed decision consumes the exact
+application of the discovered action,
 its separate preservation proof, action non-identity, and continued occurrence
 distinction; every retained decision consumes its positive viability.
 
 `rawProducedTargetOccurrences` then enumerates every produced target while
-retaining its source and trace. Convergence of those traces to the same complete
-operational profile is proved before any finite realization.
-`ExactTargetImageRealization` then realizes exactly this image: equality of two
-obligations is equivalent to equality of their produced targets, and every
-obligation has source provenance. `CausallyAdmittedRoleRegime` adds
-criterion-relative admission to this construction; `ObligationRegime` appears
-only afterwards, by projection. Its width one follows from convergence of the
-produced image. The private package constructor therefore prevents an arbitrary
-constant `carry` from being presented as the executed regime without the
-traces, licenses, and their admission.
+retaining its source and trace. `producedTargetFrontier` computes their
+duplicate-free image. `computedTargetImageRegime` constructs the
+`ObligationRegime` directly from that image: obligation equality is equivalent
+to equality of produced targets, and regime width is computed-image width.
+Trace convergence then yields width one. The regime, its frontier, and its
+`carry` are never supplied independently of the normalization.
 
 The exponential `iff` applies directly to this regime on the same profile
 carrier. Its local `2 → 1` width records are computed recursively from the
@@ -288,7 +281,7 @@ the class-level `iff`; `RoleIndexedProfiles.lean` and
 `RolewiseObligationPolicy.lean` proves the local/global conservation
 equivalence; `ExecutedRoleIndexedReduction.lean` constructs typed output
 decisions and traces; `ExecutedCausalNormalization.lean` constructs their exact
-image; and `CausallyAdmittedRoleRegime.lean` keeps admission distinct from the
+image; and `ExecutedCausalNormalization.lean` derives the regime from the
 projection to the raw regime. `ConstitutiveExtensiveSeparation.lean` joins these
 components on the public run.
 

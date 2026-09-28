@@ -91,7 +91,12 @@ while IFS=$'\t' read -r module layer migration role extra; do
   stratum[$module]="$layer"; status[$module]="$migration"; responsibility[$module]="$role"
 done < "$manifest"
 
-mapfile -t production_files < <(git ls-files --cached --others --exclude-standard -- '*.lean' | grep -v '^Tests/' | sort)
+mapfile -t tracked_production_files < <(git ls-files --cached --others --exclude-standard -- '*.lean' | grep -v '^Tests/' | sort)
+production_files=()
+for relative in "${tracked_production_files[@]}"; do
+  [[ -f "$relative" ]] || continue
+  production_files+=("$relative")
+done
 for relative in "${production_files[@]}"; do
   module="${relative%.lean}"; module="${module//\//.}"; module="${module//\\/.}"
   file_for[$module]="$relative"

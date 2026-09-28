@@ -128,7 +128,10 @@ foreach ($line in Get-Content -LiteralPath $manifestPath) {
 Push-Location $repoRoot
 try {
   $relativeFiles = @(& git ls-files --cached --others --exclude-standard -- '*.lean') |
-    Where-Object { $_ -notlike 'Tests/*' } | Sort-Object
+    Where-Object {
+      $_ -notlike 'Tests/*' -and
+      (Test-Path -LiteralPath (Join-Path $repoRoot $_) -PathType Leaf)
+    } | Sort-Object
   if ($LASTEXITCODE -ne 0) { throw "git ls-files failed" }
 } finally {
   Pop-Location

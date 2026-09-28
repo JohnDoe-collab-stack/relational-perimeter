@@ -78,7 +78,7 @@ séparées.
 
 Sur l’exécution publique, un certificat unique réunit l’histoire exécutée, sa
 décomposition opérationnelle construite étape par étape, le carrier des profils
-d’occurrences et le paquet causal du régime exécuté. La décomposition d’une
+d’occurrences et la normalisation exécutée. La décomposition d’une
 étape ne reçoit que cette étape : elle ne dépend d’aucune suite future. La suite
 dépendante commence ensuite dans l’état que cette étape a effectivement
 produit. Les rôles et les licences de réduction sont lus depuis cette même
@@ -89,28 +89,20 @@ par un profil. L’occurrence gauche applique cette action totale, l’occurrenc
 droite conserve sa continuation, et l’action compilée est positivement prouvée
 modifier la source exécutée.
 
-Pour chaque profil source, `executedCausalNormalization` construit une cible
-dans `RoleOperationalOutputProfile` et une trace
-`ExecutedRoleProfileOutputReduction` exactement indexée par cette source et
-cette cible. La cible conserve les continuations dépendamment typées retournées
-par les décisions locales. La liste homogène d’assignations est obtenue
-séparément par `targetAssignments` : elle est une lecture représentationnelle
-aval, non la cible opérationnelle elle-même. Chaque décision transformée
-consomme l’application exacte de l’action découverte, sa preuve séparée de
-préservation, la non-identité de l’action et la distinction persistante des
-occurrences ; chaque décision retenue consomme sa viabilité positive.
+Pour chaque profil source, `executedCausalNormalization` construit un profil
+d’occurrences cible et une trace `ExecutedRoleProfileReduction` exactement
+indexée par cette source et cette cible. Chaque décision transformée consomme
+l’application exacte de l’action découverte, sa preuve séparée de préservation,
+la non-identité de l’action et la distinction persistante des occurrences ;
+chaque décision retenue consomme sa viabilité positive.
 
 `rawProducedTargetOccurrences` énumère ensuite toutes les cibles produites en
-conservant, pour chacune, sa source et sa trace. La convergence de ces traces
-vers le même profil opérationnel complet est démontrée avant toute réalisation
-finie. `ExactTargetImageRealization` réalise alors exactement cette image :
-l’égalité de deux obligations équivaut à l’égalité des cibles produites, et
-chaque obligation possède une provenance source. `CausallyAdmittedRoleRegime`
-ajoute l’admission relative au critère à cette construction ; le
-`ObligationRegime` n’apparaît qu’ensuite, par projection. Sa largeur un dérive
-de la convergence de l’image produite. Le constructeur privé du paquet empêche
-donc de présenter un `carry` constant arbitraire comme le régime exécuté sans
-les traces, les licences et leur admission.
+conservant, pour chacune, sa source et sa trace. `producedTargetFrontier` calcule
+leur image sans doublon. `computedTargetImageRegime` construit directement
+l’`ObligationRegime` depuis cette image : l’égalité de deux obligations équivaut
+à l’égalité des cibles produites, et sa largeur est celle de l’image calculée.
+La convergence des traces donne ensuite la largeur un. Le régime, sa frontière
+et son `carry` ne sont donc jamais fournis indépendamment de la normalisation.
 
 Le `iff` exponentiel s’applique directement à ce régime sur le même carrier de
 profils. Ses lectures locales `2 → 1` sont calculées récursivement depuis
@@ -308,7 +300,7 @@ générales et l’`iff` au niveau de la classe ; `RoleIndexedProfiles.lean` et
 `RolewiseObligationPolicy.lean` prouve l’équivalence locale/globale de la
 conservation ; `ExecutedRoleIndexedReduction.lean` construit les décisions et
 les traces de sorties typées ; `ExecutedCausalNormalization.lean` en construit
-l’image exacte ; `CausallyAdmittedRoleRegime.lean` distingue l’admission de la
+l’image exacte ; `ExecutedCausalNormalization.lean` dérive le régime de la
 projection vers le régime brut. `ConstitutiveExtensiveSeparation.lean` réunit
 ces composants sur l’exécution publique.
 

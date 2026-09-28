@@ -103,7 +103,9 @@ if ($args.Count -gt 0 -and $args[0] -eq "--self-test") {
 
 Push-Location $repoRoot
 try {
-  $relativeFiles = @(& git ls-files --cached --others --exclude-standard -- '*.lean') | Sort-Object
+  $relativeFiles = @(& git ls-files --cached --others --exclude-standard -- '*.lean') |
+    Where-Object { Test-Path -LiteralPath (Join-Path $repoRoot $_) -PathType Leaf } |
+    Sort-Object
   if ($LASTEXITCODE -ne 0) { throw "git ls-files failed" }
   $files = $relativeFiles | ForEach-Object { Join-Path $repoRoot $_ }
   $manifestArgument = if ($args.Count -gt 0) { $args[0] } else { "scripts/import-boundaries.txt" }

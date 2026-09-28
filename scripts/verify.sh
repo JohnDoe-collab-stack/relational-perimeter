@@ -16,7 +16,12 @@ else
   exit 1
 fi
 
-mapfile -t lean_files < <(git ls-files --cached --others --exclude-standard -- '*.lean' | sort)
+mapfile -t tracked_lean_files < <(git ls-files --cached --others --exclude-standard -- '*.lean' | sort)
+lean_files=()
+for file in "${tracked_lean_files[@]}"; do
+  [[ -f "$file" ]] || continue
+  lean_files+=("$file")
+done
 
 bash scripts/check-import-boundaries.sh --self-test
 bash scripts/check-import-boundaries.sh

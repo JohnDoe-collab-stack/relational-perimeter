@@ -105,17 +105,15 @@ carrier on which the computation acts. For `n` binary openings the extensive
 readout of this source has exact width `2^n`. A downstream regime has that full
 exponential width exactly when it keeps the constituted profiles as distinct,
 separately addressable obligations. For every source profile, the executed
-normalizer constructs a dependent target together with the exact trace that
-produces it. The target is the full typed continuation profile returned by the
-local decisions; its assignment list is exposed only as a later representation
-readout. The transformed case consumes the reconstructed total action, its
-exact output, the separate preservation proof, non-identity, and occurrence
-distinction; the retained case consumes positive viability. The raw target
-image is formed from all source-indexed traces. Their convergence is proved
-before that image is exactly realized as one operational obligation. The
-regime is then projected from this causally admitted realization: its width one
-is a consequence of the produced-image convergence, not an independently
-chosen singleton, and no source profiles are identified.
+normalizer constructs a target occurrence profile together with the exact
+dependent trace that produces it. The transformed case consumes the
+reconstructed total action, its exact output, the separate preservation proof,
+non-identity, and occurrence distinction; the retained case consumes positive
+viability. The operational carrier is then constructed directly as the
+duplicate-free image of that executed target map. Its `carry`, frontier, and
+width are not supplied separately: obligation equality is exactly equality of
+produced targets, and width one is the final readout of their proved
+convergence. No source profiles are identified.
 
 A state-and-quantity projection preserves the observed states, output, width
 readout, and bound, but does not determine the total operational action. At the
@@ -222,10 +220,10 @@ below.
 - `RelationalPerimeter/Computation/ConstitutiveSearch/` contains the complete
   executable construction, its relational transports, SAT instance, feedback
   recursion, and production-level measured accounting;
-- `ExactOperationalImage.lean`, `ExecutedCausalNormalization.lean`, and
-  `CausallyAdmittedRoleRegime.lean` keep the produced target image, its exact
-  finite realization, criterion admission, and the final raw regime projection
-  as distinct layers;
+- `ExecutedRoleIndexedReduction.lean`, `ExecutedCausalNormalization.lean`, and
+  `ExactOperationalImage.lean` construct the source-indexed executed traces,
+  compute their target image, and derive the operational regime directly from
+  that image;
 - `Tests/ComputationalPhenomenonRegression.lean` protects the production
   statements corresponding to the independently enumerated adversarial probes,
   including the production seed and the causal connection between measured

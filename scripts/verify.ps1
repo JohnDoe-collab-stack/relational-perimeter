@@ -4,6 +4,7 @@ $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 Push-Location $repoRoot
 try {
   $relativeLeanFiles = @(& git ls-files --cached --others --exclude-standard -- '*.lean') |
+    Where-Object { Test-Path -LiteralPath (Join-Path $repoRoot $_) -PathType Leaf } |
     Sort-Object
   if ($LASTEXITCODE -ne 0) { throw "git ls-files failed" }
 } finally {

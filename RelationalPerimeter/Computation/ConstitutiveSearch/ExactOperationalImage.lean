@@ -237,299 +237,203 @@ theorem exactTargetImageFrontier_nodup
   letI : DecidableEq Target := targetDecEq
   exact deduplicate_nodup targetDecEq _
 
-/-- Positive witness that the computed target image converges at one target. -/
-structure ConvergentExactTargetImage
-    (source : FiniteCarrier)
-    {Target : Type}
-    (target : source.Identity → Target)
-    (anchor : source.Identity) where
-  targetConverges :
-    (identity : source.Identity) → target identity = target anchor
+/-!
+## Direct computed image regime
 
-/-- Positive provenance of one realized target-image obligation. -/
-structure TargetImagePreimage
-    (source : FiniteCarrier)
-    {Obligation : Type}
-    (carry : source.Identity → Obligation)
-    (obligation : Obligation) where
-  identity : source.Identity
-  exact : carry identity = obligation
-
-/--
-A finite realization of exactly the image of a target computation.  The
-obligation carrier is not allowed to identify distinct target values or to
-contain an obligation with no source provenance.
+The obligation carrier below is obtained directly from the duplicate-free
+image computed from the target map.  No singleton carrier and no width are
+supplied independently of that computation.
 -/
-structure ExactTargetImageRealization
-    (source : FiniteCarrier)
-    {Target : Type}
-    (target : source.Identity → Target) where
-  Obligation : Type
-  decEq : DecidableEq Obligation
-  frontier : List Obligation
-  complete : (obligation : Obligation) → obligation ∈ frontier
-  nodup : frontier.Nodup
-  value : Obligation → Target
-  value_injective : Function.Injective value
-  carry : source.Identity → Obligation
-  carry_exact : (identity : source.Identity) →
-    value (carry identity) = target identity
-  carry_surjective : (obligation : Obligation) →
-    TargetImagePreimage source carry obligation
 
-/-- Forget only the target values and provenance, after exact realization. -/
-def ExactTargetImageRealization.toObligationRegime
+/-- Attach each finite-image value to its constituting membership. -/
+def attachImageMembers {α : Type} :
+    (values : List α) → List {value : α // value ∈ values}
+  | [] => []
+  | head :: tail =>
+      ⟨head, .head tail⟩ ::
+        (attachImageMembers tail).map fun value =>
+          ⟨value.1, .tail head value.2⟩
+
+theorem attachImageMembers_complete {α : Type} :
+    (values : List α) →
+      (value : {value : α // value ∈ values}) →
+      value ∈ attachImageMembers values
+  | [], ⟨_, impossible⟩ => nomatch impossible
+  | head :: tail, ⟨value, member⟩ => by
+      cases member with
+      | head => exact .head _
+      | tail _ prior =>
+          let lift : {value : α // value ∈ tail} →
+              {value : α // value ∈ head :: tail} :=
+            fun attached => ⟨attached.1, .tail head attached.2⟩
+          let attached : {value : α // value ∈ tail} := ⟨value, prior⟩
+          have mapped : lift attached ∈
+              (attachImageMembers tail).map lift :=
+            Extensive.mem_map lift
+              (attachImageMembers_complete tail attached)
+          have exactValue :
+              lift attached =
+                (⟨value, .tail head prior⟩ :
+                  {value : α // value ∈ head :: tail}) :=
+            Subtype.ext rfl
+          exact .tail _ (exactValue ▸ mapped)
+
+theorem attachImageMembers_length {α : Type} :
+    (values : List α) →
+      (attachImageMembers values).length = values.length
+  | [] => rfl
+  | _ :: tail => by
+      unfold attachImageMembers
+      exact congrArg Nat.succ
+        (Eq.trans (Extensive.length_map _ (attachImageMembers tail))
+          (attachImageMembers_length tail))
+
+theorem attachImageMembers_nodup
+    {α : Type}
+    (values : List α)
+    (nodup : values.Nodup) :
+    (attachImageMembers values).Nodup := by
+  induction values with
+  | nil => exact .nil
+  | cons head tail inductionHypothesis =>
+      cases nodup with
+      | cons headFresh tailNodup =>
+          let lift : {value : α // value ∈ tail} →
+              {value : α // value ∈ head :: tail} :=
+            fun value => ⟨value.1, .tail head value.2⟩
+          have liftInjective : Function.Injective lift := by
+            intro left right same
+            apply Subtype.ext
+            exact congrArg
+              (fun value : {value : α // value ∈ head :: tail} => value.1)
+              same
+          change
+            (⟨head, .head tail⟩ ::
+              (attachImageMembers tail).map lift).Nodup
+          exact .cons
+            (fun mapped mappedMember same =>
+              let ⟨(prior : {value : α // value ∈ tail}),
+                    _priorMember, priorExact⟩ :=
+                Extensive.mem_map_preimage lift mappedMember
+              headFresh prior.1 prior.2
+                (congrArg Subtype.val
+                  (Eq.trans same priorExact.symm)))
+            (Extensive.nodup_map lift liftInjective
+              (inductionHypothesis tailNodup))
+
+/-- Equality of image identities is equality of their computed target values. -/
+def targetImageIdentityDecEq
     {source : FiniteCarrier}
     {Target : Type}
-    {target : source.Identity → Target}
-    (realization : ExactTargetImageRealization source target) :
-    ObligationRegime source :=
-  { Obligation := realization.Obligation
-    decEq := realization.decEq
-    frontier := realization.frontier
-    complete := realization.complete
-    nodup := realization.nodup
-    carry := realization.carry
-    carry_surjective := fun obligation =>
-      let provenance := realization.carry_surjective obligation
-      ⟨provenance.identity, provenance.exact⟩ }
+    (targetDecEq : DecidableEq Target)
+    (target : source.Identity → Target) :
+    DecidableEq
+      {value : Target //
+        value ∈ exactTargetImageFrontier source targetDecEq target} :=
+  fun left right =>
+    match targetDecEq left.1 right.1 with
+    | isTrue same => isTrue (Subtype.ext same)
+    | isFalse different =>
+        isFalse (fun equal => different (congrArg Subtype.val equal))
 
-/-- An exact realization has exactly the fibres of its target computation. -/
-theorem ExactTargetImageRealization.carry_eq_iff_target_eq
-    {source : FiniteCarrier}
-    {Target : Type}
-    {target : source.Identity → Target}
-    (realization : ExactTargetImageRealization source target)
-    (left right : source.Identity) :
-    realization.carry left = realization.carry right ↔
-      target left = target right := by
-  constructor
-  · intro carryExact
-    exact Eq.trans (realization.carry_exact left).symm
-      (Eq.trans (congrArg realization.value carryExact)
-        (realization.carry_exact right))
-  · intro targetExact
-    apply realization.value_injective
-    exact Eq.trans (realization.carry_exact left)
-      (Eq.trans targetExact (realization.carry_exact right).symm)
-
-/--
-For an exact realization of a nonempty source, width one is equivalent to
-convergence of all computed targets. Thus a singleton frontier cannot hide an
-additional identification introduced by the realization.
--/
-theorem ExactTargetImageRealization.width_one_iff_all_targets_equal
+/-- The obligation regime is exactly the computed image of `target`. -/
+def computedTargetImageRegime
     (source : FiniteCarrier)
     {Target : Type}
-    (target : source.Identity → Target)
-    (realization : ExactTargetImageRealization source target)
-    (anchor : source.Identity) :
-    realization.frontier.length = 1 ↔
-      ∀ left right : source.Identity, target left = target right := by
-  constructor
-  · intro widthExact left right
-    apply (realization.carry_eq_iff_target_eq left right).mp
-    cases frontierExact : realization.frontier with
-    | nil =>
-        have impossible := realization.complete (realization.carry anchor)
-        rw [frontierExact] at impossible
-        exact nomatch impossible
-    | cons head tail =>
-        cases tail with
-        | nil =>
-            have leftMember := realization.complete (realization.carry left)
-            have rightMember := realization.complete (realization.carry right)
-            rw [frontierExact] at leftMember rightMember
-            have leftExact : realization.carry left = head := by
-              cases leftMember with
-              | head => rfl
-              | tail _ impossible => exact nomatch impossible
-            have rightExact : realization.carry right = head := by
-              cases rightMember with
-              | head => rfl
-              | tail _ impossible => exact nomatch impossible
-            exact Eq.trans leftExact rightExact.symm
-        | cons second rest =>
-            rw [frontierExact] at widthExact
-            have impossible : Nat.succ rest.length = Nat.zero :=
-              Nat.succ.inj widthExact
-            exact nomatch impossible
-  · intro targetsConverge
-    have carriesConverge :
-        ∀ left right : source.Identity,
-          realization.carry left = realization.carry right :=
-      fun left right =>
-        (realization.carry_eq_iff_target_eq left right).mpr
-          (targetsConverge left right)
-    cases frontierExact : realization.frontier with
-    | nil =>
-        have impossible := realization.complete (realization.carry anchor)
-        rw [frontierExact] at impossible
-        exact nomatch impossible
-    | cons head tail =>
-        cases tail with
-        | nil => rfl
-        | cons second rest =>
-            let headPreimage := realization.carry_surjective head
-            let secondPreimage := realization.carry_surjective second
-            have headEqualsSecond : head = second :=
-              Eq.trans headPreimage.exact.symm
-                (Eq.trans
-                  (carriesConverge
-                    headPreimage.identity secondPreimage.identity)
-                  secondPreimage.exact)
-            have duplicate : head ∈ second :: rest :=
-              headEqualsSecond ▸ List.Mem.head rest
-            have noDuplicates := realization.nodup
-            rw [frontierExact] at noDuplicates
-            cases noDuplicates with
-            | cons headAbsent _ =>
-                exact False.elim
-                  (headAbsent second (List.Mem.head rest) headEqualsSecond)
-
-/-- Convergence constructs, rather than assumes, a one-obligation exact image. -/
-def convergentExactTargetImageRealization
-    (source : FiniteCarrier)
-    {Target : Type}
-    (target : source.Identity → Target)
-    (anchor : source.Identity)
-    (convergence : ConvergentExactTargetImage source target anchor) :
-    ExactTargetImageRealization source target :=
-  { Obligation := Unit
-    decEq := fun _ _ => isTrue rfl
-    frontier := [()]
-    complete := fun obligation => by cases obligation; exact .head _
-    nodup := .cons (fun _ impossible _ => nomatch impossible) .nil
-    value := fun _ => target anchor
-    value_injective := fun left right _ => by cases left; cases right; rfl
-    carry := fun _ => ()
-    carry_exact := fun identity => (convergence.targetConverges identity).symm
-    carry_surjective := fun obligation => by
-      cases obligation
-      exact { identity := anchor, exact := rfl } }
-
-/-- Unit is used only after target convergence has been constructed. -/
-def convergentExactTargetRegime
-    (source : FiniteCarrier)
-    {Target : Type}
-    (target : source.Identity → Target)
-    (anchor : source.Identity)
-    (_realization : ConvergentExactTargetImage source target anchor) :
-    ObligationRegime source :=
-  (convergentExactTargetImageRealization
-    source target anchor _realization).toObligationRegime
-
-/-- The projected regime has exactly the fibres of the convergent target map. -/
-theorem convergentExactTargetRegime_carry_eq_iff_target_eq
-    (source : FiniteCarrier)
-    {Target : Type}
-    (target : source.Identity → Target)
-    (anchor : source.Identity)
-    (realization : ConvergentExactTargetImage source target anchor)
-    (left right : source.Identity) :
-    (convergentExactTargetRegime
-        source target anchor realization).carry left =
-        (convergentExactTargetRegime
-          source target anchor realization).carry right ↔
-      target left = target right := by
+    (targetDecEq : DecidableEq Target)
+    (target : source.Identity → Target) :
+    ObligationRegime source := by
+  let image := exactTargetImageFrontier source targetDecEq target
   exact
-    (convergentExactTargetImageRealization
-      source target anchor realization).carry_eq_iff_target_eq left right
+    { Obligation := {value : Target // value ∈ image}
+      decEq := targetImageIdentityDecEq targetDecEq target
+      frontier := attachImageMembers image
+      complete := attachImageMembers_complete image
+      nodup := attachImageMembers_nodup image
+        (exactTargetImageFrontier_nodup source targetDecEq target)
+      carry := fun identity =>
+        ⟨target identity,
+          exactTargetImageFrontier_complete source targetDecEq target identity⟩
+      carry_surjective := fun obligation => by
+        have rawMember : obligation.1 ∈ source.frontier.map target :=
+          (mem_deduplicate_iff targetDecEq obligation.1 _).mp obligation.2
+        let ⟨identity, _identityMember, targetExact⟩ :=
+          Extensive.mem_map_preimage target rawMember
+        exact ⟨identity, Subtype.ext targetExact⟩ }
 
-/-- Width one is read only after the convergence witness has been supplied. -/
-theorem convergentExactTargetRegime_width_one
-    (source : FiniteCarrier)
-    {Target : Type}
-    (target : source.Identity → Target)
-    (anchor : source.Identity)
-    (realization : ConvergentExactTargetImage source target anchor) :
-    (convergentExactTargetRegime
-      source target anchor realization).frontier.length = 1 :=
-  by
-    unfold convergentExactTargetRegime
-    unfold ExactTargetImageRealization.toObligationRegime
-    unfold convergentExactTargetImageRealization
-    rfl
-
-/--
-The exact image is the singleton at the anchor exactly when all computed
-targets converge.  Neither side is stored as a field of the other.
--/
-theorem exactTargetImage_eq_singleton_iff_all_targets_equal
+/-- The computed image regime has exactly the fibres of the computation. -/
+theorem computedTargetImageRegime_carry_eq_iff_target_eq
     (source : FiniteCarrier)
     {Target : Type}
     (targetDecEq : DecidableEq Target)
     (target : source.Identity → Target)
-    (anchor : source.Identity) :
-    exactTargetImageFrontier source targetDecEq target = [target anchor] ↔
-      ∀ left right : source.Identity, target left = target right := by
+    (left right : source.Identity) :
+    (computedTargetImageRegime source targetDecEq target).carry left =
+        (computedTargetImageRegime source targetDecEq target).carry right ↔
+      target left = target right := by
   constructor
-  · intro imageExact left right
-    have leftMember :=
-      exactTargetImageFrontier_complete source targetDecEq target left
-    have rightMember :=
-      exactTargetImageFrontier_complete source targetDecEq target right
-    have leftFound :
-        containsWith targetDecEq (target left)
-          (exactTargetImageFrontier source targetDecEq target) = true :=
-      (containsWith_eq_true_iff_mem targetDecEq (target left) _).mpr leftMember
-    have rightFound :
-        containsWith targetDecEq (target right)
-          (exactTargetImageFrontier source targetDecEq target) = true :=
-      (containsWith_eq_true_iff_mem targetDecEq (target right) _).mpr rightMember
-    have leftSingleton :
-        containsWith targetDecEq (target left) [target anchor] = true :=
-      Eq.mp
-        (congrArg
-          (fun values => containsWith targetDecEq (target left) values = true)
-          imageExact)
-        leftFound
-    have rightSingleton :
-        containsWith targetDecEq (target right) [target anchor] = true :=
-      Eq.mp
-        (congrArg
-          (fun values => containsWith targetDecEq (target right) values = true)
-          imageExact)
-        rightFound
-    exact Eq.trans
-      (containsWith_singleton_eq
-        targetDecEq (target left) (target anchor) leftSingleton)
-      (containsWith_singleton_eq
-        targetDecEq (target right) (target anchor) rightSingleton).symm
-  · intro allEqual
-    have sourceNonempty : source.frontier ≠ [] :=
-      list_ne_nil_of_mem (source.complete anchor)
-    have imageNonempty : source.frontier.map target ≠ [] :=
-      map_ne_nil target sourceNonempty
-    have imageExact :
-        exactTargetImageFrontier source targetDecEq target = [target anchor] := by
-      apply deduplicate_eq_singleton_of_nonempty_of_all_eq targetDecEq
-        (source.frontier.map target) (target anchor) imageNonempty
-      intro value valueMember
-      rcases Extensive.mem_map_preimage target valueMember with
-        ⟨identity, _identityMember, identityExact⟩
-      exact Eq.trans identityExact.symm (allEqual identity anchor)
-    exact imageExact
+  · intro same
+    exact congrArg Subtype.val same
+  · intro same
+    exact Subtype.ext same
 
-/-- Convergence therefore gives the exact numeric width one readout. -/
-theorem exactTargetImage_width_one_of_all_targets_equal
+/-- The regime width is the computed target-image width. -/
+theorem computedTargetImageRegime_width_eq_image_width
+    (source : FiniteCarrier)
+    {Target : Type}
+    (targetDecEq : DecidableEq Target)
+    (target : source.Identity → Target) :
+    (computedTargetImageRegime source targetDecEq target).frontier.length =
+      (exactTargetImageFrontier source targetDecEq target).length :=
+  attachImageMembers_length _
+
+/-- Convergent computed targets produce the singleton image at their anchor. -/
+theorem exactTargetImage_eq_singleton_of_all_targets_equal
     (source : FiniteCarrier)
     {Target : Type}
     (targetDecEq : DecidableEq Target)
     (target : source.Identity → Target)
     (anchor : source.Identity)
-    (allEqual : ∀ left right : source.Identity, target left = target right) :
-    (exactTargetImageFrontier source targetDecEq target).length = 1 :=
-  congrArg List.length
-    ((exactTargetImage_eq_singleton_iff_all_targets_equal
-      source targetDecEq target anchor).mpr allEqual)
+    (targetsConverge :
+      ∀ left right : source.Identity, target left = target right) :
+    exactTargetImageFrontier source targetDecEq target = [target anchor] := by
+  have sourceNonempty : source.frontier ≠ [] :=
+    list_ne_nil_of_mem (source.complete anchor)
+  have mappedNonempty : source.frontier.map target ≠ [] :=
+    map_ne_nil target sourceNonempty
+  have allMappedEqual :
+      (value : Target) → value ∈ source.frontier.map target →
+        value = target anchor := by
+    intro value member
+    let ⟨identity, _identityMember, valueExact⟩ :=
+      Extensive.mem_map_preimage target member
+    exact Eq.trans valueExact.symm (targetsConverge identity anchor)
+  exact deduplicate_eq_singleton_of_nonempty_of_all_eq
+    targetDecEq (source.frontier.map target) (target anchor)
+    mappedNonempty allMappedEqual
+
+/-- Width one is derived from convergence of the computed image. -/
+theorem computedTargetImageRegime_width_one_of_all_targets_equal
+    (source : FiniteCarrier)
+    {Target : Type}
+    (targetDecEq : DecidableEq Target)
+    (target : source.Identity → Target)
+    (anchor : source.Identity)
+    (targetsConverge :
+      ∀ left right : source.Identity, target left = target right) :
+    (computedTargetImageRegime source targetDecEq target).frontier.length = 1 := by
+  rw [computedTargetImageRegime_width_eq_image_width]
+  rw [exactTargetImage_eq_singleton_of_all_targets_equal
+    source targetDecEq target anchor targetsConverge]
+  rfl
 
 end Extensive
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
-#print axioms ConstitutiveSearch.Extensive.deduplicate
+#print axioms ConstitutiveSearch.Extensive.containsWith
 #print axioms ConstitutiveSearch.Extensive.containsWith_eq_true_iff_mem
+#print axioms ConstitutiveSearch.Extensive.deduplicate
 #print axioms ConstitutiveSearch.Extensive.mem_deduplicate_iff
 #print axioms ConstitutiveSearch.Extensive.deduplicate_nodup
 #print axioms ConstitutiveSearch.Extensive.deduplicate_eq_singleton_of_nonempty_of_all_eq
@@ -537,16 +441,16 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.Extensive.list_ne_nil_of_mem
 #print axioms ConstitutiveSearch.Extensive.map_ne_nil
 #print axioms ConstitutiveSearch.Extensive.exactTargetImageFrontier
-#print axioms ConstitutiveSearch.Extensive.ConvergentExactTargetImage
-#print axioms ConstitutiveSearch.Extensive.TargetImagePreimage
-#print axioms ConstitutiveSearch.Extensive.ExactTargetImageRealization
-#print axioms ConstitutiveSearch.Extensive.ExactTargetImageRealization.toObligationRegime
-#print axioms ConstitutiveSearch.Extensive.ExactTargetImageRealization.carry_eq_iff_target_eq
-#print axioms ConstitutiveSearch.Extensive.ExactTargetImageRealization.width_one_iff_all_targets_equal
-#print axioms ConstitutiveSearch.Extensive.convergentExactTargetImageRealization
-#print axioms ConstitutiveSearch.Extensive.convergentExactTargetRegime
-#print axioms ConstitutiveSearch.Extensive.convergentExactTargetRegime_carry_eq_iff_target_eq
-#print axioms ConstitutiveSearch.Extensive.convergentExactTargetRegime_width_one
-#print axioms ConstitutiveSearch.Extensive.exactTargetImage_eq_singleton_iff_all_targets_equal
-#print axioms ConstitutiveSearch.Extensive.exactTargetImage_width_one_of_all_targets_equal
+#print axioms ConstitutiveSearch.Extensive.exactTargetImageFrontier_complete
+#print axioms ConstitutiveSearch.Extensive.exactTargetImageFrontier_nodup
+#print axioms ConstitutiveSearch.Extensive.attachImageMembers
+#print axioms ConstitutiveSearch.Extensive.attachImageMembers_complete
+#print axioms ConstitutiveSearch.Extensive.attachImageMembers_length
+#print axioms ConstitutiveSearch.Extensive.attachImageMembers_nodup
+#print axioms ConstitutiveSearch.Extensive.targetImageIdentityDecEq
+#print axioms ConstitutiveSearch.Extensive.computedTargetImageRegime
+#print axioms ConstitutiveSearch.Extensive.computedTargetImageRegime_carry_eq_iff_target_eq
+#print axioms ConstitutiveSearch.Extensive.computedTargetImageRegime_width_eq_image_width
+#print axioms ConstitutiveSearch.Extensive.exactTargetImage_eq_singleton_of_all_targets_equal
+#print axioms ConstitutiveSearch.Extensive.computedTargetImageRegime_width_one_of_all_targets_equal
 /- AXIOM_AUDIT_END -/
