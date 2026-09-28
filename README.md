@@ -104,14 +104,18 @@ The framework first constitutes the role occurrences and the complete profile
 carrier on which the computation acts. For `n` binary openings this source has
 exact width `2^n`. A downstream regime has that full exponential width exactly
 when it keeps the constituted profiles as distinct, separately addressable
-obligations. The executed reduction instead consumes, at every role, the
-reconstructed total action and its separate preservation proof; it groups the
-same source identities into one operational obligation without identifying the
-two local occurrences. Its local `2 → 1` readings are recursively derived from
-the actual reduction history, not supplied as a causal premise. The public
-certificate ties this reduction to the same executed roles, program,
-interpreter, failed-candidate work, and output transmitted to the next
-situation.
+obligations. For every source profile, the executed reduction now constructs a
+dependent result pairing the obligation with the trace that produces it. The
+role licenses are constructed stage by stage: the head license depends only on
+the stage that has just executed, and the dependent tail starts at that stage's
+produced state. Its transformed case
+consumes the reconstructed total action, its exact output, the separate
+preservation proof, non-identity, and occurrence distinction; its retained case
+consumes positive viability. The regime's `carry` is the first projection of
+the dependent result, not a separately supplied field. All traces reach the
+same retained profile, hence width one, without identifying the source
+profiles. The regime and final-certificate constructors are private, and the
+class-level `iff` applies to the resulting regime on exactly the same carrier.
 
 A state-and-quantity projection preserves the observed states, output, width
 readout, and bound, but does not determine the total operational action. At the
@@ -142,7 +146,7 @@ contains variable-arity histories.
 
 An operational regime may preserve those profile identities as distinct
 obligations or group them. Lean proves, for every problem in every binary
-relational extensive family:
+relational family formalized by the class:
 
 ```text
 regime width = 2^stageCount
@@ -153,17 +157,18 @@ regime width = 2^stageCount
 The same condition is equivalent to exact minimum addressing capacity
 factorized through the regime. On the public carrier, the certificate
 constructs the full-width identity regime and positively proves its complete
-conservation condition; on the same constituted identities, the executed
-regime has width one and fails separate preservation. A single certificate
-ties the roles, profile carrier, downstream program, exact interpreter, and
-executed reduction to the same run. The program consumes the already
-constituted profiles; it does not create their alternatives. Its transformed
-case uses the reconstructed total action, its preservation proof is separate,
-and the action is positively non-identity on the executed source. The resulting
-reduction groups distinct viable identities into one operational obligation;
-its local `2 → 1` readings are recursively derived from the reduction history.
+conservation condition. On the same constituted identities, the executed
+regime constructs a dependent reduction trace for each source profile and only
+then projects its retained target as the regime obligation. This reduction is
+read from the same stagewise decomposition whose head is available from the
+current executed stage before any future tail. The trace consumes
+the authoritative relational action, exact output, separate preservation,
+viability, non-identity, and persistent occurrence distinction. Every trace
+reaches the same retained profile, so the executed frontier has width one and
+fails separate preservation without equating any source profiles. The
+class-level `iff` applies directly to this regime on this same carrier.
 
-![Relational extensivity and operational obligations](docs/figures/relational-extensive-iff.svg)
+![Extensive readout and operational obligations](docs/figures/relational-extensive-iff.svg)
 
 This is a theorem about exact carrier width and factorized finite addressing in
 the formalized class, not a universal time or memory lower bound. The audited
@@ -252,13 +257,14 @@ pwsh -NoProfile -File scripts/verify.ps1
 bash scripts/verify.sh
 ```
 
-Both gates traverse the declared import boundaries and compile four
-expected-failure fixtures. These fixtures verify that the public certificate
-constructor remains private, that profiles from distinct stored instructions
-are not directly interchangeable, that the projection collision remains indexed
-by the authoritative instruction transport, and that an interpreter which
-ignores an arbitrary raw instruction cannot satisfy its semantic output
-specification.
+Both gates traverse the declared import boundaries and compile the
+expected-failure fixtures. These fixtures verify that the scientific
+certificate and causal-regime constructors remain private, that profiles from
+distinct stored instructions are not directly interchangeable, that a retained
+decision cannot replace the transformed decision, that the projection
+collision remains indexed by the authoritative instruction transport, and
+that an interpreter which ignores an arbitrary raw instruction cannot satisfy
+its semantic output specification.
 
 All Lean sources are constructive: they contain no `sorry`, `axiom`, or
 `noncomputable` declaration, and their final axiom-audit blocks report no axiom
@@ -285,11 +291,18 @@ indépendantes ne sont pas confondus.
 Pour `n` ouvertures binaires exécutées, le carrier source des profils constitués
 a une largeur exacte `2^n`. Un régime aval possède cette largeur exponentielle
 complète si et seulement s’il conserve ces profils comme identités distinctes
-et séparément adressables. La réduction exécutée consomme au contraire, à
-chaque rôle, l’action totale reconstruite et sa preuve séparée de préservation ;
-elle regroupe les mêmes identités sources en une obligation sans identifier les
-deux occurrences locales. Ses lectures `2 → 1` sont dérivées récursivement de
-l’histoire de réduction effective. Une projection par état et quantité conserve cette stabilité
+et séparément adressables. Pour chaque profil source, la réduction exécutée
+construit désormais un résultat dépendant qui associe l’obligation à la trace
+qui la produit. Les licences sont construites étape par étape : la licence de
+tête dépend uniquement de l’étape qui vient d’être exécutée, et la suite
+dépendante commence dans l’état produit par cette étape. Son cas transformé
+consomme l’action relationnelle reconstruite, sa
+sortie exacte, la préservation séparée, la non-identité et la distinction des
+occurrences ; son cas retenu consomme la viabilité positive. Le `carry` du
+régime est la première projection de ce résultat dépendant ; ce n’est pas un
+champ fourni séparément. Toutes les traces atteignent le même profil retenu,
+d’où la largeur un, sans identifier les profils sources.
+Une projection par état et quantité conserve cette stabilité
 observée sans déterminer l’action opérationnelle totale. Le transport total
 porté par l’instruction faisant autorité et le transport de comparaison sont
 projetés séparément vers deux vues égales, alors que leurs actions totales
@@ -310,7 +323,7 @@ des histoires à arités variables.
 
 Un régime opérationnel peut conserver ces identités de profil comme obligations
 distinctes ou les regrouper. Lean prouve, pour tout problème de toute famille
-extensive relationnelle binaire :
+relationnelle à ouvertures binaires :
 
 ```text
 largeur du régime = 2^stageCount
@@ -321,19 +334,18 @@ largeur du régime = 2^stageCount
 La même condition équivaut à la capacité minimale exacte d’un adressage
 factorisé par le régime. Sur le carrier public, le certificat construit le
 régime identitaire de pleine largeur et prouve positivement sa condition
-complète de conservation ; sur les mêmes identités constituées, le régime
-exécuté a une largeur un et ne conserve pas les identités séparément. Un
-certificat unique rattache
-les rôles, le carrier de profils, le programme aval, l’interprète exact et la
-réduction exécutée à une même exécution. Le programme consomme les profils déjà
-constitués ; il ne crée pas leurs alternatives. Son cas transformé emploie
-l’action totale reconstruite, sa preuve de préservation demeure distincte, et
-l’action est positivement non identique sur la source exécutée. La réduction
-obtenue regroupe des identités distinctes et viables en une seule obligation
-opérationnelle ; ses lectures locales `2 → 1` sont dérivées récursivement de
-l’histoire de réduction.
+complète de conservation. Sur les mêmes identités constituées, le régime
+exécuté construit pour chaque profil source une trace dépendante qui consomme
+l’action relationnelle faisant autorité, sa sortie exacte, la préservation
+séparée, la viabilité, la non-identité et la distinction persistante des
+occurrences. Cette réduction provient de la même décomposition par étapes, dont
+la tête ne dépend que de l’étape exécutée courante. Il projette seulement
+ensuite le profil retenu comme obligation.
+Toutes les traces atteignent ce même profil, donc sa frontière a une largeur
+un, sans égaliser les profils sources. Le `iff` de classe s’applique directement
+à ce régime sur ce même carrier.
 
-![Extensivité relationnelle et obligations opérationnelles](docs/figures/relational-extensive-iff.svg)
+![Lecture extensive et obligations opérationnelles](docs/figures/relational-extensive-iff.svg)
 
 Il s’agit d’un théorème sur la largeur exacte d’un carrier et l’adressage fini
 factorisé dans la classe formalisée, non d’une borne universelle en temps ou en

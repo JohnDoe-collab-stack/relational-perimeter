@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050" role="img" aria-labelledby="title desc">
-  <title id="title">Relational extensivity and operational obligations</title>
+  <title id="title">Extensive readout and operational obligations</title>
   <desc id="desc">Primitive relations constitute a dependent role history and local occurrence identities. Their derived profile carrier has product width and binary width two to the number of stages. A downstream obligation regime has full exponential width exactly when it keeps those identities distinct and separately addressable. The executed reduction instead uses the discovered action and its separate preservation proof to group the same source identities into one operational obligation without identifying them.</desc>
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
@@ -47,7 +47,7 @@
   </defs>
 
   <rect width="1600" height="1050" fill="url(#background)"/>
-  <text x="70" y="58" class="title">Relational extensivity and operational obligations</text>
+  <text x="70" y="58" class="title">Extensive readout and operational obligations</text>
   <text x="70" y="89" class="subtitle">Constitution of identities first; operational conservation or grouping afterwards</text>
 
   <g filter="url(#shadow)">
@@ -62,10 +62,10 @@
 
   <g filter="url(#shadow)">
     <rect x="250" y="340" width="1100" height="180" rx="18" fill="url(#profiles)"/>
-    <text x="290" y="383" class="layer">2 · Constituted occurrence identities and extensive profiles</text>
+    <text x="290" y="383" class="layer">2 · Constituted occurrence identities and complete profile frontier</text>
     <text x="290" y="420" class="bodyLight">One actual occurrence is selected at every role; the frontier is complete and duplicate-free.</text>
     <text x="290" y="448" class="bodyLight">No program, Boolean readout, numeric address, or obligation regime constitutes these identities.</text>
-    <text x="290" y="489" class="metric">width = product(local arities) · binary case: width = 2^stageCount</text>
+    <text x="290" y="489" class="metric">extensive readout = product(local arities) · binary case: 2^stageCount</text>
   </g>
 
   <path d="M800 520 L800 578" class="arrow"/>

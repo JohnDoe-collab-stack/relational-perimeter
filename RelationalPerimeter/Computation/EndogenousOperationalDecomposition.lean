@@ -177,6 +177,42 @@ def constitutedDistinctSeparateRegime (input : Nat) :
         (constitutiveExtensiveSeparationEvidence input).roles) :=
   publicCertificateSeparateRegime input
 
+/--
+The executed regime on exactly the same role-constituted profile carrier as
+the class-level `iff`; it is projected from the closed causal certificate.
+-/
+def executedConstitutiveObligationRegime (input : Nat) :
+    ObligationRegime
+      (roleProfileFiniteCarrier
+        (constitutiveExtensiveSeparationEvidence input).roles) :=
+  publicCertificateExecutedRegime input
+
+/-- The source-indexed reduction witness constructed behind one public carry. -/
+def executedProfileCarryDerivation
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    ExecutedCarryDerivation
+      (constitutiveExtensiveSeparationEvidence input).executedRegime.reduction
+      profile
+      ((executedConstitutiveObligationRegime input).carry profile) :=
+  publicCertificateCarryDerivation input profile
+
+/-- The executed regime is subject to the same `iff` on the same carrier. -/
+theorem executed_regime_exponential_width_iff_separate_preservation
+    (input : Nat) :
+    (executedConstitutiveObligationRegime input).frontier.length =
+        2 ^ (input + 1) ↔
+      ConservesRoleIdentitiesAsDistinctSeparatelyAddressable
+        (executedConstitutiveObligationRegime input) :=
+  constituted_exponential_width_iff_distinct_separate_conservation
+    input (executedConstitutiveObligationRegime input)
+
+/-- Its width-one readout is downstream of the same causal certificate. -/
+theorem executed_constitutive_obligation_width_is_one (input : Nat) :
+    (executedConstitutiveObligationRegime input).frontier.length = 1 :=
+  publicCertificate_executedRegime_width input
+
 /-- The explicit conservative regime realizes the exponential side. -/
 theorem constituted_distinct_separate_regime_has_exponential_width
     (input : Nat) :
@@ -196,9 +232,7 @@ separate-obligation regime; it groups identities without identifying them. -/
 theorem executed_reduction_does_not_preserve_separate_obligations
     (input : Nat) :
     ¬ PreservesIdentitiesSeparately
-      (executedObligationRegimeOfReduction
-        (constitutiveExtensiveSeparationEvidence input).roles
-        (constitutiveExtensiveSeparationEvidence input).reduction) :=
+      (executedConstitutiveObligationRegime input) :=
   publicCertificate_reduction_separates_identity_from_obligation input
 
 theorem independent_profile_addressing_requires_exponential_slots
@@ -864,6 +898,10 @@ end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutiveExtensiveSeparationEvidence
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constituted_exponential_width_iff_distinct_separate_conservation
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutedDistinctSeparateRegime
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executedConstitutiveObligationRegime
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executedProfileCarryDerivation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_regime_exponential_width_iff_separate_preservation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_constitutive_obligation_width_is_one
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constituted_distinct_separate_regime_has_exponential_width
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constituted_distinct_separate_regime_conserves
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_reduction_does_not_preserve_separate_obligations

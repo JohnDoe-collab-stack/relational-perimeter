@@ -87,6 +87,60 @@ theorem publicSeparateRegimeConserves (input : Nat) :
       (constitutedDistinctSeparateRegime input) :=
   constituted_distinct_separate_regime_conserves input
 
+/-- The executed regime enters the same class-level `iff` on the same carrier. -/
+theorem publicExecutedRegimeUsesSameConstitutedCarrier (input : Nat) :
+    (executedConstitutiveObligationRegime input).frontier.length =
+        2 ^ (input + 1) ↔
+      ConservesRoleIdentitiesAsDistinctSeparatelyAddressable
+        (executedConstitutiveObligationRegime input) :=
+  executed_regime_exponential_width_iff_separate_preservation input
+
+/-- One stage already supplies its operational decomposition without receiving
+any future execution tail as an argument. -/
+def stageDecompositionIsPrefixLocal
+    {source : CausalConstitutiveState}
+    (stage : CausalConstitutiveStageExecution source) :
+    ExecutedStageDecomposition stage :=
+  executedStageDecomposition stage
+
+/-- The closed public certificate uses the canonical stagewise decomposition
+of its exact executed history. -/
+theorem publicCertificateUsesCanonicalStagewiseDecomposition (input : Nat) :
+    (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition =
+      buildStagewiseExecutedDecompositionHistory
+        (constitutiveExtensiveSeparationEvidence input).realization.causalRun :=
+  (constitutiveExtensiveSeparationEvidence input).stagewiseDecompositionExact
+
+/-- The public obligation package is built from that stagewise history, not
+from a separately installable role relation or carry map. -/
+theorem publicExecutedPackageComesFromStagewiseDecomposition (input : Nat) :
+    (constitutiveExtensiveSeparationEvidence input).executedRegime =
+      executedRoleObligationRegimeOfStagewise
+        (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition :=
+  (constitutiveExtensiveSeparationEvidence input).executedRegimeFromStagewise
+
+/-- Each public source profile carries its own dependent reduction witness. -/
+def publicExecutedCarryHasSourceIndexedDerivation
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    ExecutedCarryDerivation
+      (constitutiveExtensiveSeparationEvidence input).executedRegime.reduction
+      profile
+      ((executedConstitutiveObligationRegime input).carry profile) :=
+  executedProfileCarryDerivation input profile
+
+/-- The public carry target is the target produced by that exact trace. -/
+theorem publicExecutedCarryTargetIsTraceTarget
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    (carryByExecutedReduction
+        (constitutiveExtensiveSeparationEvidence input).executedRegime.reduction
+        profile).profile =
+      (publicExecutedCarryHasSourceIndexedDerivation input profile).targetProfile :=
+  (publicExecutedCarryHasSourceIndexedDerivation input profile).carriedProfileExact
+
 /-- The program action is not a shape-only identity operation: the compiled
 atom changes the actually executed source continuation. -/
 theorem compiledActionIsMaterial
@@ -123,6 +177,22 @@ theorem reductionConsumesPreservation
           role.executedInput)) :=
   (executedRoleReductionLicense role).transformedAccepted
 
+/-- The reduction license retains the preservation map independently of one
+already accepted executed input. -/
+theorem reductionCarriesArbitraryContinuationPreservation
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run)
+    (continuation : GeneratedStructuralBranchContinuation
+      (causalOpeningLeft source run.selected run.fresh))
+    (accepted : GeneratedStructuralBranchAccept
+      (causalOpeningLeft source run.selected run.fresh) continuation) :
+    GeneratedStructuralBranchAccept
+      (causalOpeningRight source run.selected run.fresh)
+      ((compileRoleStageAtom role).action continuation) :=
+  executedTransformedDecisionPreservesCriterion
+    (executedRoleReductionLicense role) continuation accepted
+
 /-- Reduction does not identify the two viable opening occurrences. -/
 theorem reductionKeepsOccurrencesDistinct
     {source : CausalConstitutiveState}
@@ -147,9 +217,7 @@ theorem localGlobalPolicyEquivalence
 theorem publicExecutedReductionRejectsSeparateObligationStatus
     (input : Nat) :
     ¬ PreservesIdentitiesSeparately
-      (executedObligationRegimeOfReduction
-        (constitutiveExtensiveSeparationEvidence input).roles
-        (constitutiveExtensiveSeparationEvidence input).reduction) :=
+      (publicCertificateExecutedRegime input) :=
   executed_reduction_does_not_preserve_separate_obligations input
 
 /-- Its local width record is computed recursively from the executed
@@ -157,7 +225,7 @@ reduction; no literal global trace is accepted as evidence. -/
 theorem publicReductionWidthsAreDerived (input : Nat) :
     AllExecutedLocalWidthsExact
       (executedReductionLocalWidths
-        (constitutiveExtensiveSeparationEvidence input).reduction) :=
+        (constitutiveExtensiveSeparationEvidence input).executedRegime.reduction) :=
   (constitutiveExtensiveSeparationEvidence input).localReductionWidthsExact
 
 end RelationalPerimeter.Tests.RelationalExtensiveIffRegression
@@ -171,9 +239,16 @@ end RelationalPerimeter.Tests.RelationalExtensiveIffRegression
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicTarget
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicSeparateRegimeHasExponentialWidth
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicSeparateRegimeConserves
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedRegimeUsesSameConstitutedCarrier
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.stageDecompositionIsPrefixLocal
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicCertificateUsesCanonicalStagewiseDecomposition
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedPackageComesFromStagewiseDecomposition
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedCarryHasSourceIndexedDerivation
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedCarryTargetIsTraceTarget
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.compiledActionIsMaterial
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.transformedOccurrenceUsesDiscoveredAction
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.reductionConsumesPreservation
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.reductionCarriesArbitraryContinuationPreservation
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.reductionKeepsOccurrencesDistinct
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.localGlobalPolicyEquivalence
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedReductionRejectsSeparateObligationStatus

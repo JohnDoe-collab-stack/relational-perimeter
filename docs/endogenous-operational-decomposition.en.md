@@ -27,7 +27,7 @@ from material the computation has produced**.
 
 ![Executed architecture of the endogenous operational decomposition](figures/endogenous-operational-decomposition.svg)
 
-## Operational obligations and relational extensivity
+## Operational obligations and extensive readout
 
 The order of constitution is explicit in the types. Primitive source,
 formation, target, and provenance relations positively witness each opening.
@@ -69,31 +69,42 @@ of `carry` together with an address on obligations. The general finite proof is
 constructive; the binary equation follows from the relationally constituted
 local frontiers.
 
-Both sides are positively inhabited on the same public carrier. The certificate
+Both behaviours are positively realized on the same public carrier. The certificate
 constructs the full-width identity regime and its complete factorized
 conservation witness. Over those same constituted identities, the executed
 regime has width one and does not preserve them as separate obligations.
 
-On the public execution, one certificate joins the already executed history,
-its authoritative relational roles, the occurrence-profile carrier, the
-compiled role program, its interpreter, and the executed reduction. The
-program is downstream: it does not constitute the profile alternatives. Each
-`RoleStageAtom` is tied to the relation reconstructed by its role and acts on
-the actual occurrence selected by a profile. The left occurrence applies that
-total action, the right occurrence retains its continuation, and the compiled
-action is positively proved to change the executed source. Interpreting every
-complete profile produces the executed completed outputs exactly.
+On the public execution, one certificate joins the executed history, its
+stagewise operational decomposition, the occurrence-profile carrier, and the
+causal package of the executed regime. One stage decomposition receives only
+that stage and no future tail. The dependent tail then begins at the state that
+the stage actually produced. Roles and reduction licenses are read from this
+same stagewise history. The program is downstream: it does not
+constitute the profile alternatives. Each `RoleStageAtom` is tied to the
+relation reconstructed by its role and acts on the actual occurrence selected
+by a profile. The left occurrence applies that total action, the right
+occurrence retains its continuation, and the compiled action is positively
+proved to change the executed source.
 
-The reduction is likewise typed by this same program. Every local license
-records the transformed and retained occurrences, exact application of the
-discovered action, the separate acceptance-preservation proof, acceptance of
-the retained output, non-identity of the action on the executed source, and
-continued distinction of the two occurrences. The resulting regime has width
-one and is proved not to preserve the source profiles as separate obligations.
-Its local `2 → 1` width records are computed recursively from the actual
-reduction history; no literal trace is accepted as the cause of the result.
-Thus the source identities persist while their operational independence
-changes.
+For every source profile, `reduceExecutedRoleProfile` constructs a dependent
+pair consisting of an obligation and an `ExecutedCarryDerivation` indexed by
+that obligation. The derivation contains an `ExecutedRoleProfileReduction`
+trace. Each local decision consumes the role
+license: exact application of the discovered action, the separate
+acceptance-preservation proof, viability of the retained output, non-identity
+of the action on the executed source, and continued distinction of the
+occurrences. The regime's `carry` is definitionally the first projection of
+this pair; the executed package has no independently supplied `carry` field.
+All traces have the same retained profile, so the regime has
+width one; the source-indexed reduction witness is nevertheless exposed by the
+API before that projection. The package constructor is private, so an
+arbitrary constant `carry` cannot be installed and presented as the executed
+regime.
+
+The exponential `iff` applies directly to this regime on the same profile
+carrier. Its local `2 → 1` width records are computed recursively from the
+actual reduction history. Thus the source identities persist while their
+operational independence changes.
 
 The executed search remains essential to this public instance. Its failed
 candidate prefix is extracted from the run, its selected relation is proved
@@ -101,7 +112,7 @@ successful, its map acts on arbitrary continuations, and its preservation law
 is separate. The output, seed, decision history, and provenance then constitute
 the conditions consumed by the next discovery.
 
-![Relational extensivity and operational obligations](figures/relational-extensive-iff.svg)
+![Extensive readout and operational obligations](figures/relational-extensive-iff.svg)
 
 This is an exact theorem about carrier width and factorized operational
 addressing in the formal class above. It is not a universal time- or
@@ -201,8 +212,9 @@ The public statement module is
 [`EndogenousOperationalDecomposition.lean`](../RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean).
 It exposes axiom-free declarations for:
 
-- the general unbounded class of relation-constituted extensive families and
-  its binary subclass, together with an independent binary inhabitant and a
+- the general unbounded class of relational families whose complete frontier
+  admits an extensive readout, and its binary subclass, together with an
+  independent binary inhabitant and a
   variable-arity inhabitant of the wider class;
 - the class-level equivalence between exact exponential regime width and
   conservation of constituted identities as distinct and separately

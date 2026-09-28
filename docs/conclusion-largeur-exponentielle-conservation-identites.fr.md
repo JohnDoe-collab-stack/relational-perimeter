@@ -63,12 +63,33 @@ régime identitaire
   ⇒ largeur des obligations = largeur source = 2ⁿ
 ```
 
-Le régime exécuté porte tous les profils sources vers son unique obligation :
+Le régime exécuté est construit sur exactement le même carrier. Sa réduction
+est lue dans une histoire dépendante construite étape par étape. La
+décomposition de l’étape courante dépend uniquement de cette étape ; sa suite
+commence dans l’état que celle-ci a produit. Pour chaque profil source,
+`reduceExecutedRoleProfile` construit une paire dépendante : une obligation et
+un `ExecutedCarryDerivation` indexé par cette obligation. Ce témoin contient
+une trace `ExecutedRoleProfileReduction` indexée par le profil source. À chaque rôle, cette
+trace distingue l'occurrence transformée de l'occurrence retenue. Le cas
+transformé requiert l'action relationnelle effectivement reconstruite, sa
+sortie exacte, la preuve séparée de préservation, la non-identité de l'action
+sur la source exécutée et la distinction persistante des occurrences ; le cas
+retenu requiert sa viabilité positive.
+
+Le `carry` du régime est définitionnellement la première projection de cette
+paire dépendante ; il n’est pas un champ fourni séparément. Toutes les traces aboutissent au même profil retenu, de
+sorte que la frontière des obligations contient exactement un élément :
 
 ```text
 régime exécuté
   ⇒ largeur des obligations = 1
 ```
+
+L'unicité extensionnelle de cette obligation n'est donc pas utilisée comme
+substitut à la réduction. Le témoin source-indexé de la réduction est construit
+avant sa projection vers l'obligation unique. Le constructeur du paquet causal
+est privé : une fonction constante arbitraire ne peut pas être présentée par
+l'API comme le régime exécuté sans fournir cette construction.
 
 Dans l'instance publique positive, deux profils sources sont construits comme
 distincts tout en ayant la même obligation exécutée. Leur égalité d'obligation
@@ -85,9 +106,10 @@ le régime porte séparément toutes les identités sources.
 
 Le régime exécuté ne compresse pas 2ⁿ obligations préexistantes. Avant son
 introduction, il existe un carrier source de 2ⁿ profils distincts, mais leur
-statut d'obligations opérationnelles n'est pas encore déterminé. Le régime
-détermine ce portage pour le critère dont la préservation est démontrée par la
-réduction exécutée.
+statut d'obligations opérationnelles n'est pas encore déterminé. La réduction
+exécutée construit ce statut pour chaque profil, puis le régime en expose la
+frontière et la largeur. Le `iff` général s'applique directement à ce régime
+sur ce même carrier ; aucun transport vers un autre carrier n'intervient.
 
 Le résultat central peut ainsi être formulé sans le réduire à un problème de
 compression :

@@ -25,6 +25,12 @@ try {
     "Tests/ExpectedFailure/PrivateConstitutiveNormalizerCertificate.lean.fail" `
     'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerSuccinctness.mk`'
   Test-ExpectedLeanFailure `
+    "Tests/ExpectedFailure/PrivateExecutedRoleObligationRegime.lean.fail" `
+    'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleObligationRegime.mk`'
+  Test-ExpectedLeanFailure `
+    "Tests/ExpectedFailure/PrivateConstitutiveExtensiveSeparationCertificate.lean.fail" `
+    'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate.mk`'
+  Test-ExpectedLeanFailure `
     "Tests/ExpectedFailure/DiscoveredTransportCannotReplaceAuthoritativeInstruction.lean.fail" `
     "but is expected to have type"
   Test-ExpectedLeanFailure `
@@ -33,9 +39,12 @@ try {
   Test-ExpectedLeanFailure `
     "Tests/ExpectedFailure/ForeignInstructionProfileCannotBeReused.lean.fail" `
     "Not a definitional equality"
+  Test-ExpectedLeanFailure `
+    "Tests/ExpectedFailure/RetainedDecisionCannotReplaceTransformedDecision.lean.fail" `
+    "but is expected to have type"
 } finally {
   Pop-Location
 }
 
-Write-Output "Verified expected failures: certificate privacy, instruction-indexed profiles, authoritative collision anchor, and semantic instruction use."
+Write-Output "Verified expected failures: scientific-certificate privacy, causal-regime privacy, instruction-indexed profiles, authoritative collision anchor, semantic instruction use, and occurrence-indexed reduction decisions."
 $global:LASTEXITCODE = 0

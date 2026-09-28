@@ -28,7 +28,7 @@ de matériaux produits par le calcul**.
 
 ![Architecture exécutée de la décomposition opérationnelle endogène](figures/endogenous-operational-decomposition.svg)
 
-## Obligations opérationnelles et extensivité relationnelle
+## Obligations opérationnelles et lecture extensive
 
 L’ordre de constitution est explicite dans les types. Des relations primitives
 de source, de formation, de cible et de provenance témoignent positivement
@@ -70,33 +70,43 @@ conservation est l’injectivité de `carry` accompagnée d’un adressage des
 obligations. La preuve finie générale est constructive ; l’équation binaire
 provient des frontières locales constituées relationnellement.
 
-Les deux côtés sont positivement habités sur le même carrier public. Le
+Les deux comportements sont positivement réalisés sur le même carrier public. Le
 certificat construit le régime identitaire de pleine largeur et son témoin
 complet de conservation factorisée. Sur ces mêmes identités constituées, le
 régime exécuté a une largeur un et ne les conserve pas comme obligations
 séparées.
 
-Sur l’exécution publique, un certificat unique réunit l’histoire déjà
-exécutée, ses rôles relationnels faisant autorité, le carrier des profils
-d’occurrences, le programme compilé sur les rôles, son interprète et la
-réduction exécutée. Le programme est en aval : il ne constitue pas les
-alternatives du profil. Chaque `RoleStageAtom` est attaché à la relation
-reconstruite par son rôle et agit sur l’occurrence effectivement sélectionnée
-par un profil. L’occurrence gauche applique cette action totale, l’occurrence
-droite conserve sa continuation, et l’action compilée est positivement prouvée
-modifier la source exécutée. L’interprétation de chaque profil complet produit
-exactement les sorties exécutées achevées.
+Sur l’exécution publique, un certificat unique réunit l’histoire exécutée, sa
+décomposition opérationnelle construite étape par étape, le carrier des profils
+d’occurrences et le paquet causal du régime exécuté. La décomposition d’une
+étape ne reçoit que cette étape : elle ne dépend d’aucune suite future. La suite
+dépendante commence ensuite dans l’état que cette étape a effectivement
+produit. Les rôles et les licences de réduction sont lus depuis cette même
+histoire par étapes. Le programme est en aval :
+il ne constitue pas les alternatives du profil. Chaque `RoleStageAtom` est
+attaché à la relation reconstruite par son rôle et agit sur l’occurrence
+effectivement sélectionnée par un profil. L’occurrence gauche applique cette
+action totale, l’occurrence droite conserve sa continuation, et l’action
+compilée est positivement prouvée modifier la source exécutée.
 
-La réduction est pareillement indexée par ce même programme. Chaque licence
-locale enregistre les occurrences transformée et retenue, l’application exacte
-de l’action découverte, la preuve séparée de préservation de l’acceptation,
-l’acceptation de la sortie retenue, la non-identité de l’action sur la source
-exécutée et la distinction persistante des deux occurrences. Le régime obtenu
-a pour largeur un et il est prouvé qu’il ne conserve pas les profils sources
-comme obligations séparées. Ses lectures locales `2 → 1` sont calculées
-récursivement depuis l’histoire de réduction effective ; aucune trace littérale
-n’est admise comme cause du résultat. Les identités sources persistent donc
-alors que leur indépendance opérationnelle change.
+Pour chaque profil source, `reduceExecutedRoleProfile` construit une paire
+dépendante formée d’une obligation et d’un témoin
+`ExecutedCarryDerivation` indexé par cette obligation. Ce témoin contient une
+trace `ExecutedRoleProfileReduction`. Chaque décision locale consomme la
+licence du rôle : application exacte de l’action découverte, preuve séparée de
+préservation de l’acceptation, viabilité de la sortie retenue, non-identité de
+l’action sur la source exécutée et distinction persistante des occurrences.
+Le `carry` du régime est définitionnellement la première projection de cette
+paire ; il n’existe aucun champ `carry` indépendant dans le paquet exécuté.
+Toutes les traces ont le même profil retenu, donc le régime a
+une largeur un ; mais le témoin de réduction propre à chaque source est exposé
+par l’API avant cette projection. Le constructeur privé du paquet empêche de
+remplacer ce chemin par un `carry` arbitraire et de l’appeler « régime exécuté ».
+
+Le `iff` exponentiel s’applique directement à ce régime sur le même carrier de
+profils. Ses lectures locales `2 → 1` sont calculées récursivement depuis
+l’histoire de réduction effective. Les identités sources persistent donc alors
+que leur indépendance opérationnelle change.
 
 La recherche exécutée reste essentielle à cette instance publique. Son préfixe
 de candidats en échec est extrait de l’exécution, sa relation sélectionnée est
@@ -105,7 +115,7 @@ loi de préservation est distincte. La sortie, la graine, l’histoire des
 décisions et la provenance constituent ensuite les conditions consommées par
 la découverte suivante.
 
-![Extensivité relationnelle et obligations opérationnelles](figures/relational-extensive-iff.svg)
+![Lecture extensive et obligations opérationnelles](figures/relational-extensive-iff.svg)
 
 Il s’agit d’un théorème exact sur la largeur d’un carrier et l’adressage
 opérationnel factorisé dans la classe formelle ci-dessus, non d’une borne
@@ -212,8 +222,9 @@ Le module public de formulation est
 [`EndogenousOperationalDecomposition.lean`](../RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean).
 Il expose des déclarations sans axiome pour :
 
-- la classe générale non bornée de familles extensives constituées par des
-  relations et sa sous-classe binaire, avec un membre binaire indépendant et
+- la classe générale non bornée de familles relationnelles dont la frontière
+  complète admet une lecture extensive, et sa sous-classe binaire, avec un
+  membre binaire indépendant et
   un membre à arités variables de la classe plus large ;
 - l’équivalence, au niveau de la classe, entre largeur exponentielle exacte du
   régime et conservation des identités constituées comme distinctes et

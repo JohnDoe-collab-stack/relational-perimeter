@@ -238,12 +238,35 @@ def publicExecutedRoleReduction (input : Nat) :
     ExecutedRoleReductionHistory (publicRoleIndexedProgram input) :=
   buildExecutedRoleReductionHistory (publicRelationalConstitutiveRoles input)
 
-/-- Operational regime derived from the explicit public reduction witness. -/
+/-- Closed causal package derived from the public role history alone. -/
+def publicExecutedRoleObligationRegime (input : Nat) :
+    ExecutedRoleObligationRegime
+      (publicRelationalConstitutiveRoles input) :=
+  executedRoleObligationRegime (publicRelationalConstitutiveRoles input)
+
+/-- Operational regime projected from the public causal package. -/
 def publicExecutedObligationRegime (input : Nat) :
     ObligationRegime (publicRoleProfileFiniteCarrier input) :=
-  executedObligationRegimeOfReduction
-    (publicRelationalConstitutiveRoles input)
-    (publicExecutedRoleReduction input)
+  (publicExecutedRoleObligationRegime input).regime
+
+/-- Every public carry value is the result component of its dependent reduction. -/
+theorem publicExecutedCarry_from_reduction
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (publicRelationalConstitutiveRoles input)) :
+    (publicExecutedObligationRegime input).carry profile =
+      ((publicExecutedRoleObligationRegime input).reduce profile).1 :=
+  (publicExecutedRoleObligationRegime input).carryFromReduction profile
+
+/-- The public API exposes the dependent reduction constructed for each profile. -/
+def publicExecutedCarryDerivation
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (publicRelationalConstitutiveRoles input)) :
+    ExecutedCarryDerivation
+      (publicExecutedRoleObligationRegime input).reduction profile
+      ((publicExecutedObligationRegime input).carry profile) :=
+  (publicExecutedRoleObligationRegime input).carryDerivation profile
 
 theorem publicExecutedObligationRegime_width (input : Nat) :
     (publicExecutedObligationRegime input).frontier.length = 1 :=
@@ -273,6 +296,9 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicRoleIndexedProgram_atomCount
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicRoleIndexedProgram_interpretationExact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicExecutedRoleReduction
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicExecutedRoleObligationRegime
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicExecutedObligationRegime
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicExecutedCarry_from_reduction
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicExecutedCarryDerivation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicExecutedObligationRegime_width
 /- AXIOM_AUDIT_END -/

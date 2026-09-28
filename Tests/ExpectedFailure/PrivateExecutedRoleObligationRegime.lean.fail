@@ -1,0 +1,8 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.EndogenousDecomposition
+
+-- A caller must not be able to package an arbitrary carry as an executed
+-- causal regime. Only the canonical builder in the defining module may use
+-- the constructor.
+#check ExecutedRoleObligationRegime.mk
