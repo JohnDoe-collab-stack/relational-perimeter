@@ -62,7 +62,8 @@ theorem independentBinaryMemberIsUnbounded (bound : Nat) :
   abstractBinaryRelationalFamily_unbounded bound
 
 theorem generalClassIsNotOnlyBinary :
-    (increasingArityStage 1).occurrenceFrontier.length = 3 :=
+    (relationallyConstitutedOccurrenceFrontier
+      (increasingArityStage 1)).length = 3 :=
   increasingArityRelationalFamily_variable 1
 
 theorem publicBinaryMemberHasExactSourceWidth (input : Nat) :
@@ -77,6 +78,32 @@ theorem publicGeneralCarrierIsRelationallyConstituted (input : Nat) :
       (index := input) ()).Identity =
       RelationalOccurrenceProfile
         (publicGeneralRelationalHistory input) :=
+  rfl
+
+/-- The general opening uses the authoritative exact position-occurrence
+transport, rather than a second occurrence carrier. -/
+theorem publicOpeningTransportIsAuthoritative
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) :
+    (generalOpeningStageOfRole role).positionOccurrenceTransport =
+      openingPositionOccurrenceTransport role :=
+  generalOpeningStage_positionOccurrenceTransport_exact role
+
+/-- The concrete profile transport is the history-level general transport. -/
+theorem publicProfileTransportIsGeneralTransport
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    (roles : RelationalConstitutiveRoleHistory run) :
+    roleProfileTransport roles =
+      relationalProfileTransport (generalHistoryOfRoleHistory roles) :=
+  rfl
+
+/-- The class carrier and the executed carrier are definitionally identical. -/
+theorem publicClassCarrierIsExecutedCarrier (input : Nat) :
+    publicBinaryRelationalRoleExtensiveFamily.sourceCarrier
+        (index := input) () =
+      publicRoleProfileFiniteCarrier input :=
   rfl
 
 /-- The public iff is stated on the carrier constituted by the executed roles. -/
@@ -410,7 +437,7 @@ def publicNormalizationChainIsCausallyExact (input : Nat) :
 
 /-- Grouping is authorized by the preservation chain extracted from the same
 executed constitutive chain that produces the normalized targets. -/
-def publicGroupingConsumesPreservation (input : Nat) :
+def publicGroupingRetainsPreservation (input : Nat) :
     ExecutedReductionPreservationExact
       (publicCertificateNormalization input).constitutiveChain :=
   (exactCausalExponentialTargetEvidence input).certificate.exactOperationalRegime
@@ -418,7 +445,7 @@ def publicGroupingConsumesPreservation (input : Nat) :
 
 /-- Grouping is simultaneously authorized by persistent separation of the
 source occurrences; grouping therefore does not identify them. -/
-def publicGroupingConsumesOccurrenceSeparation (input : Nat) :
+def publicGroupingRetainsOccurrenceSeparation (input : Nat) :
     ExecutedReductionOccurrenceSeparationExact
       (publicCertificateNormalization input).constitutiveChain :=
   (exactCausalExponentialTargetEvidence input).certificate.exactOperationalRegime
@@ -458,6 +485,9 @@ end RelationalPerimeter.Tests.RelationalExtensiveIffRegression
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.generalClassIsNotOnlyBinary
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicBinaryMemberHasExactSourceWidth
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicGeneralCarrierIsRelationallyConstituted
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicOpeningTransportIsAuthoritative
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicProfileTransportIsGeneralTransport
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicClassCarrierIsExecutedCarrier
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicTarget
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicLiteralTarget
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicSeparateRegimeHasExponentialWidth
@@ -496,8 +526,8 @@ end RelationalPerimeter.Tests.RelationalExtensiveIffRegression
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicNormalizationConsumesConstitutiveChain
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.normalizationResultIsChainElimination
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicNormalizationChainIsCausallyExact
-#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicGroupingConsumesPreservation
-#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicGroupingConsumesOccurrenceSeparation
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicGroupingRetainsPreservation
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicGroupingRetainsOccurrenceSeparation
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExactTargetGroupingAuthorization
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicClassIffUsesAuthoritativeExecutedCarrier
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicRegimeIsExactNormalizationProjection

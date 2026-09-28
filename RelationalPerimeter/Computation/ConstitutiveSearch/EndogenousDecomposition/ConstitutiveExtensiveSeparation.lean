@@ -503,10 +503,10 @@ structure ExactCausalExponentialTarget (input : Nat) : Type 3 where
   groupingAuthorizationExact :
     certificate.exactOperationalRegime.groupingAuthorization =
       certificate.normalization.groupingAuthorization
-  preservationIsConsumedByGrouping :
+  groupingPreservationIsChainPreservation :
     certificate.exactOperationalRegime.groupingAuthorization.preservation =
       certificate.normalization.constitutivePreservation
-  occurrenceSeparationIsConsumedByGrouping :
+  groupingSeparationIsChainSeparation :
     certificate.exactOperationalRegime.groupingAuthorization.occurrenceSeparation =
       certificate.normalization.constitutiveOccurrenceSeparation
   exactRegimeExact :
@@ -582,8 +582,8 @@ def exactCausalExponentialTarget
         certificate.normalizationChainIsCausallyExact
       groupingAuthorizationExact :=
         certificate.operationalGroupingAuthorizationExact
-      preservationIsConsumedByGrouping := rfl
-      occurrenceSeparationIsConsumedByGrouping := rfl
+      groupingPreservationIsChainPreservation := rfl
+      groupingSeparationIsChainSeparation := rfl
       exactRegimeExact := certificate.exactOperationalRegimeExact
       carriedValuesAreProducedTargets := by
         intro profile

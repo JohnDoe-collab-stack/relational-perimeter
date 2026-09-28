@@ -1,5 +1,5 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleIndexedProfiles
-import RelationalPerimeter.Computation.ConstitutiveSearch.FiniteExtensiveAddressing
+import RelationalPerimeter.Computation.ConstitutiveSearch.RelationalProfileFiniteCarrier
 
 /-!
 # Obligation regimes over role-constituted extensive profiles
@@ -20,17 +20,14 @@ namespace ConstitutiveSearch
 namespace EndogenousDecomposition
 
 open Extensive
+open RelationalExtensive
 
 /-- The finite source carrier derived only from an authoritative role history. -/
 def roleProfileFiniteCarrier
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
     (roles : RelationalConstitutiveRoleHistory run) : FiniteCarrier :=
-  { Identity := RoleOccurrenceProfile roles
-    decEq := roleOccurrenceProfileDecEq roles
-    frontier := roleProfileFrontier roles
-    complete := roleProfileFrontier_complete roles
-    nodup := roleProfileFrontier_nodup roles }
+  relationalProfileFiniteCarrier (generalHistoryOfRoleHistory roles)
 
 theorem roleProfileFiniteCarrier_width
     {count : Nat} {state : CausalConstitutiveState}

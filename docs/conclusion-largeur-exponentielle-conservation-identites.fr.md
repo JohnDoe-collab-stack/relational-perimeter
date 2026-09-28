@@ -94,13 +94,13 @@ sources sans perdre les traces qui les produisent. Le carrier ambiant de ces
 cibles reste le produit dépendant complet des espaces de continuation : il
 n'est pas réduit d'avance à un singleton. Les traces démontrent leur
 convergence. La préservation et la séparation persistante des occurrences sont
-extraites sur toute la même chaîne, puis consommées ensemble par
-`ExecutedOperationalGroupingAuthorization` avant la constitution du régime.
-Le régime porte alors, pour chaque source, la cible effectivement
-produite avec sa preuve d'appartenance à la fibre convergente.
-`ExactExecutedOperationalRegime`, à constructeur privé, conserve cette
-normalisation dépendante, son autorisation de regroupement et expose exactement
-ce régime. Deux profils reçoivent
+projetées depuis toute la même chaîne dans
+`ExecutedOperationalGroupingAuthorization`. Les traces réalisent séparément
+l’image exacte des cibles produites. Pour chaque source, cette réalisation porte
+la cible effectivement produite avec sa preuve d'appartenance à la fibre
+convergente. `ExactExecutedOperationalRegime`, à constructeur privé, joint
+ensuite l’autorisation causale à cette réalisation exacte, sans identifier
+réalisation et admission. Deux profils reçoivent
 la même obligation si et seulement si leurs cibles produites sont égales, et si
 et seulement si `OperationallyCoDetermined` est habité par leurs deux traces
 vers une cible commune. La convergence des traces démontre ainsi que la
@@ -119,9 +119,10 @@ indépendant ne possède pas ce type.
 
 La course causale de la récursion fusionnée est prouvée exactement égale à celle
 de la réalisation publique faisant autorité, puis son histoire de rôles est
-reliée par égalité dépendante aux rôles publics. Le théorème de classe est enfin
-transporté constructivement sur le carrier littéral de ces rôles exécutés ; son
-énoncé public ne porte pas sur un carrier d’adaptation distinct.
+reliée par égalité dépendante aux rôles publics. La classe générale et
+l’instance exécutée utilisent définitionnellement le même carrier de profils
+d’occurrences ; le théorème public de classe est donc énoncé directement sur
+ce carrier, sans adaptation ni réindexation.
 
 Dans l'instance publique positive, deux profils sources explicites sont
 construits, leur distinction est prouvée, leurs deux traces vers une même cible

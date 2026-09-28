@@ -1,4 +1,5 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RelationalConstitutiveRoles
+import RelationalPerimeter.Computation.ConstitutiveSearch.RelationalProfileConstitution
 
 /-!
 # Opening occurrences and extensive profiles indexed by relational roles
@@ -13,6 +14,7 @@ namespace ConstitutiveSearch
 namespace EndogenousDecomposition
 
 open SAT
+open RelationalExtensive
 
 /-- The two expected positions of one executed binary opening. -/
 inductive OpeningRolePosition
@@ -110,6 +112,36 @@ def openingRolePositionDecEq
   | .right, .left => isFalse (fun impossible => nomatch impossible)
   | .right, .right => isTrue rfl
 
+/-- The complete local frontier of structural role positions. -/
+def openingPositionFrontier
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) :
+    List (OpeningRolePosition role) :=
+  [.left, .right]
+
+theorem openingPositionFrontier_complete
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run)
+    (position : OpeningRolePosition role) :
+    position ∈ openingPositionFrontier role := by
+  cases position with
+  | left => exact .head _
+  | right => exact .tail _ (.head _)
+
+theorem openingPositionFrontier_nodup
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) :
+    (openingPositionFrontier role).Nodup := by
+  exact .cons
+    (fun value member same => by
+      cases member with
+      | head => nomatch same
+      | tail _ impossible => cases impossible)
+    (.cons (fun _ impossible _ => nomatch impossible) .nil)
+
 /-- Occurrences are equal exactly when their realized positions are equal. -/
 theorem roleOpeningOccurrence_eq_of_position_eq
     {source : CausalConstitutiveState}
@@ -180,14 +212,13 @@ theorem causalOpening_states_distinct
   have valuesSame := congrArg StructuralBranchDecision.value headsSame.1
   exact Bool.noConfusion valuesSame
 
-/-- Complete duplicate-free local occurrence frontier. -/
+/-- Local occurrence frontier, derived from the position frontier by realization. -/
 def openingOccurrenceFrontier
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
     (role : RelationalConstitutiveRoleStage run) :
     List (RoleOpeningOccurrence role) :=
-  [roleOpeningOccurrenceAt role .left,
-    roleOpeningOccurrenceAt role .right]
+  (openingPositionFrontier role).map (roleOpeningOccurrenceAt role)
 
 theorem openingOccurrenceFrontier_complete
     {source : CausalConstitutiveState}
@@ -195,68 +226,116 @@ theorem openingOccurrenceFrontier_complete
     (role : RelationalConstitutiveRoleStage run)
     (occurrence : RoleOpeningOccurrence role) :
     occurrence ∈ openingOccurrenceFrontier role := by
-  cases occurrence with
-  | mk position state formedAt =>
-      cases formedAt
-      cases position with
-      | left => exact .head _
-      | right => exact .tail _ (.head _)
+  have member := relational_mem_map (roleOpeningOccurrenceAt role)
+    (openingPositionFrontier_complete role occurrence.position)
+  exact (openingOccurrence_roundTrip occurrence) ▸ member
 
 theorem openingOccurrenceFrontier_nodup
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
     (role : RelationalConstitutiveRoleStage run) :
-    (openingOccurrenceFrontier role).Nodup := by
-  exact .cons
-    (fun value member same => by
-      cases member with
-      | head => exact roleOpeningOccurrence_left_ne_right role same
-      | tail _ impossible => cases impossible)
-    (.cons (fun _ impossible _ => nomatch impossible) .nil)
+    (openingOccurrenceFrontier role).Nodup :=
+  relational_nodup_map (roleOpeningOccurrenceAt role)
+    (fun {_left _right} same => by
+      exact congrArg RoleOpeningOccurrence.position same)
+    (openingPositionFrontier_nodup role)
+
+/--
+One executed role as an exact relational opening.  Positions are independent
+from occurrences; the existing position-occurrence transport realizes them,
+and formation and provenance are recorded as exact agreements.
+-/
+def generalOpeningStageOfRole
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) :
+    RelationalOpeningStage CausalConstitutiveState source run.next :=
+  { Role := RelationalConstitutiveRoleStage run
+    Position := OpeningRolePosition role
+    Occurrence := RoleOpeningOccurrence role
+    Provenance := List Var
+    SourceRelation := fun observed candidate =>
+      PLift (candidate.searchState = observed)
+    FormationRelation := fun candidate occurrence =>
+      PLift (candidate = role) ×
+        PLift (occurrence.state = occurrence.position.state role)
+    TargetRelation := fun candidate observed =>
+      PLift (candidate.nextState = observed)
+    ProvenanceRelation := fun provenance candidate occurrence =>
+      PLift (provenance = source.provenance) ×
+        PLift (candidate = role) ×
+        PLift (occurrence.state = occurrence.position.state role)
+    role := role
+    provenance := source.provenance
+    sourceWitness := ⟨role.searchStateExact⟩
+    targetWitness := ⟨role.nextStateExact⟩
+    positionDecEq := openingRolePositionDecEq role
+    positionFrontier := openingPositionFrontier role
+    positionComplete := openingPositionFrontier_complete role
+    positionNodup := openingPositionFrontier_nodup role
+    realize := roleOpeningOccurrenceAt role
+    classify := roleOpeningOccurrenceToPosition
+    realize_classify := openingOccurrence_roundTrip
+    classify_realize := openingPosition_roundTrip role
+    formationAgreement := fun _ => ⟨⟨rfl⟩, ⟨rfl⟩⟩
+    provenanceAgreement := fun _ =>
+      ⟨⟨rfl⟩, ⟨⟨rfl⟩, ⟨rfl⟩⟩⟩ }
+
+/-- The general-stage transport is the authoritative occurrence realization. -/
+theorem generalOpeningStage_positionOccurrenceTransport_exact
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) :
+    (generalOpeningStageOfRole role).positionOccurrenceTransport =
+      openingPositionOccurrenceTransport role :=
+  rfl
+
+/-- The general relational history constituted by the authoritative roles. -/
+def generalHistoryOfRoleHistory :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      (roles : RelationalConstitutiveRoleHistory run) →
+      DependentRelationalRoleHistory CausalConstitutiveState state count
+  | _, state, _, .nil => .nil state
+  | _, _, _, .step headRole tailRoles =>
+      .step (generalOpeningStageOfRole headRole)
+        (generalHistoryOfRoleHistory tailRoles)
 
 /-- Position profile over an authoritative role history. -/
-def RolePositionProfile :
-    {count : Nat} → {state : CausalConstitutiveState} →
-      {run : CausalConstitutiveExecutionHistory count state} →
-      RelationalConstitutiveRoleHistory run → Type
-  | _, _, _, .nil => Unit
-  | _, _, _, .step headRole tailRoles =>
-      OpeningRolePosition headRole × RolePositionProfile tailRoles
+abbrev RolePositionProfile
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    (roles : RelationalConstitutiveRoleHistory run) : Type :=
+  RelationalPositionProfile (generalHistoryOfRoleHistory roles)
 
-/-- Occurrence profile over the same authoritative role history. -/
-def RoleOccurrenceProfile :
-    {count : Nat} → {state : CausalConstitutiveState} →
-      {run : CausalConstitutiveExecutionHistory count state} →
-      RelationalConstitutiveRoleHistory run → Type
-  | _, _, _, .nil => Unit
-  | _, _, _, .step headRole tailRoles =>
-      RoleOpeningOccurrence headRole × RoleOccurrenceProfile tailRoles
+/--
+The sole occurrence-profile carrier of the executed instance.  It is exactly
+the profile derived from the role history through the relational realization;
+no parallel concrete profile is defined.
+-/
+abbrev RoleOccurrenceProfile
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    (roles : RelationalConstitutiveRoleHistory run) : Type :=
+  RelationalOccurrenceProfile (generalHistoryOfRoleHistory roles)
 
 /-- Pointwise realization of a complete position profile. -/
 def rolePositionToOccurrenceProfile :
     {count : Nat} → {state : CausalConstitutiveState} →
       {run : CausalConstitutiveExecutionHistory count state} →
       (roles : RelationalConstitutiveRoleHistory run) →
-      RolePositionProfile roles → RoleOccurrenceProfile roles
-  | _, _, _, .nil, profile => by cases profile; exact ()
-  | _, _, _, .step headRole tailRoles, profile => by
-      change OpeningRolePosition headRole × RolePositionProfile tailRoles at profile
-      exact
-        (roleOpeningOccurrenceAt headRole profile.1,
-          rolePositionToOccurrenceProfile tailRoles profile.2)
+      RolePositionProfile roles → RoleOccurrenceProfile roles :=
+  fun roles =>
+    relationalPositionToOccurrenceProfile (generalHistoryOfRoleHistory roles)
 
 /-- Recover all historical positions from an occurrence profile. -/
 def roleOccurrenceToPositionProfile :
     {count : Nat} → {state : CausalConstitutiveState} →
       {run : CausalConstitutiveExecutionHistory count state} →
       (roles : RelationalConstitutiveRoleHistory run) →
-      RoleOccurrenceProfile roles → RolePositionProfile roles
-  | _, _, _, .nil, profile => by cases profile; exact ()
-  | _, _, _, .step headRole tailRoles, profile => by
-      change RoleOpeningOccurrence headRole × RoleOccurrenceProfile tailRoles at profile
-      exact
-        (roleOpeningOccurrenceToPosition profile.1,
-          roleOccurrenceToPositionProfile tailRoles profile.2)
+      RoleOccurrenceProfile roles → RolePositionProfile roles :=
+  fun roles =>
+    relationalOccurrenceToPositionProfile (generalHistoryOfRoleHistory roles)
 
 theorem rolePositionProfile_roundTrip :
     {count : Nat} → {state : CausalConstitutiveState} →
@@ -265,20 +344,9 @@ theorem rolePositionProfile_roundTrip :
       (profile : RolePositionProfile roles) →
       roleOccurrenceToPositionProfile roles
           (rolePositionToOccurrenceProfile roles profile) =
-        profile
-  | _, _, _, .nil, profile => by cases profile; rfl
-  | _, _, _, .step headRole tailRoles, profile => by
-      change OpeningRolePosition headRole × RolePositionProfile tailRoles at profile
-      let head := profile.1
-      let tail := profile.2
-      change
-        (roleOpeningOccurrenceToPosition
-            (roleOpeningOccurrenceAt headRole head),
-          roleOccurrenceToPositionProfile tailRoles
-            (rolePositionToOccurrenceProfile tailRoles tail)) =
-          (head, tail)
-      rw [openingPosition_roundTrip,
-        rolePositionProfile_roundTrip tailRoles tail]
+        profile :=
+  fun roles =>
+    relationalPositionProfile_roundTrip (generalHistoryOfRoleHistory roles)
 
 theorem roleOccurrenceProfile_roundTrip :
     {count : Nat} → {state : CausalConstitutiveState} →
@@ -287,20 +355,9 @@ theorem roleOccurrenceProfile_roundTrip :
       (profile : RoleOccurrenceProfile roles) →
       rolePositionToOccurrenceProfile roles
           (roleOccurrenceToPositionProfile roles profile) =
-        profile
-  | _, _, _, .nil, profile => by cases profile; rfl
-  | _, _, _, .step headRole tailRoles, profile => by
-      change RoleOpeningOccurrence headRole × RoleOccurrenceProfile tailRoles at profile
-      let head := profile.1
-      let tail := profile.2
-      change
-        (roleOpeningOccurrenceAt headRole
-            (roleOpeningOccurrenceToPosition head),
-          rolePositionToOccurrenceProfile tailRoles
-            (roleOccurrenceToPositionProfile tailRoles tail)) =
-          (head, tail)
-      rw [openingOccurrence_roundTrip,
-        roleOccurrenceProfile_roundTrip tailRoles tail]
+        profile :=
+  fun roles =>
+    relationalOccurrenceProfile_roundTrip (generalHistoryOfRoleHistory roles)
 
 /-- Exact transport between position profiles and realized occurrence profiles. -/
 def roleProfileTransport
@@ -310,200 +367,59 @@ def roleProfileTransport
     ExactTypeTransport
       (RolePositionProfile roles)
       (RoleOccurrenceProfile roles) :=
-  { forward := rolePositionToOccurrenceProfile roles
-    backward := roleOccurrenceToPositionProfile roles
-    forwardBackward := rolePositionProfile_roundTrip roles
-    backwardForward := roleOccurrenceProfile_roundTrip roles }
+  relationalProfileTransport (generalHistoryOfRoleHistory roles)
 
-/- Constructive list lemmas local to the profile construction. -/
-
-theorem profile_mem_map {α β : Type} (map : α → β) {value : α} :
-    ∀ {values : List α}, value ∈ values → map value ∈ values.map map
-  | _ :: _, .head _ => .head _
-  | _ :: _, .tail _ prior => .tail _ (profile_mem_map map prior)
-
-theorem profile_mem_append_left {α : Type} {value : α} :
-    ∀ {left : List α} (right : List α), value ∈ left → value ∈ left ++ right
-  | _ :: _, _, .head _ => .head _
-  | _ :: _, _, .tail _ prior =>
-      .tail _ (profile_mem_append_left _ prior)
-
-theorem profile_mem_append_right {α : Type} {value : α} :
-    ∀ (left : List α) {right : List α}, value ∈ right → value ∈ left ++ right
-  | [], _, prior => prior
-  | _ :: tail, _, prior => .tail _ (profile_mem_append_right tail prior)
-
-theorem profile_mem_map_preimage {α β : Type} (map : α → β) {target : β} :
-    ∀ {values : List α}, target ∈ values.map map →
-      ∃ source, source ∈ values ∧ map source = target
-  | _ :: _, .head _ => ⟨_, .head _, rfl⟩
-  | _ :: _, .tail _ prior =>
-      let ⟨source, sourceMember, sourceExact⟩ :=
-        profile_mem_map_preimage map prior
-      ⟨source, .tail _ sourceMember, sourceExact⟩
-
-theorem profile_mem_append_cases {α : Type} {value : α} :
-    ∀ {left right : List α}, value ∈ left ++ right →
-      value ∈ left ∨ value ∈ right
-  | [], _, prior => Or.inr prior
-  | _ :: _, _, .head _ => Or.inl (.head _)
-  | _ :: tail, _, .tail _ prior =>
-      match profile_mem_append_cases (left := tail) prior with
-      | .inl inTail => .inl (.tail _ inTail)
-      | .inr inRight => .inr inRight
-
-theorem profile_nodup_map
-    {α β : Type} (map : α → β)
-    (injective : Function.Injective map) :
-    ∀ {values : List α}, values.Nodup → (values.map map).Nodup
-  | [], .nil => .nil
-  | _ :: _, .cons headFresh tailNodup =>
-      .cons
-        (fun _mapped mappedMember same =>
-          let ⟨source, sourceMember, sourceExact⟩ :=
-            profile_mem_map_preimage map mappedMember
-          headFresh source sourceMember
-            (injective (Eq.trans same sourceExact.symm)))
-        (profile_nodup_map map injective tailNodup)
-
-theorem profile_nodup_append {α : Type} :
-    ∀ {left right : List α},
-      left.Nodup → right.Nodup →
-      (∀ leftValue, leftValue ∈ left →
-        ∀ rightValue, rightValue ∈ right → leftValue ≠ rightValue) →
-      (left ++ right).Nodup
-  | [], _, .nil, rightNodup, _ => rightNodup
-  | head :: _, _, .cons headFresh tailNodup, rightNodup, disjoint =>
-      .cons
-        (fun value valueMember same =>
-          match profile_mem_append_cases valueMember with
-          | .inl inTail => headFresh value inTail same
-          | .inr inRight => disjoint head (.head _) value inRight same)
-        (profile_nodup_append tailNodup rightNodup
-          (fun leftValue inTail rightValue inRight =>
-            disjoint leftValue (.tail _ inTail) rightValue inRight))
-
-theorem profile_length_map {α β : Type} (map : α → β) :
-    ∀ values : List α, (values.map map).length = values.length
-  | [] => rfl
-  | _ :: tail => congrArg Nat.succ (profile_length_map map tail)
-
-theorem profile_zero_add : ∀ value : Nat, 0 + value = value
-  | 0 => rfl
-  | value + 1 => congrArg Nat.succ (profile_zero_add value)
-
-theorem profile_succ_add (left : Nat) :
-    ∀ right : Nat, Nat.succ left + right = Nat.succ (left + right)
-  | 0 => rfl
-  | right + 1 => congrArg Nat.succ (profile_succ_add left right)
-
-theorem profile_length_append {α : Type} :
-    ∀ left right : List α,
-      (left ++ right).length = left.length + right.length
-  | [], right => (profile_zero_add right.length).symm
-  | _ :: tail, right => Eq.trans
-      (congrArg Nat.succ (profile_length_append tail right))
-      (profile_succ_add tail.length right.length).symm
-
-/-- Complete frontier produced recursively from the role occurrences. -/
-def roleProfileFrontier :
-    {count : Nat} → {state : CausalConstitutiveState} →
-      {run : CausalConstitutiveExecutionHistory count state} →
-      (roles : RelationalConstitutiveRoleHistory run) →
-      List (RoleOccurrenceProfile roles)
-  | _, _, _, .nil => [()]
-  | _, _, _, .step headRole tailRoles =>
-      (roleProfileFrontier tailRoles).map
-          (fun tail => (roleOpeningOccurrenceAt headRole .left, tail)) ++
-        (roleProfileFrontier tailRoles).map
-          (fun tail => (roleOpeningOccurrenceAt headRole .right, tail))
+/-- The sole profile frontier, derived from the exact relational history. -/
+def roleProfileFrontier
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    (roles : RelationalConstitutiveRoleHistory run) :
+    List (RoleOccurrenceProfile roles) :=
+  relationalProfileFrontier (generalHistoryOfRoleHistory roles)
 
 theorem roleProfileFrontier_complete :
     {count : Nat} → {state : CausalConstitutiveState} →
       {run : CausalConstitutiveExecutionHistory count state} →
       (roles : RelationalConstitutiveRoleHistory run) →
       (profile : RoleOccurrenceProfile roles) →
-      profile ∈ roleProfileFrontier roles
-  | _, _, _, .nil, profile => by cases profile; exact .head _
-  | _, _, _, .step headRole tailRoles, profile => by
-      change RoleOpeningOccurrence headRole × RoleOccurrenceProfile tailRoles at profile
-      rcases profile with ⟨head, tail⟩
-      change
-        (head, tail) ∈
-          (roleProfileFrontier tailRoles).map
-              (fun suffix =>
-                (roleOpeningOccurrenceAt headRole .left, suffix)) ++
-            (roleProfileFrontier tailRoles).map
-              (fun suffix =>
-                (roleOpeningOccurrenceAt headRole .right, suffix))
-      cases positionExact : head.position with
-      | left =>
-          have headExact :
-              head = roleOpeningOccurrenceAt headRole .left := by
-            calc
-              head = roleOpeningOccurrenceAt headRole head.position :=
-                (openingOccurrence_roundTrip head).symm
-              _ = roleOpeningOccurrenceAt headRole .left :=
-                congrArg (roleOpeningOccurrenceAt headRole) positionExact
-          rw [headExact]
-          exact profile_mem_append_left _
-            (profile_mem_map
-              (fun suffix =>
-                (roleOpeningOccurrenceAt headRole .left, suffix))
-              (roleProfileFrontier_complete tailRoles tail))
-      | right =>
-          have headExact :
-              head = roleOpeningOccurrenceAt headRole .right := by
-            calc
-              head = roleOpeningOccurrenceAt headRole head.position :=
-                (openingOccurrence_roundTrip head).symm
-              _ = roleOpeningOccurrenceAt headRole .right :=
-                congrArg (roleOpeningOccurrenceAt headRole) positionExact
-          rw [headExact]
-          exact profile_mem_append_right _
-            (profile_mem_map
-              (fun suffix =>
-                (roleOpeningOccurrenceAt headRole .right, suffix))
-              (roleProfileFrontier_complete tailRoles tail))
+      profile ∈ roleProfileFrontier roles :=
+  fun roles profile =>
+    relationalProfileFrontier_complete
+      (generalHistoryOfRoleHistory roles) profile
 
 theorem roleProfileFrontier_nodup :
     {count : Nat} → {state : CausalConstitutiveState} →
       {run : CausalConstitutiveExecutionHistory count state} →
       (roles : RelationalConstitutiveRoleHistory run) →
-      (roleProfileFrontier roles).Nodup
-  | _, _, _, .nil =>
-      .cons (fun _ impossible _ => nomatch impossible) .nil
-  | _, _, _, .step headRole tailRoles => by
-      have tailNodup := roleProfileFrontier_nodup tailRoles
-      have leftNodup := profile_nodup_map
-        (fun suffix => (roleOpeningOccurrenceAt headRole .left, suffix))
-        (fun {_left _right} same => congrArg Prod.snd same)
-        tailNodup
-      have rightNodup := profile_nodup_map
-        (fun suffix => (roleOpeningOccurrenceAt headRole .right, suffix))
-        (fun {_left _right} same => congrArg Prod.snd same)
-        tailNodup
-      exact profile_nodup_append leftNodup rightNodup
-        (fun leftValue leftMember rightValue rightMember same => by
-          let ⟨leftTail, _, leftExact⟩ := profile_mem_map_preimage
-            (fun suffix =>
-              (roleOpeningOccurrenceAt headRole .left, suffix)) leftMember
-          let ⟨rightTail, _, rightExact⟩ := profile_mem_map_preimage
-            (fun suffix =>
-              (roleOpeningOccurrenceAt headRole .right, suffix)) rightMember
-          have pairSame :
-              (roleOpeningOccurrenceAt headRole .left, leftTail) =
-                (roleOpeningOccurrenceAt headRole .right, rightTail) :=
-            Eq.trans leftExact (Eq.trans same rightExact.symm)
-          exact roleOpeningOccurrence_left_ne_right headRole
-            (congrArg Prod.fst pairSame))
+      (roleProfileFrontier roles).Nodup :=
+  fun roles =>
+    relationalProfileFrontier_nodup (generalHistoryOfRoleHistory roles)
 
 /-- Width is a readout of the role-produced profile frontier. -/
 def roleProfileWidth
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
     (roles : RelationalConstitutiveRoleHistory run) : Nat :=
-  (roleProfileFrontier roles).length
+  relationalProfileWidth (generalHistoryOfRoleHistory roles)
+
+/-- Every executed role opening has exactly two realized positions. -/
+theorem generalRoleHistory_uniformBinary :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      (roles : RelationalConstitutiveRoleHistory run) →
+      UniformLocalArity (generalHistoryOfRoleHistory roles) 2
+  | _, _, _, .nil => True.intro
+  | _, _, _, .step _ tailRoles =>
+      ⟨rfl, generalRoleHistory_uniformBinary tailRoles⟩
+
+theorem roleProfileWidth_eq_two_pow_count
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    (roles : RelationalConstitutiveRoleHistory run) :
+    roleProfileWidth roles = 2 ^ count :=
+  uniformLocalArity_width
+    (generalHistoryOfRoleHistory roles) 2
+    (generalRoleHistory_uniformBinary roles)
 
 theorem roleProfileWidth_step
     {count : Nat} {state : CausalConstitutiveState}
@@ -514,60 +430,18 @@ theorem roleProfileWidth_step
     roleProfileWidth
         (RelationalConstitutiveRoleHistory.step headRole tailRoles) =
       roleProfileWidth tailRoles * 2 := by
-  change
-    ((roleProfileFrontier tailRoles).map
-          (fun tail => (roleOpeningOccurrenceAt headRole .left, tail)) ++
-        (roleProfileFrontier tailRoles).map
-          (fun tail => (roleOpeningOccurrenceAt headRole .right, tail))).length =
-      (roleProfileFrontier tailRoles).length * 2
-  calc
-    ((roleProfileFrontier tailRoles).map
-          (fun tail => (roleOpeningOccurrenceAt headRole .left, tail)) ++
-        (roleProfileFrontier tailRoles).map
-          (fun tail => (roleOpeningOccurrenceAt headRole .right, tail))).length =
-        ((roleProfileFrontier tailRoles).map
-            (fun tail =>
-              (roleOpeningOccurrenceAt headRole .left, tail))).length +
-          ((roleProfileFrontier tailRoles).map
-            (fun tail =>
-              (roleOpeningOccurrenceAt headRole .right, tail))).length :=
-      profile_length_append _ _
-    _ = (roleProfileFrontier tailRoles).length +
-          (roleProfileFrontier tailRoles).length := by
-      rw [profile_length_map, profile_length_map]
-    _ = (roleProfileFrontier tailRoles).length * 2 :=
-      (Nat.mul_two _).symm
-
-theorem roleProfileWidth_eq_two_pow_count :
-    {count : Nat} → {state : CausalConstitutiveState} →
-      {run : CausalConstitutiveExecutionHistory count state} →
-      (roles : RelationalConstitutiveRoleHistory run) →
-      roleProfileWidth roles = 2 ^ count
-  | _, _, _, .nil => rfl
-  | _, _, _, .step headRole tailRoles => by
-      rw [roleProfileWidth_step,
-        roleProfileWidth_eq_two_pow_count tailRoles]
-      exact (Nat.pow_succ 2 _).symm
+  rw [roleProfileWidth_eq_two_pow_count,
+    roleProfileWidth_eq_two_pow_count]
+  exact (Nat.pow_succ 2 _).symm
 
 /-- Constructive equality decision for complete occurrence profiles. -/
 def roleOccurrenceProfileDecEq :
     {count : Nat} → {state : CausalConstitutiveState} →
       {run : CausalConstitutiveExecutionHistory count state} →
       (roles : RelationalConstitutiveRoleHistory run) →
-      DecidableEq (RoleOccurrenceProfile roles)
-  | _, _, _, .nil => fun left right =>
-      match left, right with
-      | (), () => isTrue rfl
-  | _, _, _, .step headRole tailRoles => fun left right =>
-      match roleOpeningOccurrenceDecEq headRole left.1 right.1 with
-      | isFalse headDifferent =>
-          isFalse (fun same => headDifferent (congrArg Prod.fst same))
-      | isTrue headSame =>
-          match roleOccurrenceProfileDecEq tailRoles left.2 right.2 with
-          | isFalse tailDifferent =>
-              isFalse (fun same => tailDifferent (congrArg Prod.snd same))
-          | isTrue tailSame =>
-              isTrue (Prod.ext headSame tailSame)
+      DecidableEq (RoleOccurrenceProfile roles) :=
+  fun roles =>
+    relationalOccurrenceProfileDecEq (generalHistoryOfRoleHistory roles)
 
 end EndogenousDecomposition
 end ConstitutiveSearch
@@ -580,6 +454,12 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.openingOccurrenceFrontier
 #print axioms ConstitutiveSearch.EndogenousDecomposition.openingOccurrenceFrontier_complete
 #print axioms ConstitutiveSearch.EndogenousDecomposition.openingOccurrenceFrontier_nodup
+#print axioms ConstitutiveSearch.EndogenousDecomposition.openingPositionFrontier
+#print axioms ConstitutiveSearch.EndogenousDecomposition.openingPositionFrontier_complete
+#print axioms ConstitutiveSearch.EndogenousDecomposition.openingPositionFrontier_nodup
+#print axioms ConstitutiveSearch.EndogenousDecomposition.generalOpeningStageOfRole
+#print axioms ConstitutiveSearch.EndogenousDecomposition.generalOpeningStage_positionOccurrenceTransport_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.generalHistoryOfRoleHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RolePositionProfile
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleOccurrenceProfile
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleProfileTransport
@@ -587,6 +467,7 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleProfileFrontier_complete
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleProfileFrontier_nodup
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleProfileWidth
+#print axioms ConstitutiveSearch.EndogenousDecomposition.generalRoleHistory_uniformBinary
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleProfileWidth_step
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleProfileWidth_eq_two_pow_count
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleOccurrenceProfileDecEq

@@ -119,13 +119,13 @@ than rebuilding targets from the retained output; its result is a derived
 elimination of that chain, not a replaceable stored field. The operational
 target carrier remains the full dependent product of the continuation spaces;
 it is not restricted in advance to a singleton. The executed traces prove that
-the produced targets converge. Before this target image becomes obligations,
-an `ExecutedOperationalGroupingAuthorization` consumes the chain-wide
-preservation and occurrence-separation witnesses extracted from that same
-normalization. The obligation regime then carries each actual target value
-together with its proof of belonging to that convergent fibre. A private exact
-realization retains the authorization and the source-indexed traces, and the
-public regime is its projection. Obligation equality is exactly equality of
+the produced targets converge. The target-image realization then carries each
+actual target value together with its proof of belonging to that convergent
+fibre. Separately, an `ExecutedOperationalGroupingAuthorization` is projected
+from the complete causal chain and therefore retains its preservation and
+occurrence-separation witnesses. `ExactExecutedOperationalRegime` joins this
+authorization to the exact target-image realization; it does not identify
+realization with admission. Obligation equality is exactly equality of
 produced targets and exactly codetermination by two authorized executed traces;
 width one is the final readout of their proved convergence. Two explicit source profiles are
 proved distinct while being carried together. No source profiles are
@@ -183,12 +183,14 @@ the authoritative relational action, exact output, separate preservation,
 viability, non-identity, and persistent occurrence distinction.
 The complete source-indexed family of produced targets and traces is exposed
 before the operational regime. Preservation and persistent occurrence
-separation are extracted over the complete chain and consumed together by the
-grouping authorization. Their proved convergence then constructs an exact
-one-obligation carrier whose values remain the actual produced targets. The
-fused causal run and its role history are proved equal to the authoritative
-public realization, and the class theorem is transported constructively to the
-literal carrier of those executed roles. Two explicit source profiles are
+separation are projected from the complete causal chain into the grouping
+authorization. The traces separately prove convergence and construct the exact
+one-obligation target-image realization; the admitted exact regime joins both
+without confusing their roles. Its values remain the actual produced targets.
+The fused causal run and its role history are proved equal to the authoritative
+public realization. The general class and the executed instance use the same
+occurrence-profile carrier definitionally, so the class theorem is stated
+directly on the authoritative executed carrier. Two explicit source profiles are
 proved distinct, codetermined by their traces, and carried together. The regime
 therefore has width one and fails separate preservation without equating any
 source profiles. A separate public theorem states the literal exponential
@@ -374,8 +376,10 @@ largeur du régime = 2^stageCount
 
 La même condition équivaut à la capacité minimale exacte d’un adressage
 factorisé par le régime. Le carrier de la classe contient des occurrences
-indexées par l’étape relationnelle qui les constitue et expose leurs témoins
-positifs de formation et de provenance dans `Type`.
+indexées par l’étape relationnelle qui les constitue. Chaque étape expose les
+relations primitives de formation et de provenance et reconstruit
+constructivement dans `Type` leurs témoins positifs pour toute occurrence
+réalisée.
 Sur le carrier public, le certificat construit le
 régime identitaire de pleine largeur et prouve positivement sa condition
 complète de conservation. Sur les mêmes identités constituées, le normaliseur
@@ -387,14 +391,16 @@ dépendante dont chaque lien expose l’action relationnelle faisant autorité, 
 sortie exacte, la préservation séparée, la viabilité, la non-identité et la
 distinction persistante des occurrences. La famille source-indexée des cibles et
 de leurs traces est construite avant le régime. La préservation et la séparation
-persistante sont extraites sur toute cette chaîne et consommées ensemble par
-l’autorisation de regroupement. Leur convergence permet ensuite de construire
-un carrier exact à une obligation dont les valeurs restent les cibles produites.
+persistante sont projetées depuis toute cette chaîne dans l’autorisation de
+regroupement. Les traces démontrent séparément la convergence et construisent la
+réalisation exacte de l’image à une obligation ; le régime exact admis joint ces
+deux données sans confondre leurs rôles. Ses valeurs restent les cibles produites.
 La course causale fusionnée et son histoire de rôles sont prouvées égales à la
-réalisation publique faisant autorité, et le théorème de classe est transporté
-constructivement sur le carrier littéral de ces rôles exécutés. Deux profils
-sources explicites sont prouvés
-distincts, codéterminés par leurs traces et portés ensemble. Sa frontière a
+réalisation publique faisant autorité. La classe générale et l’instance exécutée
+utilisent définitionnellement le même carrier de profils d’occurrences ; le
+théorème de classe est donc énoncé directement sur le carrier exécuté faisant
+autorité. Deux profils sources explicites sont prouvés distincts, codéterminés
+par leurs traces et portés ensemble. Sa frontière a
 donc une largeur un sans égaliser les profils sources. Un théorème public
 séparé énonce le `iff` exponentiel littéral directement sur ce carrier de
 profils de rôles.

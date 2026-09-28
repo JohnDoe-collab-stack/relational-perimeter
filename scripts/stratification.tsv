@@ -81,6 +81,8 @@ RelationalPerimeter.Computation.ConstitutiveSearch.LocalSearchableCodeExecution	
 RelationalPerimeter.Computation.ConstitutiveSearch.MachineCostInterface	Q	enforced	Generic machine-cost interface
 RelationalPerimeter.Computation.ConstitutiveSearch.OperationalFrontierStatus	G	enforced	Generic operational frontier status
 RelationalPerimeter.Computation.ConstitutiveSearch.PolynomialCostEnvelope	Q	enforced	Constructive polynomial envelopes
+RelationalPerimeter.Computation.ConstitutiveSearch.RelationalProfileConstitution	X	enforced	Primitive relational openings, exact position-occurrence transport, dependent profiles and structural width readout
+RelationalPerimeter.Computation.ConstitutiveSearch.RelationalProfileFiniteCarrier	D	enforced	Unique downstream packaging of the constituted relational profile frontier as a finite carrier
 RelationalPerimeter.Computation.ConstitutiveSearch.RelationalTransport	G	enforced	Generic relational transport and search
 RelationalPerimeter.Computation.ConstitutiveSearch.RepresentationCost	Q	enforced	Representation-cost accounting
 RelationalPerimeter.Computation.ConstitutiveSearch.SAT.AcceptedBinaryBranch	S	enforced	Accepted SAT binary branch

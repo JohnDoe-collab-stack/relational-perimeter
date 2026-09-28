@@ -864,6 +864,16 @@ inductive ExecutedRoleProfileReduction :
       {tailTarget : ExecutedOperationalTargetProfile tailReduction}
       (headDecision :
         ExecutedRoleOccurrenceDecision license headSource headTarget)
+      (headPreservation :
+        (continuation : GeneratedStructuralBranchContinuation
+          (causalOpeningLeft state head.selected head.fresh)) →
+        GeneratedStructuralBranchAccept
+            (causalOpeningLeft state head.selected head.fresh) continuation →
+          GeneratedStructuralBranchAccept
+            (causalOpeningRight state head.selected head.fresh)
+            (atom.action continuation))
+      (headSeparation :
+        license.transformedOccurrence ≠ license.retainedOccurrence)
       (tailTrace :
         ExecutedRoleProfileReduction tailReduction tailSource tailTarget) :
       ExecutedRoleProfileReduction
@@ -892,7 +902,8 @@ def normalizeExecutedRoleProfile :
       let tailNormalization :=
         normalizeExecutedRoleProfile tailReduction profile.2
       ⟨(headDecision.1, tailNormalization.1),
-        .step headDecision.2 tailNormalization.2⟩
+        .step headDecision.2 witness.preservesCriterion
+          witness.occurrencesDistinct tailNormalization.2⟩
 
 /--
 Normalize by structural recursion on the constitutive chain itself. Each head
@@ -919,7 +930,8 @@ def normalizeExecutedRoleProfileFromChain :
       let tailNormalization :=
         normalizeExecutedRoleProfileFromChain tailWitness profile.2
       ⟨(headDecision.1, tailNormalization.1),
-        .step headDecision.2 tailNormalization.2⟩
+        .step headDecision.2 headWitness.preservesCriterion
+          headWitness.occurrencesDistinct tailNormalization.2⟩
 
 /-- Every trace target equals the completed profile through executed outputs. -/
 theorem executedRoleProfileReduction_target_exact :
@@ -936,7 +948,7 @@ theorem executedRoleProfileReduction_target_exact :
   intro count state run roles program reduction sourceProfile targetProfile trace
   induction trace with
   | nil => rfl
-  | step headDecision tailTrace tailExact =>
+  | step headDecision _ _ tailTrace tailExact =>
       cases headDecision with
       | transformed absorption produced =>
           exact Prod.ext

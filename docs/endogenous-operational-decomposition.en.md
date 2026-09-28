@@ -107,22 +107,21 @@ The result pair is not stored in the normalization: it is defined by
 eliminating that exact chain at the supplied source profile.
 
 Preservation for arbitrary continuations and persistent occurrence separation
-are also extracted over the whole chain as
+are also projected from the whole chain as
 `ExecutedReductionPreservationExact` and
-`ExecutedReductionOccurrenceSeparationExact`. Together they form the
-`ExecutedOperationalGroupingAuthorization`. This authorization comes from the
-same normalization and is consumed before the target image is realized as
-obligations; it is neither attached to the regime afterwards nor replaced by
-the numerical width readout.
+`ExecutedReductionOccurrenceSeparationExact`. The
+`ExecutedOperationalGroupingAuthorization` retains the complete causal chain
+from which both are recovered. It is neither replaced by nor inferred from the
+numerical width readout.
 
 `rawProducedTargetOccurrences` then enumerates every produced target while
 retaining its source and trace. Their ambient carrier remains the full
 dependent product of continuation spaces. The traces prove convergence of the
-values actually produced. The regime then carries each actual target together
-with its proof of membership in that convergent fibre.
-`ExactExecutedOperationalRegime`, whose constructor is private, retains that
-dependent normalization and its grouping authorization, and exposes only this
-regime. Obligation equality is
+values actually produced. The target-image realization then carries each
+actual target together with its proof of membership in that convergent fibre.
+Separately, `ExactExecutedOperationalRegime`, whose constructor is private,
+joins the grouping authorization to exactly that realization. Realization and
+admission remain distinct. Obligation equality is
 equivalent both to equality of produced targets and to inhabited
 `OperationallyCoDetermined`, which contains the two executed traces to their
 common target. Trace convergence therefore yields width one. The public
@@ -140,9 +139,10 @@ independence changes.
 
 Production code connects the fused recursion to the public realization by an
 exact equality of their causal runs and then by dependent equality of their
-role histories. The class theorem is finally transported constructively to the
-literal carrier of those executed roles, so its statement no longer quantifies
-over an adapter carrier.
+role histories. The general class and the executed instance definitionally use
+the same occurrence-profile carrier, so the public class theorem is stated
+directly on the authoritative executed carrier without an adapter or
+reindexing layer.
 
 The executed search remains essential to this public instance. Its failed
 candidate prefix is extracted from the run, its selected relation is proved

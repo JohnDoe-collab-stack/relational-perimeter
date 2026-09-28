@@ -27,10 +27,6 @@ structure ExecutedCausalNormalization
   private mk ::
   constitutiveChain : ExecutedReductionConstitutiveChain reduction
   constitutiveChainExact : ExecutedReductionCausalExact constitutiveChain
-  constitutivePreservation :
-    ExecutedReductionPreservationExact constitutiveChain
-  constitutiveOccurrenceSeparation :
-    ExecutedReductionOccurrenceSeparationExact constitutiveChain
 
 /-- Canonical normalization is the execution of the reduction history. -/
 def executedCausalNormalization
@@ -42,12 +38,29 @@ def executedCausalNormalization
     ExecutedCausalNormalization reduction :=
   { constitutiveChain := executedReductionConstitutiveChain reduction
     constitutiveChainExact :=
-      (executedReductionConstitutiveChain reduction).causalExact
-    constitutivePreservation :=
-      (executedReductionConstitutiveChain reduction).causalExact.preservationExact
-    constitutiveOccurrenceSeparation :=
-      (executedReductionConstitutiveChain reduction).causalExact
-        |>.occurrenceSeparationExact }
+      (executedReductionConstitutiveChain reduction).causalExact }
+
+/-- Preservation is recovered from the exact chain consumed by normalization. -/
+def ExecutedCausalNormalization.constitutivePreservation
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    (normalization : ExecutedCausalNormalization reduction) :
+    ExecutedReductionPreservationExact normalization.constitutiveChain :=
+  normalization.constitutiveChainExact.preservationExact
+
+/-- Source separation is recovered from that same consumed exact chain. -/
+def ExecutedCausalNormalization.constitutiveOccurrenceSeparation
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    (normalization : ExecutedCausalNormalization reduction) :
+    ExecutedReductionOccurrenceSeparationExact normalization.constitutiveChain :=
+  normalization.constitutiveChainExact.occurrenceSeparationExact
 
 /--
 Positive authorization for operational grouping.  It is not a width premise:
@@ -61,10 +74,32 @@ structure ExecutedOperationalGroupingAuthorization
     {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction) : Type 2 where
-  preservation :
-    ExecutedReductionPreservationExact normalization.constitutiveChain
-  occurrenceSeparation :
-    ExecutedReductionOccurrenceSeparationExact normalization.constitutiveChain
+  private mk ::
+  causalExact : ExecutedReductionCausalExact normalization.constitutiveChain
+
+/-- Preservation licensed by the exact causal chain of this authorization. -/
+def ExecutedOperationalGroupingAuthorization.preservation
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    {normalization : ExecutedCausalNormalization reduction}
+    (authorization : ExecutedOperationalGroupingAuthorization normalization) :
+    ExecutedReductionPreservationExact normalization.constitutiveChain :=
+  authorization.causalExact.preservationExact
+
+/-- Occurrence separation licensed by the same exact causal chain. -/
+def ExecutedOperationalGroupingAuthorization.occurrenceSeparation
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    {normalization : ExecutedCausalNormalization reduction}
+    (authorization : ExecutedOperationalGroupingAuthorization normalization) :
+    ExecutedReductionOccurrenceSeparationExact normalization.constitutiveChain :=
+  authorization.causalExact.occurrenceSeparationExact
 
 /-- The grouping authorization is read from the stored causal chain. -/
 def ExecutedCausalNormalization.groupingAuthorization
@@ -75,8 +110,7 @@ def ExecutedCausalNormalization.groupingAuthorization
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction) :
     ExecutedOperationalGroupingAuthorization normalization :=
-  { preservation := normalization.constitutivePreservation
-    occurrenceSeparation := normalization.constitutiveOccurrenceSeparation }
+  { causalExact := normalization.constitutiveChainExact }
 
 /--
 The result is not a field that a caller or an alternative constructor can
@@ -214,31 +248,11 @@ def ExecutedCausalNormalization.producedTargetFrontier
   [normalization.target (defaultRoleOccurrenceProfile roles)]
 
 /--
-Form the convergent-target regime only from an authorization extracted from
-the same causal chain. Pattern matching consumes the preservation and
-occurrence-separation witnesses before the target image is realized.
--/
-def ExecutedCausalNormalization.authorizedOperationalRegime
-    {count : Nat} {state : CausalConstitutiveState}
-    {run : CausalConstitutiveExecutionHistory count state}
-    {roles : RelationalConstitutiveRoleHistory run}
-    {program : RoleIndexedProgram roles}
-    {reduction : ExecutedRoleReductionHistory program}
-    (normalization : ExecutedCausalNormalization reduction)
-    (authorization : ExecutedOperationalGroupingAuthorization normalization) :
-    ObligationRegime (roleProfileFiniteCarrier roles) :=
-  match authorization with
-  | ⟨_, _⟩ =>
-      convergedTargetImageRegime
-        (roleProfileFiniteCarrier roles)
-        normalization.target
-        (defaultRoleOccurrenceProfile roles)
-        normalization.targets_converge
-
-/--
-The operational regime is the exact convergent fibre of the executed target
-map, formed through the preservation-and-separation authorization of that same
-chain. There is no separately supplied obligation carrier or carry map.
+The operational regime realizes the exact convergent fibre of the executed
+target map. This is the realization layer: its target carrier and carry map
+are computed from executed traces. Authorization of that realization as an
+operational grouping is recorded separately by
+`ExactExecutedOperationalRegime`.
 -/
 def ExecutedCausalNormalization.operationalRegime
     {count : Nat} {state : CausalConstitutiveState}
@@ -248,8 +262,11 @@ def ExecutedCausalNormalization.operationalRegime
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction) :
     ObligationRegime (roleProfileFiniteCarrier roles) :=
-  normalization.authorizedOperationalRegime
-    normalization.groupingAuthorization
+  convergedTargetImageRegime
+    (roleProfileFiniteCarrier roles)
+    normalization.target
+    (defaultRoleOccurrenceProfile roles)
+    normalization.targets_converge
 
 /-- The public regime is exactly that executed convergent-target regime. -/
 theorem ExecutedCausalNormalization.operationalRegime_exact
@@ -359,9 +376,10 @@ theorem ExecutedCausalNormalization.carry_eq_iff_coDetermined
       produced.target_eq
 
 /--
-Exact public realization of the operational regime.  Its private constructor
-prevents an independently supplied carrier or carry map from replacing the
-executed convergent-target regime while preserving only numerical readouts.
+Authorized exact incorporation of the executed target-image realization. Its
+private constructor joins the causal authorization to that exact realization;
+neither an independently supplied regime nor authorization detached from the
+same causal chain can replace it.
 -/
 structure ExactExecutedOperationalRegime
     {count : Nat} {state : CausalConstitutiveState}
@@ -441,7 +459,11 @@ end ConstitutiveSearch
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedCausalNormalization
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.constitutivePreservation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.constitutiveOccurrenceSeparation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalGroupingAuthorization
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalGroupingAuthorization.preservation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalGroupingAuthorization.occurrenceSeparation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.groupingAuthorization
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.result
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.result_exact
@@ -452,7 +474,6 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.producedTargetOccurrence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.rawProducedTargetOccurrences
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.producedTargetFrontier
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.authorizedOperationalRegime
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.operationalRegime
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.operationalRegime_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.carry_eq_iff_target_eq

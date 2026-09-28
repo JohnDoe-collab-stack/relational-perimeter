@@ -109,22 +109,21 @@ La paire résultat n’est pas un champ stocké dans la normalisation : elle est
 définie par l’élimination de cette chaîne exacte sur le profil source fourni.
 
 La préservation pour toute continuation et la séparation persistante des
-occurrences sont aussi extraites sur la chaîne entière sous les types
+occurrences sont aussi projetées depuis la chaîne entière sous les types
 `ExecutedReductionPreservationExact` et
-`ExecutedReductionOccurrenceSeparationExact`. Elles forment ensemble
-`ExecutedOperationalGroupingAuthorization`. Cette autorisation issue de la
-même normalisation est consommée avant la réalisation de l’image des cibles en
-obligations ; elle n’est ni ajoutée au régime après coup ni remplacée par son
-seul résultat numérique.
+`ExecutedReductionOccurrenceSeparationExact`.
+`ExecutedOperationalGroupingAuthorization` conserve la chaîne causale complète
+dont ces deux témoins sont extraits ; cette autorisation n’est ni remplacée ni
+inférée depuis le seul résultat numérique.
 
 `rawProducedTargetOccurrences` énumère ensuite toutes les cibles produites en
 conservant, pour chacune, sa source et sa trace. Leur carrier ambiant demeure le
 produit dépendant complet des espaces de continuation. Les traces démontrent la
-convergence des valeurs effectivement produites. Le régime porte alors chaque
-cible avec sa preuve d’appartenance à cette fibre convergente.
-`ExactExecutedOperationalRegime`, à constructeur privé, conserve la
-normalisation dépendante, son autorisation de regroupement et expose seulement
-ce régime. L’égalité de deux
+convergence des valeurs effectivement produites. La réalisation de l’image des
+cibles porte alors chaque cible avec sa preuve d’appartenance à cette fibre
+convergente. Séparément, `ExactExecutedOperationalRegime`, à constructeur
+privé, joint l’autorisation de regroupement à cette réalisation exacte. La
+réalisation et l’admission restent distinctes. L’égalité de deux
 obligations équivaut à l’égalité des cibles produites et à l’habitation de
 `OperationallyCoDetermined` par leurs deux traces vers une cible commune. La
 convergence donne ainsi la largeur un. Le régime public est une projection de
@@ -141,9 +140,10 @@ opérationnelle change.
 
 La récursion fusionnée est reliée dans le code de production à la réalisation
 publique par l’égalité exacte de sa course causale, puis par l’égalité dépendante
-de son histoire de rôles. Le théorème de classe est enfin transporté
-constructivement sur le carrier littéral de ces rôles exécutés : son énoncé ne
-quantifie plus sur le carrier d’un adaptateur.
+de son histoire de rôles. La classe générale et l’instance exécutée utilisent
+définitionnellement le même carrier de profils d’occurrences : le théorème
+public de classe est donc énoncé directement sur le carrier exécuté faisant
+autorité, sans adaptateur ni réindexation.
 
 La recherche exécutée reste essentielle à cette instance publique. Son préfixe
 de candidats en échec est extrait de l’exécution, sa relation sélectionnée est
