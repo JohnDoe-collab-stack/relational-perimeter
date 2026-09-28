@@ -48,6 +48,11 @@ structure ConstitutiveExtensiveSeparationCertificate (input : Nat) where
     stagewiseDecomposition =
       buildStagewiseExecutedDecompositionHistory
         causalOperationalExecution.causalRun
+  prefixLocalProductionUnique :
+    {source : CausalConstitutiveState} →
+      (stage : CausalConstitutiveStageExecution source) →
+      (production : ExecutedStageOperationalProduction stage) →
+        production = prefixLocalOperationalProducer stage
   rolesExact : stagewiseDecomposition.roles =
     buildRelationalConstitutiveRoleHistory
       causalOperationalExecution.causalRun
@@ -58,6 +63,11 @@ structure ConstitutiveExtensiveSeparationCertificate (input : Nat) where
   normalizationExact :
     normalization =
       executedCausalNormalization stagewiseDecomposition.reduction
+  normalizationConsumesReductionChain :
+    normalization.constitutiveChain =
+      executedReductionConstitutiveChain stagewiseDecomposition.reduction
+  normalizationChainIsCausallyExact :
+    ExecutedReductionCausalExact normalization.constitutiveChain
   exactOperationalRegime :
     ExactExecutedOperationalRegime normalization
   exactOperationalRegimeExact :
@@ -184,6 +194,8 @@ def constitutiveExtensiveSeparationCertificate
       stagewiseDecompositionExact := rfl
       prefixLocalDecompositionExact :=
         causalOperationalExecution.headsArePrefixLocal
+      prefixLocalProductionUnique := fun _ production =>
+        ExecutedStageOperationalProduction.unique _ _
       rolesExact :=
         Eq.trans
           (congrArg
@@ -194,6 +206,8 @@ def constitutiveExtensiveSeparationCertificate
       roleConstitutionExact := stagewise.rolesConstitutionExact
       normalization := normalization
       normalizationExact := rfl
+      normalizationConsumesReductionChain := rfl
+      normalizationChainIsCausallyExact := normalization.constitutiveChainExact
       exactOperationalRegime := exactExecutedOperationalRegime normalization
       exactOperationalRegimeExact := rfl
       operationalRegimeExact := normalization.operationalRegime_exact
@@ -427,15 +441,46 @@ structure ExactCausalExponentialTarget (input : Nat) : Type 3 where
     certificate.stagewiseDecomposition =
       buildStagewiseExecutedDecompositionHistory
         certificate.causalOperationalExecution.causalRun
+  everyHeadProductionIsLocal :
+    {source : CausalConstitutiveState} →
+      (stage : CausalConstitutiveStageExecution source) →
+      (production : ExecutedStageOperationalProduction stage) →
+        production = prefixLocalOperationalProducer stage
   rolesConstituted :
     RelationalRoleHistoryConstitutionExact
       certificate.stagewiseDecomposition.roles
   normalizationExact :
     certificate.normalization =
       executedCausalNormalization certificate.stagewiseDecomposition.reduction
+  normalizationConsumesConstitutiveChain :
+    certificate.normalization.constitutiveChain =
+      executedReductionConstitutiveChain
+        certificate.stagewiseDecomposition.reduction
+  constitutiveChainIsCausallyExact :
+    ExecutedReductionCausalExact
+      certificate.normalization.constitutiveChain
   exactRegimeExact :
     certificate.exactOperationalRegime =
       exactExecutedOperationalRegime certificate.normalization
+  carriedValuesAreProducedTargets :
+    (profile : RoleOccurrenceProfile
+      certificate.stagewiseDecomposition.roles) →
+      (certificate.normalization.operationalRegime.carry profile).1 =
+        certificate.normalization.target profile
+  regimeFibresAreExactlyProducedTargetFibres :
+    (left right : RoleOccurrenceProfile
+      certificate.stagewiseDecomposition.roles) →
+      certificate.exactOperationalRegime.regime.carry left =
+          certificate.exactOperationalRegime.regime.carry right ↔
+        certificate.normalization.target left =
+          certificate.normalization.target right
+  regimeFibresAreExactlyExecutedCoDetermination :
+    (left right : RoleOccurrenceProfile
+      certificate.stagewiseDecomposition.roles) →
+      certificate.exactOperationalRegime.regime.carry left =
+          certificate.exactOperationalRegime.regime.carry right ↔
+        Nonempty
+          (OperationallyCoDetermined certificate.normalization left right)
   extensiveWidth :
     (roleProfileFiniteCarrier certificate.roles).frontier.length =
       2 ^ (input + 1)
@@ -472,9 +517,25 @@ def exactCausalExponentialTarget
     { certificate := certificate
       executionExact := certificate.causalOperationalExecutionExact
       prefixLocal := certificate.prefixLocalDecompositionExact
+      everyHeadProductionIsLocal := certificate.prefixLocalProductionUnique
       rolesConstituted := certificate.roleConstitutionExact
       normalizationExact := certificate.normalizationExact
+      normalizationConsumesConstitutiveChain :=
+        certificate.normalizationConsumesReductionChain
+      constitutiveChainIsCausallyExact :=
+        certificate.normalizationChainIsCausallyExact
       exactRegimeExact := certificate.exactOperationalRegimeExact
+      carriedValuesAreProducedTargets := by
+        intro profile
+        exact certificate.carriedValuesAreProducedTargets profile
+      regimeFibresAreExactlyProducedTargetFibres := by
+        intro left right
+        rw [certificate.exactOperationalRegime.regimeExact]
+        exact certificate.carryFibresAreProducedTargetFibres left right
+      regimeFibresAreExactlyExecutedCoDetermination := by
+        intro left right
+        rw [certificate.exactOperationalRegime.regimeExact]
+        exact certificate.normalization.carry_eq_iff_coDetermined left right
       extensiveWidth := certificate.extensiveWidthExact
       executedWidth := by
         rw [certificate.exactOperationalRegime.regimeExact]

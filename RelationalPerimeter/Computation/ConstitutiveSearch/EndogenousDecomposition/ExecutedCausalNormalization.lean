@@ -25,10 +25,8 @@ structure ExecutedCausalNormalization
     {program : RoleIndexedProgram roles}
     (reduction : ExecutedRoleReductionHistory program) where
   private mk ::
-  result :
-    (sourceProfile : RoleOccurrenceProfile roles) →
-      Sigma fun targetProfile : ExecutedOperationalTargetProfile reduction =>
-        ExecutedRoleProfileReduction reduction sourceProfile targetProfile
+  constitutiveChain : ExecutedReductionConstitutiveChain reduction
+  constitutiveChainExact : ExecutedReductionCausalExact constitutiveChain
 
 /-- Canonical normalization is the execution of the reduction history. -/
 def executedCausalNormalization
@@ -38,7 +36,41 @@ def executedCausalNormalization
     {program : RoleIndexedProgram roles}
     (reduction : ExecutedRoleReductionHistory program) :
     ExecutedCausalNormalization reduction :=
-  { result := normalizeExecutedRoleProfile reduction }
+  { constitutiveChain := executedReductionConstitutiveChain reduction
+    constitutiveChainExact :=
+      (executedReductionConstitutiveChain reduction).causalExact }
+
+/--
+The result is not a field that a caller or an alternative constructor can
+replace. It is computed by eliminating the exact constitutive chain stored in
+the normalization.
+-/
+def ExecutedCausalNormalization.result
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    (normalization : ExecutedCausalNormalization reduction)
+    (sourceProfile : RoleOccurrenceProfile roles) :
+    Sigma fun targetProfile : ExecutedOperationalTargetProfile reduction =>
+      ExecutedRoleProfileReduction reduction sourceProfile targetProfile :=
+  normalizeExecutedRoleProfileFromChain
+    normalization.constitutiveChain sourceProfile
+
+/-- The result is definitionally the execution of the stored causal chain. -/
+theorem ExecutedCausalNormalization.result_exact
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    (normalization : ExecutedCausalNormalization reduction)
+    (sourceProfile : RoleOccurrenceProfile roles) :
+    normalization.result sourceProfile =
+      normalizeExecutedRoleProfileFromChain
+        normalization.constitutiveChain sourceProfile :=
+  rfl
 
 /-- Target profile produced for one constituted source profile. -/
 def ExecutedCausalNormalization.target
@@ -346,6 +378,8 @@ end ConstitutiveSearch
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedCausalNormalization
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.result
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.result_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.target
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.trace
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.target_exact

@@ -108,10 +108,14 @@ readout of this source has exact width `2^n`. A downstream regime has that full
 exponential width exactly when it keeps the constituted profiles as distinct,
 separately addressable obligations. For every source profile, the executed
 normalizer constructs a target occurrence profile together with the exact
-dependent trace that produces it. The transformed target is a projection of a
-preserving absorption witness, which consumes the reconstructed total action,
-its exact output, the separate preservation proof, non-identity, and occurrence
-distinction; the retained case consumes positive viability. The operational
+dependent trace that produces it. The transformed decision eliminates an
+action-produced target whose private construction is indexed by a preserving
+absorption witness. That witness consumes the reconstructed total action, its
+exact output, the separate preservation proof, non-identity, and occurrence
+distinction; the retained case consumes positive viability. The normalizer
+recurses on the complete constitutive chain carrying those witnesses rather
+than rebuilding targets from the retained output; its result is a derived
+elimination of that chain, not a replaceable stored field. The operational
 target carrier remains the full dependent product of the continuation spaces;
 it is not restricted in advance to a singleton. The executed traces prove that
 the produced targets converge. The obligation regime then carries each actual
@@ -166,9 +170,10 @@ constructs the full-width identity regime and positively proves its complete
 conservation condition. On the same constituted identities, the executed
 normalizer produces one full typed operational target and one exact trace for
 each source profile. These traces come from the stagewise decomposition whose
-head is available from the current executed stage before any future tail. They
-consume the authoritative relational action, exact output, separate
-preservation, viability, non-identity, and persistent occurrence distinction.
+head is produced from the current executed stage before any future tail. The
+normalizer consumes a dependent constitutive chain whose every link exposes
+the authoritative relational action, exact output, separate preservation,
+viability, non-identity, and persistent occurrence distinction.
 The complete source-indexed family of produced targets and traces is exposed
 before the operational regime. Their proved convergence constructs an exact
 one-obligation carrier whose values remain the actual produced targets. Two
@@ -231,8 +236,10 @@ below.
 - `RelationalPerimeter/Computation/ConstitutiveSearch/` contains the complete
   executable construction, its relational transports, SAT instance, feedback
   recursion, and production-level measured accounting;
-- `ExecutedRoleIndexedReduction.lean`, `ExecutedCausalNormalization.lean`, and
-  `ExactOperationalImage.lean` construct the source-indexed executed traces,
+- `PrefixLocalOperationalProduction.lean`,
+  `ExecutedRoleIndexedReduction.lean`, `ExecutedCausalNormalization.lean`, and
+  `ExactOperationalImage.lean` construct the stage-only production interface
+  and the source-indexed executed traces,
   prove convergence of their produced targets, and derive the operational
   regime while retaining those actual target values;
 - `Tests/ComputationalPhenomenonRegression.lean` protects the production
@@ -311,9 +318,14 @@ identités distinctes et séparément adressables. Pour chaque profil source, le
 normaliseur exécuté construit une cible dépendamment typée avec la trace exacte
 qui la produit. Cette cible est le profil complet des continuations retournées
 par les décisions locales ; la liste d’assignations n’en est qu’une lecture
-représentationnelle aval. Le cas transformé consomme l’action relationnelle
-reconstruite, sa sortie exacte, la préservation séparée, la non-identité et la
-distinction des occurrences ; le cas retenu consomme la viabilité positive.
+représentationnelle aval. La décision transformée élimine une cible produite
+par l’action, dont la construction privée est indexée par l’absorption qui
+consomme l’action relationnelle reconstruite, sa sortie exacte, la préservation
+séparée, la non-identité et la distinction des occurrences ; le cas retenu
+consomme la viabilité positive. Le normaliseur effectue sa récursion sur la chaîne
+constitutive complète qui porte ces témoins, sans reconstruire les cibles
+depuis la seule sortie retenue ; son résultat est l’élimination dérivée de cette
+chaîne, et non un champ stocké remplaçable.
 La famille complète des cibles produites et de leurs traces indexées par leur
 source est exposée avant le régime. Leur convergence est démontrée, puis le
 carrier d'obligations est construit en conservant chaque cible effectivement
@@ -354,11 +366,12 @@ factorisé par le régime. Sur le carrier public, le certificat construit le
 régime identitaire de pleine largeur et prouve positivement sa condition
 complète de conservation. Sur les mêmes identités constituées, le normaliseur
 exécuté produit pour chaque profil source une cible opérationnelle complète et
-une trace dépendante. Ces traces consomment l’action relationnelle faisant
-autorité, sa sortie exacte, la préservation séparée, la viabilité, la
-non-identité et la distinction persistante des occurrences. Elles proviennent
-de la même décomposition par étapes, dont la tête ne dépend que de l’étape
-exécutée courante. La famille source-indexée des cibles et de leurs traces est
+une trace dépendante. Ces traces proviennent de la même décomposition par
+étapes, dont la tête est produite depuis la seule étape exécutée courante avant
+la queue future. Le normaliseur consomme ensuite une chaîne constitutive
+dépendante dont chaque lien expose l’action relationnelle faisant autorité, sa
+sortie exacte, la préservation séparée, la viabilité, la non-identité et la
+distinction persistante des occurrences. La famille source-indexée des cibles et de leurs traces est
 construite avant le régime. Leur convergence permet ensuite de construire un
 carrier exact à une obligation dont les valeurs restent les cibles produites.
 Deux profils sources explicites sont prouvés

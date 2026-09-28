@@ -93,12 +93,18 @@ modifier la source exécutée.
 Pour chaque profil source, `executedCausalNormalization` construit une paire
 dépendante contenant un profil d’occurrences cible et une trace
 `ExecutedRoleProfileReduction` exactement indexée par cette source et cette
-cible. La cible locale transformée est une projection de
+cible. La décision locale transformée élimine un
+`ActionProducedOperationalTarget` dont la construction privée est indexée par
 `CriterionPreservingAbsorption`. Ce témoin consomme l’application exacte de
 l’action découverte, sa preuve séparée de préservation pour toute continuation,
 la non-identité de l’action, l’acceptation positive et la distinction
 persistante des occurrences ; chaque décision retenue consomme sa viabilité
-positive.
+positive. `executedCausalNormalization` effectue sa récursion sur
+`ExecutedReductionConstitutiveChain` : chaque maillon est donc consommé avant
+le maillon dépendant suivant, et `ExecutedReductionCausalExact` expose l’action,
+la préservation, l’acceptation et la distinction encore présentes à chaque rôle.
+La paire résultat n’est pas un champ stocké dans la normalisation : elle est
+définie par l’élimination de cette chaîne exacte sur le profil source fourni.
 
 `rawProducedTargetOccurrences` énumère ensuite toutes les cibles produites en
 conservant, pour chacune, sa source et sa trace. Leur carrier ambiant demeure le
@@ -310,7 +316,8 @@ générales et l’`iff` au niveau de la classe ; `RoleIndexedProfiles.lean` et
 `RoleProfileArityTransport.lean` dérivent le carrier concret et ses arités ;
 `RoleIndexedProgram.lean` fournit l’interprète aval ;
 `RolewiseObligationPolicy.lean` prouve l’équivalence locale/globale de la
-conservation ; `ExecutedRoleIndexedReduction.lean` construit les décisions et
+conservation ; `PrefixLocalOperationalProduction.lean` fixe l’interface de
+production à la seule étape déjà exécutée ; `ExecutedRoleIndexedReduction.lean` construit les décisions et
 les traces de sorties typées ; `ExecutedCausalNormalization.lean` construit la
 normalisation, prouve la convergence des cibles et en dérive le régime exact ;
 `CausalOperationalExecution.lean` fusionne l’exécution des étapes avec leur

@@ -314,6 +314,82 @@ theorem reductionKeepsOccurrencesDistinct
       (executedRoleReductionLicense role).retainedOccurrence :=
   (executedRoleReductionLicense role).occurrencesRemainDistinct
 
+/-- Regression gate for the formerly bypassable transformed decision: its
+target is definitionally the output of the executed relation. -/
+theorem transformedDecisionTargetIsExecutedAction
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) :
+    let license := executedRoleReductionLicense role
+    (executedTransformedRoleOccurrenceDecision license).target =
+      interpretRoleStageAtom (compileRoleStageAtom role)
+        license.transformedOccurrence
+        (license.transformedOccurrenceExact ▸ role.executedInput) :=
+  rfl
+
+/-- The executed-action output is an index of the transformed decision type,
+not a label attached after the decision has been constructed. -/
+def transformedDecisionHasExecutedActionIndex
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) :
+    let license := executedRoleReductionLicense role
+    ExecutedRoleOccurrenceDecision license license.transformedOccurrence
+      (interpretRoleStageAtom (compileRoleStageAtom role)
+        license.transformedOccurrence
+        (license.transformedOccurrenceExact ▸ role.executedInput)) :=
+  executedTransformedRoleOccurrenceDecision (executedRoleReductionLicense role)
+
+/-- The only accepted producer has the exact stage-only function type. -/
+def exactPrefixLocalProducerType : PrefixLocalOperationalProducer :=
+  prefixLocalOperationalProducer
+
+/-- Any production for a stage is the canonical prefix-local production. -/
+theorem noFutureCanSelectAnotherHeadProduction
+    {source : CausalConstitutiveState}
+    (stage : CausalConstitutiveStageExecution source)
+    (production : ExecutedStageOperationalProduction stage) :
+    production = prefixLocalOperationalProducer stage :=
+  ExecutedStageOperationalProduction.unique _ _
+
+/-- The public normalizer is definitionally built by consuming the complete
+role-by-role constitutive chain. -/
+theorem publicNormalizationConsumesConstitutiveChain (input : Nat) :
+    (publicCertificateNormalization input).constitutiveChain =
+      executedReductionConstitutiveChain
+        (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction :=
+  rfl
+
+/-- The normalized pair is a definitional elimination of that chain.  There is
+no stored result field in which a prescribed target can be installed and
+justified by transporting the trace afterwards. -/
+theorem normalizationResultIsChainElimination
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    (normalization : ExecutedCausalNormalization reduction)
+    (source : RoleOccurrenceProfile roles) :
+    normalization.result source =
+      normalizeExecutedRoleProfileFromChain
+        normalization.constitutiveChain source :=
+  rfl
+
+/-- The consumed chain still exposes the action, preservation, acceptance and
+source-distinction witness at every dependent role. -/
+def publicNormalizationChainIsCausallyExact (input : Nat) :
+    ExecutedReductionCausalExact
+      (publicCertificateNormalization input).constitutiveChain :=
+  (publicCertificateNormalization input).constitutiveChainExact
+
+/-- The public regime is definitionally the exact regime projected from the
+same normalization; an unrelated singleton cannot replace it. -/
+theorem publicRegimeIsExactNormalizationProjection (input : Nat) :
+    executedConstitutiveObligationRegime input =
+      (publicCertificateNormalization input).operationalRegime :=
+  rfl
+
 end RelationalPerimeter.Tests.RelationalExtensiveIffRegression
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -352,4 +428,12 @@ end RelationalPerimeter.Tests.RelationalExtensiveIffRegression
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.transformedTargetIsExecutedAction
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.reductionCarriesArbitraryContinuationPreservation
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.reductionKeepsOccurrencesDistinct
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.transformedDecisionTargetIsExecutedAction
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.transformedDecisionHasExecutedActionIndex
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.exactPrefixLocalProducerType
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.noFutureCanSelectAnotherHeadProduction
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicNormalizationConsumesConstitutiveChain
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.normalizationResultIsChainElimination
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicNormalizationChainIsCausallyExact
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicRegimeIsExactNormalizationProjection
 /- AXIOM_AUDIT_END -/

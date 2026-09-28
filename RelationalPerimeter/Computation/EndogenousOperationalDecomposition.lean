@@ -197,6 +197,31 @@ theorem causal_operational_decomposition_is_prefix_local (input : Nat) :
         (causalOperationalExecution input).causalRun :=
   (constitutiveExtensiveSeparationEvidence input).prefixLocalDecompositionExact
 
+/-- No future tail can select another operational production for a fixed
+executed stage. -/
+theorem causal_operational_head_production_unique
+    {source : CausalConstitutiveState}
+    (stage : CausalConstitutiveStageExecution source)
+    (production : ExecutedStageOperationalProduction stage) :
+    production = prefixLocalOperationalProducer stage :=
+  ExecutedStageOperationalProduction.unique _ _
+
+/-- The public normalizer consumes the role-by-role constitutive chain built
+from its exact reduction history. -/
+theorem executed_normalization_consumes_constitutive_chain (input : Nat) :
+    (publicCertificateNormalization input).constitutiveChain =
+      executedReductionConstitutiveChain
+        (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction :=
+  rfl
+
+/-- Every link consumed by the public normalizer retains its action exactness,
+arbitrary-continuation preservation, positive acceptance and occurrence
+distinction. -/
+def executed_normalization_chain_is_causally_exact (input : Nat) :
+    ExecutedReductionCausalExact
+      (publicCertificateNormalization input).constitutiveChain :=
+  (publicCertificateNormalization input).constitutiveChainExact
+
 /-- Public-instance target with the stronger role-identity/addressing wording. -/
 theorem constituted_exponential_width_iff_distinct_separate_conservation
     (input : Nat)
@@ -1063,6 +1088,9 @@ end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.causalOperationalExecution
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.causal_operational_execution_erases_to_authoritative
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.causal_operational_decomposition_is_prefix_local
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.causal_operational_head_production_unique
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_normalization_consumes_constitutive_chain
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_normalization_chain_is_causally_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constituted_exponential_width_iff_distinct_separate_conservation
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constituted_exponential_width_iff_carry_injective
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutedDistinctSeparateRegime

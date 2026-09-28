@@ -71,14 +71,23 @@ produit. Le type de cette production locale ne possède aucun paramètre de
 futur, et son constructeur privé fixe sa décomposition comme fonction
 canonique de la seule étape courante. Son effacement redonne exactement
 l’exécution publique antérieure. Pour chaque profil source,
-`executedCausalNormalization` produit ensuite une paire dépendante contenant
-un profil d’occurrences cible et une trace `ExecutedRoleProfileReduction`
-exactement indexée par cette source et cette cible. Dans le cas transformé, la
-cible locale est une projection de `CriterionPreservingAbsorption`. Ce témoin
-consomme l’action relationnelle effectivement reconstruite, sa sortie exacte,
-la preuve séparée de préservation pour toute continuation, la non-identité de
-l’action, l’acceptation positive et la distinction persistante des
-occurrences ; le cas retenu requiert sa viabilité positive.
+`executedCausalNormalization` consomme ensuite une
+`ExecutedReductionConstitutiveChain` exactement indexée par ce profil. Dans le
+cas transformé, la décision locale élimine un
+`ActionProducedOperationalTarget`, à construction privée, lui-même indexé par
+un `CriterionPreservingAbsorption`. Ce témoin consomme l’application exacte de
+l’action relationnelle effectivement reconstruite, la preuve séparée de sa
+préservation pour toute continuation, sa non-identité, l’acceptation positive
+et la distinction persistante des occurrences ; le cas retenu consomme sa
+viabilité positive. Chaque maillon de la chaîne porte ainsi la décision locale
+et sa cible effectivement produite avant que le maillon dépendant suivant soit
+construit. `ExecutedReductionCausalExact` expose encore, à chaque rôle,
+l’action, la préservation, l’acceptation et la distinction consommées par cette
+construction. La normalisation ne stocke aucune paire résultat : son résultat
+est défini par l’élimination de cette chaîne exacte sur le profil source, ce
+qui produit un profil d’occurrences cible et une trace
+`ExecutedRoleProfileReduction` indexée exactement par cette source et cette
+cible.
 
 `rawProducedTargetOccurrences` rassemble ensuite les cibles de tous les profils
 sources sans perdre les traces qui les produisent. Le carrier ambiant de ces

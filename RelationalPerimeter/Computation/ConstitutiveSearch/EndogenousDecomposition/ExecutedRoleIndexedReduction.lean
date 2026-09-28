@@ -1,5 +1,4 @@
-import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleIndexedProgram
-import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RolewiseObligationPolicy
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PrefixLocalOperationalProduction
 
 /-!
 # Executed reduction indexed by role, action, and preservation
@@ -16,97 +15,6 @@ namespace EndogenousDecomposition
 
 open SAT
 open Extensive
-
-/-- Causal local license for absorbing the transformed occurrence. -/
-structure ExecutedRoleReductionLicense
-    {source : CausalConstitutiveState}
-    {run : CausalConstitutiveStageExecution source}
-    (role : RelationalConstitutiveRoleStage run)
-    (atom : RoleStageAtom role) where
-  private mk ::
-  transformedOccurrence : RoleOpeningOccurrence role
-  transformedOccurrenceExact :
-    transformedOccurrence = roleOpeningOccurrenceAt role .left
-  retainedOccurrence : RoleOpeningOccurrence role
-  retainedOccurrenceExact :
-    retainedOccurrence = roleOpeningOccurrenceAt role .right
-  transformedOutputExact :
-    interpretRoleStageAtom atom
-        transformedOccurrence
-        (transformedOccurrenceExact ▸ role.executedInput) =
-      role.completedOutput
-  preservesCriterion :
-    (continuation : GeneratedStructuralBranchContinuation
-      (causalOpeningLeft source run.selected run.fresh)) →
-    GeneratedStructuralBranchAccept
-        (causalOpeningLeft source run.selected run.fresh) continuation →
-      GeneratedStructuralBranchAccept
-        (causalOpeningRight source run.selected run.fresh)
-        (atom.action continuation)
-  transformedAccepted :
-    GeneratedStructuralBranchAccept
-      (causalOpeningRight source run.selected run.fresh)
-      (interpretRoleStageAtom atom
-        transformedOccurrence
-        (transformedOccurrenceExact ▸ role.executedInput))
-  retainedAccepted :
-    GeneratedStructuralBranchAccept
-      (causalOpeningRight source run.selected run.fresh)
-      role.completedOutput
-  actionChangesSource :
-    (atom.action role.executedInput).1 ≠ role.executedInput.1
-  occurrencesRemainDistinct :
-    transformedOccurrence ≠ retainedOccurrence
-
-/-- Canonical license; every field is discharged by the executed role. -/
-def executedRoleReductionLicense
-    {source : CausalConstitutiveState}
-    {run : CausalConstitutiveStageExecution source}
-    (role : RelationalConstitutiveRoleStage run) :
-    ExecutedRoleReductionLicense role (compileRoleStageAtom role) :=
-  { transformedOccurrence := roleOpeningOccurrenceAt role .left
-    transformedOccurrenceExact := rfl
-    retainedOccurrence := roleOpeningOccurrenceAt role .right
-    retainedOccurrenceExact := rfl
-    transformedOutputExact := by
-      exact Eq.trans
-        (interpretCompiledRoleStage_left role role.executedInput)
-        role.actionExact.symm
-    preservesCriterion := (compileRoleStageAtom role).preservesAccepted
-    transformedAccepted := by
-      exact (compileRoleStageAtom role).preservesAccepted
-        role.executedInput
-        (role.executedInputExact ▸ run.sourceAccepted)
-    retainedAccepted := role.preservation
-    actionChangesSource := by
-      rw [role.executedInputExact]
-      exact compiledRoleStage_action_changes_executed_source run role
-    occurrencesRemainDistinct :=
-      roleOpeningOccurrence_left_ne_right role }
-
-/--
-The operational decomposition available from one executed stage alone.  Its
-type mentions the current stage but not any future tail: the role, atom and
-reduction license are therefore available at the prefix where that stage has
-just produced its output.
--/
-structure ExecutedStageDecomposition
-    {source : CausalConstitutiveState}
-    (stage : CausalConstitutiveStageExecution source) where
-  private mk ::
-  role : RelationalConstitutiveRoleStage stage
-  roleExact : role = relationalConstitutiveRoleStage stage
-  license : ExecutedRoleReductionLicense role (compileRoleStageAtom role)
-
-/-- Canonical local decomposition, constructed from no data beyond the stage. -/
-def executedStageDecomposition
-    {source : CausalConstitutiveState}
-    (stage : CausalConstitutiveStageExecution source) :
-    ExecutedStageDecomposition stage :=
-  let role := relationalConstitutiveRoleStage stage
-  { role := role
-    roleExact := rfl
-    license := executedRoleReductionLicense role }
 
 /--
 Stagewise decomposition of a causal execution.  The tail is indexed by the
@@ -338,6 +246,42 @@ def criterionPreservingAbsorption
     sourceTargetDistinct := license.occurrencesRemainDistinct }
 
 /--
+The target positively produced by the executed action, together with the
+complete preserving absorption that licenses its operational use.  The value
+is not supplied independently: the private constructor is exposed only through
+`actionProducedOperationalTarget`, where it is definitionally the result of
+the authoritative role action.
+-/
+structure ActionProducedOperationalTarget
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {atom : RoleStageAtom role}
+    {license : ExecutedRoleReductionLicense role atom}
+    (absorption : CriterionPreservingAbsorption license) : Type where
+  private mk ::
+  value : GeneratedStructuralBranchContinuation
+    (causalOpeningRight source run.selected run.fresh)
+  valueExact :
+    value = interpretRoleStageAtom atom
+      license.transformedOccurrence
+      (license.transformedOccurrenceExact ▸ role.executedInput)
+
+/-- Canonical production by the relation actually executed at this role. -/
+def actionProducedOperationalTarget
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {atom : RoleStageAtom role}
+    {license : ExecutedRoleReductionLicense role atom}
+    (absorption : CriterionPreservingAbsorption license) :
+    ActionProducedOperationalTarget absorption :=
+  { value := interpretRoleStageAtom atom
+      license.transformedOccurrence
+      (license.transformedOccurrenceExact ▸ role.executedInput)
+    valueExact := rfl }
+
+/--
 The operational target carrier at one role is the full continuation space in
 the codomain of the executed relation.  It is deliberately not restricted to
 the completed output: convergence must be proved from execution rather than
@@ -359,11 +303,9 @@ def transformedExecutedRoleOperationalTarget
     {role : RelationalConstitutiveRoleStage run}
     {atom : RoleStageAtom role}
     {license : ExecutedRoleReductionLicense role atom}
-    (_absorption : CriterionPreservingAbsorption license) :
+    (absorption : CriterionPreservingAbsorption license) :
     ExecutedRoleOperationalTarget license :=
-  interpretRoleStageAtom atom
-    license.transformedOccurrence
-    (license.transformedOccurrenceExact ▸ role.executedInput)
+  (actionProducedOperationalTarget absorption).value
 
 /-- The transformed target exposes the executed action result definitionally. -/
 theorem transformedExecutedRoleOperationalTarget_is_executed_action
@@ -377,7 +319,7 @@ theorem transformedExecutedRoleOperationalTarget_is_executed_action
       interpretRoleStageAtom atom
         license.transformedOccurrence
         (license.transformedOccurrenceExact ▸ role.executedInput) :=
-  rfl
+  (actionProducedOperationalTarget absorption).valueExact
 
 /-- The already completed right-hand continuation as an operational target. -/
 def retainedExecutedRoleOperationalTarget
@@ -402,7 +344,7 @@ theorem transformedExecutedRoleOperationalTarget_eq_retained
   absorption.outputExact
 
 /--
-One local operational decision, indexed by both its constituted source and the
+One local operational decision, indexed by its constituted source and by the
 target it actually produces.  The transformed constructor consumes the complete
 preserving absorption witness.  The retained constructor consumes positive
 viability.  Neither constructor identifies the source occurrences.
@@ -415,10 +357,11 @@ inductive ExecutedRoleOccurrenceDecision
     (license : ExecutedRoleReductionLicense role atom) :
     RoleOpeningOccurrence role → ExecutedRoleOperationalTarget license → Type 2 where
   | transformed
-      (absorption : CriterionPreservingAbsorption license) :
+      (absorption : CriterionPreservingAbsorption license)
+      (produced : ActionProducedOperationalTarget absorption) :
       ExecutedRoleOccurrenceDecision license
         license.transformedOccurrence
-        (transformedExecutedRoleOperationalTarget absorption)
+        produced.value
   | retained
       (accepted :
         GeneratedStructuralBranchAccept
@@ -427,6 +370,109 @@ inductive ExecutedRoleOccurrenceDecision
       ExecutedRoleOccurrenceDecision license
         license.retainedOccurrence
         (retainedExecutedRoleOperationalTarget license)
+
+/-- The target index carried by the decision. -/
+def ExecutedRoleOccurrenceDecision.target
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {atom : RoleStageAtom role}
+    {license : ExecutedRoleReductionLicense role atom}
+    {occurrence : RoleOpeningOccurrence role}
+    {target : ExecutedRoleOperationalTarget license}
+    (_decision : ExecutedRoleOccurrenceDecision license occurrence target) :
+    ExecutedRoleOperationalTarget license :=
+  target
+
+/--
+The canonical transformed decision. Its target is obtained only by projecting
+the action-produced object that consumes the preserving absorption.
+-/
+def executedTransformedRoleOccurrenceDecision
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {atom : RoleStageAtom role}
+    (license : ExecutedRoleReductionLicense role atom) :
+    ExecutedRoleOccurrenceDecision license license.transformedOccurrence
+      (transformedExecutedRoleOperationalTarget
+        (criterionPreservingAbsorption license)) :=
+  let absorption := criterionPreservingAbsorption license
+  .transformed absorption (actionProducedOperationalTarget absorption)
+
+/-- The canonical transformed decision definitionally exposes the action result. -/
+theorem executedTransformedRoleOccurrenceDecision_target_is_action
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {atom : RoleStageAtom role}
+    (license : ExecutedRoleReductionLicense role atom) :
+    (executedTransformedRoleOccurrenceDecision license).target =
+      interpretRoleStageAtom atom
+        license.transformedOccurrence
+        (license.transformedOccurrenceExact ▸ role.executedInput) :=
+  rfl
+
+/--
+Complete local witness consumed by the next stratum. It ties the canonical
+decision simultaneously to the executed action, arbitrary-continuation
+preservation, positive viability and source-occurrence distinction.
+-/
+structure ExecutedTransformedDecisionWitness
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {atom : RoleStageAtom role}
+    (license : ExecutedRoleReductionLicense role atom) : Type 2 where
+  private mk ::
+  absorption : CriterionPreservingAbsorption license
+  produced : ActionProducedOperationalTarget absorption
+  decision :
+    ExecutedRoleOccurrenceDecision license license.transformedOccurrence
+      produced.value
+  decisionExact : decision =
+    ExecutedRoleOccurrenceDecision.transformed absorption produced
+  targetFromAction :
+    produced.value = interpretRoleStageAtom atom
+      license.transformedOccurrence
+      (license.transformedOccurrenceExact ▸ role.executedInput)
+  preservesCriterion :
+    (continuation : GeneratedStructuralBranchContinuation
+      (causalOpeningLeft source run.selected run.fresh)) →
+    GeneratedStructuralBranchAccept
+        (causalOpeningLeft source run.selected run.fresh) continuation →
+      GeneratedStructuralBranchAccept
+        (causalOpeningRight source run.selected run.fresh)
+        (atom.action continuation)
+  transformedAccepted :
+    GeneratedStructuralBranchAccept
+      (causalOpeningRight source run.selected run.fresh) produced.value
+  retainedAccepted :
+    GeneratedStructuralBranchAccept
+      (causalOpeningRight source run.selected run.fresh)
+      role.completedOutput
+  occurrencesDistinct :
+    license.transformedOccurrence ≠ license.retainedOccurrence
+
+/-- Build the complete local witness from the one authoritative license. -/
+def executedTransformedDecisionWitness
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {atom : RoleStageAtom role}
+    (license : ExecutedRoleReductionLicense role atom) :
+    ExecutedTransformedDecisionWitness license :=
+  let absorption := criterionPreservingAbsorption license
+  let produced := actionProducedOperationalTarget absorption
+  { absorption := absorption
+    produced := produced
+    decision := ExecutedRoleOccurrenceDecision.transformed absorption produced
+    decisionExact := rfl
+    targetFromAction := rfl
+    preservesCriterion := license.preservesCriterion
+    transformedAccepted := license.transformedAccepted
+    retainedAccepted := license.retainedAccepted
+    occurrencesDistinct := license.occurrencesRemainDistinct }
 
 /-- Decide the operational case by inspecting the constituted occurrence. -/
 def executedRoleOccurrenceDecision
@@ -453,9 +499,8 @@ def executedRoleOccurrenceDecision
           change Sigma fun target : ExecutedRoleOperationalTarget license =>
             ExecutedRoleOccurrenceDecision license occurrence target
           rw [← occurrenceExact]
-          let absorption := criterionPreservingAbsorption license
-          exact ⟨transformedExecutedRoleOperationalTarget absorption,
-            ExecutedRoleOccurrenceDecision.transformed absorption⟩
+          let witness := executedTransformedDecisionWitness license
+          exact ⟨witness.produced.value, witness.decision⟩
       | right =>
           have occurrenceExact : license.retainedOccurrence = occurrence :=
             Eq.trans license.retainedOccurrenceExact
@@ -464,7 +509,49 @@ def executedRoleOccurrenceDecision
             ExecutedRoleOccurrenceDecision license occurrence target
           rw [← occurrenceExact]
           exact ⟨retainedExecutedRoleOperationalTarget license,
-            ExecutedRoleOccurrenceDecision.retained license.retainedAccepted⟩
+            ExecutedRoleOccurrenceDecision.retained
+              (executedTransformedDecisionWitness license).retainedAccepted⟩
+
+/--
+Decide one occurrence by consuming the complete causal witness of this role.
+The transformed case reuses the exact action-produced decision stored in that
+witness; it is not reconstructed from the retained target.
+-/
+def executedRoleOccurrenceDecisionFromWitness
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {atom : RoleStageAtom role}
+    {license : ExecutedRoleReductionLicense role atom}
+    (witness : ExecutedTransformedDecisionWitness license)
+    (occurrence : RoleOpeningOccurrence role) :
+    Sigma fun target : ExecutedRoleOperationalTarget license =>
+      ExecutedRoleOccurrenceDecision license occurrence target := by
+  cases occurrence with
+  | mk position occurrenceState formedAt =>
+      let occurrence : RoleOpeningOccurrence role :=
+        { position := position
+          state := occurrenceState
+          formedAt := formedAt }
+      cases position with
+      | left =>
+          have occurrenceExact :
+              license.transformedOccurrence = occurrence :=
+            Eq.trans license.transformedOccurrenceExact
+              (openingOccurrence_roundTrip occurrence)
+          change Sigma fun target : ExecutedRoleOperationalTarget license =>
+            ExecutedRoleOccurrenceDecision license occurrence target
+          rw [← occurrenceExact]
+          exact ⟨witness.produced.value, witness.decision⟩
+      | right =>
+          have occurrenceExact : license.retainedOccurrence = occurrence :=
+            Eq.trans license.retainedOccurrenceExact
+              (openingOccurrence_roundTrip occurrence)
+          change Sigma fun target : ExecutedRoleOperationalTarget license =>
+            ExecutedRoleOccurrenceDecision license occurrence target
+          rw [← occurrenceExact]
+          exact ⟨retainedExecutedRoleOperationalTarget license,
+            ExecutedRoleOccurrenceDecision.retained witness.retainedAccepted⟩
 
 /-- Every local target is obtained by eliminating the produced decision. -/
 theorem ExecutedRoleOccurrenceDecision.target_exact
@@ -479,8 +566,8 @@ theorem ExecutedRoleOccurrenceDecision.target_exact
       license sourceOccurrence target) :
     target = retainedExecutedRoleOperationalTarget license := by
   cases decision with
-  | transformed absorption =>
-      exact transformedExecutedRoleOperationalTarget_eq_retained absorption
+  | transformed absorption produced =>
+      exact Eq.trans produced.valueExact absorption.outputExact
   | retained => rfl
 
 /-- The preserving absorption used to form a transformed decision retains the
@@ -500,6 +587,112 @@ theorem criterionPreservingAbsorption_preservesCriterion
         (causalOpeningRight source run.selected run.fresh)
         (atom.action continuation) :=
   absorption.preservesCriterion
+
+/--
+End-to-end causal witness for a whole executed reduction. Every head consumes
+the exact role license through its action-producing transformed decision before
+the dependent tail is considered.
+-/
+inductive ExecutedReductionConstitutiveChain :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      {program : RoleIndexedProgram roles} →
+      (reduction : ExecutedRoleReductionHistory program) → Type 2 where
+  | nil {state : CausalConstitutiveState} :
+      ExecutedReductionConstitutiveChain
+        (ExecutedRoleReductionHistory.nil (state := state))
+  | step {count : Nat} {state : CausalConstitutiveState}
+      {head : CausalConstitutiveStageExecution state}
+      {tail : CausalConstitutiveExecutionHistory count head.next}
+      {headRole : RelationalConstitutiveRoleStage head}
+      {tailRoles : RelationalConstitutiveRoleHistory tail}
+      {atom : RoleStageAtom headRole}
+      {tailProgram : RoleIndexedProgram tailRoles}
+      {license : ExecutedRoleReductionLicense headRole atom}
+      {tailReduction : ExecutedRoleReductionHistory tailProgram}
+      (headWitness : ExecutedTransformedDecisionWitness license)
+      (tailWitness : ExecutedReductionConstitutiveChain tailReduction) :
+      ExecutedReductionConstitutiveChain
+        (ExecutedRoleReductionHistory.step license tailReduction)
+
+/-- The constitutive chain is built only by consuming each executed license. -/
+def executedReductionConstitutiveChain :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      {program : RoleIndexedProgram roles} →
+      (reduction : ExecutedRoleReductionHistory program) →
+      ExecutedReductionConstitutiveChain reduction
+  | _, _, _, _, _, .nil => .nil
+  | _, _, _, _, _, .step license tailReduction =>
+      .step (executedTransformedDecisionWitness license)
+        (executedReductionConstitutiveChain tailReduction)
+
+/--
+The public causal content of a complete reduction chain.  At every role the
+target is the output of the executed action, the independent preservation map
+is still present, the produced target is accepted, and the source occurrences
+remain distinct.  The predicate follows the dependent tail constituted by the
+state produced at the preceding role.
+-/
+inductive ExecutedReductionCausalExact :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      {program : RoleIndexedProgram roles} →
+      {reduction : ExecutedRoleReductionHistory program} →
+      ExecutedReductionConstitutiveChain reduction → Type 2 where
+  | nil {state : CausalConstitutiveState} :
+      ExecutedReductionCausalExact
+        (ExecutedReductionConstitutiveChain.nil (state := state))
+  | step {count : Nat} {state : CausalConstitutiveState}
+      {head : CausalConstitutiveStageExecution state}
+      {tail : CausalConstitutiveExecutionHistory count head.next}
+      {headRole : RelationalConstitutiveRoleStage head}
+      {tailRoles : RelationalConstitutiveRoleHistory tail}
+      {atom : RoleStageAtom headRole}
+      {tailProgram : RoleIndexedProgram tailRoles}
+      {license : ExecutedRoleReductionLicense headRole atom}
+      {tailReduction : ExecutedRoleReductionHistory tailProgram}
+      {headWitness : ExecutedTransformedDecisionWitness license}
+      {tailWitness : ExecutedReductionConstitutiveChain tailReduction}
+      (targetFromAction :
+        headWitness.decision.target = interpretRoleStageAtom atom
+          license.transformedOccurrence
+          (license.transformedOccurrenceExact ▸ headRole.executedInput))
+      (preservesCriterion :
+        (continuation : GeneratedStructuralBranchContinuation
+          (causalOpeningLeft state head.selected head.fresh)) →
+        GeneratedStructuralBranchAccept
+            (causalOpeningLeft state head.selected head.fresh) continuation →
+          GeneratedStructuralBranchAccept
+            (causalOpeningRight state head.selected head.fresh)
+            (atom.action continuation))
+      (producedTargetAccepted :
+        GeneratedStructuralBranchAccept
+          (causalOpeningRight state head.selected head.fresh)
+          headWitness.decision.target)
+      (occurrencesDistinct :
+        license.transformedOccurrence ≠ license.retainedOccurrence)
+      (tailExact : ExecutedReductionCausalExact tailWitness) :
+      ExecutedReductionCausalExact
+        (ExecutedReductionConstitutiveChain.step headWitness tailWitness)
+
+/-- Every constitutive chain exposes its action and preservation data in order. -/
+def ExecutedReductionConstitutiveChain.causalExact :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      {program : RoleIndexedProgram roles} →
+      {reduction : ExecutedRoleReductionHistory program} →
+      (chain : ExecutedReductionConstitutiveChain reduction) →
+      ExecutedReductionCausalExact chain
+  | _, _, _, _, _, _, .nil => .nil
+  | _, _, _, _, _, _, .step headWitness tailWitness =>
+      .step headWitness.targetFromAction headWitness.preservesCriterion
+        headWitness.transformedAccepted headWitness.occurrencesDistinct
+        tailWitness.causalExact
 
 /-- The profile retained by every license of one reduction history. -/
 def retainedRoleProfile :
@@ -594,14 +787,40 @@ def normalizeExecutedRoleProfile :
       exact
         ⟨(), ExecutedRoleProfileReduction.nil (state := state)⟩
   | _, _, _, _, _, .step license tailReduction, profile =>
+      let witness := executedTransformedDecisionWitness license
       let headDecision :=
-        executedRoleOccurrenceDecision license profile.1
+        executedRoleOccurrenceDecisionFromWitness witness profile.1
       let tailNormalization :=
         normalizeExecutedRoleProfile tailReduction profile.2
       ⟨(headDecision.1, tailNormalization.1),
-        .step
-          headDecision.2
-          tailNormalization.2⟩
+        .step headDecision.2 tailNormalization.2⟩
+
+/--
+Normalize by structural recursion on the constitutive chain itself. Each head
+decision consumes the witness produced for that exact role before the tail
+normalization is formed.
+-/
+def normalizeExecutedRoleProfileFromChain :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      {program : RoleIndexedProgram roles} →
+      {reduction : ExecutedRoleReductionHistory program} →
+      ExecutedReductionConstitutiveChain reduction →
+      (profile : RoleOccurrenceProfile roles) →
+      Sigma fun target : ExecutedOperationalTargetProfile reduction =>
+        ExecutedRoleProfileReduction reduction profile target
+  | _, state, _, _, _, _, .nil, profile => by
+      cases profile
+      exact
+        ⟨(), ExecutedRoleProfileReduction.nil (state := state)⟩
+  | _, _, _, _, _, _, .step headWitness tailWitness, profile =>
+      let headDecision :=
+        executedRoleOccurrenceDecisionFromWitness headWitness profile.1
+      let tailNormalization :=
+        normalizeExecutedRoleProfileFromChain tailWitness profile.2
+      ⟨(headDecision.1, tailNormalization.1),
+        .step headDecision.2 tailNormalization.2⟩
 
 /-- Every trace target equals the completed profile through executed outputs. -/
 theorem executedRoleProfileReduction_target_exact :
@@ -620,9 +839,9 @@ theorem executedRoleProfileReduction_target_exact :
   | nil => rfl
   | step headDecision tailTrace tailExact =>
       cases headDecision with
-      | transformed absorption =>
+      | transformed absorption produced =>
           exact Prod.ext
-            (transformedExecutedRoleOperationalTarget_eq_retained absorption)
+            (Eq.trans produced.valueExact absorption.outputExact)
             tailExact
       | retained =>
           exact congrArg (fun tail => (_, tail)) tailExact
@@ -644,10 +863,6 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleReductionLicense
-#print axioms ConstitutiveSearch.EndogenousDecomposition.executedRoleReductionLicense
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedStageDecomposition
-#print axioms ConstitutiveSearch.EndogenousDecomposition.executedStageDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.StagewiseExecutedDecompositionHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.buildStagewiseExecutedDecompositionHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.StagewiseExecutedDecompositionHistory.roles
@@ -662,20 +877,33 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.buildStagewiseExecutedDecompositionHistory_reduction_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CriterionPreservingAbsorption
 #print axioms ConstitutiveSearch.EndogenousDecomposition.criterionPreservingAbsorption
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ActionProducedOperationalTarget
+#print axioms ConstitutiveSearch.EndogenousDecomposition.actionProducedOperationalTarget
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleOperationalTarget
 #print axioms ConstitutiveSearch.EndogenousDecomposition.transformedExecutedRoleOperationalTarget
 #print axioms ConstitutiveSearch.EndogenousDecomposition.transformedExecutedRoleOperationalTarget_is_executed_action
 #print axioms ConstitutiveSearch.EndogenousDecomposition.retainedExecutedRoleOperationalTarget
 #print axioms ConstitutiveSearch.EndogenousDecomposition.transformedExecutedRoleOperationalTarget_eq_retained
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleOccurrenceDecision
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleOccurrenceDecision.target
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedTransformedRoleOccurrenceDecision
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedTransformedRoleOccurrenceDecision_target_is_action
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedTransformedDecisionWitness
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedTransformedDecisionWitness
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedRoleOccurrenceDecision
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedRoleOccurrenceDecisionFromWitness
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleOccurrenceDecision.target_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.criterionPreservingAbsorption_preservesCriterion
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedReductionConstitutiveChain
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedReductionConstitutiveChain
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedReductionCausalExact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedReductionConstitutiveChain.causalExact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.retainedRoleProfile
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalTargetProfile
 #print axioms ConstitutiveSearch.EndogenousDecomposition.retainedExecutedOperationalTargetProfile
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleProfileReduction
 #print axioms ConstitutiveSearch.EndogenousDecomposition.normalizeExecutedRoleProfile
+#print axioms ConstitutiveSearch.EndogenousDecomposition.normalizeExecutedRoleProfileFromChain
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedRoleProfileReduction_target_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.normalizeExecutedRoleProfile_target_exact
 /- AXIOM_AUDIT_END -/

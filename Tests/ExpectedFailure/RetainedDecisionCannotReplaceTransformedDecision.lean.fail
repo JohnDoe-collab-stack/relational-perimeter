@@ -15,7 +15,8 @@ def retainedDecisionCannotReplaceTransformedDecision
     (license : ExecutedRoleReductionLicense role atom) :
     ExecutedRoleOccurrenceDecision license
       license.transformedOccurrence
-      (retainedExecutedRoleOperationalTarget license) :=
+      (transformedExecutedRoleOperationalTarget
+        (criterionPreservingAbsorption license)) :=
   ExecutedRoleOccurrenceDecision.retained license.retainedAccepted
 
 end RelationalPerimeter.Tests.ExpectedFailure

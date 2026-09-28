@@ -48,9 +48,24 @@ try {
   Test-ExpectedLeanFailure `
     "Tests/ExpectedFailure/RetainedDecisionCannotReplaceTransformedDecision.lean.fail" `
     "but is expected to have type"
+  Test-ExpectedLeanFailure `
+    "Tests/ExpectedFailure/SourceIgnoringNormalizationCannotSupplyTrace.lean.fail" `
+    "ExecutedRoleProfileReduction reduction _source (normalization.target chosen)"
+  Test-ExpectedLeanFailure `
+    "Tests/ExpectedFailure/PrescribedTargetCannotRecoverTraceAfterwards.lean.fail" `
+    "ExecutedRoleProfileReduction reduction source prescribed"
+  Test-ExpectedLeanFailure `
+    "Tests/ExpectedFailure/IndependentUnitRegimeCannotReplaceExecutedRegime.lean.fail" `
+    "is not definitionally equal to the right-hand side"
+  Test-ExpectedLeanFailure `
+    "Tests/ExpectedFailure/PrivateActionProducedOperationalTarget.lean.fail" `
+    'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ActionProducedOperationalTarget.mk`'
+  Test-ExpectedLeanFailure `
+    "Tests/ExpectedFailure/PrivateExactCausalExponentialTarget.lean.fail" `
+    'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExactCausalExponentialTarget.mk`'
 } finally {
   Pop-Location
 }
 
-Write-Output "Verified expected failures: scientific-certificate and causal-construction privacy, instruction-indexed profiles, authoritative collision anchor, semantic instruction use, and occurrence-indexed reduction decisions."
+Write-Output "Verified expected failures: scientific-certificate and causal-construction privacy, instruction-indexed profiles, authoritative collision anchor, semantic instruction use, occurrence-and-target-indexed decisions, source-and-target-indexed traces, and rejection of an independent Unit regime."
 $global:LASTEXITCODE = 0

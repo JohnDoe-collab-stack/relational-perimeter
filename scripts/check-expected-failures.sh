@@ -62,5 +62,20 @@ check_expected_failure \
 check_expected_failure \
   'Tests/ExpectedFailure/RetainedDecisionCannotReplaceTransformedDecision.lean.fail' \
   'but is expected to have type'
+check_expected_failure \
+  'Tests/ExpectedFailure/SourceIgnoringNormalizationCannotSupplyTrace.lean.fail' \
+  'ExecutedRoleProfileReduction reduction _source (normalization.target chosen)'
+check_expected_failure \
+  'Tests/ExpectedFailure/PrescribedTargetCannotRecoverTraceAfterwards.lean.fail' \
+  'ExecutedRoleProfileReduction reduction source prescribed'
+check_expected_failure \
+  'Tests/ExpectedFailure/IndependentUnitRegimeCannotReplaceExecutedRegime.lean.fail' \
+  'is not definitionally equal to the right-hand side'
+check_expected_failure \
+  'Tests/ExpectedFailure/PrivateActionProducedOperationalTarget.lean.fail' \
+  'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ActionProducedOperationalTarget.mk`'
+check_expected_failure \
+  'Tests/ExpectedFailure/PrivateExactCausalExponentialTarget.lean.fail' \
+  'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExactCausalExponentialTarget.mk`'
 
-echo 'Verified expected failures: scientific-certificate and causal-construction privacy, instruction-indexed profiles, authoritative collision anchor, semantic instruction use, and occurrence-indexed reduction decisions.'
+echo 'Verified expected failures: scientific-certificate and causal-construction privacy, instruction-indexed profiles, authoritative collision anchor, semantic instruction use, occurrence-and-target-indexed decisions, source-and-target-indexed traces, and rejection of an independent Unit regime.'

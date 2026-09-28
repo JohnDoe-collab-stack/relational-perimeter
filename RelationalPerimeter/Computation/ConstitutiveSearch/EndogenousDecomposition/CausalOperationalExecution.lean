@@ -1,4 +1,5 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.InstrumentedExecutionRealization
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PrefixLocalOperationalProduction
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleIndexedReduction
 
 /-!
@@ -16,26 +17,6 @@ reconstructed afterwards.
 
 namespace ConstitutiveSearch
 namespace EndogenousDecomposition
-
-/--
-The operational material produced from one executed stage.  Its type has no
-future-history parameter.  The private constructor pins the stored
-decomposition to the canonical function of the current stage.
--/
-structure ExecutedStageOperationalProduction
-    {source : CausalConstitutiveState}
-    (stage : CausalConstitutiveStageExecution source) : Type 2 where
-  private mk ::
-  decomposition : ExecutedStageDecomposition stage
-  decompositionExact : decomposition = executedStageDecomposition stage
-
-/-- Produce the operational material of the current stage alone. -/
-def executedStageOperationalProduction
-    {source : CausalConstitutiveState}
-    (stage : CausalConstitutiveStageExecution source) :
-    ExecutedStageOperationalProduction stage :=
-  { decomposition := executedStageDecomposition stage
-    decompositionExact := rfl }
 
 /--
 One execution whose head stage and head decomposition are formed before its
@@ -82,7 +63,7 @@ def executeCausalOperationalExecutionHistory
               (runThreadedNextDiscovery_work_le_canonical state fresh)
               (state.decisionsAvoidNext fresh)
             let causalStage := causalStageOfThreadedStage built.run
-            let localProduction := executedStageOperationalProduction causalStage
+            let localProduction := prefixLocalOperationalProducer causalStage
             .step built.stage built.run localProduction
               (executeCausalOperationalExecutionHistory count
                 built.run.nextRun.next (built.run.nextRun.fresh fresh))
@@ -199,8 +180,6 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedStageOperationalProduction
-#print axioms ConstitutiveSearch.EndogenousDecomposition.executedStageOperationalProduction
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.instrumented

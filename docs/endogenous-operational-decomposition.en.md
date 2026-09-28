@@ -91,12 +91,18 @@ action is positively proved to change the executed source.
 For every source profile, `executedCausalNormalization` constructs a dependent
 pair containing a target occurrence profile and an
 `ExecutedRoleProfileReduction` trace indexed exactly by that source and target.
-The local target of a transformed decision is a projection of its
+The transformed local decision eliminates an
+`ActionProducedOperationalTarget` whose private construction is indexed by its
 `CriterionPreservingAbsorption`; it is not supplied before the witness. That
 witness consumes the exact application of the discovered action, its separate
 preservation proof for arbitrary continuations, action non-identity, positive
 acceptance, and continued occurrence distinction. Every retained decision
-consumes its positive viability.
+consumes its positive viability. `executedCausalNormalization` recurses on the
+`ExecutedReductionConstitutiveChain`: each link is consumed before its
+dependent successor, while `ExecutedReductionCausalExact` exposes the action,
+preservation, acceptance, and distinction retained at every role.
+The result pair is not stored in the normalization: it is defined by
+eliminating that exact chain at the supplied source profile.
 
 `rawProducedTargetOccurrences` then enumerates every produced target while
 retaining its source and trace. Their ambient carrier remains the full
@@ -293,7 +299,8 @@ the class-level `iff`; `RoleIndexedProfiles.lean` and
 `RoleProfileArityTransport.lean` derive the concrete carrier and its arities;
 `RoleIndexedProgram.lean` supplies the downstream interpreter;
 `RolewiseObligationPolicy.lean` proves the local/global conservation
-equivalence; `ExecutedRoleIndexedReduction.lean` constructs typed output
+equivalence; `PrefixLocalOperationalProduction.lean` restricts operational
+production to the already executed stage alone; `ExecutedRoleIndexedReduction.lean` constructs typed output
 decisions and traces; `ExecutedCausalNormalization.lean` constructs their exact
 image and the private exact realization from which the regime is projected;
 `CausalOperationalExecution.lean` fuses stage execution with local operational
