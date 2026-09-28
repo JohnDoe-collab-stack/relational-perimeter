@@ -61,32 +61,110 @@ def generalHistoryOfRoleHistory :
       .step (generalOpeningStageOfRole headRole)
         (generalHistoryOfRoleHistory tailRoles)
 
-/-- The adapter preserves the concrete occurrence-profile carrier exactly. -/
-theorem generalHistory_profile_type_exact :
+/--
+The exact transport from generic relational identities to the concrete role
+occurrences of the authoritative history.  The backward map reinstates the
+positive formation and provenance witnesses supplied by each stage.
+-/
+def generalOpeningOccurrenceTransport
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) :
+    ExactTypeTransport
+      (RelationallyConstitutedOccurrence (generalOpeningStageOfRole role))
+      (RoleOpeningOccurrence role) :=
+  { forward := RelationallyConstitutedOccurrence.occurrence
+    backward := relationallyConstitutedOccurrence
+      (generalOpeningStageOfRole role)
+    forwardBackward := fun _identity =>
+      RelationallyConstitutedOccurrence.ext rfl
+    backwardForward := fun _ => rfl }
+
+/-- Exact transport of a product from exact transports of both factors. -/
+def productExactTypeTransport
+    {SourceHead SourceTail TargetHead TargetTail : Type}
+    (head : ExactTypeTransport SourceHead TargetHead)
+    (tail : ExactTypeTransport SourceTail TargetTail) :
+    ExactTypeTransport
+      (SourceHead × SourceTail) (TargetHead × TargetTail) :=
+  { forward := fun source =>
+      (head.forward source.1, tail.forward source.2)
+    backward := fun target =>
+      (head.backward target.1, tail.backward target.2)
+    forwardBackward := fun source =>
+      Prod.ext (head.forwardBackward source.1)
+        (tail.forwardBackward source.2)
+    backwardForward := fun target =>
+      Prod.ext (head.backwardForward target.1)
+        (tail.backwardForward target.2) }
+
+def generalConcreteProfileTransport :
     {count : Nat} → {state : CausalConstitutiveState} →
       {run : CausalConstitutiveExecutionHistory count state} →
       (roles : RelationalConstitutiveRoleHistory run) →
-      RelationalOccurrenceProfile (generalHistoryOfRoleHistory roles) =
-        RoleOccurrenceProfile roles
-  | _, _, _, .nil => rfl
+      ExactTypeTransport
+        (RelationalOccurrenceProfile (generalHistoryOfRoleHistory roles))
+        (RoleOccurrenceProfile roles)
+  | _, _, _, .nil => ExactTypeTransport.reflexive Unit
   | _, _, _, .step headRole tailRoles => by
-      change
-        (RoleOpeningOccurrence headRole ×
-          RelationalOccurrenceProfile
-            (generalHistoryOfRoleHistory tailRoles)) =
-        (RoleOpeningOccurrence headRole ×
-          RoleOccurrenceProfile tailRoles)
-      rw [generalHistory_profile_type_exact tailRoles]
+      simpa only [generalHistoryOfRoleHistory, RelationalOccurrenceProfile,
+        RoleOccurrenceProfile] using
+        productExactTypeTransport
+          (generalOpeningOccurrenceTransport headRole)
+          (generalConcreteProfileTransport tailRoles)
 
-/-- Exact carrier transport, not an identification of the two histories. -/
-def generalConcreteProfileTransport
-    {count : Nat} {state : CausalConstitutiveState}
-    {run : CausalConstitutiveExecutionHistory count state}
-    (roles : RelationalConstitutiveRoleHistory run) :
-    ExactTypeTransport
-      (RelationalOccurrenceProfile (generalHistoryOfRoleHistory roles))
-      (RoleOccurrenceProfile roles) :=
-  ExactTypeTransport.ofEquality (generalHistory_profile_type_exact roles)
+/--
+Reindex an obligation regime contravariantly along an exact carrier transport.
+The obligation carrier and its frontier are unchanged; only the source through
+which `carry` is read is transported, with surjectivity reconstructed from the
+explicit inverse.
+-/
+def reindexObligationRegimeAlongExactTransport
+    {source target : Extensive.FiniteCarrier}
+    (transport : ExactTypeTransport source.Identity target.Identity)
+    (regime : Extensive.ObligationRegime target) :
+    Extensive.ObligationRegime source :=
+  { Obligation := regime.Obligation
+    decEq := regime.decEq
+    frontier := regime.frontier
+    complete := regime.complete
+    nodup := regime.nodup
+    carry := fun identity => regime.carry (transport.forward identity)
+    carry_surjective := fun obligation =>
+      let ⟨targetIdentity, targetExact⟩ := regime.carry_surjective obligation
+      ⟨transport.backward targetIdentity, by
+        change regime.carry
+            (transport.forward (transport.backward targetIdentity)) = obligation
+        rw [transport.backwardForward]
+        exact targetExact⟩ }
+
+/-- Exact reindexing preserves and reflects injectivity of the carry map. -/
+theorem reindexObligationRegime_carry_injective_iff
+    {source target : Extensive.FiniteCarrier}
+    (transport : ExactTypeTransport source.Identity target.Identity)
+    (regime : Extensive.ObligationRegime target) :
+    Function.Injective
+        (reindexObligationRegimeAlongExactTransport transport regime).carry ↔
+      Function.Injective regime.carry := by
+  constructor
+  · intro reindexedInjective left right sameCarry
+    have backwardEqual :
+        transport.backward left = transport.backward right :=
+      reindexedInjective (by
+        change regime.carry
+            (transport.forward (transport.backward left)) =
+          regime.carry (transport.forward (transport.backward right))
+        rw [transport.backwardForward, transport.backwardForward]
+        exact sameCarry)
+    exact Eq.trans (transport.backwardForward left).symm
+      (Eq.trans (congrArg transport.forward backwardEqual)
+        (transport.backwardForward right))
+  · intro regimeInjective left right sameCarry
+    have forwardEqual : transport.forward left = transport.forward right :=
+      regimeInjective sameCarry
+    exact Eq.trans (transport.forwardBackward left).symm
+      (Eq.trans (congrArg transport.backward forwardEqual)
+        (transport.forwardBackward right))
 
 theorem generalHistory_is_uniformBinary :
     {count : Nat} → {state : CausalConstitutiveState} →
@@ -156,6 +234,9 @@ def publicBinaryRelationalRoleExtensiveFamily :
 theorem publicGeneralSourceWidth (input : Nat) :
     (publicRelationalRoleExtensiveFamily.sourceCarrier
         (index := input) ()).frontier.length = 2 ^ (input + 1) := by
+  change (relationalProfileFiniteCarrier
+    (publicGeneralRelationalHistory input)).frontier.length = 2 ^ (input + 1)
+  rw [relationalProfileFiniteCarrier_width]
   exact generalHistory_width_eq_twoPow
     (publicRelationalConstitutiveRoles input)
 
@@ -196,6 +277,41 @@ theorem publicBinary_exponentialWidth_iff_preservesConstitutedIdentities
       PreservesIdentitiesSeparately regime :=
   BinaryRelationalRoleExtensiveFamily.exponentialWidth_iff_preservesConstitutedIdentities
     publicBinaryRelationalRoleExtensiveFamily () regime
+
+/-
+The class theorem transported back to the literal carrier of the authoritative
+executed roles.  The quantified regime here is not on the general-history
+adapter carrier.  Elaboration crosses the complete dependent history adapter,
+so this single theorem receives a local heartbeat allowance.
+-/
+set_option maxHeartbeats 800000 in
+theorem publicBinary_exponentialWidth_iff_carry_injective_on_executedCarrier
+    (input : Nat)
+    (regime : ObligationRegime (publicRoleProfileFiniteCarrier input)) :
+    regime.frontier.length = 2 ^ (input + 1) ↔
+      Function.Injective regime.carry := by
+  let generalCarrier :=
+    publicBinaryRelationalRoleExtensiveFamily.sourceCarrier
+      (index := input) ()
+  let executedCarrier := publicRoleProfileFiniteCarrier input
+  let transport : ExactTypeTransport
+      generalCarrier.Identity executedCarrier.Identity :=
+    generalConcreteProfileTransport
+      (publicRelationalConstitutiveRoles input)
+  let reindexed : ObligationRegime generalCarrier :=
+    reindexObligationRegimeAlongExactTransport
+      (source := generalCarrier) (target := executedCarrier)
+      transport regime
+  have classIff :=
+    publicBinary_exponentialWidth_iff_preservesConstitutedIdentities
+      input reindexed
+  have injectiveIff :=
+    reindexObligationRegime_carry_injective_iff transport regime
+  constructor
+  · intro widthExact
+    exact injectiveIff.mp (classIff.mp widthExact)
+  · intro carryInjective
+    exact classIff.mpr (injectiveIff.mpr carryInjective)
 
 /-- Exact separately-addressable capacity form of the same public `iff`. -/
 theorem publicBinary_exponentialWidth_iff_exactRegimeCapacity
@@ -244,8 +360,11 @@ end ConstitutiveSearch
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.EndogenousDecomposition.generalOpeningStageOfRole
 #print axioms ConstitutiveSearch.EndogenousDecomposition.generalHistoryOfRoleHistory
-#print axioms ConstitutiveSearch.EndogenousDecomposition.generalHistory_profile_type_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.generalOpeningOccurrenceTransport
+#print axioms ConstitutiveSearch.EndogenousDecomposition.productExactTypeTransport
 #print axioms ConstitutiveSearch.EndogenousDecomposition.generalConcreteProfileTransport
+#print axioms ConstitutiveSearch.EndogenousDecomposition.reindexObligationRegimeAlongExactTransport
+#print axioms ConstitutiveSearch.EndogenousDecomposition.reindexObligationRegime_carry_injective_iff
 #print axioms ConstitutiveSearch.EndogenousDecomposition.generalHistory_is_uniformBinary
 #print axioms ConstitutiveSearch.EndogenousDecomposition.generalHistory_is_atLeastBinary
 #print axioms ConstitutiveSearch.EndogenousDecomposition.generalHistory_width_eq_twoPow
@@ -257,6 +376,7 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicGeneral_fullWidth_iff_preservesConstitutedIdentities
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicGeneral_fullWidth_iff_exactRegimeCapacity
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicBinary_exponentialWidth_iff_preservesConstitutedIdentities
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicBinary_exponentialWidth_iff_carry_injective_on_executedCarrier
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicBinary_exponentialWidth_iff_exactRegimeCapacity
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicRoleIndexedProgram
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicRoleIndexedProgram_atomCount

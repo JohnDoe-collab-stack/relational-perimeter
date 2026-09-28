@@ -91,6 +91,24 @@ def CausalOperationalExecutionHistory.causalRun :
       CausalConstitutiveExecutionHistory.step
         (causalStageOfThreadedStage headRun) tail.causalRun
 
+/--
+The causal run stored by the fused recursion is exactly the structural erasure
+of its authoritative instrumented execution; this is proved for every fused
+history, not only for the public instance.
+-/
+theorem CausalOperationalExecutionHistory.causalRun_exact :
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
+      {state : ThreadedConstitutiveState depth assignment} →
+      (history : CausalOperationalExecutionHistory (_count := count) state) →
+      history.causalRun =
+        causalHistoryOfInstrumentedHistory history.instrumented
+  | _, _, _, _, .nil _ => rfl
+  | _, _, _, _, .step _ _ _ tail => by
+      simp only [CausalOperationalExecutionHistory.causalRun,
+        CausalOperationalExecutionHistory.instrumented,
+        causalHistoryOfInstrumentedHistory]
+      rw [tail.causalRun_exact]
+
 /-- Read the decomposition produced at each recursive execution step. -/
 def CausalOperationalExecutionHistory.stagewiseDecomposition :
     {depth count : Nat} → {assignment : SequentialAssignment depth} →
@@ -176,6 +194,24 @@ theorem publicCausalOperationalExecution_instrumented_exact (input : Nat) :
     (initialThreadedConstitutiveStateFromInitialization_fresh
       (initializeConstitutiveHistory input))
 
+/-- The fused public causal run is the causal run of the authoritative public realization. -/
+theorem publicCausalOperationalExecution_causalRun_exact (input : Nat) :
+    (publicCausalOperationalExecution input).causalRun =
+      (publicInstrumentedExecutionRealization input).causalRun := by
+  exact Eq.trans
+    (publicCausalOperationalExecution input).causalRun_exact
+    (congrArg causalHistoryOfInstrumentedHistory
+      (publicCausalOperationalExecution_instrumented_exact input))
+
+/-- The roles constituted from the fused run are the authoritative public roles. -/
+theorem publicCausalOperationalExecution_roles_exact (input : Nat) :
+    HEq
+      (buildRelationalConstitutiveRoleHistory
+        (publicCausalOperationalExecution input).causalRun)
+      (publicRelationalConstitutiveRoles input) := by
+  rw [publicCausalOperationalExecution_causalRun_exact input]
+  rfl
+
 end EndogenousDecomposition
 end ConstitutiveSearch
 
@@ -184,9 +220,12 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.instrumented
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.causalRun
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.causalRun_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.stagewiseDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.headsArePrefixLocal
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionHistory_instrumented_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCausalOperationalExecution
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCausalOperationalExecution_instrumented_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCausalOperationalExecution_causalRun_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCausalOperationalExecution_roles_exact
 /- AXIOM_AUDIT_END -/

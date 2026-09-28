@@ -4,10 +4,9 @@ import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecompositio
 /-!
 # Prefix-local operational production
 
-This module is intentionally earlier than every complete operational-history
-type. Its producer can receive only the stage that has just been executed. No
-future tail, completed history, remaining-stage count or post-hoc readout is
-available in its type or imports.
+Its producer can receive only the stage that has just been executed. No future
+tail, completed history, remaining-stage count or post-hoc readout occurs in
+the producer's type.
 -/
 
 namespace ConstitutiveSearch

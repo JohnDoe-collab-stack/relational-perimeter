@@ -33,10 +33,12 @@ de matériaux produits par le calcul**.
 L’ordre de constitution est explicite dans les types. Des relations primitives
 de source, de formation, de cible et de provenance témoignent positivement
 chaque ouverture. Une histoire dépendante de ces ouvertures constitue ensuite
-les identités locales d’occurrence. `RelationalOccurrenceProfile` sélectionne
-une telle identité à chaque rôle. Sa frontière complète et sans doublon, sa
-liste d’arités et sa largeur sont toutes dérivées de cette histoire avant
-l’introduction de tout programme ou régime opérationnel.
+les identités locales d’occurrence. Le carrier de la classe utilise
+`RelationalOccurrenceProfile` : chaque occurrence sélectionnée y est
+indexée par l’étape relationnelle qui la constitue, depuis laquelle ses témoins
+exacts de formation et de provenance sont récupérés dans `Type`. Sa frontière
+complète et sans doublon, sa liste d’arités et sa largeur sont toutes dérivées
+de cette histoire avant l’introduction de tout programme ou régime opérationnel.
 
 Pour toute histoire relationnelle, Lean prouve
 
@@ -106,13 +108,23 @@ la préservation, l’acceptation et la distinction encore présentes à chaque 
 La paire résultat n’est pas un champ stocké dans la normalisation : elle est
 définie par l’élimination de cette chaîne exacte sur le profil source fourni.
 
+La préservation pour toute continuation et la séparation persistante des
+occurrences sont aussi extraites sur la chaîne entière sous les types
+`ExecutedReductionPreservationExact` et
+`ExecutedReductionOccurrenceSeparationExact`. Elles forment ensemble
+`ExecutedOperationalGroupingAuthorization`. Cette autorisation issue de la
+même normalisation est consommée avant la réalisation de l’image des cibles en
+obligations ; elle n’est ni ajoutée au régime après coup ni remplacée par son
+seul résultat numérique.
+
 `rawProducedTargetOccurrences` énumère ensuite toutes les cibles produites en
 conservant, pour chacune, sa source et sa trace. Leur carrier ambiant demeure le
 produit dépendant complet des espaces de continuation. Les traces démontrent la
 convergence des valeurs effectivement produites. Le régime porte alors chaque
 cible avec sa preuve d’appartenance à cette fibre convergente.
 `ExactExecutedOperationalRegime`, à constructeur privé, conserve la
-normalisation dépendante et expose seulement ce régime. L’égalité de deux
+normalisation dépendante, son autorisation de regroupement et expose seulement
+ce régime. L’égalité de deux
 obligations équivaut à l’égalité des cibles produites et à l’habitation de
 `OperationallyCoDetermined` par leurs deux traces vers une cible commune. La
 convergence donne ainsi la largeur un. Le régime public est une projection de
@@ -126,6 +138,12 @@ théorème public littéral est
 locales `2 → 1` sont calculées récursivement depuis l’histoire de réduction
 effective. Les identités sources persistent donc alors que leur indépendance
 opérationnelle change.
+
+La récursion fusionnée est reliée dans le code de production à la réalisation
+publique par l’égalité exacte de sa course causale, puis par l’égalité dépendante
+de son histoire de rôles. Le théorème de classe est enfin transporté
+constructivement sur le carrier littéral de ces rôles exécutés : son énoncé ne
+quantifie plus sur le carrier d’un adaptateur.
 
 La recherche exécutée reste essentielle à cette instance publique. Son préfixe
 de candidats en échec est extrait de l’exécution, sa relation sélectionnée est

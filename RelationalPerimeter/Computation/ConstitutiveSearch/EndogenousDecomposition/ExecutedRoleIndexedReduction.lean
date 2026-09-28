@@ -694,6 +694,105 @@ def ExecutedReductionConstitutiveChain.causalExact :
         headWitness.transformedAccepted headWitness.occurrencesDistinct
         tailWitness.causalExact
 
+/--
+The preservation content of an executed reduction, exposed independently of
+the other causal fields.  Each constructor carries the universal map on
+continuations at the corresponding constituted role.
+-/
+inductive ExecutedReductionPreservationExact :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      {program : RoleIndexedProgram roles} →
+      {reduction : ExecutedRoleReductionHistory program} →
+      ExecutedReductionConstitutiveChain reduction → Type 2 where
+  | nil {state : CausalConstitutiveState} :
+      ExecutedReductionPreservationExact
+        (ExecutedReductionConstitutiveChain.nil (state := state))
+  | step {count : Nat} {state : CausalConstitutiveState}
+      {head : CausalConstitutiveStageExecution state}
+      {tail : CausalConstitutiveExecutionHistory count head.next}
+      {headRole : RelationalConstitutiveRoleStage head}
+      {tailRoles : RelationalConstitutiveRoleHistory tail}
+      {atom : RoleStageAtom headRole}
+      {tailProgram : RoleIndexedProgram tailRoles}
+      {license : ExecutedRoleReductionLicense headRole atom}
+      {tailReduction : ExecutedRoleReductionHistory tailProgram}
+      {headWitness : ExecutedTransformedDecisionWitness license}
+      {tailWitness : ExecutedReductionConstitutiveChain tailReduction}
+      (headPreservation :
+        (continuation : GeneratedStructuralBranchContinuation
+          (causalOpeningLeft state head.selected head.fresh)) →
+        GeneratedStructuralBranchAccept
+            (causalOpeningLeft state head.selected head.fresh) continuation →
+          GeneratedStructuralBranchAccept
+            (causalOpeningRight state head.selected head.fresh)
+            (atom.action continuation))
+      (tailPreservation : ExecutedReductionPreservationExact tailWitness) :
+      ExecutedReductionPreservationExact
+        (ExecutedReductionConstitutiveChain.step headWitness tailWitness)
+
+/--
+The occurrence-separation content of an executed reduction.  It records at
+every role that operational grouping does not identify the two constituted
+source occurrences.
+-/
+inductive ExecutedReductionOccurrenceSeparationExact :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      {program : RoleIndexedProgram roles} →
+      {reduction : ExecutedRoleReductionHistory program} →
+      ExecutedReductionConstitutiveChain reduction → Type 2 where
+  | nil {state : CausalConstitutiveState} :
+      ExecutedReductionOccurrenceSeparationExact
+        (ExecutedReductionConstitutiveChain.nil (state := state))
+  | step {count : Nat} {state : CausalConstitutiveState}
+      {head : CausalConstitutiveStageExecution state}
+      {tail : CausalConstitutiveExecutionHistory count head.next}
+      {headRole : RelationalConstitutiveRoleStage head}
+      {tailRoles : RelationalConstitutiveRoleHistory tail}
+      {atom : RoleStageAtom headRole}
+      {tailProgram : RoleIndexedProgram tailRoles}
+      {license : ExecutedRoleReductionLicense headRole atom}
+      {tailReduction : ExecutedRoleReductionHistory tailProgram}
+      {headWitness : ExecutedTransformedDecisionWitness license}
+      {tailWitness : ExecutedReductionConstitutiveChain tailReduction}
+      (headSeparation :
+        license.transformedOccurrence ≠ license.retainedOccurrence)
+      (tailSeparation :
+        ExecutedReductionOccurrenceSeparationExact tailWitness) :
+      ExecutedReductionOccurrenceSeparationExact
+        (ExecutedReductionConstitutiveChain.step headWitness tailWitness)
+
+/-- Project the universal-preservation chain from the complete causal chain. -/
+def ExecutedReductionCausalExact.preservationExact :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      {program : RoleIndexedProgram roles} →
+      {reduction : ExecutedRoleReductionHistory program} →
+      {chain : ExecutedReductionConstitutiveChain reduction} →
+      ExecutedReductionCausalExact chain →
+        ExecutedReductionPreservationExact chain
+  | _, _, _, _, _, _, _, .nil => .nil
+  | _, _, _, _, _, _, _, .step _ preservation _ _ tailExact =>
+      .step preservation tailExact.preservationExact
+
+/-- Project occurrence separation from the complete causal chain. -/
+def ExecutedReductionCausalExact.occurrenceSeparationExact :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      {program : RoleIndexedProgram roles} →
+      {reduction : ExecutedRoleReductionHistory program} →
+      {chain : ExecutedReductionConstitutiveChain reduction} →
+      ExecutedReductionCausalExact chain →
+        ExecutedReductionOccurrenceSeparationExact chain
+  | _, _, _, _, _, _, _, .nil => .nil
+  | _, _, _, _, _, _, _, .step _ _ _ separation tailExact =>
+      .step separation tailExact.occurrenceSeparationExact
+
 /-- The profile retained by every license of one reduction history. -/
 def retainedRoleProfile :
     {count : Nat} → {state : CausalConstitutiveState} →
@@ -898,6 +997,10 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedReductionConstitutiveChain
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedReductionCausalExact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedReductionConstitutiveChain.causalExact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedReductionPreservationExact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedReductionOccurrenceSeparationExact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedReductionCausalExact.preservationExact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedReductionCausalExact.occurrenceSeparationExact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.retainedRoleProfile
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalTargetProfile
 #print axioms ConstitutiveSearch.EndogenousDecomposition.retainedExecutedOperationalTargetProfile

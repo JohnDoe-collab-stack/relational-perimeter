@@ -32,10 +32,12 @@ from material the computation has produced**.
 The order of constitution is explicit in the types. Primitive source,
 formation, target, and provenance relations positively witness each opening.
 A dependent history of those openings then constitutes local occurrence
-identities. `RelationalOccurrenceProfile` selects one such identity at every
-role. Its complete duplicate-free frontier, its list of arities, and its width
-are all derived from that history before any program or operational regime is
-introduced.
+identities. The class carrier uses
+`RelationalOccurrenceProfile`: every selected occurrence is indexed
+by the relational stage that constitutes it, from which its exact formation
+and provenance witnesses are recovered in `Type`. Its complete duplicate-free
+frontier, its list of arities, and its width are all derived from that history
+before any program or operational regime is introduced.
 
 For every relational history, Lean proves
 
@@ -104,13 +106,23 @@ preservation, acceptance, and distinction retained at every role.
 The result pair is not stored in the normalization: it is defined by
 eliminating that exact chain at the supplied source profile.
 
+Preservation for arbitrary continuations and persistent occurrence separation
+are also extracted over the whole chain as
+`ExecutedReductionPreservationExact` and
+`ExecutedReductionOccurrenceSeparationExact`. Together they form the
+`ExecutedOperationalGroupingAuthorization`. This authorization comes from the
+same normalization and is consumed before the target image is realized as
+obligations; it is neither attached to the regime afterwards nor replaced by
+the numerical width readout.
+
 `rawProducedTargetOccurrences` then enumerates every produced target while
 retaining its source and trace. Their ambient carrier remains the full
 dependent product of continuation spaces. The traces prove convergence of the
 values actually produced. The regime then carries each actual target together
 with its proof of membership in that convergent fibre.
 `ExactExecutedOperationalRegime`, whose constructor is private, retains that
-dependent normalization and exposes only this regime. Obligation equality is
+dependent normalization and its grouping authorization, and exposes only this
+regime. Obligation equality is
 equivalent both to equality of produced targets and to inhabited
 `OperationallyCoDetermined`, which contains the two executed traces to their
 common target. Trace convergence therefore yields width one. The public
@@ -125,6 +137,12 @@ On that same role-profile carrier, the literal public theorem is
 `2 → 1` width records are computed recursively from the actual reduction
 history. Thus the source identities persist while their operational
 independence changes.
+
+Production code connects the fused recursion to the public realization by an
+exact equality of their causal runs and then by dependent equality of their
+role histories. The class theorem is finally transported constructively to the
+literal carrier of those executed roles, so its statement no longer quantifies
+over an adapter carrier.
 
 The executed search remains essential to this public instance. Its failed
 candidate prefix is extracted from the run, its selected relation is proved

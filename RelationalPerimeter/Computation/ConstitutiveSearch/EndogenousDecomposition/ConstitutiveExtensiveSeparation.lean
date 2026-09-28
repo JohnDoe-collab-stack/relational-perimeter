@@ -38,6 +38,8 @@ structure ConstitutiveExtensiveSeparationCertificate (input : Nat) where
   instrumentedExecutionExact :
     causalOperationalExecution.instrumented =
       (executeConstitutiveResolution input).constitutiveFeedbackHistory
+  authoritativeCausalRunExact :
+    causalOperationalExecution.causalRun = realization.causalRun
   stagewiseDecomposition :
     StagewiseExecutedDecompositionHistory
       causalOperationalExecution.causalRun
@@ -56,6 +58,9 @@ structure ConstitutiveExtensiveSeparationCertificate (input : Nat) where
   rolesExact : stagewiseDecomposition.roles =
     buildRelationalConstitutiveRoleHistory
       causalOperationalExecution.causalRun
+  authoritativeRolesExact :
+    HEq stagewiseDecomposition.roles
+      (publicRelationalConstitutiveRoles input)
   roleConstitutionExact :
     RelationalRoleHistoryConstitutionExact stagewiseDecomposition.roles
   normalization :
@@ -68,10 +73,17 @@ structure ConstitutiveExtensiveSeparationCertificate (input : Nat) where
       executedReductionConstitutiveChain stagewiseDecomposition.reduction
   normalizationChainIsCausallyExact :
     ExecutedReductionCausalExact normalization.constitutiveChain
+  normalizationPreservesCriterionAtEveryRole :
+    ExecutedReductionPreservationExact normalization.constitutiveChain
+  normalizationKeepsOccurrencesDistinctAtEveryRole :
+    ExecutedReductionOccurrenceSeparationExact normalization.constitutiveChain
   exactOperationalRegime :
     ExactExecutedOperationalRegime normalization
   exactOperationalRegimeExact :
     exactOperationalRegime = exactExecutedOperationalRegime normalization
+  operationalGroupingAuthorizationExact :
+    exactOperationalRegime.groupingAuthorization =
+      normalization.groupingAuthorization
   operationalRegimeExact :
     normalization.operationalRegime =
       convergedTargetImageRegime
@@ -140,6 +152,10 @@ structure ConstitutiveExtensiveSeparationCertificate (input : Nat) where
       (roleProfileFiniteCarrier stagewiseDecomposition.roles)) →
       regime.frontier.length = 2 ^ (input + 1) ↔
         Function.Injective regime.carry
+  classTheoremOnAuthoritativeExecutedCarrier :
+    (regime : ObligationRegime (publicRoleProfileFiniteCarrier input)) →
+      regime.frontier.length = 2 ^ (input + 1) ↔
+        Function.Injective regime.carry
   exactRegimeCapacityIff :
     (regime : ObligationRegime
       (roleProfileFiniteCarrier stagewiseDecomposition.roles)) →
@@ -190,6 +206,8 @@ def constitutiveExtensiveSeparationCertificate
       causalOperationalExecutionExact := rfl
       instrumentedExecutionExact :=
         publicCausalOperationalExecution_instrumented_exact input
+      authoritativeCausalRunExact :=
+        publicCausalOperationalExecution_causalRun_exact input
       stagewiseDecomposition := stagewise
       stagewiseDecompositionExact := rfl
       prefixLocalDecompositionExact :=
@@ -203,13 +221,28 @@ def constitutiveExtensiveSeparationCertificate
             causalOperationalExecution.headsArePrefixLocal)
           (buildStagewiseExecutedDecompositionHistory_roles_exact
             causalOperationalExecution.causalRun)
+      authoritativeRolesExact :=
+        HEq.trans
+          (heq_of_eq
+            (Eq.trans
+              (congrArg
+                (fun decomposition => decomposition.roles)
+                causalOperationalExecution.headsArePrefixLocal)
+              (buildStagewiseExecutedDecompositionHistory_roles_exact
+                causalOperationalExecution.causalRun)))
+          (publicCausalOperationalExecution_roles_exact input)
       roleConstitutionExact := stagewise.rolesConstitutionExact
       normalization := normalization
       normalizationExact := rfl
       normalizationConsumesReductionChain := rfl
       normalizationChainIsCausallyExact := normalization.constitutiveChainExact
+      normalizationPreservesCriterionAtEveryRole :=
+        normalization.constitutivePreservation
+      normalizationKeepsOccurrencesDistinctAtEveryRole :=
+        normalization.constitutiveOccurrenceSeparation
       exactOperationalRegime := exactExecutedOperationalRegime normalization
       exactOperationalRegimeExact := rfl
+      operationalGroupingAuthorizationExact := rfl
       operationalRegimeExact := normalization.operationalRegime_exact
       programSizeExact := compileRoleHistory_atomCount_exact roles
       extensiveWidthExact := extensiveWidth
@@ -249,6 +282,8 @@ def constitutiveExtensiveSeparationCertificate
         roleConstituted_exponentialWidth_iff_distinctSeparateConservation roles
       carryInjectiveIffExponentialWidth :=
         roleConstituted_exponentialWidth_iff_carry_injective roles
+      classTheoremOnAuthoritativeExecutedCarrier :=
+        publicBinary_exponentialWidth_iff_carry_injective_on_executedCarrier input
       exactRegimeCapacityIff :=
         roleConstituted_exponentialWidth_iff_exactRegimeCapacity roles
       executedRegimeDoesNotPreserveSeparately := notPreserving }
@@ -437,6 +472,9 @@ structure ExactCausalExponentialTarget (input : Nat) : Type 3 where
   executionExact :
     certificate.causalOperationalExecution =
       publicCausalOperationalExecution input
+  authoritativeRunExact :
+    certificate.causalOperationalExecution.causalRun =
+      certificate.realization.causalRun
   prefixLocal :
     certificate.stagewiseDecomposition =
       buildStagewiseExecutedDecompositionHistory
@@ -449,6 +487,9 @@ structure ExactCausalExponentialTarget (input : Nat) : Type 3 where
   rolesConstituted :
     RelationalRoleHistoryConstitutionExact
       certificate.stagewiseDecomposition.roles
+  rolesAreAuthoritativePublicRoles :
+    HEq certificate.stagewiseDecomposition.roles
+      (publicRelationalConstitutiveRoles input)
   normalizationExact :
     certificate.normalization =
       executedCausalNormalization certificate.stagewiseDecomposition.reduction
@@ -459,6 +500,15 @@ structure ExactCausalExponentialTarget (input : Nat) : Type 3 where
   constitutiveChainIsCausallyExact :
     ExecutedReductionCausalExact
       certificate.normalization.constitutiveChain
+  groupingAuthorizationExact :
+    certificate.exactOperationalRegime.groupingAuthorization =
+      certificate.normalization.groupingAuthorization
+  preservationIsConsumedByGrouping :
+    certificate.exactOperationalRegime.groupingAuthorization.preservation =
+      certificate.normalization.constitutivePreservation
+  occurrenceSeparationIsConsumedByGrouping :
+    certificate.exactOperationalRegime.groupingAuthorization.occurrenceSeparation =
+      certificate.normalization.constitutiveOccurrenceSeparation
   exactRegimeExact :
     certificate.exactOperationalRegime =
       exactExecutedOperationalRegime certificate.normalization
@@ -508,6 +558,10 @@ structure ExactCausalExponentialTarget (input : Nat) : Type 3 where
       (roleProfileFiniteCarrier certificate.roles)) →
       regime.frontier.length = 2 ^ (input + 1) ↔
         Function.Injective regime.carry
+  classIffIsRealizedOnAuthoritativeExecutedCarrier :
+    (regime : ObligationRegime (publicRoleProfileFiniteCarrier input)) →
+      regime.frontier.length = 2 ^ (input + 1) ↔
+        Function.Injective regime.carry
 
 /-- Construct the complete target from the single authoritative execution. -/
 def exactCausalExponentialTarget
@@ -516,14 +570,20 @@ def exactCausalExponentialTarget
   exact
     { certificate := certificate
       executionExact := certificate.causalOperationalExecutionExact
+      authoritativeRunExact := certificate.authoritativeCausalRunExact
       prefixLocal := certificate.prefixLocalDecompositionExact
       everyHeadProductionIsLocal := certificate.prefixLocalProductionUnique
       rolesConstituted := certificate.roleConstitutionExact
+      rolesAreAuthoritativePublicRoles := certificate.authoritativeRolesExact
       normalizationExact := certificate.normalizationExact
       normalizationConsumesConstitutiveChain :=
         certificate.normalizationConsumesReductionChain
       constitutiveChainIsCausallyExact :=
         certificate.normalizationChainIsCausallyExact
+      groupingAuthorizationExact :=
+        certificate.operationalGroupingAuthorizationExact
+      preservationIsConsumedByGrouping := rfl
+      occurrenceSeparationIsConsumedByGrouping := rfl
       exactRegimeExact := certificate.exactOperationalRegimeExact
       carriedValuesAreProducedTargets := by
         intro profile
@@ -548,7 +608,9 @@ def exactCausalExponentialTarget
       exponentialIffIndependentConservation :=
         certificate.separateConservationIffExponentialWidth
       exponentialIffCarryInjective :=
-        certificate.carryInjectiveIffExponentialWidth }
+        certificate.carryInjectiveIffExponentialWidth
+      classIffIsRealizedOnAuthoritativeExecutedCarrier :=
+        certificate.classTheoremOnAuthoritativeExecutedCarrier }
 
 end EndogenousDecomposition
 end ConstitutiveSearch

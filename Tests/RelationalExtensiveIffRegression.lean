@@ -70,6 +70,15 @@ theorem publicBinaryMemberHasExactSourceWidth (input : Nat) :
         (index := input) ()).frontier.length = 2 ^ (input + 1) :=
   publicBinaryExtensiveFamily.sourceWidth_eq_twoPow ()
 
+/-- Every identity in the general-class carrier is constituted by its
+formation and provenance relations. -/
+theorem publicGeneralCarrierIsRelationallyConstituted (input : Nat) :
+    (publicBinaryRelationalRoleExtensiveFamily.sourceCarrier
+      (index := input) ()).Identity =
+      RelationalOccurrenceProfile
+        (publicGeneralRelationalHistory input) :=
+  rfl
+
 /-- The public iff is stated on the carrier constituted by the executed roles. -/
 theorem publicTarget
     (input : Nat)
@@ -119,6 +128,22 @@ theorem publicFusedExecutionErasesExactly (input : Nat) :
     (causalOperationalExecution input).instrumented =
       (executeConstitutiveResolution input).constitutiveFeedbackHistory :=
   causal_operational_execution_erases_to_authoritative input
+
+/-- The causal run produced by the fused recursion is the run of the
+authoritative public realization, not a second reconstructed history. -/
+theorem publicFusedCausalRunIsAuthoritative (input : Nat) :
+    (publicCausalOperationalExecution input).causalRun =
+      (publicInstrumentedExecutionRealization input).causalRun :=
+  publicCausalOperationalExecution_causalRun_exact input
+
+/-- The relational roles consumed downstream are exactly those constituted
+from the authoritative public run. -/
+theorem publicFusedRolesAreAuthoritative (input : Nat) :
+    HEq
+      (buildRelationalConstitutiveRoleHistory
+        (publicCausalOperationalExecution input).causalRun)
+      (publicRelationalConstitutiveRoles input) :=
+  publicCausalOperationalExecution_roles_exact input
 
 /-- The immutable target is inhabited by a closed production object. -/
 def publicExactTargetIsClosed (input : Nat) :
@@ -383,6 +408,39 @@ def publicNormalizationChainIsCausallyExact (input : Nat) :
       (publicCertificateNormalization input).constitutiveChain :=
   (publicCertificateNormalization input).constitutiveChainExact
 
+/-- Grouping is authorized by the preservation chain extracted from the same
+executed constitutive chain that produces the normalized targets. -/
+def publicGroupingConsumesPreservation (input : Nat) :
+    ExecutedReductionPreservationExact
+      (publicCertificateNormalization input).constitutiveChain :=
+  (exactCausalExponentialTargetEvidence input).certificate.exactOperationalRegime
+    |>.groupingAuthorization.preservation
+
+/-- Grouping is simultaneously authorized by persistent separation of the
+source occurrences; grouping therefore does not identify them. -/
+def publicGroupingConsumesOccurrenceSeparation (input : Nat) :
+    ExecutedReductionOccurrenceSeparationExact
+      (publicCertificateNormalization input).constitutiveChain :=
+  (exactCausalExponentialTargetEvidence input).certificate.exactOperationalRegime
+    |>.groupingAuthorization.occurrenceSeparation
+
+/-- The exact target closes both authorization dependencies explicitly. -/
+def publicExactTargetGroupingAuthorization (input : Nat) :
+    ExecutedOperationalGroupingAuthorization
+      (exactCausalExponentialTargetEvidence input).certificate.normalization :=
+  (exactCausalExponentialTargetEvidence input).certificate.exactOperationalRegime
+    |>.groupingAuthorization
+
+/-- The class-level exponential `iff` is available on the literal carrier of
+the authoritative executed roles, with no adapter carrier in its statement. -/
+theorem publicClassIffUsesAuthoritativeExecutedCarrier
+    (input : Nat)
+    (regime : ObligationRegime (publicRoleProfileFiniteCarrier input)) :
+    regime.frontier.length = 2 ^ (input + 1) ↔
+      Function.Injective regime.carry :=
+  (exactCausalExponentialTargetEvidence input)
+    |>.classIffIsRealizedOnAuthoritativeExecutedCarrier regime
+
 /-- The public regime is definitionally the exact regime projected from the
 same normalization; an unrelated singleton cannot replace it. -/
 theorem publicRegimeIsExactNormalizationProjection (input : Nat) :
@@ -399,6 +457,7 @@ end RelationalPerimeter.Tests.RelationalExtensiveIffRegression
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.independentBinaryMemberIsUnbounded
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.generalClassIsNotOnlyBinary
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicBinaryMemberHasExactSourceWidth
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicGeneralCarrierIsRelationallyConstituted
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicTarget
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicLiteralTarget
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicSeparateRegimeHasExponentialWidth
@@ -406,6 +465,8 @@ end RelationalPerimeter.Tests.RelationalExtensiveIffRegression
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.stageDecompositionIsPrefixLocal
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicCertificateUsesCanonicalStagewiseDecomposition
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicFusedExecutionErasesExactly
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicFusedCausalRunIsAuthoritative
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicFusedRolesAreAuthoritative
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExactTargetIsClosed
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicNormalizationIsCanonical
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicOperationalRegimeIsComputedImage
@@ -435,5 +496,9 @@ end RelationalPerimeter.Tests.RelationalExtensiveIffRegression
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicNormalizationConsumesConstitutiveChain
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.normalizationResultIsChainElimination
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicNormalizationChainIsCausallyExact
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicGroupingConsumesPreservation
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicGroupingConsumesOccurrenceSeparation
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExactTargetGroupingAuthorization
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicClassIffUsesAuthoritativeExecutedCarrier
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicRegimeIsExactNormalizationProjection
 /- AXIOM_AUDIT_END -/

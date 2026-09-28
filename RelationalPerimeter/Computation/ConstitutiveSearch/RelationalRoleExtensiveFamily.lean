@@ -53,13 +53,74 @@ inductive DependentRelationalRoleHistory
       (tail : DependentRelationalRoleHistory State next count) :
       DependentRelationalRoleHistory State source (count + 1)
 
-/-- A profile selects one constituted occurrence at every relational stage. -/
+/--
+One occurrence indexed by the relational stage that constitutes it.  The
+stage retains the proof-relevant formation and provenance witnesses in
+`Type`; they are recovered constructively below.  They are not hidden behind
+a propositional truncation and do not create additional extensive identities.
+-/
+structure RelationallyConstitutedOccurrence
+    {State : Type} {source next : State}
+    (stage : RelationalOpeningStage State source next) where
+  private mk ::
+  occurrence : stage.Occurrence
+
+/-- The canonical constituted occurrence supplied by a relational stage. -/
+def relationallyConstitutedOccurrence
+    {State : Type} {source next : State}
+    (stage : RelationalOpeningStage State source next)
+    (occurrence : stage.Occurrence) :
+    RelationallyConstitutedOccurrence stage :=
+  .mk occurrence
+
+/-- Recover the positive formation witness from the constituting stage. -/
+def RelationallyConstitutedOccurrence.formationWitness
+    {State : Type} {source next : State}
+    {stage : RelationalOpeningStage State source next}
+    (identity : RelationallyConstitutedOccurrence stage) :
+    stage.FormationRelation stage.role identity.occurrence :=
+  stage.formationWitness identity.occurrence
+
+/-- Recover the positive provenance witness from the constituting stage. -/
+def RelationallyConstitutedOccurrence.provenanceWitness
+    {State : Type} {source next : State}
+    {stage : RelationalOpeningStage State source next}
+    (identity : RelationallyConstitutedOccurrence stage) :
+    stage.ProvenanceRelation stage.provenance stage.role identity.occurrence :=
+  stage.provenanceWitness identity.occurrence
+
+/-- Constituted occurrences are equal exactly through their occurrence field. -/
+theorem RelationallyConstitutedOccurrence.ext
+    {State : Type} {source next : State}
+    {stage : RelationalOpeningStage State source next}
+    {left right : RelationallyConstitutedOccurrence stage}
+    (sameOccurrence : left.occurrence = right.occurrence) :
+    left = right := by
+  cases left
+  cases right
+  cases sameOccurrence
+  rfl
+
+/-- Decidable equality inherited from the stage occurrence carrier. -/
+def relationallyConstitutedOccurrenceDecEq
+    {State : Type} {source next : State}
+    (stage : RelationalOpeningStage State source next) :
+    DecidableEq (RelationallyConstitutedOccurrence stage) :=
+  fun left right =>
+    match stage.occurrenceDecEq left.occurrence right.occurrence with
+    | isTrue same => isTrue (RelationallyConstitutedOccurrence.ext same)
+    | isFalse different =>
+        isFalse (fun same => different (congrArg
+          RelationallyConstitutedOccurrence.occurrence same))
+
+/-- A profile of identities constituted at every relational role. -/
 def RelationalOccurrenceProfile :
     {State : Type} → {source : State} → {count : Nat} →
       DependentRelationalRoleHistory State source count → Type
   | _, _, _, .nil _ => Unit
   | _, _, _, .step head tail =>
-      head.Occurrence × RelationalOccurrenceProfile tail
+      RelationallyConstitutedOccurrence head ×
+        RelationalOccurrenceProfile tail
 
 /-- Cartesian frontier, defined without replacing occurrences by indices. -/
 def productFrontier {Head Tail : Type} :
@@ -179,14 +240,44 @@ theorem productFrontier_nodup
             exact congrArg Prod.fst (Eq.trans leftExact same)
           exact headFresh rightValue.1 restHeadMember headSame)
 
-/-- Complete occurrence-profile frontier derived from the dependent history. -/
+/-- The local frontier after formation and provenance have constituted it. -/
+def relationallyConstitutedOccurrenceFrontier
+    {State : Type} {source next : State}
+    (stage : RelationalOpeningStage State source next) :
+    List (RelationallyConstitutedOccurrence stage) :=
+  stage.occurrenceFrontier.map (relationallyConstitutedOccurrence stage)
+
+theorem relationallyConstitutedOccurrenceFrontier_complete
+    {State : Type} {source next : State}
+    (stage : RelationalOpeningStage State source next)
+    (identity : RelationallyConstitutedOccurrence stage) :
+    identity ∈ relationallyConstitutedOccurrenceFrontier stage := by
+  have canonicalMember := Extensive.mem_map
+    (relationallyConstitutedOccurrence stage)
+    (stage.occurrenceComplete identity.occurrence)
+  have canonicalExact :
+      relationallyConstitutedOccurrence stage identity.occurrence = identity :=
+    RelationallyConstitutedOccurrence.ext rfl
+  exact canonicalExact ▸ canonicalMember
+
+theorem relationallyConstitutedOccurrenceFrontier_nodup
+    {State : Type} {source next : State}
+    (stage : RelationalOpeningStage State source next) :
+    (relationallyConstitutedOccurrenceFrontier stage).Nodup :=
+  Extensive.nodup_map
+    (relationallyConstitutedOccurrence stage)
+    (fun {_left _right} same => congrArg
+      RelationallyConstitutedOccurrence.occurrence same)
+    stage.occurrenceNodup
+
+/-- The unique global frontier of relationally constituted identities. -/
 def relationalProfileFrontier :
     {State : Type} → {source : State} → {count : Nat} →
       (history : DependentRelationalRoleHistory State source count) →
       List (RelationalOccurrenceProfile history)
   | _, _, _, .nil _ => [()]
   | _, _, _, .step head tail =>
-      productFrontier head.occurrenceFrontier
+      productFrontier (relationallyConstitutedOccurrenceFrontier head)
         (relationalProfileFrontier tail)
 
 theorem relationalProfileFrontier_complete :
@@ -197,10 +288,10 @@ theorem relationalProfileFrontier_complete :
   | _, _, _, .nil _, profile => by cases profile; exact .head _
   | _, _, _, .step head tail, profile =>
       productFrontier_complete
-        (head.occurrenceComplete profile.1)
+        (relationallyConstitutedOccurrenceFrontier_complete head profile.1)
         (relationalProfileFrontier_complete tail profile.2)
 
-/-- Constructive equality decision inherited from local occurrence decisions. -/
+/-- Constructive equality decision on constituted relational profiles. -/
 def relationalOccurrenceProfileDecEq :
     {State : Type} → {source : State} → {count : Nat} →
       (history : DependentRelationalRoleHistory State source count) →
@@ -209,7 +300,7 @@ def relationalOccurrenceProfileDecEq :
       match left, right with
       | (), () => isTrue rfl
   | _, _, _, .step head tail => fun left right =>
-      match head.occurrenceDecEq left.1 right.1 with
+      match relationallyConstitutedOccurrenceDecEq head left.1 right.1 with
       | isFalse headDifferent =>
           isFalse (fun same => headDifferent (congrArg Prod.fst same))
       | isTrue headSame =>
@@ -225,10 +316,12 @@ theorem relationalProfileFrontier_nodup :
   | _, _, _, .nil _ =>
       .cons (fun _ impossible _ => nomatch impossible) .nil
   | _, _, _, .step head tail => by
-      letI : DecidableEq head.Occurrence := head.occurrenceDecEq
+      letI : DecidableEq (RelationallyConstitutedOccurrence head) :=
+        relationallyConstitutedOccurrenceDecEq head
       letI : DecidableEq (RelationalOccurrenceProfile tail) :=
         relationalOccurrenceProfileDecEq tail
-      exact productFrontier_nodup head.occurrenceNodup
+      exact productFrontier_nodup
+        (relationallyConstitutedOccurrenceFrontier_nodup head)
         (relationalProfileFrontier_nodup tail)
 
 /-- Arity list read from the already realized local occurrence frontiers. -/
@@ -252,16 +345,20 @@ theorem relationalProfileWidth_eq_arityProduct :
   | _, _, _, .nil _ => rfl
   | _, _, _, .step head tail => by
       change
-        (productFrontier head.occurrenceFrontier
+        (productFrontier (relationallyConstitutedOccurrenceFrontier head)
           (relationalProfileFrontier tail)).length =
         head.occurrenceFrontier.length *
           (relationalHistoryArities tail).prod
       calc
-        (productFrontier head.occurrenceFrontier
+        (productFrontier (relationallyConstitutedOccurrenceFrontier head)
             (relationalProfileFrontier tail)).length =
-            head.occurrenceFrontier.length *
+            (relationallyConstitutedOccurrenceFrontier head).length *
               (relationalProfileFrontier tail).length :=
           productFrontier_length _ _
+        _ = head.occurrenceFrontier.length *
+              (relationalProfileFrontier tail).length := by
+          rw [relationallyConstitutedOccurrenceFrontier,
+            relational_length_map]
         _ = head.occurrenceFrontier.length *
               (relationalHistoryArities tail).prod :=
           congrArg (fun width => head.occurrenceFrontier.length * width)
@@ -277,6 +374,14 @@ def relationalProfileFiniteCarrier
     frontier := relationalProfileFrontier history
     complete := relationalProfileFrontier_complete history
     nodup := relationalProfileFrontier_nodup history }
+
+/-- The finite carrier and its numerical readout share the same frontier. -/
+theorem relationalProfileFiniteCarrier_width
+    {State : Type} {source : State} {count : Nat}
+    (history : DependentRelationalRoleHistory State source count) :
+    (relationalProfileFiniteCarrier history).frontier.length =
+      relationalProfileWidth history :=
+  rfl
 
 /-- Every realized local opening has one fixed arity. -/
 def UniformLocalArity :
@@ -302,13 +407,17 @@ theorem uniformLocalArity_width :
   | _, _, _, .nil _, _, _ => rfl
   | _, _, _, .step head tail, arity, uniform => by
       change
-        (productFrontier head.occurrenceFrontier
+        (productFrontier (relationallyConstitutedOccurrenceFrontier head)
           (relationalProfileFrontier tail)).length = arity ^ (_ + 1)
       calc
-        (productFrontier head.occurrenceFrontier
+        (productFrontier (relationallyConstitutedOccurrenceFrontier head)
             (relationalProfileFrontier tail)).length =
-            head.occurrenceFrontier.length *
+            (relationallyConstitutedOccurrenceFrontier head).length *
               relationalProfileWidth tail := productFrontier_length _ _
+        _ = head.occurrenceFrontier.length *
+              relationalProfileWidth tail := by
+          rw [relationallyConstitutedOccurrenceFrontier,
+            relational_length_map]
         _ = arity * (arity ^ _) := by
           rw [uniform.1, uniformLocalArity_width tail arity uniform.2]
         _ = arity ^ (_ + 1) := by
@@ -324,13 +433,16 @@ theorem atLeastBinaryLocalArity_width_lowerBound :
       have tailBound := atLeastBinaryLocalArity_width_lowerBound tail binary.2
       change
         2 ^ (_ + 1) ≤
-          (productFrontier head.occurrenceFrontier
+          (productFrontier (relationallyConstitutedOccurrenceFrontier head)
             (relationalProfileFrontier tail)).length
       rw [productFrontier_length, Nat.pow_succ]
       calc
         2 ^ _ * 2 = 2 * 2 ^ _ := Nat.mul_comm _ _
-        _ ≤ head.occurrenceFrontier.length * relationalProfileWidth tail :=
-          Nat.mul_le_mul binary.1 tailBound
+        _ ≤ (relationallyConstitutedOccurrenceFrontier head).length *
+              relationalProfileWidth tail := by
+          rw [relationallyConstitutedOccurrenceFrontier,
+            relational_length_map]
+          exact Nat.mul_le_mul binary.1 tailBound
 
 /--
 A nontrivial general class.  Problems produce dependent relational histories;
@@ -372,10 +484,11 @@ theorem sourceWidth_atLeast_exponential
     (family : RelationalRoleExtensiveFamily)
     {index : Nat} (problem : family.Problem index) :
     2 ^ family.stageCount problem ≤
-      (family.sourceCarrier problem).frontier.length :=
-  atLeastBinaryLocalArity_width_lowerBound
-    (family.producedHistory problem)
-    (family.nontrivialOpenings problem)
+      (family.sourceCarrier problem).frontier.length := by
+  unfold sourceCarrier
+  rw [relationalProfileFiniteCarrier_width]
+  exact atLeastBinaryLocalArity_width_lowerBound
+    (family.producedHistory problem) (family.nontrivialOpenings problem)
 
 /--
 General target theorem: on every problem in every relational extensive family,
@@ -417,10 +530,11 @@ theorem sourceWidth_eq_twoPow
     (family : BinaryRelationalRoleExtensiveFamily)
     {index : Nat} (problem : family.Problem index) :
     (family.sourceCarrier problem).frontier.length =
-      2 ^ family.stageCount problem :=
-  uniformLocalArity_width
-    (family.producedHistory problem) 2
-    (family.binaryOpenings problem)
+      2 ^ family.stageCount problem := by
+  unfold sourceCarrier RelationalRoleExtensiveFamily.sourceCarrier
+  rw [relationalProfileFiniteCarrier_width]
+  exact uniformLocalArity_width
+    (family.producedHistory problem) 2 (family.binaryOpenings problem)
 
 /--
 Class-level target theorem. For every problem in every binary relational
@@ -666,8 +780,17 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.RelationalExtensive.RelationalOpeningStage
 #print axioms ConstitutiveSearch.RelationalExtensive.DependentRelationalRoleHistory
 #print axioms ConstitutiveSearch.RelationalExtensive.RelationalOccurrenceProfile
+#print axioms ConstitutiveSearch.RelationalExtensive.RelationallyConstitutedOccurrence
+#print axioms ConstitutiveSearch.RelationalExtensive.relationallyConstitutedOccurrence
+#print axioms ConstitutiveSearch.RelationalExtensive.RelationallyConstitutedOccurrence.formationWitness
+#print axioms ConstitutiveSearch.RelationalExtensive.RelationallyConstitutedOccurrence.provenanceWitness
+#print axioms ConstitutiveSearch.RelationalExtensive.relationallyConstitutedOccurrenceFrontier
 #print axioms ConstitutiveSearch.RelationalExtensive.relationalProfileFrontier
+#print axioms ConstitutiveSearch.RelationalExtensive.relationalProfileFrontier_complete
+#print axioms ConstitutiveSearch.RelationalExtensive.relationalOccurrenceProfileDecEq
+#print axioms ConstitutiveSearch.RelationalExtensive.relationalProfileFrontier_nodup
 #print axioms ConstitutiveSearch.RelationalExtensive.relationalProfileFiniteCarrier
+#print axioms ConstitutiveSearch.RelationalExtensive.relationalProfileFiniteCarrier_width
 #print axioms ConstitutiveSearch.RelationalExtensive.relationalProfileWidth_eq_arityProduct
 #print axioms ConstitutiveSearch.RelationalExtensive.UniformLocalArity
 #print axioms ConstitutiveSearch.RelationalExtensive.AtLeastBinaryLocalArity

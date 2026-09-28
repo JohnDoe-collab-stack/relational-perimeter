@@ -102,9 +102,10 @@ local production type has no future-history parameter.
 
 ![Endogenous operational decomposition](docs/figures/endogenous-operational-decomposition.svg)
 
-The framework first constitutes the role occurrences and the complete profile
-carrier on which the computation acts. For `n` binary openings the extensive
-readout of this source has exact width `2^n`. A downstream regime has that full
+The framework first constitutes each role occurrence through its positive
+formation and provenance relations, then derives the complete profile carrier
+on which the computation acts. For `n` binary openings the extensive readout
+of this source has exact width `2^n`. A downstream regime has that full
 exponential width exactly when it keeps the constituted profiles as distinct,
 separately addressable obligations. For every source profile, the executed
 normalizer constructs a target occurrence profile together with the exact
@@ -118,12 +119,15 @@ than rebuilding targets from the retained output; its result is a derived
 elimination of that chain, not a replaceable stored field. The operational
 target carrier remains the full dependent product of the continuation spaces;
 it is not restricted in advance to a singleton. The executed traces prove that
-the produced targets converge. The obligation regime then carries each actual
-target value together with its proof of belonging to that convergent fibre. A
-private exact realization retains the source-indexed traces, and the public
-regime is its projection. Obligation equality is exactly equality of produced
-targets and exactly codetermination by two executed traces; width one is the
-final readout of their proved convergence. Two explicit source profiles are
+the produced targets converge. Before this target image becomes obligations,
+an `ExecutedOperationalGroupingAuthorization` consumes the chain-wide
+preservation and occurrence-separation witnesses extracted from that same
+normalization. The obligation regime then carries each actual target value
+together with its proof of belonging to that convergent fibre. A private exact
+realization retains the authorization and the source-indexed traces, and the
+public regime is its projection. Obligation equality is exactly equality of
+produced targets and exactly codetermination by two authorized executed traces;
+width one is the final readout of their proved convergence. Two explicit source profiles are
 proved distinct while being carried together. No source profiles are
 identified.
 
@@ -147,9 +151,12 @@ constituted operational process.
 
 The repository now proves the extensive equivalence at the level of a general
 relational class. Primitive source, formation, target, and provenance relations
-constitute a dependent history of role occurrences. Complete occurrence
-profiles are derived from that history before any program or operational
-regime. Their width is the product of the realized local arities; uniform
+constitute a dependent history of role occurrences. Its source carrier is made
+of `RelationallyConstitutedOccurrence` values: each selected occurrence is
+indexed by its constituting relational stage, from which its exact formation
+and provenance witnesses are recovered in `Type`. Complete occurrence profiles
+are derived from that history before any program or operational regime. Their
+width is the product of the realized local arities; uniform
 binary histories therefore have exact width `2^n`. The class is unbounded and
 has an inhabitant independent of the public SAT execution; the wider class also
 contains variable-arity histories.
@@ -175,9 +182,13 @@ normalizer consumes a dependent constitutive chain whose every link exposes
 the authoritative relational action, exact output, separate preservation,
 viability, non-identity, and persistent occurrence distinction.
 The complete source-indexed family of produced targets and traces is exposed
-before the operational regime. Their proved convergence constructs an exact
-one-obligation carrier whose values remain the actual produced targets. Two
-explicit source profiles are
+before the operational regime. Preservation and persistent occurrence
+separation are extracted over the complete chain and consumed together by the
+grouping authorization. Their proved convergence then constructs an exact
+one-obligation carrier whose values remain the actual produced targets. The
+fused causal run and its role history are proved equal to the authoritative
+public realization, and the class theorem is transported constructively to the
+literal carrier of those executed roles. Two explicit source profiles are
 proved distinct, codetermined by their traces, and carried together. The regime
 therefore has width one and fails separate preservation without equating any
 source profiles. A separate public theorem states the literal exponential
@@ -362,7 +373,10 @@ largeur du régime = 2^stageCount
 ```
 
 La même condition équivaut à la capacité minimale exacte d’un adressage
-factorisé par le régime. Sur le carrier public, le certificat construit le
+factorisé par le régime. Le carrier de la classe contient des occurrences
+indexées par l’étape relationnelle qui les constitue et expose leurs témoins
+positifs de formation et de provenance dans `Type`.
+Sur le carrier public, le certificat construit le
 régime identitaire de pleine largeur et prouve positivement sa condition
 complète de conservation. Sur les mêmes identités constituées, le normaliseur
 exécuté produit pour chaque profil source une cible opérationnelle complète et
@@ -371,10 +385,15 @@ une trace dépendante. Ces traces proviennent de la même décomposition par
 la queue future. Le normaliseur consomme ensuite une chaîne constitutive
 dépendante dont chaque lien expose l’action relationnelle faisant autorité, sa
 sortie exacte, la préservation séparée, la viabilité, la non-identité et la
-distinction persistante des occurrences. La famille source-indexée des cibles et de leurs traces est
-construite avant le régime. Leur convergence permet ensuite de construire un
-carrier exact à une obligation dont les valeurs restent les cibles produites.
-Deux profils sources explicites sont prouvés
+distinction persistante des occurrences. La famille source-indexée des cibles et
+de leurs traces est construite avant le régime. La préservation et la séparation
+persistante sont extraites sur toute cette chaîne et consommées ensemble par
+l’autorisation de regroupement. Leur convergence permet ensuite de construire
+un carrier exact à une obligation dont les valeurs restent les cibles produites.
+La course causale fusionnée et son histoire de rôles sont prouvées égales à la
+réalisation publique faisant autorité, et le théorème de classe est transporté
+constructivement sur le carrier littéral de ces rôles exécutés. Deux profils
+sources explicites sont prouvés
 distincts, codéterminés par leurs traces et portés ensemble. Sa frontière a
 donc une largeur un sans égaliser les profils sources. Un théorème public
 séparé énonce le `iff` exponentiel littéral directement sur ce carrier de
