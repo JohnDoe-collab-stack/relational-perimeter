@@ -45,6 +45,9 @@ check_expected_failure \
   'Tests/ExpectedFailure/PrivateConstitutiveExtensiveSeparationCertificate.lean.fail' \
   'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate.mk`'
 check_expected_failure \
+  'Tests/ExpectedFailure/PrivateCausallyAdmittedRoleRegime.lean.fail' \
+  'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.CausallyAdmittedRoleRegime.mk`'
+check_expected_failure \
   'Tests/ExpectedFailure/DiscoveredTransportCannotReplaceAuthoritativeInstruction.lean.fail' \
   'but is expected to have type'
 check_expected_failure \
@@ -57,4 +60,4 @@ check_expected_failure \
   'Tests/ExpectedFailure/RetainedDecisionCannotReplaceTransformedDecision.lean.fail' \
   'but is expected to have type'
 
-echo 'Verified expected failures: scientific-certificate privacy, causal-regime privacy, instruction-indexed profiles, authoritative collision anchor, semantic instruction use, and occurrence-indexed reduction decisions.'
+echo 'Verified expected failures: scientific-certificate privacy, admitted-regime privacy, causal-regime privacy, instruction-indexed profiles, authoritative collision anchor, semantic instruction use, and occurrence-indexed reduction decisions.'

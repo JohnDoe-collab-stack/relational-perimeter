@@ -31,6 +31,9 @@ try {
     "Tests/ExpectedFailure/PrivateConstitutiveExtensiveSeparationCertificate.lean.fail" `
     'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate.mk`'
   Test-ExpectedLeanFailure `
+    "Tests/ExpectedFailure/PrivateCausallyAdmittedRoleRegime.lean.fail" `
+    'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.CausallyAdmittedRoleRegime.mk`'
+  Test-ExpectedLeanFailure `
     "Tests/ExpectedFailure/DiscoveredTransportCannotReplaceAuthoritativeInstruction.lean.fail" `
     "but is expected to have type"
   Test-ExpectedLeanFailure `
@@ -46,5 +49,5 @@ try {
   Pop-Location
 }
 
-Write-Output "Verified expected failures: scientific-certificate privacy, causal-regime privacy, instruction-indexed profiles, authoritative collision anchor, semantic instruction use, and occurrence-indexed reduction decisions."
+Write-Output "Verified expected failures: scientific-certificate privacy, admitted-regime privacy, causal-regime privacy, instruction-indexed profiles, authoritative collision anchor, semantic instruction use, and occurrence-indexed reduction decisions."
 $global:LASTEXITCODE = 0

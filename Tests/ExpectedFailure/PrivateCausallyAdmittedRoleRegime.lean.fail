@@ -1,0 +1,7 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.EndogenousDecomposition
+
+-- A raw regime or a foreign normalizer cannot be installed as the executed
+-- regime without the private package that joins traces and criterion admission.
+#check CausallyAdmittedRoleRegime.mk

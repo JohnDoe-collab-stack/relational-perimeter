@@ -299,8 +299,8 @@ def ConstitutiveNormalizerProgram.profileFrontier :
             (instruction := instruction), rest)))
 
 /-- Each program instruction contributes the two Boolean profile extensions
-of the tail frontier.  This reduction equation is the typed source of the
-binary extensive deployment. -/
+of the tail frontier. This reduction equation is the typed source of the
+binary width later read by extensivity. -/
 theorem ConstitutiveNormalizerProgram.profileFrontier_step
     {depth count : Nat}
     {assignment : SequentialAssignment depth}

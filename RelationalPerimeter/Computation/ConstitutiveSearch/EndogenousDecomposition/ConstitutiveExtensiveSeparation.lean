@@ -1,4 +1,5 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRelationalExtensiveFamily
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CausallyAdmittedRoleRegime
 
 /-!
 # One-chain certificate for constitutive extensivity and operational reduction
@@ -240,6 +241,114 @@ theorem publicCertificate_reduction_separates_identity_from_obligation
       (publicCertificateExecutedRegime input) :=
   (constitutiveExtensiveSeparationCertificate input).executedRegimeDoesNotPreserveSeparately
 
+/-!
+## Causally admitted exact target image
+
+The original certificate and all of its public declarations above remain
+unchanged.  This second, downstream certificate adds the stronger operational
+target construction without replacing the compatibility surface.
+-/
+
+/-- Causal strengthening of one already constituted separation certificate. -/
+structure CausallyAdmittedConstitutiveExtensiveSeparationCertificate
+    (input : Nat)
+    (base : ConstitutiveExtensiveSeparationCertificate input) where
+  private mk ::
+  admittedRegime : CausallyAdmittedRoleRegime base.stagewiseDecomposition
+  admittedRegimeExact :
+    admittedRegime =
+      causallyAdmittedRoleRegime base.stagewiseDecomposition
+  producedTargetFrontierExact :
+    admittedRegime.normalization.producedTargetFrontier = [()]
+  producedTargetWidthExact :
+    admittedRegime.normalization.producedTargetFrontier.length = 1
+  regimeWidthMatchesProducedTargetWidth :
+    admittedRegime.toObligationRegime.frontier.length =
+      admittedRegime.normalization.producedTargetFrontier.length
+  regimeDoesNotPreserveSeparately :
+    ¬ PreservesIdentitiesSeparately admittedRegime.toObligationRegime
+
+/-- The strengthened certificate is constructed from the same public execution. -/
+def causallyAdmittedConstitutiveExtensiveSeparationCertificate
+    (input : Nat) :
+    CausallyAdmittedConstitutiveExtensiveSeparationCertificate input
+      (constitutiveExtensiveSeparationCertificate input) := by
+  let base := constitutiveExtensiveSeparationCertificate input
+  let admitted := causallyAdmittedRoleRegime base.stagewiseDecomposition
+  have notPreserving :
+      ¬ PreservesIdentitiesSeparately admitted.toObligationRegime := by
+    intro preserves
+    have fullWidth := full_width_of_preserves
+      admitted.toObligationRegime preserves
+    have oneEqualsExponential : 1 = 2 ^ (input + 1) :=
+      Eq.trans admitted.width_exact.symm
+        (Eq.trans fullWidth base.extensiveWidthExact)
+    have strictGrowth : 1 < 2 ^ (input + 1) :=
+      Constructive.two_pow_strictly_grows (Nat.zero_lt_succ input)
+    exact (Nat.ne_of_lt strictGrowth) oneEqualsExponential
+  exact
+    { admittedRegime := admitted
+      admittedRegimeExact := rfl
+      producedTargetFrontierExact := admitted.producedTargetFrontier_exact
+      producedTargetWidthExact := admitted.producedTargetWidth_exact
+      regimeWidthMatchesProducedTargetWidth :=
+        admitted.regimeWidth_eq_producedTargetWidth
+      regimeDoesNotPreserveSeparately := notPreserving }
+
+/-- Canonical admitted package on the original certificate's source carrier. -/
+def publicCertificateCausallyAdmittedRegime
+    (input : Nat) :
+    CausallyAdmittedRoleRegime
+      (constitutiveExtensiveSeparationCertificate input).stagewiseDecomposition :=
+  (causallyAdmittedConstitutiveExtensiveSeparationCertificate input).admittedRegime
+
+/-- Raw regime projected only after causal admission and exact image realization. -/
+def publicCertificateCausallyAdmittedExecutedRegime
+    (input : Nat) :
+    ObligationRegime
+      (roleProfileFiniteCarrier
+        (constitutiveExtensiveSeparationCertificate input).roles) :=
+  (publicCertificateCausallyAdmittedRegime input).toObligationRegime
+
+/-- The admitted carry has exactly the fibres of the produced targets. -/
+theorem publicCertificate_causallyAdmitted_carry_eq_iff_target_eq
+    (input : Nat)
+    (left right : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationCertificate input).roles) :
+    (publicCertificateCausallyAdmittedExecutedRegime input).carry left =
+        (publicCertificateCausallyAdmittedExecutedRegime input).carry right ↔
+      (publicCertificateCausallyAdmittedRegime input).normalization.target left =
+        (publicCertificateCausallyAdmittedRegime input).normalization.target right :=
+  (publicCertificateCausallyAdmittedRegime input).carry_eq_iff_target_eq
+    left right
+
+/-- The exact produced target frontier is exposed before its numeric width. -/
+theorem publicCertificate_causallyAdmitted_producedTargetFrontier_exact
+    (input : Nat) :
+    (publicCertificateCausallyAdmittedRegime input).normalization.producedTargetFrontier =
+      [()] :=
+  (causallyAdmittedConstitutiveExtensiveSeparationCertificate input).producedTargetFrontierExact
+
+/-- The projected width is definitionally the produced target-image width. -/
+theorem publicCertificate_causallyAdmitted_regimeWidth_eq_producedTargetWidth
+    (input : Nat) :
+    (publicCertificateCausallyAdmittedExecutedRegime input).frontier.length =
+      (publicCertificateCausallyAdmittedRegime input).normalization.producedTargetFrontier.length :=
+  (causallyAdmittedConstitutiveExtensiveSeparationCertificate input).regimeWidthMatchesProducedTargetWidth
+
+/-- Width one is now derived from the causally admitted exact image. -/
+theorem publicCertificate_causallyAdmitted_executedRegime_width
+    (input : Nat) :
+    (publicCertificateCausallyAdmittedExecutedRegime input).frontier.length = 1 :=
+  (publicCertificateCausallyAdmittedRegime input).width_exact
+
+/-- The admitted reduction groups source identities without identifying them. -/
+theorem publicCertificate_causallyAdmitted_separates_identity_from_obligation
+    (input : Nat) :
+    ¬ PreservesIdentitiesSeparately
+      (publicCertificateCausallyAdmittedExecutedRegime input) :=
+  (causallyAdmittedConstitutiveExtensiveSeparationCertificate input).regimeDoesNotPreserveSeparately
+
 end EndogenousDecomposition
 end ConstitutiveSearch
 
@@ -256,4 +365,13 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateCarryDerivation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_executedRegime_width
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_reduction_separates_identity_from_obligation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausallyAdmittedConstitutiveExtensiveSeparationCertificate
+#print axioms ConstitutiveSearch.EndogenousDecomposition.causallyAdmittedConstitutiveExtensiveSeparationCertificate
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateCausallyAdmittedRegime
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateCausallyAdmittedExecutedRegime
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_causallyAdmitted_carry_eq_iff_target_eq
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_causallyAdmitted_producedTargetFrontier_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_causallyAdmitted_regimeWidth_eq_producedTargetWidth
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_causallyAdmitted_executedRegime_width
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_causallyAdmitted_separates_identity_from_obligation
 /- AXIOM_AUDIT_END -/

@@ -79,27 +79,34 @@ stagewise operational decomposition, the occurrence-profile carrier, and the
 causal package of the executed regime. One stage decomposition receives only
 that stage and no future tail. The dependent tail then begins at the state that
 the stage actually produced. Roles and reduction licenses are read from this
-same stagewise history. The program is downstream: it does not
-constitute the profile alternatives. Each `RoleStageAtom` is tied to the
-relation reconstructed by its role and acts on the actual occurrence selected
-by a profile. The left occurrence applies that total action, the right
-occurrence retains its continuation, and the compiled action is positively
-proved to change the executed source.
+same stagewise history. The program is downstream: it does not constitute the
+profile alternatives. Each `RoleStageAtom` is tied to the relation reconstructed
+by its role and acts on the actual occurrence selected by a profile. The left
+occurrence applies that total action, the right occurrence retains its
+continuation, and the compiled action is positively proved to change the
+executed source.
 
-For every source profile, `reduceExecutedRoleProfile` constructs a dependent
-pair consisting of an obligation and an `ExecutedCarryDerivation` indexed by
-that obligation. The derivation contains an `ExecutedRoleProfileReduction`
-trace. Each local decision consumes the role
-license: exact application of the discovered action, the separate
-acceptance-preservation proof, viability of the retained output, non-identity
-of the action on the executed source, and continued distinction of the
-occurrences. The regime's `carry` is definitionally the first projection of
-this pair; the executed package has no independently supplied `carry` field.
-All traces have the same retained profile, so the regime has
-width one; the source-indexed reduction witness is nevertheless exposed by the
-API before that projection. The package constructor is private, so an
-arbitrary constant `carry` cannot be installed and presented as the executed
-regime.
+For every source profile, `executedCausalNormalization` constructs a target in
+`RoleOperationalOutputProfile` and an `ExecutedRoleProfileOutputReduction`
+trace indexed exactly by that source and target. The target retains the full
+dependently typed continuations returned by the local decisions. The homogeneous
+assignment list is obtained separately through `targetAssignments`: it is a
+downstream representation readout, not the operational target itself. Every
+transformed decision consumes the exact application of the discovered action,
+its separate preservation proof, action non-identity, and continued occurrence
+distinction; every retained decision consumes its positive viability.
+
+`rawProducedTargetOccurrences` then enumerates every produced target while
+retaining its source and trace. Convergence of those traces to the same complete
+operational profile is proved before any finite realization.
+`ExactTargetImageRealization` then realizes exactly this image: equality of two
+obligations is equivalent to equality of their produced targets, and every
+obligation has source provenance. `CausallyAdmittedRoleRegime` adds
+criterion-relative admission to this construction; `ObligationRegime` appears
+only afterwards, by projection. Its width one follows from convergence of the
+produced image. The private package constructor therefore prevents an arbitrary
+constant `carry` from being presented as the executed regime without the
+traces, licenses, and their admission.
 
 The exponential `iff` applies directly to this regime on the same profile
 carrier. Its local `2 → 1` width records are computed recursively from the
@@ -279,9 +286,11 @@ the class-level `iff`; `RoleIndexedProfiles.lean` and
 `RoleProfileArityTransport.lean` derive the concrete carrier and its arities;
 `RoleIndexedProgram.lean` supplies the downstream interpreter;
 `RolewiseObligationPolicy.lean` proves the local/global conservation
-equivalence; and `ExecutedRoleIndexedReduction.lean` constructs the causal
-grouping regime. `ConstitutiveExtensiveSeparation.lean` joins these components
-on the public run.
+equivalence; `ExecutedRoleIndexedReduction.lean` constructs typed output
+decisions and traces; `ExecutedCausalNormalization.lean` constructs their exact
+image; and `CausallyAdmittedRoleRegime.lean` keeps admission distinct from the
+projection to the raw regime. `ConstitutiveExtensiveSeparation.lean` joins these
+components on the public run.
 
 The earlier operational account remains available:
 `OperationalFrontierStatus.lean` defines the generic pending/reduced boundary,

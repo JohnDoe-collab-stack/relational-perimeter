@@ -101,21 +101,21 @@ discovery.
 ![Endogenous operational decomposition](docs/figures/endogenous-operational-decomposition.svg)
 
 The framework first constitutes the role occurrences and the complete profile
-carrier on which the computation acts. For `n` binary openings this source has
-exact width `2^n`. A downstream regime has that full exponential width exactly
-when it keeps the constituted profiles as distinct, separately addressable
-obligations. For every source profile, the executed reduction now constructs a
-dependent result pairing the obligation with the trace that produces it. The
-role licenses are constructed stage by stage: the head license depends only on
-the stage that has just executed, and the dependent tail starts at that stage's
-produced state. Its transformed case
-consumes the reconstructed total action, its exact output, the separate
-preservation proof, non-identity, and occurrence distinction; its retained case
-consumes positive viability. The regime's `carry` is the first projection of
-the dependent result, not a separately supplied field. All traces reach the
-same retained profile, hence width one, without identifying the source
-profiles. The regime and final-certificate constructors are private, and the
-class-level `iff` applies to the resulting regime on exactly the same carrier.
+carrier on which the computation acts. For `n` binary openings the extensive
+readout of this source has exact width `2^n`. A downstream regime has that full
+exponential width exactly when it keeps the constituted profiles as distinct,
+separately addressable obligations. For every source profile, the executed
+normalizer constructs a dependent target together with the exact trace that
+produces it. The target is the full typed continuation profile returned by the
+local decisions; its assignment list is exposed only as a later representation
+readout. The transformed case consumes the reconstructed total action, its
+exact output, the separate preservation proof, non-identity, and occurrence
+distinction; the retained case consumes positive viability. The raw target
+image is formed from all source-indexed traces. Their convergence is proved
+before that image is exactly realized as one operational obligation. The
+regime is then projected from this causally admitted realization: its width one
+is a consequence of the produced-image convergence, not an independently
+chosen singleton, and no source profiles are identified.
 
 A state-and-quantity projection preserves the observed states, output, width
 readout, and bound, but does not determine the total operational action. At the
@@ -158,13 +158,14 @@ The same condition is equivalent to exact minimum addressing capacity
 factorized through the regime. On the public carrier, the certificate
 constructs the full-width identity regime and positively proves its complete
 conservation condition. On the same constituted identities, the executed
-regime constructs a dependent reduction trace for each source profile and only
-then projects its retained target as the regime obligation. This reduction is
-read from the same stagewise decomposition whose head is available from the
-current executed stage before any future tail. The trace consumes
-the authoritative relational action, exact output, separate preservation,
-viability, non-identity, and persistent occurrence distinction. Every trace
-reaches the same retained profile, so the executed frontier has width one and
+normalizer produces one full typed operational target and one exact trace for
+each source profile. These traces come from the stagewise decomposition whose
+head is available from the current executed stage before any future tail. They
+consume the authoritative relational action, exact output, separate
+preservation, viability, non-identity, and persistent occurrence distinction.
+The complete raw image of their targets is formed before its finite
+realization. Their proved convergence yields an exact one-obligation image,
+from which the executed regime is projected. It therefore has width one and
 fails separate preservation without equating any source profiles. The
 class-level `iff` applies directly to this regime on this same carrier.
 
@@ -221,6 +222,10 @@ below.
 - `RelationalPerimeter/Computation/ConstitutiveSearch/` contains the complete
   executable construction, its relational transports, SAT instance, feedback
   recursion, and production-level measured accounting;
+- `ExactOperationalImage.lean`, `ExecutedCausalNormalization.lean`, and
+  `CausallyAdmittedRoleRegime.lean` keep the produced target image, its exact
+  finite realization, criterion admission, and the final raw regime projection
+  as distinct layers;
 - `Tests/ComputationalPhenomenonRegression.lean` protects the production
   statements corresponding to the independently enumerated adversarial probes,
   including the production seed and the causal connection between measured
@@ -236,7 +241,8 @@ below.
 - `Tests/RelationalExtensiveIffRegression.lean` protects the class-level
   exponential `iff`, its exact factorized-capacity form, the independent
   unbounded members of the relational classes, and the one-chain public
-  reduction from action and preservation to grouped obligations.
+  normalization from typed action outputs and source-indexed traces to the
+  exactly realized operational image.
 
 The computational tree imports the foundational modules directly. It has no
 dependency on an external alignment layer, a separate foundation layer, or a
@@ -288,20 +294,21 @@ séparément, et le résultat retenu conditionne la découverte suivante. Ainsi,
 nombre d’alternatives engendrées et le nombre d’obligations qui doivent rester
 indépendantes ne sont pas confondus.
 
-Pour `n` ouvertures binaires exécutées, le carrier source des profils constitués
-a une largeur exacte `2^n`. Un régime aval possède cette largeur exponentielle
-complète si et seulement s’il conserve ces profils comme identités distinctes
-et séparément adressables. Pour chaque profil source, la réduction exécutée
-construit désormais un résultat dépendant qui associe l’obligation à la trace
-qui la produit. Les licences sont construites étape par étape : la licence de
-tête dépend uniquement de l’étape qui vient d’être exécutée, et la suite
-dépendante commence dans l’état produit par cette étape. Son cas transformé
-consomme l’action relationnelle reconstruite, sa
-sortie exacte, la préservation séparée, la non-identité et la distinction des
-occurrences ; son cas retenu consomme la viabilité positive. Le `carry` du
-régime est la première projection de ce résultat dépendant ; ce n’est pas un
-champ fourni séparément. Toutes les traces atteignent le même profil retenu,
-d’où la largeur un, sans identifier les profils sources.
+Pour `n` ouvertures binaires exécutées, la lecture extensive du carrier source
+des profils constitués a une largeur exacte `2^n`. Un régime aval possède cette
+largeur exponentielle complète si et seulement s’il conserve ces profils comme
+identités distinctes et séparément adressables. Pour chaque profil source, le
+normaliseur exécuté construit une cible dépendamment typée avec la trace exacte
+qui la produit. Cette cible est le profil complet des continuations retournées
+par les décisions locales ; la liste d’assignations n’en est qu’une lecture
+représentationnelle aval. Le cas transformé consomme l’action relationnelle
+reconstruite, sa sortie exacte, la préservation séparée, la non-identité et la
+distinction des occurrences ; le cas retenu consomme la viabilité positive.
+L’image brute des cibles est formée à partir de toutes les traces indexées par
+leur source. Leur convergence est démontrée avant la réalisation exacte de
+cette image comme une obligation. Le régime est ensuite projeté depuis cette
+réalisation causalement admise : sa largeur un découle de la convergence de
+l’image produite, et aucun profil source n’est identifié.
 Une projection par état et quantité conserve cette stabilité
 observée sans déterminer l’action opérationnelle totale. Le transport total
 porté par l’instruction faisant autorité et le transport de comparaison sont
@@ -334,16 +341,17 @@ largeur du régime = 2^stageCount
 La même condition équivaut à la capacité minimale exacte d’un adressage
 factorisé par le régime. Sur le carrier public, le certificat construit le
 régime identitaire de pleine largeur et prouve positivement sa condition
-complète de conservation. Sur les mêmes identités constituées, le régime
-exécuté construit pour chaque profil source une trace dépendante qui consomme
-l’action relationnelle faisant autorité, sa sortie exacte, la préservation
-séparée, la viabilité, la non-identité et la distinction persistante des
-occurrences. Cette réduction provient de la même décomposition par étapes, dont
-la tête ne dépend que de l’étape exécutée courante. Il projette seulement
-ensuite le profil retenu comme obligation.
-Toutes les traces atteignent ce même profil, donc sa frontière a une largeur
-un, sans égaliser les profils sources. Le `iff` de classe s’applique directement
-à ce régime sur ce même carrier.
+complète de conservation. Sur les mêmes identités constituées, le normaliseur
+exécuté produit pour chaque profil source une cible opérationnelle complète et
+une trace dépendante. Ces traces consomment l’action relationnelle faisant
+autorité, sa sortie exacte, la préservation séparée, la viabilité, la
+non-identité et la distinction persistante des occurrences. Elles proviennent
+de la même décomposition par étapes, dont la tête ne dépend que de l’étape
+exécutée courante. L’image brute de leurs cibles est construite avant sa
+réalisation finie. Leur convergence donne une image exacte à une obligation,
+puis seulement le régime projeté. Sa frontière a donc une largeur un sans
+égaliser les profils sources. Le `iff` de classe s’applique directement à ce
+régime sur ce même carrier.
 
 ![Lecture extensive et obligations opérationnelles](docs/figures/relational-extensive-iff.svg)
 

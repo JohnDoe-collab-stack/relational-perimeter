@@ -2,7 +2,7 @@
 
 **Dans ce cadre, la constitution relationnelle des dépendances est primitive. Le calcul produit lui-même, pendant son exécution et à partir de ce qu’il a déjà produit, sa décomposition opérationnelle et détermine ainsi quelles alternatives doivent continuer à être traitées comme des obligations indépendantes.**
 
-**Cette exécution ne produit pas d’explosion exponentielle de la largeur opérationnelle : bien que le déploiement extensif des profils constitués ait une largeur 2ⁿ, le régime exécuté les regroupe en une seule obligation sans identifier les profils eux-mêmes.**
+**Cette exécution ne produit pas d’explosion exponentielle de la largeur opérationnelle : bien que la lecture extensive du carrier des profils constitués ait une largeur 2ⁿ, le régime exécuté les regroupe en une seule obligation sans identifier les profils eux-mêmes.**
 
 **Dans la classe binaire formalisée, une largeur opérationnelle exponentielle apparaît si et seulement si le régime impose de conserver séparément toute la multiplicité extensive, c’est-à-dire si son application `carry` est injective.**
 
@@ -67,29 +67,39 @@ Le régime exécuté est construit sur exactement le même carrier. Sa réductio
 est lue dans une histoire dépendante construite étape par étape. La
 décomposition de l’étape courante dépend uniquement de cette étape ; sa suite
 commence dans l’état que celle-ci a produit. Pour chaque profil source,
-`reduceExecutedRoleProfile` construit une paire dépendante : une obligation et
-un `ExecutedCarryDerivation` indexé par cette obligation. Ce témoin contient
-une trace `ExecutedRoleProfileReduction` indexée par le profil source. À chaque rôle, cette
-trace distingue l'occurrence transformée de l'occurrence retenue. Le cas
-transformé requiert l'action relationnelle effectivement reconstruite, sa
-sortie exacte, la preuve séparée de préservation, la non-identité de l'action
-sur la source exécutée et la distinction persistante des occurrences ; le cas
-retenu requiert sa viabilité positive.
+`executedCausalNormalization` produit une cible dans
+`RoleOperationalOutputProfile` et une trace
+`ExecutedRoleProfileOutputReduction` exactement indexée par cette source et
+cette cible. Le cas transformé requiert l’action relationnelle effectivement
+reconstruite, sa sortie exacte, la preuve séparée de préservation, la
+non-identité de l’action sur la source exécutée et la distinction persistante
+des occurrences ; le cas retenu requiert sa viabilité positive.
 
-Le `carry` du régime est définitionnellement la première projection de cette
-paire dépendante ; il n’est pas un champ fourni séparément. Toutes les traces aboutissent au même profil retenu, de
-sorte que la frontière des obligations contient exactement un élément :
+La cible est un profil dépendamment typé des continuations opérationnelles
+produites. La liste homogène d’assignations est obtenue seulement ensuite par
+`targetAssignments` ; elle appartient à la représentation aval. La construction
+`rawProducedTargetOccurrences` rassemble les cibles de tous les profils sources
+sans perdre les traces qui les produisent. La convergence de ces traces est
+alors démontrée : toutes atteignent le même profil opérationnel complet.
+
+Ce n’est qu’après cette convergence que `ExactTargetImageRealization` réalise
+leur image comme une obligation unique. Cette réalisation est exacte dans les
+deux sens pertinents : chaque obligation possède une provenance source, et deux
+profils reçoivent la même obligation si et seulement si leurs cibles produites
+sont égales. La frontière des obligations contient donc exactement un élément :
 
 ```text
 régime exécuté
   ⇒ largeur des obligations = 1
 ```
 
-L'unicité extensionnelle de cette obligation n'est donc pas utilisée comme
-substitut à la réduction. Le témoin source-indexé de la réduction est construit
-avant sa projection vers l'obligation unique. Le constructeur du paquet causal
-est privé : une fonction constante arbitraire ne peut pas être présentée par
-l'API comme le régime exécuté sans fournir cette construction.
+L’unicité de cette obligation n’est donc pas utilisée comme substitut à la
+réduction. Les cibles et leurs traces sont construites avant leur réalisation
+finie. L’admission relative au critère conserve séparément les preuves de
+préservation et de viabilité portées par les licences exécutées. Le régime brut
+n’apparaît qu’ensuite, par projection du paquet causalement admis. Son
+constructeur privé empêche une fonction constante arbitraire d’être présentée
+par l’API comme le régime exécuté sans fournir cette construction.
 
 Dans l'instance publique positive, deux profils sources sont construits comme
 distincts tout en ayant la même obligation exécutée. Leur égalité d'obligation
@@ -105,11 +115,13 @@ largeur opérationnelle exponentielle. Cette largeur apparaît exactement lorsqu
 le régime porte séparément toutes les identités sources.
 
 Le régime exécuté ne compresse pas 2ⁿ obligations préexistantes. Avant son
-introduction, il existe un carrier source de 2ⁿ profils distincts, mais leur
-statut d'obligations opérationnelles n'est pas encore déterminé. La réduction
-exécutée construit ce statut pour chaque profil, puis le régime en expose la
-frontière et la largeur. Le `iff` général s'applique directement à ce régime
-sur ce même carrier ; aucun transport vers un autre carrier n'intervient.
+introduction, il existe un carrier source de 2ⁿ profils distincts, dont
+l’extensivité fournit la lecture quantitative ; leur statut d’obligations
+opérationnelles n’est pas encore déterminé. La normalisation exécutée construit
+ce statut pour chaque profil, la réalisation exacte en constitue l’image, puis
+le régime en expose la frontière et la largeur. Le `iff` général s’applique
+directement à ce régime sur ce même carrier ; aucun transport vers un autre
+carrier n’intervient.
 
 Le résultat central peut ainsi être formulé sans le réduire à un problème de
 compression :

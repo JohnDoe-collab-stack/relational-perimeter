@@ -198,6 +198,130 @@ def executedProfileCarryDerivation
       ((executedConstitutiveObligationRegime input).carry profile) :=
   publicCertificateCarryDerivation input profile
 
+/--
+The causally admitted regime strengthens, without replacing, the original
+executed-regime compatibility API.
+-/
+def causallyAdmittedConstitutiveObligationRegime (input : Nat) :
+    ObligationRegime
+      (roleProfileFiniteCarrier
+        (constitutiveExtensiveSeparationEvidence input).roles) :=
+  publicCertificateCausallyAdmittedExecutedRegime input
+
+/-- Exact target produced by the authoritative causal normalizer. -/
+def executedConstitutiveTarget
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    RoleOperationalOutputProfile
+      (constitutiveExtensiveSeparationEvidence input).roles :=
+  (publicCertificateCausallyAdmittedRegime input).normalization.target
+    profile
+
+/-- The exact executed trace from one constituted source to its public target. -/
+def executedConstitutiveTargetTrace
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    ExecutedRoleProfileOutputReduction
+      (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction
+      profile
+      (executedConstitutiveTarget input profile) :=
+  (publicCertificateCausallyAdmittedRegime input).normalization.trace
+    profile
+
+/-- Criterion admission retained from every license of the executed reduction. -/
+def executedConstitutiveCriterionAdmission
+    (input : Nat) :
+    ExecutedReductionCriterionAdmission
+      (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction :=
+  (publicCertificateCausallyAdmittedRegime input).criterionAdmission
+
+/-- Every public operational target is exactly the completed typed output profile. -/
+theorem executed_constitutive_target_exact
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    executedConstitutiveTarget input profile =
+      completedRoleOperationalOutputProfile
+        (constitutiveExtensiveSeparationEvidence input).roles :=
+  (publicCertificateCausallyAdmittedRegime input).target_exact
+    profile
+
+/-- Downstream homogeneous readout of the produced operational target. -/
+def executedConstitutiveTargetAssignments
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    List Assignment :=
+  roleOperationalOutputAssignments
+    (executedConstitutiveTarget input profile)
+
+/-- The public target readout is the compiled interpreter output on that profile. -/
+theorem executed_constitutive_targetAssignments_eq_interpreted_profile
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    executedConstitutiveTargetAssignments input profile =
+      interpretRoleOccurrenceProfile
+        (compileRoleHistory
+          (constitutiveExtensiveSeparationEvidence input).roles)
+        profile
+        (canonicalRoleProfilePayload
+          (constitutiveExtensiveSeparationEvidence input).roles profile) :=
+  (publicCertificateCausallyAdmittedRegime input).targetAssignments_eq_interpreted_profile
+    profile
+
+/-- The authoritative carry has exactly the fibres of the produced targets. -/
+theorem executed_carry_eq_iff_produced_target_eq
+    (input : Nat)
+    (left right : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    (causallyAdmittedConstitutiveObligationRegime input).carry left =
+        (causallyAdmittedConstitutiveObligationRegime input).carry right ↔
+      executedConstitutiveTarget input left =
+        executedConstitutiveTarget input right :=
+  publicCertificate_causallyAdmitted_carry_eq_iff_target_eq input left right
+
+/-- The complete produced-target image is exposed before its width readout. -/
+theorem executed_produced_target_frontier_exact
+    (input : Nat) :
+    (publicCertificateCausallyAdmittedRegime input).normalization.producedTargetFrontier =
+      [()] :=
+  publicCertificate_causallyAdmitted_producedTargetFrontier_exact input
+
+/-- The public image has width one exactly when all executed targets converge. -/
+theorem executed_produced_target_width_one_iff_targets_converge
+    (input : Nat) :
+    (publicCertificateCausallyAdmittedRegime input).normalization.producedTargetFrontier.length = 1 ↔
+      ∀ left right : RoleOccurrenceProfile
+          (constitutiveExtensiveSeparationEvidence input).roles,
+        executedConstitutiveTarget input left =
+          executedConstitutiveTarget input right :=
+  (publicCertificateCausallyAdmittedRegime input).producedTargetWidth_one_iff_targets_converge
+
+/-- The operational regime width is exactly the produced-image width. -/
+theorem executed_causal_regime_width_eq_produced_target_width
+    (input : Nat) :
+    (causallyAdmittedConstitutiveObligationRegime input).frontier.length =
+      (publicCertificateCausallyAdmittedRegime input).normalization.producedTargetFrontier.length :=
+  publicCertificate_causallyAdmitted_regimeWidth_eq_producedTargetWidth input
+
+/-- The same class-level `iff` applies to the admitted regime on that carrier. -/
+theorem executed_causal_regime_exponential_width_iff_separate_preservation
+    (input : Nat) :
+    (causallyAdmittedConstitutiveObligationRegime input).frontier.length =
+        2 ^ (input + 1) ↔
+      ConservesRoleIdentitiesAsDistinctSeparatelyAddressable
+        (causallyAdmittedConstitutiveObligationRegime input) :=
+  constituted_exponential_width_iff_distinct_separate_conservation
+    input (causallyAdmittedConstitutiveObligationRegime input)
+
+/-- Width one of the admitted regime is derived from its exact target image. -/
+theorem executed_causal_obligation_width_is_one (input : Nat) :
+    (causallyAdmittedConstitutiveObligationRegime input).frontier.length = 1 :=
+  publicCertificate_causallyAdmitted_executedRegime_width input
+
 /-- The executed regime is subject to the same `iff` on the same carrier. -/
 theorem executed_regime_exponential_width_iff_separate_preservation
     (input : Nat) :
@@ -234,6 +358,13 @@ theorem executed_reduction_does_not_preserve_separate_obligations
     ¬ PreservesIdentitiesSeparately
       (executedConstitutiveObligationRegime input) :=
   publicCertificate_reduction_separates_identity_from_obligation input
+
+/-- The causally admitted regime makes the same separation on the same source. -/
+theorem executed_causal_reduction_does_not_preserve_separate_obligations
+    (input : Nat) :
+    ¬ PreservesIdentitiesSeparately
+      (causallyAdmittedConstitutiveObligationRegime input) :=
+  publicCertificate_causallyAdmitted_separates_identity_from_obligation input
 
 theorem independent_profile_addressing_requires_exponential_slots
     (input : Nat) (addressing : IndependentProfileAddressing input) :
@@ -900,11 +1031,25 @@ end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutedDistinctSeparateRegime
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executedConstitutiveObligationRegime
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executedProfileCarryDerivation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.causallyAdmittedConstitutiveObligationRegime
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executedConstitutiveTarget
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executedConstitutiveTargetTrace
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executedConstitutiveCriterionAdmission
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_constitutive_target_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executedConstitutiveTargetAssignments
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_constitutive_targetAssignments_eq_interpreted_profile
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_carry_eq_iff_produced_target_eq
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_produced_target_frontier_exact
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_produced_target_width_one_iff_targets_converge
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_causal_regime_width_eq_produced_target_width
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_causal_regime_exponential_width_iff_separate_preservation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_causal_obligation_width_is_one
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_regime_exponential_width_iff_separate_preservation
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_constitutive_obligation_width_is_one
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constituted_distinct_separate_regime_has_exponential_width
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constituted_distinct_separate_regime_conserves
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_reduction_does_not_preserve_separate_obligations
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_causal_reduction_does_not_preserve_separate_obligations
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.independent_profile_addressing_requires_exponential_slots
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutive_program_instruction_count_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.structural_frontier_is_program_expansion

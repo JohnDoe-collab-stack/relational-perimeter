@@ -447,6 +447,269 @@ theorem normalizeExecutedRoleProfile_target_exact
   executedRoleProfileReduction_target_exact
     (normalizeExecutedRoleProfile reduction profile).2
 
+/-!
+## Executed output reduction
+
+The occurrence reduction above records which structural occurrence is retained.
+The causal operational result is stronger: its target is the continuation
+actually returned by the interpreted atom.  The transformed and retained cases
+therefore have definitionally different target expressions, and their equality
+is obtained only from the executed output exactness carried by the license.
+-/
+
+/-- One local decision indexed by the continuation it actually produces. -/
+inductive ExecutedRoleOutputDecision
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {atom : RoleStageAtom role}
+    (license : ExecutedRoleReductionLicense role atom) :
+    RoleOpeningOccurrence role →
+      GeneratedStructuralBranchContinuation
+        (causalOpeningRight source run.selected run.fresh) → Type 2 where
+  | transformed
+      (outputExact :
+        interpretRoleStageAtom atom
+            license.transformedOccurrence
+            (license.transformedOccurrenceExact ▸ role.executedInput) =
+          role.completedOutput)
+      (accepted :
+        GeneratedStructuralBranchAccept
+          (causalOpeningRight source run.selected run.fresh)
+          (interpretRoleStageAtom atom
+            license.transformedOccurrence
+            (license.transformedOccurrenceExact ▸ role.executedInput)))
+      (preservesCriterion :
+        (continuation : GeneratedStructuralBranchContinuation
+          (causalOpeningLeft source run.selected run.fresh)) →
+        GeneratedStructuralBranchAccept
+            (causalOpeningLeft source run.selected run.fresh) continuation →
+          GeneratedStructuralBranchAccept
+            (causalOpeningRight source run.selected run.fresh)
+            (atom.action continuation))
+      (changesSource :
+        (atom.action role.executedInput).1 ≠ role.executedInput.1)
+      (sourceTargetDistinct :
+        license.transformedOccurrence ≠ license.retainedOccurrence) :
+      ExecutedRoleOutputDecision license license.transformedOccurrence
+        (interpretRoleStageAtom atom
+          license.transformedOccurrence
+          (license.transformedOccurrenceExact ▸ role.executedInput))
+  | retained
+      (accepted :
+        GeneratedStructuralBranchAccept
+          (causalOpeningRight source run.selected run.fresh)
+          role.completedOutput) :
+      ExecutedRoleOutputDecision license license.retainedOccurrence
+        role.completedOutput
+
+/-- Inspect one occurrence and execute the corresponding local action. -/
+def executedRoleOutputDecision
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {atom : RoleStageAtom role}
+    (license : ExecutedRoleReductionLicense role atom)
+    (occurrence : RoleOpeningOccurrence role) :
+    Sigma fun target : GeneratedStructuralBranchContinuation
+        (causalOpeningRight source run.selected run.fresh) =>
+      ExecutedRoleOutputDecision license occurrence target := by
+  cases occurrence with
+  | mk position occurrenceState formedAt =>
+      let occurrence : RoleOpeningOccurrence role :=
+        { position := position
+          state := occurrenceState
+          formedAt := formedAt }
+      cases position with
+      | left =>
+          have occurrenceExact :
+              license.transformedOccurrence = occurrence :=
+            Eq.trans license.transformedOccurrenceExact
+              (openingOccurrence_roundTrip occurrence)
+          change Sigma fun target =>
+            ExecutedRoleOutputDecision license occurrence target
+          rw [← occurrenceExact]
+          exact
+            ⟨interpretRoleStageAtom atom
+                license.transformedOccurrence
+                (license.transformedOccurrenceExact ▸ role.executedInput),
+              .transformed
+                license.transformedOutputExact
+                license.transformedAccepted
+                license.preservesCriterion
+                license.actionChangesSource
+                license.occurrencesRemainDistinct⟩
+      | right =>
+          have occurrenceExact : license.retainedOccurrence = occurrence :=
+            Eq.trans license.retainedOccurrenceExact
+              (openingOccurrence_roundTrip occurrence)
+          change Sigma fun target =>
+            ExecutedRoleOutputDecision license occurrence target
+          rw [← occurrenceExact]
+          exact
+            ⟨role.completedOutput,
+              .retained license.retainedAccepted⟩
+
+/--
+Dependent operational output profile.  Each component retains the full typed
+continuation produced at its own role; it is not yet a homogeneous assignment
+readout.
+-/
+def RoleOperationalOutputProfile :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      RelationalConstitutiveRoleHistory run → Type
+  | _, _, _, .nil => Unit
+  | _, _, _, @RelationalConstitutiveRoleHistory.step
+      _ _ head _ _headRole tailRoles =>
+      GeneratedStructuralBranchContinuation
+          (causalOpeningRight _ head.selected head.fresh) ×
+        RoleOperationalOutputProfile tailRoles
+
+/-- Operational output profile completed by the authoritative role history. -/
+def completedRoleOperationalOutputProfile :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      (roles : RelationalConstitutiveRoleHistory run) →
+        RoleOperationalOutputProfile roles
+  | _, _, _, .nil => ()
+  | _, _, _, .step headRole tailRoles =>
+      (headRole.completedOutput,
+        completedRoleOperationalOutputProfile tailRoles)
+
+/-- Downstream homogeneous assignment readout of a typed output profile. -/
+def roleOperationalOutputAssignments :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      RoleOperationalOutputProfile roles → List Assignment
+  | _, _, _, .nil, _ => []
+  | _, _, _, .step _ tailRoles, outputProfile =>
+      outputProfile.1.1 ::
+        roleOperationalOutputAssignments
+          (roles := tailRoles) outputProfile.2
+
+/-- The completed operational profile projects to the earlier assignment readout. -/
+theorem completedRoleOperationalOutputProfile_assignments :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      (roles : RelationalConstitutiveRoleHistory run) →
+      roleOperationalOutputAssignments
+          (completedRoleOperationalOutputProfile roles) =
+        completedRoleAssignments roles
+  | _, _, _, .nil => rfl
+  | _, _, _, .step headRole tailRoles =>
+      congrArg (List.cons headRole.completedOutput.1)
+        (completedRoleOperationalOutputProfile_assignments tailRoles)
+
+/--
+Proof-relevant normalization from a constituted profile to the full dependent
+operational outputs actually returned by its local decisions.
+-/
+inductive ExecutedRoleProfileOutputReduction :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      {program : RoleIndexedProgram roles} →
+      (reduction : ExecutedRoleReductionHistory program) →
+      RoleOccurrenceProfile roles → RoleOperationalOutputProfile roles → Type 2 where
+  | nil {state : CausalConstitutiveState} :
+      ExecutedRoleProfileOutputReduction
+        (ExecutedRoleReductionHistory.nil (state := state)) () ()
+  | step {count : Nat} {state : CausalConstitutiveState}
+      {head : CausalConstitutiveStageExecution state}
+      {tail : CausalConstitutiveExecutionHistory count head.next}
+      {headRole : RelationalConstitutiveRoleStage head}
+      {tailRoles : RelationalConstitutiveRoleHistory tail}
+      {atom : RoleStageAtom headRole}
+      {tailProgram : RoleIndexedProgram tailRoles}
+      {license : ExecutedRoleReductionLicense headRole atom}
+      {tailReduction : ExecutedRoleReductionHistory tailProgram}
+      {headSource : RoleOpeningOccurrence headRole}
+      {headTarget : GeneratedStructuralBranchContinuation
+        (causalOpeningRight state head.selected head.fresh)}
+      {tailSource : RoleOccurrenceProfile tailRoles}
+      {tailTarget : RoleOperationalOutputProfile tailRoles}
+      (headDecision :
+        ExecutedRoleOutputDecision license headSource headTarget)
+      (tailTrace :
+        ExecutedRoleProfileOutputReduction
+          tailReduction tailSource tailTarget) :
+      ExecutedRoleProfileOutputReduction
+        (ExecutedRoleReductionHistory.step license tailReduction)
+        (headSource, tailSource)
+        (headTarget, tailTarget)
+
+/-- Execute every local decision and retain its full typed operational output. -/
+def normalizeExecutedRoleProfileOutput :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      {program : RoleIndexedProgram roles} →
+      (reduction : ExecutedRoleReductionHistory program) →
+      (profile : RoleOccurrenceProfile roles) →
+      Sigma fun targetOutput : RoleOperationalOutputProfile roles =>
+        ExecutedRoleProfileOutputReduction
+          reduction profile targetOutput
+  | _, state, _, _, _, .nil, profile => by
+      cases profile
+      exact ⟨(), .nil (state := state)⟩
+  | _, _, _, _, _, .step license tailReduction, profile =>
+      let headNormalization :=
+        executedRoleOutputDecision license profile.1
+      let tailNormalization :=
+        normalizeExecutedRoleProfileOutput tailReduction profile.2
+      ⟨(headNormalization.1, tailNormalization.1),
+        .step headNormalization.2 tailNormalization.2⟩
+
+/--
+Every trace reaches the typed operational profile completed by the same role
+history. In
+the transformed case, the head equality is obtained from the executed action's
+output exactness; in the retained case it is definitional.
+-/
+theorem executedRoleProfileOutputReduction_target_exact :
+    {count : Nat} → {state : CausalConstitutiveState} →
+      {run : CausalConstitutiveExecutionHistory count state} →
+      {roles : RelationalConstitutiveRoleHistory run} →
+      {program : RoleIndexedProgram roles} →
+      {reduction : ExecutedRoleReductionHistory program} →
+      {sourceProfile : RoleOccurrenceProfile roles} →
+      {targetOutput : RoleOperationalOutputProfile roles} →
+      (trace : ExecutedRoleProfileOutputReduction
+        reduction sourceProfile targetOutput) →
+      targetOutput = completedRoleOperationalOutputProfile roles := by
+  intro count state run roles program reduction sourceProfile targetOutput trace
+  induction trace with
+  | nil => rfl
+  | @step _ _ _ _ headRole tailRoles _ _ license _ _ headTarget _ _
+      headDecision tailTrace tailExact =>
+      cases headDecision with
+      | transformed outputExact _accepted _preserves _changes _distinct =>
+          change (_, _) =
+            (headRole.completedOutput,
+              completedRoleOperationalOutputProfile tailRoles)
+          rw [outputExact, tailExact]
+      | retained _accepted =>
+          change (headRole.completedOutput, _) =
+            (headRole.completedOutput,
+              completedRoleOperationalOutputProfile tailRoles)
+          exact congrArg (Prod.mk headRole.completedOutput) tailExact
+
+/-- The produced operational profile of the canonical normalizer is exact. -/
+theorem normalizeExecutedRoleProfileOutput_target_exact
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    {program : RoleIndexedProgram roles}
+    (reduction : ExecutedRoleReductionHistory program)
+    (profile : RoleOccurrenceProfile roles) :
+    (normalizeExecutedRoleProfileOutput reduction profile).1 =
+      completedRoleOperationalOutputProfile roles :=
+  executedRoleProfileOutputReduction_target_exact
+    (normalizeExecutedRoleProfileOutput reduction profile).2
+
+
 /--
 One operational obligation contains the retained role profile derived from the
 reduction.  It is not a new source identity and does not identify profiles in
@@ -931,6 +1194,16 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.normalizeExecutedRoleProfile
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedRoleProfileReduction_target_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.normalizeExecutedRoleProfile_target_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleOutputDecision
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedRoleOutputDecision
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleOperationalOutputProfile
+#print axioms ConstitutiveSearch.EndogenousDecomposition.completedRoleOperationalOutputProfile
+#print axioms ConstitutiveSearch.EndogenousDecomposition.roleOperationalOutputAssignments
+#print axioms ConstitutiveSearch.EndogenousDecomposition.completedRoleOperationalOutputProfile_assignments
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleProfileOutputReduction
+#print axioms ConstitutiveSearch.EndogenousDecomposition.normalizeExecutedRoleProfileOutput
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedRoleProfileOutputReduction_target_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.normalizeExecutedRoleProfileOutput_target_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalObligation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedRetainedObligation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedOperationalObligation_unique

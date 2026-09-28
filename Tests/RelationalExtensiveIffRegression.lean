@@ -119,6 +119,87 @@ theorem publicExecutedPackageComesFromStagewiseDecomposition (input : Nat) :
         (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition :=
   (constitutiveExtensiveSeparationEvidence input).executedRegimeFromStagewise
 
+/-- The authoritative causal package is the canonical package of the stagewise run. -/
+theorem publicCausalPackageComesFromStagewiseDecomposition (input : Nat) :
+    publicCertificateCausallyAdmittedRegime input =
+      causallyAdmittedRoleRegime
+        (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition :=
+  (causallyAdmittedConstitutiveExtensiveSeparationCertificate input).admittedRegimeExact
+
+/-- The target frontier is computed from all source-indexed traces before width. -/
+theorem publicExecutedProducedTargetFrontierIsExact (input : Nat) :
+    (publicCertificateCausallyAdmittedRegime input).normalization.producedTargetFrontier =
+      [()] :=
+  executed_produced_target_frontier_exact input
+
+/-- Width one cannot arise from any cause beyond produced-target convergence. -/
+theorem publicExecutedWidthOneIffTargetsConverge (input : Nat) :
+    (publicCertificateCausallyAdmittedRegime input).normalization.producedTargetFrontier.length = 1 ↔
+      ∀ left right : RoleOccurrenceProfile
+          (constitutiveExtensiveSeparationEvidence input).roles,
+        executedConstitutiveTarget input left =
+          executedConstitutiveTarget input right :=
+  executed_produced_target_width_one_iff_targets_converge input
+
+/-- Each public source exposes its exact trace to the typed operational target. -/
+def publicExecutedTargetHasExactTrace
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    ExecutedRoleProfileOutputReduction
+      (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction
+      profile
+      (executedConstitutiveTarget input profile) :=
+  executedConstitutiveTargetTrace input profile
+
+/-- Criterion admission is retained from the same authoritative reduction. -/
+def publicExecutedReductionIsCriterionAdmitted
+    (input : Nat) :
+    ExecutedReductionCriterionAdmission
+      (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction :=
+  executedConstitutiveCriterionAdmission input
+
+/-- The trace-produced target is the completed dependent operational profile. -/
+theorem publicExecutedTargetIsExact
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    executedConstitutiveTarget input profile =
+      completedRoleOperationalOutputProfile
+        (constitutiveExtensiveSeparationEvidence input).roles :=
+  executed_constitutive_target_exact input profile
+
+/-- Every public operational target has the compiled interpreter as its readout. -/
+theorem publicExecutedTargetReadoutIsInterpretedOutput
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    executedConstitutiveTargetAssignments input profile =
+      interpretRoleOccurrenceProfile
+        (compileRoleHistory
+          (constitutiveExtensiveSeparationEvidence input).roles)
+        profile
+        (canonicalRoleProfilePayload
+          (constitutiveExtensiveSeparationEvidence input).roles profile) :=
+  executed_constitutive_targetAssignments_eq_interpreted_profile input profile
+
+/-- The operational width readout agrees with that computed target image. -/
+theorem publicExecutedWidthComesFromProducedTargetImage (input : Nat) :
+    (causallyAdmittedConstitutiveObligationRegime input).frontier.length =
+      (publicCertificateCausallyAdmittedRegime input).normalization.producedTargetFrontier.length :=
+  executed_causal_regime_width_eq_produced_target_width input
+
+/-- The public carry may merge exactly when its executed targets coincide. -/
+theorem publicExecutedCarryFibresAreProducedTargetFibres
+    (input : Nat)
+    (left right : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    (executedConstitutiveObligationRegime input).carry left =
+        (executedConstitutiveObligationRegime input).carry right ↔
+      executedConstitutiveTarget input left =
+        executedConstitutiveTarget input right :=
+  executed_carry_eq_iff_produced_target_eq input left right
+
 /-- Each public source profile carries its own dependent reduction witness. -/
 def publicExecutedCarryHasSourceIndexedDerivation
     (input : Nat)
@@ -243,6 +324,15 @@ end RelationalPerimeter.Tests.RelationalExtensiveIffRegression
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.stageDecompositionIsPrefixLocal
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicCertificateUsesCanonicalStagewiseDecomposition
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedPackageComesFromStagewiseDecomposition
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicCausalPackageComesFromStagewiseDecomposition
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedProducedTargetFrontierIsExact
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedWidthOneIffTargetsConverge
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedTargetHasExactTrace
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedReductionIsCriterionAdmitted
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedTargetIsExact
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedTargetReadoutIsInterpretedOutput
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedWidthComesFromProducedTargetImage
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedCarryFibresAreProducedTargetFibres
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedCarryHasSourceIndexedDerivation
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedCarryTargetIsTraceTarget
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.compiledActionIsMaterial
