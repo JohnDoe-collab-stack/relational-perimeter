@@ -1,5 +1,6 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRelationalExtensiveFamily
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecution
 
 /-!
 # One constitutive chain from primitive roles to operational width
@@ -7,10 +8,11 @@ import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecompositio
 The certificate follows one direction only:
 
 relations and executed stages -> constituted roles -> source profiles ->
-executed reduction -> computed target image -> obligation regime -> width.
+executed reduction -> produced targets and traces -> proved convergence ->
+obligation regime -> width.
 
 The extensive width is a downstream readout.  No singleton obligation carrier
-and no width are supplied independently of the executed target image.
+and no width premise are supplied independently of the executed normalization.
 -/
 
 namespace ConstitutiveSearch
@@ -26,13 +28,29 @@ structure ConstitutiveExtensiveSeparationCertificate (input : Nat) where
   realization : InstrumentedExecutionRealization
     (executeConstitutiveResolution input).constitutiveFeedbackHistory
   realizationExact : realization = publicInstrumentedExecutionRealization input
+  causalOperationalExecution :
+    CausalOperationalExecutionHistory
+      (_count := resolutionLength input)
+      (initialThreadedConstitutiveStateFromInitialization
+        (initializeConstitutiveHistory input))
+  causalOperationalExecutionExact :
+    causalOperationalExecution = publicCausalOperationalExecution input
+  instrumentedExecutionExact :
+    causalOperationalExecution.instrumented =
+      (executeConstitutiveResolution input).constitutiveFeedbackHistory
   stagewiseDecomposition :
-    StagewiseExecutedDecompositionHistory realization.causalRun
+    StagewiseExecutedDecompositionHistory
+      causalOperationalExecution.causalRun
   stagewiseDecompositionExact :
     stagewiseDecomposition =
-      buildStagewiseExecutedDecompositionHistory realization.causalRun
+      causalOperationalExecution.stagewiseDecomposition
+  prefixLocalDecompositionExact :
+    stagewiseDecomposition =
+      buildStagewiseExecutedDecompositionHistory
+        causalOperationalExecution.causalRun
   rolesExact : stagewiseDecomposition.roles =
-    buildRelationalConstitutiveRoleHistory realization.causalRun
+    buildRelationalConstitutiveRoleHistory
+      causalOperationalExecution.causalRun
   roleConstitutionExact :
     RelationalRoleHistoryConstitutionExact stagewiseDecomposition.roles
   normalization :
@@ -40,12 +58,17 @@ structure ConstitutiveExtensiveSeparationCertificate (input : Nat) where
   normalizationExact :
     normalization =
       executedCausalNormalization stagewiseDecomposition.reduction
+  exactOperationalRegime :
+    ExactExecutedOperationalRegime normalization
+  exactOperationalRegimeExact :
+    exactOperationalRegime = exactExecutedOperationalRegime normalization
   operationalRegimeExact :
     normalization.operationalRegime =
-      computedTargetImageRegime
+      convergedTargetImageRegime
         (roleProfileFiniteCarrier stagewiseDecomposition.roles)
-        (roleOccurrenceProfileDecEq stagewiseDecomposition.roles)
         normalization.target
+        (defaultRoleOccurrenceProfile stagewiseDecomposition.roles)
+        normalization.targets_converge
   programSizeExact :
     (compileRoleHistory stagewiseDecomposition.roles).atomCount = input + 1
   extensiveWidthExact :
@@ -65,10 +88,12 @@ structure ConstitutiveExtensiveSeparationCertificate (input : Nat) where
   normalizationTargetExact :
     (profile : RoleOccurrenceProfile stagewiseDecomposition.roles) →
       normalization.target profile =
-        retainedRoleProfile stagewiseDecomposition.reduction
+        retainedExecutedOperationalTargetProfile
+          stagewiseDecomposition.reduction
   producedTargetFrontierExact :
     normalization.producedTargetFrontier =
-      [retainedRoleProfile stagewiseDecomposition.reduction]
+      [retainedExecutedOperationalTargetProfile
+        stagewiseDecomposition.reduction]
   regimeWidthMatchesProducedTargetWidth :
     normalization.operationalRegime.frontier.length =
       normalization.producedTargetFrontier.length
@@ -79,11 +104,32 @@ structure ConstitutiveExtensiveSeparationCertificate (input : Nat) where
       normalization.operationalRegime.carry left =
           normalization.operationalRegime.carry right ↔
         normalization.target left = normalization.target right
+  carriedValuesAreProducedTargets :
+    (profile : RoleOccurrenceProfile stagewiseDecomposition.roles) →
+      (normalization.operationalRegime.carry profile).1 =
+        normalization.target profile
+  explicitProfilesDistinct :
+    stagewiseDecomposition.roles.headTransformedProfile ≠
+      stagewiseDecomposition.roles.headRetainedProfile
+  explicitProfilesCoDetermined :
+    OperationallyCoDetermined normalization
+      stagewiseDecomposition.roles.headTransformedProfile
+      stagewiseDecomposition.roles.headRetainedProfile
+  explicitProfilesCarryTogether :
+    normalization.operationalRegime.carry
+        stagewiseDecomposition.roles.headTransformedProfile =
+      normalization.operationalRegime.carry
+        stagewiseDecomposition.roles.headRetainedProfile
   separateConservationIffExponentialWidth :
     (regime : ObligationRegime
       (roleProfileFiniteCarrier stagewiseDecomposition.roles)) →
       regime.frontier.length = 2 ^ (input + 1) ↔
         ConservesRoleIdentitiesAsDistinctSeparatelyAddressable regime
+  carryInjectiveIffExponentialWidth :
+    (regime : ObligationRegime
+      (roleProfileFiniteCarrier stagewiseDecomposition.roles)) →
+      regime.frontier.length = 2 ^ (input + 1) ↔
+        Function.Injective regime.carry
   exactRegimeCapacityIff :
     (regime : ObligationRegime
       (roleProfileFiniteCarrier stagewiseDecomposition.roles)) →
@@ -99,15 +145,16 @@ structure ConstitutiveExtensiveSeparationCertificate (input : Nat) where
 def ConstitutiveExtensiveSeparationCertificate.roles
     {input : Nat}
     (certificate : ConstitutiveExtensiveSeparationCertificate input) :
-    RelationalConstitutiveRoleHistory certificate.realization.causalRun :=
+    RelationalConstitutiveRoleHistory
+      certificate.causalOperationalExecution.causalRun :=
   certificate.stagewiseDecomposition.roles
 
 /-- Construct the certificate in the same order as its constitutive chain. -/
 def constitutiveExtensiveSeparationCertificate
     (input : Nat) : ConstitutiveExtensiveSeparationCertificate input := by
   let realization := publicInstrumentedExecutionRealization input
-  let stagewise :=
-    buildStagewiseExecutedDecompositionHistory realization.causalRun
+  let causalOperationalExecution := publicCausalOperationalExecution input
+  let stagewise := causalOperationalExecution.stagewiseDecomposition
   let roles := stagewise.roles
   let normalization := executedCausalNormalization stagewise.reduction
   let separateRegime := identityObligationRegime (roleProfileFiniteCarrier roles)
@@ -129,14 +176,26 @@ def constitutiveExtensiveSeparationCertificate
   exact
     { realization := realization
       realizationExact := rfl
+      causalOperationalExecution := causalOperationalExecution
+      causalOperationalExecutionExact := rfl
+      instrumentedExecutionExact :=
+        publicCausalOperationalExecution_instrumented_exact input
       stagewiseDecomposition := stagewise
       stagewiseDecompositionExact := rfl
+      prefixLocalDecompositionExact :=
+        causalOperationalExecution.headsArePrefixLocal
       rolesExact :=
-        buildStagewiseExecutedDecompositionHistory_roles_exact
-          realization.causalRun
+        Eq.trans
+          (congrArg
+            (fun decomposition => decomposition.roles)
+            causalOperationalExecution.headsArePrefixLocal)
+          (buildStagewiseExecutedDecompositionHistory_roles_exact
+            causalOperationalExecution.causalRun)
       roleConstitutionExact := stagewise.rolesConstitutionExact
       normalization := normalization
       normalizationExact := rfl
+      exactOperationalRegime := exactExecutedOperationalRegime normalization
+      exactOperationalRegimeExact := rfl
       operationalRegimeExact := normalization.operationalRegime_exact
       programSizeExact := compileRoleHistory_atomCount_exact roles
       extensiveWidthExact := extensiveWidth
@@ -152,8 +211,30 @@ def constitutiveExtensiveSeparationCertificate
       retainedOperationalWidthExact := executedWidth
       carryFibresAreProducedTargetFibres :=
         normalization.carry_eq_iff_target_eq
+      carriedValuesAreProducedTargets := fun profile =>
+        convergedTargetImageRegime_carry_value
+          (roleProfileFiniteCarrier roles)
+          normalization.target
+          (defaultRoleOccurrenceProfile roles)
+          normalization.targets_converge
+          profile
+      explicitProfilesDistinct := stagewise.roles.headProfilesDistinct
+        (Nat.zero_lt_succ input)
+      explicitProfilesCoDetermined :=
+        normalization.coDeterminationOfTargetEq
+          stagewise.roles.headTransformedProfile
+          stagewise.roles.headRetainedProfile
+          (normalization.targets_converge _ _)
+      explicitProfilesCarryTogether :=
+        (normalization.carry_eq_iff_coDetermined _ _).mpr
+          ⟨normalization.coDeterminationOfTargetEq
+            stagewise.roles.headTransformedProfile
+            stagewise.roles.headRetainedProfile
+            (normalization.targets_converge _ _)⟩
       separateConservationIffExponentialWidth :=
         roleConstituted_exponentialWidth_iff_distinctSeparateConservation roles
+      carryInjectiveIffExponentialWidth :=
+        roleConstituted_exponentialWidth_iff_carry_injective roles
       exactRegimeCapacityIff :=
         roleConstituted_exponentialWidth_iff_exactRegimeCapacity roles
       executedRegimeDoesNotPreserveSeparately := notPreserving }
@@ -165,13 +246,26 @@ def publicCertificateNormalization
       (constitutiveExtensiveSeparationCertificate input).stagewiseDecomposition.reduction :=
   (constitutiveExtensiveSeparationCertificate input).normalization
 
-/-- Its operational regime is the direct computed image. -/
+/-- Exact public realization retaining its produced occurrences and traces. -/
+def publicCertificateExactExecutedRegime
+    (input : Nat) :
+    ExactExecutedOperationalRegime (publicCertificateNormalization input) :=
+  (constitutiveExtensiveSeparationCertificate input).exactOperationalRegime
+
+/-- Its operational regime is the projection of that exact realization. -/
 def publicCertificateExecutedRegime
     (input : Nat) :
     ObligationRegime
       (roleProfileFiniteCarrier
         (constitutiveExtensiveSeparationCertificate input).roles) :=
   (publicCertificateNormalization input).operationalRegime
+
+/-- The public facade is pinned to the image computed by the normalization. -/
+theorem publicCertificateExecutedRegime_exact
+    (input : Nat) :
+    publicCertificateExecutedRegime input =
+      (publicCertificateNormalization input).operationalRegime :=
+  rfl
 
 /-- Every public source exposes the executed trace that produces its target. -/
 def publicCertificateCarryTrace
@@ -193,14 +287,80 @@ theorem publicCertificate_carry_eq_iff_produced_target_eq
         (publicCertificateExecutedRegime input).carry right ↔
       (publicCertificateNormalization input).target left =
         (publicCertificateNormalization input).target right :=
-  (constitutiveExtensiveSeparationCertificate input).carryFibresAreProducedTargetFibres
-    left right
+  publicCertificateExecutedRegime_exact input ▸
+    (constitutiveExtensiveSeparationCertificate input).carryFibresAreProducedTargetFibres
+      left right
 
-/-- Width one is read from the executed target image. -/
+/-- The value carried by the public regime is the target actually produced
+for that source, not an independently supplied singleton label. -/
+theorem publicCertificate_carry_value_eq_produced_target
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationCertificate input).roles) :
+    ((publicCertificateExecutedRegime input).carry profile).1 =
+      (publicCertificateNormalization input).target profile := by
+  exact
+    (constitutiveExtensiveSeparationCertificate input).carriedValuesAreProducedTargets
+      profile
+
+/-- Regime equality is exactly inhabited codetermination by two executed
+source-indexed traces. -/
+theorem publicCertificate_carry_eq_iff_coDetermined
+    (input : Nat)
+    (left right : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationCertificate input).roles) :
+    (publicCertificateExecutedRegime input).carry left =
+        (publicCertificateExecutedRegime input).carry right ↔
+      Nonempty
+        (OperationallyCoDetermined (publicCertificateNormalization input)
+          left right) :=
+  publicCertificateExecutedRegime_exact input ▸
+    (publicCertificateNormalization input).carry_eq_iff_coDetermined left right
+
+/-- First positive source profile, selecting the transformed occurrence. -/
+def publicCertificateTransformedProfile
+    (input : Nat) :
+    RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationCertificate input).roles :=
+  (constitutiveExtensiveSeparationCertificate input).stagewiseDecomposition
+    |>.roles.headTransformedProfile
+
+/-- Second positive source profile, selecting the retained occurrence. -/
+def publicCertificateRetainedProfile
+    (input : Nat) :
+    RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationCertificate input).roles :=
+  (constitutiveExtensiveSeparationCertificate input).stagewiseDecomposition
+    |>.roles.headRetainedProfile
+
+/-- The two constituted source profiles are explicitly distinct. -/
+theorem publicCertificateProfiles_distinct (input : Nat) :
+    publicCertificateTransformedProfile input ≠
+      publicCertificateRetainedProfile input :=
+  (constitutiveExtensiveSeparationCertificate input).explicitProfilesDistinct
+
+/-- Their common operational status is positively witnessed by both traces. -/
+def publicCertificateProfiles_coDetermined (input : Nat) :
+    OperationallyCoDetermined (publicCertificateNormalization input)
+      (publicCertificateTransformedProfile input)
+      (publicCertificateRetainedProfile input) :=
+  (constitutiveExtensiveSeparationCertificate input).explicitProfilesCoDetermined
+
+/-- The exact executed regime carries both distinct profiles together. -/
+theorem publicCertificateProfiles_carryTogether (input : Nat) :
+    (publicCertificateExecutedRegime input).carry
+        (publicCertificateTransformedProfile input) =
+      (publicCertificateExecutedRegime input).carry
+        (publicCertificateRetainedProfile input) :=
+  publicCertificateExecutedRegime_exact input ▸
+    (constitutiveExtensiveSeparationCertificate input).explicitProfilesCarryTogether
+
+/-- Width one is read from executed convergence of the produced targets. -/
 theorem publicCertificate_executedRegime_width
     (input : Nat) :
     (publicCertificateExecutedRegime input).frontier.length = 1 :=
-  (constitutiveExtensiveSeparationCertificate input).retainedOperationalWidthExact
+  publicCertificateExecutedRegime_exact input ▸
+    (constitutiveExtensiveSeparationCertificate input).retainedOperationalWidthExact
 
 /-- The general target iff is stated on this same constituted source carrier. -/
 theorem publicCertificate_exponential_iff_conservation
@@ -211,6 +371,17 @@ theorem publicCertificate_exponential_iff_conservation
     regime.frontier.length = 2 ^ (input + 1) ↔
       ConservesRoleIdentitiesAsDistinctSeparatelyAddressable regime :=
   (constitutiveExtensiveSeparationCertificate input).separateConservationIffExponentialWidth
+    regime
+
+/-- Literal form of the target on the public role-profile carrier. -/
+theorem publicCertificate_exponential_iff_carry_injective
+    (input : Nat)
+    (regime : ObligationRegime
+      (roleProfileFiniteCarrier
+        (constitutiveExtensiveSeparationCertificate input).roles)) :
+    regime.frontier.length = 2 ^ (input + 1) ↔
+      Function.Injective regime.carry :=
+  (constitutiveExtensiveSeparationCertificate input).carryInjectiveIffExponentialWidth
     regime
 
 /-- Positive full-width regime on the same source identities. -/
@@ -239,6 +410,85 @@ theorem publicCertificate_reduction_separates_identity_from_obligation
     ¬ PreservesIdentitiesSeparately (publicCertificateExecutedRegime input) :=
   (constitutiveExtensiveSeparationCertificate input).executedRegimeDoesNotPreserveSeparately
 
+/--
+Closed witness of the immutable scientific target.  Every field is on the one
+public role-profile carrier.  The execution and its prefix-local operational
+production precede the dependent normalization; the exact regime is then
+constructed from the actual target values and their proved convergence, and
+width is only a final readout.
+-/
+structure ExactCausalExponentialTarget (input : Nat) : Type 3 where
+  private mk ::
+  certificate : ConstitutiveExtensiveSeparationCertificate input
+  executionExact :
+    certificate.causalOperationalExecution =
+      publicCausalOperationalExecution input
+  prefixLocal :
+    certificate.stagewiseDecomposition =
+      buildStagewiseExecutedDecompositionHistory
+        certificate.causalOperationalExecution.causalRun
+  rolesConstituted :
+    RelationalRoleHistoryConstitutionExact
+      certificate.stagewiseDecomposition.roles
+  normalizationExact :
+    certificate.normalization =
+      executedCausalNormalization certificate.stagewiseDecomposition.reduction
+  exactRegimeExact :
+    certificate.exactOperationalRegime =
+      exactExecutedOperationalRegime certificate.normalization
+  extensiveWidth :
+    (roleProfileFiniteCarrier certificate.roles).frontier.length =
+      2 ^ (input + 1)
+  executedWidth :
+    certificate.exactOperationalRegime.regime.frontier.length = 1
+  distinctProfiles :
+    certificate.stagewiseDecomposition.roles.headTransformedProfile ≠
+      certificate.stagewiseDecomposition.roles.headRetainedProfile
+  coDeterminedProfiles :
+    OperationallyCoDetermined certificate.normalization
+      certificate.stagewiseDecomposition.roles.headTransformedProfile
+      certificate.stagewiseDecomposition.roles.headRetainedProfile
+  groupedWithoutIdentification :
+    certificate.exactOperationalRegime.regime.carry
+        certificate.stagewiseDecomposition.roles.headTransformedProfile =
+      certificate.exactOperationalRegime.regime.carry
+        certificate.stagewiseDecomposition.roles.headRetainedProfile
+  exponentialIffIndependentConservation :
+    (regime : ObligationRegime
+      (roleProfileFiniteCarrier certificate.roles)) →
+      regime.frontier.length = 2 ^ (input + 1) ↔
+        ConservesRoleIdentitiesAsDistinctSeparatelyAddressable regime
+  exponentialIffCarryInjective :
+    (regime : ObligationRegime
+      (roleProfileFiniteCarrier certificate.roles)) →
+      regime.frontier.length = 2 ^ (input + 1) ↔
+        Function.Injective regime.carry
+
+/-- Construct the complete target from the single authoritative execution. -/
+def exactCausalExponentialTarget
+    (input : Nat) : ExactCausalExponentialTarget input := by
+  let certificate := constitutiveExtensiveSeparationCertificate input
+  exact
+    { certificate := certificate
+      executionExact := certificate.causalOperationalExecutionExact
+      prefixLocal := certificate.prefixLocalDecompositionExact
+      rolesConstituted := certificate.roleConstitutionExact
+      normalizationExact := certificate.normalizationExact
+      exactRegimeExact := certificate.exactOperationalRegimeExact
+      extensiveWidth := certificate.extensiveWidthExact
+      executedWidth := by
+        rw [certificate.exactOperationalRegime.regimeExact]
+        exact certificate.retainedOperationalWidthExact
+      distinctProfiles := certificate.explicitProfilesDistinct
+      coDeterminedProfiles := certificate.explicitProfilesCoDetermined
+      groupedWithoutIdentification := by
+        rw [certificate.exactOperationalRegime.regimeExact]
+        exact certificate.explicitProfilesCarryTogether
+      exponentialIffIndependentConservation :=
+        certificate.separateConservationIffExponentialWidth
+      exponentialIffCarryInjective :=
+        certificate.carryInjectiveIffExponentialWidth }
+
 end EndogenousDecomposition
 end ConstitutiveSearch
 
@@ -247,13 +497,25 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate.roles
 #print axioms ConstitutiveSearch.EndogenousDecomposition.constitutiveExtensiveSeparationCertificate
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateNormalization
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateExactExecutedRegime
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateExecutedRegime
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateExecutedRegime_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateCarryTrace
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_carry_eq_iff_produced_target_eq
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_carry_value_eq_produced_target
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_carry_eq_iff_coDetermined
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateTransformedProfile
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateRetainedProfile
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateProfiles_distinct
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateProfiles_coDetermined
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateProfiles_carryTogether
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_executedRegime_width
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_exponential_iff_conservation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_exponential_iff_carry_injective
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificateSeparateRegime
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_separateRegime_exponentialWidth
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_separateRegime_conserves
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCertificate_reduction_separates_identity_from_obligation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExactCausalExponentialTarget
+#print axioms ConstitutiveSearch.EndogenousDecomposition.exactCausalExponentialTarget
 /- AXIOM_AUDIT_END -/

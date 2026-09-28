@@ -63,24 +63,34 @@ régime identitaire
   ⇒ largeur des obligations = largeur source = 2ⁿ
 ```
 
-Le régime exécuté est construit sur exactement le même carrier. Sa réduction
-est lue dans une histoire dépendante construite étape par étape. La
-décomposition de l’étape courante dépend uniquement de cette étape ; sa suite
-commence dans l’état que celle-ci a produit. Pour chaque profil source,
-`executedCausalNormalization` produit un profil d’occurrences cible et une
-trace `ExecutedRoleProfileReduction` exactement indexée par cette source et
-cette cible. Le cas transformé requiert l’action relationnelle effectivement
-reconstruite, sa sortie exacte, la preuve séparée de préservation, la
-non-identité de l’action sur la source exécutée et la distinction persistante
-des occurrences ; le cas retenu requiert sa viabilité positive. Le profil
-retenu est dérivé récursivement des licences exécutées.
+Le régime exécuté est construit sur exactement le même carrier.
+`CausalOperationalExecutionHistory` est produit par la récursion qui exécute
+les étapes. À chaque pas, elle forme un `ExecutedStageOperationalProduction`
+depuis l’étape courante avant de poursuivre depuis l’état que cette étape a
+produit. Le type de cette production locale ne possède aucun paramètre de
+futur, et son constructeur privé fixe sa décomposition comme fonction
+canonique de la seule étape courante. Son effacement redonne exactement
+l’exécution publique antérieure. Pour chaque profil source,
+`executedCausalNormalization` produit ensuite une paire dépendante contenant
+un profil d’occurrences cible et une trace `ExecutedRoleProfileReduction`
+exactement indexée par cette source et cette cible. Dans le cas transformé, la
+cible locale est une projection de `CriterionPreservingAbsorption`. Ce témoin
+consomme l’action relationnelle effectivement reconstruite, sa sortie exacte,
+la preuve séparée de préservation pour toute continuation, la non-identité de
+l’action, l’acceptation positive et la distinction persistante des
+occurrences ; le cas retenu requiert sa viabilité positive.
 
 `rawProducedTargetOccurrences` rassemble ensuite les cibles de tous les profils
-sources sans perdre les traces qui les produisent. `producedTargetFrontier`
-calcule leur image sans doublon. `computedTargetImageRegime` construit alors le
-carrier d’obligations, sa frontière et son `carry` directement depuis cette
-image : deux profils reçoivent la même obligation si et seulement si leurs
-cibles produites sont égales. La convergence des traces démontre que cette
+sources sans perdre les traces qui les produisent. Le carrier ambiant de ces
+cibles reste le produit dépendant complet des espaces de continuation : il
+n'est pas réduit d'avance à un singleton. Les traces démontrent leur
+convergence. Le régime porte alors, pour chaque source, la cible effectivement
+produite avec sa preuve d'appartenance à la fibre convergente.
+`ExactExecutedOperationalRegime`, à constructeur privé, conserve cette
+normalisation dépendante et expose exactement ce régime. Deux profils reçoivent
+la même obligation si et seulement si leurs cibles produites sont égales, et si
+et seulement si `OperationallyCoDetermined` est habité par leurs deux traces
+vers une cible commune. La convergence des traces démontre ainsi que la
 frontière contient exactement un élément :
 
 ```text
@@ -89,12 +99,15 @@ régime exécuté
 ```
 
 L’unicité de cette obligation n’est donc pas utilisée comme substitut à la
-réduction. Les cibles et leurs traces sont construites avant le régime, dont le
-carrier et le `carry` ne peuvent pas être fournis indépendamment.
+réduction. Les cibles et leurs traces sont construites avant le régime, et le
+`carry` conserve littéralement la cible produite pour chaque source. Le régime
+public est une projection de leur réalisation exécutée exacte ; un singleton
+indépendant ne possède pas ce type.
 
-Dans l'instance publique positive, deux profils sources sont construits comme
-distincts tout en ayant la même obligation exécutée. Leur égalité d'obligation
-n'établit aucune égalité dans le carrier source.
+Dans l'instance publique positive, deux profils sources explicites sont
+construits, leur distinction est prouvée, leurs deux traces vers une même cible
+sont produites, puis leur même obligation exécutée est démontrée. Leur égalité
+d'obligation n'établit aucune égalité dans le carrier source.
 
 ```text
 distinction des identités du carrier source
@@ -110,9 +123,10 @@ introduction, il existe un carrier source de 2ⁿ profils distincts, dont
 l’extensivité fournit la lecture quantitative ; leur statut d’obligations
 opérationnelles n’est pas encore déterminé. La normalisation exécutée construit
 ce statut pour chaque profil, la réalisation exacte en constitue l’image, puis
-le régime en expose la frontière et la largeur. Le `iff` général s’applique
-directement à ce régime sur ce même carrier ; aucun transport vers un autre
-carrier n’intervient.
+le régime en expose la frontière et la largeur. Le théorème public littéral
+`constituted_exponential_width_iff_carry_injective` est énoncé directement sur
+ce carrier de profils de rôles ; aucun transport vers un autre carrier
+n’intervient dans cet énoncé scientifique.
 
 Le résultat central peut ainsi être formulé sans le réduire à un problème de
 compression :

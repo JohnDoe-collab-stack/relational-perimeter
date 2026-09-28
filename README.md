@@ -96,7 +96,9 @@ reconstructs a directed transport between them, and a separate preservation
 proof permits one obligation to be absorbed for the criterion under study.
 Neither equality of the alternatives nor impossibility of the absorbed one is
 asserted. The retained result and its provenance then condition the next
-discovery.
+discovery. The public fused executor forms the local operational production at
+the current stage before recursing from the state that stage produced; the
+local production type has no future-history parameter.
 
 ![Endogenous operational decomposition](docs/figures/endogenous-operational-decomposition.svg)
 
@@ -106,14 +108,20 @@ readout of this source has exact width `2^n`. A downstream regime has that full
 exponential width exactly when it keeps the constituted profiles as distinct,
 separately addressable obligations. For every source profile, the executed
 normalizer constructs a target occurrence profile together with the exact
-dependent trace that produces it. The transformed case consumes the
-reconstructed total action, its exact output, the separate preservation proof,
-non-identity, and occurrence distinction; the retained case consumes positive
-viability. The operational carrier is then constructed directly as the
-duplicate-free image of that executed target map. Its `carry`, frontier, and
-width are not supplied separately: obligation equality is exactly equality of
-produced targets, and width one is the final readout of their proved
-convergence. No source profiles are identified.
+dependent trace that produces it. The transformed target is a projection of a
+preserving absorption witness, which consumes the reconstructed total action,
+its exact output, the separate preservation proof, non-identity, and occurrence
+distinction; the retained case consumes positive viability. The operational
+target carrier remains the full dependent product of the continuation spaces;
+it is not restricted in advance to a singleton. The executed traces prove that
+the produced targets converge. The obligation regime then carries each actual
+target value together with its proof of belonging to that convergent fibre. A
+private exact realization retains the source-indexed traces, and the public
+regime is its projection. Obligation equality is exactly equality of produced
+targets and exactly codetermination by two executed traces; width one is the
+final readout of their proved convergence. Two explicit source profiles are
+proved distinct while being carried together. No source profiles are
+identified.
 
 A state-and-quantity projection preserves the observed states, output, width
 readout, and bound, but does not determine the total operational action. At the
@@ -161,11 +169,14 @@ each source profile. These traces come from the stagewise decomposition whose
 head is available from the current executed stage before any future tail. They
 consume the authoritative relational action, exact output, separate
 preservation, viability, non-identity, and persistent occurrence distinction.
-The complete raw image of their targets is formed before its finite
-realization. Their proved convergence yields an exact one-obligation image,
-from which the executed regime is projected. It therefore has width one and
-fails separate preservation without equating any source profiles. The
-class-level `iff` applies directly to this regime on this same carrier.
+The complete source-indexed family of produced targets and traces is exposed
+before the operational regime. Their proved convergence constructs an exact
+one-obligation carrier whose values remain the actual produced targets. Two
+explicit source profiles are
+proved distinct, codetermined by their traces, and carried together. The regime
+therefore has width one and fails separate preservation without equating any
+source profiles. A separate public theorem states the literal exponential
+`iff` directly on this role-profile carrier.
 
 ![Extensive readout and operational obligations](docs/figures/relational-extensive-iff.svg)
 
@@ -222,8 +233,8 @@ below.
   recursion, and production-level measured accounting;
 - `ExecutedRoleIndexedReduction.lean`, `ExecutedCausalNormalization.lean`, and
   `ExactOperationalImage.lean` construct the source-indexed executed traces,
-  compute their target image, and derive the operational regime directly from
-  that image;
+  prove convergence of their produced targets, and derive the operational
+  regime while retaining those actual target values;
 - `Tests/ComputationalPhenomenonRegression.lean` protects the production
   statements corresponding to the independently enumerated adversarial probes,
   including the production seed and the causal connection between measured
@@ -288,9 +299,10 @@ l'incorporation de cette continuation dans le même régime devient impossible.
 Cette architecture porte aussi une décomposition opérationnelle endogène de la
 recherche. L’ouverture produit une multiplicité structurelle ; une relation
 dirigée est ensuite reconstruite par l’exécution, sa préservation est prouvée
-séparément, et le résultat retenu conditionne la découverte suivante. Ainsi, le
-nombre d’alternatives engendrées et le nombre d’obligations qui doivent rester
-indépendantes ne sont pas confondus.
+séparément, et le résultat retenu conditionne la découverte suivante. La même
+récursion forme la production opérationnelle de l’étape courante avant de
+poursuivre depuis l’état produit. Ainsi, le nombre d’alternatives engendrées et
+le nombre d’obligations qui doivent rester indépendantes ne sont pas confondus.
 
 Pour `n` ouvertures binaires exécutées, la lecture extensive du carrier source
 des profils constitués a une largeur exacte `2^n`. Un régime aval possède cette
@@ -302,11 +314,12 @@ par les décisions locales ; la liste d’assignations n’en est qu’une lectu
 représentationnelle aval. Le cas transformé consomme l’action relationnelle
 reconstruite, sa sortie exacte, la préservation séparée, la non-identité et la
 distinction des occurrences ; le cas retenu consomme la viabilité positive.
-L’image brute des cibles est formée à partir de toutes les traces indexées par
-leur source. Leur convergence est démontrée avant la réalisation exacte de
-cette image comme une obligation. Le régime est ensuite projeté depuis cette
-réalisation causalement admise : sa largeur un découle de la convergence de
-l’image produite, et aucun profil source n’est identifié.
+La famille complète des cibles produites et de leurs traces indexées par leur
+source est exposée avant le régime. Leur convergence est démontrée, puis le
+carrier d'obligations est construit en conservant chaque cible effectivement
+produite avec sa preuve d'appartenance à la fibre convergente. Sa largeur un
+découle de cette convergence. Deux profils sources explicites restent distincts tout en
+étant codéterminés par leurs traces et portés par la même obligation.
 Une projection par état et quantité conserve cette stabilité
 observée sans déterminer l’action opérationnelle totale. Le transport total
 porté par l’instruction faisant autorité et le transport de comparaison sont
@@ -345,11 +358,14 @@ une trace dépendante. Ces traces consomment l’action relationnelle faisant
 autorité, sa sortie exacte, la préservation séparée, la viabilité, la
 non-identité et la distinction persistante des occurrences. Elles proviennent
 de la même décomposition par étapes, dont la tête ne dépend que de l’étape
-exécutée courante. L’image brute de leurs cibles est construite avant sa
-réalisation finie. Leur convergence donne une image exacte à une obligation,
-puis seulement le régime projeté. Sa frontière a donc une largeur un sans
-égaliser les profils sources. Le `iff` de classe s’applique directement à ce
-régime sur ce même carrier.
+exécutée courante. La famille source-indexée des cibles et de leurs traces est
+construite avant le régime. Leur convergence permet ensuite de construire un
+carrier exact à une obligation dont les valeurs restent les cibles produites.
+Deux profils sources explicites sont prouvés
+distincts, codéterminés par leurs traces et portés ensemble. Sa frontière a
+donc une largeur un sans égaliser les profils sources. Un théorème public
+séparé énonce le `iff` exponentiel littéral directement sur ce carrier de
+profils de rôles.
 
 ![Lecture extensive et obligations opérationnelles](docs/figures/relational-extensive-iff.svg)
 

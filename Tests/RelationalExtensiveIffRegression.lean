@@ -6,10 +6,11 @@ import RelationalPerimeter
 The checks protect one dependency direction:
 
 primitive relations -> executed stages -> constituted roles -> source profiles ->
-executed reduction -> computed target image -> obligation regime -> width.
+executed reduction -> produced targets and traces -> proved convergence ->
+obligation regime -> width.
 
 No obligation carrier or operational width may be installed independently of the
-computed image.
+executed convergent-target regime.
 -/
 
 namespace RelationalPerimeter.Tests.RelationalExtensiveIffRegression
@@ -33,6 +34,15 @@ theorem classLevelTarget
         regime :=
   binary_family_exponential_width_iff_distinct_separate_conservation
     family problem regime
+
+/-- The general class also exposes the immutable literal `iff`. -/
+theorem classLevelLiteralTarget
+    (family : RelationalExtensive.BinaryRelationalRoleExtensiveFamily)
+    {index : Nat} (problem : family.Problem index)
+    (regime : ObligationRegime (family.sourceCarrier problem)) :
+    regime.frontier.length = 2 ^ family.stageCount problem ↔
+      Function.Injective regime.carry :=
+  binary_family_exponential_width_iff_carry_injective family problem regime
 
 /-- Factorized separate capacity is equivalent to the same full-width side. -/
 theorem classLevelCapacityTarget
@@ -71,6 +81,16 @@ theorem publicTarget
   constituted_exponential_width_iff_distinct_separate_conservation
     input regime
 
+/-- The target's literal `iff` is exposed without a surrogate predicate. -/
+theorem publicLiteralTarget
+    (input : Nat)
+    (regime : ObligationRegime
+      (roleProfileFiniteCarrier
+        (constitutiveExtensiveSeparationEvidence input).roles)) :
+    regime.frontier.length = 2 ^ (input + 1) ↔
+      Function.Injective regime.carry :=
+  constituted_exponential_width_iff_carry_injective input regime
+
 theorem publicSeparateRegimeHasExponentialWidth (input : Nat) :
     (constitutedDistinctSeparateRegime input).frontier.length =
       2 ^ (input + 1) :=
@@ -91,8 +111,20 @@ def stageDecompositionIsPrefixLocal
 theorem publicCertificateUsesCanonicalStagewiseDecomposition (input : Nat) :
     (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition =
       buildStagewiseExecutedDecompositionHistory
-        (constitutiveExtensiveSeparationEvidence input).realization.causalRun :=
-  (constitutiveExtensiveSeparationEvidence input).stagewiseDecompositionExact
+        (causalOperationalExecution input).causalRun :=
+  causal_operational_decomposition_is_prefix_local input
+
+/-- The richer execution erases exactly to the established authoritative run. -/
+theorem publicFusedExecutionErasesExactly (input : Nat) :
+    (causalOperationalExecution input).instrumented =
+      (executeConstitutiveResolution input).constitutiveFeedbackHistory :=
+  causal_operational_execution_erases_to_authoritative input
+
+/-- The immutable target is inhabited by a closed production object. -/
+def publicExactTargetIsClosed (input : Nat) :
+    _root_.RelationalPerimeter.Computation.EndogenousOperationalDecomposition.ExactCausalExponentialTarget
+      input :=
+  exactCausalExponentialTargetEvidence input
 
 /-- The public normalizer is the execution of that exact reduction history. -/
 theorem publicNormalizationIsCanonical (input : Nat) :
@@ -101,16 +133,44 @@ theorem publicNormalizationIsCanonical (input : Nat) :
         (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction :=
   (constitutiveExtensiveSeparationEvidence input).normalizationExact
 
-/-- The regime is definitionally pinned to the image of the executed target map. -/
+/-- The regime is pinned to actual targets and their executed convergence. -/
 theorem publicOperationalRegimeIsComputedImage (input : Nat) :
     (publicCertificateNormalization input).operationalRegime =
-      computedTargetImageRegime
+      convergedTargetImageRegime
         (roleProfileFiniteCarrier
           (constitutiveExtensiveSeparationEvidence input).roles)
-        (roleOccurrenceProfileDecEq
+        (publicCertificateNormalization input).target
+        (defaultRoleOccurrenceProfile
           (constitutiveExtensiveSeparationEvidence input).roles)
-        (publicCertificateNormalization input).target :=
+        (publicCertificateNormalization input).targets_converge :=
   (constitutiveExtensiveSeparationEvidence input).operationalRegimeExact
+
+/-- The public regime is only a projection of its exact executed realization. -/
+theorem publicOperationalRegimeIsExactRealization (input : Nat) :
+    executedConstitutiveObligationRegime input =
+      (publicCertificateNormalization input).operationalRegime :=
+  executed_constitutive_regime_is_exact_realization input
+
+/-- Production code supplies a positive pair of distinct constituted profiles. -/
+theorem publicExecutedProfilesRemainDistinct (input : Nat) :
+    executedTransformedSourceProfile input ≠
+      executedRetainedSourceProfile input :=
+  executed_source_profiles_are_distinct input
+
+/-- The two distinct profiles carry two traces to one produced target. -/
+def publicExecutedProfilesAreCoDetermined (input : Nat) :
+    OperationallyCoDetermined (publicCertificateNormalization input)
+      (executedTransformedSourceProfile input)
+      (executedRetainedSourceProfile input) :=
+  executed_source_profiles_are_codetermined input
+
+/-- Their shared obligation is obtained without identifying the profiles. -/
+theorem publicExecutedDistinctProfilesCarryTogether (input : Nat) :
+    (executedConstitutiveObligationRegime input).carry
+        (executedTransformedSourceProfile input) =
+      (executedConstitutiveObligationRegime input).carry
+        (executedRetainedSourceProfile input) :=
+  executed_distinct_profiles_carry_together input
 
 /-- Each source profile carries the dependent trace producing its target. -/
 def publicExecutedTargetHasExactTrace
@@ -128,14 +188,14 @@ theorem publicExecutedTargetIsExact
     (profile : RoleOccurrenceProfile
       (constitutiveExtensiveSeparationEvidence input).roles) :
     executedConstitutiveTarget input profile =
-      retainedRoleProfile
+      retainedExecutedOperationalTargetProfile
         (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction :=
   executed_constitutive_target_exact input profile
 
 /-- The target frontier is computed before its numerical width is read. -/
 theorem publicExecutedProducedTargetFrontierIsExact (input : Nat) :
     (publicCertificateNormalization input).producedTargetFrontier =
-      [retainedRoleProfile
+      [retainedExecutedOperationalTargetProfile
         (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction] :=
   executed_produced_target_frontier_exact input
 
@@ -155,6 +215,27 @@ theorem publicExecutedCarryFibresAreProducedTargetFibres
         executedConstitutiveTarget input right :=
   executed_carry_eq_iff_produced_target_eq input left right
 
+/-- The carried obligation contains the target produced for this source. -/
+theorem publicExecutedCarryValueIsProducedTarget
+    (input : Nat)
+    (profile : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    ((executedConstitutiveObligationRegime input).carry profile).1 =
+      executedConstitutiveTarget input profile :=
+  executed_carry_value_eq_produced_target input profile
+
+/-- Fibre equality is constituted by the two executed traces themselves. -/
+theorem publicExecutedCarryFibresAreOperationalCodetermination
+    (input : Nat)
+    (left right : RoleOccurrenceProfile
+      (constitutiveExtensiveSeparationEvidence input).roles) :
+    (executedConstitutiveObligationRegime input).carry left =
+        (executedConstitutiveObligationRegime input).carry right ↔
+      Nonempty
+        (OperationallyCoDetermined (publicCertificateNormalization input)
+          left right) :=
+  executed_carry_eq_iff_operational_codetermination input left right
+
 theorem publicExecutedRegimeUsesSameConstitutedCarrier (input : Nat) :
     (executedConstitutiveObligationRegime input).frontier.length =
         2 ^ (input + 1) ↔
@@ -162,7 +243,7 @@ theorem publicExecutedRegimeUsesSameConstitutedCarrier (input : Nat) :
         (executedConstitutiveObligationRegime input) :=
   executed_regime_exponential_width_iff_separate_preservation input
 
-/-- Width one is the terminal readout of the computed singleton image. -/
+/-- Width one is the terminal readout of executed target convergence. -/
 theorem publicExecutedWidthIsOne (input : Nat) :
     (executedConstitutiveObligationRegime input).frontier.length = 1 :=
   executed_constitutive_obligation_width_is_one input
@@ -194,6 +275,20 @@ theorem transformedOccurrenceUsesDiscoveredAction
       role.reconstructedRelation.mapContinuation continuation :=
   interpretCompiledRoleStage_left role continuation
 
+/-- The transformed operational target is literally the executed action output;
+convergence is proved only afterwards. -/
+theorem transformedTargetIsExecutedAction
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) :
+    let license := executedRoleReductionLicense role
+    let absorption := criterionPreservingAbsorption license
+    transformedExecutedRoleOperationalTarget absorption =
+      interpretRoleStageAtom (compileRoleStageAtom role)
+        license.transformedOccurrence
+        (license.transformedOccurrenceExact ▸ role.executedInput) :=
+  transformedExecutedRoleOperationalTarget_is_executed_action _
+
 /-- Preservation for arbitrary continuations remains a separate witness. -/
 theorem reductionCarriesArbitraryContinuationPreservation
     {source : CausalConstitutiveState}
@@ -206,8 +301,10 @@ theorem reductionCarriesArbitraryContinuationPreservation
     GeneratedStructuralBranchAccept
       (causalOpeningRight source run.selected run.fresh)
       ((compileRoleStageAtom role).action continuation) :=
-  executedTransformedDecisionPreservesCriterion
-    (executedRoleReductionLicense role) continuation accepted
+  let license := executedRoleReductionLicense role
+  let absorption := criterionPreservingAbsorption license
+  criterionPreservingAbsorption_preservesCriterion absorption
+    continuation accepted
 
 theorem reductionKeepsOccurrencesDistinct
     {source : CausalConstitutiveState}
@@ -221,27 +318,38 @@ end RelationalPerimeter.Tests.RelationalExtensiveIffRegression
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.classLevelTarget
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.classLevelLiteralTarget
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.classLevelCapacityTarget
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.independentBinaryMemberIsUnbounded
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.generalClassIsNotOnlyBinary
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicBinaryMemberHasExactSourceWidth
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicTarget
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicLiteralTarget
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicSeparateRegimeHasExponentialWidth
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicSeparateRegimeConserves
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.stageDecompositionIsPrefixLocal
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicCertificateUsesCanonicalStagewiseDecomposition
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicFusedExecutionErasesExactly
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExactTargetIsClosed
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicNormalizationIsCanonical
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicOperationalRegimeIsComputedImage
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicOperationalRegimeIsExactRealization
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedProfilesRemainDistinct
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedProfilesAreCoDetermined
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedDistinctProfilesCarryTogether
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedTargetHasExactTrace
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedTargetIsExact
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedProducedTargetFrontierIsExact
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedWidthComesFromProducedTargetImage
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedCarryFibresAreProducedTargetFibres
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedCarryValueIsProducedTarget
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedCarryFibresAreOperationalCodetermination
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedRegimeUsesSameConstitutedCarrier
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedWidthIsOne
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicExecutedReductionRejectsSeparateObligationStatus
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.compiledActionIsMaterial
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.transformedOccurrenceUsesDiscoveredAction
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.transformedTargetIsExecutedAction
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.reductionCarriesArbitraryContinuationPreservation
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.reductionKeepsOccurrencesDistinct
 /- AXIOM_AUDIT_END -/

@@ -110,6 +110,20 @@ theorem roleConstituted_exponentialWidth_iff_distinctSeparateConservation
     unfold ObligationRegime.HasFullExtensiveWidth at fullWidth
     exact Eq.trans fullWidth (roleProfileFiniteCarrier_width roles)
 
+/-- The immutable target in its literal form: full binary width is equivalent
+to injectivity of the regime's own carry map on the constituted profiles. -/
+theorem roleConstituted_exponentialWidth_iff_carry_injective
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    (roles : RelationalConstitutiveRoleHistory run)
+    (regime : ObligationRegime (roleProfileFiniteCarrier roles)) :
+    regime.frontier.length = 2 ^ count ↔
+      Function.Injective regime.carry := by
+  exact Iff.trans
+    (roleConstituted_exponentialWidth_iff_distinctSeparateConservation
+      roles regime)
+    (preservesIdentitiesSeparately_iff_roleIdentityConservation regime).symm
+
 /-- The same target stated through exact minimum factorized capacity. -/
 theorem roleConstituted_exponentialWidth_iff_exactRegimeCapacity
     {count : Nat} {state : CausalConstitutiveState}
@@ -149,6 +163,7 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.preservesIdentitiesSeparately_iff_roleIdentityConservation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.HasRoleConstitutedExponentialWidth
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleConstituted_exponentialWidth_iff_distinctSeparateConservation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.roleConstituted_exponentialWidth_iff_carry_injective
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleConstituted_exponentialWidth_iff_exactRegimeCapacity
 #print axioms ConstitutiveSearch.EndogenousDecomposition.positiveRoleHistory_has_nontrivial_extensive_width
 /- AXIOM_AUDIT_END -/

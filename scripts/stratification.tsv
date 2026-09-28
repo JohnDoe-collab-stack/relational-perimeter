@@ -25,6 +25,7 @@ RelationalPerimeter.Computation.ConstitutiveSearch.ContinuationTransport	G	enfor
 RelationalPerimeter.Computation.ConstitutiveSearch.ExactOperationalImage	K	enforced	Direct finite image regime computed from operational targets
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CausalFoundationBridge	B	enforced	Unique typed bridge from the relational foundation to causal semantic states
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CausalConstitutiveExecution	E	enforced	Causal execution state stage and dependent history produced from the relational foundation
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecution	A	enforced	Fused authoritative execution producing each stage and its exact local operational decomposition before the dependent tail
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparation	A	enforced	One-chain public certificate joining roles profiles program reduction and regime theorems
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveFeedback	A	enforced	Legacy integrated feedback compatibility surface over execution instrumentation and diagnostics
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveFullStep	Q	enforced	Legacy quantitatively instrumented full-step execution compatibility surface

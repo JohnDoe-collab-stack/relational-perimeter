@@ -427,6 +427,107 @@ theorem computedTargetImageRegime_width_one_of_all_targets_equal
     source targetDecEq target anchor targetsConverge]
   rfl
 
+/-!
+## Exact convergent image without decidable equality on the target carrier
+
+Some operational targets contain functions and proof-relevant continuations,
+so their ambient carrier has no constructive `DecidableEq`.  When execution
+itself proves that every produced target converges to the target of one source,
+the following carrier retains the actual produced target value together with
+that convergence proof.  It is not `Unit`, and its carry map stores
+`target identity` rather than discarding the computation.
+-/
+
+/-- A target value in the execution-proved fibre of the chosen anchor. -/
+def ConvergedTargetObligation
+    (source : FiniteCarrier)
+    {Target : Type}
+    (target : source.Identity → Target)
+    (anchor : source.Identity) : Type :=
+  {value : Target // value = target anchor}
+
+/-- Equality is constructive because both values are proved equal to the
+execution-produced anchor target. -/
+def convergedTargetObligationDecEq
+    (source : FiniteCarrier)
+    {Target : Type}
+    (target : source.Identity → Target)
+    (anchor : source.Identity) :
+    DecidableEq (ConvergedTargetObligation source target anchor) :=
+  fun left right =>
+    isTrue (Subtype.ext (Eq.trans left.2 right.2.symm))
+
+/--
+The exact operational regime produced by a target map and its convergence
+proof.  Every carried obligation retains the actual target value computed for
+its source; convergence supplies only the proof that it belongs to the common
+executed fibre.
+-/
+def convergedTargetImageRegime
+    (source : FiniteCarrier)
+    {Target : Type}
+    (target : source.Identity → Target)
+    (anchor : source.Identity)
+    (targetsConverge :
+      ∀ left right : source.Identity, target left = target right) :
+    ObligationRegime source :=
+  let anchorObligation : ConvergedTargetObligation source target anchor :=
+    ⟨target anchor, rfl⟩
+  { Obligation := ConvergedTargetObligation source target anchor
+    decEq := convergedTargetObligationDecEq source target anchor
+    frontier := [anchorObligation]
+    complete := fun obligation => by
+      have same : obligation = anchorObligation :=
+        Subtype.ext obligation.2
+      exact same ▸ .head []
+    nodup := .cons (fun _ member _ => nomatch member) .nil
+    carry := fun identity =>
+      ⟨target identity, targetsConverge identity anchor⟩
+    carry_surjective := fun obligation =>
+      ⟨anchor, Subtype.ext obligation.2.symm⟩ }
+
+/-- The carried value is definitionally the target produced for its source. -/
+theorem convergedTargetImageRegime_carry_value
+    (source : FiniteCarrier)
+    {Target : Type}
+    (target : source.Identity → Target)
+    (anchor : source.Identity)
+    (targetsConverge :
+      ∀ left right : source.Identity, target left = target right)
+    (identity : source.Identity) :
+    ((convergedTargetImageRegime source target anchor targetsConverge).carry
+      identity).1 = target identity :=
+  rfl
+
+/-- Obligation equality has exactly the fibres of the produced target map. -/
+theorem convergedTargetImageRegime_carry_eq_iff_target_eq
+    (source : FiniteCarrier)
+    {Target : Type}
+    (target : source.Identity → Target)
+    (anchor : source.Identity)
+    (targetsConverge :
+      ∀ left right : source.Identity, target left = target right)
+    (left right : source.Identity) :
+    (convergedTargetImageRegime source target anchor targetsConverge).carry left =
+        (convergedTargetImageRegime source target anchor targetsConverge).carry right ↔
+      target left = target right := by
+  constructor
+  · intro same
+    exact congrArg Subtype.val same
+  · intro same
+    exact Subtype.ext same
+
+/-- Its width is one only after an executed convergence proof is supplied. -/
+theorem convergedTargetImageRegime_width_exact
+    (source : FiniteCarrier)
+    {Target : Type}
+    (target : source.Identity → Target)
+    (anchor : source.Identity)
+    (targetsConverge :
+      ∀ left right : source.Identity, target left = target right) :
+    (convergedTargetImageRegime source target anchor targetsConverge).frontier.length = 1 :=
+  rfl
+
 end Extensive
 end ConstitutiveSearch
 
@@ -453,4 +554,10 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.Extensive.computedTargetImageRegime_width_eq_image_width
 #print axioms ConstitutiveSearch.Extensive.exactTargetImage_eq_singleton_of_all_targets_equal
 #print axioms ConstitutiveSearch.Extensive.computedTargetImageRegime_width_one_of_all_targets_equal
+#print axioms ConstitutiveSearch.Extensive.ConvergedTargetObligation
+#print axioms ConstitutiveSearch.Extensive.convergedTargetObligationDecEq
+#print axioms ConstitutiveSearch.Extensive.convergedTargetImageRegime
+#print axioms ConstitutiveSearch.Extensive.convergedTargetImageRegime_carry_value
+#print axioms ConstitutiveSearch.Extensive.convergedTargetImageRegime_carry_eq_iff_target_eq
+#print axioms ConstitutiveSearch.Extensive.convergedTargetImageRegime_width_exact
 /- AXIOM_AUDIT_END -/

@@ -28,6 +28,15 @@ try {
     "Tests/ExpectedFailure/PrivateConstitutiveExtensiveSeparationCertificate.lean.fail" `
     'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate.mk`'
   Test-ExpectedLeanFailure `
+    "Tests/ExpectedFailure/PrivateExecutedCausalNormalization.lean.fail" `
+    'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.mk`'
+  Test-ExpectedLeanFailure `
+    "Tests/ExpectedFailure/PrivateExactExecutedOperationalRegime.lean.fail" `
+    'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExactExecutedOperationalRegime.mk`'
+  Test-ExpectedLeanFailure `
+    "Tests/ExpectedFailure/PrivateExecutedStageOperationalProduction.lean.fail" `
+    'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExecutedStageOperationalProduction.mk`'
+  Test-ExpectedLeanFailure `
     "Tests/ExpectedFailure/DiscoveredTransportCannotReplaceAuthoritativeInstruction.lean.fail" `
     "but is expected to have type"
   Test-ExpectedLeanFailure `
@@ -43,5 +52,5 @@ try {
   Pop-Location
 }
 
-Write-Output "Verified expected failures: scientific-certificate privacy, instruction-indexed profiles, authoritative collision anchor, semantic instruction use, and occurrence-indexed reduction decisions."
+Write-Output "Verified expected failures: scientific-certificate and causal-construction privacy, instruction-indexed profiles, authoritative collision anchor, semantic instruction use, and occurrence-indexed reduction decisions."
 $global:LASTEXITCODE = 0

@@ -76,38 +76,50 @@ complet de conservation factorisée. Sur ces mêmes identités constituées, le
 régime exécuté a une largeur un et ne les conserve pas comme obligations
 séparées.
 
-Sur l’exécution publique, un certificat unique réunit l’histoire exécutée, sa
-décomposition opérationnelle construite étape par étape, le carrier des profils
-d’occurrences et la normalisation exécutée. La décomposition d’une
-étape ne reçoit que cette étape : elle ne dépend d’aucune suite future. La suite
-dépendante commence ensuite dans l’état que cette étape a effectivement
-produit. Les rôles et les licences de réduction sont lus depuis cette même
-histoire par étapes. Le programme est en aval : il ne constitue pas les
-alternatives du profil. Chaque `RoleStageAtom` est attaché à la relation
+Sur l’exécution publique, `CausalOperationalExecutionHistory` est construit par
+la récursion qui exécute les étapes. À chaque pas, elle forme un
+`ExecutedStageOperationalProduction` depuis l’étape courante avant de poursuivre
+depuis l’état produit par cette étape. Ce type local ne possède aucun paramètre
+de futur, et son constructeur privé fixe la décomposition comme fonction
+canonique de la seule étape courante. Son effacement redonne exactement
+l’exécution antérieure faisant autorité. Les rôles et les licences de réduction
+sont lus depuis cette même histoire. Le programme est en aval : il ne constitue
+pas les alternatives du profil. Chaque `RoleStageAtom` est attaché à la relation
 reconstruite par son rôle et agit sur l’occurrence effectivement sélectionnée
 par un profil. L’occurrence gauche applique cette action totale, l’occurrence
 droite conserve sa continuation, et l’action compilée est positivement prouvée
 modifier la source exécutée.
 
-Pour chaque profil source, `executedCausalNormalization` construit un profil
-d’occurrences cible et une trace `ExecutedRoleProfileReduction` exactement
-indexée par cette source et cette cible. Chaque décision transformée consomme
-l’application exacte de l’action découverte, sa preuve séparée de préservation,
-la non-identité de l’action et la distinction persistante des occurrences ;
-chaque décision retenue consomme sa viabilité positive.
+Pour chaque profil source, `executedCausalNormalization` construit une paire
+dépendante contenant un profil d’occurrences cible et une trace
+`ExecutedRoleProfileReduction` exactement indexée par cette source et cette
+cible. La cible locale transformée est une projection de
+`CriterionPreservingAbsorption`. Ce témoin consomme l’application exacte de
+l’action découverte, sa preuve séparée de préservation pour toute continuation,
+la non-identité de l’action, l’acceptation positive et la distinction
+persistante des occurrences ; chaque décision retenue consomme sa viabilité
+positive.
 
 `rawProducedTargetOccurrences` énumère ensuite toutes les cibles produites en
-conservant, pour chacune, sa source et sa trace. `producedTargetFrontier` calcule
-leur image sans doublon. `computedTargetImageRegime` construit directement
-l’`ObligationRegime` depuis cette image : l’égalité de deux obligations équivaut
-à l’égalité des cibles produites, et sa largeur est celle de l’image calculée.
-La convergence des traces donne ensuite la largeur un. Le régime, sa frontière
-et son `carry` ne sont donc jamais fournis indépendamment de la normalisation.
+conservant, pour chacune, sa source et sa trace. Leur carrier ambiant demeure le
+produit dépendant complet des espaces de continuation. Les traces démontrent la
+convergence des valeurs effectivement produites. Le régime porte alors chaque
+cible avec sa preuve d’appartenance à cette fibre convergente.
+`ExactExecutedOperationalRegime`, à constructeur privé, conserve la
+normalisation dépendante et expose seulement ce régime. L’égalité de deux
+obligations équivaut à l’égalité des cibles produites et à l’habitation de
+`OperationallyCoDetermined` par leurs deux traces vers une cible commune. La
+convergence donne ainsi la largeur un. Le régime public est une projection de
+cette réalisation exacte, non un singleton fourni indépendamment.
 
-Le `iff` exponentiel s’applique directement à ce régime sur le même carrier de
-profils. Ses lectures locales `2 → 1` sont calculées récursivement depuis
-l’histoire de réduction effective. Les identités sources persistent donc alors
-que leur indépendance opérationnelle change.
+Le dépôt construit deux profils sources explicites, prouve leur distinction,
+construit leurs traces de codétermination, puis démontre que le régime exact les
+porte ensemble sans les identifier. Sur ce même carrier de profils de rôles, le
+théorème public littéral est
+`regime.frontier.length = 2^n ↔ Function.Injective regime.carry`. Ses lectures
+locales `2 → 1` sont calculées récursivement depuis l’histoire de réduction
+effective. Les identités sources persistent donc alors que leur indépendance
+opérationnelle change.
 
 La recherche exécutée reste essentielle à cette instance publique. Son préfixe
 de candidats en échec est extrait de l’exécution, sa relation sélectionnée est
@@ -299,10 +311,11 @@ générales et l’`iff` au niveau de la classe ; `RoleIndexedProfiles.lean` et
 `RoleIndexedProgram.lean` fournit l’interprète aval ;
 `RolewiseObligationPolicy.lean` prouve l’équivalence locale/globale de la
 conservation ; `ExecutedRoleIndexedReduction.lean` construit les décisions et
-les traces de sorties typées ; `ExecutedCausalNormalization.lean` en construit
-l’image exacte ; `ExecutedCausalNormalization.lean` dérive le régime de la
-projection vers le régime brut. `ConstitutiveExtensiveSeparation.lean` réunit
-ces composants sur l’exécution publique.
+les traces de sorties typées ; `ExecutedCausalNormalization.lean` construit la
+normalisation, prouve la convergence des cibles et en dérive le régime exact ;
+`CausalOperationalExecution.lean` fusionne l’exécution des étapes avec leur
+production opérationnelle locale ; `ConstitutiveExtensiveSeparation.lean`
+réunit ces composants sur l’exécution publique.
 
 Le compte rendu opérationnel antérieur reste disponible :
 `OperationalFrontierStatus.lean` définit la frontière générique entre attente

@@ -74,37 +74,51 @@ constructs the full-width identity regime and its complete factorized
 conservation witness. Over those same constituted identities, the executed
 regime has width one and does not preserve them as separate obligations.
 
-On the public execution, one certificate joins the executed history, its
-stagewise operational decomposition, the occurrence-profile carrier, and the
-executed normalization. One stage decomposition receives only
-that stage and no future tail. The dependent tail then begins at the state that
-the stage actually produced. Roles and reduction licenses are read from this
-same stagewise history. The program is downstream: it does not constitute the
-profile alternatives. Each `RoleStageAtom` is tied to the relation reconstructed
-by its role and acts on the actual occurrence selected by a profile. The left
-occurrence applies that total action, the right occurrence retains its
-continuation, and the compiled action is positively proved to change the
-executed source.
+On the public execution, `CausalOperationalExecutionHistory` is built by the
+same recursion that executes the stages. At each recursive step it forms an
+`ExecutedStageOperationalProduction` from the current executed stage before
+continuing from the state that stage produced. That local production type has
+no future-history parameter, and its private constructor pins its decomposition
+to the canonical function of the current stage. Erasing the operational
+production recovers the pre-existing authoritative execution exactly. Roles
+and reduction licenses are read from this same stagewise history. The program
+is downstream: it does not constitute the profile alternatives. Each
+`RoleStageAtom` is tied to the relation reconstructed by its role and acts on
+the actual occurrence selected by a profile. The left occurrence applies that
+total action, the right occurrence retains its continuation, and the compiled
+action is positively proved to change the executed source.
 
-For every source profile, `executedCausalNormalization` constructs a target
-occurrence profile and an `ExecutedRoleProfileReduction` trace indexed exactly
-by that source and target. Every transformed decision consumes the exact
-application of the discovered action,
-its separate preservation proof, action non-identity, and continued occurrence
-distinction; every retained decision consumes its positive viability.
+For every source profile, `executedCausalNormalization` constructs a dependent
+pair containing a target occurrence profile and an
+`ExecutedRoleProfileReduction` trace indexed exactly by that source and target.
+The local target of a transformed decision is a projection of its
+`CriterionPreservingAbsorption`; it is not supplied before the witness. That
+witness consumes the exact application of the discovered action, its separate
+preservation proof for arbitrary continuations, action non-identity, positive
+acceptance, and continued occurrence distinction. Every retained decision
+consumes its positive viability.
 
 `rawProducedTargetOccurrences` then enumerates every produced target while
-retaining its source and trace. `producedTargetFrontier` computes their
-duplicate-free image. `computedTargetImageRegime` constructs the
-`ObligationRegime` directly from that image: obligation equality is equivalent
-to equality of produced targets, and regime width is computed-image width.
-Trace convergence then yields width one. The regime, its frontier, and its
-`carry` are never supplied independently of the normalization.
+retaining its source and trace. Their ambient carrier remains the full
+dependent product of continuation spaces. The traces prove convergence of the
+values actually produced. The regime then carries each actual target together
+with its proof of membership in that convergent fibre.
+`ExactExecutedOperationalRegime`, whose constructor is private, retains that
+dependent normalization and exposes only this regime. Obligation equality is
+equivalent both to equality of produced targets and to inhabited
+`OperationallyCoDetermined`, which contains the two executed traces to their
+common target. Trace convergence therefore yields width one. The public
+obligation regime is a projection of this exact realization, not an
+independently supplied singleton.
 
-The exponential `iff` applies directly to this regime on the same profile
-carrier. Its local `2 → 1` width records are computed recursively from the
-actual reduction history. Thus the source identities persist while their
-operational independence changes.
+The repository constructs two explicit source profiles, proves them distinct,
+constructs their codetermination traces, and proves that the exact regime
+carries them together. No equality or quotient of the source profiles is used.
+On that same role-profile carrier, the literal public theorem is
+`regime.frontier.length = 2^n ↔ Function.Injective regime.carry`. Its local
+`2 → 1` width records are computed recursively from the actual reduction
+history. Thus the source identities persist while their operational
+independence changes.
 
 The executed search remains essential to this public instance. Its failed
 candidate prefix is extracted from the run, its selected relation is proved
@@ -281,9 +295,10 @@ the class-level `iff`; `RoleIndexedProfiles.lean` and
 `RolewiseObligationPolicy.lean` proves the local/global conservation
 equivalence; `ExecutedRoleIndexedReduction.lean` constructs typed output
 decisions and traces; `ExecutedCausalNormalization.lean` constructs their exact
-image; and `ExecutedCausalNormalization.lean` derives the regime from the
-projection to the raw regime. `ConstitutiveExtensiveSeparation.lean` joins these
-components on the public run.
+image and the private exact realization from which the regime is projected;
+`CausalOperationalExecution.lean` fuses stage execution with local operational
+production; and `ConstitutiveExtensiveSeparation.lean` joins these components
+on the public run in `ExactCausalExponentialTarget`.
 
 The earlier operational account remains available:
 `OperationalFrontierStatus.lean` defines the generic pending/reduced boundary,
