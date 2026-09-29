@@ -15,6 +15,17 @@
       "tail": [
         "Lean (version 4.33.1, x86_64-unknown-linux-gnu, commit 819816b2e0a3bf405af45ae5c7af2491d8f5bee6, Release)"
       ]
+    },
+    {
+      "name": "clean",
+      "command": [
+        "lake",
+        "clean"
+      ],
+      "exit_code": 0,
+      "seconds": 0.06,
+      "diagnostics": [],
+      "tail": []
     }
   ],
   "scope": "Implementation and repository regression verification, not a completed A-J adversarial audit."
