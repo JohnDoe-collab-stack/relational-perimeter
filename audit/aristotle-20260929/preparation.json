@@ -1,0 +1,9 @@
+{
+  "scientific_target_commit": "1ca8e89ed02eacc71eb70efa1ccab84985fb8ace",
+  "target_tree": "9379b85f008b7618ca3336a4a2c8e7730edd3681",
+  "immediate_parent": "ded0e8ef4d343c091b66c80010c5a6827a589319",
+  "main_observed_at_preparation": "8a5e494e9ac2ee725ff9fdb03dfe08c8b1b30685",
+  "merge_base": "8a5e494e9ac2ee725ff9fdb03dfe08c8b1b30685",
+  "branch": "chatgpt/endogenous-width-proof-20260929",
+  "scope": "Audit preparation only. No new independent Aristotle audit has been run. Prior mutation results are historical, not target certification."
+}
