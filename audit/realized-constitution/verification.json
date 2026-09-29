@@ -270,6 +270,18 @@
         "Build completed successfully (136 jobs).",
         "Verified 134 Lean files: build, constructivity, audit blocks, import boundaries, and migration boundaries are clean."
       ]
+    },
+    {
+      "name": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.0,
+      "diagnostics": [],
+      "tail": []
     }
   ],
   "scope": "Implementation and repository regression verification, not a completed A-J adversarial audit."
