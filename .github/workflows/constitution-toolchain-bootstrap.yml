@@ -26,13 +26,22 @@ jobs:
           curl --fail --location --retry 3 "https://github.com/leanprover/lean4/releases/download/v${version}/${asset}" -o "$RUNNER_TEMP/lean-linux.tar.zst"
           echo "${digest#sha256:}  $RUNNER_TEMP/lean-linux.tar.zst" | sha256sum --check
           printf '%s\n%s\n' "$toolchain" "$digest" > "$RUNNER_TEMP/toolchain-manifest.txt"
-      - name: Export the public compiler distribution (one-day retention)
+          split -b 400M "$RUNNER_TEMP/lean-linux.tar.zst" "$RUNNER_TEMP/lean-part-"
+      - name: Export compiler part A (one-day retention)
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: pinned-lean-linux
+          name: pinned-lean-linux-a
           compression-level: 0
           retention-days: 1
           if-no-files-found: error
           path: |
-            ${{ runner.temp }}/lean-linux.tar.zst
+            ${{ runner.temp }}/lean-part-aa
             ${{ runner.temp }}/toolchain-manifest.txt
+      - name: Export compiler part B (one-day retention)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pinned-lean-linux-b
+          compression-level: 0
+          retention-days: 1
+          if-no-files-found: error
+          path: ${{ runner.temp }}/lean-part-ab
