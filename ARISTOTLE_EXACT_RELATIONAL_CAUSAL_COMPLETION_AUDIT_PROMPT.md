@@ -8,8 +8,9 @@ mutations and probes only in disposable copies.
 
 - Repository: `https://github.com/JohnDoe-collab-stack/relational-perimeter.git`
 - Branch containing the target: `codex/exact-relational-causal-completion`
-- Exact scientific target commit: `2c31d97616d631c1641ab6ee89e1173db3ee44f4`
-- Immediate parent: `4a21728b81d3e8eb5fdeb085dd7fc25e60df1229`
+- Exact scientific target commit: `5617ab4b09e5c0c044645737acd62973457b9a59`
+- Immediate parent: `ea5a0e6aa91dab1c763c870e6e825a8581721f78`
+- Implementation baseline: `4a21728b81d3e8eb5fdeb085dd7fc25e60df1229`
 - Public `main` reference: `8a5e494e9ac2ee725ff9fdb03dfe08c8b1b30685`
 - Required toolchain: the repository's own `lean-toolchain`
 
@@ -192,6 +193,9 @@ git diff --check
 ```
 
 Check that every production module is reachable from `import RelationalPerimeter`.
+Verify the strict terminal stratification `A5` executed production → `A6`
+public executed family → `A7` scientific certificate → `A8` computational
+facade → `A9` public project root, in both Bash and PowerShell checkers.
 Check every Lean file for exactly one final `AXIOM_AUDIT` block. Scan all source
 and generated declarations for axiom dependencies and distinguish handwritten
 from compiler-generated declarations. Confirm the complete absence in source of
