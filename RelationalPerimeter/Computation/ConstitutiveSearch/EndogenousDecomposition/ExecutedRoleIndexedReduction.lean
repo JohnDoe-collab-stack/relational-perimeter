@@ -251,29 +251,49 @@ def criterionPreservingAbsorption
     sourceTargetDistinct := license.occurrencesRemainDistinct }
 
 /--
-The target positively produced by the executed action, together with the
-complete preserving absorption that licenses its operational use.  The value
-is not supplied independently: the private constructor is exposed only through
-`actionProducedOperationalTarget`, where it is definitionally the result of
-the authoritative role action.
+A produced action target is an execution constructor, not a stored value
+accompanied by an equality. Its value is obtained only by interpretation below.
 -/
-structure ActionProducedOperationalTarget
+inductive ActionProducedOperationalTarget
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
     {role : RelationalConstitutiveRoleStage run}
     {atom : RoleStageAtom role}
     {license : ExecutedRoleReductionLicense role atom}
     (absorption : CriterionPreservingAbsorption license) : Type where
-  private mk ::
-  value : GeneratedStructuralBranchContinuation
-    (causalOpeningRight source run.selected run.fresh)
-  valueExact :
-    value = interpretRoleStageAtom atom
-      license.transformedOccurrence
-      license.transformedConstitution
+  | execute : ActionProducedOperationalTarget absorption
+
+/-- Eliminate the execution constructor by applying the actual role action. -/
+def ActionProducedOperationalTarget.value
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {atom : RoleStageAtom role}
+    {license : ExecutedRoleReductionLicense role atom}
+    {absorption : CriterionPreservingAbsorption license} :
+    ActionProducedOperationalTarget absorption →
+      GeneratedStructuralBranchContinuation
+        (causalOpeningRight source run.selected run.fresh)
+  | .execute => interpretRoleStageAtom atom
+      license.transformedOccurrence license.transformedConstitution
       (license.transformedOccurrenceExact ▸ role.executedInput)
 
-/-- Canonical production by the relation actually executed at this role. -/
+/-- The action equation follows from execution, rather than being a field. -/
+theorem ActionProducedOperationalTarget.valueExact
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {atom : RoleStageAtom role}
+    {license : ExecutedRoleReductionLicense role atom}
+    {absorption : CriterionPreservingAbsorption license}
+    (produced : ActionProducedOperationalTarget absorption) :
+    produced.value = interpretRoleStageAtom atom
+      license.transformedOccurrence license.transformedConstitution
+      (license.transformedOccurrenceExact ▸ role.executedInput) := by
+  cases produced
+  rfl
+
+/-- The canonical action step does not accept a caller-supplied target. -/
 def actionProducedOperationalTarget
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
@@ -282,11 +302,7 @@ def actionProducedOperationalTarget
     {license : ExecutedRoleReductionLicense role atom}
     (absorption : CriterionPreservingAbsorption license) :
     ActionProducedOperationalTarget absorption :=
-  { value := interpretRoleStageAtom atom
-      license.transformedOccurrence
-      license.transformedConstitution
-      (license.transformedOccurrenceExact ▸ role.executedInput)
-    valueExact := rfl }
+  .execute
 
 /--
 The operational target carrier at one role is the full continuation space in
@@ -1127,6 +1143,8 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CriterionPreservingAbsorption
 #print axioms ConstitutiveSearch.EndogenousDecomposition.criterionPreservingAbsorption
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ActionProducedOperationalTarget
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ActionProducedOperationalTarget.value
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ActionProducedOperationalTarget.valueExact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.actionProducedOperationalTarget
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleOperationalTarget
 #print axioms ConstitutiveSearch.EndogenousDecomposition.transformedExecutedRoleOperationalTarget

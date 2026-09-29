@@ -119,41 +119,112 @@ def executedStageDecomposition
     license := executedRoleReductionLicense role }
 
 /--
-Operational material produced from one executed stage alone. The private
-constructor pins the stored decomposition to the canonical decomposition of
-that exact stage.
+A closed, state-indexed past. Each extension records the stage and local
+material already produced; it cannot contain an arbitrary user-selected type
+of context or a completed future execution as its context payload.
 -/
+inductive ConstitutedOperationalPrefix : CausalConstitutiveState → Type 2 where
+  | root (source : CausalConstitutiveState) : ConstitutedOperationalPrefix source
+  | advance {source : CausalConstitutiveState}
+      (prior : ConstitutedOperationalPrefix source)
+      (stage : CausalConstitutiveStageExecution source)
+      (decomposition : ExecutedStageDecomposition stage) :
+      ConstitutedOperationalPrefix decomposition.role.nextState
+
+/-- The number of past productions is a downstream readout, not an input. -/
+def ConstitutedOperationalPrefix.depth :
+    {source : CausalConstitutiveState} → ConstitutedOperationalPrefix source → Nat
+  | _, .root _ => 0
+  | _, .advance prior _ _ => prior.depth + 1
+
+
+/-- Material provenance reconstructed from the role actually recorded at the head. -/
+def ConstitutedOperationalPrefix.provenance :
+    {source : CausalConstitutiveState} → ConstitutedOperationalPrefix source → List SAT.Var
+  | _, .root source => source.provenance
+  | _, .advance _ stage decomposition =>
+      stage.selected :: decomposition.role.provenance
+
+/--
+Source and provenance agreements connect the head's actual material to the
+source; its target agreement connects the extended material to the next state.
+-/
+theorem ConstitutedOperationalPrefix.provenance_exact :
+    {source : CausalConstitutiveState} →
+      (past : ConstitutedOperationalPrefix source) →
+      past.provenance = source.provenance
+  | _, .root _ => rfl
+  | _, .advance _ stage decomposition => by
+      change stage.selected :: decomposition.role.provenance =
+        decomposition.role.nextState.provenance
+      exact Eq.trans
+        (congrArg (List.cons stage.selected) decomposition.role.provenanceExact)
+        (Eq.trans stage.nextProvenanceExact.symm
+          (congrArg CausalConstitutiveState.provenance
+            decomposition.role.nextStateExact.symm))
+
+/-- Dependent transport of a context does not invent or recount executed heads. -/
+theorem ConstitutedOperationalPrefix.depth_transport
+    {source target : CausalConstitutiveState}
+    (same : source = target)
+    (past : ConstitutedOperationalPrefix source) :
+    (same ▸ past : ConstitutedOperationalPrefix target).depth = past.depth := by
+  cases same
+  rfl
+
+/-- Material produced from the current stage and its already constituted past. -/
 structure ExecutedStageOperationalProduction
-    {Context : Type 2}
-    (context : Context)
     {source : CausalConstitutiveState}
+    (context : ConstitutedOperationalPrefix source)
     (stage : CausalConstitutiveStageExecution source) : Type 2 where
   private mk ::
-  priorContext : Context
+  priorContext : ConstitutedOperationalPrefix source
   priorContextExact : priorContext = context
   decomposition : ExecutedStageDecomposition stage
   decompositionExact : decomposition = executedStageDecomposition stage
 
-/-- The exact interface of a producer that has no access to future data. -/
-abbrev PrefixLocalOperationalProducer : Type 3 :=
-  {Context : Type 2} → (context : Context) →
-    {source : CausalConstitutiveState} →
+/-- Extend the actual past with this production and the state it produced. -/
+def ExecutedStageOperationalProduction.nextContext
+    {source : CausalConstitutiveState}
+    {context : ConstitutedOperationalPrefix source}
+    {stage : CausalConstitutiveStageExecution source}
+    (production : ExecutedStageOperationalProduction context stage) :
+    ConstitutedOperationalPrefix stage.next :=
+  production.decomposition.role.nextStateExact ▸
+    ConstitutedOperationalPrefix.advance production.priorContext stage
+      production.decomposition
+
+/-- The next context contains one additional already executed production. -/
+theorem ExecutedStageOperationalProduction.nextContext_depth
+    {source : CausalConstitutiveState}
+    {context : ConstitutedOperationalPrefix source}
+    {stage : CausalConstitutiveStageExecution source}
+    (production : ExecutedStageOperationalProduction context stage) :
+    production.nextContext.depth = context.depth + 1 := by
+  unfold ExecutedStageOperationalProduction.nextContext
+  rw [ConstitutedOperationalPrefix.depth_transport]
+  change production.priorContext.depth + 1 = context.depth + 1
+  rw [production.priorContextExact]
+
+/-- The producer has no remaining-count, future-history or arbitrary-context input. -/
+abbrev PrefixLocalOperationalProducer : Type 2 :=
+  {source : CausalConstitutiveState} →
+    (context : ConstitutedOperationalPrefix source) →
     (stage : CausalConstitutiveStageExecution source) →
       ExecutedStageOperationalProduction context stage
 
-/-- Produce the operational material of the current stage alone. -/
+/-- Produce the local decomposition before constructing the dependent continuation. -/
 def prefixLocalOperationalProducer : PrefixLocalOperationalProducer :=
-  fun {_} context {_} stage =>
+  fun {_} context stage =>
     { priorContext := context
       priorContextExact := rfl
       decomposition := executedStageDecomposition stage
       decompositionExact := rfl }
 
-/-- The canonical production is exactly the local function of its stage. -/
+/-- The local computation is exactly the function of the already executed stage. -/
 theorem prefixLocalOperationalProducer_decomposition_exact
-    {Context : Type 2}
-    (context : Context)
     {source : CausalConstitutiveState}
+    (context : ConstitutedOperationalPrefix source)
     (stage : CausalConstitutiveStageExecution source) :
     (prefixLocalOperationalProducer context stage).decomposition =
       executedStageDecomposition stage :=
@@ -163,6 +234,13 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutedOperationalPrefix.provenance
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutedOperationalPrefix.provenance_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutedOperationalPrefix.depth_transport
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutedOperationalPrefix
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutedOperationalPrefix.depth
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedStageOperationalProduction.nextContext
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedStageOperationalProduction.nextContext_depth
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleReductionLicense
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedRoleReductionLicense
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedStageDecomposition

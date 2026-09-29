@@ -34,6 +34,16 @@ def OpeningRolePosition.state
   | .left => causalOpeningLeft source run.selected run.fresh
   | .right => causalOpeningRight source run.selected run.fresh
 
+
+/-- The realized-state agreement is a primitive witness, not an auxiliary label. -/
+def RoleFormationAgreement
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run)
+    (position : OpeningRolePosition role)
+    (state : GeneratedStructuralBranchContext source.rootFormula) : Type :=
+  PLift (state = position.state role)
+
 /--
 An opening occurrence carries both its historical position and the generated
 structural state that realizes that position.
@@ -44,7 +54,17 @@ structure RoleOpeningOccurrence
     (role : RelationalConstitutiveRoleStage run) where
   position : OpeningRolePosition role
   state : GeneratedStructuralBranchContext source.rootFormula
-  formedAt : state = position.state role
+  formationWitness : RoleFormationAgreement role position state
+
+
+/-- Exact realization is recovered by consuming the stored formation witness. -/
+theorem RoleOpeningOccurrence.formedAt
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    (occurrence : RoleOpeningOccurrence role) :
+    occurrence.state = occurrence.position.state role :=
+  occurrence.formationWitness.down
 
 /-- Canonical realization of a role position by its generated occurrence. -/
 def roleOpeningOccurrenceAt
@@ -55,7 +75,7 @@ def roleOpeningOccurrenceAt
     RoleOpeningOccurrence role :=
   { position := position
     state := position.state role
-    formedAt := rfl }
+    formationWitness := ⟨rfl⟩ }
 
 /-- Forget only the realized state, retaining the occurrence's position. -/
 def roleOpeningOccurrenceToPosition
@@ -84,9 +104,11 @@ theorem openingOccurrence_roundTrip
         (roleOpeningOccurrenceToPosition occurrence) =
       occurrence := by
   cases occurrence with
-  | mk position state formedAt =>
-      cases formedAt
-      rfl
+  | mk position state formationWitness =>
+      cases formationWitness with
+      | up formedAt =>
+          cases formedAt
+          rfl
 
 /-- Exact reversible realization between positions and occurrences. -/
 def openingPositionOccurrenceTransport
@@ -246,7 +268,7 @@ abbrev executedRoleSourceRelation
     {run : CausalConstitutiveStageExecution source}
     (observed : CausalConstitutiveState)
     (candidate : RelationalConstitutiveRoleStage run) : Type :=
-  PLift (candidate.searchState = observed)
+  RoleSourceAgreement candidate.searchState observed
 
 /-- Primitive formation relation between an executed role and one occurrence. -/
 abbrev executedRoleFormationRelation
@@ -256,7 +278,7 @@ abbrev executedRoleFormationRelation
     (candidate : RelationalConstitutiveRoleStage run)
     (occurrence : RoleOpeningOccurrence reference) : Type :=
   PLift (candidate = reference) ×
-    PLift (occurrence.state = occurrence.position.state reference)
+    RoleFormationAgreement reference occurrence.position occurrence.state
 
 /-- Primitive target relation read by the executed relational role. -/
 abbrev executedRoleTargetRelation
@@ -264,7 +286,7 @@ abbrev executedRoleTargetRelation
     {run : CausalConstitutiveStageExecution source}
     (candidate : RelationalConstitutiveRoleStage run)
     (observed : CausalConstitutiveState) : Type :=
-  PLift (candidate.nextState = observed)
+  RoleTargetAgreement candidate.nextState observed
 
 /-- Primitive provenance relation carried by one executed occurrence. -/
 abbrev executedRoleProvenanceRelation
@@ -274,9 +296,9 @@ abbrev executedRoleProvenanceRelation
     (provenance : List Var)
     (candidate : RelationalConstitutiveRoleStage run)
     (occurrence : RoleOpeningOccurrence reference) : Type :=
-  PLift (provenance = source.provenance) ×
+  RoleProvenanceAgreement provenance candidate.searchState.provenance ×
     PLift (candidate = reference) ×
-    PLift (occurrence.state = occurrence.position.state reference)
+    RoleFormationAgreement reference occurrence.position occurrence.state
 
 /--
 One executed role as an exact relational opening.  Positions are independent
@@ -297,9 +319,9 @@ def generalOpeningStageOfRole
     TargetRelation := executedRoleTargetRelation
     ProvenanceRelation := executedRoleProvenanceRelation role
     role := role
-    provenance := source.provenance
-    sourceWitness := ⟨role.searchStateExact⟩
-    targetWitness := ⟨role.nextStateExact⟩
+    provenance := role.provenance
+    sourceWitness := role.sourceWitness
+    targetWitness := role.targetWitness
     positionDecEq := openingRolePositionDecEq role
     positionFrontier := openingPositionFrontier role
     positionComplete := openingPositionFrontier_complete role
@@ -310,7 +332,7 @@ def generalOpeningStageOfRole
     classify_realize := openingPosition_roundTrip role
     formationAgreement := fun _ => ⟨⟨rfl⟩, ⟨rfl⟩⟩
     provenanceAgreement := fun _ =>
-      ⟨⟨rfl⟩, ⟨⟨rfl⟩, ⟨rfl⟩⟩⟩ }
+      ⟨role.provenanceWitness, ⟨⟨rfl⟩, ⟨rfl⟩⟩⟩ }
 
 /--
 The constituted identity belonging to one executed relational role. The
@@ -375,7 +397,7 @@ structure RoleConstitutionEvidence
   formationWitness :
     executedRoleFormationRelation role role identity.realized
   provenanceWitness :
-    executedRoleProvenanceRelation role source.provenance role identity.realized
+    executedRoleProvenanceRelation role role.provenance role identity.realized
 
 /-- Recover all primitive witnesses from the exact relational opening. -/
 def roleConstitutionEvidence
@@ -599,6 +621,8 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleFormationAgreement
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleOpeningOccurrence.formedAt
 #print axioms ConstitutiveSearch.EndogenousDecomposition.OpeningRolePosition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleOpeningOccurrence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.openingPositionOccurrenceTransport

@@ -397,9 +397,8 @@ def exactPrefixLocalProducerType : PrefixLocalOperationalProducer :=
 /-- The canonical head production carries exactly the already-produced context
 that was available before its dependent tail is constructed. -/
 theorem prefixLocalProductionCarriesExactPriorContext
-    {Context : Type 2}
-    (context : Context)
     {source : CausalConstitutiveState}
+    (context : ConstitutedOperationalPrefix source)
     (stage : CausalConstitutiveStageExecution source) :
     (prefixLocalOperationalProducer context stage).priorContext = context :=
   (prefixLocalOperationalProducer context stage).priorContextExact

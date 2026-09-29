@@ -18,188 +18,265 @@ reconstructed afterwards.
 namespace ConstitutiveSearch
 namespace EndogenousDecomposition
 
-/-- The root prefix before the first operational production. -/
-abbrev InitialOperationalPrefix : Type 2 := ULift.{2, 0} Unit
+/-- The root context is indexed by the actually initialized public state. -/
+abbrev InitialOperationalPrefix (input : Nat) : Type 2 :=
+  ConstitutedOperationalPrefix (causalStateOfThreadedState
+    (initialThreadedConstitutiveStateFromInitialization
+      (initializeConstitutiveHistory input)))
 
-/-- Canonical empty root prefix. -/
-def initialOperationalPrefix : InitialOperationalPrefix :=
-  ULift.up ()
+def initialOperationalPrefix (input : Nat) : InitialOperationalPrefix input :=
+  .root _
 
+set_option genSizeOf false in
 /--
-One execution whose head stage and head decomposition are formed before its
-dependent tail.  The type of the head decomposition mentions only the current
-executed stage; no completed future is an argument or an index of that head.
+The tail receives both the exact state and the closed context produced by the
+head. The context is a past history, not an arbitrary type parameter.
 -/
 inductive CausalOperationalExecutionHistory :
-    {Context : Type 2} → (context : Context) →
-      {depth _count : Nat} → {assignment : SequentialAssignment depth} →
-      (state : ThreadedConstitutiveState depth assignment) → Type 3 where
-  | nil {Context : Type 2} (context : Context)
-      {depth : Nat} {assignment : SequentialAssignment depth}
-      (state : ThreadedConstitutiveState depth assignment) :
-      CausalOperationalExecutionHistory context (_count := 0) state
-  | step {Context : Type 2} {context : Context}
-      {depth count : Nat} {assignment : SequentialAssignment depth}
+    {depth _count : Nat} → {assignment : SequentialAssignment depth} →
+      (state : ThreadedConstitutiveState depth assignment) →
+      ConstitutedOperationalPrefix (causalStateOfThreadedState state) → Type 3 where
+  | nil {depth : Nat} {assignment : SequentialAssignment depth}
+      (state : ThreadedConstitutiveState depth assignment)
+      (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)) :
+      CausalOperationalExecutionHistory (_count := 0) state context
+  | step {depth count : Nat} {assignment : SequentialAssignment depth}
       {state : ThreadedConstitutiveState depth assignment}
+      {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
       (head : SequentialStageRun depth assignment)
       (headRun : ThreadedConstitutiveStageRun state head)
       (headProduction : ExecutedStageOperationalProduction
         context (causalStageOfThreadedStage headRun))
-      (tail : CausalOperationalExecutionHistory
-        headProduction (_count := count) headRun.nextRun.next) :
-      CausalOperationalExecutionHistory context (_count := count + 1) state
+      (tail : CausalOperationalExecutionHistory (_count := count)
+        headRun.nextRun.next headProduction.nextContext) :
+      CausalOperationalExecutionHistory (_count := count + 1) state context
 
-/--
-The authoritative recursion produces the stage, its local decomposition and
-the next state in one step, then continues from that next state.
--/
+/-- The next stage and its production, without a remaining-length input. -/
+structure CausalOperationalHead
+    {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)) : Type 3 where
+  stage : SequentialStageRun depth assignment
+  run : ThreadedConstitutiveStageRun state stage
+  production : ExecutedStageOperationalProduction context (causalStageOfThreadedStage run)
+
+/-- Discover, execute and produce the current head using no future argument. -/
+def executeCausalOperationalHead
+    {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+    (fresh : ThreadedStateFreshForNext state) : CausalOperationalHead state context :=
+  let discoveryRun := runThreadedNextDiscovery state
+  match found : discoveryRun.outcome.discovered? with
+  | none => False.elim ((runThreadedNextDiscovery_found state fresh) found)
+  | some discovery =>
+      let built := buildThreadedConstitutiveStage state discoveryRun rfl
+        discovery found
+        (by
+          rw [← runThreadedNextDiscovery_discovered_exact state fresh]
+          exact found)
+        (runThreadedNextDiscovery_work_le_canonical state fresh)
+        (state.decisionsAvoidNext fresh)
+      { stage := built.stage
+        run := built.run
+        production := prefixLocalOperationalProducer context
+          (causalStageOfThreadedStage built.run) }
+
+/-- Execute a head first, then continue from its produced state and context. -/
 def executeCausalOperationalExecutionHistory
-    (count : Nat) : {Context : Type 2} → (context : Context) →
-      {depth : Nat} → {assignment : SequentialAssignment depth} →
+    (count : Nat) : {depth : Nat} → {assignment : SequentialAssignment depth} →
       (state : ThreadedConstitutiveState depth assignment) →
+      (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)) →
       ThreadedStateFreshForNext state →
-      CausalOperationalExecutionHistory context (_count := count) state
-  | _, context, _, _, state, fresh => match count with
-    | 0 => .nil context state
+      CausalOperationalExecutionHistory (_count := count) state context
+  | _, _, state, context, fresh => match count with
+    | 0 => .nil state context
     | count + 1 =>
-        let discoveryRun := runThreadedNextDiscovery state
-        match found : discoveryRun.outcome.discovered? with
-        | none => False.elim ((runThreadedNextDiscovery_found state fresh) found)
-        | some discovery =>
-            let built := buildThreadedConstitutiveStage state discoveryRun rfl
-              discovery found
-              (by
-                rw [← runThreadedNextDiscovery_discovered_exact state fresh]
-                exact found)
-              (runThreadedNextDiscovery_work_le_canonical state fresh)
-              (state.decisionsAvoidNext fresh)
-            let causalStage := causalStageOfThreadedStage built.run
-            let localProduction :=
-              prefixLocalOperationalProducer context causalStage
-            .step built.stage built.run localProduction
-              (executeCausalOperationalExecutionHistory count
-                localProduction built.run.nextRun.next
-                (built.run.nextRun.fresh fresh))
+        let produced := executeCausalOperationalHead state context fresh
+        .step produced.stage produced.run produced.production
+          (executeCausalOperationalExecutionHistory count
+            produced.run.nextRun.next produced.production.nextContext
+            (produced.run.nextRun.fresh fresh))
 
-/-- Erase only the operational decomposition, retaining the executed history. -/
+/-- Observe the head without evaluating any tail or adding a positivity cast. -/
+def CausalOperationalExecutionHistory.head?
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)} :
+    CausalOperationalExecutionHistory (_count := count) state context →
+      Option (CausalOperationalHead state context)
+  | .nil _ _ => none
+  | .step stage run production _ => some ⟨stage, run, production⟩
+
+/-- Head production of the public recursion is the prefix-only producer itself. -/
+theorem executeCausalOperationalExecutionHistory_head
+    (remaining : Nat) {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+    (fresh : ThreadedStateFreshForNext state) :
+    (executeCausalOperationalExecutionHistory (remaining + 1) state context fresh).head? =
+      some (executeCausalOperationalHead state context fresh) := rfl
+
+/-- Varying the future horizon leaves the constructed head unchanged. -/
+theorem executeCausalOperationalExecutionHistory_head_independent
+    (leftRemaining rightRemaining : Nat)
+    {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+    (fresh : ThreadedStateFreshForNext state) :
+    (executeCausalOperationalExecutionHistory (leftRemaining + 1) state context fresh).head? =
+      (executeCausalOperationalExecutionHistory (rightRemaining + 1) state context fresh).head? :=
+  rfl
+
+/-- The recursive transition exposes the exact produced state and context. -/
+theorem executeCausalOperationalExecutionHistory_step
+    (remaining : Nat) {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+    (fresh : ThreadedStateFreshForNext state) :
+    executeCausalOperationalExecutionHistory (remaining + 1) state context fresh =
+      let produced := executeCausalOperationalHead state context fresh
+      CausalOperationalExecutionHistory.step produced.stage produced.run produced.production
+        (executeCausalOperationalExecutionHistory remaining produced.run.nextRun.next
+          produced.production.nextContext (produced.run.nextRun.fresh fresh)) := rfl
+
+/-- Different valid tails do not determine the already constructed head. -/
+theorem causalOperational_same_head_different_tails
+    {depth leftCount rightCount : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
+    (stage : SequentialStageRun depth assignment)
+    (run : ThreadedConstitutiveStageRun state stage)
+    (production : ExecutedStageOperationalProduction context (causalStageOfThreadedStage run))
+    (leftTail : CausalOperationalExecutionHistory (_count := leftCount)
+      run.nextRun.next production.nextContext)
+    (rightTail : CausalOperationalExecutionHistory (_count := rightCount)
+      run.nextRun.next production.nextContext) :
+    (CausalOperationalExecutionHistory.step stage run production leftTail).head? =
+      (CausalOperationalExecutionHistory.step stage run production rightTail).head? :=
+  rfl
+
+/-- Erase only the operational material; the executed states are unchanged. -/
 def CausalOperationalExecutionHistory.instrumented :
-    {Context : Type 2} → {context : Context} →
-      {depth count : Nat} → {assignment : SequentialAssignment depth} →
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
       {state : ThreadedConstitutiveState depth assignment} →
-      CausalOperationalExecutionHistory context (_count := count) state →
+      {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)} →
+      CausalOperationalExecutionHistory (_count := count) state context →
       ConstitutiveExecutionHistory (count := count) state
-  | _, _, _, _, _, _, .nil _ state => .nil state
-  | _, _, _, _, _, _, .step head headRun _ tail =>
+  | _, _, _, _, _, .nil state _ => .nil state
+  | _, _, _, _, _, .step head headRun _ tail =>
       .step head headRun tail.instrumented
 
-/-- Erase instrumentation while retaining the causal stages produced in place. -/
+/-- The causal run is an erasure of the same fused execution. -/
 def CausalOperationalExecutionHistory.causalRun :
-    {Context : Type 2} → {context : Context} →
-      {depth count : Nat} → {assignment : SequentialAssignment depth} →
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
       {state : ThreadedConstitutiveState depth assignment} →
-      (history : CausalOperationalExecutionHistory context (_count := count) state) →
-      CausalConstitutiveExecutionHistory count
-        (causalStateOfThreadedState state)
-  | _, _, _, _, _, _, .nil _ state =>
+      {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)} →
+      (history : CausalOperationalExecutionHistory (_count := count) state context) →
+      CausalConstitutiveExecutionHistory count (causalStateOfThreadedState state)
+  | _, _, _, _, _, .nil state _ =>
       CausalConstitutiveExecutionHistory.nil (causalStateOfThreadedState state)
-  | _, _, _, _, _, _, .step _ headRun _ tail =>
+  | _, _, _, _, _, .step _ headRun _ tail =>
       CausalConstitutiveExecutionHistory.step
         (causalStageOfThreadedStage headRun) tail.causalRun
 
-/--
-The causal run stored by the fused recursion is exactly the structural erasure
-of its authoritative instrumented execution; this is proved for every fused
-history, not only for the public instance.
--/
 theorem CausalOperationalExecutionHistory.causalRun_exact :
-    {Context : Type 2} → {context : Context} →
-      {depth count : Nat} → {assignment : SequentialAssignment depth} →
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
       {state : ThreadedConstitutiveState depth assignment} →
-      (history : CausalOperationalExecutionHistory context (_count := count) state) →
-      history.causalRun =
-        causalHistoryOfInstrumentedHistory history.instrumented
-  | _, _, _, _, _, _, .nil _ _ => rfl
-  | _, _, _, _, _, _, .step _ _ _ tail => by
+      {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)} →
+      (history : CausalOperationalExecutionHistory (_count := count) state context) →
+      history.causalRun = causalHistoryOfInstrumentedHistory history.instrumented
+  | _, _, _, _, _, .nil _ _ => rfl
+  | _, _, _, _, _, .step _ _ _ tail => by
       simp only [CausalOperationalExecutionHistory.causalRun,
         CausalOperationalExecutionHistory.instrumented,
         causalHistoryOfInstrumentedHistory]
       rw [tail.causalRun_exact]
 
-/-- Read the decomposition produced at each recursive execution step. -/
+/-- Read only the local decompositions actually stored by the fused execution. -/
 def CausalOperationalExecutionHistory.stagewiseDecomposition :
-    {Context : Type 2} → {context : Context} →
-      {depth count : Nat} → {assignment : SequentialAssignment depth} →
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
       {state : ThreadedConstitutiveState depth assignment} →
-      (history : CausalOperationalExecutionHistory context (_count := count) state) →
+      {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)} →
+      (history : CausalOperationalExecutionHistory (_count := count) state context) →
       StagewiseExecutedDecompositionHistory history.causalRun
-  | _, _, _, _, _, _, .nil _ _ => .nil
-  | _, _, _, _, _, _, .step _ _ headProduction tail =>
+  | _, _, _, _, _, .nil _ _ => .nil
+  | _, _, _, _, _, .step _ _ headProduction tail =>
       .step headProduction.decomposition tail.stagewiseDecomposition
 
-/-- Every stored head is the canonical function of its current stage alone. -/
 theorem CausalOperationalExecutionHistory.headsArePrefixLocal :
-    {Context : Type 2} → {context : Context} →
-      {depth count : Nat} → {assignment : SequentialAssignment depth} →
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
       {state : ThreadedConstitutiveState depth assignment} →
-      (history : CausalOperationalExecutionHistory context (_count := count) state) →
+      {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)} →
+      (history : CausalOperationalExecutionHistory (_count := count) state context) →
       history.stagewiseDecomposition =
         buildStagewiseExecutedDecompositionHistory history.causalRun
-  | _, _, _, _, _, _, .nil _ _ => rfl
-  | _, _, _, _, _, _, .step _ _ headProduction tail => by
+  | _, _, _, _, _, .nil _ _ => rfl
+  | _, _, _, _, _, .step _ _ headProduction tail => by
       change StagewiseExecutedDecompositionHistory.step
           headProduction.decomposition tail.stagewiseDecomposition =
-        StagewiseExecutedDecompositionHistory.step
-          (executedStageDecomposition _) _
+        StagewiseExecutedDecompositionHistory.step (executedStageDecomposition _) _
       rw [headProduction.decompositionExact, tail.headsArePrefixLocal]
       rfl
 
-/-- The fused executor erases to the pre-existing authoritative executor. -/
+/-- Removing operational context gives the original authoritative execution. -/
 theorem executeCausalOperationalExecutionHistory_instrumented_exact
-    (count : Nat) {Context : Type 2} (context : Context) {depth : Nat}
-    {assignment : SequentialAssignment depth}
+    (count : Nat) {depth : Nat} {assignment : SequentialAssignment depth}
     (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
     (fresh : ThreadedStateFreshForNext state) :
-    (executeCausalOperationalExecutionHistory count context state fresh).instrumented =
+    (executeCausalOperationalExecutionHistory count state context fresh).instrumented =
       executeConstitutiveExecutionHistory count state fresh := by
-  induction count generalizing Context context depth assignment state with
+  induction count generalizing depth assignment state with
   | zero => rfl
   | succ count inductionHypothesis =>
-      simp only [executeCausalOperationalExecutionHistory,
-        executeConstitutiveExecutionHistory]
+      rw [executeCausalOperationalExecutionHistory, executeConstitutiveExecutionHistory]
       split
       case h_1 =>
         rename_i notFound
-        exact False.elim
-          ((runThreadedNextDiscovery_found state fresh) notFound)
+        exact False.elim ((runThreadedNextDiscovery_found state fresh) notFound)
       case h_2 =>
-        rename_i leftDiscovery leftFound
-        split
-        case h_1 =>
-          rename_i rightNotFound
-          exact False.elim
-            ((runThreadedNextDiscovery_found state fresh) rightNotFound)
-        case h_2 =>
-          rename_i rightDiscovery rightFound
-          have sameDiscovery : leftDiscovery = rightDiscovery :=
-            Option.some.inj (Eq.trans leftFound.symm rightFound)
-          cases sameDiscovery
-          simp only [CausalOperationalExecutionHistory.instrumented]
-          exact congrArg
-            (fun tail => ConstitutiveExecutionHistory.step _ _ tail)
-            (inductionHypothesis _ _ _)
+        rename_i discovery found
+        let built := buildThreadedConstitutiveStage state (runThreadedNextDiscovery state)
+          rfl discovery found
+          (by rw [← runThreadedNextDiscovery_discovered_exact state fresh]; exact found)
+          (runThreadedNextDiscovery_work_le_canonical state fresh)
+          (state.decisionsAvoidNext fresh)
+        have headExact : executeCausalOperationalHead state context fresh =
+            { stage := built.stage, run := built.run,
+              production := prefixLocalOperationalProducer context
+                (causalStageOfThreadedStage built.run) } := by
+          unfold executeCausalOperationalHead
+          dsimp only
+          split
+          case h_1 =>
+            rename_i absent
+            exact False.elim ((runThreadedNextDiscovery_found state fresh) absent)
+          case h_2 =>
+            rename_i other otherFound
+            have same : other = discovery := Option.some.inj (Eq.trans otherFound.symm found)
+            cases same
+            rfl
+        have stepExact := congrArg
+          (fun produced : CausalOperationalHead state context =>
+            (CausalOperationalExecutionHistory.step produced.stage produced.run produced.production
+              (executeCausalOperationalExecutionHistory count produced.run.nextRun.next
+                produced.production.nextContext (produced.run.nextRun.fresh fresh))).instrumented)
+          headExact
+        exact Eq.trans stepExact
+          (congrArg (fun tail => ConstitutiveExecutionHistory.step built.stage built.run tail)
+            (inductionHypothesis _ _ _))
 
-/-- The public fused run starts from the measured public initialization. -/
+/-- The public execution starts at the state actually produced by initialization. -/
 def publicCausalOperationalExecution (input : Nat) :
-    CausalOperationalExecutionHistory
-      initialOperationalPrefix
-      (_count := resolutionLength input)
+    CausalOperationalExecutionHistory (_count := resolutionLength input)
       (initialThreadedConstitutiveStateFromInitialization
-        (initializeConstitutiveHistory input)) :=
-  executeCausalOperationalExecutionHistory
-    (resolutionLength input)
-    initialOperationalPrefix
+        (initializeConstitutiveHistory input))
+      (initialOperationalPrefix input) :=
+  executeCausalOperationalExecutionHistory (resolutionLength input)
     (initialThreadedConstitutiveStateFromInitialization
       (initializeConstitutiveHistory input))
+    (initialOperationalPrefix input)
     (initialThreadedConstitutiveStateFromInitialization_fresh
       (initializeConstitutiveHistory input))
 
@@ -247,9 +324,9 @@ theorem publicCausalOperationalExecution_instrumented_exact (input : Nat) :
       (executeConstitutiveResolution input).constitutiveFeedbackHistory := by
   exact executeCausalOperationalExecutionHistory_instrumented_exact
     (resolutionLength input)
-    initialOperationalPrefix
     (initialThreadedConstitutiveStateFromInitialization
       (initializeConstitutiveHistory input))
+    (initialOperationalPrefix input)
     (initialThreadedConstitutiveStateFromInitialization_fresh
       (initializeConstitutiveHistory input))
 
@@ -272,6 +349,14 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionHistory_head
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionHistory_head_independent
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionHistory_step
+
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalHead
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalHead
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.head?
+#print axioms ConstitutiveSearch.EndogenousDecomposition.causalOperational_same_head_different_tails
 #print axioms ConstitutiveSearch.EndogenousDecomposition.InitialOperationalPrefix
 #print axioms ConstitutiveSearch.EndogenousDecomposition.initialOperationalPrefix
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory

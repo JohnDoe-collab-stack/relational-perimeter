@@ -30,10 +30,10 @@ structure ConstitutiveExtensiveSeparationCertificate (input : Nat) where
   realizationExact : realization = publicInstrumentedExecutionRealization input
   causalOperationalExecution :
     CausalOperationalExecutionHistory
-      initialOperationalPrefix
       (_count := resolutionLength input)
       (initialThreadedConstitutiveStateFromInitialization
         (initializeConstitutiveHistory input))
+      (initialOperationalPrefix input)
   causalOperationalExecutionExact :
     causalOperationalExecution = publicCausalOperationalExecution input
   instrumentedExecutionExact :
@@ -285,6 +285,46 @@ def publicCertificateExecutedRegime
     ObligationRegime (publicRoleProfileFiniteCarrier input) :=
   (publicCertificateNormalization input).operationalRegime
 
+/-- Transform arbitrary profile data using the guarantee on its carried obligation. -/
+def publicCarriedProfilePayload
+    (input : Nat)
+    (profile : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input))
+    (payload : RoleProfilePayload profile) :=
+  ((publicCertificateExecutedRegime input).carry profile).transformPayload
+    profile rfl payload
+
+/-- This result is the specified action, not merely an accepted constant output. -/
+theorem publicCarriedProfilePayload_action
+    (input : Nat)
+    (profile : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input))
+    (payload : RoleProfilePayload profile) :
+    (publicCarriedProfilePayload input profile payload).1 =
+      RoleSemantics.actProfile
+        (publicCausalOperationalExecution input).stagewiseDecomposition.reduction
+        profile payload :=
+  (publicCarriedProfilePayload input profile payload).2.1
+
+/-- Acceptance is preserved for all structural payloads, at every public depth. -/
+theorem publicCarriedProfilePayload_preserves
+    (input : Nat)
+    (profile : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input))
+    (payload : RoleProfilePayload profile)
+    (accepted : RoleSemantics.ProfileAccept profile payload) :
+    RoleSemantics.TargetAccept
+      (publicCausalOperationalExecution input).stagewiseDecomposition.reduction
+      (publicCarriedProfilePayload input profile payload).1 :=
+  (publicCarriedProfilePayload input profile payload).2.2 accepted
+
+/-- The obligation itself exposes the source distinctions and four agreements. -/
+theorem publicCarriedProfile_constitution
+    (input : Nat)
+    (profile : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input)) :
+    RoleSemantics.SourcesRemainDistinct
+      (publicCausalOperationalExecution input).stagewiseDecomposition.reduction ∧
+    ∀ p : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input),
+      RoleSemantics.ProfileConstitution p :=
+  ((publicCertificateExecutedRegime input).carry profile).sourceInvariant
+
 theorem publicCertificateExecutedRegime_exact
     (input : Nat) :
     publicCertificateExecutedRegime input =
@@ -475,6 +515,11 @@ structure PublicOperationalRegimeCertificate (input : Nat) : Type 3 where
   groupingSeparationIsChainSeparation :
     (publicCertificateExactExecutedRegime input).groupingAuthorization.occurrenceSeparation =
       (publicCertificateNormalization input).constitutiveOccurrenceSeparation
+  carriedSemanticGuarantee :
+    (profile : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input)) →
+      SemanticImage.Specification
+        (publicCertificateNormalization input).imageDescription
+        ((publicCertificateExecutedRegime input).carry profile).value
   exactRegimeExact :
     publicCertificateExactExecutedRegime input =
       exactExecutedOperationalRegime (publicCertificateNormalization input)
@@ -542,6 +587,8 @@ def publicOperationalRegimeCertificate
     groupingRelationalConstitutionIsChainConstitution := rfl
     groupingPreservationIsChainPreservation := rfl
     groupingSeparationIsChainSeparation := rfl
+    carriedSemanticGuarantee := fun profile =>
+      ((publicCertificateExecutedRegime input).carry profile).semantics
     exactRegimeExact := rfl
     carriedValuesAreProducedTargets :=
       publicCertificate_carry_value_eq_produced_target input
@@ -588,6 +635,11 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCarriedProfilePayload
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCarriedProfilePayload_action
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCarriedProfilePayload_preserves
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCarriedProfile_constitution
+
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate.roles
 #print axioms ConstitutiveSearch.EndogenousDecomposition.constitutiveExtensiveSeparationCertificate

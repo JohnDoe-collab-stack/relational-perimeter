@@ -125,3 +125,5 @@ RelationalPerimeter.Computation.ConstitutiveSearch.SequentialPrimitiveExecution	
 RelationalPerimeter.Computation.ConstitutiveSearch.TransportClosure	G	enforced	Generic transport closure
 RelationalPerimeter.Computation.ConstitutiveSearch.TransportCode	G	enforced	Generic transport-code syntax and semantics
 RelationalPerimeter.Computation.EndogenousOperationalDecomposition	A8	enforced	Public computational facade
+RelationalPerimeter.Computation.ConstitutiveSearch.SemanticImage	G	enforced	Generic semantic specification and consumer of image obligations
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleProfileSemantics	D	enforced	Total action, preservation, and constitutive agreements on the authoritative occurrence profiles

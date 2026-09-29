@@ -14,13 +14,28 @@ namespace EndogenousDecomposition
 
 open SAT
 
+
+/-- Primitive agreement between the state read by a role and its executed source. -/
+def RoleSourceAgreement (observed expected : CausalConstitutiveState) : Type :=
+  PLift (observed = expected)
+
+/-- Primitive agreement between the role's target and the state produced by execution. -/
+def RoleTargetAgreement (observed expected : CausalConstitutiveState) : Type :=
+  PLift (observed = expected)
+
+/-- Primitive material provenance agreement, before any operational readout. -/
+def RoleProvenanceAgreement (observed expected : List Var) : Type :=
+  PLift (observed = expected)
+
 /-- The relational functions constituted together by one executed stage. -/
 structure RelationalConstitutiveRoleStage
     {source : CausalConstitutiveState}
     (run : CausalConstitutiveStageExecution source) where
   private mk ::
   searchState : CausalConstitutiveState
-  searchStateExact : searchState = source
+  sourceWitness : RoleSourceAgreement searchState source
+  provenance : List Var
+  provenanceWitness : RoleProvenanceAgreement provenance searchState.provenance
   structuralOpening :
     AcceptingExactBinarySplit
       (generatedStructuralBranchSystem source.rootFormula)
@@ -47,7 +62,30 @@ structure RelationalConstitutiveRoleStage
       (causalOpeningRight source run.selected run.fresh)
       completedOutput
   nextState : CausalConstitutiveState
-  nextStateExact : nextState = run.next
+  targetWitness : RoleTargetAgreement nextState run.next
+
+
+/-- Source equality is obtained by eliminating the primitive source witness. -/
+theorem RelationalConstitutiveRoleStage.searchStateExact
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) : role.searchState = source :=
+  role.sourceWitness.down
+
+/-- The target used by a dependent continuation is read from the target witness. -/
+theorem RelationalConstitutiveRoleStage.nextStateExact
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) : role.nextState = run.next :=
+  role.targetWitness.down
+
+/-- The material list for further discovery is reconciled by its provenance witness. -/
+theorem RelationalConstitutiveRoleStage.provenanceExact
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) : role.provenance = source.provenance :=
+  Eq.trans role.provenanceWitness.down
+    (congrArg CausalConstitutiveState.provenance role.searchStateExact)
 
 /-- Canonical role reading; no caller supplies any relational component. -/
 def relationalConstitutiveRoleStage
@@ -55,7 +93,9 @@ def relationalConstitutiveRoleStage
     (run : CausalConstitutiveStageExecution source) :
     RelationalConstitutiveRoleStage run :=
   { searchState := source
-    searchStateExact := rfl
+    sourceWitness := ⟨rfl⟩
+    provenance := source.provenance
+    provenanceWitness := ⟨rfl⟩
     structuralOpening :=
       generatedStructuralSplit source.operationalState run.selected run.fresh
     reconstructedRelation := run.relation
@@ -67,7 +107,7 @@ def relationalConstitutiveRoleStage
     actionExact := run.outputExact
     preservation := run.outputAccepted
     nextState := run.next
-    nextStateExact := rfl }
+    targetWitness := ⟨rfl⟩ }
 
 /--
 An explicit certificate exposing how every role component is determined by its
@@ -163,6 +203,12 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSourceAgreement
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleTargetAgreement
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleProvenanceAgreement
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RelationalConstitutiveRoleStage.searchStateExact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RelationalConstitutiveRoleStage.nextStateExact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RelationalConstitutiveRoleStage.provenanceExact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RelationalConstitutiveRoleStage
 #print axioms ConstitutiveSearch.EndogenousDecomposition.relationalConstitutiveRoleStage
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RelationalRoleConstitutionExact

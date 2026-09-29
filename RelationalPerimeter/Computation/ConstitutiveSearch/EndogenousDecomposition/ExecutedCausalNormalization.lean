@@ -1,5 +1,5 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.ExactOperationalImage
-import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleIndexedReduction
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleProfileSemantics
 
 /-!
 # Operational image computed by the executed role reduction
@@ -221,6 +221,44 @@ theorem ExecutedCausalNormalization.targets_converge
   Eq.trans (normalization.target_exact left)
     (normalization.target_exact right).symm
 
+/-- Structural semantics of this normalization, with no proof in its description. -/
+def ExecutedCausalNormalization.imageDescription
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run} {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    (normalization : ExecutedCausalNormalization reduction) : SemanticImage.Description :=
+  { Source := RoleOccurrenceProfile roles
+    Payload := RoleProfilePayload
+    Target := ExecutedOperationalTargetProfile reduction
+    Accept := RoleSemantics.ProfileAccept
+    TargetAccept := RoleSemantics.TargetAccept reduction
+    action := RoleSemantics.actProfile reduction
+    canonical := canonicalRoleProfilePayload roles
+    produced := normalization.target
+    reflect := fun target => ⟨RoleSemantics.retainedSelection reduction,
+      RoleSemantics.includeTarget reduction target⟩
+    SourceInvariant := RoleSemantics.SourcesRemainDistinct reduction ∧
+      ∀ p : RoleOccurrenceProfile roles, RoleSemantics.ProfileConstitution p }
+
+/-- Semantic admission is built by consuming the exact chain's three projections. -/
+theorem ExecutedOperationalGroupingAuthorization.imageSpecification
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run} {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    {normalization : ExecutedCausalNormalization reduction}
+    (authorization : ExecutedOperationalGroupingAuthorization normalization)
+    (value : ExecutedOperationalTargetProfile reduction) :
+    SemanticImage.Specification normalization.imageDescription value :=
+  SemanticImage.certify normalization.imageDescription
+    ⟨RoleSemantics.sourcesRemainDistinct authorization.occurrenceSeparation,
+      RoleSemantics.profileConstitutionFromChain authorization.relationalConstitution⟩
+    (fun p => Eq.trans (RoleSemantics.canonicalAction_exact reduction p)
+      (normalization.target_exact p).symm)
+    (RoleSemantics.profilePreserves authorization.preservation)
+    (RoleSemantics.includeTarget_preserves reduction) value
+
 /-- Positive occurrence of one target with its source and executed trace. -/
 structure ProducedOperationalTargetOccurrence
     {count : Nat} {state : CausalConstitutiveState}
@@ -272,40 +310,85 @@ def ExecutedCausalNormalization.producedTargetFrontier
     List (ExecutedOperationalTargetProfile reduction) :=
   [normalization.target (defaultRoleOccurrenceProfile roles)]
 
-/--
-One produced target admitted by the exact grouping authorization.  The
-authorization is an index of the obligation type itself, so an operational
-regime cannot be formed first and authorized afterwards.
--/
-inductive AuthorizedProducedTargetObligation
+/-- Positive membership in the image actually produced by this execution. -/
+def ExecutedTargetIsProduced
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
     {roles : RelationalConstitutiveRoleHistory run}
     {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction)
-    (_authorization : ExecutedOperationalGroupingAuthorization normalization) :
-    Type where
-  | admitted
-      (value : ExecutedOperationalTargetProfile reduction)
-      (valueExact : value = normalization.target
-        (defaultRoleOccurrenceProfile roles)) :
-      AuthorizedProducedTargetObligation normalization _authorization
+    (value : ExecutedOperationalTargetProfile reduction) : Prop :=
+  ∃ profile, normalization.target profile = value ∧
+    Nonempty (ExecutedRoleProfileReduction reduction profile value)
 
-/-- Recover the executed target value carried by an admitted obligation. -/
-def AuthorizedProducedTargetObligation.value
+/--
+An obligation is an actual produced target with a source and executed trace.
+Membership is not defined as equality to a distinguished output. The ambient
+target carrier remains unchanged, and convergence is a separate theorem.
+-/
+structure AuthorizedProducedTargetObligation
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    (normalization : ExecutedCausalNormalization reduction)
+    (_authorization : ExecutedOperationalGroupingAuthorization normalization) : Type where
+  admitted ::
+  value : ExecutedOperationalTargetProfile reduction
+  produced : ExecutedTargetIsProduced normalization value
+  semantics : SemanticImage.Specification normalization.imageDescription value
+
+/-- Use an obligation's own preimage guarantee through the abstract consumer. -/
+def AuthorizedProducedTargetObligation.transformPayload
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run} {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    {normalization : ExecutedCausalNormalization reduction}
+    {authorization : ExecutedOperationalGroupingAuthorization normalization}
+    (obligation : AuthorizedProducedTargetObligation normalization authorization)
+    (p : RoleOccurrenceProfile roles) (preimage : normalization.target p = obligation.value)
+    (payload : RoleProfilePayload p) :
+    {result : ExecutedOperationalTargetProfile reduction //
+      result = RoleSemantics.actProfile reduction p payload ∧
+      (RoleSemantics.ProfileAccept p payload → RoleSemantics.TargetAccept reduction result)} :=
+  SemanticImage.use obligation.semantics p preimage payload
+
+/-- The admitted value retains the constitution and separation of its sources. -/
+theorem AuthorizedProducedTargetObligation.sourceInvariant
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run} {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    {normalization : ExecutedCausalNormalization reduction}
+    {authorization : ExecutedOperationalGroupingAuthorization normalization}
+    (obligation : AuthorizedProducedTargetObligation normalization authorization) :
+    RoleSemantics.SourcesRemainDistinct reduction ∧
+      ∀ p : RoleOccurrenceProfile roles, RoleSemantics.ProfileConstitution p :=
+  SemanticImage.source_invariant obligation.semantics
+
+/-- Exact image equality does not need a convergence assumption. -/
+theorem AuthorizedProducedTargetObligation.eq_of_value_eq
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
     {roles : RelationalConstitutiveRoleHistory run}
     {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
     {normalization : ExecutedCausalNormalization reduction}
-    {authorization : ExecutedOperationalGroupingAuthorization normalization} :
-    AuthorizedProducedTargetObligation normalization authorization →
-      ExecutedOperationalTargetProfile reduction
-  | .admitted value _ => value
+    {authorization : ExecutedOperationalGroupingAuthorization normalization}
+    {left right : AuthorizedProducedTargetObligation normalization authorization}
+    (same : left.value = right.value) : left = right := by
+  cases left with
+  | admitted leftValue leftProduced leftSemantics =>
+      cases right with
+      | admitted rightValue rightProduced rightSemantics =>
+          change leftValue = rightValue at same
+          cases same
+          rfl
 
-/-- Every admitted obligation belongs to the same execution-produced fibre. -/
+/-- It is executed convergence, not the obligation definition, that joins members. -/
 theorem AuthorizedProducedTargetObligation.all_eq
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -314,19 +397,15 @@ theorem AuthorizedProducedTargetObligation.all_eq
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction)
     (authorization : ExecutedOperationalGroupingAuthorization normalization)
-    (left right :
-      AuthorizedProducedTargetObligation normalization authorization) :
+    (left right : AuthorizedProducedTargetObligation normalization authorization) :
     left = right := by
-  cases left with
-  | admitted leftValue leftExact =>
-      cases right with
-      | admitted rightValue rightExact =>
-          have same : leftValue = rightValue :=
-            Eq.trans leftExact rightExact.symm
-          cases same
-          rfl
+  apply AuthorizedProducedTargetObligation.eq_of_value_eq
+  rcases left.produced with ⟨leftSource, leftExact, _leftTrace⟩
+  rcases right.produced with ⟨rightSource, rightExact, _rightTrace⟩
+  exact Eq.trans leftExact.symm
+    (Eq.trans (normalization.targets_converge leftSource rightSource) rightExact)
 
-/-- Constructive equality follows from the common executed target. -/
+/-- Equality is decidable because the executed image has converged. -/
 def authorizedProducedTargetObligationDecEq
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -335,18 +414,14 @@ def authorizedProducedTargetObligationDecEq
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction)
     (authorization : ExecutedOperationalGroupingAuthorization normalization) :
-    DecidableEq
-      (AuthorizedProducedTargetObligation normalization authorization) :=
+    DecidableEq (AuthorizedProducedTargetObligation normalization authorization) :=
   fun left right => isTrue
-    (AuthorizedProducedTargetObligation.all_eq
-      normalization authorization left right)
+    (AuthorizedProducedTargetObligation.all_eq normalization authorization left right)
 
 /--
-The operational regime realizes the exact convergent fibre of the executed
-target map. This is the realization layer: its target carrier and carry map
-are computed from executed traces. Authorization of that realization as an
-operational grouping is recorded separately by
-`ExactExecutedOperationalRegime`.
+The carrier is the produced image. Its singleton enumeration is complete only
+by the executed-convergence theorem. The carrying map retains the output of
+its own source, and surjectivity recovers that source from image membership.
 -/
 def ExecutedCausalNormalization.authorizedOperationalRegime
     {count : Nat} {state : CausalConstitutiveState}
@@ -358,30 +433,24 @@ def ExecutedCausalNormalization.authorizedOperationalRegime
     (authorization : ExecutedOperationalGroupingAuthorization normalization) :
     ObligationRegime (roleProfileFiniteCarrier roles) :=
   let anchor := defaultRoleOccurrenceProfile roles
-  let anchorObligation :
-      AuthorizedProducedTargetObligation normalization authorization :=
-    .admitted (normalization.target anchor) rfl
-  { Obligation :=
-      AuthorizedProducedTargetObligation normalization authorization
+  let anchorObligation : AuthorizedProducedTargetObligation normalization authorization :=
+    .admitted (normalization.target anchor)
+      ⟨anchor, rfl, ⟨normalization.trace anchor⟩⟩ (authorization.imageSpecification (normalization.target anchor))
+  { Obligation := AuthorizedProducedTargetObligation normalization authorization
     decEq := authorizedProducedTargetObligationDecEq normalization authorization
     frontier := [anchorObligation]
     complete := fun obligation => by
-      cases obligation with
-      | admitted value valueExact =>
-          have same :
-              AuthorizedProducedTargetObligation.admitted value valueExact =
-                anchorObligation := by
-            cases valueExact
-            rfl
-          exact same ▸ .head []
+      have same := AuthorizedProducedTargetObligation.all_eq
+        normalization authorization anchorObligation obligation
+      exact same ▸ .head []
     nodup := .cons (fun _ member _ => nomatch member) .nil
     carry := fun identity =>
       .admitted (normalization.target identity)
-        (normalization.targets_converge identity anchor)
+        ⟨identity, rfl, ⟨normalization.trace identity⟩⟩ (authorization.imageSpecification (normalization.target identity))
     carry_surjective := fun obligation => by
-      cases obligation with
-      | admitted value valueExact =>
-          exact ⟨anchor, by cases valueExact; rfl⟩ }
+      rcases obligation.produced with ⟨identity, targetExact, _trace⟩
+      refine ⟨identity, ?_⟩
+      exact AuthorizedProducedTargetObligation.eq_of_value_eq targetExact }
 
 /-- The public regime is formed only through its exact grouping authorization. -/
 def ExecutedCausalNormalization.operationalRegime
@@ -394,6 +463,20 @@ def ExecutedCausalNormalization.operationalRegime
     ObligationRegime (roleProfileFiniteCarrier roles) :=
   normalization.authorizedOperationalRegime
     normalization.groupingAuthorization
+
+/-- The actual carried obligations preserve and reflect the profile criterion. -/
+theorem ExecutedCausalNormalization.viable_iff
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run} {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    (normalization : ExecutedCausalNormalization reduction) :
+    (∃ p : RoleOccurrenceProfile roles, ∃ payload : RoleProfilePayload p,
+      RoleSemantics.ProfileAccept p payload) ↔
+    (∃ target : ExecutedOperationalTargetProfile reduction,
+      RoleSemantics.TargetAccept reduction target) :=
+  SemanticImage.viable_iff normalization.imageDescription
+    (fun p => (normalization.operationalRegime.carry p).semantics)
 
 /-- The public regime is exactly that executed convergent-target regime. -/
 theorem ExecutedCausalNormalization.operationalRegime_exact
@@ -424,9 +507,8 @@ theorem ExecutedCausalNormalization.carry_eq_iff_target_eq
     constructor
     · intro same
       exact congrArg AuthorizedProducedTargetObligation.value same
-    · intro _
-      exact AuthorizedProducedTargetObligation.all_eq
-        normalization normalization.groupingAuthorization _ _
+    · intro same
+      exact AuthorizedProducedTargetObligation.eq_of_value_eq same
 
 /--
 Positive relation between two constituted profiles whose executed traces
@@ -583,6 +665,15 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.viable_iff
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.imageDescription
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalGroupingAuthorization.imageSpecification
+#print axioms ConstitutiveSearch.EndogenousDecomposition.AuthorizedProducedTargetObligation.transformPayload
+#print axioms ConstitutiveSearch.EndogenousDecomposition.AuthorizedProducedTargetObligation.sourceInvariant
+
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedTargetIsProduced
+#print axioms ConstitutiveSearch.EndogenousDecomposition.AuthorizedProducedTargetObligation.produced
+#print axioms ConstitutiveSearch.EndogenousDecomposition.AuthorizedProducedTargetObligation.eq_of_value_eq
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executedCausalNormalization
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.constitutivePreservation
