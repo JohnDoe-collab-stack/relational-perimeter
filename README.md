@@ -292,8 +292,13 @@ pwsh -NoProfile -File scripts/verify.ps1
 bash scripts/verify.sh
 ```
 
-Both gates traverse the declared import boundaries and compile the
-expected-failure fixtures. These fixtures verify that the scientific
+Both gates traverse the declared import boundaries, build the library, and
+then compile all 19 expected-failure fixtures listed in the shared
+`scripts/expected-failures.tsv` inventory. Unlisted, missing or duplicate fixtures
+fail both gates. Privacy, dependent-type, semantic-type and termination tests
+are reported separately; a termination rejection is not a general causality
+proof. `python3 scripts/test-expected-failure-gates.py --output /tmp/gate-tests`
+exercises both gates after the build (PowerShell is required). These fixtures verify that the scientific
 certificate and causal-regime constructors remain private, that profiles from
 distinct stored instructions are not directly interchangeable, that a retained
 decision cannot replace the transformed decision, that the projection

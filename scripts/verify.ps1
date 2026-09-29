@@ -26,8 +26,6 @@ if ($LASTEXITCODE -ne 0) { throw "measured accounting import-boundary check fail
 if ($LASTEXITCODE -ne 0) { throw "stratification parser self-test failed" }
 & (Join-Path $PSScriptRoot "check-stratification.ps1")
 if ($LASTEXITCODE -ne 0) { throw "stratification check failed" }
-& (Join-Path $PSScriptRoot "check-expected-failures.ps1")
-if ($LASTEXITCODE -ne 0) { throw "expected-failure check failed" }
 
 $forbiddenTerms =
   '(?m)^\s*(axiom|unsafe)\s|\b(noncomputable|Classical|propext|Quot\.sound|native_decide|implemented_by|sorry|admit)\b'
@@ -67,6 +65,9 @@ try {
   if ($joinedOutput -match 'depends on axioms:|sorryAx') {
     throw "axiom audit failure detected in lake build output"
   }
+  & (Join-Path $PSScriptRoot "check-expected-failures.ps1")
+  if ($LASTEXITCODE -ne 0) { throw "expected-failure check failed" }
+
   foreach ($file in $leanFiles) {
     $relative = $file.FullName.Substring($repoRoot.Length).TrimStart('\', '/')
     $oleanRelative = [IO.Path]::ChangeExtension($relative, ".olean")

@@ -344,6 +344,42 @@ class-level equivalence, its exact-capacity form, the independent general-class
 witnesses, the material program action, the separate preservation field, and
 the recursively derived reduction widths.
 
+## Bridge after the adversarial audit
+
+Occurrence formation is now carried by `GeneratedChildFormation`, indexed by
+the generated child, its parent, decision and freshness, without requiring an
+operational transport. Its realization equality is derived. The role's source,
+target and provenance views are projected from its indexed stage rather than
+stored as independent copies. Realization agreements remain distinct from the
+original generation relations.
+
+`RoleStatus.History` composes local statuses on the same source-profile carrier.
+A pending opening retains two obligations; an available preserving transport
+licenses absorption and supplies its action. The finite local image is built
+before specialising to convergence. The general policy width is
+`2^pendingCount`; the two-role mixed cases have widths 4, 2 and 1. These are
+policy comparisons on one history, not three additional SAT executions. The
+public regime is connected to the policy of actually returned transports and
+to its action on arbitrary continuations.
+
+`SemanticImage.Admission` and `AdmittedImageValue` separate semantic admission
+from image membership. The abstract consumer cannot recover evidence from a
+rich SAT reduction. The unused authorization parameter has been removed; the
+concrete instance supplies the guarantee from its own chain. Reconstructing an
+equivalent proof from that chain does not erase the guarantee's content.
+
+A primitive program makes discovery, application and decomposition observable.
+Its interpreter produces the value and its trace; the public evaluator is
+proved equal to this interpretation. Actually applying a following stage
+before the first decomposition preserves the value but violates the required
+trace. This statement concerns those primitive boundaries, not machine timing
+or every possible Lean computation hidden inside an argument.
+
+Neither convergence nor the binary class theorem is weakened.
+`executedAdmittedRegime_notFullWidth` names the admitted public regime expressly;
+the cardinal non-necessity lemma remains a weaker corollary. The historical
+Aristotle verdict and surviving mutations are not relabelled as successes.
+
 ## Exact scope
 
 The results are constructive, executable, uniformly indexed, and axiom-free.

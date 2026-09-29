@@ -363,6 +363,43 @@ les témoins indépendants des classes générales, l’action matérielle du
 programme, le champ de préservation distinct et les largeurs dérivées
 récursivement de la réduction.
 
+## Raccord après l’audit adversarial
+
+La formation d’une occurrence est désormais portée par `GeneratedChildFormation`,
+qui indexe l’enfant engendré par sa source, sa décision et sa fraîcheur, avant
+qu’un transport opérationnel soit requis. Son égalité de réalisation est dérivée.
+Les lectures de source, cible et provenance du rôle ne sont plus des copies
+librement stockées : elles sont projetées depuis l’étape indexée. Ces accords
+de réalisation sont distingués des relations de génération d’origine.
+
+`RoleStatus.History` compose les statuts locaux sur le même porteur de profils.
+Sans transport fourni, une ouverture conserve deux obligations ; avec un
+transport préservant, son action justifie l’absorption. L’image locale est
+construite avant spécialisation à la convergence. Le théorème général de cette
+politique donne une largeur `2^pendingCount` ; les cas mixtes à deux rôles ont
+les largeurs 4, 2 et 1. Ce sont des comparaisons de politique sur une histoire,
+non trois nouvelles exécutions SAT. Le régime public est raccordé à la politique
+des transports effectivement retournés et à son action sur toute continuation.
+
+L’admission est séparée de l’appartenance à l’image par `SemanticImage.Admission`
+et `AdmittedImageValue`. Le consommateur abstrait n’a aucun accès à une réduction
+SAT riche. Le paramètre d’autorisation fantôme a été retiré ; l’instance fournit
+la garantie depuis sa chaîne. Une preuve équivalente reconstruite depuis cette
+même chaîne n’est pas considérée comme une disparition de son contenu.
+
+L’ordre est également observé dans un programme de primitives de découverte,
+d’application et de décomposition. L’interprète produit une valeur et une trace ;
+le calcul public est relié à cet interprète par une égalité démontrée. Une
+réorganisation qui applique réellement l’étape suivante avant la première
+décomposition conserve la valeur mais viole la trace attendue. Cette propriété
+porte sur ces frontières de primitives, non sur le temps machine ni sur tout
+calcul Lean susceptible d’être caché dans un argument.
+
+Le théorème de convergence et le théorème binaire ne sont pas affaiblis.
+`executedAdmittedRegime_notFullWidth` désigne expressément le régime public admis ;
+le lemme cardinal de non-nécessité reste une conséquence plus faible. Le rapport
+Aristotle original et ses mutations survivantes ne sont pas réécrits en succès.
+
 ## Portée exacte
 
 Les résultats sont constructifs, exécutables, uniformément indexés et sans

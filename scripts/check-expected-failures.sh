@@ -16,66 +16,39 @@ else
   exit 1
 fi
 
-check_expected_failure() {
-  local fixture="$1"
-  local expected="$2"
-  local output status
+# One shared inventory; classification records what a fixture actually tests.
+manifest="scripts/expected-failures.tsv"
+declare -A expected category
+fixtures=()
+while IFS=$'\t' read -r fixture kind diagnostic extra; do
+  fixture="${fixture%$'\r'}"; kind="${kind%$'\r'}"; diagnostic="${diagnostic%$'\r'}"
+  [[ -z "$fixture" || "${fixture:0:1}" == '#' ]] && continue
+  [[ -z "${extra:-}" && -n "$diagnostic" ]] || { echo 'invalid expected-failure inventory row' >&2; exit 1; }
+  [[ "$fixture" == Tests/ExpectedFailure/*.lean.fail && "$fixture" != *'..'* ]] || { echo "invalid fixture path: $fixture" >&2; exit 1; }
+  [[ -z "${expected[$fixture]+x}" ]] || { echo "duplicate fixture: $fixture" >&2; exit 1; }
+  [[ " privacy dependent-type semantic-type termination " == *" $kind "* ]] || { echo "unknown fixture category: $kind" >&2; exit 1; }
+  [[ -f "$fixture" ]] || { echo "orphan fixture entry: $fixture" >&2; exit 1; }
+  fixtures+=("$fixture"); expected[$fixture]="$diagnostic"; category[$fixture]="$kind"
+done < "$manifest"
+mapfile -t actual < <(find Tests/ExpectedFailure -type f -name '*.lean.fail' | LC_ALL=C sort)
+[[ ${#fixtures[@]} -gt 0 ]] || { echo 'empty expected-failure inventory' >&2; exit 1; }
+for fixture in "${actual[@]}"; do
+  [[ -n "${expected[$fixture]+x}" ]] || { echo "uninventoried fixture: $fixture" >&2; exit 1; }
+done
+[[ ${#actual[@]} -eq ${#fixtures[@]} ]] || { echo 'fixture inventory mismatch' >&2; exit 1; }
+for fixture in "${fixtures[@]}"; do
   set +e
   output="$("${lake_command[@]}" env lean "$fixture" 2>&1)"
   status=$?
   set -e
-  if [[ "$status" == 0 ]]; then
-    echo "$fixture: unexpectedly compiled" >&2
-    exit 1
-  fi
-  if [[ "$output" != *"$expected"* ]]; then
+  [[ "$status" != 0 ]] || { echo "$fixture: unexpectedly compiled" >&2; exit 1; }
+  # Signals and conventional timeout codes are not compiler rejections.
+  [[ "$status" -lt 124 ]] || { echo "$fixture: interrupted or timed out ($status)" >&2; exit 1; }
+  if [[ "$output" != *"${expected[$fixture]}"* ]]; then
     echo "$fixture: failed for an unexpected reason" >&2
     echo "$output" >&2
     exit 1
   fi
-}
-
-check_expected_failure \
-  'Tests/ExpectedFailure/PrivateConstitutiveNormalizerCertificate.lean.fail' \
-  'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerSuccinctness.mk`'
-check_expected_failure \
-  'Tests/ExpectedFailure/PrivateConstitutiveExtensiveSeparationCertificate.lean.fail' \
-  'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate.mk`'
-check_expected_failure \
-  'Tests/ExpectedFailure/PrivateExecutedCausalNormalization.lean.fail' \
-  'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.mk`'
-check_expected_failure \
-  'Tests/ExpectedFailure/PrivateExactExecutedOperationalRegime.lean.fail' \
-  'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExactExecutedOperationalRegime.mk`'
-check_expected_failure \
-  'Tests/ExpectedFailure/PrivateExecutedStageOperationalProduction.lean.fail' \
-  'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExecutedStageOperationalProduction.mk`'
-check_expected_failure \
-  'Tests/ExpectedFailure/DiscoveredTransportCannotReplaceAuthoritativeInstruction.lean.fail' \
-  'but is expected to have type'
-check_expected_failure \
-  'Tests/ExpectedFailure/InstructionIgnoringInterpreterCannotMeetSemanticSpecification.lean.fail' \
-  'Not a definitional equality'
-check_expected_failure \
-  'Tests/ExpectedFailure/ForeignInstructionProfileCannotBeReused.lean.fail' \
-  'Not a definitional equality'
-check_expected_failure \
-  'Tests/ExpectedFailure/RetainedDecisionCannotReplaceTransformedDecision.lean.fail' \
-  'but is expected to have type'
-check_expected_failure \
-  'Tests/ExpectedFailure/SourceIgnoringNormalizationCannotSupplyTrace.lean.fail' \
-  'ExecutedRoleProfileReduction reduction _source (normalization.target chosen)'
-check_expected_failure \
-  'Tests/ExpectedFailure/PrescribedTargetCannotRecoverTraceAfterwards.lean.fail' \
-  'ExecutedRoleProfileReduction reduction source prescribed'
-check_expected_failure \
-  'Tests/ExpectedFailure/IndependentUnitRegimeCannotReplaceExecutedRegime.lean.fail' \
-  'is not definitionally equal to the right-hand side'
-check_expected_failure \
-  'Tests/ExpectedFailure/PrivateActionProducedOperationalTarget.lean.fail' \
-  'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ActionProducedOperationalTarget.mk`'
-check_expected_failure \
-  'Tests/ExpectedFailure/PrivateExactCausalExponentialTarget.lean.fail' \
-  'Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExactCausalExponentialTarget.mk`'
-
-echo 'Verified expected failures: scientific-certificate and causal-construction privacy, instruction-indexed profiles, authoritative collision anchor, semantic instruction use, occurrence-and-target-indexed decisions, source-and-target-indexed traces, and rejection of an independent Unit regime.'
+  printf 'EXPECTED_FAILURE_OK\t%s\t%s\n' "${category[$fixture]}" "$fixture"
+done
+printf 'Verified expected failures: %s fixtures, each executed once; privacy, dependent-type, semantic-type and termination remain distinct.\n' "${#fixtures[@]}"

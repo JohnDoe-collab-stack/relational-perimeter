@@ -201,8 +201,6 @@ theorem ExecutedStageOperationalProduction.nextContext_depth
     {stage : CausalConstitutiveStageExecution source}
     (production : ExecutedStageOperationalProduction context stage) :
     production.nextContext.depth = context.depth + 1 := by
-  unfold ExecutedStageOperationalProduction.nextContext
-  rw [ConstitutedOperationalPrefix.depth_transport]
   change production.priorContext.depth + 1 = context.depth + 1
   rw [production.priorContextExact]
 

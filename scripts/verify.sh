@@ -30,7 +30,6 @@ bash scripts/check-import-boundaries.sh scripts/executed-history-import-boundari
 bash scripts/check-import-boundaries.sh scripts/measured-accounting-import-boundaries.txt
 bash scripts/check-stratification.sh --self-test
 bash scripts/check-stratification.sh
-bash scripts/check-expected-failures.sh
 
 for file in "${lean_files[@]}"; do
   begin_count="$(grep -cF -- '/- AXIOM_AUDIT_BEGIN -/' "$file" || true)"
@@ -69,6 +68,8 @@ if grep -E 'depends on axioms:|sorryAx' "$build_log"; then
   echo 'axiom audit failure detected in lake build output' >&2
   exit 1
 fi
+
+bash scripts/check-expected-failures.sh
 
 for file in "${lean_files[@]}"; do
   relative="${file#./}"

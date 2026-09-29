@@ -68,6 +68,57 @@ theorem certify
   ⟨invariant, (fun source preimage =>
     ⟨Eq.trans (canonicalExact source) preimage, preservation source⟩), reflection⟩
 
+/-- Semantic admission of specified data; no execution or width is available. -/
+structure Admission (description : Description) : Prop where
+  invariant : description.SourceInvariant
+  canonicalExact : ∀ source,
+    description.action source (description.canonical source) = description.produced source
+  preservation : ∀ source payload, description.Accept source payload →
+    description.TargetAccept (description.action source payload)
+  reflection : ∀ target, description.TargetAccept target →
+    description.Accept (description.reflect target).1 (description.reflect target).2
+
+theorem Admission.specification {description : Description}
+    (admission : Admission description) (value : description.Target) :
+    Specification description value :=
+  certify description admission.invariant admission.canonicalExact
+    admission.preservation admission.reflection value
+
+/-- Image membership and semantic admission are different obligations.
+The predicate of production may retain dependent traces; it supplies no semantics. -/
+structure AdmittedImageValue (description : Description)
+    (Produced : description.Target → Prop) where
+  admitted ::
+  value : description.Target
+  produced : Produced value
+  semantics : Specification description value
+
+/-- This generic consumer has no concrete reduction from which to recover evidence. -/
+def AdmittedImageValue.transformPayload
+    {description : Description} {Produced : description.Target → Prop}
+    (obligation : AdmittedImageValue description Produced)
+    (source : description.Source) (preimage : description.produced source = obligation.value)
+    (payload : description.Payload source) :=
+  use obligation.semantics source preimage payload
+
+theorem AdmittedImageValue.sourceInvariant
+    {description : Description} {Produced : description.Target → Prop}
+    (obligation : AdmittedImageValue description Produced) : description.SourceInvariant :=
+  source_invariant obligation.semantics
+
+/-- Obligation equality only forgets proof fields, never identifies source profiles. -/
+theorem AdmittedImageValue.eq_of_value_eq
+    {description : Description} {Produced : description.Target → Prop}
+    {left right : AdmittedImageValue description Produced}
+    (same : left.value = right.value) : left = right := by
+  cases left with
+  | admitted lv lp ls =>
+    cases right with
+    | admitted rv rp rs =>
+      change lv = rv at same
+      cases same
+      rfl
+
 /-- The family of admitted image values preserves and reflects global viability. -/
 theorem viable_iff
     (description : Description)
@@ -86,6 +137,13 @@ theorem viable_iff
 
 end ConstitutiveSearch.SemanticImage
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.SemanticImage.Admission
+#print axioms ConstitutiveSearch.SemanticImage.Admission.specification
+#print axioms ConstitutiveSearch.SemanticImage.AdmittedImageValue
+#print axioms ConstitutiveSearch.SemanticImage.AdmittedImageValue.transformPayload
+#print axioms ConstitutiveSearch.SemanticImage.AdmittedImageValue.sourceInvariant
+#print axioms ConstitutiveSearch.SemanticImage.AdmittedImageValue.eq_of_value_eq
+
 #print axioms ConstitutiveSearch.SemanticImage.Description
 #print axioms ConstitutiveSearch.SemanticImage.Specification
 #print axioms ConstitutiveSearch.SemanticImage.use

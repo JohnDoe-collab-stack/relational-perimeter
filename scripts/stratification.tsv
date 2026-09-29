@@ -128,3 +128,4 @@ RelationalPerimeter.Computation.EndogenousOperationalDecomposition	A8	enforced	P
 RelationalPerimeter.Computation.ConstitutiveSearch.SemanticImage	G	enforced	Generic semantic specification and consumer of image obligations
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleProfileSemantics	D	enforced	Total action, preservation, and constitutive agreements on the authoritative occurrence profiles
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedFeedbackBridge	A6	enforced	Existing endogenous step proofs and transient frontier trace on the authoritative fused history
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RolewiseOperationalStatus	D	enforced	Local preserving status and mixed-policy exact finite images on the authoritative profiles

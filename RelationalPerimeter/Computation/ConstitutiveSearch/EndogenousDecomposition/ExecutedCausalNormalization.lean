@@ -1,3 +1,4 @@
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RolewiseOperationalStatus
 import RelationalPerimeter.Computation.ConstitutiveSearch.ExactOperationalImage
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleProfileSemantics
 
@@ -241,7 +242,23 @@ def ExecutedCausalNormalization.imageDescription
     SourceInvariant := RoleSemantics.SourcesRemainDistinct reduction ∧
       ∀ p : RoleOccurrenceProfile roles, RoleSemantics.ProfileConstitution p }
 
-/-- Semantic admission is built by consuming the exact chain's three projections. -/
+/-- Extract the independent semantic obligations from the actual chain. -/
+theorem ExecutedOperationalGroupingAuthorization.semanticAdmission
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run} {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    {normalization : ExecutedCausalNormalization reduction}
+    (authorization : ExecutedOperationalGroupingAuthorization normalization) :
+    SemanticImage.Admission normalization.imageDescription :=
+  { invariant := ⟨RoleSemantics.sourcesRemainDistinct authorization.occurrenceSeparation,
+      RoleSemantics.profileConstitutionFromChain authorization.relationalConstitution⟩
+    canonicalExact := fun p => Eq.trans (RoleSemantics.canonicalAction_exact reduction p)
+      (normalization.target_exact p).symm
+    preservation := RoleSemantics.profilePreserves authorization.preservation
+    reflection := RoleSemantics.includeTarget_preserves reduction }
+
+/-- Admission is discharged before the generic image obligation is constructed. -/
 theorem ExecutedOperationalGroupingAuthorization.imageSpecification
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -251,13 +268,7 @@ theorem ExecutedOperationalGroupingAuthorization.imageSpecification
     (authorization : ExecutedOperationalGroupingAuthorization normalization)
     (value : ExecutedOperationalTargetProfile reduction) :
     SemanticImage.Specification normalization.imageDescription value :=
-  SemanticImage.certify normalization.imageDescription
-    ⟨RoleSemantics.sourcesRemainDistinct authorization.occurrenceSeparation,
-      RoleSemantics.profileConstitutionFromChain authorization.relationalConstitution⟩
-    (fun p => Eq.trans (RoleSemantics.canonicalAction_exact reduction p)
-      (normalization.target_exact p).symm)
-    (RoleSemantics.profilePreserves authorization.preservation)
-    (RoleSemantics.includeTarget_preserves reduction) value
+  authorization.semanticAdmission.specification value
 
 /-- Positive occurrence of one target with its source and executed trace. -/
 structure ProducedOperationalTargetOccurrence
@@ -308,7 +319,8 @@ def ExecutedCausalNormalization.producedTargetFrontier
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction) :
     List (ExecutedOperationalTargetProfile reduction) :=
-  [normalization.target (defaultRoleOccurrenceProfile roles)]
+  (rolewiseObligationFrontier (RoleStatus.executed reduction).policy).map
+    (fun obligation => normalization.target ((RoleStatus.executed reduction).realize obligation))
 
 /-- Positive membership in the image actually produced by this execution. -/
 def ExecutedTargetIsProduced
@@ -333,8 +345,7 @@ structure AuthorizedProducedTargetObligation
     {roles : RelationalConstitutiveRoleHistory run}
     {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
-    (normalization : ExecutedCausalNormalization reduction)
-    (_authorization : ExecutedOperationalGroupingAuthorization normalization) : Type where
+    (normalization : ExecutedCausalNormalization reduction) : Type where
   admitted ::
   value : ExecutedOperationalTargetProfile reduction
   produced : ExecutedTargetIsProduced normalization value
@@ -347,8 +358,7 @@ def AuthorizedProducedTargetObligation.transformPayload
     {roles : RelationalConstitutiveRoleHistory run} {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
     {normalization : ExecutedCausalNormalization reduction}
-    {authorization : ExecutedOperationalGroupingAuthorization normalization}
-    (obligation : AuthorizedProducedTargetObligation normalization authorization)
+    (obligation : AuthorizedProducedTargetObligation normalization)
     (p : RoleOccurrenceProfile roles) (preimage : normalization.target p = obligation.value)
     (payload : RoleProfilePayload p) :
     {result : ExecutedOperationalTargetProfile reduction //
@@ -363,8 +373,7 @@ theorem AuthorizedProducedTargetObligation.sourceInvariant
     {roles : RelationalConstitutiveRoleHistory run} {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
     {normalization : ExecutedCausalNormalization reduction}
-    {authorization : ExecutedOperationalGroupingAuthorization normalization}
-    (obligation : AuthorizedProducedTargetObligation normalization authorization) :
+    (obligation : AuthorizedProducedTargetObligation normalization) :
     RoleSemantics.SourcesRemainDistinct reduction ∧
       ∀ p : RoleOccurrenceProfile roles, RoleSemantics.ProfileConstitution p :=
   SemanticImage.source_invariant obligation.semantics
@@ -377,8 +386,7 @@ theorem AuthorizedProducedTargetObligation.eq_of_value_eq
     {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
     {normalization : ExecutedCausalNormalization reduction}
-    {authorization : ExecutedOperationalGroupingAuthorization normalization}
-    {left right : AuthorizedProducedTargetObligation normalization authorization}
+    {left right : AuthorizedProducedTargetObligation normalization}
     (same : left.value = right.value) : left = right := by
   cases left with
   | admitted leftValue leftProduced leftSemantics =>
@@ -396,8 +404,7 @@ theorem AuthorizedProducedTargetObligation.all_eq
     {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction)
-    (authorization : ExecutedOperationalGroupingAuthorization normalization)
-    (left right : AuthorizedProducedTargetObligation normalization authorization) :
+    (left right : AuthorizedProducedTargetObligation normalization) :
     left = right := by
   apply AuthorizedProducedTargetObligation.eq_of_value_eq
   rcases left.produced with ⟨leftSource, leftExact, _leftTrace⟩
@@ -413,10 +420,9 @@ def authorizedProducedTargetObligationDecEq
     {program : RoleIndexedProgram roles}
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction)
-    (authorization : ExecutedOperationalGroupingAuthorization normalization) :
-    DecidableEq (AuthorizedProducedTargetObligation normalization authorization) :=
+    : DecidableEq (AuthorizedProducedTargetObligation normalization) :=
   fun left right => isTrue
-    (AuthorizedProducedTargetObligation.all_eq normalization authorization left right)
+    (AuthorizedProducedTargetObligation.all_eq normalization left right)
 
 /--
 The carrier is the produced image. Its singleton enumeration is complete only
@@ -432,25 +438,34 @@ def ExecutedCausalNormalization.authorizedOperationalRegime
     (normalization : ExecutedCausalNormalization reduction)
     (authorization : ExecutedOperationalGroupingAuthorization normalization) :
     ObligationRegime (roleProfileFiniteCarrier roles) :=
-  let anchor := defaultRoleOccurrenceProfile roles
-  let anchorObligation : AuthorizedProducedTargetObligation normalization authorization :=
-    .admitted (normalization.target anchor)
-      ⟨anchor, rfl, ⟨normalization.trace anchor⟩⟩ (authorization.imageSpecification (normalization.target anchor))
-  { Obligation := AuthorizedProducedTargetObligation normalization authorization
-    decEq := authorizedProducedTargetObligationDecEq normalization authorization
-    frontier := [anchorObligation]
+  let history := RoleStatus.executed reduction
+  let makeObligation := fun source : RoleOccurrenceProfile roles =>
+    (AuthorizedProducedTargetObligation.admitted (normalization.target source)
+      ⟨source, rfl, ⟨normalization.trace source⟩⟩
+      (authorization.imageSpecification (normalization.target source)) :
+      AuthorizedProducedTargetObligation normalization)
+  let fromPolicy := fun obligation : RolewiseObligation history.policy =>
+    makeObligation (history.realize obligation)
+  { Obligation := AuthorizedProducedTargetObligation normalization
+    decEq := authorizedProducedTargetObligationDecEq normalization
+    frontier := (rolewiseObligationFrontier history.policy).map fromPolicy
     complete := fun obligation => by
-      have same := AuthorizedProducedTargetObligation.all_eq
-        normalization authorization anchorObligation obligation
-      exact same ▸ .head []
-    nodup := .cons (fun _ member _ => nomatch member) .nil
-    carry := fun identity =>
-      .admitted (normalization.target identity)
-        ⟨identity, rfl, ⟨normalization.trace identity⟩⟩ (authorization.imageSpecification (normalization.target identity))
+      let anchor := rolewiseCarry history.policy (defaultRoleOccurrenceProfile roles)
+      have member := Extensive.mem_map fromPolicy
+        (rolewiseObligationFrontier_complete history.policy anchor)
+      have same := AuthorizedProducedTargetObligation.all_eq normalization
+        (fromPolicy anchor) obligation
+      exact same ▸ member
+    nodup := by
+      have injective : Function.Injective fromPolicy := by
+        intro left right _same
+        exact RoleStatus.executed_all_eq reduction left right
+      exact Extensive.nodup_map fromPolicy injective
+        (rolewiseObligationFrontier_nodup history.policy)
+    carry := makeObligation
     carry_surjective := fun obligation => by
       rcases obligation.produced with ⟨identity, targetExact, _trace⟩
-      refine ⟨identity, ?_⟩
-      exact AuthorizedProducedTargetObligation.eq_of_value_eq targetExact }
+      exact ⟨identity, AuthorizedProducedTargetObligation.eq_of_value_eq targetExact⟩ }
 
 /-- The public regime is formed only through its exact grouping authorization. -/
 def ExecutedCausalNormalization.operationalRegime
@@ -506,7 +521,7 @@ theorem ExecutedCausalNormalization.carry_eq_iff_target_eq
   by
     constructor
     · intro same
-      exact congrArg AuthorizedProducedTargetObligation.value same
+      exact congrArg (fun obligation => obligation.value) same
     · intro same
       exact AuthorizedProducedTargetObligation.eq_of_value_eq same
 
@@ -623,7 +638,20 @@ def exactExecutedOperationalRegime
     producedOccurrence := normalization.producedTargetOccurrence
     producedSourceExact := fun _ => rfl }
 
-/-- Executed convergence makes the produced-target frontier a singleton. -/
+/-- A one-element finite frontier maps to its actual produced value. -/
+theorem mapSingletonOfLengthOne {α β : Type} (values : List α) (f : α → β) (anchor : β)
+    (length : values.length = 1) (allEqual : ∀ value, f value = anchor) :
+    values.map f = [anchor] := by
+  cases values with
+  | nil => cases length
+  | cons head tail =>
+    cases tail with
+    | nil => exact congrArg (fun value => [value]) (allEqual head)
+    | cons second rest =>
+      have impossible : (second :: rest).length = 0 := Nat.succ.inj length
+      cases impossible
+
+/-- The status-produced frontier is a singleton at the actually executed target. -/
 theorem ExecutedCausalNormalization.producedTargetFrontier_exact
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -632,11 +660,11 @@ theorem ExecutedCausalNormalization.producedTargetFrontier_exact
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction) :
     normalization.producedTargetFrontier =
-      [retainedExecutedOperationalTargetProfile reduction] := by
-  exact congrArg (fun target => [target])
-    (normalization.target_exact (defaultRoleOccurrenceProfile roles))
+      [retainedExecutedOperationalTargetProfile reduction] :=
+  mapSingletonOfLengthOne _ _ _ (RoleStatus.executed_width reduction)
+    (fun obligation => normalization.target_exact ((RoleStatus.executed reduction).realize obligation))
 
-/-- The regime width is the width of the executed convergent-target frontier. -/
+/-- Both frontiers are realizations of the same locally produced status frontier. -/
 theorem ExecutedCausalNormalization.regimeWidth_eq_producedTargetWidth
     {count : Nat} {state : CausalConstitutiveState}
     {run : CausalConstitutiveExecutionHistory count state}
@@ -645,8 +673,20 @@ theorem ExecutedCausalNormalization.regimeWidth_eq_producedTargetWidth
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction) :
     normalization.operationalRegime.frontier.length =
-      normalization.producedTargetFrontier.length :=
-  rfl
+      normalization.producedTargetFrontier.length := by
+  exact Eq.trans (Extensive.length_map _ _)
+    (Extensive.length_map _ _).symm
+
+/-- Operational width is a readout of the actual status composition. -/
+theorem ExecutedCausalNormalization.regimeWidth_eq_statusWidth
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run} {program : RoleIndexedProgram roles}
+    {reduction : ExecutedRoleReductionHistory program}
+    (normalization : ExecutedCausalNormalization reduction) :
+    normalization.operationalRegime.frontier.length =
+      (rolewiseObligationFrontier (RoleStatus.executed reduction).policy).length :=
+  Extensive.length_map _ _
 
 /-- Width one is the terminal readout of executed target convergence. -/
 theorem ExecutedCausalNormalization.width_exact
@@ -657,14 +697,15 @@ theorem ExecutedCausalNormalization.width_exact
     {reduction : ExecutedRoleReductionHistory program}
     (normalization : ExecutedCausalNormalization reduction) :
     normalization.operationalRegime.frontier.length = 1 := by
-  rw [normalization.regimeWidth_eq_producedTargetWidth]
-  rw [normalization.producedTargetFrontier_exact]
-  rfl
+  exact Eq.trans normalization.regimeWidth_eq_statusWidth (RoleStatus.executed_width reduction)
 
 end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.mapSingletonOfLengthOne
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.regimeWidth_eq_statusWidth
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalGroupingAuthorization.semanticAdmission
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.viable_iff
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.imageDescription
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalGroupingAuthorization.imageSpecification

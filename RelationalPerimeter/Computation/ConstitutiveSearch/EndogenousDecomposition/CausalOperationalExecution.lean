@@ -60,43 +60,211 @@ structure CausalOperationalHead
   run : ThreadedConstitutiveStageRun state stage
   production : ExecutedStageOperationalProduction context (causalStageOfThreadedStage run)
 
-/-- Discover, execute and produce the current head using no future argument. -/
-def executeCausalOperationalHead
+/-- Observable boundaries of the existing primitive operations.
+`applied` includes the existing stage builder and next-state formation.
+These events do not claim instruction-level or wall-clock timing. -/
+inductive OperationalProductionEvent where
+  | discovered (depth : Nat)
+  | applied (depth : Nat)
+  | decomposed (depth : Nat)
+  deriving DecidableEq
+
+/-- Build from the discovery already performed, without searching a second time. -/
+def buildFromExecutedDiscovery {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (fresh : ThreadedStateFreshForNext state)
+    (discoveryRun : ThreadedNextDiscoveryRun depth state)
+    (discoveryExact : discoveryRun = runThreadedNextDiscovery state) :
+    ConstructedThreadedStageRun state :=
+  match found : discoveryRun.outcome.discovered? with
+  | none => False.elim ((runThreadedNextDiscovery_found state fresh)
+      (discoveryExact ▸ found))
+  | some discovery =>
+      buildThreadedConstitutiveStage state discoveryRun discoveryExact
+        discovery found
+        (by rw [discoveryExact, runThreadedNextDiscovery_discovered_exact state fresh] at found
+            exact found)
+        (discoveryExact.symm ▸ runThreadedNextDiscovery_work_le_canonical state fresh)
+        (state.decisionsAvoidNext fresh)
+
+universe u
+/-- A program over fixed production primitives. No constructor accepts a log.
+The interpreter calls each primitive and emits its own corresponding event. -/
+inductive OperationalProductionProgram : Type u → Type (max (u + 1) 3) where
+  | done {Result : Type u} (value : Result) : OperationalProductionProgram Result
+  | discover {Result : Type u} {depth : Nat} {assignment : SequentialAssignment depth}
+      (state : ThreadedConstitutiveState depth assignment)
+      (next : (discovery : ThreadedNextDiscoveryRun depth state) →
+        discovery = runThreadedNextDiscovery state → OperationalProductionProgram Result) :
+      OperationalProductionProgram Result
+  | applyStage {Result : Type u} {depth : Nat} {assignment : SequentialAssignment depth}
+      (state : ThreadedConstitutiveState depth assignment)
+      (fresh : ThreadedStateFreshForNext state)
+      (discovery : ThreadedNextDiscoveryRun depth state)
+      (exactDiscovery : discovery = runThreadedNextDiscovery state)
+      (next : ConstructedThreadedStageRun state → OperationalProductionProgram Result) :
+      OperationalProductionProgram Result
+  | decompose {Result : Type u} {depth : Nat} {assignment : SequentialAssignment depth}
+      {state : ThreadedConstitutiveState depth assignment}
+      {stage : SequentialStageRun depth assignment}
+      (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+      (run : ThreadedConstitutiveStageRun state stage)
+      (next : ExecutedStageOperationalProduction context (causalStageOfThreadedStage run) →
+        OperationalProductionProgram Result) : OperationalProductionProgram Result
+  | mapResult {Input Result : Type u} (program : OperationalProductionProgram Input)
+      (map : Input → Result) : OperationalProductionProgram Result
+
+/-- Value and trace are produced together, not reconstructed from a completed history. -/
+def OperationalProductionProgram.evaluate {Result : Type u} :
+    OperationalProductionProgram Result → Result × List OperationalProductionEvent
+  | .done value => (value, [])
+  | .discover (depth := depth) state next =>
+      let discovery := runThreadedNextDiscovery state
+      let result := (next discovery rfl).evaluate
+      (result.1, .discovered depth :: result.2)
+  | .applyStage (depth := depth) state fresh discovery exactDiscovery next =>
+      let built := buildFromExecutedDiscovery state fresh discovery exactDiscovery
+      let result := (next built).evaluate
+      (result.1, .applied depth :: result.2)
+  | .decompose (depth := depth) context run next =>
+      let production := prefixLocalOperationalProducer context (causalStageOfThreadedStage run)
+      let result := (next production).evaluate
+      (result.1, .decomposed depth :: result.2)
+  | .mapResult program map =>
+      let result := program.evaluate
+      (map result.1, result.2)
+
+/-- Shared head program used by the head API and by the recursive executor. -/
+def withCausalOperationalHead {Result : Type u}
     {depth : Nat} {assignment : SequentialAssignment depth}
     (state : ThreadedConstitutiveState depth assignment)
     (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
-    (fresh : ThreadedStateFreshForNext state) : CausalOperationalHead state context :=
-  let discoveryRun := runThreadedNextDiscovery state
-  match found : discoveryRun.outcome.discovered? with
-  | none => False.elim ((runThreadedNextDiscovery_found state fresh) found)
-  | some discovery =>
-      let built := buildThreadedConstitutiveStage state discoveryRun rfl
-        discovery found
-        (by
-          rw [← runThreadedNextDiscovery_discovered_exact state fresh]
-          exact found)
-        (runThreadedNextDiscovery_work_le_canonical state fresh)
-        (state.decisionsAvoidNext fresh)
-      { stage := built.stage
-        run := built.run
-        production := prefixLocalOperationalProducer context
-          (causalStageOfThreadedStage built.run) }
+    (fresh : ThreadedStateFreshForNext state)
+    (next : CausalOperationalHead state context → OperationalProductionProgram Result) :
+    OperationalProductionProgram Result :=
+  .discover state fun discovery exactDiscovery =>
+    .applyStage state fresh discovery exactDiscovery fun built =>
+      .decompose context built.run fun production =>
+        next ⟨built.stage, built.run, production⟩
 
-/-- Execute a head first, then continue from its produced state and context. -/
-def executeCausalOperationalExecutionHistory
-    (count : Nat) : {depth : Nat} → {assignment : SequentialAssignment depth} →
-      (state : ThreadedConstitutiveState depth assignment) →
-      (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)) →
-      ThreadedStateFreshForNext state →
-      CausalOperationalExecutionHistory (_count := count) state context
+def causalOperationalHeadProgram {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+    (fresh : ThreadedStateFreshForNext state) :
+    OperationalProductionProgram (CausalOperationalHead state context) :=
+  withCausalOperationalHead state context fresh .done
+
+/-- Specialised evaluator for the fixed three-primitive head program.
+The equation below checks it against the generic interpreter, avoiding repeated
+normalisation of its polymorphic recursor in downstream dependent types. -/
+def executeCausalOperationalHeadWithTrace {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+    (fresh : ThreadedStateFreshForNext state) :
+    CausalOperationalHead state context × List OperationalProductionEvent :=
+  let discovery := runThreadedNextDiscovery state
+  let built := buildFromExecutedDiscovery state fresh discovery rfl
+  let production := prefixLocalOperationalProducer context (causalStageOfThreadedStage built.run)
+  (⟨built.stage, built.run, production⟩,
+    [.discovered depth, .applied depth, .decomposed depth])
+
+theorem executeCausalOperationalHeadWithTrace_exact
+    {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+    (fresh : ThreadedStateFreshForNext state) :
+    executeCausalOperationalHeadWithTrace state context fresh =
+      (causalOperationalHeadProgram state context fresh).evaluate := rfl
+
+/-- The public head is the value of the verified primitive-program evaluator. -/
+def executeCausalOperationalHead {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+    (fresh : ThreadedStateFreshForNext state) : CausalOperationalHead state context :=
+  (executeCausalOperationalHeadWithTrace state context fresh).1
+
+/-- Program construction continues only from the state and context it has produced. -/
+def causalOperationalExecutionProgram (count : Nat) :
+    {depth : Nat} → {assignment : SequentialAssignment depth} →
+    (state : ThreadedConstitutiveState depth assignment) →
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)) →
+    ThreadedStateFreshForNext state →
+    OperationalProductionProgram (CausalOperationalExecutionHistory (_count := count) state context)
   | _, _, state, context, fresh => match count with
-    | 0 => .nil state context
+    | 0 => .done (.nil state context)
+    | count + 1 => withCausalOperationalHead state context fresh fun produced =>
+      .mapResult
+        (causalOperationalExecutionProgram count produced.run.nextRun.next
+          produced.production.nextContext (produced.run.nextRun.fresh fresh))
+        (fun tail => .step produced.stage produced.run produced.production tail)
+
+/-- Evaluation yields both the historical value and the chronological primitive trace. -/
+def executeCausalOperationalExecutionWithTrace (count : Nat) :
+    {depth : Nat} → {assignment : SequentialAssignment depth} →
+    (state : ThreadedConstitutiveState depth assignment) →
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)) →
+    ThreadedStateFreshForNext state →
+    CausalOperationalExecutionHistory (_count := count) state context × List OperationalProductionEvent
+  | _, _, state, context, fresh => match count with
+    | 0 => (.nil state context, [])
     | count + 1 =>
-        let produced := executeCausalOperationalHead state context fresh
-        .step produced.stage produced.run produced.production
-          (executeCausalOperationalExecutionHistory count
-            produced.run.nextRun.next produced.production.nextContext
-            (produced.run.nextRun.fresh fresh))
+      let produced := executeCausalOperationalHeadWithTrace state context fresh
+      let rest := executeCausalOperationalExecutionWithTrace count produced.1.run.nextRun.next
+        produced.1.production.nextContext (produced.1.run.nextRun.fresh fresh)
+      (.step produced.1.stage produced.1.run produced.1.production rest.1, produced.2 ++ rest.2)
+
+/-- The specialised recursive evaluator implements the primitive program exactly. -/
+theorem executeWithTrace_program_exact (count : Nat)
+    {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+    (fresh : ThreadedStateFreshForNext state) :
+    executeCausalOperationalExecutionWithTrace count state context fresh =
+      (causalOperationalExecutionProgram count state context fresh).evaluate := by
+  induction count generalizing depth assignment with
+  | zero => rfl
+  | succ count ih =>
+    let produced := executeCausalOperationalHead state context fresh
+    change (CausalOperationalExecutionHistory.step produced.stage produced.run produced.production
+      (executeCausalOperationalExecutionWithTrace count produced.run.nextRun.next
+        produced.production.nextContext (produced.run.nextRun.fresh fresh)).1,
+      OperationalProductionEvent.discovered depth :: .applied depth :: .decomposed depth ::
+      (executeCausalOperationalExecutionWithTrace count produced.run.nextRun.next
+        produced.production.nextContext (produced.run.nextRun.fresh fresh)).2) = _
+    rw [ih produced.run.nextRun.next produced.production.nextContext (produced.run.nextRun.fresh fresh)]
+    rfl
+
+def executeCausalOperationalExecutionHistory (count : Nat)
+    {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+    (fresh : ThreadedStateFreshForNext state) :
+    CausalOperationalExecutionHistory (_count := count) state context :=
+  (executeCausalOperationalExecutionWithTrace count state context fresh).1
+
+/-- Required order is specified independently of the program's returned history. -/
+def operationalProductionTimeline : Nat → Nat → List OperationalProductionEvent
+  | 0, _ => []
+  | count + 1, depth => .discovered depth :: .applied depth :: .decomposed depth ::
+      operationalProductionTimeline count (depth + 1)
+
+theorem operationalProductionTimeline_exact (count : Nat)
+    {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+    (fresh : ThreadedStateFreshForNext state) :
+    (executeCausalOperationalExecutionWithTrace count state context fresh).2 =
+      operationalProductionTimeline count depth := by
+  induction count generalizing depth assignment with
+  | zero => rfl
+  | succ count ih =>
+    let produced := executeCausalOperationalHead state context fresh
+    change .discovered depth :: .applied depth :: .decomposed depth ::
+      (executeCausalOperationalExecutionWithTrace count produced.run.nextRun.next
+        produced.production.nextContext (produced.run.nextRun.fresh fresh)).2 = _
+    exact congrArg (fun tail => OperationalProductionEvent.discovered depth ::
+      .applied depth :: .decomposed depth :: tail)
+      (ih produced.run.nextRun.next produced.production.nextContext (produced.run.nextRun.fresh fresh))
 
 /-- Observe the head without evaluating any tail or adding a positivity cast. -/
 def CausalOperationalExecutionHistory.head?
@@ -230,7 +398,7 @@ theorem executeCausalOperationalExecutionHistory_instrumented_exact
   induction count generalizing depth assignment state with
   | zero => rfl
   | succ count inductionHypothesis =>
-      rw [executeCausalOperationalExecutionHistory, executeConstitutiveExecutionHistory]
+      rw [executeCausalOperationalExecutionHistory_step, executeConstitutiveExecutionHistory]
       split
       case h_1 =>
         rename_i notFound
@@ -246,7 +414,8 @@ theorem executeCausalOperationalExecutionHistory_instrumented_exact
             { stage := built.stage, run := built.run,
               production := prefixLocalOperationalProducer context
                 (causalStageOfThreadedStage built.run) } := by
-          unfold executeCausalOperationalHead
+          unfold executeCausalOperationalHead executeCausalOperationalHeadWithTrace
+            buildFromExecutedDiscovery
           dsimp only
           split
           case h_1 =>
@@ -279,6 +448,21 @@ def publicCausalOperationalExecution (input : Nat) :
     (initialOperationalPrefix input)
     (initialThreadedConstitutiveStateFromInitialization_fresh
       (initializeConstitutiveHistory input))
+
+/-- The public execution and its operation trace share one evaluation. -/
+def publicCausalOperationalExecutionWithTrace (input : Nat) :=
+  executeCausalOperationalExecutionWithTrace (resolutionLength input)
+    (initialThreadedConstitutiveStateFromInitialization (initializeConstitutiveHistory input))
+    (initialOperationalPrefix input)
+    (initialThreadedConstitutiveStateFromInitialization_fresh (initializeConstitutiveHistory input))
+
+theorem publicCausalOperationalExecutionWithTrace_value (input : Nat) :
+    (publicCausalOperationalExecutionWithTrace input).1 = publicCausalOperationalExecution input := rfl
+
+theorem publicCausalOperationalExecutionWithTrace_order (input : Nat) :
+    (publicCausalOperationalExecutionWithTrace input).2 =
+      operationalProductionTimeline (resolutionLength input) input :=
+  operationalProductionTimeline_exact _ _ _ _
 
 /--
 The authoritative public roles are constituted directly from the sole fused
@@ -349,6 +533,24 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalHeadWithTrace
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalHeadWithTrace_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executeWithTrace_program_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCausalOperationalExecutionWithTrace
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCausalOperationalExecutionWithTrace_value
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicCausalOperationalExecutionWithTrace_order
+
+#print axioms ConstitutiveSearch.EndogenousDecomposition.OperationalProductionEvent
+#print axioms ConstitutiveSearch.EndogenousDecomposition.buildFromExecutedDiscovery
+#print axioms ConstitutiveSearch.EndogenousDecomposition.OperationalProductionProgram
+#print axioms ConstitutiveSearch.EndogenousDecomposition.OperationalProductionProgram.evaluate
+#print axioms ConstitutiveSearch.EndogenousDecomposition.withCausalOperationalHead
+#print axioms ConstitutiveSearch.EndogenousDecomposition.causalOperationalHeadProgram
+#print axioms ConstitutiveSearch.EndogenousDecomposition.causalOperationalExecutionProgram
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionWithTrace
+#print axioms ConstitutiveSearch.EndogenousDecomposition.operationalProductionTimeline
+#print axioms ConstitutiveSearch.EndogenousDecomposition.operationalProductionTimeline_exact
+
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionHistory_head
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionHistory_head_independent
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionHistory_step

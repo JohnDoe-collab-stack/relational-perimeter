@@ -35,14 +35,27 @@ def OpeningRolePosition.state
   | .right => causalOpeningRight source run.selected run.fresh
 
 
-/-- The realized-state agreement is a primitive witness, not an auxiliary label. -/
+/-- The occurrence is justified by structural generation, not by a copied state equation. -/
 def RoleFormationAgreement
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
     (role : RelationalConstitutiveRoleStage run)
     (position : OpeningRolePosition role)
     (state : GeneratedStructuralBranchContext source.rootFormula) : Type :=
-  PLift (state = position.state role)
+  match position with
+  | .left => GeneratedChildFormation source.operationalState run.selected false run.fresh state
+  | .right => GeneratedChildFormation source.operationalState run.selected true run.fresh state
+
+/-- Exact realization is a consequence of the indexed formation. -/
+theorem RoleFormationAgreement.down
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {position : OpeningRolePosition role}
+    {state : GeneratedStructuralBranchContext source.rootFormula}
+    (formation : RoleFormationAgreement role position state) :
+    state = position.state role := by
+  cases position <;> cases formation <;> rfl
 
 /--
 An opening occurrence carries both its historical position and the generated
@@ -75,7 +88,7 @@ def roleOpeningOccurrenceAt
     RoleOpeningOccurrence role :=
   { position := position
     state := position.state role
-    formationWitness := ⟨rfl⟩ }
+    formationWitness := by cases position <;> exact .formed }
 
 /-- Forget only the realized state, retaining the occurrence's position. -/
 def roleOpeningOccurrenceToPosition
@@ -105,10 +118,7 @@ theorem openingOccurrence_roundTrip
       occurrence := by
   cases occurrence with
   | mk position state formationWitness =>
-      cases formationWitness with
-      | up formedAt =>
-          cases formedAt
-          rfl
+      cases position <;> cases formationWitness <;> rfl
 
 /-- Exact reversible realization between positions and occurrences. -/
 def openingPositionOccurrenceTransport
@@ -262,7 +272,7 @@ theorem openingOccurrenceFrontier_nodup
       exact congrArg RoleOpeningOccurrence.position same)
     (openingPositionFrontier_nodup role)
 
-/-- Primitive source relation read by the executed relational role. -/
+/-- Source realization agreement projected from the executed relational role. -/
 abbrev executedRoleSourceRelation
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
@@ -280,7 +290,7 @@ abbrev executedRoleFormationRelation
   PLift (candidate = reference) ×
     RoleFormationAgreement reference occurrence.position occurrence.state
 
-/-- Primitive target relation read by the executed relational role. -/
+/-- Target realization agreement projected from the executed relational role. -/
 abbrev executedRoleTargetRelation
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
@@ -288,7 +298,7 @@ abbrev executedRoleTargetRelation
     (observed : CausalConstitutiveState) : Type :=
   RoleTargetAgreement candidate.nextState observed
 
-/-- Primitive provenance relation carried by one executed occurrence. -/
+/-- Provenance and formation agreements carried by one executed occurrence. -/
 abbrev executedRoleProvenanceRelation
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
@@ -330,9 +340,11 @@ def generalOpeningStageOfRole
     classify := roleOpeningOccurrenceToPosition
     realize_classify := openingOccurrence_roundTrip
     classify_realize := openingPosition_roundTrip role
-    formationAgreement := fun _ => ⟨⟨rfl⟩, ⟨rfl⟩⟩
-    provenanceAgreement := fun _ =>
-      ⟨role.provenanceWitness, ⟨⟨rfl⟩, ⟨rfl⟩⟩⟩ }
+    formationAgreement := fun position =>
+      ⟨⟨rfl⟩, (roleOpeningOccurrenceAt role position).formationWitness⟩
+    provenanceAgreement := fun position =>
+      ⟨role.provenanceWitness, ⟨⟨rfl⟩,
+        (roleOpeningOccurrenceAt role position).formationWitness⟩⟩ }
 
 /--
 The constituted identity belonging to one executed relational role. The
@@ -399,7 +411,7 @@ structure RoleConstitutionEvidence
   provenanceWitness :
     executedRoleProvenanceRelation role role.provenance role identity.realized
 
-/-- Recover all primitive witnesses from the exact relational opening. -/
+/-- Recover formation and realization witnesses from the exact relational opening. -/
 def roleConstitutionEvidence
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
@@ -621,6 +633,7 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleFormationAgreement.down
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleFormationAgreement
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleOpeningOccurrence.formedAt
 #print axioms ConstitutiveSearch.EndogenousDecomposition.OpeningRolePosition

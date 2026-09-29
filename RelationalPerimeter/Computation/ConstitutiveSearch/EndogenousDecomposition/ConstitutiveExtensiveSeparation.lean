@@ -483,23 +483,26 @@ structure PublicExecutionConstitutionCertificate (input : Nat) : Type 3 where
     RelationalRoleHistoryConstitutionExact
       (publicRelationalConstitutiveRoles input)
 
-/-- The public normalizer eliminates precisely the executed constitutive chain. -/
-structure PublicConstitutiveNormalizationCertificate (input : Nat) : Type 3 where
+/-- Generic dependent facts are elaborated before their concrete public instantiation.
+This factors typechecking work; the public fields and their meaning are unchanged. -/
+structure ConstitutiveNormalizationFacts
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run} {program : RoleIndexedProgram roles}
+    (reduction : ExecutedRoleReductionHistory program)
+    (normalization : ExecutedCausalNormalization reduction) : Type 3 where
   private mk ::
-  normalizationExact :
-    publicCertificateNormalization input =
-      executedCausalNormalization
-        (publicCausalOperationalExecution input).stagewiseDecomposition.reduction
+  normalizationExact : normalization = executedCausalNormalization reduction
   normalizationConsumesConstitutiveChain :
-    (publicCertificateNormalization input).constitutiveChain =
-      executedReductionConstitutiveChain
-        (publicCausalOperationalExecution input).stagewiseDecomposition.reduction
-  constitutiveChainIsCausallyExact :
-    ExecutedReductionCausalExact
-      (publicCertificateNormalization input).constitutiveChain
+    normalization.constitutiveChain = executedReductionConstitutiveChain reduction
+  constitutiveChainIsCausallyExact : ExecutedReductionCausalExact normalization.constitutiveChain
   relationalConstitutionIsConsumed :
-    ExecutedReductionRelationalConstitutionExact
-      (publicCertificateNormalization input).constitutiveChain
+    ExecutedReductionRelationalConstitutionExact normalization.constitutiveChain
+
+abbrev PublicConstitutiveNormalizationCertificate (input : Nat) : Type 3 :=
+  ConstitutiveNormalizationFacts
+    (publicCausalOperationalExecution input).stagewiseDecomposition.reduction
+    (publicCertificateNormalization input)
 
 /-- Exact incorporation of the normalized target fibres into a regime. -/
 structure PublicOperationalRegimeCertificate (input : Nat) : Type 3 where
@@ -545,24 +548,29 @@ structure PublicOperationalRegimeCertificate (input : Nat) : Type 3 where
           (OperationallyCoDetermined
             (publicCertificateNormalization input) left right)
 
-/-- Width readouts and their exact conservation characterisation. -/
-structure PublicOperationalWidthCertificate (input : Nat) : Type 3 where
+/-- Widths and exact conservation on a single generic executed carrier. -/
+structure OperationalWidthFacts
+    {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run} {program : RoleIndexedProgram roles}
+    (reduction : ExecutedRoleReductionHistory program)
+    (normalization : ExecutedCausalNormalization reduction) : Type 3 where
   private mk ::
-  extensiveWidth :
-    (publicRoleProfileFiniteCarrier input).frontier.length =
-      2 ^ (input + 1)
-  executedWidth :
-    (publicCertificateExecutedRegime input).frontier.length = 1
-  groupedDistinctProfiles :
-    ExecutedGroupedDistinctProfiles (publicCertificateNormalization input)
+  extensiveWidth : (roleProfileFiniteCarrier roles).frontier.length = 2 ^ count
+  executedWidth : normalization.operationalRegime.frontier.length = 1
+  groupedDistinctProfiles : ExecutedGroupedDistinctProfiles normalization
   exponentialIffIndependentConservation :
-    (regime : ObligationRegime (publicRoleProfileFiniteCarrier input)) →
-      regime.frontier.length = 2 ^ (input + 1) ↔
+    (regime : ObligationRegime (roleProfileFiniteCarrier roles)) →
+      regime.frontier.length = 2 ^ count ↔
         ConservesRoleIdentitiesAsDistinctSeparatelyAddressable regime
   exponentialIffCarryInjective :
-    (regime : ObligationRegime (publicRoleProfileFiniteCarrier input)) →
-      regime.frontier.length = 2 ^ (input + 1) ↔
-        Function.Injective regime.carry
+    (regime : ObligationRegime (roleProfileFiniteCarrier roles)) →
+      regime.frontier.length = 2 ^ count ↔ Function.Injective regime.carry
+
+abbrev PublicOperationalWidthCertificate (input : Nat) : Type 3 :=
+  OperationalWidthFacts
+    (publicCausalOperationalExecution input).stagewiseDecomposition.reduction
+    (publicCertificateNormalization input)
 
 def publicExecutionConstitutionCertificate
     (input : Nat) : PublicExecutionConstitutionCertificate input :=
@@ -617,12 +625,21 @@ def publicOperationalWidthCertificate
 Closed witness of the immutable scientific target, stratified in the same
 order as its constitution.  Every layer refers to the one public carrier.
 -/
-structure ExactCausalExponentialTarget (input : Nat) : Type 3 where
+structure CausalExponentialTargetParts
+    (Execution Normalization Regime Width : Type 3) : Type 3 where
   private mk ::
-  execution : PublicExecutionConstitutionCertificate input
-  normalization : PublicConstitutiveNormalizationCertificate input
-  regime : PublicOperationalRegimeCertificate input
-  width : PublicOperationalWidthCertificate input
+  execution : Execution
+  normalization : Normalization
+  regime : Regime
+  width : Width
+
+/-- Specialisation preserves the four public certificate types definitionally. -/
+abbrev ExactCausalExponentialTarget (input : Nat) : Type 3 :=
+  CausalExponentialTargetParts
+    (PublicExecutionConstitutionCertificate input)
+    (PublicConstitutiveNormalizationCertificate input)
+    (PublicOperationalRegimeCertificate input)
+    (PublicOperationalWidthCertificate input)
 
 /-- Construct the complete target from the single authoritative execution. -/
 def exactCausalExponentialTarget
@@ -637,6 +654,19 @@ width theorem, on the one public source carrier. This is a mathematical
 statement, not a verdict about source-erasure mutation tests. -/
 structure EndogenousDecompositionAndWidth (input : Nat) : Prop where
   feedbackAtEveryStep : ExecutedFeedback.Along (publicCausalOperationalExecution input)
+  primitiveOperationOrder :
+    (publicCausalOperationalExecutionWithTrace input).2 =
+      operationalProductionTimeline (resolutionLength input) input
+  admittedImage : SemanticImage.Admission (publicCertificateNormalization input).imageDescription
+  widthFromProducedStatuses :
+    (publicCertificateExecutedRegime input).frontier.length =
+      (rolewiseObligationFrontier
+        (RoleStatus.executed (publicCausalOperationalExecution input).stagewiseDecomposition.reduction).policy).length
+  statusActionIsCarriedAction :
+    ∀ (p : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input)) (c : RoleProfilePayload p),
+      RoleStatus.executedPayloadOutput _ p
+        ((RoleStatus.executed (publicCausalOperationalExecution input).stagewiseDecomposition.reduction).transform p c) =
+          (publicCarriedProfilePayload input p c).1
   constitutedRoles : RelationalRoleHistoryConstitutionExact
     (publicRelationalConstitutiveRoles input)
   sourceAgreements : ∀ p : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input),
@@ -686,6 +716,11 @@ structure EndogenousDecompositionAndWidth (input : Nat) : Prop where
 is reused rather than replaced by a cardinality argument. -/
 theorem endogenousDecompositionAndWidth (input : Nat) : EndogenousDecompositionAndWidth input :=
   { feedbackAtEveryStep := ExecutedFeedback.public_along input
+    primitiveOperationOrder := publicCausalOperationalExecutionWithTrace_order input
+    admittedImage := (publicCertificateNormalization input).groupingAuthorization.semanticAdmission
+    widthFromProducedStatuses := (publicCertificateNormalization input).regimeWidth_eq_statusWidth
+    statusActionIsCarriedAction := fun p c =>
+      Eq.trans (RoleStatus.executed_action_exact _ p c) (publicCarriedProfilePayload_action input p c).symm
     constitutedRoles := (publicCausalOperationalExecution input).stagewiseDecomposition.rolesConstitutionExact
     sourceAgreements := fun p => (publicCarriedProfile_constitution input p).2 p
     allProfilesRemainViable := fun p =>
@@ -712,7 +747,18 @@ theorem binaryClass_fullWidthExactlyInjective
     regime.frontier.length = 2 ^ family.stageCount problem ↔ Function.Injective regime.carry :=
   family.exponentialWidth_iff_preservesConstitutedIdentities problem regime
 
-/-- The actual executed witness refutes necessity of full extensive width on
+/-- The non-full-width witness is this particular semantically admitted execution.
+An unrelated constant regime cannot replace the named object in this statement. -/
+theorem executedAdmittedRegime_notFullWidth (input : Nat) :
+    SemanticImage.Admission (publicCertificateNormalization input).imageDescription ∧
+    (publicCertificateExecutedRegime input).frontier.length ≠ 2 ^ (input + 1) := by
+  refine ⟨(publicCertificateNormalization input).groupingAuthorization.semanticAdmission, ?_⟩
+  intro same
+  have impossible : 1 = 2 ^ (input + 1) :=
+    Eq.trans (publicCertificate_executedRegime_width input).symm same
+  exact (Nat.ne_of_lt (Constructive.two_pow_strictly_grows (Nat.zero_lt_succ input))) impossible
+
+/-- A weaker cardinal consequence of the actual executed witness: it refutes necessity of full extensive width on
 this source carrier. It does not assert a complexity bound for other problems. -/
 theorem extensiveMultiplicity_doesNotForceFullOperationalWidth (input : Nat) :
     ¬ (∀ regime : ObligationRegime (publicRoleProfileFiniteCarrier input),
@@ -727,6 +773,10 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalExponentialTargetParts
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizationFacts
+#print axioms ConstitutiveSearch.EndogenousDecomposition.OperationalWidthFacts
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedAdmittedRegime_notFullWidth
 #print axioms ConstitutiveSearch.EndogenousDecomposition.EndogenousDecompositionAndWidth
 #print axioms ConstitutiveSearch.EndogenousDecomposition.endogenousDecompositionAndWidth
 #print axioms ConstitutiveSearch.EndogenousDecomposition.binaryClass_fullWidthExactlyInjective
