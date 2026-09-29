@@ -1045,9 +1045,22 @@ theorem separator_states_have_different_constitutions_and_outcomes
   · intro same
     exact nextDiscovery_outcome_different depth same.symm
 
+/-- Endogenous production and width separation on the same executed profiles. -/
+theorem endogenous_production_and_width_separation (input : Nat) :
+    ConstitutiveSearch.EndogenousDecomposition.EndogenousDecompositionAndWidth input :=
+  ConstitutiveSearch.EndogenousDecomposition.endogenousDecompositionAndWidth input
+
+/-- Full extensive multiplicity is not a necessary operational width of this source. -/
+theorem extensive_multiplicity_does_not_force_full_operational_width (input : Nat) :
+    ¬ (∀ regime : ObligationRegime (publicRoleProfileFiniteCarrier input),
+      regime.frontier.length = 2 ^ (input + 1)) :=
+  ConstitutiveSearch.EndogenousDecomposition.extensiveMultiplicity_doesNotForceFullOperationalWidth input
+
 end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.endogenous_production_and_width_separation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.extensive_multiplicity_does_not_force_full_operational_width
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.evidence
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.family
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.OperationalStabilityEvidence

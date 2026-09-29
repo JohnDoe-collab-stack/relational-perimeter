@@ -1,3 +1,4 @@
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedFeedbackBridge
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRelationalExtensiveFamily
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecution
@@ -631,10 +632,105 @@ def exactCausalExponentialTarget
     regime := publicOperationalRegimeCertificate input
     width := publicOperationalWidthCertificate input }
 
+/-- Positive bridge between the established endogenous execution and the
+width theorem, on the one public source carrier. This is a mathematical
+statement, not a verdict about source-erasure mutation tests. -/
+structure EndogenousDecompositionAndWidth (input : Nat) : Prop where
+  feedbackAtEveryStep : ExecutedFeedback.Along (publicCausalOperationalExecution input)
+  constitutedRoles : RelationalRoleHistoryConstitutionExact
+    (publicRelationalConstitutiveRoles input)
+  sourceAgreements : ∀ p : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input),
+    RoleSemantics.ProfileConstitution p
+  allProfilesRemainViable :
+    ∀ p : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input),
+      ∃ payload : RoleProfilePayload p, RoleSemantics.ProfileAccept p payload
+  interpretedAction :
+    ∀ (p : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input))
+      (payload : RoleProfilePayload p),
+      (publicCarriedProfilePayload input p payload).1 =
+        RoleSemantics.actProfile
+          (publicCausalOperationalExecution input).stagewiseDecomposition.reduction p payload
+  preservation :
+    ∀ (p : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input))
+      (payload : RoleProfilePayload p), RoleSemantics.ProfileAccept p payload →
+      RoleSemantics.TargetAccept
+        (publicCausalOperationalExecution input).stagewiseDecomposition.reduction
+        (publicCarriedProfilePayload input p payload).1
+  sourceIndexedTrace :
+    ∀ p : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input),
+      Nonempty (ExecutedRoleProfileReduction
+        (publicCausalOperationalExecution input).stagewiseDecomposition.reduction p
+        ((publicCertificateExecutedRegime input).carry p).value)
+  exactCodetermination :
+    ∀ p q : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input),
+      (publicCertificateExecutedRegime input).carry p =
+        (publicCertificateExecutedRegime input).carry q ↔
+      Nonempty (OperationallyCoDetermined (publicCertificateNormalization input) p q)
+  distinctProfiles : publicCertificateTransformedProfile input ≠ publicCertificateRetainedProfile input
+  groupedProfiles :
+    (publicCertificateExecutedRegime input).carry (publicCertificateTransformedProfile input) =
+      (publicCertificateExecutedRegime input).carry (publicCertificateRetainedProfile input)
+  extensiveWidth : (publicRoleProfileFiniteCarrier input).frontier.length = 2 ^ (input + 1)
+  executedWidth : (publicCertificateExecutedRegime input).frontier.length = 1
+  transientWidth : WidthTraceAtMost 2
+    (ExecutedFeedback.widthTrace (publicCausalOperationalExecution input))
+  fullWidthExactlyIndependent :
+    ∀ regime : ObligationRegime (publicRoleProfileFiniteCarrier input),
+      regime.frontier.length = 2 ^ (input + 1) ↔ Function.Injective regime.carry
+  separateRegimeWidth : (publicCertificateSeparateRegime input).frontier.length = 2 ^ (input + 1)
+  separateRegimeConservation :
+    ConservesConstitutedIdentitiesDistinctlyAndSeparatelyAddressably
+      (publicCertificateSeparateRegime input)
+
+/-- The same public history supplies every component. In particular, feedback
+is reused rather than replaced by a cardinality argument. -/
+theorem endogenousDecompositionAndWidth (input : Nat) : EndogenousDecompositionAndWidth input :=
+  { feedbackAtEveryStep := ExecutedFeedback.public_along input
+    constitutedRoles := (publicCausalOperationalExecution input).stagewiseDecomposition.rolesConstitutionExact
+    sourceAgreements := fun p => (publicCarriedProfile_constitution input p).2 p
+    allProfilesRemainViable := fun p =>
+      ⟨canonicalRoleProfilePayload (publicRelationalConstitutiveRoles input) p,
+        RoleSemantics.canonicalPayload_accepted (publicRelationalConstitutiveRoles input) p⟩
+    interpretedAction := publicCarriedProfilePayload_action input
+    preservation := publicCarriedProfilePayload_preserves input
+    sourceIndexedTrace := fun p => ⟨publicCertificateCarryTrace input p⟩
+    exactCodetermination := publicCertificate_carry_eq_iff_coDetermined input
+    distinctProfiles := publicCertificateProfiles_distinct input
+    groupedProfiles := publicCertificateProfiles_carryTogether input
+    extensiveWidth := publicRoleProfileFiniteCarrier_width input
+    executedWidth := publicCertificate_executedRegime_width input
+    transientWidth := ExecutedFeedback.public_widthTrace_le_two input
+    fullWidthExactlyIndependent := publicCertificate_exponential_iff_carry_injective input
+    separateRegimeWidth := publicCertificate_separateRegime_exponentialWidth input
+    separateRegimeConservation := publicCertificate_separateRegime_conserves input }
+
+/-- Exact class-level characterization, separate from the executed witness. -/
+theorem binaryClass_fullWidthExactlyInjective
+    (family : RelationalExtensive.BinaryRelationalRoleExtensiveFamily)
+    {index : Nat} (problem : family.Problem index)
+    (regime : ObligationRegime (family.sourceCarrier problem)) :
+    regime.frontier.length = 2 ^ family.stageCount problem ↔ Function.Injective regime.carry :=
+  family.exponentialWidth_iff_preservesConstitutedIdentities problem regime
+
+/-- The actual executed witness refutes necessity of full extensive width on
+this source carrier. It does not assert a complexity bound for other problems. -/
+theorem extensiveMultiplicity_doesNotForceFullOperationalWidth (input : Nat) :
+    ¬ (∀ regime : ObligationRegime (publicRoleProfileFiniteCarrier input),
+      regime.frontier.length = 2 ^ (input + 1)) := by
+  intro necessary
+  have claimed := necessary (publicCertificateExecutedRegime input)
+  have oneEquals : 1 = 2 ^ (input + 1) :=
+    Eq.trans (endogenousDecompositionAndWidth input).executedWidth.symm claimed
+  exact (Nat.ne_of_lt (Constructive.two_pow_strictly_grows (Nat.zero_lt_succ input))) oneEquals
+
 end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.EndogenousDecompositionAndWidth
+#print axioms ConstitutiveSearch.EndogenousDecomposition.endogenousDecompositionAndWidth
+#print axioms ConstitutiveSearch.EndogenousDecomposition.binaryClass_fullWidthExactlyInjective
+#print axioms ConstitutiveSearch.EndogenousDecomposition.extensiveMultiplicity_doesNotForceFullOperationalWidth
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCarriedProfilePayload
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCarriedProfilePayload_action
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCarriedProfilePayload_preserves

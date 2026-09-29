@@ -12,6 +12,8 @@ construction of endogenous operational decomposition.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.endogenous_production_and_width_separation
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.extensive_multiplicity_does_not_force_full_operational_width
 #print axioms StrongPerimetralTurning.Example.examplePresentation
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.evidence
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.family

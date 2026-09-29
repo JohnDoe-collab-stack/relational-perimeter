@@ -273,8 +273,30 @@ theorem actProfile_step
       (interpretRoleStageAtom atom o (roleConstitutionEvidence role o) c,
         actProfile rest p payload) := rfl
 
+/-- Every constituted source profile has positive accepted data. Operational
+regrouping does not establish impossibility of any of these source profiles. -/
+theorem canonicalPayload_accepted :
+    {count : Nat} → {state : CausalConstitutiveState} →
+    {run : CausalConstitutiveExecutionHistory count state} →
+    (roles : RelationalConstitutiveRoleHistory run) →
+    (p : RoleOccurrenceProfile roles) →
+    ProfileAccept p (canonicalRoleProfilePayload roles p)
+  | _, _, _, .nil, p => by cases p; exact True.intro
+  | _, _, _, @RelationalConstitutiveRoleHistory.step
+      _ _ head _ role roles, p => by
+      rcases p with ⟨occurrence, rest⟩
+      refine eliminateRoleConstitutedOccurrence role occurrence
+        (motive := fun o => ProfileAccept (roles := .step role roles) (o, rest)
+          (canonicalRoleProfilePayload (.step role roles) (o, rest))) ?_ ?_
+      · refine ⟨?_, canonicalPayload_accepted roles rest⟩
+        change GeneratedStructuralBranchAccept _ role.executedInput
+        rw [role.executedInputExact]
+        exact head.sourceAccepted
+      · exact ⟨role.preservation, canonicalPayload_accepted roles rest⟩
+
 end ConstitutiveSearch.EndogenousDecomposition.RoleSemantics
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.canonicalPayload_accepted
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.retainedSelection
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.includeTarget
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.includeTarget_preserves
