@@ -22,15 +22,20 @@ structure ExecutedRoleReductionLicense
     (role : RelationalConstitutiveRoleStage run)
     (atom : RoleStageAtom role) where
   private mk ::
-  transformedOccurrence : RoleOpeningOccurrence role
+  transformedOccurrence : RoleConstitutedOccurrence role
   transformedOccurrenceExact :
-    transformedOccurrence = roleOpeningOccurrenceAt role .left
-  retainedOccurrence : RoleOpeningOccurrence role
+    transformedOccurrence = roleConstitutedOccurrenceAt role .left
+  transformedConstitution :
+    RoleConstitutionEvidence role transformedOccurrence
+  retainedOccurrence : RoleConstitutedOccurrence role
   retainedOccurrenceExact :
-    retainedOccurrence = roleOpeningOccurrenceAt role .right
+    retainedOccurrence = roleConstitutedOccurrenceAt role .right
+  retainedConstitution :
+    RoleConstitutionEvidence role retainedOccurrence
   transformedOutputExact :
     interpretRoleStageAtom atom
         transformedOccurrence
+        transformedConstitution
         (transformedOccurrenceExact ▸ role.executedInput) =
       role.completedOutput
   preservesCriterion :
@@ -46,6 +51,7 @@ structure ExecutedRoleReductionLicense
       (causalOpeningRight source run.selected run.fresh)
       (interpretRoleStageAtom atom
         transformedOccurrence
+        transformedConstitution
         (transformedOccurrenceExact ▸ role.executedInput))
   retainedAccepted :
     GeneratedStructuralBranchAccept
@@ -62,10 +68,14 @@ def executedRoleReductionLicense
     {run : CausalConstitutiveStageExecution source}
     (role : RelationalConstitutiveRoleStage run) :
     ExecutedRoleReductionLicense role (compileRoleStageAtom role) :=
-  { transformedOccurrence := roleOpeningOccurrenceAt role .left
+  { transformedOccurrence := roleConstitutedOccurrenceAt role .left
     transformedOccurrenceExact := rfl
-    retainedOccurrence := roleOpeningOccurrenceAt role .right
+    transformedConstitution :=
+      roleConstitutionEvidence role (roleConstitutedOccurrenceAt role .left)
+    retainedOccurrence := roleConstitutedOccurrenceAt role .right
     retainedOccurrenceExact := rfl
+    retainedConstitution :=
+      roleConstitutionEvidence role (roleConstitutedOccurrenceAt role .right)
     transformedOutputExact := by
       exact Eq.trans
         (interpretCompiledRoleStage_left role role.executedInput)
@@ -80,7 +90,11 @@ def executedRoleReductionLicense
       rw [role.executedInputExact]
       exact compiledRoleStage_action_changes_executed_source run role
     occurrencesRemainDistinct :=
-      roleOpeningOccurrence_left_ne_right role }
+      (fun same => openingRolePosition_left_ne_right role
+        (congrArg
+          (fun occurrence : RoleConstitutedOccurrence role =>
+            occurrence.position)
+          same)) }
 
 /--
 The operational decomposition available from one executed stage alone. Its
@@ -110,47 +124,39 @@ constructor pins the stored decomposition to the canonical decomposition of
 that exact stage.
 -/
 structure ExecutedStageOperationalProduction
+    {Context : Type 2}
+    (context : Context)
     {source : CausalConstitutiveState}
     (stage : CausalConstitutiveStageExecution source) : Type 2 where
   private mk ::
+  priorContext : Context
+  priorContextExact : priorContext = context
   decomposition : ExecutedStageDecomposition stage
   decompositionExact : decomposition = executedStageDecomposition stage
 
 /-- The exact interface of a producer that has no access to future data. -/
-abbrev PrefixLocalOperationalProducer : Type 2 :=
-  {source : CausalConstitutiveState} →
+abbrev PrefixLocalOperationalProducer : Type 3 :=
+  {Context : Type 2} → (context : Context) →
+    {source : CausalConstitutiveState} →
     (stage : CausalConstitutiveStageExecution source) →
-      ExecutedStageOperationalProduction stage
+      ExecutedStageOperationalProduction context stage
 
 /-- Produce the operational material of the current stage alone. -/
 def prefixLocalOperationalProducer : PrefixLocalOperationalProducer :=
-  fun stage =>
-    { decomposition := executedStageDecomposition stage
+  fun {_} context {_} stage =>
+    { priorContext := context
+      priorContextExact := rfl
+      decomposition := executedStageDecomposition stage
       decompositionExact := rfl }
 
 /-- The canonical production is exactly the local function of its stage. -/
 theorem prefixLocalOperationalProducer_decomposition_exact
+    {Context : Type 2}
+    (context : Context)
     {source : CausalConstitutiveState}
     (stage : CausalConstitutiveStageExecution source) :
-    (prefixLocalOperationalProducer stage).decomposition =
+    (prefixLocalOperationalProducer context stage).decomposition =
       executedStageDecomposition stage :=
-  rfl
-
-/--
-There is exactly one operational production for a fixed executed stage. This
-is the typed prefix-locality statement consumed by the history layer: no tail
-can select another head production.
--/
-theorem ExecutedStageOperationalProduction.unique
-    {source : CausalConstitutiveState}
-    {stage : CausalConstitutiveStageExecution source}
-    (left right : ExecutedStageOperationalProduction stage) :
-    left = right := by
-  have sameDecomposition : left.decomposition = right.decomposition :=
-    Eq.trans left.decompositionExact right.decompositionExact.symm
-  cases left
-  cases right
-  cases sameDecomposition
   rfl
 
 end EndogenousDecomposition
@@ -165,5 +171,4 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.PrefixLocalOperationalProducer
 #print axioms ConstitutiveSearch.EndogenousDecomposition.prefixLocalOperationalProducer
 #print axioms ConstitutiveSearch.EndogenousDecomposition.prefixLocalOperationalProducer_decomposition_exact
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ExecutedStageOperationalProduction.unique
 /- AXIOM_AUDIT_END -/

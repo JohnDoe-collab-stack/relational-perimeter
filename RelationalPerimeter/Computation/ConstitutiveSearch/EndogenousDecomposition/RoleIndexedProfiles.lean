@@ -240,6 +240,44 @@ theorem openingOccurrenceFrontier_nodup
       exact congrArg RoleOpeningOccurrence.position same)
     (openingPositionFrontier_nodup role)
 
+/-- Primitive source relation read by the executed relational role. -/
+abbrev executedRoleSourceRelation
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (observed : CausalConstitutiveState)
+    (candidate : RelationalConstitutiveRoleStage run) : Type :=
+  PLift (candidate.searchState = observed)
+
+/-- Primitive formation relation between an executed role and one occurrence. -/
+abbrev executedRoleFormationRelation
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (reference : RelationalConstitutiveRoleStage run)
+    (candidate : RelationalConstitutiveRoleStage run)
+    (occurrence : RoleOpeningOccurrence reference) : Type :=
+  PLift (candidate = reference) ×
+    PLift (occurrence.state = occurrence.position.state reference)
+
+/-- Primitive target relation read by the executed relational role. -/
+abbrev executedRoleTargetRelation
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (candidate : RelationalConstitutiveRoleStage run)
+    (observed : CausalConstitutiveState) : Type :=
+  PLift (candidate.nextState = observed)
+
+/-- Primitive provenance relation carried by one executed occurrence. -/
+abbrev executedRoleProvenanceRelation
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (reference : RelationalConstitutiveRoleStage run)
+    (provenance : List Var)
+    (candidate : RelationalConstitutiveRoleStage run)
+    (occurrence : RoleOpeningOccurrence reference) : Type :=
+  PLift (provenance = source.provenance) ×
+    PLift (candidate = reference) ×
+    PLift (occurrence.state = occurrence.position.state reference)
+
 /--
 One executed role as an exact relational opening.  Positions are independent
 from occurrences; the existing position-occurrence transport realizes them,
@@ -254,17 +292,10 @@ def generalOpeningStageOfRole
     Position := OpeningRolePosition role
     Occurrence := RoleOpeningOccurrence role
     Provenance := List Var
-    SourceRelation := fun observed candidate =>
-      PLift (candidate.searchState = observed)
-    FormationRelation := fun candidate occurrence =>
-      PLift (candidate = role) ×
-        PLift (occurrence.state = occurrence.position.state role)
-    TargetRelation := fun candidate observed =>
-      PLift (candidate.nextState = observed)
-    ProvenanceRelation := fun provenance candidate occurrence =>
-      PLift (provenance = source.provenance) ×
-        PLift (candidate = role) ×
-        PLift (occurrence.state = occurrence.position.state role)
+    SourceRelation := executedRoleSourceRelation
+    FormationRelation := executedRoleFormationRelation role
+    TargetRelation := executedRoleTargetRelation
+    ProvenanceRelation := executedRoleProvenanceRelation role
     role := role
     provenance := source.provenance
     sourceWitness := ⟨role.searchStateExact⟩
@@ -280,6 +311,107 @@ def generalOpeningStageOfRole
     formationAgreement := fun _ => ⟨⟨rfl⟩, ⟨rfl⟩⟩
     provenanceAgreement := fun _ =>
       ⟨⟨rfl⟩, ⟨⟨rfl⟩, ⟨rfl⟩⟩⟩ }
+
+/--
+The constituted identity belonging to one executed relational role. The
+opening occurrence remains only the internal realization carried by the stage; every
+scientific profile and every downstream operation uses this stage-indexed
+identity.
+-/
+abbrev RoleConstitutedOccurrence
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) : Type :=
+  RelationallyConstitutedOccurrence (generalOpeningStageOfRole role)
+
+/-- Constitute a role identity from its exact historical position. -/
+def roleConstitutedOccurrenceAt
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run)
+    (position : OpeningRolePosition role) :
+    RoleConstitutedOccurrence role :=
+  relationallyConstitutedOccurrence (generalOpeningStageOfRole role) position
+
+/-- Reconstituting an identity from its carried position returns that identity. -/
+theorem roleConstitutedOccurrence_roundTrip
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    (identity : RoleConstitutedOccurrence role) :
+    roleConstitutedOccurrenceAt role identity.position = identity := by
+  cases identity
+  rfl
+
+/-- Realize a constituted role identity in its internal occurrence carrier. -/
+def realizeRoleConstitutedOccurrence
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    (identity : RoleConstitutedOccurrence role) :
+    RoleOpeningOccurrence role :=
+  identity.realized
+
+/-- The position is preserved exactly by the internal realization. -/
+theorem realizeRoleConstitutedOccurrence_position
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    (identity : RoleConstitutedOccurrence role) :
+    (realizeRoleConstitutedOccurrence identity).position = identity.position :=
+  rfl
+
+/--
+The positive relational evidence constituting one executed identity.  These
+witnesses are not metadata adjacent to the carrier: the operational chain
+receives this evidence for every identity it transforms or retains.
+-/
+structure RoleConstitutionEvidence
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run)
+    (identity : RoleConstitutedOccurrence role) : Type where
+  sourceWitness : executedRoleSourceRelation source role
+  targetWitness : executedRoleTargetRelation role run.next
+  formationWitness :
+    executedRoleFormationRelation role role identity.realized
+  provenanceWitness :
+    executedRoleProvenanceRelation role source.provenance role identity.realized
+
+/-- Recover all primitive witnesses from the exact relational opening. -/
+def roleConstitutionEvidence
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run)
+    (identity : RoleConstitutedOccurrence role) :
+    RoleConstitutionEvidence role identity :=
+  { sourceWitness := (generalOpeningStageOfRole role).sourceWitness
+    targetWitness := (generalOpeningStageOfRole role).targetWitness
+    formationWitness :=
+      (generalOpeningStageOfRole role).formationWitness identity
+    provenanceWitness :=
+      (generalOpeningStageOfRole role).provenanceWitness identity }
+
+/--
+Eliminate the four primitive relations in constitutive order.  Downstream
+operations use this eliminator rather than merely storing the witnesses next to
+an otherwise relation-free carrier.
+-/
+def RoleConstitutionEvidence.eliminate
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run}
+    {identity : RoleConstitutedOccurrence role}
+    {Result : Sort u}
+    (evidence : RoleConstitutionEvidence role identity)
+    (constituted : Result) : Result := by
+  rcases evidence.sourceWitness with ⟨sourceExact⟩
+  rcases evidence.formationWitness with
+    ⟨⟨formationRoleExact⟩, ⟨formationStateExact⟩⟩
+  rcases evidence.targetWitness with ⟨targetExact⟩
+  rcases evidence.provenanceWitness with
+    ⟨⟨provenanceExact⟩, ⟨⟨provenanceRoleExact⟩, ⟨provenanceStateExact⟩⟩⟩
+  exact constituted
 
 /-- The general-stage transport is the authoritative occurrence realization. -/
 theorem generalOpeningStage_positionOccurrenceTransport_exact
@@ -457,7 +589,19 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.openingPositionFrontier
 #print axioms ConstitutiveSearch.EndogenousDecomposition.openingPositionFrontier_complete
 #print axioms ConstitutiveSearch.EndogenousDecomposition.openingPositionFrontier_nodup
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedRoleSourceRelation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedRoleFormationRelation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedRoleTargetRelation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executedRoleProvenanceRelation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.generalOpeningStageOfRole
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleConstitutedOccurrence
+#print axioms ConstitutiveSearch.EndogenousDecomposition.roleConstitutedOccurrenceAt
+#print axioms ConstitutiveSearch.EndogenousDecomposition.roleConstitutedOccurrence_roundTrip
+#print axioms ConstitutiveSearch.EndogenousDecomposition.realizeRoleConstitutedOccurrence
+#print axioms ConstitutiveSearch.EndogenousDecomposition.realizeRoleConstitutedOccurrence_position
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleConstitutionEvidence
+#print axioms ConstitutiveSearch.EndogenousDecomposition.roleConstitutionEvidence
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleConstitutionEvidence.eliminate
 #print axioms ConstitutiveSearch.EndogenousDecomposition.generalOpeningStage_positionOccurrenceTransport_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.generalHistoryOfRoleHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RolePositionProfile

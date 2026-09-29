@@ -81,7 +81,7 @@ def RoleOpeningPayload
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
     {role : RelationalConstitutiveRoleStage run}
-    (occurrence : RoleOpeningOccurrence role) : Type :=
+    (occurrence : RoleConstitutedOccurrence role) : Type :=
   match occurrence.position with
   | .left => GeneratedStructuralBranchContinuation
       (causalOpeningLeft source run.selected run.fresh)
@@ -90,20 +90,23 @@ def RoleOpeningPayload
 
 /--
 Interpret one real occurrence.  The transformed and retained cases cannot be
-interchanged without changing the required payload type.
+interchanged without changing the required payload type.  Evaluation first
+eliminates the source, formation, target and provenance witnesses that
+constitute this occurrence.
 -/
 def interpretRoleStageAtom
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
     {role : RelationalConstitutiveRoleStage run}
     (atom : RoleStageAtom role)
-    (occurrence : RoleOpeningOccurrence role) :
+    (occurrence : RoleConstitutedOccurrence role)
+    (constitution : RoleConstitutionEvidence role occurrence) :
     RoleOpeningPayload occurrence →
       GeneratedStructuralBranchContinuation
         (causalOpeningRight source run.selected run.fresh) :=
-  match occurrence with
-  | ⟨.left, _, _⟩ => fun continuation => atom.action continuation
-  | ⟨.right, _, _⟩ => fun continuation => continuation
+  constitution.eliminate <| match occurrence with
+    | .at .left => fun continuation => atom.action continuation
+    | .at .right => fun continuation => continuation
 
 theorem interpretCompiledRoleStage_left
     {source : CausalConstitutiveState}
@@ -112,7 +115,9 @@ theorem interpretCompiledRoleStage_left
     (continuation : GeneratedStructuralBranchContinuation
       (causalOpeningLeft source run.selected run.fresh)) :
     interpretRoleStageAtom (compileRoleStageAtom role)
-        (roleOpeningOccurrenceAt role .left) continuation =
+        (roleConstitutedOccurrenceAt role .left)
+        (roleConstitutionEvidence role
+          (roleConstitutedOccurrenceAt role .left)) continuation =
       role.reconstructedRelation.mapContinuation continuation :=
   rfl
 
@@ -123,7 +128,9 @@ theorem interpretCompiledRoleStage_right
     (continuation : GeneratedStructuralBranchContinuation
       (causalOpeningRight source run.selected run.fresh)) :
     interpretRoleStageAtom (compileRoleStageAtom role)
-        (roleOpeningOccurrenceAt role .right) continuation = continuation :=
+        (roleConstitutedOccurrenceAt role .right)
+        (roleConstitutionEvidence role
+          (roleConstitutedOccurrenceAt role .right)) continuation = continuation :=
   rfl
 
 /-- The transformed action is positively non-identity on the executed source. -/
@@ -150,7 +157,9 @@ theorem interpretCompiledRoleStage_executedOutput
     (run : CausalConstitutiveStageExecution source)
     (role : RelationalConstitutiveRoleStage run) :
     interpretRoleStageAtom (compileRoleStageAtom role)
-        (roleOpeningOccurrenceAt role .left) run.sourceContinuation =
+        (roleConstitutedOccurrenceAt role .left)
+        (roleConstitutionEvidence role
+          (roleConstitutedOccurrenceAt role .left)) run.sourceContinuation =
       run.outputContinuation := by
   exact Eq.trans
     (compileRoleStageAtom_action_exact role run.sourceContinuation)
@@ -230,7 +239,8 @@ def interpretRoleOccurrenceProfile :
       RoleProfilePayload profile → List Assignment
   | _, _, _, _, .nil, _, _ => []
   | _, _, _, _, .step atom tailProgram, profile, payload =>
-      (interpretRoleStageAtom atom profile.1 payload.1).1 ::
+      (interpretRoleStageAtom atom profile.1
+        (roleConstitutionEvidence _ profile.1) payload.1).1 ::
         interpretRoleOccurrenceProfile tailProgram profile.2 payload.2
 
 /-- One program step must evaluate its stored atom and then its typed tail. -/
@@ -242,14 +252,15 @@ theorem interpretRoleOccurrenceProfile_step
     {tailRoles : RelationalConstitutiveRoleHistory tail}
     (atom : RoleStageAtom headRole)
     (tailProgram : RoleIndexedProgram tailRoles)
-    (headOccurrence : RoleOpeningOccurrence headRole)
+    (headOccurrence : RoleConstitutedOccurrence headRole)
     (tailProfile : RoleOccurrenceProfile tailRoles)
     (headPayload : RoleOpeningPayload headOccurrence)
     (tailPayload : RoleProfilePayload tailProfile) :
     interpretRoleOccurrenceProfile
         (RoleIndexedProgram.step atom tailProgram)
         (headOccurrence, tailProfile) (headPayload, tailPayload) =
-      (interpretRoleStageAtom atom headOccurrence headPayload).1 ::
+      (interpretRoleStageAtom atom headOccurrence
+        (roleConstitutionEvidence headRole headOccurrence) headPayload).1 ::
         interpretRoleOccurrenceProfile tailProgram tailProfile tailPayload :=
   rfl
 
@@ -277,21 +288,20 @@ def canonicalRoleProfilePayload :
       RoleProfilePayload profile
   | _, _, _, .nil, profile => by cases profile; exact ()
   | _, _, _, .step headRole tailRoles, profile => by
-      change RoleOpeningOccurrence headRole ×
+      change RoleConstitutedOccurrence headRole ×
         RoleOccurrenceProfile tailRoles at profile
       cases profile with
       | mk headOccurrence tailProfile =>
-          cases headOccurrence with
-          | mk position occurrenceState formedAt =>
-              cases position with
-              | left =>
-                  exact
-                    (headRole.executedInput,
-                      canonicalRoleProfilePayload tailRoles tailProfile)
-              | right =>
-                  exact
-                    (headRole.completedOutput,
-                      canonicalRoleProfilePayload tailRoles tailProfile)
+          rcases headOccurrence with ⟨position⟩
+          cases position with
+          | left =>
+              exact
+                (headRole.executedInput,
+                  canonicalRoleProfilePayload tailRoles tailProfile)
+          | right =>
+              exact
+                (headRole.completedOutput,
+                  canonicalRoleProfilePayload tailRoles tailProfile)
 
 /-- Executed retained assignment at every role, read from the role history. -/
 def completedRoleAssignments :
@@ -318,45 +328,44 @@ theorem interpretCompiledRoleHistory_exact :
         completedRoleAssignments roles
   | _, _, _, .nil, profile => by cases profile; rfl
   | _, _, _, .step headRole tailRoles, profile => by
-      change RoleOpeningOccurrence headRole ×
+      change RoleConstitutedOccurrence headRole ×
         RoleOccurrenceProfile tailRoles at profile
       cases profile with
       | mk headOccurrence tailProfile =>
-          cases headOccurrence with
-          | mk position occurrenceState formedAt =>
-              cases position with
-              | left =>
-                  change
-                    ((compileRoleStageAtom headRole).action
-                        headRole.executedInput).1 ::
-                        interpretRoleOccurrenceProfile
-                          (compileRoleHistory tailRoles) tailProfile
-                          (canonicalRoleProfilePayload
-                            tailRoles tailProfile) =
-                      headRole.completedOutput.1 ::
-                        completedRoleAssignments tailRoles
-                  have headExact :
-                      (compileRoleStageAtom headRole).action
-                          headRole.executedInput =
-                        headRole.completedOutput :=
-                    Eq.trans
-                      (compileRoleStageAtom_action_exact
-                        headRole headRole.executedInput)
-                      headRole.actionExact.symm
-                  rw [congrArg Subtype.val headExact]
-                  exact congrArg (List.cons headRole.completedOutput.1)
-                    (interpretCompiledRoleHistory_exact tailRoles tailProfile)
-              | right =>
-                  change
-                    headRole.completedOutput.1 ::
-                        interpretRoleOccurrenceProfile
-                          (compileRoleHistory tailRoles) tailProfile
-                          (canonicalRoleProfilePayload
-                            tailRoles tailProfile) =
-                      headRole.completedOutput.1 ::
-                        completedRoleAssignments tailRoles
-                  exact congrArg (List.cons headRole.completedOutput.1)
-                    (interpretCompiledRoleHistory_exact tailRoles tailProfile)
+          rcases headOccurrence with ⟨position⟩
+          cases position with
+          | left =>
+              change
+                ((compileRoleStageAtom headRole).action
+                    headRole.executedInput).1 ::
+                    interpretRoleOccurrenceProfile
+                      (compileRoleHistory tailRoles) tailProfile
+                      (canonicalRoleProfilePayload
+                        tailRoles tailProfile) =
+                  headRole.completedOutput.1 ::
+                    completedRoleAssignments tailRoles
+              have headExact :
+                  (compileRoleStageAtom headRole).action
+                      headRole.executedInput =
+                    headRole.completedOutput :=
+                Eq.trans
+                  (compileRoleStageAtom_action_exact
+                    headRole headRole.executedInput)
+                  headRole.actionExact.symm
+              rw [congrArg Subtype.val headExact]
+              exact congrArg (List.cons headRole.completedOutput.1)
+                (interpretCompiledRoleHistory_exact tailRoles tailProfile)
+          | right =>
+              change
+                headRole.completedOutput.1 ::
+                    interpretRoleOccurrenceProfile
+                      (compileRoleHistory tailRoles) tailProfile
+                      (canonicalRoleProfilePayload
+                        tailRoles tailProfile) =
+                  headRole.completedOutput.1 ::
+                    completedRoleAssignments tailRoles
+              exact congrArg (List.cons headRole.completedOutput.1)
+                (interpretCompiledRoleHistory_exact tailRoles tailProfile)
 
 end EndogenousDecomposition
 end ConstitutiveSearch

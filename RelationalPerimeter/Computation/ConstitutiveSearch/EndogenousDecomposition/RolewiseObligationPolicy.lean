@@ -16,16 +16,20 @@ namespace EndogenousDecomposition
 open Extensive
 open RelationalExtensive
 
-/-- Finite local carrier of the two occurrences realized by one role. -/
+/-- Finite local carrier of the two identities constituted by one role. -/
 def roleOpeningFiniteCarrier
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
     (role : RelationalConstitutiveRoleStage run) : FiniteCarrier :=
-  { Identity := RoleOpeningOccurrence role
-    decEq := roleOpeningOccurrenceDecEq role
-    frontier := openingOccurrenceFrontier role
-    complete := openingOccurrenceFrontier_complete role
-    nodup := openingOccurrenceFrontier_nodup role }
+  { Identity := RoleConstitutedOccurrence role
+    decEq := relationallyConstitutedOccurrenceDecEq
+      (generalOpeningStageOfRole role)
+    frontier := relationallyConstitutedOccurrenceFrontier
+      (generalOpeningStageOfRole role)
+    complete := relationallyConstitutedOccurrenceFrontier_complete
+      (generalOpeningStageOfRole role)
+    nodup := relationallyConstitutedOccurrenceFrontier_nodup
+      (generalOpeningStageOfRole role) }
 
 /-- One local obligation regime for every role in the dependent history. -/
 inductive RolewiseObligationPolicy :
@@ -166,7 +170,7 @@ def defaultRoleOccurrenceProfile :
       RoleOccurrenceProfile roles
   | _, _, _, .nil => ()
   | _, _, _, .step headRole tailRoles =>
-      (roleOpeningOccurrenceAt headRole .left,
+      (roleConstitutedOccurrenceAt headRole .left,
         defaultRoleOccurrenceProfile tailRoles)
 
 /-- The same positive default, with the role history inferred from its policy. -/
@@ -179,7 +183,7 @@ def defaultPolicyOccurrenceProfile :
   | _, _, _, _, .nil => ()
   | _, _, _, _, @RolewiseObligationPolicy.step
       _ _ _ _ headRole _ _ tailPolicy =>
-        (roleOpeningOccurrenceAt headRole .left,
+        (roleConstitutedOccurrenceAt headRole .left,
           defaultPolicyOccurrenceProfile tailPolicy)
 
 /-- Pointwise proposition that every local carry map is injective. -/

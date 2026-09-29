@@ -244,8 +244,10 @@ theorem increasingArityHistory_nontrivial :
   | 0, _ => True.intro
   | count + 1, source => by
       constructor
-      · change 2 ≤ ((constructiveFinRange (source + 2)).map id).length
-        rw [relational_length_map, constructiveFinRange_length]
+      · rw [relationallyConstitutedOccurrenceFrontier,
+          relational_length_map]
+        change 2 ≤ (constructiveFinRange (source + 2)).length
+        rw [constructiveFinRange_length]
         exact Nat.le_add_left 2 source
       · exact increasingArityHistory_nontrivial count (source + 1)
 
@@ -272,7 +274,9 @@ theorem increasingArityRelationalFamily_variable
     (relationallyConstitutedOccurrenceFrontier
       (increasingArityStage source)).length = source + 2 :=
   Eq.trans
-    (relational_length_map id (constructiveFinRange (source + 2)))
+    (relational_length_map
+      (relationallyConstitutedOccurrence (increasingArityStage source))
+      (constructiveFinRange (source + 2)))
     (constructiveFinRange_length _)
 
 /-- A binary relational opening independent of the public SAT construction. -/

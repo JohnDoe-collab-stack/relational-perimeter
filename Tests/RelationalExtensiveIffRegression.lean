@@ -166,10 +166,8 @@ theorem publicFusedCausalRunIsAuthoritative (input : Nat) :
 /-- The relational roles consumed downstream are exactly those constituted
 from the authoritative public run. -/
 theorem publicFusedRolesAreAuthoritative (input : Nat) :
-    HEq
-      (buildRelationalConstitutiveRoleHistory
-        (publicCausalOperationalExecution input).causalRun)
-      (publicRelationalConstitutiveRoles input) :=
+    (publicCausalOperationalExecution input).stagewiseDecomposition.roles =
+      publicRelationalConstitutiveRoles input :=
   publicCausalOperationalExecution_roles_exact input
 
 /-- The immutable target is inhabited by a closed production object. -/
@@ -188,14 +186,9 @@ theorem publicNormalizationIsCanonical (input : Nat) :
 /-- The regime is pinned to actual targets and their executed convergence. -/
 theorem publicOperationalRegimeIsComputedImage (input : Nat) :
     (publicCertificateNormalization input).operationalRegime =
-      convergedTargetImageRegime
-        (roleProfileFiniteCarrier
-          (constitutiveExtensiveSeparationEvidence input).roles)
-        (publicCertificateNormalization input).target
-        (defaultRoleOccurrenceProfile
-          (constitutiveExtensiveSeparationEvidence input).roles)
-        (publicCertificateNormalization input).targets_converge :=
-  (constitutiveExtensiveSeparationEvidence input).operationalRegimeExact
+      (publicCertificateNormalization input).authorizedOperationalRegime
+        (publicCertificateNormalization input).groupingAuthorization :=
+  (publicCertificateNormalization input).operationalRegime_exact
 
 /-- The public regime is only a projection of its exact executed realization. -/
 theorem publicOperationalRegimeIsExactRealization (input : Nat) :
@@ -323,7 +316,9 @@ theorem transformedOccurrenceUsesDiscoveredAction
     (continuation : GeneratedStructuralBranchContinuation
       (causalOpeningLeft source run.selected run.fresh)) :
     interpretRoleStageAtom (compileRoleStageAtom role)
-        (roleOpeningOccurrenceAt role .left) continuation =
+        (roleConstitutedOccurrenceAt role .left)
+        (roleConstitutionEvidence role
+          (roleConstitutedOccurrenceAt role .left)) continuation =
       role.reconstructedRelation.mapContinuation continuation :=
   interpretCompiledRoleStage_left role continuation
 
@@ -338,6 +333,7 @@ theorem transformedTargetIsExecutedAction
     transformedExecutedRoleOperationalTarget absorption =
       interpretRoleStageAtom (compileRoleStageAtom role)
         license.transformedOccurrence
+        license.transformedConstitution
         (license.transformedOccurrenceExact ▸ role.executedInput) :=
   transformedExecutedRoleOperationalTarget_is_executed_action _
 
@@ -376,6 +372,7 @@ theorem transformedDecisionTargetIsExecutedAction
     (executedTransformedRoleOccurrenceDecision license).target =
       interpretRoleStageAtom (compileRoleStageAtom role)
         license.transformedOccurrence
+        license.transformedConstitution
         (license.transformedOccurrenceExact ▸ role.executedInput) :=
   rfl
 
@@ -389,6 +386,7 @@ def transformedDecisionHasExecutedActionIndex
     ExecutedRoleOccurrenceDecision license license.transformedOccurrence
       (interpretRoleStageAtom (compileRoleStageAtom role)
         license.transformedOccurrence
+        license.transformedConstitution
         (license.transformedOccurrenceExact ▸ role.executedInput)) :=
   executedTransformedRoleOccurrenceDecision (executedRoleReductionLicense role)
 
@@ -396,13 +394,15 @@ def transformedDecisionHasExecutedActionIndex
 def exactPrefixLocalProducerType : PrefixLocalOperationalProducer :=
   prefixLocalOperationalProducer
 
-/-- Any production for a stage is the canonical prefix-local production. -/
-theorem noFutureCanSelectAnotherHeadProduction
+/-- The canonical head production carries exactly the already-produced context
+that was available before its dependent tail is constructed. -/
+theorem prefixLocalProductionCarriesExactPriorContext
+    {Context : Type 2}
+    (context : Context)
     {source : CausalConstitutiveState}
-    (stage : CausalConstitutiveStageExecution source)
-    (production : ExecutedStageOperationalProduction stage) :
-    production = prefixLocalOperationalProducer stage :=
-  ExecutedStageOperationalProduction.unique _ _
+    (stage : CausalConstitutiveStageExecution source) :
+    (prefixLocalOperationalProducer context stage).priorContext = context :=
+  (prefixLocalOperationalProducer context stage).priorContextExact
 
 /-- The public normalizer is definitionally built by consuming the complete
 role-by-role constitutive chain. -/
@@ -440,23 +440,21 @@ executed constitutive chain that produces the normalized targets. -/
 def publicGroupingRetainsPreservation (input : Nat) :
     ExecutedReductionPreservationExact
       (publicCertificateNormalization input).constitutiveChain :=
-  (exactCausalExponentialTargetEvidence input).certificate.exactOperationalRegime
-    |>.groupingAuthorization.preservation
+  (publicCertificateExactExecutedRegime input).groupingAuthorization.preservation
 
 /-- Grouping is simultaneously authorized by persistent separation of the
 source occurrences; grouping therefore does not identify them. -/
 def publicGroupingRetainsOccurrenceSeparation (input : Nat) :
     ExecutedReductionOccurrenceSeparationExact
       (publicCertificateNormalization input).constitutiveChain :=
-  (exactCausalExponentialTargetEvidence input).certificate.exactOperationalRegime
-    |>.groupingAuthorization.occurrenceSeparation
+  (publicCertificateExactExecutedRegime input).groupingAuthorization
+    |>.occurrenceSeparation
 
 /-- The exact target closes both authorization dependencies explicitly. -/
 def publicExactTargetGroupingAuthorization (input : Nat) :
     ExecutedOperationalGroupingAuthorization
-      (exactCausalExponentialTargetEvidence input).certificate.normalization :=
-  (exactCausalExponentialTargetEvidence input).certificate.exactOperationalRegime
-    |>.groupingAuthorization
+      (publicCertificateNormalization input) :=
+  (publicCertificateExactExecutedRegime input).groupingAuthorization
 
 /-- The class-level exponential `iff` is available on the literal carrier of
 the authoritative executed roles, with no adapter carrier in its statement. -/
@@ -466,7 +464,7 @@ theorem publicClassIffUsesAuthoritativeExecutedCarrier
     regime.frontier.length = 2 ^ (input + 1) ↔
       Function.Injective regime.carry :=
   (exactCausalExponentialTargetEvidence input)
-    |>.classIffIsRealizedOnAuthoritativeExecutedCarrier regime
+    |>.width.exponentialIffCarryInjective regime
 
 /-- The public regime is definitionally the exact regime projected from the
 same normalization; an unrelated singleton cannot replace it. -/
@@ -522,7 +520,7 @@ end RelationalPerimeter.Tests.RelationalExtensiveIffRegression
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.transformedDecisionTargetIsExecutedAction
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.transformedDecisionHasExecutedActionIndex
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.exactPrefixLocalProducerType
-#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.noFutureCanSelectAnotherHeadProduction
+#print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.prefixLocalProductionCarriesExactPriorContext
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicNormalizationConsumesConstitutiveChain
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.normalizationResultIsChainElimination
 #print axioms RelationalPerimeter.Tests.RelationalExtensiveIffRegression.publicNormalizationChainIsCausallyExact

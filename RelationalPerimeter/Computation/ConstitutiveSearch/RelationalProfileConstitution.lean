@@ -74,10 +74,29 @@ inductive DependentRelationalRoleHistory
       (tail : DependentRelationalRoleHistory State next count) :
       DependentRelationalRoleHistory State source (count + 1)
 
-/-- The occurrence type constituted and exactly realized by one stage. -/
-abbrev RelationallyConstitutedOccurrence
+/--
+An identity constituted at one relational stage.  The carrier is indexed by the
+whole stage, including its primitive relations and positive witnesses.  It is
+not an alias for the internal realization carrier.
+-/
+inductive RelationallyConstitutedOccurrence
     {State : Type} {source next : State}
-    (stage : RelationalOpeningStage State source next) := stage.Occurrence
+    (stage : RelationalOpeningStage State source next) : Type where
+  | at (position : stage.Position) : RelationallyConstitutedOccurrence stage
+
+/-- Recover the structural position carried by a constituted identity. -/
+def RelationallyConstitutedOccurrence.position
+    {State : Type} {source next : State}
+    {stage : RelationalOpeningStage State source next} :
+    RelationallyConstitutedOccurrence stage → stage.Position
+  | .at position => position
+
+/-- Realize a constituted identity in the raw occurrence carrier of its stage. -/
+def RelationallyConstitutedOccurrence.realized
+    {State : Type} {source next : State}
+    {stage : RelationalOpeningStage State source next}
+    (identity : RelationallyConstitutedOccurrence stage) : stage.Occurrence :=
+  stage.realize identity.position
 
 /-- The canonical constituted occurrence supplied by a relational stage. -/
 def relationallyConstitutedOccurrence
@@ -85,27 +104,23 @@ def relationallyConstitutedOccurrence
     (stage : RelationalOpeningStage State source next)
     (position : stage.Position) :
     RelationallyConstitutedOccurrence stage :=
-  stage.realize position
+  .at position
 
 /-- Recover formation through the exact role-occurrence agreement. -/
 def RelationalOpeningStage.formationWitness
     {State : Type} {source next : State}
     (stage : RelationalOpeningStage State source next)
-    (occurrence : stage.Occurrence) :
-    stage.FormationRelation stage.role occurrence := by
-  have witness := stage.formationAgreement (stage.classify occurrence)
-  rw [stage.realize_classify occurrence] at witness
-  exact witness
+    (identity : RelationallyConstitutedOccurrence stage) :
+    stage.FormationRelation stage.role identity.realized :=
+  stage.formationAgreement identity.position
 
 /-- Recover provenance through the same exact role-occurrence agreement. -/
 def RelationalOpeningStage.provenanceWitness
     {State : Type} {source next : State}
     (stage : RelationalOpeningStage State source next)
-    (occurrence : stage.Occurrence) :
-    stage.ProvenanceRelation stage.provenance stage.role occurrence := by
-  have witness := stage.provenanceAgreement (stage.classify occurrence)
-  rw [stage.realize_classify occurrence] at witness
-  exact witness
+    (identity : RelationallyConstitutedOccurrence stage) :
+    stage.ProvenanceRelation stage.provenance stage.role identity.realized :=
+  stage.provenanceAgreement identity.position
 
 /-- Decidable equality inherited from the stage occurrence carrier. -/
 def relationallyConstitutedOccurrenceDecEq
@@ -113,15 +128,11 @@ def relationallyConstitutedOccurrenceDecEq
     (stage : RelationalOpeningStage State source next) :
     DecidableEq (RelationallyConstitutedOccurrence stage) :=
   fun left right =>
-    match stage.positionDecEq (stage.classify left) (stage.classify right) with
-    | isTrue same => isTrue (by
-        calc
-          left = stage.realize (stage.classify left) :=
-            (stage.realize_classify left).symm
-          _ = stage.realize (stage.classify right) := congrArg stage.realize same
-          _ = right := stage.realize_classify right)
+    match stage.positionDecEq left.position right.position with
+    | isTrue same => isTrue (by cases left; cases right; cases same; rfl)
     | isFalse different =>
-        isFalse (fun same => different (congrArg stage.classify same))
+        isFalse (fun same => different
+          (congrArg RelationallyConstitutedOccurrence.position same))
 
 /-- A profile of identities constituted at every relational role. -/
 def RelationalOccurrenceProfile :
@@ -129,7 +140,7 @@ def RelationalOccurrenceProfile :
       DependentRelationalRoleHistory State source count → Type
   | _, _, _, .nil _ => Unit
   | _, _, _, .step head tail =>
-      head.Occurrence × RelationalOccurrenceProfile tail
+      RelationallyConstitutedOccurrence head × RelationalOccurrenceProfile tail
 
 /-- Position profile kept distinct from its realized occurrence profile. -/
 def RelationalPositionProfile :
@@ -146,7 +157,7 @@ def relationalPositionToOccurrenceProfile :
       RelationalPositionProfile history → RelationalOccurrenceProfile history
   | _, _, _, .nil _, profile => by cases profile; exact ()
   | _, _, _, .step head tail, profile =>
-      (head.realize profile.1,
+      (relationallyConstitutedOccurrence head profile.1,
         relationalPositionToOccurrenceProfile tail profile.2)
 
 /-- Pointwise classification of a complete relational occurrence profile. -/
@@ -156,7 +167,7 @@ def relationalOccurrenceToPositionProfile :
       RelationalOccurrenceProfile history → RelationalPositionProfile history
   | _, _, _, .nil _, profile => by cases profile; exact ()
   | _, _, _, .step head tail, profile =>
-      (head.classify profile.1,
+      (profile.1.position,
         relationalOccurrenceToPositionProfile tail profile.2)
 
 theorem relationalPositionProfile_roundTrip :
@@ -167,7 +178,7 @@ theorem relationalPositionProfile_roundTrip :
           (relationalPositionToOccurrenceProfile history profile) = profile
   | _, _, _, .nil _, profile => by cases profile; rfl
   | _, _, _, .step head tail, profile => by
-      exact Prod.ext (head.classify_realize profile.1)
+      exact Prod.ext rfl
         (relationalPositionProfile_roundTrip tail profile.2)
 
 theorem relationalOccurrenceProfile_roundTrip :
@@ -178,7 +189,8 @@ theorem relationalOccurrenceProfile_roundTrip :
           (relationalOccurrenceToPositionProfile history profile) = profile
   | _, _, _, .nil _, profile => by cases profile; rfl
   | _, _, _, .step head tail, profile => by
-      exact Prod.ext (head.realize_classify profile.1)
+      cases profile.1
+      exact Prod.ext rfl
         (relationalOccurrenceProfile_roundTrip tail profile.2)
 
 /-- Exact history-level transport, constructed before any numeric readout. -/
@@ -347,27 +359,26 @@ def relationallyConstitutedOccurrenceFrontier
     {State : Type} {source next : State}
     (stage : RelationalOpeningStage State source next) :
     List (RelationallyConstitutedOccurrence stage) :=
-  stage.positionFrontier.map stage.realize
+  stage.positionFrontier.map (relationallyConstitutedOccurrence stage)
 
 theorem relationallyConstitutedOccurrenceFrontier_complete
     {State : Type} {source next : State}
     (stage : RelationalOpeningStage State source next)
     (identity : RelationallyConstitutedOccurrence stage) :
     identity ∈ relationallyConstitutedOccurrenceFrontier stage := by
-  have realizedMember := relational_mem_map stage.realize
-    (stage.positionComplete (stage.classify identity))
-  rw [stage.realize_classify identity] at realizedMember
+  have realizedMember := relational_mem_map
+    (relationallyConstitutedOccurrence stage)
+    (stage.positionComplete identity.position)
+  cases identity
   exact realizedMember
 
 theorem relationallyConstitutedOccurrenceFrontier_nodup
     {State : Type} {source next : State}
     (stage : RelationalOpeningStage State source next) :
     (relationallyConstitutedOccurrenceFrontier stage).Nodup :=
-  relational_nodup_map stage.realize
+  relational_nodup_map (relationallyConstitutedOccurrence stage)
     (fun {_left _right} same => by
-      have classified := congrArg stage.classify same
-      rw [stage.classify_realize, stage.classify_realize] at classified
-      exact classified)
+      exact congrArg RelationallyConstitutedOccurrence.position same)
     stage.positionNodup
 
 /-- The unique global frontier of relationally constituted identities. -/
@@ -536,9 +547,12 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.RelationalExtensive.relationalOccurrenceProfile_roundTrip
 #print axioms ConstitutiveSearch.RelationalExtensive.relationalProfileTransport
 #print axioms ConstitutiveSearch.RelationalExtensive.RelationallyConstitutedOccurrence
+#print axioms ConstitutiveSearch.RelationalExtensive.RelationallyConstitutedOccurrence.position
+#print axioms ConstitutiveSearch.RelationalExtensive.RelationallyConstitutedOccurrence.realized
 #print axioms ConstitutiveSearch.RelationalExtensive.relationallyConstitutedOccurrence
 #print axioms ConstitutiveSearch.RelationalExtensive.RelationalOpeningStage.formationWitness
 #print axioms ConstitutiveSearch.RelationalExtensive.RelationalOpeningStage.provenanceWitness
+#print axioms ConstitutiveSearch.RelationalExtensive.relationallyConstitutedOccurrenceDecEq
 #print axioms ConstitutiveSearch.RelationalExtensive.relationallyConstitutedOccurrenceFrontier
 #print axioms ConstitutiveSearch.RelationalExtensive.relationalProfileFrontier
 #print axioms ConstitutiveSearch.RelationalExtensive.relationalProfileFrontier_complete
@@ -550,4 +564,3 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.RelationalExtensive.uniformLocalArity_width
 #print axioms ConstitutiveSearch.RelationalExtensive.atLeastBinaryLocalArity_width_lowerBound
 /- AXIOM_AUDIT_END -/
-

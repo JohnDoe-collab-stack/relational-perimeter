@@ -197,21 +197,12 @@ theorem causal_operational_decomposition_is_prefix_local (input : Nat) :
         (causalOperationalExecution input).causalRun :=
   (constitutiveExtensiveSeparationEvidence input).prefixLocalDecompositionExact
 
-/-- No future tail can select another operational production for a fixed
-executed stage. -/
-theorem causal_operational_head_production_unique
-    {source : CausalConstitutiveState}
-    (stage : CausalConstitutiveStageExecution source)
-    (production : ExecutedStageOperationalProduction stage) :
-    production = prefixLocalOperationalProducer stage :=
-  ExecutedStageOperationalProduction.unique _ _
-
 /-- The public normalizer consumes the role-by-role constitutive chain built
 from its exact reduction history. -/
 theorem executed_normalization_consumes_constitutive_chain (input : Nat) :
     (publicCertificateNormalization input).constitutiveChain =
       executedReductionConstitutiveChain
-        (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction :=
+        (publicCausalOperationalExecution input).stagewiseDecomposition.reduction :=
   rfl
 
 /-- Every link consumed by the public normalizer retains its action exactness,
@@ -226,8 +217,7 @@ def executed_normalization_chain_is_causally_exact (input : Nat) :
 theorem constituted_exponential_width_iff_distinct_separate_conservation
     (input : Nat)
     (regime : ObligationRegime
-      (roleProfileFiniteCarrier
-        (constitutiveExtensiveSeparationEvidence input).roles)) :
+      (publicRoleProfileFiniteCarrier input)) :
     regime.frontier.length = 2 ^ (input + 1) ↔
       ConservesRoleIdentitiesAsDistinctSeparatelyAddressable regime :=
   publicCertificate_exponential_iff_conservation input regime
@@ -236,17 +226,14 @@ theorem constituted_exponential_width_iff_distinct_separate_conservation
 theorem constituted_exponential_width_iff_carry_injective
     (input : Nat)
     (regime : ObligationRegime
-      (roleProfileFiniteCarrier
-        (constitutiveExtensiveSeparationEvidence input).roles)) :
+      (publicRoleProfileFiniteCarrier input)) :
     regime.frontier.length = 2 ^ (input + 1) ↔
       Function.Injective regime.carry :=
   publicCertificate_exponential_iff_carry_injective input regime
 
 /-- Explicit full-width regime on the same constituted public identities. -/
 def constitutedDistinctSeparateRegime (input : Nat) :
-    ObligationRegime
-      (roleProfileFiniteCarrier
-        (constitutiveExtensiveSeparationEvidence input).roles) :=
+    ObligationRegime (publicRoleProfileFiniteCarrier input) :=
   publicCertificateSeparateRegime input
 
 /--
@@ -254,9 +241,7 @@ The operational regime constructed from the actual targets produced by the
 executed role reduction and the convergence proved by their dependent traces.
 -/
 def executedConstitutiveObligationRegime (input : Nat) :
-    ObligationRegime
-      (roleProfileFiniteCarrier
-        (constitutiveExtensiveSeparationEvidence input).roles) :=
+    ObligationRegime (publicRoleProfileFiniteCarrier input) :=
   publicCertificateExecutedRegime input
 
 /-- Exact executed realization retained above the obligation-regime readout. -/
@@ -274,14 +259,12 @@ theorem executed_constitutive_regime_is_exact_realization (input : Nat) :
 
 /-- Explicit transformed source profile constituted by the first public role. -/
 def executedTransformedSourceProfile (input : Nat) :
-    RoleOccurrenceProfile
-      (constitutiveExtensiveSeparationEvidence input).roles :=
+    RoleOccurrenceProfile (publicRelationalConstitutiveRoles input) :=
   publicCertificateTransformedProfile input
 
 /-- Explicit retained source profile constituted by the first public role. -/
 def executedRetainedSourceProfile (input : Nat) :
-    RoleOccurrenceProfile
-      (constitutiveExtensiveSeparationEvidence input).roles :=
+    RoleOccurrenceProfile (publicRelationalConstitutiveRoles input) :=
   publicCertificateRetainedProfile input
 
 /-- The two source profiles remain distinct before operational grouping. -/
@@ -310,18 +293,18 @@ theorem executed_distinct_profiles_carry_together (input : Nat) :
 def executedConstitutiveTarget
     (input : Nat)
     (profile : RoleOccurrenceProfile
-      (constitutiveExtensiveSeparationEvidence input).roles) :
+      (publicRelationalConstitutiveRoles input)) :
     ExecutedOperationalTargetProfile
-      (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction :=
+      (publicCausalOperationalExecution input).stagewiseDecomposition.reduction :=
   (publicCertificateNormalization input).target profile
 
 /-- The exact executed trace from one constituted source to its public target. -/
 def executedConstitutiveTargetTrace
     (input : Nat)
     (profile : RoleOccurrenceProfile
-      (constitutiveExtensiveSeparationEvidence input).roles) :
+      (publicRelationalConstitutiveRoles input)) :
     ExecutedRoleProfileReduction
-      (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction
+      (publicCausalOperationalExecution input).stagewiseDecomposition.reduction
       profile
       (executedConstitutiveTarget input profile) :=
   publicCertificateCarryTrace input profile
@@ -330,17 +313,17 @@ def executedConstitutiveTargetTrace
 theorem executed_constitutive_target_exact
     (input : Nat)
     (profile : RoleOccurrenceProfile
-      (constitutiveExtensiveSeparationEvidence input).roles) :
+      (publicRelationalConstitutiveRoles input)) :
     executedConstitutiveTarget input profile =
       retainedExecutedOperationalTargetProfile
-        (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction :=
+        (publicCausalOperationalExecution input).stagewiseDecomposition.reduction :=
   (publicCertificateNormalization input).target_exact profile
 
 /-- The authoritative carry has exactly the fibres of the produced targets. -/
 theorem executed_carry_eq_iff_produced_target_eq
     (input : Nat)
     (left right : RoleOccurrenceProfile
-      (constitutiveExtensiveSeparationEvidence input).roles) :
+      (publicRelationalConstitutiveRoles input)) :
     (executedConstitutiveObligationRegime input).carry left =
         (executedConstitutiveObligationRegime input).carry right ↔
       executedConstitutiveTarget input left =
@@ -351,7 +334,7 @@ theorem executed_carry_eq_iff_produced_target_eq
 theorem executed_carry_value_eq_produced_target
     (input : Nat)
     (profile : RoleOccurrenceProfile
-      (constitutiveExtensiveSeparationEvidence input).roles) :
+      (publicRelationalConstitutiveRoles input)) :
     ((executedConstitutiveObligationRegime input).carry profile).1 =
       executedConstitutiveTarget input profile :=
   publicCertificate_carry_value_eq_produced_target input profile
@@ -361,7 +344,7 @@ executed source-indexed traces. -/
 theorem executed_carry_eq_iff_operational_codetermination
     (input : Nat)
     (left right : RoleOccurrenceProfile
-      (constitutiveExtensiveSeparationEvidence input).roles) :
+      (publicRelationalConstitutiveRoles input)) :
     (executedConstitutiveObligationRegime input).carry left =
         (executedConstitutiveObligationRegime input).carry right ↔
       Nonempty
@@ -374,7 +357,7 @@ theorem executed_produced_target_frontier_exact
     (input : Nat) :
     (publicCertificateNormalization input).producedTargetFrontier =
       [retainedExecutedOperationalTargetProfile
-        (constitutiveExtensiveSeparationEvidence input).stagewiseDecomposition.reduction] :=
+        (publicCausalOperationalExecution input).stagewiseDecomposition.reduction] :=
   (publicCertificateNormalization input).producedTargetFrontier_exact
 
 /-- The operational regime width is exactly the produced-target-frontier width. -/
@@ -1088,7 +1071,6 @@ end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.causalOperationalExecution
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.causal_operational_execution_erases_to_authoritative
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.causal_operational_decomposition_is_prefix_local
-#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.causal_operational_head_production_unique
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_normalization_consumes_constitutive_chain
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.executed_normalization_chain_is_causally_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constituted_exponential_width_iff_distinct_separate_conservation

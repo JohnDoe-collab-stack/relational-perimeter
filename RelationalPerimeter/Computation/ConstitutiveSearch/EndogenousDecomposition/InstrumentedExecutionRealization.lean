@@ -1,10 +1,10 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveResolution
-import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RolewiseObligationRegime
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CausalConstitutiveExecution
 
 /-!
 # Exact realization of the causal execution by the public instrumented run
 
-This migration adapter erases counters and diagnostic material from the
+This exact realization erases counters and diagnostic material from the
 already executed public feedback history.  It never invokes a stage builder or
 reruns discovery.  Every causal stage is projected from the corresponding
 instrumented stage, and the dependent tail starts at the projected state that
@@ -131,46 +131,6 @@ def publicInstrumentedExecutionRealization (input : Nat) :=
   realizeInstrumentedExecution
     (executeConstitutiveResolution input).constitutiveFeedbackHistory
 
-/-- Authoritative relational roles read from that projected public history. -/
-def publicRelationalConstitutiveRoles (input : Nat) :=
-  buildRelationalConstitutiveRoleHistory
-    (publicInstrumentedExecutionRealization input).causalRun
-
-/-- The public source carrier is constituted from those roles, not by a program. -/
-def publicRoleProfileFiniteCarrier (input : Nat) : Extensive.FiniteCarrier :=
-  roleProfileFiniteCarrier (publicRelationalConstitutiveRoles input)
-
-theorem publicRoleProfileFiniteCarrier_width (input : Nat) :
-    (publicRoleProfileFiniteCarrier input).frontier.length =
-      2 ^ (input + 1) :=
-  roleProfileFiniteCarrier_width (publicRelationalConstitutiveRoles input)
-
-/--
-Public specialization of the target `iff` to the already existing executed
-instance.  The quantified regime is downstream of the same projected run and
-the same role-constituted source carrier.
--/
-theorem public_exponentialWidth_iff_distinctSeparateConservation
-    (input : Nat)
-    (regime : Extensive.ObligationRegime
-      (publicRoleProfileFiniteCarrier input)) :
-    regime.frontier.length = 2 ^ (input + 1) ↔
-      ConservesRoleIdentitiesAsDistinctSeparatelyAddressable regime :=
-  roleConstituted_exponentialWidth_iff_distinctSeparateConservation
-    (publicRelationalConstitutiveRoles input) regime
-
-/-- Public exact-capacity form of the same equivalence. -/
-theorem public_exponentialWidth_iff_exactRegimeCapacity
-    (input : Nat)
-    (regime : Extensive.ObligationRegime
-      (publicRoleProfileFiniteCarrier input)) :
-    regime.frontier.length = 2 ^ (input + 1) ↔
-      Nonempty
-        (Extensive.ExactRegimeSeparateCapacity regime
-          (publicRoleProfileFiniteCarrier input).frontier.length) :=
-  roleConstituted_exponentialWidth_iff_exactRegimeCapacity
-    (publicRelationalConstitutiveRoles input) regime
-
 end EndogenousDecomposition
 end ConstitutiveSearch
 
@@ -182,9 +142,4 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.InstrumentedExecutionRealization
 #print axioms ConstitutiveSearch.EndogenousDecomposition.realizeInstrumentedExecution
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicInstrumentedExecutionRealization
-#print axioms ConstitutiveSearch.EndogenousDecomposition.publicRelationalConstitutiveRoles
-#print axioms ConstitutiveSearch.EndogenousDecomposition.publicRoleProfileFiniteCarrier
-#print axioms ConstitutiveSearch.EndogenousDecomposition.publicRoleProfileFiniteCarrier_width
-#print axioms ConstitutiveSearch.EndogenousDecomposition.public_exponentialWidth_iff_distinctSeparateConservation
-#print axioms ConstitutiveSearch.EndogenousDecomposition.public_exponentialWidth_iff_exactRegimeCapacity
 /- AXIOM_AUDIT_END -/

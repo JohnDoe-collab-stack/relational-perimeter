@@ -89,7 +89,7 @@ qui produit un profil d’occurrences cible et une trace
 `ExecutedRoleProfileReduction` indexée exactement par cette source et cette
 cible.
 
-`rawProducedTargetOccurrences` rassemble ensuite les cibles de tous les profils
+`producedTargetOccurrences` rassemble ensuite les cibles de tous les profils
 sources sans perdre les traces qui les produisent. Le carrier ambiant de ces
 cibles reste le produit dépendant complet des espaces de continuation : il
 n'est pas réduit d'avance à un singleton. Les traces démontrent leur

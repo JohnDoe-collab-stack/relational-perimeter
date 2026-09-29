@@ -114,7 +114,7 @@ are also projected from the whole chain as
 from which both are recovered. It is neither replaced by nor inferred from the
 numerical width readout.
 
-`rawProducedTargetOccurrences` then enumerates every produced target while
+`producedTargetOccurrences` then enumerates every produced target while
 retaining its source and trace. Their ambient carrier remains the full
 dependent product of continuation spaces. The traces prove convergence of the
 values actually produced. The target-image realization then carries each

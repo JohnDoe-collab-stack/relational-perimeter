@@ -116,7 +116,7 @@ occurrences sont aussi projetées depuis la chaîne entière sous les types
 dont ces deux témoins sont extraits ; cette autorisation n’est ni remplacée ni
 inférée depuis le seul résultat numérique.
 
-`rawProducedTargetOccurrences` énumère ensuite toutes les cibles produites en
+`producedTargetOccurrences` énumère ensuite toutes les cibles produites en
 conservant, pour chacune, sa source et sa trace. Leur carrier ambiant demeure le
 produit dépendant complet des espaces de continuation. Les traces démontrent la
 convergence des valeurs effectivement produites. La réalisation de l’image des
