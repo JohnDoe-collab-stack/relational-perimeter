@@ -340,8 +340,7 @@ theorem roleConstitutedOccurrence_roundTrip
     {role : RelationalConstitutiveRoleStage run}
     (identity : RoleConstitutedOccurrence role) :
     roleConstitutedOccurrenceAt role identity.position = identity := by
-  cases identity
-  rfl
+  exact relationallyConstitutedOccurrence_roundTrip identity
 
 /-- Realize a constituted role identity in its internal occurrence carrier. -/
 def realizeRoleConstitutedOccurrence
@@ -385,33 +384,54 @@ def roleConstitutionEvidence
     (role : RelationalConstitutiveRoleStage run)
     (identity : RoleConstitutedOccurrence role) :
     RoleConstitutionEvidence role identity :=
-  { sourceWitness := (generalOpeningStageOfRole role).sourceWitness
-    targetWitness := (generalOpeningStageOfRole role).targetWitness
+  { sourceWitness := identity.sourceWitness
+    targetWitness := identity.targetWitness
     formationWitness :=
       (generalOpeningStageOfRole role).formationWitness identity
     provenanceWitness :=
       (generalOpeningStageOfRole role).provenanceWitness identity }
 
+
 /--
-Eliminate the four primitive relations in constitutive order.  Downstream
-operations use this eliminator rather than merely storing the witnesses next to
-an otherwise relation-free carrier.
+Transport a payload from the realized state to its historical role position.
+Unlike an unindexed Result-to-Result wrapper, the input and output here inhabit
+different fibres. The actual formation equality supplies the transport.
+Source, target and provenance remain carried by the constituted identity; this
+function makes no claim that they change the value of the local total action.
 -/
-def RoleConstitutionEvidence.eliminate
+def RoleConstitutionEvidence.transportFormation
     {source : CausalConstitutiveState}
     {run : CausalConstitutiveStageExecution source}
     {role : RelationalConstitutiveRoleStage run}
     {identity : RoleConstitutedOccurrence role}
-    {Result : Sort u}
+    {Motive : GeneratedStructuralBranchContext source.rootFormula → Sort u}
     (evidence : RoleConstitutionEvidence role identity)
-    (constituted : Result) : Result := by
-  rcases evidence.sourceWitness with ⟨sourceExact⟩
-  rcases evidence.formationWitness with
-    ⟨⟨formationRoleExact⟩, ⟨formationStateExact⟩⟩
-  rcases evidence.targetWitness with ⟨targetExact⟩
-  rcases evidence.provenanceWitness with
-    ⟨⟨provenanceExact⟩, ⟨⟨provenanceRoleExact⟩, ⟨provenanceStateExact⟩⟩⟩
-  exact constituted
+    (value : Motive identity.realized.state) :
+    Motive (identity.position.state role) :=
+  evidence.formationWitness.2.down ▸ value
+
+/--
+Dependent case analysis justified by the realized-occurrence return law.
+The branch inputs inhabit the canonical left and right fibres, not an already
+supplied result in the fibre of an arbitrary identity.
+-/
+def eliminateRoleConstitutedOccurrence
+    {source : CausalConstitutiveState}
+    {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run)
+    (identity : RoleConstitutedOccurrence role)
+    {motive : RoleConstitutedOccurrence role → Sort u}
+    (left : motive (roleConstitutedOccurrenceAt role .left))
+    (right : motive (roleConstitutedOccurrenceAt role .right)) :
+    motive identity := by
+  have canonical := roleConstitutedOccurrence_roundTrip identity
+  cases positionExact : identity.position with
+  | left =>
+      rw [positionExact] at canonical
+      exact canonical ▸ left
+  | right =>
+      rw [positionExact] at canonical
+      exact canonical ▸ right
 
 /-- The general-stage transport is the authoritative occurrence realization. -/
 theorem generalOpeningStage_positionOccurrenceTransport_exact
@@ -601,7 +621,8 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.realizeRoleConstitutedOccurrence_position
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleConstitutionEvidence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.roleConstitutionEvidence
-#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleConstitutionEvidence.eliminate
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleConstitutionEvidence.transportFormation
+#print axioms ConstitutiveSearch.EndogenousDecomposition.eliminateRoleConstitutedOccurrence
 #print axioms ConstitutiveSearch.EndogenousDecomposition.generalOpeningStage_positionOccurrenceTransport_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.generalHistoryOfRoleHistory
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RolePositionProfile
