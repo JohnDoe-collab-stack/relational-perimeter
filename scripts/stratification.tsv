@@ -3,7 +3,7 @@ SegmentedResidualRole	F	enforced	Primitive residual roles and exact internal rea
 AbstractSegmentedTurning	F	enforced	Abstract segmented boundary and turning
 ExactTypeTransport	U	enforced	Constructive exact transport between carriers
 StrongPerimetralTurning	F	enforced	Strong relational perimeter and affirmative turning
-RelationalPerimeter	A8	enforced	Public project facade
+RelationalPerimeter	A9	enforced	Public project facade
 RelationalPerimeter.Computation.ConstitutiveGeneration	F	enforced	Free generation and old/fresh occurrences from the perimeter
 RelationalPerimeter.Computation.ConstitutiveSearch.AcceptedFrontier	G	enforced	Generic accepted frontier semantics
 RelationalPerimeter.Computation.ConstitutiveSearch.AcceptedFrontierNormalization	G	enforced	Generic accepted frontier normalization
@@ -26,7 +26,7 @@ RelationalPerimeter.Computation.ConstitutiveSearch.ExactOperationalImage	K	enfor
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CausalFoundationBridge	B	enforced	Unique typed bridge from the relational foundation to causal semantic states
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CausalConstitutiveExecution	E	enforced	Causal execution state stage and dependent history produced from the relational foundation
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecution	A5	enforced	Fused authoritative execution producing each stage and its exact local operational decomposition before the dependent tail
-RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparation	A6	enforced	One-chain public certificate joining roles profiles program reduction and regime theorems
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparation	A7	enforced	One-chain public certificate joining roles profiles program reduction and regime theorems
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveFeedback	A0	enforced	Legacy integrated feedback compatibility surface over execution instrumentation and diagnostics
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveFullStep	Q	enforced	Legacy quantitatively instrumented full-step execution compatibility surface
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveInterface	A0	enforced	Legacy integrated concrete-interface compatibility surface over generated execution
@@ -64,7 +64,7 @@ RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.Measu
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PrefixLocalOperationalProduction	D	enforced	Operational production typed only by the already executed stage
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.OperationalProjection	N	enforced	Operational projection diagnostic
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RelationalConstitutiveRoles	R	enforced	Relational constitutive roles read exactly from causal execution
-RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRelationalExtensiveFamily	A5	enforced	Public executed instance of the general relational extensive family and role-indexed program
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRelationalExtensiveFamily	A6	enforced	Public executed instance of the general relational extensive family and role-indexed program
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleIndexedProfiles	X	enforced	Extensive occurrence profiles generated from the authoritative relational role history
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleProfileArityTransport	Q	enforced	Exact downstream transport from constituted occurrence profiles to numerical arity profiles
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleIndexedProgram	P	enforced	Authoritative program indexed by relational roles and consuming constituted occurrence profiles
@@ -124,4 +124,4 @@ RelationalPerimeter.Computation.ConstitutiveSearch.SearchSystem	G	enforced	Gener
 RelationalPerimeter.Computation.ConstitutiveSearch.SequentialPrimitiveExecution	G	enforced	Sequential primitive execution
 RelationalPerimeter.Computation.ConstitutiveSearch.TransportClosure	G	enforced	Generic transport closure
 RelationalPerimeter.Computation.ConstitutiveSearch.TransportCode	G	enforced	Generic transport-code syntax and semantics
-RelationalPerimeter.Computation.EndogenousOperationalDecomposition	A7	enforced	Public computational facade
+RelationalPerimeter.Computation.EndogenousOperationalDecomposition	A8	enforced	Public computational facade
