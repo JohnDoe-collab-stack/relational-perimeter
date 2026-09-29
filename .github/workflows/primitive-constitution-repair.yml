@@ -1,0 +1,68 @@
+name: Primitive constitution repair
+
+on:
+  push:
+    branches: [chatgpt/primitive-constitution-repair-20260929]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: primitive-constitution-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Check out the exact proposed revision
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Install the repository toolchain
+        uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596
+        with:
+          auto-config: 'false'
+          build: 'false'
+          test: 'false'
+          lint: 'false'
+          use-mathlib-cache: 'false'
+          use-github-cache: 'false'
+      - name: Record the revision and environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          cat lean-toolchain
+          lake env lean --version
+          lake --version
+          pwsh --version
+          sha256sum lean-toolchain
+      - name: Clean the checkout's build products
+        run: lake clean
+      - name: Compile from the public root
+        run: lake build +RelationalPerimeter
+      - name: Compile all declared targets
+        run: lake build
+      - name: Verify Bash gates
+        run: bash scripts/verify.sh
+      - name: Verify PowerShell gates
+        shell: pwsh
+        run: ./scripts/verify.ps1
+      - name: Run constitutive-dependency probes when present
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f scripts/check-primitive-constitution.sh ]]; then
+            bash scripts/check-primitive-constitution.sh
+          fi
+      - name: Verify tracked-source integrity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          test -z "$(git status --porcelain --untracked-files=no)"
+          git rev-parse HEAD
