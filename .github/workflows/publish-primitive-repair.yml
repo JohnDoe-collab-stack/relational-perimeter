@@ -1,0 +1,83 @@
+name: Publish verified primitive repair
+
+on:
+  push:
+    branches: [chatgpt/constitution-toolchain-bootstrap-20260929]
+    paths: [audit/submissions/repair-submission.json]
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Read the exact submitted patch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          path: submission
+      - name: Check out only the isolated repair branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: chatgpt/primitive-constitution-repair-20260929
+          fetch-depth: 0
+          path: repair
+      - name: Verify the patch and publish a normal fast-forward commit
+        working-directory: repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64
+          import gzip
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+
+          def git(*args):
+              return subprocess.check_output(['git', *args], text=True).strip()
+
+          submission = Path('../submission/audit/submissions')
+          manifest = json.loads((submission / 'repair-submission.json').read_text())
+          expected_parent = '936db080dd2316e222576b8231a16d8566c85bd7'
+          expected_base_tree = '10362c82441898dd4f5b2e4a84705765d24c8fbc'
+          expected_tree = '5a71d6bdee2ef66ee7b5e48a48f6bfeab20b77e0'
+          expected_patch_sha256 = 'c7f79fc5b5bb59ccd546e8abfb47b107e0ef73e435e303e769c2b2dbaabc8d46'
+          for key, value in [('expected_parent', expected_parent), ('base_tree', expected_base_tree),
+                             ('expected_tree', expected_tree), ('patch_sha256', expected_patch_sha256)]:
+              if manifest[key] != value:
+                  raise SystemExit('Unexpected submission identity: ' + key)
+          if git('rev-parse', 'HEAD') != expected_parent:
+              raise SystemExit('Repair branch advanced; refusing to overwrite or force-push')
+          if git('rev-parse', 'HEAD^{tree}') != expected_base_tree or git('status', '--porcelain'):
+              raise SystemExit('Unexpected base tree or dirty checkout')
+          parts = ['repair-patch.part0', 'repair-patch.part1', 'repair-patch.part2', 'repair-patch.part3']
+          encoded = ''.join(''.join((submission / part).read_text().split()) for part in parts)
+          patch = gzip.decompress(base64.b64decode(encoded, validate=True))
+          if hashlib.sha256(patch).hexdigest() != expected_patch_sha256:
+              raise SystemExit('Patch digest mismatch')
+          patch_path = Path(os.environ['RUNNER_TEMP']) / 'primitive-constitution-repair.patch'
+          patch_path.write_bytes(patch)
+          subprocess.run(['git', 'apply', '--check', str(patch_path)], check=True)
+          subprocess.run(['git', 'apply', '--index', str(patch_path)], check=True)
+          if git('write-tree') != expected_tree:
+              raise SystemExit('Applied tree differs from the locally compiled tree')
+          subprocess.run(['git', 'diff', '--cached', '--check'], check=True)
+          git('config', 'user.name', 'github-actions[bot]')
+          git('config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com')
+          subprocess.run(['git', 'commit', '-m',
+              'refactor: constitute observed roles intrinsically and prove strict primitive erasures'], check=True)
+          subprocess.run(['git', 'push', 'origin',
+              'HEAD:refs/heads/chatgpt/primitive-constitution-repair-20260929'], check=True)
+          published = git('rev-parse', 'HEAD')
+          print('PUBLISHED_SOURCE_COMMIT=' + published)
+          print('PUBLISHED_TREE=' + git('rev-parse', 'HEAD^{tree}'))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('Published source commit: `' + published + '`\n\n')
+              summary.write('Verified source tree: `' + expected_tree + '`\n\n')
+              summary.write('Only the isolated repair branch was fast-forwarded. No merge and no force-push.\n')
+          PY
