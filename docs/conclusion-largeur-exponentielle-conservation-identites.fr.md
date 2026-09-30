@@ -96,15 +96,22 @@ n'est pas réduit d'avance à un singleton. Les traces démontrent leur
 convergence. La préservation et la séparation persistante des occurrences sont
 projetées depuis toute la même chaîne dans
 `ExecutedOperationalGroupingAuthorization`. Les traces réalisent séparément
-l’image exacte des cibles produites. Pour chaque source, cette réalisation porte
-la cible effectivement produite avec sa preuve d'appartenance à la fibre
-convergente. `ExactExecutedOperationalRegime`, à constructeur privé, joint
+l’image exacte des cibles produites. Chaque production locale enregistre
+l’image complète de ses sorties. L’accord de sortie exécuté permet d’en retirer
+les doublons ; l’histoire compose ces images. Le transport exact réalise leurs
+valeurs dans l’image admise. Sa carte inverse recopie les valeurs de la cible
+sans choisir une occurrence source fixe. Ses retours garantissent la complétude
+et l’absence de doublons sans utiliser la largeur un. La commutation avec `carry` et l’accord avec
+l’action sur toute continuation sont prouvés séparément.
+`ExactExecutedOperationalRegime`, à constructeur privé, joint
 ensuite l’autorisation causale à cette réalisation exacte, sans identifier
 réalisation et admission. Deux profils reçoivent
 la même obligation si et seulement si leurs cibles produites sont égales, et si
 et seulement si `OperationallyCoDetermined` est habité par leurs deux traces
-vers une cible commune. La convergence des traces démontre ainsi que la
-frontière contient exactement un élément :
+vers une cible commune. La frontière réalise exactement la composition des
+images locales enregistrées. L’accord de sortie exécuté prouve leur convergence ;
+celle-ci donne une largeur un, conservée par le transport. L’accord avec la
+normalisation est prouvé pour chaque source :
 
 ```text
 régime exécuté
@@ -226,14 +233,19 @@ Les lectures de source, cible et provenance du rôle ne sont plus des copies
 librement stockées : elles sont projetées depuis l’étape indexée. Ces accords
 de réalisation sont distingués des relations de génération d’origine.
 
-`RoleStatus.History` compose les statuts locaux sur le même porteur de profils.
-Sans transport fourni, une ouverture conserve deux obligations ; avec un
-transport préservant, son action justifie l’absorption. L’image locale est
-construite avant spécialisation à la convergence. Le théorème général de cette
-politique donne une largeur `2^pendingCount` ; les cas mixtes à deux rôles ont
-les largeurs 4, 2 et 1. Ce sont des comparaisons de politique sur une histoire,
-non trois nouvelles exécutions SAT. Le régime public est raccordé à la politique
-des transports effectivement retournés et à son action sur toute continuation.
+`RoleStatus.History` conserve les comparaisons de statuts sur le même porteur
+de profils : les politiques en attente et mixtes ont une largeur
+`2^pendingCount`, avec les cas 4, 2 et 1 à deux rôles. Ce ne sont pas trois
+nouvelles exécutions SAT. Ces statuts ne déterminent pas la frontière publique.
+
+Cette frontière vient des sorties réelles. `producedRoleOutput` applique
+l’instruction à l’entrée canonique de chaque occurrence formée.
+`ProducedOutputImage.Value` en porte l’image complète sans lui imposer une
+valeur distinguée. L’accord exécuté prouve la convergence et permet de retirer
+les doublons locaux. `ExecutedStageDecomposition.outputRegime` enregistre
+cette image avant la queue future ; `ExecutedOutput.ofStagewise` compose les
+images enregistrées. La largeur un est ensuite démontrée par cette convergence
+et cette composition, pas par la présence d’un marqueur de statut.
 
 L’admission est séparée de l’appartenance à l’image par `SemanticImage.Admission`
 et `AdmittedImageValue`. Le consommateur abstrait n’a aucun accès à une réduction

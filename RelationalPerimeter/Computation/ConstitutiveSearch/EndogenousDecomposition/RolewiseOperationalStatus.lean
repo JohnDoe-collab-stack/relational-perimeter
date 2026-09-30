@@ -12,68 +12,6 @@ Mixed policies are comparisons on one history, not additional SAT executions.
 namespace ConstitutiveSearch.EndogenousDecomposition.RoleStatus
 open SAT Extensive RelationalExtensive
 
-abbrev Status {source : CausalConstitutiveState}
-    {run : CausalConstitutiveStageExecution source}
-    (role : RelationalConstitutiveRoleStage run) :=
-  Option (AcceptingContinuationTransport (RoleSemantics.occurrenceSystem role)
-    (roleConstitutedOccurrenceAt role .left) (roleConstitutedOccurrenceAt role .right))
-
-def target {source : CausalConstitutiveState}
-    {run : CausalConstitutiveStageExecution source} {role : RelationalConstitutiveRoleStage run} :
-    Status role → RoleConstitutedOccurrence role → RoleConstitutedOccurrence role
-  | none, occurrence => occurrence
-  | some _, _ => roleConstitutedOccurrenceAt role .right
-
-/-- Complete finite image, constructed before any convergence specialisation. -/
-def localRegime {source : CausalConstitutiveState}
-    {run : CausalConstitutiveStageExecution source} (role : RelationalConstitutiveRoleStage run)
-    (status : Status role) : ObligationRegime (roleOpeningFiniteCarrier role) :=
-  computedTargetImageRegime (roleOpeningFiniteCarrier role)
-    (relationallyConstitutedOccurrenceDecEq (generalOpeningStageOfRole role)) (target status)
-
-theorem localFibres {source : CausalConstitutiveState}
-    {run : CausalConstitutiveStageExecution source} {role : RelationalConstitutiveRoleStage run}
-    (status : Status role) (p q : RoleConstitutedOccurrence role) :
-    (localRegime role status).carry p = (localRegime role status).carry q ↔
-      target status p = target status q :=
-  computedTargetImageRegime_carry_eq_iff_target_eq _ _ _ _ _
-
-theorem pendingWidth {source : CausalConstitutiveState}
-    {run : CausalConstitutiveStageExecution source} (role : RelationalConstitutiveRoleStage run) :
-    (localRegime role none).frontier.length = 2 := rfl
-
-theorem absorbedWidth {source : CausalConstitutiveState}
-    {run : CausalConstitutiveStageExecution source} {role : RelationalConstitutiveRoleStage run}
-    (transport : AcceptingContinuationTransport (RoleSemantics.occurrenceSystem role)
-      (roleConstitutedOccurrenceAt role .left) (roleConstitutedOccurrenceAt role .right)) :
-    (localRegime role (some transport)).frontier.length = 1 := rfl
-
-/-- Data-level action uses the supplied transport only in its absorbed case. -/
-def act {source : CausalConstitutiveState}
-    {run : CausalConstitutiveStageExecution source} {role : RelationalConstitutiveRoleStage run} :
-    (status : Status role) → (o : RoleConstitutedOccurrence role) →
-      RoleOpeningPayload o → RoleOpeningPayload (target status o)
-  | none, _, c => c
-  | some transport, o, c =>
-      eliminateRoleConstitutedOccurrence role o
-        (motive := fun o => RoleOpeningPayload o →
-          RoleOpeningPayload (roleConstitutedOccurrenceAt role .right))
-        transport.map (fun c => c) c
-
-/-- The preservation law is separate from the action, and consumes the transport. -/
-theorem act_preserves {source : CausalConstitutiveState}
-    {run : CausalConstitutiveStageExecution source} {role : RelationalConstitutiveRoleStage run}
-    (status : Status role) (o : RoleConstitutedOccurrence role) (c : RoleOpeningPayload o) :
-    RoleSemantics.LocalAccept o c → RoleSemantics.LocalAccept (target status o) (act status o c) := by
-  cases status with
-  | none => exact fun accepted => accepted
-  | some transport =>
-    exact eliminateRoleConstitutedOccurrence role o
-      (motive := fun o => ∀ c : RoleOpeningPayload o,
-        RoleSemantics.LocalAccept o c →
-        RoleSemantics.LocalAccept (target (some transport) o) (act (some transport) o c))
-      transport.preservesAccept (fun _ accepted => accepted) c
-
 /-- Each historical role has its own status, retaining its actual typed transport. -/
 inductive History : {count : Nat} → {state : CausalConstitutiveState} →
     {run : CausalConstitutiveExecutionHistory count state} →
@@ -175,13 +113,67 @@ theorem History.realize_carry : {count : Nat} → {state : CausalConstitutiveSta
   | _, _, _, _, .nil, _ => rfl
   | _, _, _, _, .step _ rest, p => Prod.ext rfl (rest.realize_carry p.2)
 
-/-- Local status supplied by the actual executed license, not by a Boolean switch. -/
-def returnedTransport {source : CausalConstitutiveState}
-    {run : CausalConstitutiveStageExecution source} {role : RelationalConstitutiveRoleStage run}
-    {atom : RoleStageAtom role} (license : ExecutedRoleReductionLicense role atom) :
-    AcceptingContinuationTransport (RoleSemantics.occurrenceSystem role)
-      (roleConstitutedOccurrenceAt role .left) (roleConstitutedOccurrenceAt role .right) :=
-  { map := atom.action, preservesAccept := license.preservesCriterion }
+/-- Local selection is a retraction, before any convergence specialization. -/
+theorem History.selected_idempotent : {count : Nat} → {state : CausalConstitutiveState} →
+    {run : CausalConstitutiveExecutionHistory count state} →
+    {roles : RelationalConstitutiveRoleHistory run} →
+    (history : History roles) → (p : RoleOccurrenceProfile roles) →
+    history.selected (history.selected p) = history.selected p
+  | _, _, _, _, .nil, _ => rfl
+  | _, _, _, _, .step status rest, p =>
+      Prod.ext (target_idempotent status p.1) (rest.selected_idempotent p.2)
+
+/-- The occurrence realization has an inverse on all policy obligations. -/
+theorem History.carry_realize {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    (history : History roles) (q : RolewiseObligation history.policy) :
+    rolewiseCarry history.policy (history.realize q) = q := by
+  rcases rolewiseCarry_surjective history.policy q with ⟨p, same⟩
+  cases same
+  apply (history.fibres _ _).mpr
+  rw [history.realize_carry, history.selected_idempotent]
+
+theorem History.realize_injective {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    (history : History roles) : Function.Injective history.realize := by
+  intro left right same
+  exact Eq.trans (history.carry_realize left).symm
+    (Eq.trans (congrArg (rolewiseCarry history.policy) same) (history.carry_realize right))
+
+theorem History.selected_realize {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    (history : History roles) (q : RolewiseObligation history.policy) :
+    history.selected (history.realize q) = history.realize q :=
+  Eq.trans (history.realize_carry (history.realize q)).symm
+    (congrArg history.realize (history.carry_realize q))
+
+/-- Target occurrences, not source profiles identified by a quotient.
+Idempotence makes this exactly the image of local selection: a member is its
+own positively available preimage. No existential is eliminated into data. -/
+def History.ProducedOccurrence {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run} (history : History roles) :=
+  {p : RoleOccurrenceProfile roles // history.selected p = p}
+
+/-- Both maps and returns work also for pending and mixed local statuses. -/
+def History.producedOccurrenceTransport {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run} (history : History roles) :
+    ExactTypeTransport (RolewiseObligation history.policy) history.ProducedOccurrence :=
+  { forward := fun q => ⟨history.realize q, history.selected_realize q⟩
+    backward := fun p => rolewiseCarry history.policy p.1
+    forwardBackward := history.carry_realize
+    backwardForward := fun p => Subtype.ext (Eq.trans (history.realize_carry p.1) p.2) }
+
+theorem History.producedOccurrenceTransport_carry {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run}
+    (history : History roles) (p : RoleOccurrenceProfile roles) :
+    (history.producedOccurrenceTransport.forward (rolewiseCarry history.policy p)).1 =
+      history.selected p := history.realize_carry p
 
 /-- Actual decisions and their proofs are read from the executed reduction. -/
 def executed : {count : Nat} → {state : CausalConstitutiveState} →
@@ -190,6 +182,33 @@ def executed : {count : Nat} → {state : CausalConstitutiveState} →
     ExecutedRoleReductionHistory program → History roles
   | _, _, _, _, _, .nil => .nil
   | _, _, _, _, _, .step license rest => .step (some (returnedTransport license)) (executed rest)
+
+/-- Projection of the decompositions recorded by the fused producer. -/
+def ofStagewise : {count : Nat} → {state : CausalConstitutiveState} →
+    {run : CausalConstitutiveExecutionHistory count state} →
+    (productions : StagewiseExecutedDecompositionHistory run) → History productions.roles
+  | _, _, _, .nil => .nil
+  | _, _, _, .step head rest => .step head.operationalStatus (ofStagewise rest)
+
+theorem ofStagewise_eq_executed : {count : Nat} → {state : CausalConstitutiveState} →
+    {run : CausalConstitutiveExecutionHistory count state} →
+    (productions : StagewiseExecutedDecompositionHistory run) →
+    ofStagewise productions = executed productions.reduction
+  | _, _, _, .nil => rfl
+  | _, _, _, .step head rest => by
+      change History.step head.operationalStatus (ofStagewise rest) =
+        History.step head.operationalStatus (executed rest.reduction)
+      rw [ofStagewise_eq_executed rest]
+
+/-- Structural target occurrence of the actually returned statuses. -/
+theorem executed_selected_eq : {count : Nat} → {state : CausalConstitutiveState} →
+    {run : CausalConstitutiveExecutionHistory count state} →
+    {roles : RelationalConstitutiveRoleHistory run} → {program : RoleIndexedProgram roles} →
+    (reduction : ExecutedRoleReductionHistory program) → (p : RoleOccurrenceProfile roles) →
+    (executed reduction).selected p = retainedRoleProfile reduction
+  | _, _, _, _, _, .nil, _ => rfl
+  | _, _, _, _, _, .step license rest, p =>
+      Prod.ext license.retainedOccurrenceExact.symm (executed_selected_eq rest p.2)
 
 theorem executed_pendingCount : {count : Nat} → {state : CausalConstitutiveState} →
     {run : CausalConstitutiveExecutionHistory count state} →
@@ -287,6 +306,16 @@ theorem executed_preserves {count : Nat} {state : CausalConstitutiveState}
 end ConstitutiveSearch.EndogenousDecomposition.RoleStatus
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History.selected_idempotent
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History.carry_realize
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History.realize_injective
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History.selected_realize
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History.ProducedOccurrence
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History.producedOccurrenceTransport
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History.producedOccurrenceTransport_carry
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.ofStagewise
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.ofStagewise_eq_executed
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.executed_selected_eq
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.returnedAct_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.executedPayloadOutput
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.executed_action_exact
@@ -294,14 +323,6 @@ end ConstitutiveSearch.EndogenousDecomposition.RoleStatus
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.executed_preserves
 
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.singletonMember_eq
-#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.Status
-#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.target
-#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.localRegime
-#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.localFibres
-#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.pendingWidth
-#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.absorbedWidth
-#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.act
-#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.act_preserves
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History.policy
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History.pendingCount
@@ -312,7 +333,6 @@ end ConstitutiveSearch.EndogenousDecomposition.RoleStatus
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History.width
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History.realize
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.History.realize_carry
-#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.returnedTransport
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.executed
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.executed_pendingCount
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStatus.executed_width

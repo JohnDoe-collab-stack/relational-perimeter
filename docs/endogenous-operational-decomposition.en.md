@@ -117,14 +117,21 @@ numerical width readout.
 `producedTargetOccurrences` then enumerates every produced target while
 retaining its source and trace. Their ambient carrier remains the full
 dependent product of continuation spaces. The traces prove convergence of the
-values actually produced. The target-image realization then carries each
-actual target together with its proof of membership in that convergent fibre.
+values actually produced. Each head production stores the full image of its
+local output map in the continuation codomain. Image membership contains no
+convergence condition. The frontier removes duplicate local outputs using
+equality justified by the executed output agreement, then the history composes
+these images. A two-sided transport realizes their actual values in the admitted
+image. Its inverse copies target components without selecting a source from
+a propositional existence. The return laws establish completeness and
+duplicate-freedom before numerical width is read.
 Separately, `ExactExecutedOperationalRegime`, whose constructor is private,
 joins the grouping authorization to exactly that realization. Realization and
 admission remain distinct. Obligation equality is
 equivalent both to equality of produced targets and to inhabited
 `OperationallyCoDetermined`, which contains the two executed traces to their
-common target. Trace convergence therefore yields width one. The public
+common target. Width one follows local output convergence, composition and
+this exact transport. Agreement with normalization is proved source by source. The public
 obligation regime is a projection of this exact realization, not an
 independently supplied singleton.
 
@@ -353,14 +360,34 @@ target and provenance views are projected from its indexed stage rather than
 stored as independent copies. Realization agreements remain distinct from the
 original generation relations.
 
-`RoleStatus.History` composes local statuses on the same source-profile carrier.
-A pending opening retains two obligations; an available preserving transport
-licenses absorption and supplies its action. The finite local image is built
-before specialising to convergence. The general policy width is
-`2^pendingCount`; the two-role mixed cases have widths 4, 2 and 1. These are
-policy comparisons on one history, not three additional SAT executions. The
-public regime is connected to the policy of actually returned transports and
-to its action on arbitrary continuations.
+`RoleStatus.History` retains status comparisons on the same source-profile
+carrier: pending and mixed policies have width `2^pendingCount`, with two-role
+cases 4, 2 and 1. These are not three additional SAT executions. These statuses
+do not determine the public frontier.
+
+That frontier comes from actual outputs. `producedRoleOutput` applies the
+instruction to each formed occurrence's canonical input.
+`ProducedOutputImage.Value` carries the full image without prescribing a
+distinguished value. The executed agreement proves convergence and permits
+local duplicate removal. `ExecutedStageDecomposition.outputRegime` stores
+this image before any future tail; `ExecutedOutput.ofStagewise` composes the
+stored images. Width one follows convergence and composition, not the presence
+of a status marker.
+
+This bridge consists of proved maps, not merely an equality of widths.
+`policyObligationTransport` relates composed local-image obligations to
+admitted values with two return laws. Its inverse copies the produced values.
+`publicProducedObligationTransport_carry` proves carry commutation;
+`publicCertificate_carry_value_eq_produced_target` fixes the target and
+`publicCarriedProfilePayload_action` fixes the action on every continuation.
+`publicRegimeWidth_eq_producedOutputs` connects regime width to the stored
+images. Separately, `RoleStatus.History.producedOccurrenceTransport` retains
+its return laws for comparative pending and mixed policies. None of these
+transports is a bijection between source profiles and their grouped image.
+
+Agreement with the full continuation target uses the executed licenses'
+output agreements. An arbitrary criterion-preserving transport alone does
+not guarantee equality of canonical outputs.
 
 `SemanticImage.Admission` and `AdmittedImageValue` separate semantic admission
 from image membership. The abstract consumer cannot recover evidence from a

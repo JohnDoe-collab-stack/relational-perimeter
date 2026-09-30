@@ -11,21 +11,6 @@ separate result about the data actually executed, not about all continuations.
 namespace ConstitutiveSearch.EndogenousDecomposition.RoleSemantics
 open ConstitutiveSearch.SAT
 
-/-- Acceptance on the actual realized occurrence, not on its label. -/
-def LocalAccept
-    {state : CausalConstitutiveState} {run : CausalConstitutiveStageExecution state}
-    {role : RelationalConstitutiveRoleStage run}
-    (occurrence : RoleConstitutedOccurrence role) (c : RoleOpeningPayload occurrence) : Prop :=
-  GeneratedStructuralBranchAccept occurrence.realized.state c
-
-/-- Continuation semantics indexed by the actual constituted occurrences. -/
-def occurrenceSystem
-    {state : CausalConstitutiveState} {run : CausalConstitutiveStageExecution state}
-    (role : RelationalConstitutiveRoleStage run) : SearchSystem :=
-  { State := RoleConstitutedOccurrence role
-    Continuation := RoleOpeningPayload
-    Accept := LocalAccept }
-
 /-- Pointwise acceptance; this does not assert a new global SAT semantics. -/
 def ProfileAccept :
     {count : Nat} → {state : CausalConstitutiveState} →
@@ -303,8 +288,6 @@ end ConstitutiveSearch.EndogenousDecomposition.RoleSemantics
 
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.localConstitutionFromBoth
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.profileConstitutionFromChain
-#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.LocalAccept
-#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.occurrenceSystem
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.ProfileAccept
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.TargetAccept
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.actProfile

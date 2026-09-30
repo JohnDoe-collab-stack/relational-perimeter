@@ -119,14 +119,23 @@ inférée depuis le seul résultat numérique.
 `producedTargetOccurrences` énumère ensuite toutes les cibles produites en
 conservant, pour chacune, sa source et sa trace. Leur carrier ambiant demeure le
 produit dépendant complet des espaces de continuation. Les traces démontrent la
-convergence des valeurs effectivement produites. La réalisation de l’image des
-cibles porte alors chaque cible avec sa preuve d’appartenance à cette fibre
-convergente. Séparément, `ExactExecutedOperationalRegime`, à constructeur
+convergence des valeurs effectivement produites. Chaque production de tête
+enregistre l’image complète de sa carte de sortie locale, dans le codomaine
+des continuations. L’appartenance à cette image ne contient aucune condition
+de convergence. La frontière retire les doublons locaux avec l’égalité
+justifiée par l’accord de sortie exécuté, puis l’histoire compose ces images.
+Un transport exact réalise leurs valeurs dans l’image admise ; son inverse
+recopie les composantes de la cible sans choisir un profil source depuis une
+existence propositionnelle. Ses retours établissent la complétude et l’absence
+de doublons avant toute lecture de largeur. Séparément,
+`ExactExecutedOperationalRegime`, à constructeur
 privé, joint l’autorisation de regroupement à cette réalisation exacte. La
 réalisation et l’admission restent distinctes. L’égalité de deux
 obligations équivaut à l’égalité des cibles produites et à l’habitation de
 `OperationallyCoDetermined` par leurs deux traces vers une cible commune. La
-convergence donne ainsi la largeur un. Le régime public est une projection de
+largeur un découle de la convergence des sorties locales, de leur composition
+et de ce transport exact. L’accord avec la normalisation est prouvé source par
+source. Le régime public est une projection de
 cette réalisation exacte, non un singleton fourni indépendamment.
 
 Le dépôt construit deux profils sources explicites, prouve leur distinction,
@@ -372,14 +381,35 @@ Les lectures de source, cible et provenance du rôle ne sont plus des copies
 librement stockées : elles sont projetées depuis l’étape indexée. Ces accords
 de réalisation sont distingués des relations de génération d’origine.
 
-`RoleStatus.History` compose les statuts locaux sur le même porteur de profils.
-Sans transport fourni, une ouverture conserve deux obligations ; avec un
-transport préservant, son action justifie l’absorption. L’image locale est
-construite avant spécialisation à la convergence. Le théorème général de cette
-politique donne une largeur `2^pendingCount` ; les cas mixtes à deux rôles ont
-les largeurs 4, 2 et 1. Ce sont des comparaisons de politique sur une histoire,
-non trois nouvelles exécutions SAT. Le régime public est raccordé à la politique
-des transports effectivement retournés et à son action sur toute continuation.
+`RoleStatus.History` conserve les comparaisons de statuts sur le même porteur
+de profils : les politiques en attente et mixtes ont une largeur
+`2^pendingCount`, avec les cas 4, 2 et 1 à deux rôles. Ce ne sont pas trois
+nouvelles exécutions SAT. Ces statuts ne déterminent pas la frontière publique.
+
+Cette frontière vient des sorties réelles. `producedRoleOutput` applique
+l’instruction à l’entrée canonique de chaque occurrence formée.
+`ProducedOutputImage.Value` en porte l’image complète sans lui imposer une
+valeur distinguée. L’accord exécuté prouve la convergence et permet de retirer
+les doublons locaux. `ExecutedStageDecomposition.outputRegime` enregistre
+cette image avant la queue future ; `ExecutedOutput.ofStagewise` compose les
+images enregistrées. La largeur un est ensuite démontrée par cette convergence
+et cette composition, pas par la présence d’un marqueur de statut.
+
+Le raccord est démontré par des cartes, pas seulement par une égalité de
+largeurs. `policyObligationTransport` relie les obligations des images locales
+composées aux valeurs admises avec deux retours. Sa carte inverse recopie les
+valeurs produites. `publicProducedObligationTransport_carry` prouve la
+commutation avec le portage ; `publicCertificate_carry_value_eq_produced_target`
+fixe la cible et `publicCarriedProfilePayload_action` fixe l’action sur toute
+continuation. `publicRegimeWidth_eq_producedOutputs` relie la largeur du régime
+aux images enregistrées. Séparément, les retours de
+`RoleStatus.History.producedOccurrenceTransport` restent valables pour les
+politiques comparatives en attente et mixtes. Aucun de ces transports n’est une
+bijection entre les profils sources et leur image regroupée.
+
+Le raccord à la cible complète de continuation utilise les accords de sortie
+des licences exécutées. Un transport arbitraire qui préserve le critère ne
+suffit pas, à lui seul, à garantir cette égalité de sorties canoniques.
 
 L’admission est séparée de l’appartenance à l’image par `SemanticImage.Admission`
 et `AdmittedImageValue`. Le consommateur abstrait n’a aucun accès à une réduction

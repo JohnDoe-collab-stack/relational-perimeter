@@ -119,15 +119,21 @@ than rebuilding targets from the retained output; its result is a derived
 elimination of that chain, not a replaceable stored field. The operational
 target carrier remains the full dependent product of the continuation spaces;
 it is not restricted in advance to a singleton. The executed traces prove that
-the produced targets converge. The target-image realization then carries each
-actual target value together with its proof of belonging to that convergent
-fibre. Separately, an `ExecutedOperationalGroupingAuthorization` is projected
+the produced targets converge. Each head production stores the full image
+of its actual local output map. Its frontier removes duplicate local outputs,
+with equality justified by the executed output agreement. The history composes
+these images without enumerating all source profiles. A two-sided transport
+realizes their actual values in the admitted image; its inverse copies those
+values rather than selecting a fixed source occurrence. Completeness and
+duplicate-freedom follow from the return laws before numerical width is read.
+Separately, an `ExecutedOperationalGroupingAuthorization` is projected
 from the complete causal chain and therefore retains its preservation and
 occurrence-separation witnesses. `ExactExecutedOperationalRegime` joins this
 authorization to the exact target-image realization; it does not identify
 realization with admission. Obligation equality is exactly equality of
 produced targets and exactly codetermination by two authorized executed traces;
-width one is the final readout of their proved convergence. Two explicit source profiles are
+width one follows local output convergence and the exact transport. The traces
+prove agreement with the same actual outputs. Two explicit source profiles are
 proved distinct while being carried together. No source profiles are
 identified.
 
@@ -184,9 +190,12 @@ viability, non-identity, and persistent occurrence distinction.
 The complete source-indexed family of produced targets and traces is exposed
 before the operational regime. Preservation and persistent occurrence
 separation are projected from the complete causal chain into the grouping
-authorization. The traces separately prove convergence and construct the exact
-one-obligation target-image realization; the admitted exact regime joins both
-without confusing their roles. Its values remain the actual produced targets.
+authorization. The traces separately prove convergence. Each local output
+image is stored by the head producer; `publicExecutedOutputPolicy` composes
+those images. `policyObligationTransport` connects their actual values to the
+admitted obligations with two return laws and source-wise carry and action
+agreements. `publicRegimeWidth_eq_producedOutputs` relates the admitted width
+to that output policy. Its values remain the actual produced targets.
 The fused causal run and its role history are proved equal to the authoritative
 public realization. The general class and the executed instance use the same
 occurrence-profile carrier definitionally, so the class theorem is stated
@@ -345,10 +354,14 @@ constitutive complète qui porte ces témoins, sans reconstruire les cibles
 depuis la seule sortie retenue ; son résultat est l’élimination dérivée de cette
 chaîne, et non un champ stocké remplaçable.
 La famille complète des cibles produites et de leurs traces indexées par leur
-source est exposée avant le régime. Leur convergence est démontrée, puis le
-carrier d'obligations est construit en conservant chaque cible effectivement
-produite avec sa preuve d'appartenance à la fibre convergente. Sa largeur un
-découle de cette convergence. Deux profils sources explicites restent distincts tout en
+source est exposée avant le régime. Leur convergence est démontrée. Chaque
+production de tête enregistre l’image complète de ses sorties locales réelles ;
+sa frontière retire les doublons selon l’accord de sortie exécuté. L’histoire
+compose ces images sans énumérer tous les profils sources. Un transport exact
+réalise leurs valeurs dans l’image admise ; son inverse recopie ces valeurs,
+sans choisir une occurrence source fixe. Les retours établissent la complétude
+et l’absence de doublons avant la lecture numérique. La largeur un découle de
+la convergence locale et de ce raccord. Deux profils sources restent distincts tout en
 étant codéterminés par leurs traces et portés par la même obligation.
 Une projection par état et quantité conserve cette stabilité
 observée sans déterminer l’action opérationnelle totale. Le transport total
@@ -397,9 +410,12 @@ sortie exacte, la préservation séparée, la viabilité, la non-identité et la
 distinction persistante des occurrences. La famille source-indexée des cibles et
 de leurs traces est construite avant le régime. La préservation et la séparation
 persistante sont projetées depuis toute cette chaîne dans l’autorisation de
-regroupement. Les traces démontrent séparément la convergence et construisent la
-réalisation exacte de l’image à une obligation ; le régime exact admis joint ces
-deux données sans confondre leurs rôles. Ses valeurs restent les cibles produites.
+regroupement. Les traces démontrent séparément la convergence. Chaque image
+locale est enregistrée par le producteur de tête ; `publicExecutedOutputPolicy`
+compose ces images. `policyObligationTransport` relie leurs valeurs réelles aux
+obligations admises avec deux retours et des accords de portage et d’action.
+`publicRegimeWidth_eq_producedOutputs` relie la largeur admise à cette politique
+de sorties. Ses valeurs restent les cibles produites.
 La course causale fusionnée et son histoire de rôles sont prouvées égales à la
 réalisation publique faisant autorité. La classe générale et l’instance exécutée
 utilisent définitionnellement le même carrier de profils d’occurrences ; le

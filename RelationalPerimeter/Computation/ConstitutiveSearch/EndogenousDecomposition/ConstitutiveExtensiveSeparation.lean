@@ -8,9 +8,9 @@ import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecompositio
 
 The certificate follows one direction only:
 
-relations and executed stages -> constituted roles -> source profiles ->
-executed reduction -> produced targets and traces -> proved convergence ->
-obligation regime -> width.
+relations and executed stages -> constituted roles and actual local output images ->
+source profiles and composed output policy -> executed targets, traces and admission ->
+exact realization of policy obligations -> obligation regime -> width.
 
 The extensive width is a downstream readout.  No singleton obligation carrier
 and no width premise are supplied independently of the executed normalization.
@@ -241,8 +241,7 @@ def constitutiveExtensiveSeparationCertificate
       retainedOperationalWidthExact := executedWidth
       carryFibresAreProducedTargetFibres :=
         normalization.carry_eq_iff_target_eq
-      carriedValuesAreProducedTargets := fun profile =>
-        rfl
+      carriedValuesAreProducedTargets := normalization.carry_value
       explicitProfilesDistinct := stagewise.roles.headProfilesDistinct
         (Nat.zero_lt_succ input)
       explicitProfilesCoDetermined :=
@@ -286,13 +285,50 @@ def publicCertificateExecutedRegime
     ObligationRegime (publicRoleProfileFiniteCarrier input) :=
   (publicCertificateNormalization input).operationalRegime
 
+/-- Exact realization of the obligations selected by the stored head productions.
+This is not a transport from source profiles to their grouped obligations. -/
+def publicProducedObligationTransport (input : Nat) :
+    ExactTypeTransport
+      (RolewiseObligation
+        (ExecutedOutput.policy
+          (publicCausalOperationalExecution input).stagewiseDecomposition.reduction))
+      (AuthorizedProducedTargetObligation (publicCertificateNormalization input)) :=
+  (publicCertificateNormalization input).policyObligationTransport
+    (publicCertificateNormalization input).groupingAuthorization
+
+/-- Portage commutes with this realization, source by source. -/
+theorem publicProducedObligationTransport_carry
+    (input : Nat)
+    (profile : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input)) :
+    (publicProducedObligationTransport input).forward
+      (rolewiseCarry
+        (ExecutedOutput.policy
+          (publicCausalOperationalExecution input).stagewiseDecomposition.reduction)
+        profile) =
+      (publicCertificateExecutedRegime input).carry profile :=
+  (publicCertificateNormalization input).policyObligationTransport_carry profile
+
+/-- Width is read from the actual local output images stored by the fused run. -/
+theorem publicRegimeWidth_eq_producedOutputs (input : Nat) :
+    (publicCertificateExecutedRegime input).frontier.length =
+      (rolewiseObligationFrontier (publicExecutedOutputPolicy input)).length := by
+  rw [publicExecutedOutputPolicy_exact]
+  exact (publicCertificateNormalization input).regimeWidth_eq_outputWidth
+
+/-- Subsequent comparison with the status readout, not the regime construction. -/
+theorem publicRegimeWidth_eq_producedStatuses (input : Nat) :
+    (publicCertificateExecutedRegime input).frontier.length =
+      (rolewiseObligationFrontier (publicOperationalStatuses input).policy).length := by
+  rw [publicOperationalStatuses_exact]
+  exact (publicCertificateNormalization input).regimeWidth_eq_statusWidth
+
 /-- Transform arbitrary profile data using the guarantee on its carried obligation. -/
 def publicCarriedProfilePayload
     (input : Nat)
     (profile : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input))
     (payload : RoleProfilePayload profile) :=
   ((publicCertificateExecutedRegime input).carry profile).transformPayload
-    profile rfl payload
+    profile ((publicCertificateNormalization input).carry_value profile).symm payload
 
 /-- This result is the specified action, not merely an accepted constant output. -/
 theorem publicCarriedProfilePayload_action
@@ -359,7 +395,7 @@ theorem publicCertificate_carry_value_eq_produced_target
       (publicRelationalConstitutiveRoles input)) :
     ((publicCertificateExecutedRegime input).carry profile).1 =
       (publicCertificateNormalization input).target profile :=
-  rfl
+  (publicCertificateNormalization input).carry_value profile
 
 theorem publicCertificate_carry_eq_iff_coDetermined
     (input : Nat)
@@ -472,6 +508,19 @@ structure ExecutedGroupedDistinctProfiles
 /-- Constitution and prefix-local production of the public execution. -/
 structure PublicExecutionConstitutionCertificate (input : Nat) : Type 3 where
   private mk ::
+  primitiveProgramExact :
+    publicCausalOperationalExecutionWithTrace input =
+      (causalOperationalExecutionProgram (resolutionLength input)
+        (initialThreadedConstitutiveStateFromInitialization (initializeConstitutiveHistory input))
+        (initialOperationalPrefix input)
+        (initialThreadedConstitutiveStateFromInitialization_fresh
+          (initializeConstitutiveHistory input))).evaluate
+  primitiveOperationOrder :
+    (publicCausalOperationalExecutionWithTrace input).2 =
+      operationalProductionTimeline (resolutionLength input) input
+  outputPolicyIsRecordedHeads :
+    publicExecutedOutputPolicy input =
+      ExecutedOutput.ofStagewise (publicCausalOperationalExecution input).stagewiseDecomposition
   executionErasesExactly :
     (publicCausalOperationalExecution input).instrumented =
       (executeConstitutiveResolution input).constitutiveFeedbackHistory
@@ -574,7 +623,10 @@ abbrev PublicOperationalWidthCertificate (input : Nat) : Type 3 :=
 
 def publicExecutionConstitutionCertificate
     (input : Nat) : PublicExecutionConstitutionCertificate input :=
-  { executionErasesExactly :=
+  { primitiveProgramExact := executeWithTrace_program_exact (resolutionLength input) _ _ _
+    primitiveOperationOrder := publicCausalOperationalExecutionWithTrace_order input
+    outputPolicyIsRecordedHeads := rfl
+    executionErasesExactly :=
       publicCausalOperationalExecution_instrumented_exact input
     prefixLocal := (publicCausalOperationalExecution input).headsArePrefixLocal
     rolesConstituted :=
@@ -662,6 +714,15 @@ structure EndogenousDecompositionAndWidth (input : Nat) : Prop where
     (publicCertificateExecutedRegime input).frontier.length =
       (rolewiseObligationFrontier
         (RoleStatus.executed (publicCausalOperationalExecution input).stagewiseDecomposition.reduction).policy).length
+  recordedStatusesExact :
+    publicOperationalStatuses input =
+      RoleStatus.executed (publicCausalOperationalExecution input).stagewiseDecomposition.reduction
+  widthFromRecordedProductions :
+    (publicCertificateExecutedRegime input).frontier.length =
+      (rolewiseObligationFrontier (publicOperationalStatuses input).policy).length
+  widthFromActualOutputs :
+    (publicCertificateExecutedRegime input).frontier.length =
+      (rolewiseObligationFrontier (publicExecutedOutputPolicy input)).length
   statusActionIsCarriedAction :
     ∀ (p : RoleOccurrenceProfile (publicRelationalConstitutiveRoles input)) (c : RoleProfilePayload p),
       RoleStatus.executedPayloadOutput _ p
@@ -719,6 +780,9 @@ theorem endogenousDecompositionAndWidth (input : Nat) : EndogenousDecompositionA
     primitiveOperationOrder := publicCausalOperationalExecutionWithTrace_order input
     admittedImage := (publicCertificateNormalization input).groupingAuthorization.semanticAdmission
     widthFromProducedStatuses := (publicCertificateNormalization input).regimeWidth_eq_statusWidth
+    recordedStatusesExact := publicOperationalStatuses_exact input
+    widthFromRecordedProductions := publicRegimeWidth_eq_producedStatuses input
+    widthFromActualOutputs := publicRegimeWidth_eq_producedOutputs input
     statusActionIsCarriedAction := fun p c =>
       Eq.trans (RoleStatus.executed_action_exact _ p c) (publicCarriedProfilePayload_action input p c).symm
     constitutedRoles := (publicCausalOperationalExecution input).stagewiseDecomposition.rolesConstitutionExact
@@ -728,7 +792,9 @@ theorem endogenousDecompositionAndWidth (input : Nat) : EndogenousDecompositionA
         RoleSemantics.canonicalPayload_accepted (publicRelationalConstitutiveRoles input) p⟩
     interpretedAction := publicCarriedProfilePayload_action input
     preservation := publicCarriedProfilePayload_preserves input
-    sourceIndexedTrace := fun p => ⟨publicCertificateCarryTrace input p⟩
+    sourceIndexedTrace := fun p => by
+      rw [publicCertificate_carry_value_eq_produced_target]
+      exact ⟨publicCertificateCarryTrace input p⟩
     exactCodetermination := publicCertificate_carry_eq_iff_coDetermined input
     distinctProfiles := publicCertificateProfiles_distinct input
     groupedProfiles := publicCertificateProfiles_carryTogether input
@@ -773,6 +839,10 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicRegimeWidth_eq_producedOutputs
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicProducedObligationTransport
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicProducedObligationTransport_carry
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicRegimeWidth_eq_producedStatuses
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalExponentialTargetParts
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizationFacts
 #print axioms ConstitutiveSearch.EndogenousDecomposition.OperationalWidthFacts

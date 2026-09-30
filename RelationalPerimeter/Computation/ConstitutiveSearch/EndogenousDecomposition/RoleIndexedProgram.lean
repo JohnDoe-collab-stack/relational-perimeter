@@ -85,6 +85,25 @@ def RoleOpeningPayload
     (occurrence : RoleConstitutedOccurrence role) : Type :=
   GeneratedStructuralBranchContinuation occurrence.realized.state
 
+namespace RoleSemantics
+
+/-- Acceptance on the actual realized occurrence, not on its label. -/
+def LocalAccept
+    {state : CausalConstitutiveState} {run : CausalConstitutiveStageExecution state}
+    {role : RelationalConstitutiveRoleStage run}
+    (occurrence : RoleConstitutedOccurrence role) (c : RoleOpeningPayload occurrence) : Prop :=
+  GeneratedStructuralBranchAccept occurrence.realized.state c
+
+/-- Continuation semantics indexed by the actual constituted occurrences. -/
+def occurrenceSystem
+    {state : CausalConstitutiveState} {run : CausalConstitutiveStageExecution state}
+    (role : RelationalConstitutiveRoleStage run) : SearchSystem :=
+  { State := RoleConstitutedOccurrence role
+    Continuation := RoleOpeningPayload
+    Accept := LocalAccept }
+
+end RoleSemantics
+
 /--
 First use the actual formation agreement to transport the input continuation.
 Only then select the transformed or retained case at its historical position.
@@ -285,6 +304,15 @@ theorem interpretRoleOccurrenceProfile_length :
 
 
 /-- Canonical payload, reconstructed through the realized occurrence eliminator. -/
+def canonicalRoleOpeningPayload
+    {state : CausalConstitutiveState} {run : CausalConstitutiveStageExecution state}
+    (role : RelationalConstitutiveRoleStage run)
+    (occurrence : RoleConstitutedOccurrence role) : RoleOpeningPayload occurrence :=
+  eliminateRoleConstitutedOccurrence role occurrence
+    (motive := fun occurrence => RoleOpeningPayload occurrence)
+    role.executedInput role.completedOutput
+
+/-- Canonical payload at every role of the constituted history. -/
 def canonicalRoleProfilePayload :
     {count : Nat} → {state : CausalConstitutiveState} →
       {run : CausalConstitutiveExecutionHistory count state} →
@@ -295,13 +323,8 @@ def canonicalRoleProfilePayload :
   | _, _, _, .step headRole tailRoles, profile => by
       change RoleConstitutedOccurrence headRole ×
         RoleOccurrenceProfile tailRoles at profile
-      exact eliminateRoleConstitutedOccurrence headRole profile.1
-        (motive := fun occurrence =>
-          RoleOpeningPayload occurrence × RoleProfilePayload profile.2)
-        (headRole.executedInput,
-          canonicalRoleProfilePayload tailRoles profile.2)
-        (headRole.completedOutput,
-          canonicalRoleProfilePayload tailRoles profile.2)
+      exact (canonicalRoleOpeningPayload headRole profile.1,
+        canonicalRoleProfilePayload tailRoles profile.2)
 
 /-- Executed retained assignment at every role, read from the role history. -/
 def completedRoleAssignments :
@@ -364,6 +387,9 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.canonicalRoleOpeningPayload
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.LocalAccept
+#print axioms ConstitutiveSearch.EndogenousDecomposition.RoleSemantics.occurrenceSystem
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStageAtom
 #print axioms ConstitutiveSearch.EndogenousDecomposition.compileRoleStageAtom
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RoleStageAtom.action

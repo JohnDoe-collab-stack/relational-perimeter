@@ -1,6 +1,8 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.InstrumentedExecutionRealization
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PrefixLocalOperationalProduction
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedRoleIndexedReduction
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RolewiseOperationalStatus
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedOutputObligations
 
 /-!
 # Execution that produces its operational decomposition stage by stage
@@ -471,6 +473,60 @@ execution.  No projected history defines a parallel scientific carrier.
 def publicRelationalConstitutiveRoles (input : Nat) :=
   (publicCausalOperationalExecution input).stagewiseDecomposition.roles
 
+/-- Output images are projected from the head productions stored by this execution. -/
+def CausalOperationalExecutionHistory.outputPolicy
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
+    (history : CausalOperationalExecutionHistory (_count := count) state context) :
+    RolewiseObligationPolicy history.stagewiseDecomposition.roles :=
+  ExecutedOutput.ofStagewise history.stagewiseDecomposition
+
+theorem CausalOperationalExecutionHistory.outputPolicy_exact
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
+    (history : CausalOperationalExecutionHistory (_count := count) state context) :
+    history.outputPolicy = ExecutedOutput.policy history.stagewiseDecomposition.reduction :=
+  ExecutedOutput.ofStagewise_exact history.stagewiseDecomposition
+
+def publicExecutedOutputPolicy (input : Nat) :
+    RolewiseObligationPolicy (publicRelationalConstitutiveRoles input) :=
+  (publicCausalOperationalExecution input).outputPolicy
+
+theorem publicExecutedOutputPolicy_exact (input : Nat) :
+    publicExecutedOutputPolicy input =
+      ExecutedOutput.policy (publicCausalOperationalExecution input).stagewiseDecomposition.reduction :=
+  (publicCausalOperationalExecution input).outputPolicy_exact
+
+/-- Statuses are projected from the productions stored by this execution. -/
+def CausalOperationalExecutionHistory.operationalStatuses
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
+    (history : CausalOperationalExecutionHistory (_count := count) state context) :
+    RoleStatus.History history.stagewiseDecomposition.roles :=
+  RoleStatus.ofStagewise history.stagewiseDecomposition
+
+/-- The extracted reduction and the stored productions supply exactly one status history. -/
+theorem CausalOperationalExecutionHistory.operationalStatuses_exact
+    {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
+    (history : CausalOperationalExecutionHistory (_count := count) state context) :
+    history.operationalStatuses = RoleStatus.executed history.stagewiseDecomposition.reduction :=
+  RoleStatus.ofStagewise_eq_executed history.stagewiseDecomposition
+
+/-- These are projections of the actual local productions, not new discovery runs. -/
+def publicOperationalStatuses (input : Nat) :
+    RoleStatus.History (publicRelationalConstitutiveRoles input) :=
+  (publicCausalOperationalExecution input).operationalStatuses
+
+theorem publicOperationalStatuses_exact (input : Nat) :
+    publicOperationalStatuses input =
+      RoleStatus.executed (publicCausalOperationalExecution input).stagewiseDecomposition.reduction :=
+  (publicCausalOperationalExecution input).operationalStatuses_exact
+
 /-- The unique public source carrier, read from the fused constitutive roles. -/
 def publicRoleProfileFiniteCarrier (input : Nat) : Extensive.FiniteCarrier :=
   roleProfileFiniteCarrier (publicRelationalConstitutiveRoles input)
@@ -533,6 +589,14 @@ end EndogenousDecomposition
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.outputPolicy
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.outputPolicy_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicExecutedOutputPolicy
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicExecutedOutputPolicy_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.operationalStatuses
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.operationalStatuses_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicOperationalStatuses
+#print axioms ConstitutiveSearch.EndogenousDecomposition.publicOperationalStatuses_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalHeadWithTrace
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalHeadWithTrace_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeWithTrace_program_exact
