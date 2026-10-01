@@ -1,4 +1,2 @@
-/.lake/
-*.olean
-*.ilean
-*.c
+.lake/
+*.log

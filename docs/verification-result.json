@@ -1,0 +1,11 @@
+{
+  "status": "PASSED",
+  "checkedAtUtc": "2026-10-01T06:46:59.5457427Z",
+  "toolchain": "leanprover/lean4:v4.33.1",
+  "sourceFiles": 40,
+  "axiomAudit": "AUDIT_OK: 2712 declarations, zero axiom dependencies",
+  "expectedFailures": 5,
+  "comparison": "COMPARISON_OK: 11 audited results, no original source written",
+  "migration": "MIGRATION_OK: 174 sources; CONSTITUTION_AUDIT_OK: 3095 declarations, zero axiom dependencies; 19 expected failures",
+  "reference": "Skipped explicitly"
+}
