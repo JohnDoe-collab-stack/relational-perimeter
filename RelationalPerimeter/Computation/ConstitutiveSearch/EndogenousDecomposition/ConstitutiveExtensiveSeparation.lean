@@ -508,6 +508,18 @@ structure ExecutedGroupedDistinctProfiles
 /-- Constitution and prefix-local production of the public execution. -/
 structure PublicExecutionConstitutionCertificate (input : Nat) : Type 3 where
   private mk ::
+  wholeHeadIsPrefixLocal :
+    (remaining : Nat) →
+      (executeCausalOperationalExecutionHistory (remaining + 1)
+        (initialThreadedConstitutiveStateFromInitialization (initializeConstitutiveHistory input))
+        (initialOperationalPrefix input)
+        (initialThreadedConstitutiveStateFromInitialization_fresh
+          (initializeConstitutiveHistory input))).head? =
+        some (executeCausalOperationalHead
+          (initialThreadedConstitutiveStateFromInitialization (initializeConstitutiveHistory input))
+          (initialOperationalPrefix input)
+          (initialThreadedConstitutiveStateFromInitialization_fresh
+            (initializeConstitutiveHistory input)))
   primitiveProgramExact :
     publicCausalOperationalExecutionWithTrace input =
       (causalOperationalExecutionProgram (resolutionLength input)
@@ -623,7 +635,9 @@ abbrev PublicOperationalWidthCertificate (input : Nat) : Type 3 :=
 
 def publicExecutionConstitutionCertificate
     (input : Nat) : PublicExecutionConstitutionCertificate input :=
-  { primitiveProgramExact := executeWithTrace_program_exact (resolutionLength input) _ _ _
+  { wholeHeadIsPrefixLocal := fun remaining =>
+      executeCausalOperationalExecutionHistory_head remaining _ _ _
+    primitiveProgramExact := executeWithTrace_program_exact (resolutionLength input) _ _ _
     primitiveOperationOrder := publicCausalOperationalExecutionWithTrace_order input
     outputPolicyIsRecordedHeads := rfl
     executionErasesExactly :=

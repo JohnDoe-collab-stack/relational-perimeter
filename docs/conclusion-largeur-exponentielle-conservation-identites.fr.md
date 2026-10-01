@@ -1,12 +1,12 @@
 # Conclusion de la branche : largeur exponentielle et conservation séparée des identités
 
-**Dans ce cadre, la constitution relationnelle des dépendances est primitive. Le calcul produit lui-même, pendant son exécution et à partir de ce qu’il a déjà produit, sa décomposition opérationnelle et détermine ainsi quelles alternatives doivent continuer à être traitées comme des obligations indépendantes.**
+**Dans ce cadre, la constitution relationnelle des dépendances est primitive. Le calcul produit, pendant son exécution et à partir de ce qu’il a déjà produit, sa décomposition opérationnelle. Il détermine ainsi quelles alternatives continuent à être traitées comme des obligations indépendantes.**
 
-**Cette exécution ne produit pas d’explosion exponentielle de la largeur opérationnelle : bien que la lecture extensive du carrier des profils constitués ait une largeur 2ⁿ, le régime exécuté les regroupe en une seule obligation sans identifier les profils eux-mêmes.**
+**La lecture extensive du carrier des profils constitués donne une largeur `2^n`. L’instance convergente auditée regroupe ces profils en une seule obligation opérationnelle, tandis que chaque profil conserve son identité constitutive propre.**
 
-**Dans la classe binaire formalisée, une largeur opérationnelle exponentielle apparaît si et seulement si le régime impose de conserver séparément toute la multiplicité extensive, c’est-à-dire si son application `carry` est injective.**
+**Dans la classe binaire formalisée, la largeur opérationnelle est exactement égale à la largeur extensive `2^n` si et seulement si l’application `carry` est injective. Cette injectivité exprime la conservation de chaque profil comme obligation distincte. Dans les histoires factorisées étudiées, la largeur opérationnelle composée vaut `2^k`, où `k` compte les étapes dont les sorties calculées restent distinctes.**
 
-**L’explosion exponentielle de la largeur opérationnelle est donc démontrée ici comme l’effet exact de cette exigence extensive de conservation indépendante, et non comme une conséquence nécessaire de la structure relationnelle du problème elle-même.**
+**La conservation intégrale de la largeur extensive exponentielle est donc caractérisée comme l’effet exact de cette exigence de conservation indépendante. L’exécution étudiée établit qu’une même multiplicité de profils constitués peut recevoir un régime autorisé de largeur opérationnelle un.**
 
 ## Résultat démontré
 

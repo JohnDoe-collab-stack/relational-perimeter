@@ -2,6 +2,32 @@
 
 ## Résultat
 
+Dans ce cadre, la constitution relationnelle des dépendances est primitive.
+Le calcul produit, pendant son exécution et à partir de ce qu’il a déjà produit,
+sa décomposition opérationnelle. Il détermine ainsi quelles alternatives
+continuent à être traitées comme des obligations indépendantes.
+
+La lecture extensive du carrier des profils constitués donne une largeur `2^n`.
+L’instance convergente auditée regroupe ces profils en une seule obligation
+opérationnelle, tandis que chaque profil conserve son identité constitutive propre.
+
+Dans la classe binaire formalisée, la largeur opérationnelle est exactement
+égale à la largeur extensive `2^n` si et seulement si l’application `carry` est
+injective. Cette injectivité exprime la conservation de chaque profil comme
+obligation distincte. Dans les histoires factorisées étudiées, la largeur
+opérationnelle composée vaut `2^k`, où `k` compte les étapes dont les sorties
+calculées restent distinctes.
+
+La conservation intégrale de la largeur extensive exponentielle est donc
+caractérisée comme l’effet exact de cette exigence de conservation indépendante.
+L’exécution étudiée établit qu’une même multiplicité de profils constitués peut
+recevoir un régime autorisé de largeur opérationnelle un.
+
+Les constructions à décomposition variable et la portée de la formule `2^k`
+sont présentées dans [Décomposition exécutée variable](decomposition-executee-variable.fr.md).
+
+### Décomposition produite par le calcul
+
 La construction exhibe une recherche dont la **décomposition opérationnelle
 est un produit du calcul, et non une donnée de sa structure de branchement**.
 

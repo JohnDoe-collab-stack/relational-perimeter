@@ -102,12 +102,27 @@ local production type has no future-history parameter.
 
 ![Endogenous operational decomposition](docs/figures/endogenous-operational-decomposition.svg)
 
-The framework first constitutes each role occurrence through its positive
-formation and provenance relations, then derives the complete profile carrier
-on which the computation acts. For `n` binary openings the extensive readout
-of this source has exact width `2^n`. A downstream regime has that full
-exponential width exactly when it keeps the constituted profiles as distinct,
-separately addressable obligations. For every source profile, the executed
+In this framework, the relational constitution of dependencies is primitive.
+During its execution and from what it has already produced, the computation
+produces its operational decomposition. It thereby determines which alternatives
+continue to be treated as independent obligations.
+
+The extensive readout of the constituted profile carrier gives a width of `2^n`.
+The audited convergent instance groups these profiles into a single operational
+obligation, while each profile retains its own constitutive identity.
+
+In the formalized binary class, operational width is exactly equal to the
+extensive width `2^n` if and only if `carry` is injective. This injectivity
+expresses the preservation of each profile as a distinct obligation. In the
+factorized histories studied, composed operational width is `2^k`, where `k`
+counts the stages whose computed outputs remain distinct.
+
+Full preservation of exponential extensive width is thus characterized as the
+exact effect of this requirement of independent preservation. The execution
+studied establishes that the same multiplicity of constituted profiles can
+receive an authorized regime of operational width one.
+
+For every source profile, the executed
 normalizer constructs a target occurrence profile together with the exact
 dependent trace that produces it. The transformed decision eliminates an
 action-produced target whose private construction is indexed by a preserving
@@ -237,6 +252,8 @@ below.
 - [Positionnement et portée](docs/positionnement-et-portee.fr.md)
 - [Endogenous operational decomposition](docs/endogenous-operational-decomposition.en.md)
 - [Décomposition opérationnelle endogène](docs/decomposition-operationnelle-endogene.fr.md)
+- [Variable executed decomposition](docs/variable-executed-decomposition.en.md)
+- [Décomposition exécutée variable](docs/decomposition-executee-variable.fr.md)
 - [Conceptual authorship and AI-generation disclosure](AI_AUTHORSHIP.md)
 
 ## Foundational Lean sources
@@ -330,18 +347,28 @@ pas parcourue par la génération. Le premier pas au-delà du périmètre consti
 un tournant périmétral affirmatif : la génération continue, tandis que
 l'incorporation de cette continuation dans le même régime devient impossible.
 
-Cette architecture porte aussi une décomposition opérationnelle endogène de la
-recherche. L’ouverture produit une multiplicité structurelle ; une relation
-dirigée est ensuite reconstruite par l’exécution, sa préservation est prouvée
-séparément, et le résultat retenu conditionne la découverte suivante. La même
-récursion forme la production opérationnelle de l’étape courante avant de
-poursuivre depuis l’état produit. Ainsi, le nombre d’alternatives engendrées et
-le nombre d’obligations qui doivent rester indépendantes ne sont pas confondus.
+Dans ce cadre, la constitution relationnelle des dépendances est primitive.
+Le calcul produit, pendant son exécution et à partir de ce qu’il a déjà produit,
+sa décomposition opérationnelle. Il détermine ainsi quelles alternatives
+continuent à être traitées comme des obligations indépendantes.
 
-Pour `n` ouvertures binaires exécutées, la lecture extensive du carrier source
-des profils constitués a une largeur exacte `2^n`. Un régime aval possède cette
-largeur exponentielle complète si et seulement s’il conserve ces profils comme
-identités distinctes et séparément adressables. Pour chaque profil source, le
+La lecture extensive du carrier des profils constitués donne une largeur `2^n`.
+L’instance convergente auditée regroupe ces profils en une seule obligation
+opérationnelle, tandis que chaque profil conserve son identité constitutive propre.
+
+Dans la classe binaire formalisée, la largeur opérationnelle est exactement
+égale à la largeur extensive `2^n` si et seulement si l’application `carry` est
+injective. Cette injectivité exprime la conservation de chaque profil comme
+obligation distincte. Dans les histoires factorisées étudiées, la largeur
+opérationnelle composée vaut `2^k`, où `k` compte les étapes dont les sorties
+calculées restent distinctes.
+
+La conservation intégrale de la largeur extensive exponentielle est donc
+caractérisée comme l’effet exact de cette exigence de conservation indépendante.
+L’exécution étudiée établit qu’une même multiplicité de profils constitués peut
+recevoir un régime autorisé de largeur opérationnelle un.
+
+Pour chaque profil source, le
 normaliseur exécuté construit une cible dépendamment typée avec la trace exacte
 qui la produit. Cette cible est le profil complet des continuations retournées
 par les décisions locales ; la liste d’assignations n’en est qu’une lecture

@@ -2,6 +2,31 @@
 
 ## Result
 
+In this framework, the relational constitution of dependencies is primitive.
+During its execution and from what it has already produced, the computation
+produces its operational decomposition. It thereby determines which alternatives
+continue to be treated as independent obligations.
+
+The extensive readout of the constituted profile carrier gives a width of `2^n`.
+The audited convergent instance groups these profiles into a single operational
+obligation, while each profile retains its own constitutive identity.
+
+In the formalized binary class, operational width is exactly equal to the
+extensive width `2^n` if and only if `carry` is injective. This injectivity
+expresses the preservation of each profile as a distinct obligation. In the
+factorized histories studied, composed operational width is `2^k`, where `k`
+counts the stages whose computed outputs remain distinct.
+
+Full preservation of exponential extensive width is thus characterized as the
+exact effect of this requirement of independent preservation. The execution
+studied establishes that the same multiplicity of constituted profiles can
+receive an authorized regime of operational width one.
+
+The variable-decomposition constructions and the scope of the `2^k` formula
+are presented in [Variable executed decomposition](variable-executed-decomposition.en.md).
+
+### Decomposition produced by the computation
+
 The construction exhibits a search whose **operational decomposition is an
 output of the computation rather than a datum of its branching structure**.
 

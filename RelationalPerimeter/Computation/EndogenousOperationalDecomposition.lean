@@ -1,4 +1,8 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.MeasuredAccounting
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableRelationalExecution
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableOutputComposition
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.AdaptiveRelationalExecution
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnboundedMixedExecution
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.EndogenousOperationalStability
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.InstrumentedExecutionRealization
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparation
@@ -1056,9 +1060,39 @@ theorem extensive_multiplicity_does_not_force_full_operational_width (input : Na
       regime.frontier.length = 2 ^ (input + 1)) :=
   ConstitutiveSearch.EndogenousDecomposition.extensiveMultiplicity_doesNotForceFullOperationalWidth input
 
+/-- The additional concrete execution contains both a convergent local image
+and a separating local image. Neither width is supplied to the producer. -/
+theorem mixed_execution_local_widths :
+    VariableExecution.MixedExample.firstRegime.frontier.length = 1 ∧
+      VariableExecution.MixedExample.secondRegime.frontier.length = 2 :=
+  ⟨VariableExecution.MixedExample.first_width, VariableExecution.MixedExample.second_width⟩
+
+/-- An unbounded fixed-history family with searched regrouping prefixes and
+a separating terminal step. The operational values are the stored output tuples. -/
+theorem unbounded_mixed_execution_widths (count : Nat) :
+    (relationalProfileFiniteCarrier
+      (VariableExecution.UnboundedMixed.production count).history.roles).frontier.length =
+        2 ^ (count + 1) ∧
+      (VariableExecution.composedRegime
+        (VariableExecution.UnboundedMixed.production count).comparisons).frontier.length = 2 :=
+  ⟨VariableExecution.UnboundedMixed.constituted_width count,
+    VariableExecution.UnboundedMixed.produced_width count⟩
+
+/-- The adaptive example carries dependent futures rather than a fixed
+product history. Its image retains distinctions between the produced outputs. -/
+theorem adaptive_mixed_execution_widths :
+    (VariableExecution.Adaptive.profileCarrier
+      VariableExecution.Adaptive.MixedAdaptiveExample.execution).frontier.length = 6 ∧
+      VariableExecution.Adaptive.MixedAdaptiveExample.regime.frontier.length = 3 :=
+  ⟨VariableExecution.Adaptive.MixedAdaptiveExample.source_width,
+    VariableExecution.Adaptive.MixedAdaptiveExample.image_width⟩
+
 end RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.mixed_execution_local_widths
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.unbounded_mixed_execution_widths
+#print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.adaptive_mixed_execution_widths
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.endogenous_production_and_width_separation
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.extensive_multiplicity_does_not_force_full_operational_width
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.evidence

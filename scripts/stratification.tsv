@@ -132,3 +132,7 @@ RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.Rolew
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.LocalOperationalStatus	D	enforced	Local occurrence status and preserving action available before prefix-local production
 RelationalPerimeter.Computation.ConstitutiveSearch.ProducedOutputImage	K	enforced	Actual target-image carrier and local duplicate removal justified by produced-output convergence
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedOutputObligations	D	enforced	Dependent composition and exact value realization of executed local output images
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableRelationalExecution	A0	enforced	Assembly of constituted openings with the existing searched preserving action and exact local output images
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableOutputComposition	A1	enforced	Exact value realization of composed local output images with separately proved common-tail transmission
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.AdaptiveRelationalExecution	A1	enforced	Dependent execution whose successors are formed from each local produced continuation
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnboundedMixedExecution	A2	enforced	Unbounded concrete searched mixed execution with admitted output tuples and justified common tails
