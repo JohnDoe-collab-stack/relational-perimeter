@@ -1,0 +1,18 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.AcceptedTargetCannotReplaceProducedOutput
+open ConstitutiveSearch.Agent ConstitutiveSearch.EndogenousDecomposition
+
+-- Acceptance without exactness to the executed output is insufficient.
+def suppliedTargets {count : Nat} {state : CausalConstitutiveState}
+    {run : CausalConstitutiveExecutionHistory count state}
+    {roles : RelationalConstitutiveRoleHistory run} {program : RoleIndexedProgram roles}
+    (reduction : ExecutedRoleReductionHistory program)
+    (target : ExecutedOperationalTargetProfile reduction)
+    (accepted : RoleSemantics.TargetAccept reduction target) : List AnswerTarget :=
+  initialTargets reduction target accepted
+
+end Tests.ExpectedFailure.AcceptedTargetCannotReplaceProducedOutput
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.Agent.initialTargets
+/- AXIOM_AUDIT_END -/

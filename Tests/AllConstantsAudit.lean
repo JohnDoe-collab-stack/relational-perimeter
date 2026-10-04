@@ -17,6 +17,9 @@ import Tests.RelationalExtensiveIffRegression
 import Tests.SemanticImageRegression
 import Tests.UnifiedConstitution
 import Tests.UnifiedMasterInstance
+import Tests.ConstitutiveAgentRequirements
+import Tests.ConstitutiveAgentExecution
+import Tests.ConstitutiveAgentPersistence
 
 /-! Build-time tooling, not a mathematical hypothesis or a new production
 dependency. Scan every constant in every imported repository module, including
@@ -31,6 +34,11 @@ This is a build-time interface check, not a heap-size theorem. -/
 run_cmd Lean.Elab.Command.liftTermElabM do
   let env ← Lean.getEnv
   let schemas := [
+    (`ConstitutiveSearch.Agent.Session, [("memory", `ConstitutiveSearch.Agent.Memory)]),
+    (`ConstitutiveSearch.Agent.Memory,
+      [("requirement", `ConstitutiveSearch.Agent.Requirement),
+       ("live", `ConstitutiveSearch.EndogenousDecomposition.LiveContinuation.Memory),
+       ("register", `List)]),
     (`ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.Memory,
       [("live", `ConstitutiveSearch.EndogenousDecomposition.LiveContinuation.Memory),
        ("output", `ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalTargetProfile),
@@ -54,6 +62,10 @@ run_cmd Lean.Elab.Command.liftTermElabM do
           unless result.getAppArgs.size == 1 &&
               (← Lean.Meta.isDefEq result.getAppArgs[0]! (Lean.mkConst `ConstitutiveSearch.SAT.Assignment)) do
             throwError "Restart readers must store assignments, not archived scientific packages: {result}"
+        if record == `ConstitutiveSearch.Agent.Memory && field == "register" then
+          unless result.getAppArgs.size == 1 &&
+              (← Lean.Meta.isDefEq result.getAppArgs[0]! (Lean.mkConst `ConstitutiveSearch.Agent.AnswerTarget)) do
+            throwError "Agent register must store produced targets, not source archives: {result}"
   logInfo "RESTART_SCHEMA_OK: produced memory and nested live-state fields checked"
 
 run_cmd do

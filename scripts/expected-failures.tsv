@@ -21,3 +21,4 @@ Tests/ExpectedFailure/MissingImagePreservation.lean.fail	semantic-type	Type mism
 Tests/ExpectedFailure/RootCannotReplaceProducedTail.lean.fail	dependent-type	Application type mismatch
 Tests/ExpectedFailure/MasterCannotUseUnexecutedHistory.lean.fail	semantic-type	replacement = MasterResources.execute
 Tests/ExpectedFailure/MasterCheckpointCannotPrescribeOutput.lean.fail	semantic-type	(master.checkpoint profile).output = prescribed
+Tests/ExpectedFailure/AcceptedTargetCannotReplaceProducedOutput.lean.fail	dependent-type	target = retainedExecutedOperationalTargetProfile reduction → List AnswerTarget

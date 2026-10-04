@@ -9,6 +9,7 @@ import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecompositio
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.MasterContinuationFeasibility
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ProducedProfileContinuation
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate
+import RelationalPerimeter.Agents.Constitutive.PublicInstance
 
 /-!
 # Relational Perimeter
@@ -66,4 +67,8 @@ construction of endogenous operational decomposition.
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutive_normalizer_code_size_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutive_normalizer_interpreter_exact
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutive_normalizer_returns_executed_codes
+#print axioms ConstitutiveSearch.Agent.publicAgent
+#print axioms ConstitutiveSearch.Agent.certify
+#print axioms ConstitutiveSearch.Agent.all_executed_determinations_followed
+#print axioms ConstitutiveSearch.Agent.initial_profile_not_recoverable
 /- AXIOM_AUDIT_END -/

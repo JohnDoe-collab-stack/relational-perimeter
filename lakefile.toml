@@ -19,5 +19,6 @@ globs = [
   "RelationalPerimeter",
   "RelationalPerimeter.Computation.+",
   "RelationalPerimeter.Constitution.+",
+  "RelationalPerimeter.Agents.+",
   "Tests.+",
 ]

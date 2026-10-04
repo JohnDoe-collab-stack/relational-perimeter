@@ -22,7 +22,14 @@ SegmentedResidualRole	F	enforced	Primitive residual roles and exact internal rea
 AbstractSegmentedTurning	F	enforced	Abstract segmented boundary and turning
 ExactTypeTransport	U	enforced	Constructive exact transport between carriers
 StrongPerimetralTurning	F	enforced	Strong relational perimeter and affirmative turning
-RelationalPerimeter	A10	enforced	Public project facade above the unified master certificate
+RelationalPerimeter	A17	enforced	Public project facade above the closed constitutive agent
+RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement
+RelationalPerimeter.Agents.Constitutive.ProducedEvidence	A11	enforced	Constitutive agent ProducedEvidence
+RelationalPerimeter.Agents.Constitutive.State	A12	enforced	Constitutive agent State
+RelationalPerimeter.Agents.Constitutive.Execution	A13	enforced	Constitutive agent Execution
+RelationalPerimeter.Agents.Constitutive.Agreement	A14	enforced	Constitutive agent Agreement
+RelationalPerimeter.Agents.Constitutive.Persistence	A15	enforced	Constitutive agent Persistence
+RelationalPerimeter.Agents.Constitutive.PublicInstance	A16	enforced	Constitutive agent PublicInstance
 RelationalPerimeter.Computation.ConstitutiveGeneration	F	enforced	Free generation and old/fresh occurrences from the perimeter
 RelationalPerimeter.Computation.ConstitutiveSearch.AcceptedFrontier	G	enforced	Generic accepted frontier semantics
 RelationalPerimeter.Computation.ConstitutiveSearch.AcceptedFrontierNormalization	G	enforced	Generic accepted frontier normalization

@@ -239,6 +239,8 @@ below.
 - [Décomposition opérationnelle endogène](docs/decomposition-operationnelle-endogene.fr.md)
 - [Continuation and normalized-profile forgetting](docs/continuation-and-profile-forgetting.en.md)
 - [Continuation et oubli des profils normalisés](docs/continuation-et-oubli-des-profils.fr.md)
+- [Constitutive interactive agent and persistence](docs/constitutive-agent-and-persistence.en.md)
+- [Agent constitutif interactif et persistance](docs/agent-constitutif-et-persistance.fr.md)
 - [Conceptual authorship and AI-generation disclosure](AI_AUTHORSHIP.md)
 
 ## Foundational Lean sources

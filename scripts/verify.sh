@@ -84,6 +84,7 @@ else
   exit 1
 fi
 "${python_command[@]}" scripts/check-unified-codegen.py
+"${python_command[@]}" scripts/check-agent-codegen.py
 
 bash scripts/check-expected-failures.sh
 

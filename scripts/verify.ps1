@@ -78,6 +78,8 @@ try {
   if (-not $pythonCommand) { throw "Python 3 is required for the compiled-code dependency check" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-unified-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled-code dependency check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-agent-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled agent dependency check failed" }
   & (Join-Path $PSScriptRoot "check-expected-failures.ps1")
   if ($LASTEXITCODE -ne 0) { throw "expected-failure check failed" }
 
