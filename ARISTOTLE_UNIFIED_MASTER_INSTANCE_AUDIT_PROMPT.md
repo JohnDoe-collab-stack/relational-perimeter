@@ -478,4 +478,3 @@ runtime implementation, tooling assurance, documentary precision and untested
 platforms. State the smallest necessary corrections, without implementing them.
 No expected positive verdict, deadline pressure or author claim may override
 your findings.
-
