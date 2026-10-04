@@ -619,4 +619,3 @@ unification dependencies. A positive immutable-target verdict does not close
 unification deficiencies. Distinguish mathematical truth, interface guarantees,
 static tooling coverage, documentation and untested platforms. There is no
 requested positive outcome: report the smallest genuine remaining defect.
-
