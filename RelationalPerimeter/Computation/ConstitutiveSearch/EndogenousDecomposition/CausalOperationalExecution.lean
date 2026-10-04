@@ -326,6 +326,35 @@ theorem causalOperational_same_head_different_tails
       (CausalOperationalExecutionHistory.step stage run production rightTail).head? :=
   rfl
 
+/-- Pin the complete production object at every executed head. -/
+def CausalOperationalExecutionHistory.allHeadsExact :
+    {depth count : Nat} → {assignment : SequentialAssignment depth} →
+    {state : ThreadedConstitutiveState depth assignment} →
+    {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)} →
+    (history : CausalOperationalExecutionHistory (_count := count) state context) →
+    ThreadedStateFreshForNext state → Prop
+  | _, _, _, _, _, .nil _ _, _ => True
+  | _, _, _, state, context, .step stage run production tail, fresh =>
+      (⟨stage, run, production⟩ : CausalOperationalHead state context) =
+        executeCausalOperationalHead state context fresh ∧
+      tail.allHeadsExact (run.nextRun.fresh fresh)
+
+theorem executeCausalOperationalExecutionHistory_allHeadsExact (count : Nat)
+    {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment)
+    (context : ConstitutedOperationalPrefix (causalStateOfThreadedState state))
+    (fresh : ThreadedStateFreshForNext state) :
+    (executeCausalOperationalExecutionHistory count state context fresh).allHeadsExact fresh := by
+  induction count generalizing depth assignment with
+  | zero => exact True.intro
+  | succ count ih =>
+    let produced := executeCausalOperationalHead state context fresh
+    change produced = produced ∧
+      (executeCausalOperationalExecutionHistory count produced.run.nextRun.next
+        produced.production.nextContext (produced.run.nextRun.fresh fresh)).allHeadsExact
+          (produced.run.nextRun.fresh fresh)
+    exact ⟨rfl, ih _ _ _⟩
+
 /-- Erase only the operational material; the executed states are unchanged. -/
 def CausalOperationalExecutionHistory.instrumented :
     {depth count : Nat} → {assignment : SequentialAssignment depth} →
@@ -632,6 +661,8 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.causalRun_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.stagewiseDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.headsArePrefixLocal
+#print axioms ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecutionHistory.allHeadsExact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionHistory_allHeadsExact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionHistory_instrumented_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicCausalOperationalExecution
 #print axioms ConstitutiveSearch.EndogenousDecomposition.publicRelationalConstitutiveRoles

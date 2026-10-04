@@ -28,7 +28,7 @@ if ($LASTEXITCODE -ne 0) { throw "stratification parser self-test failed" }
 if ($LASTEXITCODE -ne 0) { throw "stratification check failed" }
 
 $forbiddenTerms =
-  '(?m)^\s*(axiom|unsafe)\s|\b(noncomputable|Classical|propext|Quot\.sound|native_decide|implemented_by|sorry|admit)\b'
+  '\b(axiom|unsafe|noncomputable|Classical|propext|Quot\.sound|native_decide|implemented_by|sorry|admit)\b'
 $forbiddenArchitecture =
   '\b(NPAndOrP|RequestProject|LoggedAlgebra|ConstitutivePersistence|IteratedConstitutivePersistence|StructuralEntrypoint)\b|(?m)^\s*(import|open)\s+(Alignment|Foundations)(\.|\s|$)'
 
@@ -65,6 +65,19 @@ try {
   if ($joinedOutput -match 'depends on axioms:|sorryAx') {
     throw "axiom audit failure detected in lake build output"
   }
+  $expectedModules = $leanFiles.Count - 1
+  $sweepLines = [regex]::Matches($joinedOutput, 'ALL_CONSTANTS_OK constants=[0-9]+ modules=[0-9]+ generatedExceptions=[0-9]+ writtenExceptions=[0-9]+')
+  if ($sweepLines.Count -ne 1 -or $sweepLines[0].Value.TrimEnd("`r") -notmatch
+      "^ALL_CONSTANTS_OK constants=[0-9]+ modules=$expectedModules generatedExceptions=[0-9]+ writtenExceptions=0$") {
+    throw "Missing or incomplete exhaustive constant audit (including all test modules)"
+  }
+  $pythonCommand = $env:RELATIONAL_PERIMETER_PYTHON
+  if (-not $pythonCommand) {
+    $pythonCommand = (Get-Command python3 -ErrorAction SilentlyContinue).Source
+  }
+  if (-not $pythonCommand) { throw "Python 3 is required for the compiled-code dependency check" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-unified-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled-code dependency check failed" }
   & (Join-Path $PSScriptRoot "check-expected-failures.ps1")
   if ($LASTEXITCODE -ne 0) { throw "expected-failure check failed" }
 

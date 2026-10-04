@@ -1,0 +1,18 @@
+import RelationalPerimeter
+open ConstitutiveSearch.EndogenousDecomposition
+
+example (input : Nat)
+    (replacement : CausalOperationalExecutionHistory (_count := resolutionLength input)
+      (ProducedContinuation.publicOrigin input).state (ProducedContinuation.publicOrigin input).context
+        × MasterResources.Cursor)
+    (references : ConstitutiveSearch.Resources.Support.Extension
+      (ProducedContinuation.publicOrigin input).support replacement.2.support)
+    (referenceAgreement : HEq references
+      (MasterResources.executeWithReferences (resolutionLength input)
+        (ProducedContinuation.publicOrigin input)).references) : UnifiedMaster.Instance input where
+  origin := ProducedContinuation.publicOrigin input
+  originExact := rfl
+  executed := replacement
+  executedExact := rfl
+  references := references
+  referencesExact := referenceAgreement

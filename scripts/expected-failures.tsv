@@ -1,4 +1,5 @@
 # fixture	category	expected diagnostic
+Tests/ExpectedFailure/ResourcePortsCannotBePermuted.lean.fail	dependent-type	but is expected to have type
 Tests/ExpectedFailure/PrivateConstitutiveNormalizerCertificate.lean.fail	privacy	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerSuccinctness.mk`
 Tests/ExpectedFailure/PrivateConstitutiveExtensiveSeparationCertificate.lean.fail	privacy	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate.mk`
 Tests/ExpectedFailure/PrivateExecutedCausalNormalization.lean.fail	privacy	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.mk`
@@ -18,3 +19,5 @@ Tests/ExpectedFailure/FutureCannotProduceOwnHead.lean.fail	termination	fail to s
 Tests/ExpectedFailure/MissingImageConstitution.lean.fail	semantic-type	Type mismatch
 Tests/ExpectedFailure/MissingImagePreservation.lean.fail	semantic-type	Type mismatch
 Tests/ExpectedFailure/RootCannotReplaceProducedTail.lean.fail	dependent-type	Application type mismatch
+Tests/ExpectedFailure/MasterCannotUseUnexecutedHistory.lean.fail	semantic-type	replacement = MasterResources.execute
+Tests/ExpectedFailure/MasterCheckpointCannotPrescribeOutput.lean.fail	semantic-type	(master.checkpoint profile).output = prescribed

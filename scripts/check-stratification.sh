@@ -86,7 +86,7 @@ while IFS=$'\t' read -r module layer migration role extra; do
   [[ -z "$module" || "${module:0:1}" == '#' ]] && continue
   [[ -z "${extra:-}" && -n "$role" ]] || { echo "$manifest:$line_number: expected four tab-separated fields" >&2; exit 1; }
   [[ -z "${stratum[$module]+x}" ]] || { echo "$manifest:$line_number: duplicate module $module" >&2; exit 1; }
-  [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 " == *" $layer "* ]] || { echo "$manifest:$line_number: unknown stratum $layer" >&2; exit 1; }
+  [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 " == *" $layer "* ]] || { echo "$manifest:$line_number: unknown stratum $layer" >&2; exit 1; }
   [[ "$migration" == enforced ]] || { echo "$manifest:$line_number: every production module must be enforced, found $migration" >&2; exit 1; }
   stratum[$module]="$layer"; status[$module]="$migration"; responsibility[$module]="$role"
 done < "$manifest"
@@ -136,6 +136,7 @@ allowed_dependency() {
     A7) [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 " == *" $2 "* ]] ;;
     A8) [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 A7 " == *" $2 "* ]] ;;
     A9) [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 A7 A8 " == *" $2 "* ]] ;;
+    A10) [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 " == *" $2 "* ]] ;;
     *) return 1 ;;
   esac
 }

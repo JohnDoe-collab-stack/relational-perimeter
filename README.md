@@ -237,6 +237,8 @@ below.
 - [Positionnement et portée](docs/positionnement-et-portee.fr.md)
 - [Endogenous operational decomposition](docs/endogenous-operational-decomposition.en.md)
 - [Décomposition opérationnelle endogène](docs/decomposition-operationnelle-endogene.fr.md)
+- [Continuation and normalized-profile forgetting](docs/continuation-and-profile-forgetting.en.md)
+- [Continuation et oubli des profils normalisés](docs/continuation-et-oubli-des-profils.fr.md)
 - [Conceptual authorship and AI-generation disclosure](AI_AUTHORSHIP.md)
 
 ## Foundational Lean sources
@@ -301,8 +303,9 @@ pwsh -NoProfile -File scripts/verify.ps1
 bash scripts/verify.sh
 ```
 
-Both gates traverse the declared import boundaries, build the library, and
-then compile all 19 expected-failure fixtures listed in the shared
+Both gates require Python 3, traverse the declared import boundaries, build
+the library, sweep every repository constant (including private declarations),
+check the generated C dependency graph and then compile all 22 expected-failure fixtures listed in the shared
 `scripts/expected-failures.tsv` inventory. Unlisted, missing or duplicate fixtures
 fail both gates. Privacy, dependent-type, semantic-type and termination tests
 are reported separately; a termination rejection is not a general causality
@@ -319,6 +322,15 @@ All Lean sources are constructive: they contain no `sorry`, `axiom`, or
 `noncomputable` declaration, and their final axiom-audit blocks report no axiom
 dependency for the audited declarations. The default build includes the public
 modules and the regression suites.
+
+`Tests/AllConstantsAudit.lean` rejects any handwritten axiom dependency and
+reports compiler-generated exceptions separately. Both verification scripts
+check that its module coverage equals the complete Lean inventory. The compiled
+code check follows transitive calls, statically named closures and initializers;
+it verifies the shared producer and absence of historical-support dependencies
+from the restricted restart entry. It is not a total-cost or physical-memory
+bound. `RELATIONAL_PERIMETER_PYTHON` can select a Python 3 executable when
+`python3` is not on the command path.
 
 ## Résumé français
 

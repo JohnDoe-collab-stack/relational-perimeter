@@ -12,6 +12,8 @@ check_graph() {
   local kind module
   local -A forbidden=()
   while read -r kind module; do
+    kind="${kind%$'\r'}"
+    module="${module%$'\r'}"
     [[ -z "${kind:-}" || "$kind" == \#* ]] && continue
     case "$kind" in
       root) root_module="$module" ;;

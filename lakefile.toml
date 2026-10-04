@@ -18,5 +18,6 @@ globs = [
   "StrongPerimetralTurning",
   "RelationalPerimeter",
   "RelationalPerimeter.Computation.+",
+  "RelationalPerimeter.Constitution.+",
   "Tests.+",
 ]

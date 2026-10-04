@@ -528,6 +528,10 @@ structure PublicExecutionConstitutionCertificate (input : Nat) : Type 3 where
     (publicCausalOperationalExecution input).stagewiseDecomposition =
       buildStagewiseExecutedDecompositionHistory
         (publicCausalOperationalExecution input).causalRun
+  allHeadsExact :
+    (publicCausalOperationalExecution input).allHeadsExact
+      (initialThreadedConstitutiveStateFromInitialization_fresh
+        (initializeConstitutiveHistory input))
   rolesConstituted :
     RelationalRoleHistoryConstitutionExact
       (publicRelationalConstitutiveRoles input)
@@ -629,6 +633,8 @@ def publicExecutionConstitutionCertificate
     executionErasesExactly :=
       publicCausalOperationalExecution_instrumented_exact input
     prefixLocal := (publicCausalOperationalExecution input).headsArePrefixLocal
+    allHeadsExact := executeCausalOperationalExecutionHistory_allHeadsExact
+      (resolutionLength input) _ _ _
     rolesConstituted :=
       (publicCausalOperationalExecution input).stagewiseDecomposition
         |>.rolesConstitutionExact }

@@ -113,7 +113,7 @@ foreach ($line in Get-Content -LiteralPath $manifestPath) {
   if ($parts.Count -ne 4) { throw "$manifestPath`:${lineNumber}: expected four tab-separated fields" }
   $module, $stratum, $status, $responsibility = $parts
   if ($entries.ContainsKey($module)) { throw "$manifestPath`:${lineNumber}: duplicate module $module" }
-  if ($stratum -notin @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7','A8','A9')) {
+  if ($stratum -notin @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7','A8','A9','A10')) {
     throw "$manifestPath`:${lineNumber}: unknown stratum $stratum"
   }
   if ($status -ne 'enforced') {
@@ -176,6 +176,7 @@ $allowed = @{
   A7 = @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6')
   A8 = @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7')
   A9 = @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7','A8')
+  A10 = @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7','A8','A9')
 }
 
 foreach ($root in ($entries.Keys | Sort-Object)) {

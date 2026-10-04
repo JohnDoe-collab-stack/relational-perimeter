@@ -1,0 +1,16 @@
+import RelationalPerimeter
+open ConstitutiveSearch
+open ConstitutiveSearch.Resources
+open ConstitutiveSearch.EndogenousDecomposition
+open MasterResources
+
+example {depth : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    (fresh : Ref [Kind.fresh state, Kind.discovery state] (Kind.fresh state))
+    (discovered : Ref [Kind.fresh state, Kind.discovery state] (Kind.discovery state)) :
+    Producer Value [Kind.fresh state, Kind.discovery state] :=
+  applyStage fresh discovered
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.applyStage
+/- AXIOM_AUDIT_END -/

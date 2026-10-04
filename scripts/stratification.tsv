@@ -1,9 +1,28 @@
 # module	stratum	status	responsibility
+RelationalPerimeter.Constitution.Resources.TypedReferences	U	enforced	Typed references distinguishing constituted resource occurrences
+RelationalPerimeter.Constitution.Resources.ConstructedSupport	U	enforced	Dependent producers reading earlier typed occurrences
+RelationalPerimeter.Constitution.Grouping.Traces	U	enforced	Directed action traces and distinct symmetric codetermination chains
+RelationalPerimeter.Constitution.Grouping.Rules	U	enforced	Positive local choices decrease and constructed local junctions
+RelationalPerimeter.Constitution.Grouping.Normalization	U	enforced	Executable normalization terminal uniqueness and exact chain fibres
+RelationalPerimeter.Constitution.Grouping.Projections	U	enforced	Projection agreements licensed by constructed common targets
+RelationalPerimeter.Constitution.Grouping.BinaryReadout	U	enforced	Binary coding used downstream of constituted role profiles
+RelationalPerimeter.Constitution.Grouping.Reindexing	U	enforced	Exact transport of local rules and traces
+RelationalPerimeter.Constitution.Grouping.ContinuationContract	U	enforced	Separate acceptance actions and exact future continuation contracts
+RelationalPerimeter.Constitution.Grouping.HistoricalExtension	U	enforced	Historical operation inclusion and renormalization
+RelationalPerimeter.Constitution.Grouping.ExactImage	K	enforced	Normal target image reusing the existing finite image implementation
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CertifiedRoleGrouping	A6	enforced	Certified grouping on actual relational role occurrences and returned transports
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleGroupingSemantics	A7	enforced	All normalizing traces agree on arbitrary continuation payloads
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.HistoricalRoleGrouping	A7	enforced	Historical role inclusion with returned licences and exact renormalization
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.MasterResourceExecution	A6	enforced	One execution with typed resource inputs and exact historical erasure
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.MasterContinuationFeasibility	A7	enforced	Canonical-prefix reconstruction obstruction under preserved discovery reads
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.LiveResourceContinuation	A7	enforced	Archive-free live engine with exact production events and all future step requests
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ProducedProfileContinuation	A8	enforced	Actual normalized profile forgetting with admitted reads and live search continuation on one resource execution
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate	A9	enforced	Single resource execution consumed by scientific grouping width and restricted continuation projections
 SegmentedResidualRole	F	enforced	Primitive residual roles and exact internal realization
 AbstractSegmentedTurning	F	enforced	Abstract segmented boundary and turning
 ExactTypeTransport	U	enforced	Constructive exact transport between carriers
 StrongPerimetralTurning	F	enforced	Strong relational perimeter and affirmative turning
-RelationalPerimeter	A9	enforced	Public project facade
+RelationalPerimeter	A10	enforced	Public project facade above the unified master certificate
 RelationalPerimeter.Computation.ConstitutiveGeneration	F	enforced	Free generation and old/fresh occurrences from the perimeter
 RelationalPerimeter.Computation.ConstitutiveSearch.AcceptedFrontier	G	enforced	Generic accepted frontier semantics
 RelationalPerimeter.Computation.ConstitutiveSearch.AcceptedFrontierNormalization	G	enforced	Generic accepted frontier normalization

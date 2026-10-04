@@ -1,0 +1,7 @@
+import RelationalPerimeter
+open ConstitutiveSearch.EndogenousDecomposition
+
+example {input : Nat} (master : UnifiedMaster.Instance input)
+    (profile : RoleOccurrenceProfile master.roles)
+    (prescribed : ExecutedOperationalTargetProfile master.reduction) :
+    (master.checkpoint profile).output = prescribed := rfl
