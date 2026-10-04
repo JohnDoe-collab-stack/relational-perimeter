@@ -174,6 +174,42 @@ theorem runtime_events_exact {input : Nat} (master : UnifiedMaster.Instance inpu
       Continuation.events ProducedContinuation.sourceNext ProducedContinuation.sourceEvent (master.source p) requests :=
   (ProducedContinuation.executeRequests_events _ requests).trans (master.future_events_exact p requests).symm
 
+/-- These guarantees are consumed through the closed certificate itself. -/
+theorem certified_regime {input : Nat} (certificate : UnifiedMaster.Certificate input) :
+    certificate.master.regime = certificate.master.normalization.operationalRegime :=
+  certificate.facts.regimeExact
+
+theorem certified_restart {input : Nat} (certificate : UnifiedMaster.Certificate input)
+    (p : RoleOccurrenceProfile certificate.master.roles) :
+    (certificate.master.checkpoint p).live = LiveContinuation.project certificate.master.cursor :=
+  certificate.facts.restartCursorExact p
+
+theorem certified_inspection {input : Nat} (certificate : UnifiedMaster.Certificate input)
+    (p : RoleOccurrenceProfile certificate.master.roles) (query : ProducedContinuation.Query) :
+    (ProducedContinuation.executeInput (certificate.master.checkpoint p) (.inspect query)).2 =
+      .observed query (ProducedContinuation.readTarget query
+        (ProducedContinuation.targetReaders certificate.master.reduction
+          (certificate.master.normalization.target p))) :=
+  certificate.facts.runtimeInspectEvent p query
+
+theorem certified_rejection {input : Nat} (certificate : UnifiedMaster.Certificate input)
+    (p : RoleOccurrenceProfile certificate.master.roles) (query : ProducedContinuation.Query)
+    (outside : resolutionLength input ≤ query.slot) :
+    ¬ Nonempty (ProducedContinuation.allow (certificate.master.checkpoint p) (.inspect query)) :=
+  fun admitted => Nat.not_lt_of_ge outside
+    ((certificate.facts.inspectAdmission (certificate.master.checkpoint p) query).mp admitted)
+
+theorem certified_growth {input : Nat} (certificate : UnifiedMaster.Certificate input) (extra : Nat) :
+    HEq (certificate.master.grow extra).grown.history
+      (MasterResources.executeWithReferences (extra + resolutionLength input) certificate.master.origin).history :=
+  certificate.facts.growthOneRun extra
+
+theorem growth_keeps_produced_cursor {input : Nat} (master : UnifiedMaster.Instance input) (extra : Nat) :
+    (master.grow extra).suffix.finish =
+      (MasterResources.executeWithReferences (master.grow extra).grown.count
+        (master.grow extra).producedPrefix.origin).finish :=
+  (master.grow extra).producedPrefix.cursorExact
+
 #guard actual_checkpoint.live.depth == 1
 #guard actual_checkpoint.readers.length == 1
 #guard (ProducedContinuation.readTarget ProducedContinuation.publicFirstQuery actual_checkpoint.readers).isSome
@@ -219,4 +255,10 @@ end UnifiedMasterTests
 #print axioms UnifiedMasterTests.actual_growth_twice
 #print axioms UnifiedMasterTests.resource_producer_pinned
 #print axioms UnifiedMasterTests.runtime_events_exact
+#print axioms UnifiedMasterTests.certified_regime
+#print axioms UnifiedMasterTests.certified_restart
+#print axioms UnifiedMasterTests.certified_inspection
+#print axioms UnifiedMasterTests.certified_rejection
+#print axioms UnifiedMasterTests.certified_growth
+#print axioms UnifiedMasterTests.growth_keeps_produced_cursor
 /- AXIOM_AUDIT_END -/

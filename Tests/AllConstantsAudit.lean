@@ -25,6 +25,37 @@ the constructor/definition metadata; an unclassified exception fails closed.
 The selected declarations printed in each module remain independently audited. -/
 set_option maxHeartbeats 0
 open Lean
+/- Check the dependent restart record schema, including the nested live record.
+Counting top-level C fields alone would permit an archive hidden in `live`.
+This is a build-time interface check, not a heap-size theorem. -/
+run_cmd Lean.Elab.Command.liftTermElabM do
+  let env ← Lean.getEnv
+  let schemas := [
+    (`ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.Memory,
+      [("live", `ConstitutiveSearch.EndogenousDecomposition.LiveContinuation.Memory),
+       ("output", `ConstitutiveSearch.EndogenousDecomposition.ExecutedOperationalTargetProfile),
+       ("readers", `List), ("readersExact", `Eq)]),
+    (`ConstitutiveSearch.EndogenousDecomposition.LiveContinuation.Memory,
+      [("depth", `Nat), ("assignment", `ConstitutiveSearch.EndogenousDecomposition.SequentialAssignment),
+       ("state", `ConstitutiveSearch.EndogenousDecomposition.ThreadedConstitutiveState),
+       ("fresh", `ConstitutiveSearch.EndogenousDecomposition.ThreadedStateFreshForNext)])]
+  for (record, fields) in schemas do
+    let some structureInfo := Lean.getStructureInfo? env record
+      | throwError "Restart schema: missing structure {record}"
+    unless structureInfo.fieldNames.toList.map Name.getString! == fields.map Prod.fst do
+      throwError "Restart schema changed: {record}: {structureInfo.fieldNames}"
+    for (field, expected) in fields do
+      let projection := record ++ Name.mkSimple field
+      let info ← Lean.getConstInfo projection
+      Lean.Meta.forallTelescope info.type fun _ result => do
+        unless result.getAppFn.constName? == some expected do
+          throwError "Restart field {projection} stores {result}, expected head {expected}"
+        if field == "readers" then
+          unless result.getAppArgs.size == 1 &&
+              (← Lean.Meta.isDefEq result.getAppArgs[0]! (Lean.mkConst `ConstitutiveSearch.SAT.Assignment)) do
+            throwError "Restart readers must store assignments, not archived scientific packages: {result}"
+  logInfo "RESTART_SCHEMA_OK: produced memory and nested live-state fields checked"
+
 run_cmd do
   let env ← Lean.getEnv
   let mut checked := 0

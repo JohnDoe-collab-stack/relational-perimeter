@@ -255,6 +255,17 @@ theorem executeWithReferences_exact (count : Nat) (cursor : Cursor) :
     ((executeWithReferences count cursor).history, (executeWithReferences count cursor).finish) =
       execute count cursor := rfl
 
+set_option maxHeartbeats 0 in
+/-- Expose the recursive boundary without reducing discovery internals. -/
+theorem execute_succ (count : Nat) (cursor : Cursor) :
+    execute (count + 1) cursor =
+      let resources := cursor.headResources
+      let produced := (resources.1.read .here).down
+      let next := (continueWithReferences resources.1 .here
+        (.prior (.prior (.prior (.prior cursor.fresh))))).1
+      (CausalOperationalExecutionHistory.step produced.stage produced.run
+        produced.production (execute count next).1, (execute count next).2) := rfl
+
 /-- The dependent boundary of a stored history. Reading it never discovers or
 executes an old stage. -/
 structure Boundary : Type 3 where
@@ -300,6 +311,25 @@ theorem executeWithReferences_endpoint (count : Nat) (cursor : Cursor) :
   exact (congrArg endpoint histories).trans ((execute_endpoint count cursor).trans
     (congrArg Cursor.boundary cursors).symm)
 
+/-- Positive origin of a stored prefix and its complete resource cursor.
+An endpoint agreement alone does not establish this resource provenance. -/
+structure ProducedPrefix {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
+    (history : CausalOperationalExecutionHistory (_count := count) state context)
+    (cursor : Cursor) : Type 3 where
+  origin : Cursor
+  originBoundary : origin.boundary = (⟨depth, assignment, state, context⟩ : Boundary)
+  historyExact : HEq history (executeWithReferences count origin).history
+  cursorExact : cursor = (executeWithReferences count origin).finish
+
+theorem execute_finish_append (extra count : Nat) (cursor : Cursor) :
+    (executeWithReferences extra (executeWithReferences count cursor).finish).finish =
+      (executeWithReferences (extra + count) cursor).finish := by
+  induction count generalizing cursor with
+  | zero => rfl
+  | succ count ih => exact ih cursor.next
+
 set_option maxHeartbeats 2000000 in
 theorem execute_erases (count : Nat) (cursor : Cursor) :
     (execute count cursor).1 = executeCausalOperationalExecutionHistory count
@@ -344,6 +374,7 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.Result
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.executeWithReferences
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.executeWithReferences_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.execute_succ
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.Boundary
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.Cursor.boundary
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.HistoryAt
@@ -352,4 +383,6 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.endpoint
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.execute_endpoint
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.executeWithReferences_endpoint
+#print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.ProducedPrefix
+#print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.execute_finish_append
 /- AXIOM_AUDIT_END -/

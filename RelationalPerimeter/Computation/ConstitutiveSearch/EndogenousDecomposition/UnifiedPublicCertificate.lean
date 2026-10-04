@@ -187,6 +187,7 @@ theorem profile_irrecoverable (master : Instance input) :
 
 end Instance
 
+set_option genSizeOf false in
 /-- A stored old history is prolonged only from its reached resource cursor.
 The suffix is executed once; its producer, reference transport and attachment
 are pinned. Old heads are read, not executed again. -/
@@ -196,6 +197,8 @@ structure Growth {depth count : Nat} {assignment : SequentialAssignment depth}
     (old : CausalOperationalExecutionHistory (_count := count) state context)
     (cursor : MasterResources.Cursor) (boundary : cursor.boundary = MasterResources.endpoint old)
     (extra : Nat) : Type 3 where
+  provenance : MasterResources.ProducedPrefix (depth := depth) (count := count)
+    (assignment := assignment) (state := state) (context := context) old cursor
   suffix : MasterResources.Result extra cursor
   suffixExact : suffix = MasterResources.executeWithReferences extra cursor
   grown : CertifiedRoleGrouping.StoredGrowth old
@@ -207,11 +210,71 @@ def resource_history_extension {depth count : Nat} {assignment : SequentialAssig
     {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
     (old : CausalOperationalExecutionHistory (_count := count) state context)
     (cursor : MasterResources.Cursor) (boundary : cursor.boundary = MasterResources.endpoint old)
-    (extra : Nat) : Growth old cursor boundary extra :=
+    (extra : Nat) (provenance : MasterResources.ProducedPrefix (depth := depth) (count := count)
+      (assignment := assignment) (state := state) (context := context) old cursor) : Growth old cursor boundary extra :=
   let suffix := MasterResources.executeWithReferences extra cursor
   let grown := CertifiedRoleGrouping.growStored old
     (MasterResources.transportHistory boundary suffix.history)
-  ⟨suffix, rfl, grown, rfl⟩
+  ⟨provenance, suffix, rfl, grown, rfl⟩
+
+private theorem step_heq {depth firstCount secondCount : Nat}
+    {assignment : SequentialAssignment depth} {state : ThreadedConstitutiveState depth assignment}
+    {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
+    (stage : SequentialStageRun depth assignment) (run : ThreadedConstitutiveStageRun state stage)
+    (production : ExecutedStageOperationalProduction context (causalStageOfThreadedStage run))
+    (first : CausalOperationalExecutionHistory (depth := depth + 1) (_count := firstCount)
+      (assignment := stage.next) run.nextRun.next production.nextContext)
+    (second : CausalOperationalExecutionHistory (depth := depth + 1) (_count := secondCount)
+      (assignment := stage.next) run.nextRun.next production.nextContext)
+    (counts : firstCount = secondCount) (tails : HEq first second) :
+    HEq (CausalOperationalExecutionHistory.step (depth := depth) (count := firstCount)
+      (assignment := assignment) (state := state) (context := context) stage run production first)
+      (CausalOperationalExecutionHistory.step (depth := depth) (count := secondCount)
+        (assignment := assignment) (state := state) (context := context) stage run production second) := by
+  cases counts
+  exact heq_of_eq (congrArg
+    (fun tail => CausalOperationalExecutionHistory.step (depth := depth) (count := firstCount)
+      (assignment := assignment) (state := state) (context := context) stage run production tail)
+    (eq_of_heq tails))
+
+private theorem executed_history_count_heq (first second : Nat) (same : first = second)
+    (origin : MasterResources.Cursor) :
+    HEq (MasterResources.executeWithReferences first origin).history
+      (MasterResources.executeWithReferences second origin).history := by
+  cases same
+  rfl
+
+set_option maxHeartbeats 0 in
+/-- Stored attachment agrees with one uninterrupted resource execution.
+The right side is a specification in Prop, never a second runtime call. -/
+theorem stored_growth_is_one_run (extra : Nat) : ∀ (count : Nat) (cursor : MasterResources.Cursor)
+    (boundary : (MasterResources.execute count cursor).2.boundary =
+      MasterResources.endpoint (MasterResources.execute count cursor).1),
+    HEq (CertifiedRoleGrouping.growStored (MasterResources.execute count cursor).1
+      (MasterResources.transportHistory boundary
+        (MasterResources.execute extra (MasterResources.execute count cursor).2).1)).history
+      (MasterResources.execute (extra + count) cursor).1
+  | 0, _, boundary => by cases boundary; rfl
+  | count + 1, cursor, boundary => by
+      simp only [Nat.add_succ, MasterResources.execute_succ] at boundary ⊢
+      dsimp only [MasterResources.endpoint] at boundary
+      let resources := cursor.headResources
+      let produced := (resources.1.read .here).down
+      let next := (MasterResources.continueWithReferences resources.1 .here
+        (.prior (.prior (.prior (.prior cursor.fresh))))).1
+      let suffix := MasterResources.transportHistory
+        (MasterResources.execute_endpoint count next).symm
+        (MasterResources.execute extra (MasterResources.execute count next).2).1
+      have rest := stored_growth_is_one_run extra count next
+        (MasterResources.execute_endpoint count next).symm
+      exact step_heq (depth := cursor.depth) (assignment := cursor.assignment)
+        (state := cursor.state) (context := cursor.context)
+        (firstCount := (CertifiedRoleGrouping.growStored (MasterResources.execute count next).1 suffix).count)
+        (secondCount := extra + count) produced.stage produced.run produced.production
+        (CertifiedRoleGrouping.growStored (MasterResources.execute count next).1 suffix).history
+        (MasterResources.execute (extra + count) next).1
+        ((CertifiedRoleGrouping.growStored_count (MasterResources.execute count next).1 suffix).trans
+          (Nat.add_comm count extra)) rest
 
 namespace Growth
 variable {depth count extra : Nat} {assignment : SequentialAssignment depth}
@@ -237,8 +300,37 @@ theorem endpoint_exact (growth : Growth old cursor boundary extra) :
   exact executedEnd.trans
     (agreement.symm.trans (CertifiedRoleGrouping.growStored_endpoint _ _).symm)
 
+theorem history_is_one_run (growth : Growth old cursor boundary extra) :
+    HEq growth.grown.history
+      (MasterResources.executeWithReferences (extra + count) growth.provenance.origin).history := by
+  cases growth.provenance with
+  | mk start startExact historyExact cursorExact =>
+    cases startExact
+    have oldExact := eq_of_heq historyExact
+    subst old
+    subst cursor
+    rw [growth.grownExact, growth.suffixExact]
+    exact stored_growth_is_one_run extra count start _
+
+def producedPrefix (growth : Growth old cursor boundary extra) :
+    MasterResources.ProducedPrefix (depth := depth) (count := growth.grown.count)
+      (assignment := assignment) (state := state) (context := context)
+      growth.grown.history growth.suffix.finish := by
+  refine ⟨growth.provenance.origin, growth.provenance.originBoundary, ?_, ?_⟩
+  · exact growth.history_is_one_run.trans
+      (executed_history_count_heq _ _ (growth.count_exact.trans (Nat.add_comm count extra)).symm
+        growth.provenance.origin)
+  · have length := growth.count_exact.trans (Nat.add_comm count extra)
+    exact (congrArg MasterResources.Result.finish growth.suffixExact).trans
+      ((congrArg (fun next => (MasterResources.executeWithReferences extra next).finish)
+        growth.provenance.cursorExact).trans
+        ((MasterResources.execute_finish_append extra count growth.provenance.origin).trans
+          (congrArg (fun n => (MasterResources.executeWithReferences n growth.provenance.origin).finish)
+            length.symm)))
+
 def resume (growth : Growth old cursor boundary extra) (more : Nat) :=
   resource_history_extension growth.grown.history growth.suffix.finish growth.endpoint_exact more
+    growth.producedPrefix
 end Growth
 
 theorem Instance.endpoint_exact {input : Nat} (master : Instance input) :
@@ -247,8 +339,23 @@ theorem Instance.endpoint_exact {input : Nat} (master : Instance input) :
   rw [master.executedExact]
   exact (MasterResources.execute_endpoint _ _).symm
 
+def Instance.producedPrefix {input : Nat} (master : Instance input) :
+    MasterResources.ProducedPrefix (depth := master.origin.depth) (count := resolutionLength input)
+      (assignment := master.origin.assignment) (state := master.origin.state) (context := master.origin.context)
+      master.execution master.cursor where
+  origin := master.origin
+  originBoundary := rfl
+  historyExact := by
+    unfold Instance.execution
+    rw [master.executedExact]
+    rfl
+  cursorExact := by
+    unfold Instance.cursor
+    rw [master.executedExact]
+    rfl
+
 def Instance.grow {input : Nat} (master : Instance input) (extra : Nat) :=
-  resource_history_extension master.execution master.cursor master.endpoint_exact extra
+  resource_history_extension master.execution master.cursor master.endpoint_exact extra master.producedPrefix
 
 /-- Transport from the original support through an already produced extension.
 The extension is an argument, not a second call of its executor. -/
@@ -280,7 +387,8 @@ def publicGrowth (input extra : Nat) := (publicContinuation input extra).grown.h
 
 /-- The second extension consumes the first result and its final cursor. -/
 def publicGrowthTwice (input first second : Nat) :=
-  let grown := publicContinuation input first
+  let master := publicInstance input
+  let grown := master.grow first
   let next := grown.resume second
   grown.grown.historical.compose next.grown.historical
 
@@ -352,6 +460,12 @@ theorem public_execution_exact (input : Nat) :
 structure Facts {input : Nat} (master : Instance input) : Prop where
   executionExact : HEq master.execution (publicCausalOperationalExecution input)
   headsExact : master.execution.allHeadsExact master.origin.freshness
+  horizonIndependent : ∀ first second,
+    (MasterResources.executeWithReferences (first + 1) master.origin).history.head? =
+      (MasterResources.executeWithReferences (second + 1) master.origin).history.head?
+  regimeExact : master.regime = master.normalization.operationalRegime
+  imageCommutes : ∀ p, master.producedImageTransport.forward (FiniteImage.carry master.groupingRules p) =
+    master.regime.carry p
   rolesConstituted : RelationalRoleHistoryConstitutionExact master.roles
   sourceWidth : master.carrier.frontier.length = 2 ^ (input + 1)
   executedWidth : master.regime.frontier.length = 1
@@ -365,6 +479,29 @@ structure Facts {input : Nat} (master : Instance input) : Prop where
   grouped : master.regime.carry master.distinctPair.left = master.regime.carry master.distinctPair.right
   outputAccepted : ∀ p, RoleSemantics.TargetAccept master.reduction (master.checkpoint p).output
   outputExact : ∀ p, (master.checkpoint p).output = master.normalization.target p
+  restartCursorExact : ∀ p, (master.checkpoint p).live = LiveContinuation.project master.cursor
+  readersExact : ∀ p, (master.checkpoint p).readers =
+    ProducedContinuation.targetReaders master.reduction (master.normalization.target p)
+  inspectAdmission : ∀ (memory : ProducedContinuation.Memory master.normalization) query,
+    Nonempty (ProducedContinuation.allow memory (.inspect query)) ↔ query.slot < resolutionLength input
+  inspectEvent : ∀ p query, ProducedContinuation.event (master.checkpoint p) (.inspect query) =
+    .observed query (ProducedContinuation.readTarget query
+      (ProducedContinuation.targetReaders master.reduction (master.normalization.target p)))
+  sourceInspectEvent : ∀ p query, ProducedContinuation.sourceEvent (master.source p) (.inspect query) =
+    .observed query (ProducedContinuation.readTarget query
+      (ProducedContinuation.targetReaders master.reduction (master.normalization.target p)))
+  runtimeInspectEvent : ∀ p query,
+    (ProducedContinuation.executeInput (master.checkpoint p) (.inspect query)).2 =
+      .observed query (ProducedContinuation.readTarget query
+        (ProducedContinuation.targetReaders master.reduction (master.normalization.target p)))
+  growthCount : ∀ extra, (master.grow extra).grown.count = resolutionLength input + extra
+  growthEndpoint : ∀ extra, (master.grow extra).suffix.finish.boundary =
+    MasterResources.endpoint (master.grow extra).grown.history
+  growthOneRun : ∀ extra, HEq (master.grow extra).grown.history
+    (MasterResources.executeWithReferences (extra + resolutionLength input) master.origin).history
+  growthReferences : ∀ extra {kind : MasterResources.Kind} (ref : Resources.Ref master.origin.kinds kind),
+    (master.grow extra).suffix.finish.support.read
+      ((master.referencesThrough (master.grow extra)).references ref) = master.origin.support.read ref
   arbitraryTracePreserves : ∀ {p q} (trace : Trace master.groupingRules.Step p q) (data : RoleProfilePayload p),
     RoleSemantics.ProfileAccept p data →
       RoleSemantics.ProfileAccept q (master.groupingAction.transport trace data)
@@ -383,6 +520,14 @@ structure Facts {input : Nat} (master : Instance input) : Prop where
 theorem facts {input : Nat} (master : Instance input) : Facts master where
   executionExact := master.audited_execution_exact
   headsExact := master.all_heads_exact
+  horizonIndependent := fun first second =>
+    (congrArg CausalOperationalExecutionHistory.head? (MasterResources.execute_erases (first + 1) master.origin)).trans
+      ((executeCausalOperationalExecutionHistory_head_independent first second
+        master.origin.state master.origin.context master.origin.freshness).trans
+        (congrArg CausalOperationalExecutionHistory.head?
+          (MasterResources.execute_erases (second + 1) master.origin)).symm)
+  regimeExact := rfl
+  imageCommutes := master.producedImageTransport_carry
   rolesConstituted := master.stagewise.rolesConstitutionExact
   sourceWidth := master.source_width
   executedWidth := master.executed_width
@@ -393,6 +538,21 @@ theorem facts {input : Nat} (master : Instance input) : Facts master where
   grouped := master.distinctPair.carriedTogether
   outputAccepted := master.checkpoint_output_accepted
   outputExact := master.checkpoint_output_exact
+  restartCursorExact := fun _ => rfl
+  readersExact := fun p => (master.checkpoint p).readersExact.trans
+    (congrArg (ProducedContinuation.targetReaders master.reduction) (master.checkpoint_output_exact p))
+  inspectAdmission := ProducedContinuation.inspect_admitted_iff
+  inspectEvent := fun p query =>
+    (ProducedContinuation.inspect_event_exact (master.checkpoint p) query).trans
+      (by rw [master.checkpoint_output_exact])
+  sourceInspectEvent := fun p query => ProducedContinuation.source_inspect_event_exact (master.source p) query
+  runtimeInspectEvent := fun p query =>
+    (ProducedContinuation.execute_inspect_exact (master.checkpoint p) query).trans
+      (by rw [master.checkpoint_output_exact])
+  growthCount := fun extra => (master.grow extra).count_exact
+  growthEndpoint := fun extra => (master.grow extra).endpoint_exact
+  growthOneRun := fun extra => (master.grow extra).history_is_one_run
+  growthReferences := fun extra {_} ref => master.referencesThrough_read (master.grow extra) ref
   arbitraryTracePreserves := master.arbitrary_trace_preserves
   coherentTraces := master.normalizing_trace_coherent
   profileNotRecoverable := master.profile_irrecoverable
@@ -438,6 +598,10 @@ end ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster
 #print axioms ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Growth
 #print axioms ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Growth.count_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Growth.endpoint_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.stored_growth_is_one_run
+#print axioms ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Growth.history_is_one_run
+#print axioms ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Growth.producedPrefix
+#print axioms ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Instance.producedPrefix
 #print axioms ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Growth.resume
 #print axioms ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Instance.endpoint_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Instance.grow

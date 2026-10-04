@@ -212,6 +212,45 @@ def allow {normalization : ExecutedCausalNormalization reduction}
   | .advance _ => ULift.{3} Unit
   | .inspect query => ULift.{3} (PLift (query.slot < memory.readers.length))
 
+/-- Admission is pinned to the number of produced role continuations, not
+merely to agreement between two implementations of the same predicate. -/
+theorem inspect_admitted_iff {normalization : ExecutedCausalNormalization reduction}
+    (memory : Memory normalization) (query : Query) :
+    Nonempty (allow memory (.inspect query)) ↔ query.slot < count := by
+  have size : memory.readers.length = count :=
+    (congrArg List.length memory.readersExact).trans (targetReaders_length reduction memory.output)
+  constructor
+  · intro ⟨witness⟩
+    exact size ▸ witness.down.down
+  · intro within
+    exact ⟨⟨⟨size.symm ▸ within⟩⟩⟩
+
+theorem inspect_out_of_bounds {normalization : ExecutedCausalNormalization reduction}
+    (memory : Memory normalization) (query : Query) (outside : count ≤ query.slot) :
+    ¬ Nonempty (allow memory (.inspect query)) :=
+  fun admitted => Nat.not_lt_of_ge outside ((inspect_admitted_iff memory query).mp admitted)
+
+/-- The observable value is a read of the actual produced output. This law
+is independent of the source/restart agreement law. -/
+theorem inspect_event_exact {normalization : ExecutedCausalNormalization reduction}
+    (memory : Memory normalization) (query : Query) :
+    event memory (.inspect query) =
+      .observed query (readTarget query (targetReaders reduction memory.output)) := by
+  change Event.observed query (readTarget query memory.readers) = _
+  rw [memory.readersExact]
+
+theorem source_inspect_event_exact {normalization : ExecutedCausalNormalization reduction}
+    (source : Source normalization) (query : Query) :
+    sourceEvent source (.inspect query) =
+      .observed query (readTarget query (targetReaders reduction (normalization.target source.profile))) := by
+  rw [event_exact, inspect_event_exact, output_is_executed]
+
+theorem execute_inspect_exact {normalization : ExecutedCausalNormalization reduction}
+    (memory : Memory normalization) (query : Query) :
+    (executeInput memory (.inspect query)).2 =
+      .observed query (readTarget query (targetReaders reduction memory.output)) :=
+  (executeInput_event memory (.inspect query)).trans (inspect_event_exact memory query)
+
 def contract (normalization : ExecutedCausalNormalization reduction) :
     Continuation.Exact (Source normalization) (Memory normalization)
       (Input normalization) (Event normalization)
@@ -402,6 +441,11 @@ theorem publicContractCertificate (input : Nat) : PublicContractCertificate inpu
 
 end ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.inspect_admitted_iff
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.inspect_out_of_bounds
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.inspect_event_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.source_inspect_event_exact
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.execute_inspect_exact
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.Query
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.targetReaders
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.targetReaders_length

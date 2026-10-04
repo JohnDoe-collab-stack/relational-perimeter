@@ -2,13 +2,17 @@
 
 **Dans ce cadre, la constitution relationnelle des dépendances est primitive. Le calcul produit lui-même, pendant son exécution et à partir de ce qu’il a déjà produit, sa décomposition opérationnelle et détermine ainsi quelles alternatives doivent continuer à être traitées comme des obligations indépendantes.**
 
-**Cette exécution ne produit pas d’explosion exponentielle de la largeur opérationnelle : bien que la lecture extensive du carrier des profils constitués ait une largeur 2ⁿ, le régime exécuté les regroupe en une seule obligation sans identifier les profils eux-mêmes.**
+**Cette exécution ne produit pas d’explosion exponentielle de la largeur opérationnelle : bien que le déploiement extensif des profils constitués ait une largeur 2ⁿ, le régime exécuté les regroupe en une seule obligation sans identifier les profils eux-mêmes.**
 
 **Dans la classe binaire formalisée, une largeur opérationnelle exponentielle apparaît si et seulement si le régime impose de conserver séparément toute la multiplicité extensive, c’est-à-dire si son application `carry` est injective.**
 
 **L’explosion exponentielle de la largeur opérationnelle est donc démontrée ici comme l’effet exact de cette exigence extensive de conservation indépendante, et non comme une conséquence nécessaire de la structure relationnelle du problème elle-même.**
 
 ## Résultat démontré
+
+Dans le paragraphe ci-dessus, « déploiement extensif » désigne la lecture
+quantitative des profils déjà constitués. Il ne désigne pas une nouvelle
+opération de constitution.
 
 Pour toute `BinaryRelationalRoleExtensiveFamily`, tout problème de cette
 famille et tout `ObligationRegime` sur le carrier source correspondant, Lean

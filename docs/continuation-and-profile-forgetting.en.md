@@ -11,6 +11,17 @@ once. Its roles, program, normalization, regime and cursor are projections of
 this shared result. `UnifiedMaster.certificate` packages that instance and
 proofs about it; it is not retained in restart memory.
 
+The closed certificate pins the actual image regime, restart cursor, produced
+readers, head-horizon agreement, historical growth and reference reads.
+Inspection admission is equivalent to the produced role bound; its event is
+the corresponding read of the produced output, not merely an agreement
+between two implementations. The compiled-path gate separately guards against
+replaying an equal execution: equality of results alone cannot prove that an
+executor was called only once.
+
+These laws specify the deterministic bound check and read defined by the
+inspection interface; they do not describe an additional discovery.
+
 `ProducedContinuation.publicStart` uses this same typed-resource execution. That
 execution supplies both the roles and relations of the normalization and the
 reached cursor from which search resumes. `public_execution_exact` proves its
@@ -59,6 +70,11 @@ are proved. The instance transport is pinned to its producer's result rather
 than supplied independently. These historical references are not added to
 restart memory: its contract admits only the future operations and reads below.
 
+The generic extension also requires a positively constructed `ProducedPrefix`:
+the complete cursor must be the resource executor's returned cursor, not an
+unrelated support sharing its boundary. Stored attachment is proved equal to
+one uninterrupted execution; this proof does not run that execution again.
+
 ## The exact future contract
 
 Two operations are admitted:
@@ -103,6 +119,11 @@ provenance list remains true on the latter domain. It does not prove that
 forgetting normalized source profiles is impossible.
 
 ## Code references
+
+The grouping interfaces are autonomous local reconstructions informed by the
+Apache-2.0 comparison material. They use the local role, trace, finite-image
+and continuation interfaces; no external foundation or path dependency is
+required. The repository's license remains Apache-2.0.
 
 - [Master instance and certificate](../RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/UnifiedPublicCertificate.lean): `publicInstance`, `certificate`, `class_iff_on_executed_regime`, `publicGrowth`, `public_obligations_compose`.
 - [Master-facade clients](../Tests/UnifiedMasterInstance.lean): direct application of the class theorem, transports, admission and profile loss.

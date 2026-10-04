@@ -12,6 +12,18 @@ curseur sont des projections de ce résultat commun. `UnifiedMaster.certificate`
 réunit cette instance et les preuves portant sur elle ; il n'est pas conservé
 dans la mémoire de reprise.
 
+Le certificat fermé fixe le régime d'image effectif, le curseur de reprise,
+les lecteurs produits, l'accord des têtes entre horizons, le prolongement
+historique et les lectures des références. L'admission d'une inspection
+équivaut à la borne des rôles produits ; son événement est la lecture
+correspondante de la sortie produite, pas seulement un accord entre deux
+implémentations. Le contrôle des chemins compilés interdit séparément la
+réexécution d'un calcul égal : l'égalité des résultats ne prouve pas, à elle
+seule, qu'un exécuteur n'a été appelé qu'une fois.
+
+Ces lois fixent le contrôle de borne et la lecture déterministes définis par
+l'interface d'inspection ; elles ne décrivent pas une découverte supplémentaire.
+
 `ProducedContinuation.publicStart` utilise cette même exécution par ressources.
 Cette exécution fournit à la fois les rôles et les relations de la normalisation,
 et le curseur atteint depuis lequel la recherche reprend. Elle est prouvée égale
@@ -63,6 +75,12 @@ est fixé au résultat de son producteur, pas fourni indépendamment. Ces réfé
 historiques ne sont pas ajoutées à la mémoire de reprise : son contrat n'autorise
 que les opérations et lectures futures décrites ci-dessous.
 
+Le prolongement générique exige aussi un `ProducedPrefix` construit
+positivement : le curseur complet doit être celui retourné par l'exécuteur
+de ressources, pas un support étranger ayant la même frontière. Le raccord
+conservé est prouvé égal à une exécution ininterrompue ; cette preuve ne lance
+pas une seconde exécution.
+
 ## Le contrat futur exact
 
 Deux opérations sont autorisées :
@@ -108,6 +126,12 @@ exacte de la profondeur et de toute la provenance reste vrai sur ces derniers.
 Il ne prouve pas l'impossibilité de l'oubli des profils normalisés.
 
 ## Repères dans le code
+
+Les interfaces de regroupement sont des reconstructions locales autonomes,
+informées par le matériau de comparaison sous Apache-2.0. Elles utilisent les
+interfaces locales de rôles, traces, images finies et continuation ; aucune
+fondation extérieure ni dépendance par chemin n'est requise. La licence du
+dépôt reste Apache-2.0.
 
 - [Instance et certificat maître](../RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/UnifiedPublicCertificate.lean) : `publicInstance`, `certificate`, `class_iff_on_executed_regime`, `publicGrowth`, `public_obligations_compose`.
 - [Clients de la façade maître](../Tests/UnifiedMasterInstance.lean) : application directe du théorème de classe, transports, admission et perte du profil.

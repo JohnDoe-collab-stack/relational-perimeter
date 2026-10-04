@@ -326,10 +326,14 @@ modules and the regression suites.
 `Tests/AllConstantsAudit.lean` rejects any handwritten axiom dependency and
 reports compiler-generated exceptions separately. Both verification scripts
 check that its module coverage equals the complete Lean inventory. The compiled
-code check follows transitive calls, statically named closures and initializers;
-it verifies the shared producer and absence of historical-support dependencies
-from the restricted restart entry. It is not a total-cost or physical-memory
-bound. `RELATIONAL_PERIMETER_PYTHON` can select a Python 3 executable when
+code check follows transitive calls, statically named closures and initializers.
+It checks static producer routes at the public construction and extension
+entries, rejects calls to the old executor on those paths, and excludes
+historical-support dependencies from the restricted restart entry. The Lean
+gate also checks the field types of restart memory and its nested live record.
+These are checks of the declared interfaces and compiled paths, not a general
+dynamic heap analysis, total-cost theorem or physical-memory bound.
+`RELATIONAL_PERIMETER_PYTHON` can select a Python 3 executable when
 `python3` is not on the command path.
 
 ## Résumé français

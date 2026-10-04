@@ -1,13 +1,16 @@
 # Plan d'unification de la fondation et de l'instance maître
 
-Statut : corrections locales des prolongements, transports de références et
-contrôles exhaustifs implémentées et vérifiées. Build propre public : 153 jobs ;
-build complet : 173 jobs. Les deux vérificateurs passent sur 171 fichiers Lean
-et 22 fixtures. Le sweep couvre 16 882 constantes dans 170 modules importés,
-sans dépendance axiomatique écrite à la main ; 360 exceptions générées par Lean
-sont identifiées séparément. L'oubli de tout préfixe chronologique n'est pas revendiqué.
-G10 reste ouvert : préparation de la publication figée et de la soumission
-à l'audit indépendant autorisée. Aucun verdict indépendant ni fusion n'est acquis.
+Statut : l'audit indépendant du commit `44512e832565b4a2979e44beeab238e5719cf1df`
+confirme la cible scientifique (`EXACT TARGET ESTABLISHED`) et demande des
+corrections d'unification (`UNIFICATION REQUIRES CORRECTIONS`). Ces corrections
+sont implémentées et vérifiées localement : build propre public de 153 jobs,
+build complet de 173 jobs, deux vérificateurs sur 171 fichiers Lean et 22 fixtures.
+Le sweep couvre désormais 16 938 constantes dans 170 modules importés, sans
+dépendance axiomatique écrite à la main ; 360 exceptions générées par Lean sont
+identifiées séparément. L'oubli de tout préfixe chronologique n'est pas revendiqué.
+G10 reste ouvert : ces corrections n'ont pas reçu de nouveau verdict indépendant.
+L'utilisateur a autorisé leur commit, leur push et la relance de l'audit le
+4 octobre 2026. Cette publication pour audit n'autorise pas une fusion dans `main`.
 Plan initial : 3 octobre 2026. État d'avancement : 4 octobre 2026.
 
 ## État effectif du chantier
@@ -26,9 +29,47 @@ auditée par une seconde instance ni par un régime singleton indépendant.
 | G5 | `executeWithReferences` est la récursion unique qui produit l'histoire, le curseur et le transport des ressources. `execute` n'en est qu'une projection. `UnifiedMaster.publicInstance` fournit ce résultat partagé aux consommateurs et fixe son transport au producteur par `referencesExact`. |
 | G6 | Moteur vivant concret raccordé aux productions exactes du moteur historique ; contrat fermé pour les requêtes de pas et les lectures des continuations produites. `executeRequests` partage les productions entre événements et successeurs. Les lectures rétrospectives du profil source sont exclues explicitement. |
 | G7 | Non-reconstruction du profil réellement normalisé prouvée sur les mêmes rôles publics, avec deux sources distinctes, mémoire commune et mêmes suites futures. Ce résultat ne concerne pas l'oubli du préfixe chronologique canonique. |
-| G8 | `UnifiedMaster.certificate` réunit la même instance et ses faits clos. Ses consommateurs publics donnent le regroupement, les actions et leur cohérence, les transports d'image réversibles, les largeurs, les extensions réellement exécutées et leur composition, le contrat futur et le séparateur. Le théorème de classe s'applique directement à son carrier. Le certificat scientifique reste séparé de la mémoire runtime. |
-| G9 | Builds propres réussis : 153 et 173 jobs, sans avertissement. Les deux vérificateurs passent sur 171 fichiers et 22 fixtures. Le manifeste classe 152 modules de production, tous contrôlés, sans orphelin. Le sweep couvre 16 882 constantes, dont les privées, sans dépendance axiomatique écrite à la main. Le contrôle C suit les appels transitifs, cibles nommées des fermetures et initialisateurs ; les références historiques sont absentes de la dépendance de reprise contrôlée. Les quatre fichiers fondamentaux et le manifeste Lake restent inchangés. Documentation bilingue et liens locaux vérifiés. Ce contrôle local n'est pas un audit indépendant. |
-| G10 | Publication figée et soumission à l'audit indépendant en préparation ; verdict et intégration dans `main` restent ouverts. |
+| G8 | Le certificat fixe aussi le régime d'image effectif, l'accord de son transport avec `carry`, le curseur terminal de reprise, les lecteurs, l'indépendance des têtes entre horizons, les prolongements et leurs références, l'admission des inspections et la valeur effectivement lue. Le prolongement générique exige un `ProducedPrefix` positif qui fixe le curseur complet à son producteur. Le prolongement conservé est prouvé égal à une exécution ininterrompue. Le certificat scientifique reste séparé de la mémoire runtime. |
+| G9 | Builds propres réussis : 153 et 173 jobs, sans avertissement Lean. Les vérificateurs Bash et PowerShell passent sur Windows sur 171 fichiers et 22 fixtures. Les 152 modules de production restent contrôlés, sans orphelin. Le sweep couvre 16 938 constantes, dont les privées, sans dépendance axiomatique écrite à la main. Le contrôle C suit les routes transitives, contrôle `Instance.grow`, `Growth.resume`, la récursion du producteur et exclut l'ancien exécuteur ; il exige les artefacts C de tous les fichiers Lean inventoriés. Le schéma des champs de reprise et de l'état vivant est contrôlé à l'élaboration. Les fichiers protégés et le manifeste restent inchangés. Les rejeux locaux ciblés sont décrits ci-dessous ; ils ne sont pas un nouvel audit indépendant. |
+| G10 | Le premier audit est terminé, avec les deux verdicts distincts ci-dessus. Nouvelle validation indépendante des corrections, publication et intégration dans `main` restent ouvertes. Le plan de chantier devra être retiré avant une intégration autorisée. |
+
+### Corrections demandées par l'audit indépendant
+
+La cible scientifique et ses résultats ne sont pas remplacés. Les corrections
+ajoutent des accords au certificat, ferment la provenance du prolongement et
+renforcent les contrôles de l'implémentation compilée. Elles ne transforment pas
+une égalité de valeurs en preuve du nombre physique d'appels : ce dernier point
+reste un contrôle statique des interfaces nommées, distinct des théorèmes Lean.
+
+| Rejeu ciblé | Rejet constaté sur la correction |
+|---|---|
+| M01c : régime `Unit` indépendant | L'accord `Facts.regimeExact` échoue en production. |
+| M04d : tête depuis une histoire future complétée | Le graphe compilé révèle l'ancien exécuteur et le rejette. |
+| M10 : références depuis un second run caché | Deux routes transitives vers le producteur sont détectées. |
+| M11 : rejeu de l'origine dans `Instance.grow` | Les raccords de prolongement et de références du certificat ne typent plus sur l'instance conservée. |
+| M14b : suffixe depuis un second ancien exécuteur | L'ancien exécuteur est détecté dans le chemin compilé du prolongement. |
+| M15d : archive cachée dans `live` | Le contrôle de schéma rejette le produit contenant la normalisation historique. |
+| M18b : événements d'inspection fictifs | La loi de lecture de la sortie produite ne se prouve plus. |
+| M18c : admission de toutes les inspections | La caractérisation indépendante de la borne ne se prouve plus. |
+| M19b : checkpoint à l'origine, ancien test supprimé | `Facts.restartCursorExact` échoue en production. |
+
+Un client supplémentaire conserve la même frontière et remplace seulement le
+support du curseur : son appel au prolongement est rejeté parce que le témoin
+`ProducedPrefix` du curseur produit ne porte pas sur ce support étranger.
+
+Ces neuf mutations sont des rejeux locaux ciblés, pas un rejeu des 35 mutations
+de l'audit initial. Les adaptations nécessaires à la nouvelle interface positive
+de provenance sont enregistrées hors dépôt. Les essais de compilation C sans
+le contexte de paquet Lake, ainsi que les patches qui ne s'appliquaient plus,
+ne sont pas comptés comme des rejets. Les contrôles de chemins décisifs utilisent
+le contexte du paquet et les artefacts compilés des copies isolées.
+
+Les journaux de cette passe sont `correction-clean-public-01.log`,
+`correction-verify-ps1-final.log`, `correction-verify-sh-final.log`,
+`correction-codegen-final.log` et `correction-docs-01.log`, hors dépôt.
+Le manifeste demeure identique après `lake update`. La note de provenance des
+reconstructions et les limites du contrôle compilé sont désormais dans les
+documents permanents français et anglais, pas seulement dans ce plan temporaire.
 
 ### Évidence de fermeture locale
 
