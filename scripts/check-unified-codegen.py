@@ -9,6 +9,9 @@ from pathlib import Path
 import re
 import sys
 import subprocess
+sys.dont_write_bytecode = True
+from unified_codegen_analysis import Analysis, Value, parameters, add_static_objects
+from unified_codegen_selftest import self_test
 
 ROOT = Path(__file__).resolve().parent.parent
 HEADER = re.compile(r"(?m)^(?:LEAN_EXPORT |static )?(?:lean_object\*|uint\d+_t|double|void|size_t) "
@@ -75,12 +78,26 @@ def calls(functions, name, suffix, expected):
     print(f"CODEGEN_CALL_OK {name}: {suffix}={actual}")
 
 
+def owned_symbol(functions, compiled_parameters, owners, prefix, declaration, module, variant=''):
+    """Resolve a fully qualified declaration and its defining C artifact.
+
+    Imported prototypes do not establish ownership. Missing, duplicate or
+    foreign definitions fail closed; substring/suffix lookalikes cannot match.
+    """
+    symbol = prefix + declaration.replace('.', '_') + variant
+    if symbol not in functions or symbol not in compiled_parameters:
+        raise ValueError('Missing exact generated definition: ' + symbol)
+    if owners.get(symbol) != {module}:
+        raise ValueError(f'{symbol}: expected defining artifact {module}; found {owners.get(symbol)}')
+    return symbol
+
+
 def producer_routes(functions, start, target, expected, boundaries=()):
     """Count static call/reference routes up to the producer boundary.
 
-    The producer's own recursion is intentionally not unfolded. A helper or
-    closure cannot conceal another route; an upstream recursive cycle fails
-    closed. This is a check of these compiled entry points, not a time bound.
+    The producer's recursion is intentionally not unfolded. This shared API
+    counts references, NOT applications of a closure. Application multiplicity
+    is checked separately by the local symbolic analysis below.
     """
     memo = {}
     def count(name, stack):
@@ -115,6 +132,7 @@ def producer_routes(functions, start, target, expected, boundaries=()):
 
 
 def main():
+    self_test(bodies, reachable, owned_symbol)
     # The negative self-check must follow a closure target, not merely a call.
     probe = {"l_start": "{ lean_alloc_closure(l_bad, 1, 0); }", "l_bad": "{}"}
     if "l_bad" not in reachable(probe, "l_start"):
@@ -143,15 +161,47 @@ def main():
     if missing:
         raise ValueError(f"Incomplete C dependency graph; rebuild these artifacts: {missing}")
     functions = {}
+    owners = {}
+    compiled_texts = []
     for path in compiled:
-        functions.update(bodies(path.read_text(encoding="utf-8")))
+        source = path.read_text(encoding="utf-8")
+        compiled_texts.append(source)
+        module = path.relative_to(ROOT / '.lake/build/ir').as_posix()
+        for symbol in parameters([source]):
+            owners.setdefault(symbol, set()).add(module)
+        functions.update(bodies(source))
+        add_static_objects(functions, LITERALS.sub(lambda m: ' ' * len(m.group()), source))
     if not functions:
         raise ValueError("Missing generated C; run lake build first")
     entry = select(functions, "UnifiedMaster_publicInstance")
     producer = select(functions, "MasterResources_executeWithReferences")
+    compiled_parameters = parameters(compiled_texts)
+    def applications(suffix, expected):
+        start = select(functions, suffix)
+        analysis = Analysis(functions, compiled_parameters, reachable, target=producer)
+        _, low, high = analysis.run(start, [Value() for _ in compiled_parameters[start]])
+        if (low, high) != (expected, expected):
+            raise ValueError(f"{start}: expected {expected} entry applications, obtained [{low}, {high}]")
+        print(f"CODEGEN_APPLICATIONS_OK {start}: [{low}, {high}], recursive producer boundary")
+    for suffix, expected in [
+            ("UnifiedMaster_publicInstance", 1),
+            ("UnifiedMaster_resource__history__extension___redArg", 1),
+            ("UnifiedMaster_Instance_grow___redArg", 1),
+            ("UnifiedMaster_Growth_resume___redArg", 1),
+            ("UnifiedMaster_publicContinuation", 2),
+            ("UnifiedMaster_publicGrowthTwice", 3)]:
+        applications(suffix, expected)
     projection_executor = select(functions, "MasterResources_execute")
     producer_routes(functions, entry, producer, 1)
     old_executor = ["executeCausalOperationalExecutionHistory", "executeCausalOperationalHead"]
+    # Full exported wrappers survive when a mutation makes an erased argument
+    # computationally relevant; a missing redArg helper is not a causal rejection.
+    for suffix in ["UnifiedMaster_Instance_stagewise",
+                   "UnifiedMaster_Instance_normalization",
+                   "UnifiedMaster_Instance_checkpoint"]:
+        consumer = select(functions, suffix)
+        absent(functions, consumer, old_executor + ["MasterResources_execute"], [projection_executor])
+        applications(suffix, 0)
     absent(functions, entry, old_executor + ["MasterResources_execute___"], [projection_executor])
     absent(functions, producer, old_executor, [projection_executor])
     growth = select(functions, "UnifiedMaster_resource__history__extension___redArg")
@@ -194,6 +244,53 @@ def main():
     if not re.search(r"lean_alloc_ctor\(0,\s*3,\s*0\)", functions[project]):
         raise ValueError("Restart-memory layout is not live state / output / readers")
     print("CODEGEN_MEMORY_OK: three top-level fields, no source closure; nested schema checked by AllConstantsAudit")
+    # Follow field values from production to retention, rather than checking
+    # project alone. Whole source profiles/results are tagged archives; the
+    # executed-target selector and restricted live projection are named scope
+    # boundaries, not a general claim about arbitrary client assignments.
+    public_declaration = 'ConstitutiveSearch_EndogenousDecomposition_UnifiedMaster_publicInstance'
+    if not entry.endswith(public_declaration):
+        raise ValueError('Cannot resolve the public declaration namespace: ' + entry)
+    prefix = entry[:-len(public_declaration)]
+    module_root = 'RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/'
+    namespace = 'ConstitutiveSearch.EndogenousDecomposition.'
+    def authority(declaration, module, variant=''):
+        return owned_symbol(functions, compiled_parameters, owners, prefix,
+                            namespace + declaration, module_root + module + '.c', variant)
+    if authority('UnifiedMaster.publicInstance', 'UnifiedPublicCertificate') != entry:
+        raise ValueError('Public declaration is not defined by its authoritative artifact')
+    capture_boundaries = {
+        authority('ExecutedCausalNormalization.result', 'ExecutedCausalNormalization', '___redArg'): 'archive',
+        authority('ExecutedChainNormalization.target', 'ExecutedRoleIndexedReduction', '___redArg'): 'produced',
+        authority('LiveContinuation.project', 'LiveResourceContinuation'): 'live',
+    }
+    getters = (
+        authority('UnifiedMaster.Instance.reduction', 'UnifiedPublicCertificate', '___redArg'),
+        authority('UnifiedMaster.Instance.normalization', 'UnifiedPublicCertificate', '___redArg'),
+        authority('MasterResources.Cursor.state', 'MasterResourceExecution'),
+        authority('causalStateOfThreadedState', 'InstrumentedExecutionRealization'),
+    )
+    print('CODEGEN_BOUNDARIES_OK: exact qualified symbols and unique defining artifacts')
+    factory = select(functions, "ProducedContinuation_produce___redArg")
+    capture = Analysis(functions, compiled_parameters, reachable, capture=True,
+                       capture_boundaries=capture_boundaries)
+    args = [Value(frozenset({'archive'})) for _ in compiled_parameters[factory]]
+    source, _, _ = capture.run(factory, args)
+    memory, _, _ = capture.run(project, [source])
+    if 'archive' in memory.retained():
+        raise ValueError("Historical value remains accessible in a retained output/reader closure")
+    print("CODEGEN_CAPTURE_OK: source factory -> projected memory; produced target/live boundaries explicit")
+    for suffix in ('UnifiedMaster_Instance_source', 'UnifiedMaster_Instance_checkpoint'):
+        start = select(functions, suffix)
+        flow = Analysis(functions, compiled_parameters, reachable, capture=True,
+                        archive_getters=getters, capture_boundaries=capture_boundaries)
+        value, _, _ = flow.run(start, [Value(frozenset({'archive'})) for _ in compiled_parameters[start]])
+        if suffix.endswith('source'):
+            value, _, _ = flow.run(project, [value])
+        for field, label in ((0, 'live state'), (1, 'produced output'), (2, 'readers')):
+            if field not in value.fields or 'archive' in value.fields[field].retained():
+                raise ValueError(f'{start}: unresolved or archived retained {label}')
+        print(f'CODEGEN_CAPTURE_OK {start}: live / output / readers; rich getters conservatively tainted')
     print("CODEGEN_OK: structural producer, extension and restart checks; no cost or physical-memory claim")
 
 

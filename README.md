@@ -329,9 +329,14 @@ modules and the regression suites.
 reports compiler-generated exceptions separately. Both verification scripts
 check that its module coverage equals the complete Lean inventory. The compiled
 code check follows transitive calls, statically named closures and initializers.
-It checks static producer routes at the public construction and extension
-entries, rejects calls to the old executor on those paths, and excludes
-historical-support dependencies from the restricted restart entry. The Lean
+It keeps static producer-route checks and separately checks application
+multiplicity through helpers and closures at the public construction and
+extension entries. It also checks `stagewise`, `normalization` and `checkpoint`
+for replay, and follows archive captures from source/checkpoint factories to
+retained readers, with explicit executed-value and live-projection boundaries.
+Those boundaries are pinned to exact qualified symbols and their unique
+defining C artifacts; similar helper names grant no authorization.
+It excludes historical-support dependencies from the restricted restart entry. The Lean
 gate also checks the field types of restart memory and its nested live record.
 These are checks of the declared interfaces and compiled paths, not a general
 dynamic heap analysis, total-cost theorem or physical-memory bound.
