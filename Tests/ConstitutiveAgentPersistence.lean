@@ -88,6 +88,111 @@ theorem historical_support_is_not_declared_given {input : Nat}
     history.realization.support.formation ≠ .given history.realization.support.values :=
   ((concrete_certificate input).historicalFormation profile history).not_given (history.realization.reference ref)
 
+/-! Regression pins for guarantees whose deletion previously went unnoticed. -/
+section RegressionPins
+open ConstitutiveSearch.SAT ConstitutiveSearch.Resources
+
+/-- The value an answer target restitutes is the read of its own produced
+continuation, both definitionally and as a closed certificate field. -/
+theorem answer_read_is_produced_value (target : AnswerTarget) (var : Var) :
+    target.read var = target.continuation.1 var := rfl
+
+theorem certified_answer_read {input : Nat} (target : AnswerTarget) (var : Var) :
+    target.read var = target.continuation.1 var :=
+  (concrete_certificate input).targetReads target var
+
+/-- Normalized origins are indexed by the executed retained target of their
+own license, not by an arbitrary accepted continuation. -/
+def normalized_origin_index : ∀ {state : CausalConstitutiveState} {head : CausalConstitutiveStageExecution state}
+    {role : RelationalConstitutiveRoleStage head} {atom : RoleStageAtom role}
+    (license : ExecutedRoleReductionLicense role atom),
+    TargetOrigin _ (causalOpeningRight state head.selected head.fresh)
+      (retainedExecutedRoleOperationalTarget license) := @TargetOrigin.normalized
+
+/-- Resumed origins are indexed by the context and output of their own live production. -/
+def resumed_origin_index : ∀ {memory : LiveContinuation.Memory} (production : LiveContinuation.Production memory),
+    TargetOrigin _ production.built.stage.schedule.entry.target production.built.stage.application.output :=
+  @TargetOrigin.resumed
+
+/-- Exhaustive: no third origin constructor (for example a free tag) exists. -/
+def origin_producer {root : Cnf} {context : GeneratedStructuralBranchContext root}
+    {continuation : GeneratedStructuralBranchContinuation context} :
+    TargetOrigin root context continuation → Bool
+  | .normalized _ => true
+  | .resumed _ => false
+
+theorem certified_resumed_origin {input : Nat} {memory : LiveContinuation.Memory}
+    (production : LiveContinuation.Production memory) :
+    (resumedTarget production).origin = TargetOrigin.resumed production :=
+  (concrete_certificate input).resumedOrigin production
+
+theorem certified_targets_accepted {input : Nat} (target : AnswerTarget) :
+    GeneratedStructuralBranchAccept target.context target.continuation :=
+  (concrete_certificate input).targetsAccepted target
+
+/-- An answer criterion is an authorization together with contextual acceptance. -/
+theorem answer_criterion_is_contextual_acceptance (requirement : Requirement) (register : List AnswerTarget)
+    (handle : Nat) (var : Var) (value : Bool) :
+    ReplyCriterion requirement register (.answer handle var value) =
+      ∃ authorization : Authorization requirement register handle var value,
+        GeneratedStructuralBranchAccept authorization.occurrence.1.context authorization.occurrence.1.continuation :=
+  rfl
+
+/-- Every internal stage of the head request is followed by the certificate. -/
+theorem certified_internal_stages (input : Nat)
+    (profile : RoleOccurrenceProfile (UnifiedMaster.publicInstance input).roles)
+    (request : Request) (rest : List Request) :
+    let master := UnifiedMaster.publicInstance input
+    let source := sourceStart master (singletonRequirement 0) profile
+    let stages := ((concrete_certificate input).followed profile (request :: rest)).stages
+    (project stages.final, stages.events) =
+      ((executeInput (project source) request).1, (executeInput (project source) request).2.productions) := by
+  intro master source stages
+  show (project ((concrete_certificate input).followed profile (request :: rest)).stages.final,
+      ((concrete_certificate input).followed profile (request :: rest)).stages.events) = _
+  rw [(concrete_certificate input).followedStages profile request rest]
+  exact (concrete_certificate input).internalStages source request
+
+theorem certified_followed_references (input : Nat)
+    (profile : RoleOccurrenceProfile (UnifiedMaster.publicInstance input).roles)
+    (request : Request) (rest : List Request) :
+    ((concrete_certificate input).followed profile (request :: rest)).references =
+      (sourcePerform (sourceStart (UnifiedMaster.publicInstance input) (singletonRequirement 0) profile)
+        request).1.history.references :=
+  (concrete_certificate input).followedReferences profile request rest
+
+/-- Both admission return laws remain closed certificate fields. -/
+theorem certified_received_return {input : Nat} {register : List AnswerTarget}
+    {cursor : MasterResources.Cursor} (requirement : Requirement)
+    (realization : RegisterRealization register cursor) (request : Request)
+    (witness : RichAdmission requirement realization request) :
+    receivedAdmission requirement realization request (realizeAdmission requirement realization request witness) =
+      witness :=
+  (concrete_certificate input).receivedReturn requirement realization request witness
+
+theorem certified_realized_return {input : Nat} {register : List AnswerTarget}
+    {cursor : MasterResources.Cursor} (requirement : Requirement)
+    (realization : RegisterRealization register cursor) (request : Request)
+    (witness : Admission requirement register request) :
+    realizeAdmission requirement realization request (receivedAdmission requirement realization request witness) =
+      witness :=
+  (concrete_certificate input).realizedReturn requirement realization request witness
+
+end RegressionPins
+
+/-- The concrete missing handle requires two internal productions, not one
+production merely because there is one external request. -/
+theorem missing_handle_has_two_internal_stages :
+    requestStageCount
+      (sourceStart (UnifiedMaster.publicInstance 0) (singletonRequirement 0)
+        (UnifiedMaster.publicInstance 0).distinctPair.left) (.obtain 2 0) = 2 := rfl
+
+/-- Reading the already-produced initial handle adds no internal production. -/
+theorem cached_handle_has_no_internal_stage :
+    requestStageCount
+      (sourceStart (UnifiedMaster.publicInstance 0) (singletonRequirement 0)
+        (UnifiedMaster.publicInstance 0).distinctPair.left) (.obtain 0 0) = 0 := rfl
+
 end Tests.ConstitutiveAgentPersistence
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms Tests.ConstitutiveAgentPersistence.distinct_sources_same_complete_memory
@@ -104,4 +209,18 @@ end Tests.ConstitutiveAgentPersistence
 #print axioms Tests.ConstitutiveAgentPersistence.every_internal_head_has_two_transports
 #print axioms Tests.ConstitutiveAgentPersistence.followed_stages_are_actual_execution
 #print axioms Tests.ConstitutiveAgentPersistence.historical_support_is_not_declared_given
+#print axioms Tests.ConstitutiveAgentPersistence.answer_read_is_produced_value
+#print axioms Tests.ConstitutiveAgentPersistence.certified_answer_read
+#print axioms Tests.ConstitutiveAgentPersistence.normalized_origin_index
+#print axioms Tests.ConstitutiveAgentPersistence.resumed_origin_index
+#print axioms Tests.ConstitutiveAgentPersistence.origin_producer
+#print axioms Tests.ConstitutiveAgentPersistence.certified_resumed_origin
+#print axioms Tests.ConstitutiveAgentPersistence.certified_targets_accepted
+#print axioms Tests.ConstitutiveAgentPersistence.answer_criterion_is_contextual_acceptance
+#print axioms Tests.ConstitutiveAgentPersistence.certified_internal_stages
+#print axioms Tests.ConstitutiveAgentPersistence.certified_followed_references
+#print axioms Tests.ConstitutiveAgentPersistence.certified_received_return
+#print axioms Tests.ConstitutiveAgentPersistence.certified_realized_return
+#print axioms Tests.ConstitutiveAgentPersistence.missing_handle_has_two_internal_stages
+#print axioms Tests.ConstitutiveAgentPersistence.cached_handle_has_no_internal_stage
 /- AXIOM_AUDIT_END -/

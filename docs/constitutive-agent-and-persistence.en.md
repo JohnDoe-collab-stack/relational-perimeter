@@ -158,21 +158,44 @@ has a separate dependency check.
 
 This check covers `Session.execute`, `produce` and `executeAll`, together with
 initialization. It follows helpers, aliases and resolved closure applications.
+`step` must reach exactly one live production on every compiled path (bounds
+`[1,1]`), including through a helper or closure; a path with no production is
+also refused. The only live production it admits is the one inside `step`: every
+other application of the live producer on the worker (`runSteps`), request
+(`performCertified`, `executeProducedInput`, `executeInput`), executor and
+session paths is bounded by zero, with `step` as the sole boundary, and
+`performCertified` reaches `step` only through `runSteps`. Generated tag
+dispatch (`switch`) is explored alternative by alternative; a fall-through
+fails the check.
 Call bounds concern one entry or one explicit structural unfolding, not a whole
 execution of arbitrary length. An unresolved required indirect call fails the
 check rather than being assigned zero cost. Expected failures are checked using
 Lean JSON diagnostics with frozen file, line, column and characteristic message;
 an extra error or printed text does not validate the fixture.
 
-The fixture-source policy also excludes commands and tactics capable of
-fabricating a diagnostic. It distinguishes character literals from strings
+The fixture-source policy also excludes the commands, tactics, attributes and
+message APIs it knows to be capable of fabricating a diagnostic: fixtures may
+import only modules of this project (each import alone on its line, no module
+header), and attribute application (`@[...]`, `attribute [...]`), registered
+elaborators (`command_elab`, `term_elab`, ...), logging and error-throwing
+functions and `m!`/`f!` message interpolation are refused. Before compiling any
+fixture, both wrappers run `check-fixture-import-closure.py`: the dependencies
+resolved by `lean --deps` for every production module must remain in the local
+inventory, except for `Init` and `Init.Omega` of the pinned toolchain.
+An unmanifested local module or direct or indirect exposure of `Lean`, `Std`,
+`Lake` or another external module is refused. Lake rechecks artifact hashes
+with `--rehash --no-build --no-cache`; missing or stale outputs are refused,
+never silently rebuilt. Source, fixture, configuration and artifact hashes
+are rechecked until the end of expected-failure compilation.
+The lexical policy distinguishes character literals from strings
 and recognizes nested Lean comments, then checks tokens outside these regions,
 including after a comment or modifier. Interpolated strings and unsupported
 character forms are rejected. This restricted check does not claim to secure
 arbitrary Lean source.
 Both verification scripts automatically run the 864 lexical matrix cases and
 the simulated diagnostic and interruption checks. The full two-wrapper suite
-is run separately with
+uses independent physical copies of sources and artifacts, never a cache shared
+with the reference. It is run separately with
 `python scripts/test-expected-failure-gates.py --output <new directory>`.
 
 ## Declarations and reproduction

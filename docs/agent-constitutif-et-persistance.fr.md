@@ -161,22 +161,47 @@ pas la découverte. Celle-ci fait l’objet d’un contrôle de dépendances sé
 
 Ce contrôle couvre `Session.execute`, `produce` et `executeAll`, ainsi que
 l'initialisation. Il suit les auxiliaires, les alias et les applications de
-fermetures résolues. Les bornes d'appels portent sur une entrée ou un dépliage
+fermetures résolues. `step` doit atteindre exactement une production vivante
+sur chaque chemin compilé (bornes `[1,1]`), même à travers un auxiliaire ou une
+fermeture ; un chemin sans production est également refusé.
+La seule production vivante admise est celle de `step` :
+toute autre application du producteur vivant sur les chemins du travailleur
+(`runSteps`), de la requête (`performCertified`, `executeProducedInput`,
+`executeInput`), de l'exécuteur et de la session est bornée par zéro, avec
+`step` pour seule frontière, et `performCertified` n'atteint `step` qu'à travers
+`runSteps`. Les aiguillages générés (`switch`) sont explorés alternative par
+alternative ; une continuation d'un cas dans le suivant fait échouer le contrôle. Les bornes d'appels portent sur une entrée ou un dépliage
 structurel explicite, pas sur une exécution entière de longueur arbitraire.
 Un appel indirect nécessaire non résolu est un échec du contrôle, pas un coût
 nul. Les refus attendus sont vérifiés à partir des diagnostics JSON de Lean,
 avec fichier, ligne, colonne et motif figés ; une erreur supplémentaire ou un
 texte imprimé ne valide pas la fixture.
 
-La politique de source des fixtures exclut aussi les commandes et tactiques
-capables de fabriquer un diagnostic. Elle distingue les littéraux de caractère
+La politique de source des fixtures exclut aussi les commandes, tactiques,
+attributs et API de messages qu'elle sait capables de fabriquer un diagnostic :
+une fixture n'importe que des modules de ce projet (chaque import seul sur sa
+ligne, sans en-tête de module), et l'application d'attributs (`@[...]`,
+`attribute [...]`), les élaborateurs enregistrés (`command_elab`, `term_elab`,
+...), les fonctions de journalisation ou de levée d'erreur et l'interpolation
+de messages `m!`/`f!` sont refusées. Avant de compiler une fixture, les deux
+wrappers exécutent `check-fixture-import-closure.py` : les dépendances résolues
+par `lean --deps` de chaque module de production doivent rester dans
+l'inventaire local, sauf `Init` et `Init.Omega` de la toolchain épinglée.
+Un module local non inventorié ou une exposition directe ou indirecte de
+`Lean`, `Std`, `Lake` ou d'un autre module externe est refusé. Lake recontrôle
+les empreintes des artefacts avec `--rehash --no-build --no-cache` ; des sorties
+absentes ou périmées sont refusées, jamais reconstruites silencieusement.
+Les empreintes des sources, fixtures, configurations et artefacts sont
+recontrôlées jusqu'à la fin de la compilation des refus attendus.
+La politique lexicale distingue les littéraux de caractère
 des chaînes et reconnaît les commentaires Lean imbriqués, puis contrôle les
 tokens hors de ces régions, même après un commentaire ou un modificateur.
 Les chaînes interpolées et les formes de caractère non prises en charge sont
 refusées. Ce contrôle restreint ne prétend pas sécuriser du Lean arbitraire.
 Les deux scripts de vérification exécutent automatiquement les 864 cas de la
 matrice lexicale et les contrôles simulés des diagnostics et interruptions.
-La suite complète des deux wrappers se lance séparément avec
+La suite complète utilise des copies physiques indépendantes des sources et
+artefacts, jamais un cache partagé avec la référence. Elle se lance avec
 `python scripts/test-expected-failure-gates.py --output <répertoire neuf>`.
 
 ## Déclarations et reproduction

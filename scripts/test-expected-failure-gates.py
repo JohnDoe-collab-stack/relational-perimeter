@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Regression checks of fixture gates, not scientific experiments.
 
-Real Lean checks run in disposable directories sharing built .lake artifacts.
+Real Lean checks run in disposable directories with independent copied artifacts.
 Pure status/parser checks separately test process failure and JSON spoofing.
 """
 from __future__ import annotations
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 import importlib.util
 import json
 import os
@@ -13,8 +14,33 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+sys.dont_write_bytecode = True
 import tempfile
+from types import SimpleNamespace
 from unittest.mock import patch
+
+
+# Exact bypass reported by the independent audit (M20e): a same-file command
+# elaborator fabricates the frozen diagnostic of a dependent-type fixture at
+# its frozen line and column, while the genuine type error is removed.
+SPOOF_TARGET = 'Tests/ExpectedFailure/AcceptedTargetCannotReplaceProducedOutput.lean.fail'
+SPOOF_FIXTURE = (
+    'import RelationalPerimeter\n'
+    'import Lean\n'
+    'set_option genInjectivity false\n'
+    'namespace Tests.ExpectedFailure.AcceptedTargetCannotReplaceProducedOutput\n'
+    'open ConstitutiveSearch.Agent ConstitutiveSearch.EndogenousDecomposition\n'
+    '\n'
+    'open Lean Elab Command in\n'
+    '@[command_elab Lean.Parser.Command.check] def reviewNote : CommandElab := fun stx =>\n'
+    '  Lean.logAt stx m!"Application type mismatch: target = retainedExecutedOperationalTargetProfile '
+    'reduction \u2192 List AnswerTarget" .error\n'
+    '\n'
+    'theorem harmless : True := True.intro\n'
+    '\n'
+    '  #check harmless\n'
+    '\n'
+    'end Tests.ExpectedFailure.AcceptedTargetCannotReplaceProducedOutput\n')
 
 
 def lexical_matrix(policy) -> dict[str, int]:
@@ -88,6 +114,8 @@ def policy_checks(repo: Path) -> dict[str, int]:
         "def unicodeCharacter : Char := '\u00ab'\n",
         "def consecutiveCharacters := ('a', '\"')\n",
         "def head' := true\ndef tail'' := head'\n",
+        'import RelationalPerimeter\nimport RelationalPerimeter.Agents.Constitutive.Execution\ndef importance := 1\n',
+        'import RelationalPerimeter\r\ndef moduleName := 1\r\n',
     )
     for source in permitted_sources:
         policy.validate_source(source, 'lexical-positive-case')
@@ -116,6 +144,19 @@ def policy_checks(repo: Path) -> dict[str, int]:
             r"""def after : Char := '\"'""" + '\n',
         "def x := 'unclosed", "def x := 'ab'", r"def x := '\q'",
         "def x := '\\", "def x := ''",
+        # Same-file attribute-registered elaborators, foreign imports and the
+        # message API (audit bypass M20e and its variants).
+        SPOOF_FIXTURE, SPOOF_FIXTURE.replace('import Lean\n', ''),
+        'import RelationalPerimeter\nimport Lean\n',
+        'import Lean.Elab.Command\n', 'import Std\n', 'public import RelationalPerimeter\n',
+        'meta import RelationalPerimeter\n', ' import RelationalPerimeter\n',
+        'import RelationalPerimeter\r\nimport Lean\r\n', 'import RelationalPerimeter\rimport Lean\r',
+        'module\nimport RelationalPerimeter\n', 'import RelationalPerimeter /- -/ Lean\n',
+        '@[term_elab Lean.Parser.Term.app] def x := 1', '@[tactic Lean.Parser.Tactic.exact] def x := 1',
+        '@[simp] theorem x : True := True.intro', 'attribute [command_elab Lean.Parser.Command.check] x',
+        'def x := Lean.logAt', 'def x := Lean.Meta.throwAppTypeMismatch',
+        'def x := m!"Application type mismatch"', 'def x := f!"Type mismatch"',
+        'def x : Lean.MessageData := default', 'def x := Lean.logInfo', 'def x := Lean.logWarning',
     ):
         try:
             policy.validate_source(source, 'lexical-negative-case')
@@ -134,6 +175,7 @@ def policy_checks(repo: Path) -> dict[str, int]:
         """def before : Char := '"'\nrun_cmd logError "Type mismatch"\ndef after : Char := '"'\n""",
         r"""def before : Char := '\"'""" + '\nrun_cmd logError "Type mismatch"\n' +
             r"""def after : Char := '\"'""" + '\n',
+        SPOOF_FIXTURE,
     ):
         def forged_read(path, *args, **kwargs):
             if path.resolve() == (repo / first_fixture).resolve():
@@ -171,6 +213,8 @@ def policy_checks(repo: Path) -> dict[str, int]:
                       12, 13, 'but is expected to have type'):
         raise SystemExit('A foreign diagnostic site was accepted')
     with patch.object(sys, 'argv', ['expected_failure_diagnostics.py']), \
+         patch.object(policy, 'load_closure', return_value=SimpleNamespace(
+             check=lambda *_: {}, unchanged=lambda *_: None)), \
          patch.object(policy.subprocess, 'run', side_effect=subprocess.TimeoutExpired('synthetic', 90)):
         try:
             policy.main()
@@ -183,18 +227,10 @@ def policy_checks(repo: Path) -> dict[str, int]:
     return matrix
 
 
-def link_artifacts(source: Path, destination: Path) -> None:
-    try:
-        os.symlink(source, destination, target_is_directory=True)
-    except OSError:
-        if os.name != 'nt':
-            raise
-        # Junction creation only: both absolute targets are explicit and the
-        # new link is inside this test's disposable directory.
-        command = ("New-Item -ItemType Junction -Path '" + str(destination).replace("'", "''") +
-                   "' -Target '" + str(source).replace("'", "''") + "' | Out-Null")
-        subprocess.run(['powershell', '-NoProfile', '-Command', command],
-                       check=True, capture_output=True)
+def digest_artifacts(repo: Path) -> dict[str, str]:
+    import hashlib
+    return {str(path.relative_to(repo)): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in (repo / '.lake/build').rglob('*') if path.is_file()}
 
 
 def main() -> None:
@@ -202,6 +238,7 @@ def main() -> None:
     parser.add_argument('--output', type=Path, help='required for the cross-shell suite')
     parser.add_argument('--policy-only', action='store_true',
                         help='run source/diagnostic policy checks without building or launching either shell')
+    parser.add_argument('--jobs', type=int, default=2, choices=(1, 2, 3, 4))
     parser.add_argument('--bash', default='C:/Program Files/Git/bin/bash.exe' if os.name == 'nt' else 'bash')
     args = parser.parse_args()
     repo = Path(__file__).resolve().parent.parent
@@ -217,7 +254,11 @@ def main() -> None:
     if not shutil.which('pwsh'):
         raise SystemExit('PowerShell unavailable: this two-gate test cannot pass')
     policy_results = policy_checks(repo)
-    args.output.mkdir(parents=True, exist_ok=True)
+    spec = importlib.util.spec_from_file_location('fixture_policy_main', repo / 'scripts/expected_failure_diagnostics.py')
+    policy = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(policy)
+    args.output.mkdir(parents=True, exist_ok=False)
+    reference_artifacts = digest_artifacts(repo)
     manifest = (repo / 'scripts/expected-failures.tsv').read_text(encoding='utf-8')
     rows = [line for line in manifest.splitlines() if line and not line.startswith('#')]
     unique = {line.split('\t')[0] for line in rows}
@@ -237,22 +278,114 @@ def main() -> None:
         ('escaped-character-run-cmd', 'executable diagnostic imitation is forbidden'),
         ('quoted-run-cmd', 'failed for an unexpected reason (error class)'),
         ('quoted-run-tac', 'failed for an unexpected reason (error class)'),
+        ('command-elab-spoof', 'executable diagnostic imitation is forbidden'),
+        ('command-elab-spoof-project-import', 'executable diagnostic imitation is forbidden'),
+        ('foreign-import', 'only plain project imports are permitted'),
+        ('production-lean-import', 'forbidden resolved dependency'),
+        ('production-comment-import', 'forbidden resolved dependency'),
+        ('production-split-import', 'forbidden resolved dependency'),
+        ('production-indirect-import', 'forbidden resolved dependency'),
+        ('production-unmanifested', 'unmanifested or missing production module'),
+        ('production-unresolved', 'import closure: command failed'),
+        ('production-stale', 'stale or invalid production artifact'),
+        ('production-missing-artifact', 'missing production artifact'),
+        ('closure-malformed-resolver', 'malformed dependency resolver output'),
+        ('closure-timeout', 'resolver or freshness check timed out'),
+        ('closure-homonym', 'forbidden resolved dependency'),
+        ('closure-source-change', 'changed during validation'),
+        ('closure-forced-failure', 'import closure: forced self-test refusal'),
     ]
-    records = []
-    for case, expected in cases:
+    def run_case(case_expected):
+        case, expected = case_expected
+        records = []
         with tempfile.TemporaryDirectory(prefix='fixture-gate-') as directory:
             work = Path(directory)
+            shutil.copytree(repo / 'RelationalPerimeter', work / 'RelationalPerimeter')
+            for path in repo.glob('*.lean'):
+                shutil.copy2(path, work / path.name)
             shutil.copytree(repo / 'Tests/ExpectedFailure', work / 'Tests/ExpectedFailure')
             (work / 'scripts').mkdir()
             for name in ('check-expected-failures.sh', 'check-expected-failures.ps1',
-                         'expected_failure_diagnostics.py', 'expected-failures.tsv'):
+                         'expected_failure_diagnostics.py', 'expected-failures.tsv',
+                         'check-fixture-import-closure.py', 'stratification.tsv'):
                 shutil.copy2(repo / 'scripts' / name, work / 'scripts' / name)
-            link_artifacts(repo / '.lake', work / '.lake')
+            # Physical copies: mutations and Lake metadata never reach the
+            # reference through a junction, symlink, hard link or shared cache.
+            shutil.copytree(repo / '.lake', work / '.lake')
             for config in ('lakefile.toml', 'lake-manifest.json', 'lean-toolchain'):
                 shutil.copy2(repo / config, work / config)
             inventory = work / 'scripts/expected-failures.tsv'
             environment = dict(os.environ)
             environment['RELATIONAL_PERIMETER_PYTHON'] = sys.executable
+            if case.startswith(('production-', 'closure-')):
+                facade = work / 'RelationalPerimeter.lean'
+                original = facade.read_text(encoding='utf-8')
+                if case in ('production-lean-import', 'production-comment-import', 'production-split-import'):
+                    header = {'production-lean-import': 'import Lean\n',
+                              'production-comment-import': '/- preceding comment -/ import Lean\n',
+                              'production-split-import': 'import\n  Lean\n'}[case]
+                    facade.write_text(header + original, encoding='utf-8')
+                elif case in ('production-indirect-import', 'production-unmanifested'):
+                    probe = work / 'RelationalPerimeter/ClosureGateProbe.lean'
+                    probe.write_text('import Lean\nset_option genInjectivity false\n'
+                                     'namespace ClosureGateProbe\ntheorem ok : True := True.intro\nend ClosureGateProbe\n'
+                                     '/- AXIOM_AUDIT_BEGIN -/\n#print axioms ClosureGateProbe.ok\n/- AXIOM_AUDIT_END -/\n',
+                                     encoding='utf-8')
+                    facade.write_text('import RelationalPerimeter.ClosureGateProbe\n' + original, encoding='utf-8')
+                    if case == 'production-indirect-import':
+                        strata = work / 'scripts/stratification.tsv'
+                        strata.write_text(strata.read_text(encoding='utf-8') +
+                                          'RelationalPerimeter.ClosureGateProbe\tA17\tenforced\tDisposable import control\n',
+                                          encoding='utf-8')
+                elif case == 'production-unresolved':
+                    facade.write_text('import ModuleThatDoesNotExist\n' + original, encoding='utf-8')
+                elif case == 'production-stale':
+                    facade.write_text('-- freshness self-test\n' + original, encoding='utf-8')
+                elif case == 'production-missing-artifact':
+                    (work / '.lake/build/lib/lean/RelationalPerimeter.olean').unlink()
+                elif case == 'closure-forced-failure':
+                    gate = work / 'scripts/check-fixture-import-closure.py'
+                    gate.write_text(gate.read_text(encoding='utf-8').replace(
+                        '    root = root.resolve()\n',
+                        '    raise ValueError("import closure: forced self-test refusal")\n    root = root.resolve()\n', 1),
+                        encoding='utf-8')
+                elif case in ('closure-malformed-resolver', 'closure-timeout', 'closure-homonym',
+                              'closure-source-change'):
+                    gate = work / 'scripts/check-fixture-import-closure.py'
+                    gate_source = gate.read_text(encoding='utf-8')
+                    if case == 'closure-malformed-resolver':
+                        gate_source = gate_source.replace('    return result.stdout\n',
+                            '    return "invalid resolver record" if "--deps" in command else result.stdout\n', 1)
+                    elif case == 'closure-timeout':
+                        gate_source = gate_source.replace('    try:\n        result = subprocess.run(',
+                            '    try:\n        if "--deps" in command:\n'
+                            '            raise subprocess.TimeoutExpired(command, timeout)\n'
+                            '        result = subprocess.run(', 1)
+                    elif case == 'closure-homonym':
+                        library = subprocess.run([shutil.which('lake'), 'env', 'lean', '--print-libdir'],
+                            cwd=work, capture_output=True, text=True, encoding='utf-8', check=True).stdout.strip()
+                        (work / 'alternate').mkdir()
+                        shutil.copy2(Path(library) / 'Init.olean', work / 'alternate/Init.olean')
+                        gate_source = gate_source.replace('    return result.stdout\n',
+                            '    if "--deps" in command:\n'
+                            '        lines = result.stdout.splitlines()\n'
+                            '        lines[0] = str(root / "alternate/Init.olean")\n'
+                            '        return "\\n".join(lines) + "\\n"\n'
+                            '    return result.stdout\n', 1)
+                    else:
+                        gate_source = gate_source.replace('    unchanged(root, before)\n',
+                            '    path = root / "RelationalPerimeter.lean"\n'
+                            '    path.write_text(path.read_text(encoding="utf-8") + "\\n-- transaction change\\n", encoding="utf-8")\n'
+                            '    unchanged(root, before)\n', 1)
+                    gate.write_text(gate_source, encoding='utf-8')
+                if case in ('production-lean-import', 'production-comment-import',
+                            'production-split-import', 'production-indirect-import'):
+                    built = subprocess.run([shutil.which('lake'), 'build', '+RelationalPerimeter'], cwd=work,
+                                           env=environment, capture_output=True, text=True,
+                                           encoding='utf-8', timeout=180)
+                    (args.output / f'{case}-build.log').write_text(built.stdout + built.stderr, encoding='utf-8')
+                    if built.returncode != 0:
+                        raise SystemExit('Disposable import control did not build: ' + case)
             if case == 'unlisted':
                 (work / 'Tests/ExpectedFailure/Unlisted.lean.fail').write_text('example : True := True.intro\n', encoding='utf-8')
             elif case == 'orphan':
@@ -298,14 +431,44 @@ def main() -> None:
                     'def quoteAfter : Char := ' + character + '\n'
                 (work / first).write_text(fabricated, encoding='utf-8')
             elif case == 'quoted-run-cmd':
-                fabricated = 'import Lean\nopen Lean Elab Command\n' + '\n' * 9 + \
+                # Foreign imports are refused by policy, so the quoted
+                # spellings are tested with the only permitted import. The
+                # parser error lands on the frozen site with the wrong class.
+                fabricated = 'import RelationalPerimeter\n' + '\n' * 10 + \
                     ' ' * 13 + '\u00abrun_cmd\u00bb \u00ablogError\u00bb "Application type mismatch: applyStage fresh"\n'
                 (work / first).write_text(fabricated, encoding='utf-8')
             elif case == 'quoted-run-tac':
                 (work / first).write_text(
-                    'import Lean\nexample : True := by\n'
+                    'import RelationalPerimeter\nexample : True := by\n'
                     '  \u00abrun_tac\u00bb Lean.\u00ablogError\u00bb "Type mismatch"\n'
                     '  exact True.intro\n', encoding='utf-8')
+            elif case in ('command-elab-spoof', 'command-elab-spoof-project-import'):
+                spoof = SPOOF_FIXTURE if case == 'command-elab-spoof' else SPOOF_FIXTURE.replace('import Lean\n', '')
+                (work / SPOOF_TARGET).write_text(spoof, encoding='utf-8')
+            elif case == 'foreign-import':
+                original = (work / first).read_text(encoding='utf-8')
+                (work / first).write_text(original.replace('\n', '\nimport Lean\n', 1), encoding='utf-8')
+            if case == 'command-elab-spoof':
+                # Compiler control: the spoof really fabricates exactly the
+                # frozen diagnostic at the frozen site, so only the source
+                # policy can be responsible for its rejection below.
+                lake = shutil.which('lake')
+                if lake is None:
+                    raise SystemExit('lake unavailable for the elaborator-spoof compiler control')
+                compiled = subprocess.run([lake, 'env', 'lean', '--json', SPOOF_TARGET],
+                                          cwd=work, env=environment, capture_output=True,
+                                          text=True, encoding='utf-8', timeout=180)
+                compiler_output = compiled.stdout + compiled.stderr
+                (args.output / f'{case}-compiler.log').write_text(compiler_output, encoding='utf-8')
+                site = next(row.split('\t') for row in rows if row.split('\t')[0] == SPOOF_TARGET)
+                found = policy.errors(compiler_output, SPOOF_TARGET)
+                if compiled.returncode != 1 or len(found) != 1 or not any(
+                        record.get('fileName') == SPOOF_TARGET and
+                        record.get('pos') == {'line': int(site[2]), 'column': int(site[3])} and
+                        site[4] in record.get('data', '') and
+                        record.get('data', '').startswith('Application type mismatch')
+                        for record in found):
+                    raise SystemExit('Elaborator spoof no longer reproduces the frozen diagnostic')
             if case in ('quoted-run-cmd', 'quoted-run-tac'):
                 # These names are lexically permitted. Confirm the actual
                 # compiler refusal before testing rejection by the wrappers,
@@ -319,7 +482,7 @@ def main() -> None:
                 compiler_output = compiled.stdout + compiled.stderr
                 (args.output / f'{case}-compiler.log').write_text(compiler_output, encoding='utf-8')
                 diagnostics = [json.loads(line) for line in compiler_output.splitlines() if line.strip()]
-                intended = ('unknown namespace ' + chr(96) + 'run_cmd' + chr(96)) \
+                intended = 'unexpected identifier; expected command' \
                     if case == 'quoted-run-cmd' else 'unknown tactic'
                 if compiled.returncode != 1 or not any(
                         record.get('severity') == 'error' and record.get('data') == intended
@@ -329,16 +492,28 @@ def main() -> None:
                 ('bash', [args.bash, 'scripts/check-expected-failures.sh']),
                 ('powershell', ['pwsh', '-NoProfile', '-File', 'scripts/check-expected-failures.ps1']),
             ):
+                if case == 'closure-source-change':
+                    # Each surface starts from the same fresh source. The
+                    # preceding surface intentionally changed its disposable
+                    # source; do not mistake that residue for this test.
+                    facade.write_text(original, encoding='utf-8')
                 result = subprocess.run(command, cwd=work, env=environment, capture_output=True,
-                                        text=True, encoding='utf-8', timeout=180)
+                                        text=True, encoding='utf-8', timeout=300)
                 output = result.stdout + result.stderr
                 log = args.output / f'{case}-{surface}.log'
                 log.write_text(output, encoding='utf-8')
                 executed = [line.split('\t')[-1] for line in output.splitlines() if line.startswith('EXPECTED_FAILURE_OK\t')]
                 passed = (result.returncode == 0 and len(executed) == len(unique) and set(executed) == unique) if case == 'baseline' else (result.returncode != 0 and expected in output)
+                if case.startswith(('production-', 'closure-')):
+                    passed = passed and not executed and 'FIXTURE_IMPORT_CLOSURE_OK' not in output
                 records.append(dict(case=case, surface=surface, exit_code=result.returncode, passed=passed,
                                     fixture_calls=len(executed), log=log.name))
                 print(case, surface, result.returncode, 'PASS' if passed else 'FAIL', flush=True)
+        return records
+    with ThreadPoolExecutor(max_workers=args.jobs) as pool:
+        records = [record for group in pool.map(run_case, cases) for record in group]
+    if digest_artifacts(repo) != reference_artifacts:
+        raise SystemExit('Reference artifacts were changed by disposable fixture tests')
     (args.output / 'results.json').write_text(json.dumps(records, indent=2), encoding='utf-8')
     (args.output / 'policy-results.json').write_text(json.dumps(policy_results, indent=2), encoding='utf-8')
     if not all(record['passed'] for record in records):

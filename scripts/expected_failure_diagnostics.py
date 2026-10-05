@@ -7,11 +7,13 @@ This is fixture validation, not a semantic proof or a general secure compiler.
 """
 from __future__ import annotations
 import argparse
+import importlib.util
 import json
 from pathlib import Path
 import re
 import subprocess
 import sys
+sys.dont_write_bytecode = True
 
 ROOT = Path(__file__).resolve().parent.parent
 CATEGORIES = {'privacy', 'dependent-type', 'semantic-type', 'termination'}
@@ -24,7 +26,21 @@ ERROR_CLASSES = {
 PROHIBITED = re.compile(
     r'(?<![\w\u00ab\u00bb])(?:run_cmd|run_elab|run_tac|initialize|builtin_initialize|'
     r'syntax|declare_syntax_cat|macro|macro_rules|elab|elab_rules|notation|'
-    r'logError|logErrorAt|throwError|throwErrorAt)\b')
+    r'logError|logErrorAt|throwError|throwErrorAt|'
+    r'logAt|logInfo|logInfoAt|logWarning|logWarningAt|logMessage|logUnassignedUsingErrorInfos|'
+    r'throwAppTypeMismatch|throwTypeMismatchError|throwErrorIfErrors|MessageData|toMessageData|'
+    r'command_elab|term_elab|tactic_elab|builtin_command_elab|builtin_term_elab|builtin_tactic|'
+    r'attribute)\b')
+# Attribute application can register an elaborator, a linter or another
+# message-producing extension on an ordinary-looking declaration.
+ATTRIBUTE = re.compile(r'@\[')
+# Message-data interpolation builds compiler-style diagnostics.
+MESSAGE_INTERPOLATION = re.compile(r'(?<!\w)[mf]!')
+# Fixtures may import only modules of this project. The resolved production
+# import closure is checked separately before any fixture is compiled.
+IMPORT_TOKEN = re.compile(r'(?<![\w.\u00ab\u00bb])import(?![\w\u00ab\u00bb])')
+MODULE_HEADER = re.compile(r'(?:^|(?<=[\r\n]))[ \t]*module\b')
+PERMITTED_IMPORT = re.compile(r'import[ \t]+RelationalPerimeter(?:\.[A-Za-z_][A-Za-z_0-9]*)*[ \t]*')
 TACTIC_DIAGNOSTIC = re.compile(r'(?<![\w.])(?:fail|fail_if_success|trace|trace_state|dbg_trace)\b')
 HASH_COMMAND = re.compile(r'#[A-Za-z_][A-Za-z_0-9]*')
 RAW_STRING = re.compile(r'(?<![\w\x27])r(#+)?"')
@@ -122,8 +138,19 @@ def validate_source(source: str, fixture: str) -> None:
     # and on a line already containing a command. Only the two diagnostic
     # commands used by the reviewed fixtures are allowed.
     if (PROHIBITED.search(code) or TACTIC_DIAGNOSTIC.search(code) or INTERPOLATED_STRING.search(code) or
+            ATTRIBUTE.search(code) or MESSAGE_INTERPOLATION.search(code) or MODULE_HEADER.search(code) or
             any(match.group() not in {'#check', '#print'} for match in HASH_COMMAND.finditer(code))):
         raise ValueError(f'{fixture}: executable diagnostic imitation is forbidden')
+    for match in IMPORT_TOKEN.finditer(code):
+        # The whole masked line must be one plain project import starting in
+        # column zero; any other occurrence of the keyword is refused.
+        start = max(code.rfind('\n', 0, match.start()), code.rfind('\r', 0, match.start())) + 1
+        ends = [index for index in (code.find('\n', match.start()), code.find('\r', match.start()))
+                if index != -1]
+        line = code[start:min(ends) if ends else len(code)]
+        if match.start() != start or PERMITTED_IMPORT.fullmatch(line) is None:
+            raise ValueError(f'{fixture}: executable diagnostic imitation is forbidden '
+                             '(only plain project imports are permitted)')
 
 
 def errors(output: str, fixture: str) -> list[dict]:
@@ -162,6 +189,14 @@ def validate_status(status: int, fixture: str) -> None:
         raise ValueError(f'{fixture}: interrupted or timed out ({status})')
 
 
+def load_closure():
+    spec = importlib.util.spec_from_file_location('fixture_import_closure',
+                                                 ROOT / 'scripts/check-fixture-import-closure.py')
+    closure = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(closure)
+    return closure
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--inventory', action='store_true', help='read-only migration: print actual error sites')
@@ -198,9 +233,12 @@ def main() -> None:
         raise ValueError('empty expected-failure inventory')
     if actual != set(entries):
         raise ValueError('uninventoried fixture: ' + ', '.join(sorted(actual - set(entries))))
+    for fixture in entries:
+        validate_source((ROOT / fixture).read_text(encoding='utf-8'), fixture)
+    closure = load_closure()
+    before = closure.check(ROOT, args.lake)
     for fixture, (category, sites, old_needle) in entries.items():
-        source = (ROOT / fixture).read_text(encoding='utf-8')
-        validate_source(source, fixture)
+        closure.unchanged(ROOT, before)
         try:
             run = subprocess.run([args.lake, 'env', 'lean', '--json', fixture], cwd=ROOT,
                                  capture_output=True, text=True, encoding='utf-8', timeout=90)
@@ -226,6 +264,7 @@ def main() -> None:
                 raise ValueError(f'{fixture}: failed for an unexpected reason (diagnostic/site mismatch)')
             pending.pop(found[0])
         print(f'EXPECTED_FAILURE_OK\t{category}\t{fixture}')
+    closure.unchanged(ROOT, before)
     if not args.inventory:
         print(f'Verified expected failures: {len(entries)} fixtures, exact Lean diagnostics and sites, no additional errors.')
 

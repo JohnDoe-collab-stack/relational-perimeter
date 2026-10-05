@@ -94,6 +94,32 @@ def statements(body):
                     cursor += 1
                     no = block()
                 nodes.append(('if', text, yes, no))
+            elif re.match(r'^switch\s*\(', text):
+                # Generated tag dispatch: every alternative is a braced block
+                # which must end by return/goto (no fall-through, checked on
+                # every path). All alternatives are explored, like a branch.
+                if cursor >= len(tokens) or tokens[cursor][0] != '{':
+                    raise ValueError("Unsupported unbraced C switch")
+                cursor += 1
+                alternatives = []
+                while True:
+                    if cursor >= len(tokens):
+                        raise ValueError("Unterminated C switch")
+                    item_kind, item = tokens[cursor]
+                    if item_kind == '}':
+                        cursor += 1
+                        break
+                    if not ((item_kind == 'text' and re.fullmatch(r'case\s+\d+\s*:', item)) or
+                            (item_kind == 'label' and item == 'default')):
+                        raise ValueError("Unsupported C switch alternative: " + item)
+                    cursor += 1
+                    if cursor >= len(tokens) or tokens[cursor][0] != '{':
+                        raise ValueError("Unsupported unbraced C switch alternative")
+                    cursor += 1
+                    alternatives.append(block())
+                if not alternatives:
+                    raise ValueError("Empty C switch")
+                nodes.append(('switch', text, alternatives))
             elif re.match(r'^(switch|for|while|do)\b', text):
                 raise ValueError("Unsupported sensitive C control flow: " + text)
             else:
@@ -206,6 +232,12 @@ class Analysis:
                         no = compile_block(item[3], node)
                         nodes.append(('if', item[1], yes, no))
                         node = len(nodes) - 1
+                    elif item[0] == 'switch':
+                        nodes.append(('fallthrough',))
+                        stop = len(nodes) - 1
+                        successors = [compile_block(alternative, stop) for alternative in item[2]]
+                        nodes.append(('if', item[1], *successors))
+                        node = len(nodes) - 1
                     else:
                         nodes.append(('statement', item[1], node))
                         node = len(nodes) - 1
@@ -236,6 +268,8 @@ class Analysis:
                     return walk(pc, widened, set(), low, high)
                 node = nodes[pc]
                 path = path | {pc}
+                if node[0] == 'fallthrough':
+                    raise ValueError("Unsupported C switch fall-through: " + name)
                 if node[0] == 'if':
                     condition = node[1][node[1].index('(') + 1:-1]
                     _, lo, hi = evaluate(condition, environment)

@@ -219,7 +219,7 @@ theorem request_internal_execution {input : Nat} {master : UnifiedMaster.Instanc
       | some permission => exact ⟨rfl, rfl⟩
 
 /-- Each node is the actual current request, its produced response evidence,
-rich/reduced agreement and actual historical reference transport. -/
+ rich/reduced agreement and engine-reference extension from the master. -/
 inductive Followed {input : Nat} (master : UnifiedMaster.Instance input) :
     Source master → List Request → Type 3 where
   | nil (source : Source master) : Followed master source []
@@ -232,6 +232,7 @@ inductive Followed {input : Nat} (master : UnifiedMaster.Instance input) :
         executeInput (project source) request)
       (requirementExact : (executeInput (project source) request).1.requirement = source.requirement)
       (references : Support.Extension master.cursor.support (sourcePerform source request).1.cursor.support)
+      (referencesExact : references = (sourcePerform source request).1.history.references)
       (stages : FollowedStages master source (requestStageCount source request))
       (stageMemoryExact : project stages.final = (executeInput (project source) request).1)
       (stageEventsExact : stages.events = (executeInput (project source) request).2.productions)
@@ -245,7 +246,7 @@ def all_executed_determinations_followed {input : Nat} (master : UnifiedMaster.I
       .cons (executedEvidence (project source) request) (executed_reply_criterion (project source) request)
         (sourceProduced source request) rfl (sourcePerform_exact source request)
         (executeInput_requirement (project source) request)
-        (sourcePerform source request).1.history.references
+        (sourcePerform source request).1.history.references rfl
         (requestStages master source request)
         ((congrArg Prod.fst (requestStages master source request).execution_exact).trans
           (request_internal_execution source request).1)
@@ -265,10 +266,41 @@ theorem Followed.satisfies {input : Nat} {master : UnifiedMaster.Instance input}
     FiniteResponseCriterion (project source) requests := by
   induction followed with
   | nil source => exact True.intro
-  | cons response criterion rich richExact nextExact requirementExact references stages memoryExact eventsExact tail ih =>
+  | cons response criterion rich richExact nextExact requirementExact references referencesExact stages
+      memoryExact eventsExact tail ih =>
       refine ⟨criterion, ?_⟩
       rw [← congrArg Prod.fst nextExact]
       exact ih
+
+/-- The internal stages carried by the head node of a followed interaction. -/
+def Followed.stages {input : Nat} {master : UnifiedMaster.Instance input}
+    {source : Source master} {request : Request} {rest : List Request} :
+    Followed master source (request :: rest) → FollowedStages master source (requestStageCount source request)
+  | .cons _ _ _ _ _ _ _ _ stages _ _ _ => stages
+
+/-- The engine-reference extension from the master carried by the head node.
+The historical-target support has a separate extension. -/
+def Followed.references {input : Nat} {master : UnifiedMaster.Instance input}
+    {source : Source master} {request : Request} {rest : List Request} :
+    Followed master source (request :: rest) →
+      Support.Extension master.cursor.support (sourcePerform source request).1.cursor.support
+  | .cons _ _ _ _ _ _ references _ _ _ _ _ => references
+
+theorem Followed.references_exact {input : Nat} {master : UnifiedMaster.Instance input}
+    {source : Source master} {request : Request} {rest : List Request}
+    (followed : Followed master source (request :: rest)) :
+    followed.references = (sourcePerform source request).1.history.references := by
+  cases followed with
+  | cons _ _ _ _ _ _ _ referencesExact _ _ _ _ => exact referencesExact
+
+/-- Every internal stage of one request, followed in producer order, is the
+actual worker execution of that request. -/
+theorem request_stages_exact {input : Nat} {master : UnifiedMaster.Instance input}
+    (source : Source master) (request : Request) :
+    (project (requestStages master source request).final, (requestStages master source request).events) =
+      ((executeInput (project source) request).1, (executeInput (project source) request).2.productions) :=
+  (requestStages master source request).execution_exact.trans
+    (Prod.ext (request_internal_execution source request).1 (request_internal_execution source request).2)
 
 theorem all_finite_responses_satisfy {input : Nat} (master : UnifiedMaster.Instance input)
     (source : Source master) (requests : List Request) : FiniteResponseCriterion (project source) requests :=
@@ -349,6 +381,10 @@ structure Certificate {input : Nat} (master : UnifiedMaster.Instance input)
     history.realization.reference one = history.realization.reference two → one = two
   retainedCriterion : ∀ {req register handle var value} (authorization : Authorization req register handle var value),
     GeneratedStructuralBranchAccept authorization.occurrence.1.context authorization.occurrence.1.continuation
+  targetsAccepted : ∀ target : AnswerTarget, GeneratedStructuralBranchAccept target.context target.continuation
+  targetReads : ∀ (target : AnswerTarget) var, target.read var = target.continuation.1 var
+  resumedOrigin : ∀ {memory : LiveContinuation.Memory} (production : LiveContinuation.Production memory),
+    (resumedTarget production).origin = TargetOrigin.resumed production
   cachedObtain : ∀ memory handle var, handle < memory.register.length →
     (executeInput memory (.obtain handle var)).2.productions = []
   replies : ∀ memory request, RequestEvidence memory request (executeInput memory request)
@@ -368,6 +404,14 @@ structure Certificate {input : Nat} (master : UnifiedMaster.Instance input)
     (executeInput memory request).2.message = .refused handle var reason →
       (executeInput memory request).1 = memory
   followed : ∀ profile requests, Followed master (sourceStart master requirement profile) requests
+  followedStages : ∀ profile request rest,
+    (followed profile (request :: rest)).stages = requestStages master (sourceStart master requirement profile) request
+  followedReferences : ∀ profile request rest,
+    (followed profile (request :: rest)).references =
+      (sourcePerform (sourceStart master requirement profile) request).1.history.references
+  internalStages : ∀ (source : Source master) request,
+    (project (requestStages master source request).final, (requestStages master source request).events) =
+      ((executeInput (project source) request).1, (executeInput (project source) request).2.productions)
   satisfaction : ∀ profile requests, FiniteResponseCriterion (start master requirement profile) requests
   entireHead : ∀ memory request rest, executeRequests memory (request :: rest) =
     let head := executeProducedInput memory request
@@ -425,6 +469,9 @@ def certify {input : Nat} (master : UnifiedMaster.Instance input) (requirement :
   historicalPositions := fun _ history => history.realization.advance_position
   historicalDistinctness := fun _ history => history.realization.injective
   retainedCriterion := authorized_target_accepted
+  targetsAccepted := AnswerTarget.accepted
+  targetReads := fun _ _ => rfl
+  resumedOrigin := fun _ => rfl
   cachedObtain := cached_obtain_runs_no_stage
   replies := executedEvidence
   candidateExact := candidate_authorization_exact
@@ -434,6 +481,9 @@ def certify {input : Nat} (master : UnifiedMaster.Instance input) (requirement :
   obtainWork := obtain_work_exact
   refusalsPreserveMemory := refusal_preserves_memory
   followed := fun profile => all_executed_determinations_followed master (sourceStart master requirement profile)
+  followedStages := fun _ _ _ => rfl
+  followedReferences := fun _ _ _ => rfl
+  internalStages := request_stages_exact
   satisfaction := fun profile => all_finite_responses_satisfy master (sourceStart master requirement profile)
   entireHead := executeRequests_head_entire
   futures := all_future_requests_exact master
@@ -478,6 +528,10 @@ end ConstitutiveSearch.Agent
 #print axioms ConstitutiveSearch.Agent.FiniteResponseCriterion
 #print axioms ConstitutiveSearch.Agent.Followed.satisfies
 #print axioms ConstitutiveSearch.Agent.all_finite_responses_satisfy
+#print axioms ConstitutiveSearch.Agent.Followed.stages
+#print axioms ConstitutiveSearch.Agent.Followed.references
+#print axioms ConstitutiveSearch.Agent.Followed.references_exact
+#print axioms ConstitutiveSearch.Agent.request_stages_exact
 #print axioms ConstitutiveSearch.Agent.executeRequests_head_entire
 #print axioms ConstitutiveSearch.Agent.followStages
 #print axioms ConstitutiveSearch.Agent.RequestStages
