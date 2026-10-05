@@ -231,6 +231,7 @@ below.
 
 ## Documents
 
+- [Résultats sur la constitution, le calcul endogène et la persistance de l’alignement](docs/resultats-constitution-calcul-alignement.fr.md)
 - [English presentation](docs/primitive-relations-and-perimeter-constitution.en.md)
 - [Présentation française](docs/relations-primitives-constitution-perimetre.fr.md)
 - [Positioning and scope](docs/positioning-and-scope.en.md)
@@ -307,10 +308,12 @@ bash scripts/verify.sh
 
 Both gates require Python 3, traverse the declared import boundaries, build
 the library, sweep every repository constant (including private declarations),
-check the generated C dependency graph and then compile all 22 expected-failure fixtures listed in the shared
+check the generated C dependency graph and then compile all 23 expected-failure fixtures listed in the shared
 `scripts/expected-failures.tsv` inventory. Unlisted, missing or duplicate fixtures
 fail both gates. Privacy, dependent-type, semantic-type and termination tests
-are reported separately; a termination rejection is not a general causality
+are reported separately. Both gates validate the same structured Lean errors at
+the frozen file, line and column; printed text, unrelated errors and extra errors
+cannot stand in for the intended rejection. A termination rejection is not a general causality
 proof. `python3 scripts/test-expected-failure-gates.py --output /tmp/gate-tests`
 exercises both gates after the build (PowerShell is required). These fixtures verify that the scientific
 certificate and causal-regime constructors remain private, that profiles from
@@ -319,6 +322,14 @@ decision cannot replace the transformed decision, that the projection
 collision remains indexed by the authoritative instruction transport, and
 that an interpreter which ignores an arbitrary raw instruction cannot satisfy
 its semantic output specification.
+
+The interactive agent's initialization certificate links the received scope and
+actual selection code to its memory. Its finite-response certificate derives
+target acceptance from produced origins and follows both engine and historical
+support transports through every internal step. Rich formation remains separate
+from runtime restart memory. The compiled-agent check includes session wrappers
+and transitive closure applications, within its explicitly bounded unfolding
+scope; it is not a general time or physical-memory theorem.
 
 All Lean sources are constructive: they contain no `sorry`, `axiom`, or
 `noncomputable` declaration, and their final axiom-audit blocks report no axiom

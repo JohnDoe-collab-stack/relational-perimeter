@@ -85,6 +85,7 @@ else
 fi
 "${python_command[@]}" scripts/check-unified-codegen.py
 "${python_command[@]}" scripts/check-agent-codegen.py
+"${python_command[@]}" scripts/test-expected-failure-gates.py --policy-only
 
 bash scripts/check-expected-failures.sh
 

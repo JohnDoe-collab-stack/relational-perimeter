@@ -28,6 +28,16 @@ theorem obtain_exact_work (memory : Memory) (handle var : Nat)
 def every_target_has_produced_origin (target : AnswerTarget) :
     TargetOrigin target.root target.context target.continuation := target.origin
 
+theorem every_target_criterion_is_derived (target : AnswerTarget) :
+    ConstitutiveSearch.SAT.GeneratedStructuralBranchAccept target.context target.continuation :=
+  target.origin.accepted
+
+theorem entire_head_is_shared (memory : Memory) (request : Request) (rest : List Request) :
+    executeRequests memory (request :: rest) =
+      let head := executeProducedInput memory request
+      let tail := executeRequests head.1.1 rest
+      (tail.1, head.1.2 :: tail.2) := executeRequests_head_entire memory request rest
+
 theorem refusal_has_no_state_effect (memory : Memory) (request : Request) (handle var : Nat) (reason : Refusal)
     (refused : (executeInput memory request).2.message = .refused handle var reason) :
     (executeInput memory request).1 = memory := refusal_preserves_memory memory request handle var reason refused
@@ -75,6 +85,8 @@ end Tests.ConstitutiveAgentExecution
 #print axioms Tests.ConstitutiveAgentExecution.obtain_exact_size
 #print axioms Tests.ConstitutiveAgentExecution.obtain_exact_work
 #print axioms Tests.ConstitutiveAgentExecution.every_target_has_produced_origin
+#print axioms Tests.ConstitutiveAgentExecution.every_target_criterion_is_derived
+#print axioms Tests.ConstitutiveAgentExecution.entire_head_is_shared
 #print axioms Tests.ConstitutiveAgentExecution.refusal_has_no_state_effect
 #print axioms Tests.ConstitutiveAgentExecution.stable_old_handles
 #print axioms Tests.ConstitutiveAgentExecution.same_head_different_future

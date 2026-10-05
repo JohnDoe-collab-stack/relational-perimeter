@@ -80,6 +80,8 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "compiled-code dependency check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-agent-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled agent dependency check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "test-expected-failure-gates.py") --policy-only
+  if ($LASTEXITCODE -ne 0) { throw "expected-failure policy self-test failed" }
   & (Join-Path $PSScriptRoot "check-expected-failures.ps1")
   if ($LASTEXITCODE -ne 0) { throw "expected-failure check failed" }
 

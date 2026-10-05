@@ -97,9 +97,40 @@ def Prepared.memory {input : Nat} {scope : List Var} {code : List Bool}
     (prepared : Prepared input scope code) : Memory :=
   start prepared.master prepared.requirement prepared.profile
 
+theorem Prepared.prepare_exact {input : Nat} {scope : List Var} {code : List Bool}
+    (prepared : Prepared input scope code) : prepare input scope code = .ok prepared := by
+  rcases prepared with ⟨master, masterExact, requirement, received, profile, decoded⟩
+  cases masterExact
+  dsimp only [prepare]
+  split
+  · rename_i absent
+    cases absent.symm.trans received
+  · rename_i actualRequirement actualReceived
+    have sameRequirement := Option.some.inj (actualReceived.symm.trans received)
+    cases sameRequirement
+    split
+    · rename_i absent
+      cases absent.symm.trans decoded
+    · rename_i actualProfile actualDecoded
+      have sameProfile := Option.some.inj (actualDecoded.symm.trans decoded)
+      cases sameProfile
+      rfl
+
+/-- Initialization and continuation are certified together, but the received
+code and selected profile remain outside the runtime memory. -/
+structure InitializationCertificate {input : Nat} {scope : List Var} {code : List Bool}
+    (prepared : Prepared input scope code) : Type 3 where
+  initialized : prepare input scope code = .ok prepared
+  masterExact : prepared.master = UnifiedMaster.publicInstance input
+  received : receive scope = some prepared.requirement
+  decoded : decodeSelection prepared.master.roles code = some prepared.profile
+  memoryExact : prepared.memory = start prepared.master prepared.requirement prepared.profile
+  continuation : Certificate prepared.master prepared.requirement
+
 def Prepared.certificate {input : Nat} {scope : List Var} {code : List Bool}
-    (prepared : Prepared input scope code) : Certificate prepared.master prepared.requirement :=
-  certify prepared.master prepared.requirement
+    (prepared : Prepared input scope code) : InitializationCertificate prepared :=
+  ⟨prepared.prepare_exact, prepared.masterExact, prepared.received, prepared.decoded, rfl,
+    certify prepared.master prepared.requirement⟩
 
 def initializeAgent (input : Nat) (scope : List Var) (code : List Bool) : Except InitializationRefusal Memory :=
   (prepare input scope code).map Prepared.memory
@@ -138,6 +169,26 @@ theorem Session.executeAll_exact (session : Session) (requests : List Request) :
 
 theorem initialize_empty (input : Nat) (code : List Bool) :
     initializeAgent input [] code = .error .emptyScope := rfl
+
+theorem initialize_invalid_selection (input : Nat) (scope : List Var) (code : List Bool)
+    (requirement : Requirement) (received : receive scope = some requirement)
+    (invalid : decodeSelection (UnifiedMaster.publicInstance input).roles code = none) :
+    initializeAgent input scope code = .error .invalidSelection := by
+  dsimp only [initializeAgent, prepare]
+  split
+  · rename_i absent
+    cases absent.symm.trans received
+  · split
+    · rfl
+    · rename_i profile decoded
+      cases decoded.symm.trans invalid
+
+theorem initialize_wrong_length (input : Nat) (scope : List Var) (code : List Bool)
+    (requirement : Requirement) (received : receive scope = some requirement)
+    (different : code.length ≠ resolutionLength input) :
+    initializeAgent input scope code = .error .invalidSelection :=
+  initialize_invalid_selection input scope code requirement received
+    (wrong_selection_length (UnifiedMaster.publicInstance input).roles code different)
 
 def singletonRequirement (var : Var) : Requirement :=
   (receive [var]).get (by rfl)
@@ -199,6 +250,10 @@ end ConstitutiveSearch.Agent
 #print axioms ConstitutiveSearch.Agent.prepare
 #print axioms ConstitutiveSearch.Agent.Prepared.memory
 #print axioms ConstitutiveSearch.Agent.Prepared.certificate
+#print axioms ConstitutiveSearch.Agent.Prepared.prepare_exact
+#print axioms ConstitutiveSearch.Agent.InitializationCertificate
+#print axioms ConstitutiveSearch.Agent.initialize_invalid_selection
+#print axioms ConstitutiveSearch.Agent.initialize_wrong_length
 #print axioms ConstitutiveSearch.Agent.initializeAgent
 #print axioms ConstitutiveSearch.Agent.publicAgent
 #print axioms ConstitutiveSearch.Agent.Session.ofMaster

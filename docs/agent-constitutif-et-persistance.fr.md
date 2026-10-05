@@ -19,6 +19,13 @@ puis interprète ce code sur ses rôles réellement constitués. Un code de mauv
 longueur et un périmètre vide donnent des refus distincts. Le décodage parcourt
 une histoire de rôles, sans énumérer les profils.
 
+`InitializationCertificate` relie le résultat exact de `prepare` au périmètre
+reçu, au décodage du code réellement fourni et à la mémoire initialisée.
+`Prepared.certificate` réunit ce raccord et le certificat de continuation sur
+le même maître. Le code et le profil décodé restent dans ce paquet scientifique,
+pas dans la mémoire de reprise. Les refus de sélection invalide et de mauvaise
+longueur ont leurs lois publiques.
+
 Le périmètre ne fournit aucune réponse attendue. Il détermine quelles variables
 peuvent être lues, pas celles choisies par la découverte. Deux périmètres peuvent
 donc changer l’autorisation d’une même lecture sans changer sa vérité. Les
@@ -51,6 +58,11 @@ fabrique initiale exige l’accord exact de la cible avec les sorties des rôles
 exécutés ; l’acceptation seule ne permet pas d’y insérer une autre continuation.
 Ce témoin ne conserve pas le choix du profil source normalisé.
 
+L'acceptation de chaque cible est obtenue en éliminant son `TargetOrigin` :
+elle vient de la licence de normalisation ou de la sortie de l'étape reprise.
+`AnswerTarget` ne contient plus une preuve d'acceptation indépendante. Cette
+garantie est ensuite consommée dans le critère de restitution.
+
 Un handle numérique est une adresse locale à la session, pas une occurrence
 constituée à lui seul. Sa résolution construit une référence typée à une cible
 réelle. L’ajout en fin de registre préserve les anciens handles ; les références
@@ -64,6 +76,14 @@ chaque référence du registre à la référence historique qui lit cette cible.
 l’extension du support ; les lectures, l’injectivité des références et le
 décalage de leurs positions sont prouvés séparément. Ce support riche n’est
 pas conservé dans la mémoire runtime.
+
+`HistoricalFormation` suit le support lui-même, avec ses ports et son arbre de
+formation. Seul le couple initial maître/profil est donné. Normalisation,
+curseur, composantes et cibles reprises sont ajoutés par leurs producteurs.
+Un support contenant une référence de cible ne peut pas être déclaré donné
+avec les mêmes valeurs. `MaterialReading` porte cette formation et les lectures
+effectives ; `RichOperation` porte cette lecture et la décision qui en découle.
+Son résultat est éliminé de ces objets, puis raccordé au résultat runtime.
 
 Avec `r` entrées et le handle `h`, lorsque la variable est autorisée et que
 le handle manque, `obtain` produit exactement `h + 1 - r` étapes et le registre
@@ -93,6 +113,14 @@ puis leur accord avec les entrées réduites. `FollowedStages` suit aussi chaque
 étape interne d’une demande ; le certificat ne s’arrête pas aux frontières
 entre demandes.
 
+Chaque `InternalStepAgreement` ferme l'accord avec la production vivante,
+la cible ajoutée et son acceptation. Il contient deux extensions distinctes :
+celle du support courant du moteur et celle du support historique des cibles.
+`FollowedStages.engineTransport` et `historicalTransport` composent ces
+extensions jusqu'au dernier état ; leurs lectures, injectivité et positions
+sont celles des extensions réalisées. Les événements et la mémoire finale du
+suivi sont prouvés égaux à ceux des étapes effectivement exécutées.
+
 Les permissions riches se réfèrent au périmètre reçu ; les permissions runtime
 à sa réalisation portée par les ressources. Leur passage possède les deux lois
 de retour sur les témoins, pas seulement deux implications de validité.
@@ -100,6 +128,12 @@ de retour sur les témoins, pas seulement deux implications de validité.
 La tête utilise seulement la mémoire et la demande courantes. Aucun paramètre
 de demandes futures n’entre dans son producteur. Le certificat ferme son
 exactitude, son indépendance de l’horizon et les accords de la continuation.
+
+`ReplyCriterion` exige, pour une réponse positive, une autorisation et
+l'acceptation de sa cible dans son contexte propre. `FiniteResponseCriterion`
+applique cette exigence à chaque réponse de l'exécuteur réel. Le suivi fini
+implique ce contrat ; le champ `Certificate.satisfaction` consomme cette
+démonstration. Aucune prémisse extérieure d'acceptation n'est demandée au client.
 
 ## Oubli et portée
 
@@ -125,6 +159,26 @@ des profils du chemin de reprise. Le moteur réutilisé construit encore une
 lecture locale de ses deux occurrences après l’action ; cette lecture ne choisit
 pas la découverte. Celle-ci fait l’objet d’un contrôle de dépendances séparé.
 
+Ce contrôle couvre `Session.execute`, `produce` et `executeAll`, ainsi que
+l'initialisation. Il suit les auxiliaires, les alias et les applications de
+fermetures résolues. Les bornes d'appels portent sur une entrée ou un dépliage
+structurel explicite, pas sur une exécution entière de longueur arbitraire.
+Un appel indirect nécessaire non résolu est un échec du contrôle, pas un coût
+nul. Les refus attendus sont vérifiés à partir des diagnostics JSON de Lean,
+avec fichier, ligne, colonne et motif figés ; une erreur supplémentaire ou un
+texte imprimé ne valide pas la fixture.
+
+La politique de source des fixtures exclut aussi les commandes et tactiques
+capables de fabriquer un diagnostic. Elle distingue les littéraux de caractère
+des chaînes et reconnaît les commentaires Lean imbriqués, puis contrôle les
+tokens hors de ces régions, même après un commentaire ou un modificateur.
+Les chaînes interpolées et les formes de caractère non prises en charge sont
+refusées. Ce contrôle restreint ne prétend pas sécuriser du Lean arbitraire.
+Les deux scripts de vérification exécutent automatiquement les 864 cas de la
+matrice lexicale et les contrôles simulés des diagnostics et interruptions.
+La suite complète des deux wrappers se lance séparément avec
+`python scripts/test-expected-failure-gates.py --output <répertoire neuf>`.
+
 ## Déclarations et reproduction
 
 Tous les modules sont accessibles depuis `import RelationalPerimeter`.
@@ -133,6 +187,7 @@ Tous les modules sont accessibles depuis `import RelationalPerimeter`.
 | --- | --- |
 | Formation du périmètre | `receive`, `Requirement.scope_exact` |
 | Codes réellement interprétés | `decode_encode`, `initialized_codes_admitted` |
+| Initialisation certifiée avec son entrée | `InitializationCertificate`, `Prepared.prepare_exact`, `initialize_invalid_selection`, `initialize_wrong_length` |
 | Cibles effectives | `initialTargets`, `resumedTarget`, `executed_step_register_exact` |
 | Réponse et témoin partagés | `performCertified`, `executeProducedInput`, `executedEvidence` |
 | Réponses admises et erronées | `candidate_authorization_exact`, `admitted_inspection_returns`, `correct_candidate_returns`, `incorrect_candidate_refused` |
@@ -140,6 +195,9 @@ Tous les modules sont accessibles depuis `import RelationalPerimeter`.
 | Refus sans modification de mémoire | `refusal_preserves_memory` |
 | Handles et références | `History.realization`, `History.handle_transport`, `RegisterRealization.advance_position`, `RegisterRealization.injective`, `runSteps_old_read` |
 | Lois locales indépendantes | `sourcePerform_exact`, `bridge` |
+| Formation et lecture riches | `HistoricalFormation`, `HistoricalFormation.not_given`, `MaterialReading`, `RichOperation`, `sourceProduced` |
+| Deux transports internes composés | `InternalStepAgreement`, `FollowedStages.engineTransport`, `FollowedStages.historicalTransport`, `FollowedStages.execution_exact` |
+| Critère d'acceptation de toutes les réponses | `ReplyCriterion`, `FiniteResponseCriterion`, `Followed.satisfies`, `Certificate.satisfaction` |
 | Toutes les interactions finies et leurs étapes internes | `FollowedStages`, `all_executed_determinations_followed`, `all_future_requests_exact`, `all_future_events_exact`, `all_future_reads_exact` |
 | Admissions dans les deux sens | `admissions_forward`, `admissions_reflected`, `admission_received_return`, `admission_realized_return` |
 | Mémoire entière et oubli | `agent_memory_factors_through_output`, `initial_profile_not_recoverable`, `forgotten_sources_same_future` |
@@ -163,9 +221,9 @@ positives et les petits contrôles de calculabilité. Le scénario public obtien
 une cible absente, la réutilise sans nouvelle étape et distingue les refus. Ces
 évaluations finies ne sont pas une campagne confirmatoire de complexité.
 
-Vérification locale du 4 octobre 2026 : builds propres réussis, 181 fichiers Lean
-contrôlés par les deux scripts, 23 fixtures d’échec attendu, aucune dépendance
-axiomatique dans les déclarations écrites à la main. Les quatre fondations et le
-manifeste restent inchangés. Il ne s’agit pas d’un nouvel audit indépendant.
+L'audit du commit `f6c6d2c051ae0886056d47cf5357253c137a1319` conclut
+`AGENT TARGET REQUIRES CORRECTIONS` et `NO REGRESSION VERIFIED`. Les raccords
+ci-dessus constituent la correction de ses sept constats ; leur vérification
+locale est distincte d'un nouveau verdict indépendant.
 
 [English version](constitutive-agent-and-persistence.en.md)

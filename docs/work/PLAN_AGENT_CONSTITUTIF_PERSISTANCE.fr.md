@@ -761,6 +761,15 @@ scientifique sera ce paquet fermé ; la transposition à d’autres exigences ou
 
 ## 17. Réalisation locale et vérifications du 4 octobre 2026
 
+Ce bilan est le compte rendu historique de la réalisation initiale. L'audit
+indépendant du commit `f6c6d2c051ae0886056d47cf5357253c137a1319` a ensuite
+conclu `AGENT TARGET REQUIRES CORRECTIONS`, avec `NO REGRESSION VERIFIED` :
+plusieurs garanties décrites ici n'étaient pas encore consommées par leurs
+raccords annoncés. Les sept corrections et leurs contrôles du 5 octobre sont
+consignés dans le [plan de correction](PLAN_CORRECTIONS_AGENT_APRES_AUDIT.fr.md),
+section 16. Ne pas utiliser le présent bilan comme un verdict indépendant
+positif sur l'agent corrigé.
+
 Les cinq lots sont implémentés dans les sept modules annoncés, sans changement
 des quatre fondations ou des énoncés scientifiques antérieurs. L’entrée réelle
 se nomme `initializeAgent` (`initialize` est un mot réservé de Lean) ; le

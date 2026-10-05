@@ -66,6 +66,28 @@ def every_internal_head_followed {input : Nat}
     (source : Source (UnifiedMaster.publicInstance input)) (count : Nat) :
     FollowedStages (UnifiedMaster.publicInstance input) source count := followStages _ count source
 
+theorem all_responses_keep_produced_criterion (input : Nat)
+    (profile : RoleOccurrenceProfile (UnifiedMaster.publicInstance input).roles) (requests : List Request) :
+    FiniteResponseCriterion (start (UnifiedMaster.publicInstance input) (singletonRequirement 0) profile) requests :=
+  (concrete_certificate input).satisfaction profile requests
+
+def every_internal_head_has_two_transports {input : Nat}
+    (source : Source (UnifiedMaster.publicInstance input)) (count : Nat) : InternalStepAgreement source :=
+  (every_internal_head_followed source (count + 1)).head
+
+theorem followed_stages_are_actual_execution {input : Nat}
+    (source : Source (UnifiedMaster.publicInstance input)) (count : Nat) :
+    let followed := every_internal_head_followed source count
+    (project followed.final, followed.events) = runSteps count (project source) :=
+  (every_internal_head_followed source count).execution_exact
+
+theorem historical_support_is_not_declared_given {input : Nat}
+    (profile : RoleOccurrenceProfile (UnifiedMaster.publicInstance input).roles)
+    (history : History (UnifiedMaster.publicInstance input) profile) {target : AnswerTarget}
+    (ref : ConstitutiveSearch.Resources.Ref history.targets target) :
+    history.realization.support.formation ≠ .given history.realization.support.values :=
+  ((concrete_certificate input).historicalFormation profile history).not_given (history.realization.reference ref)
+
 end Tests.ConstitutiveAgentPersistence
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms Tests.ConstitutiveAgentPersistence.distinct_sources_same_complete_memory
@@ -78,4 +100,8 @@ end Tests.ConstitutiveAgentPersistence
 #print axioms Tests.ConstitutiveAgentPersistence.historical_position_moves
 #print axioms Tests.ConstitutiveAgentPersistence.historical_occurrences_do_not_collapse
 #print axioms Tests.ConstitutiveAgentPersistence.every_internal_head_followed
+#print axioms Tests.ConstitutiveAgentPersistence.all_responses_keep_produced_criterion
+#print axioms Tests.ConstitutiveAgentPersistence.every_internal_head_has_two_transports
+#print axioms Tests.ConstitutiveAgentPersistence.followed_stages_are_actual_execution
+#print axioms Tests.ConstitutiveAgentPersistence.historical_support_is_not_declared_given
 /- AXIOM_AUDIT_END -/

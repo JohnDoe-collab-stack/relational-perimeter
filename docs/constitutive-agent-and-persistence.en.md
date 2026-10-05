@@ -19,6 +19,13 @@ that code over its actually constituted roles. A wrong-length code and an empty
 scope yield distinct refusals. Decoding traverses one role history without
 enumerating profiles.
 
+`InitializationCertificate` connects the exact `prepare` result to the received
+scope, decoding of the actual supplied code, and initialized memory.
+`Prepared.certificate` combines this agreement with the continuation certificate
+on the same master. Code and decoded profile remain in this scientific package,
+not in restart memory. Invalid-selection and wrong-length refusals have public
+laws.
+
 The scope supplies no expected answer. It determines which variables may be
 read, not which variables discovery selects. Different scopes may therefore
 change authorization for the same read without changing its truth. Duplicate
@@ -51,6 +58,11 @@ The initial factory requires exact agreement with the executed roles' outputs;
 acceptance alone does not permit inserting another continuation. This witness
 does not retain the normalized source-profile choice.
 
+Each target's acceptance is obtained by eliminating its `TargetOrigin`: it comes
+from the normalization license or the resumed stage output. `AnswerTarget` no
+longer stores an independent acceptance proof. This guarantee is then consumed
+by the reply criterion.
+
 A numeric handle is a session-local address, not a constituted occurrence by
 itself. Resolution constructs a typed reference to an actual target. Appending
 preserves old handles; historical-support references are transported by the real
@@ -62,6 +74,14 @@ register reference to the historical reference reading that target.
 `History.handle_transport` closes the square between register extension and
 support extension; reads, reference injectivity and position shifts are proved
 separately. This rich support is not retained in runtime memory.
+
+`HistoricalFormation` follows the support itself, with its ports and formation
+tree. Only the initial master/profile pair is given. Normalization, cursor,
+components and resumed targets are added by their producers. A support containing
+a target reference cannot be declared given with the same values. `MaterialReading`
+carries this formation and the actual reads; `RichOperation` carries this reading
+and its resulting decision. Its result is eliminated from these objects and then
+connected to the runtime result.
 
 With `r` entries and handle `h`, when the variable is permitted and the handle
 is missing, `obtain` produces exactly `h + 1 - r` stages and the register reaches
@@ -90,6 +110,14 @@ Rich reads and authorizations consume the realized support values and then
 their agreement with the reduced entries. `FollowedStages` also follows every
 internal stage of a request: the certificate does not stop at request boundaries.
 
+Each `InternalStepAgreement` closes agreement with the live production, appended
+target and its acceptance. It contains two distinct extensions: the current
+engine support extension and the historical target support extension.
+`FollowedStages.engineTransport` and `historicalTransport` compose these extensions
+through the last state; their reads, injectivity and positions are those of the
+realized extensions. The followed events and final memory are proved equal to
+those of the actually executed stages.
+
 Rich permissions refer to the received scope; runtime permissions refer to its
 resource-carried realization. Their passage has both return laws on witnesses,
 not merely two validity implications.
@@ -97,6 +125,12 @@ not merely two validity implications.
 The head uses only current memory and request. No future-request parameter
 enters its producer. The certificate closes head exactness, horizon independence
 and continuation agreements.
+
+For a positive reply, `ReplyCriterion` requires authorization and acceptance of
+its target in its own context. `FiniteResponseCriterion` applies this requirement
+to every reply of the real executor. Finite following implies this contract;
+`Certificate.satisfaction` consumes that proof. No external acceptance premise
+is required from the client.
 
 ## Forgetting and scope
 
@@ -122,6 +156,25 @@ from resumption. The reused engine still builds a local readout of its two
 occurrences after the action; this readout does not select discovery. Discovery
 has a separate dependency check.
 
+This check covers `Session.execute`, `produce` and `executeAll`, together with
+initialization. It follows helpers, aliases and resolved closure applications.
+Call bounds concern one entry or one explicit structural unfolding, not a whole
+execution of arbitrary length. An unresolved required indirect call fails the
+check rather than being assigned zero cost. Expected failures are checked using
+Lean JSON diagnostics with frozen file, line, column and characteristic message;
+an extra error or printed text does not validate the fixture.
+
+The fixture-source policy also excludes commands and tactics capable of
+fabricating a diagnostic. It distinguishes character literals from strings
+and recognizes nested Lean comments, then checks tokens outside these regions,
+including after a comment or modifier. Interpolated strings and unsupported
+character forms are rejected. This restricted check does not claim to secure
+arbitrary Lean source.
+Both verification scripts automatically run the 864 lexical matrix cases and
+the simulated diagnostic and interruption checks. The full two-wrapper suite
+is run separately with
+`python scripts/test-expected-failure-gates.py --output <new directory>`.
+
 ## Declarations and reproduction
 
 All modules are reachable from `import RelationalPerimeter`.
@@ -130,6 +183,7 @@ All modules are reachable from `import RelationalPerimeter`.
 | --- | --- |
 | Scope formation | `receive`, `Requirement.scope_exact` |
 | Actually interpreted codes | `decode_encode`, `initialized_codes_admitted` |
+| Initialization certified with its input | `InitializationCertificate`, `Prepared.prepare_exact`, `initialize_invalid_selection`, `initialize_wrong_length` |
 | Actual targets | `initialTargets`, `resumedTarget`, `executed_step_register_exact` |
 | Shared reply and witness | `performCertified`, `executeProducedInput`, `executedEvidence` |
 | Admitted and incorrect replies | `candidate_authorization_exact`, `admitted_inspection_returns`, `correct_candidate_returns`, `incorrect_candidate_refused` |
@@ -137,6 +191,9 @@ All modules are reachable from `import RelationalPerimeter`.
 | Refusal without a memory change | `refusal_preserves_memory` |
 | Handles and references | `History.realization`, `History.handle_transport`, `RegisterRealization.advance_position`, `RegisterRealization.injective`, `runSteps_old_read` |
 | Independent local laws | `sourcePerform_exact`, `bridge` |
+| Rich formation and reading | `HistoricalFormation`, `HistoricalFormation.not_given`, `MaterialReading`, `RichOperation`, `sourceProduced` |
+| Two composed internal transports | `InternalStepAgreement`, `FollowedStages.engineTransport`, `FollowedStages.historicalTransport`, `FollowedStages.execution_exact` |
+| Acceptance criterion for all replies | `ReplyCriterion`, `FiniteResponseCriterion`, `Followed.satisfies`, `Certificate.satisfaction` |
 | All finite interactions and their internal stages | `FollowedStages`, `all_executed_determinations_followed`, `all_future_requests_exact`, `all_future_events_exact`, `all_future_reads_exact` |
 | Two-way admissions | `admissions_forward`, `admissions_reflected`, `admission_received_return`, `admission_realized_return` |
 | Whole memory and forgetting | `agent_memory_factors_through_output`, `initial_profile_not_recoverable`, `forgotten_sources_same_future` |
@@ -160,9 +217,9 @@ and small code-generation checks. The public scenario obtains a missing target,
 reuses it without another stage and distinguishes refusal reasons. These finite
 evaluations are not a confirmatory complexity experiment.
 
-Local verification on 4 October 2026: clean builds passed, both scripts checked
-181 Lean files, all 23 expected-failure fixtures passed, and no handwritten
-declaration depends on an axiom. The four foundations and manifest remain
-unchanged. This is not a new independent audit.
+The audit of commit `f6c6d2c051ae0886056d47cf5357253c137a1319` concludes
+`AGENT TARGET REQUIRES CORRECTIONS` and `NO REGRESSION VERIFIED`. The agreements
+above implement corrections to its seven findings; local verification is
+distinct from a new independent verdict.
 
 [Version française](agent-constitutif-et-persistance.fr.md)
