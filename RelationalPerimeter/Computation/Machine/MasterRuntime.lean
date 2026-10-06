@@ -20,7 +20,6 @@ open SAT EndogenousDecomposition ConnectedFabric ContinuationSignatures
 
 structure Routing where
   sourceWidth : Nat
-  targetWidth : Nat
   circuit : FrontierCircuit
 
 def Routing.apply (routing : Routing) (slot : Nat) (bits : Signals) : Option (Nat × Signals) :=
@@ -35,7 +34,7 @@ structure ProblemMemory (formula : Cnf) where
   routed : Option (Nat × Signals)
 
 def initialProblem (formula : Cnf) (source : VariableMaster.States formula) : ProblemMemory formula :=
-  ⟨source, ⟨source.length, source.length, .identity⟩, none⟩
+  ⟨source, ⟨source.length, .identity⟩, none⟩
 
 /-- A scope-specific production, with no supplied partition or expected width. -/
 structure ScopedProblemProduction (scope : Scope) (formula : Cnf) (selected : Var)
@@ -58,7 +57,7 @@ def ScopedProblemProduction.next {scope : Scope} {formula : Cnf} {selected : Var
     {source : VariableMaster.States formula} (production : ScopedProblemProduction scope formula selected source) :
     ProblemMemory formula :=
   ⟨production.reduction.retained,
-    ⟨production.opening.frontier.length, production.reduction.retained.length, production.configured⟩,
+    ⟨production.opening.frontier.length, production.configured⟩,
     none⟩
 
 def ScopedProblemProduction.preservation {scope : Scope} {formula : Cnf} {selected : Var}

@@ -11,6 +11,13 @@ received SAT contexts. Relation search on those contexts constructs both the
 retained frontier and its routing program. The next memory keeps that frontier:
 the next search therefore reads what the preceding search actually retained.
 
+In this live family, the selector value is determined by depth
+(`LocalAction.selected_exact`). It is not informationally new. The executed
+path nevertheless reads the selector returned by search; it does not replace
+it with an independent depth-based calculation. The connection is directed:
+the live engine supplies the selector to SAT, while the produced SAT frontier
+feeds the next SAT search. No SAT-to-live-engine feedback is asserted here.
+
 The program configures finite gates. Later packets use those gates and routes,
 without restarting SAT relation search or historical assignment readers.
 
@@ -79,8 +86,9 @@ Only the received decision on variable 1 differs.
 
 When that decision is true, search retains one branch, and the circuit routes
 the transformed branch's packet to its retained slot. When it is false,
-both directed searches fail and two branches remain; the circuit preserves
-two slots. Every child is proved viable. Failure of this particular finder
+both directed searches fail and two branches remain; the circuit routes both
+positions. In the concrete example it swaps slot numbers 0 and 1. Every child
+is proved viable. Failure of this particular finder
 does not imply impossibility of every future relation.
 
 The checks also prove that sources remain distinct, later packets use the
@@ -98,6 +106,17 @@ The complete SAT frontier remains in memory because later search reads its
 residual formulas and decisions. The existing live reduction still applies to
 the engine. Minimality under its own contract does not automatically establish
 minimality of the combined memory.
+
+`Tests/Machine/ValidAssignmentForgetting.lean` constructs two valid live states
+whose assignments genuinely differ at variable 1, retaining generation, seed,
+provenance and decisions. The received memories are coherent and have the
+same present observation. Under the permission for variable 2,
+`outside_permission_all_futures` proves equality of every future. Under the
+permission for variable 1, `separating_future` exhibits the distinguishing
+request `[advance]`. `received_distinct` proves that the sources have not been
+identified. These are constructed valid states, not two proved reachable
+prefixes of the public run; this does not characterize minimality of the
+whole combined memory.
 
 Three readings remain distinct:
 
@@ -117,11 +136,54 @@ From the root: `lake build`, then `scripts/verify.ps1` or
 `bash scripts/verify.sh`. Both include
 `scripts/check-integrated-machine-codegen.py`.
 
-The compiled-C check covers named local producer boundaries: one live and one
-SAT production per advance, one opening, normalization and configuration per
-SAT production, and one paired transition per request. It excludes SAT search
+The compiled-C check verifies one live and one SAT production per advance,
+and counts one invocation of their common live search, including alternate
+reduced entry paths. It does not count each candidate as a new production.
+It follows found-result fields into the action, executed code, selector passed
+to SAT and successor installed from the same production. It also checks that
+the SAT frontier and circuit originate in the received opening and reduction.
+
+The three checked runners are `MasterMachine.run`, `LiveReduction.runReduced`
+and `LiveReduction.ConstitutiveExecution.run`. Each nonempty frame uses one
+transition pair for both its event and recursive successor, on the actual
+request tail; an empty frame executes no transition. Gate self-tests protect
+these arguments, not just call counts. The analysis keeps distinct call and
+field origins without unioning branch tags. Unsupported sensitive forms fail
+explicitly. Local summary bodies are checked before use; search kernels and
+finite-list kernels remain explicit boundaries, not free elementary operations.
+Erased formula indices and propositional proofs are checked by Lean, not
+invented as physical C fields.
+
+The analysis does not summarize heap changes made by a helper to a received
+object. It therefore rejects those writes instead of forgetting them on return:
+production results, aliases, subfields, captures, tags and scalars are covered.
+A write through an input alias returned by a helper is also rejected, because
+that alias is not reconnected to the caller's heap.
+Helpers that read their inputs and build a fresh object remain accepted.
+Self-tests include sixteen forbidden writes, two writes through returned
+aliases and a helper injected into the
+compiled runner that replaces the event with `.refused`; rejection is due to
+the write, not a missing symbol. Constructor tags and closure targets remain
+distinct in comparisons of analyzed values. This explicit boundary is not a
+general C heap analysis.
+
+For the integrated advance, a provenance preflight rejects an unrelated
+argument origin without analyzing its entire internal representation. It can
+never establish acceptance on its own: the second pass also expands helpers
+that may write to received objects. An actual-C fixture checks that a large
+helper with an ignored return cannot bypass this second pass.
+
+It excludes SAT search
 and assignment callbacks from configured packet handling. It proves neither
 total physical cost, a global memory bound nor hardware realization.
+
+The inactive `Routing.targetWidth` field is removed: target width remains a
+readout of the retained frontier, not a supplied routing datum. This changes
+the record signature; its local consumers are rebuilt.
+
+After a change, direct checks do not replace freezing the registry's sources
+and evidence. A stale registry must block publication even when builds and
+compiled checks pass.
 
 This is a software runtime with finite circuits represented by constructors,
 not an FPGA or already constructed new hardware. Routing is still structurally

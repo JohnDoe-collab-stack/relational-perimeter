@@ -37,6 +37,7 @@ import Tests.Machine.R4ContractChecks
 import Tests.Machine.R6StatementTypes
 import Tests.Machine.R7StatementTypes
 import Tests.Machine.ReducedLiveChecks
+import Tests.Machine.ValidAssignmentForgetting
 import Tests.Machine.ReducedLiveRunnerChecks
 import Tests.Machine.Run
 import Tests.Machine.RunMachine

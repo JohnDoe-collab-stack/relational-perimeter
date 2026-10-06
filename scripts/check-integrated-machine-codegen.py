@@ -7,8 +7,10 @@ from pathlib import Path
 import re
 import runpy
 import sys
-
 sys.dont_write_bytecode = True
+from integrated_machine_analysis import self_test as flow_self_test
+from integrated_machine_checks import run_checks, self_test_checks, compiled_fixture_tests
+
 ROOT = Path(__file__).resolve().parent.parent
 checks = runpy.run_path(str(ROOT / "scripts/check-variable-master-codegen.py"))
 agent, shared = checks["agent"], checks["shared"]
@@ -17,6 +19,8 @@ agent, shared = checks["agent"], checks["shared"]
 def main():
     agent["self_test"]()
     checks["erased_application_self_test"]()
+    flow_self_test(agent["bodies_with_objects"], agent["parameters"], shared["reachable"])
+    self_test_checks(agent["bodies_with_objects"], agent["parameters"], shared)
     functions, texts, owners = {}, [], {}
     for path in sorted((ROOT / ".lake/build/ir").rglob("*.c")):
         text = path.read_text(encoding="utf-8")
@@ -48,6 +52,17 @@ def main():
         if (low, high) != (1, 1):
             raise ValueError(f"{current}: expected one {target}, found [{low},{high}]")
         print(f"MACHINE_PRODUCER_OK {current}: {target}=[1,1]")
+
+    common = shared["owned_symbol"](functions, params, owners, prefix,
+        "ConstitutiveSearch.EndogenousDecomposition.exploreRecordedCandidates",
+        "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/EndogenousDiscovery.c",
+        "___redArg")
+    analysis = checks["LocalAnalysis"](normalized, params, shared["reachable"], target=common)
+    _, low, high = analysis.run(entry, [agent["Value"]() for _ in params[entry]])
+    if (low, high) != (1, 1):
+        raise ValueError(f"DISCOVERY_MULTIPLICITY: expected one common live discovery, found [{low},{high}]")
+    print("MACHINE_COMMON_DISCOVERY_OK: [1,1], including alternate reduced entry paths")
+    compiled_fixture_tests(run_checks(normalized, params, owners, shared))
 
     runner = symbol("ConstitutiveSearch.MasterMachine.run", "MasterContract")
     perform = symbol("ConstitutiveSearch.MasterMachine.perform", "MasterContract")
