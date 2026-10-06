@@ -10,6 +10,13 @@ import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecompositio
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ProducedProfileContinuation
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate
 import RelationalPerimeter.Agents.Constitutive.PublicInstance
+import RelationalPerimeter.Agents.ContinuationSignatures.PublicCertificate
+import RelationalPerimeter.Agents.ContinuationSignatures.ExistingAgent
+import RelationalPerimeter.Agents.ContinuationSignatures.ReachableAgent
+import RelationalPerimeter.Constitution.Continuation.CostModel
+import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterFutures
+import RelationalPerimeter.Computation.Machine.LiveRoot
+import RelationalPerimeter.Computation.Machine.MasterContract
 
 /-!
 # Relational Perimeter
@@ -71,4 +78,13 @@ construction of endogenous operational decomposition.
 #print axioms ConstitutiveSearch.Agent.certify
 #print axioms ConstitutiveSearch.Agent.all_executed_determinations_followed
 #print axioms ConstitutiveSearch.Agent.initial_profile_not_recoverable
+#print axioms ConstitutiveSearch.EndogenousDecomposition.VariableMaster.execute_erases
+#print axioms ConstitutiveSearch.EndogenousDecomposition.VariableMaster.execute_viable_iff
+#print axioms ConstitutiveSearch.EndogenousDecomposition.VariableMaster.Example.outputs_differ
+#print axioms ConstitutiveSearch.EndogenousDecomposition.VariableMaster.Futures.grouped_all_futures
+#print axioms ConstitutiveSearch.EndogenousDecomposition.VariableMaster.Futures.every_exact_realization_distinguishes
+#print axioms ConstitutiveSearch.MasterMachine.receive
+#print axioms ConstitutiveSearch.MasterMachine.advance_exact
+#print axioms ConstitutiveSearch.MasterMachine.ScopedProblemProduction.route_exact
+#print axioms ConstitutiveSearch.MasterMachine.all_futures_exact
 /- AXIOM_AUDIT_END -/

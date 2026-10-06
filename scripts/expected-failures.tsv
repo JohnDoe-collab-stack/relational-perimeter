@@ -1,24 +1,26 @@
-# fixture	category	expected diagnostic
-Tests/ExpectedFailure/ResourcePortsCannotBePermuted.lean.fail	dependent-type	but is expected to have type
-Tests/ExpectedFailure/PrivateConstitutiveNormalizerCertificate.lean.fail	privacy	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerSuccinctness.mk`
-Tests/ExpectedFailure/PrivateConstitutiveExtensiveSeparationCertificate.lean.fail	privacy	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate.mk`
-Tests/ExpectedFailure/PrivateExecutedCausalNormalization.lean.fail	privacy	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.mk`
-Tests/ExpectedFailure/PrivateExactExecutedOperationalRegime.lean.fail	privacy	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExactExecutedOperationalRegime.mk`
-Tests/ExpectedFailure/PrivateExecutedStageOperationalProduction.lean.fail	privacy	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExecutedStageOperationalProduction.mk`
-Tests/ExpectedFailure/DiscoveredTransportCannotReplaceAuthoritativeInstruction.lean.fail	dependent-type	but is expected to have type
-Tests/ExpectedFailure/InstructionIgnoringInterpreterCannotMeetSemanticSpecification.lean.fail	semantic-type	Not a definitional equality
-Tests/ExpectedFailure/ForeignInstructionProfileCannotBeReused.lean.fail	dependent-type	Not a definitional equality
-Tests/ExpectedFailure/RetainedDecisionCannotReplaceTransformedDecision.lean.fail	dependent-type	but is expected to have type
-Tests/ExpectedFailure/SourceIgnoringNormalizationCannotSupplyTrace.lean.fail	dependent-type	ExecutedRoleProfileReduction reduction _source (normalization.target chosen)
-Tests/ExpectedFailure/PrescribedTargetCannotRecoverTraceAfterwards.lean.fail	dependent-type	ExecutedRoleProfileReduction reduction source prescribed
-Tests/ExpectedFailure/IndependentUnitRegimeCannotReplaceExecutedRegime.lean.fail	dependent-type	is not definitionally equal to the right-hand side
-Tests/ExpectedFailure/PrivateActionProducedOperationalTarget.lean.fail	privacy	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ActionProducedOperationalTarget.mk`
-Tests/ExpectedFailure/PrivateExactCausalExponentialTarget.lean.fail	privacy	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExactCausalExponentialTarget.mk`
-Tests/ExpectedFailure/CanonicalSampleCannotPrescribeAction.lean.fail	semantic-type	Type mismatch
-Tests/ExpectedFailure/FutureCannotProduceOwnHead.lean.fail	termination	fail to show termination for
-Tests/ExpectedFailure/MissingImageConstitution.lean.fail	semantic-type	Type mismatch
-Tests/ExpectedFailure/MissingImagePreservation.lean.fail	semantic-type	Type mismatch
-Tests/ExpectedFailure/RootCannotReplaceProducedTail.lean.fail	dependent-type	Application type mismatch
-Tests/ExpectedFailure/MasterCannotUseUnexecutedHistory.lean.fail	semantic-type	replacement = MasterResources.execute
-Tests/ExpectedFailure/MasterCheckpointCannotPrescribeOutput.lean.fail	semantic-type	(master.checkpoint profile).output = prescribed
-Tests/ExpectedFailure/AcceptedTargetCannotReplaceProducedOutput.lean.fail	dependent-type	target = retainedExecutedOperationalTargetProfile reduction → List AnswerTarget
+# fixture	category	line	column	expected Lean JSON error diagnostic
+Tests/ExpectedFailure/ResourcePortsCannotBePermuted.lean.fail	dependent-type	12	13	applyStage fresh
+Tests/ExpectedFailure/PrivateConstitutiveNormalizerCertificate.lean.fail	privacy	6	7	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerSuccinctness.mk`
+Tests/ExpectedFailure/PrivateConstitutiveExtensiveSeparationCertificate.lean.fail	privacy	8	7	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate.mk`
+Tests/ExpectedFailure/PrivateExecutedCausalNormalization.lean.fail	privacy	7	7	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExecutedCausalNormalization.mk`
+Tests/ExpectedFailure/PrivateExactExecutedOperationalRegime.lean.fail	privacy	7	7	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExactExecutedOperationalRegime.mk`
+Tests/ExpectedFailure/PrivateExecutedStageOperationalProduction.lean.fail	privacy	7	7	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExecutedStageOperationalProduction.mk`
+Tests/ExpectedFailure/DiscoveredTransportCannotReplaceAuthoritativeInstruction.lean.fail	dependent-type	20	2	(ExecutedExtensionalSeparator.executedTransportAction run) (ExecutedExtensionalSeparator.discoveredTransport run)
+Tests/ExpectedFailure/InstructionIgnoringInterpreterCannotMeetSemanticSpecification.lean.fail	semantic-type	19	0	(instructionIgnoringInterpreter run first second payload).val
+Tests/ExpectedFailure/InstructionIgnoringInterpreterCannotMeetSemanticSpecification.lean.fail	semantic-type	30	2	(instructionIgnoringInterpreter run first second payload).val =
+Tests/ExpectedFailure/ForeignInstructionProfileCannotBeReused.lean.fail	dependent-type	10	0	(ConstitutiveNormalizerProgram.step headRole second tail).Profile
+Tests/ExpectedFailure/ForeignInstructionProfileCannotBeReused.lean.fail	dependent-type	25	2	(ConstitutiveNormalizerProgram.step headRole first tail).Profile =
+Tests/ExpectedFailure/RetainedDecisionCannotReplaceTransformedDecision.lean.fail	dependent-type	20	2	ExecutedRoleOccurrenceDecision license license.transformedOccurrence
+Tests/ExpectedFailure/SourceIgnoringNormalizationCannotSupplyTrace.lean.fail	dependent-type	18	17	ExecutedRoleProfileReduction reduction _source (normalization.target chosen)
+Tests/ExpectedFailure/PrescribedTargetCannotRecoverTraceAfterwards.lean.fail	dependent-type	17	16	ExecutedRoleProfileReduction reduction source prescribed
+Tests/ExpectedFailure/IndependentUnitRegimeCannotReplaceExecutedRegime.lean.fail	dependent-type	35	2	independentUnitRegime input = executedConstitutiveObligationRegime input
+Tests/ExpectedFailure/PrivateActionProducedOperationalTarget.lean.fail	privacy	7	7	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ActionProducedOperationalTarget.mk`
+Tests/ExpectedFailure/PrivateExactCausalExponentialTarget.lean.fail	privacy	7	7	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ExactCausalExponentialTarget.mk`
+Tests/ExpectedFailure/CanonicalSampleCannotPrescribeAction.lean.fail	semantic-type	7	71	description.action source payload = description.produced source
+Tests/ExpectedFailure/FutureCannotProduceOwnHead.lean.fail	termination	5	6	fail to show termination for
+Tests/ExpectedFailure/MissingImageConstitution.lean.fail	semantic-type	3	69	description.SourceInvariant
+Tests/ExpectedFailure/MissingImagePreservation.lean.fail	semantic-type	5	68	description.TargetAccept (description.action source payload)
+Tests/ExpectedFailure/RootCannotReplaceProducedTail.lean.fail	dependent-type	9	44	CausalOperationalExecutionHistory head.run.nextRun.next head.production.nextContext
+Tests/ExpectedFailure/MasterCannotUseUnexecutedHistory.lean.fail	semantic-type	16	19	replacement = MasterResources.execute
+Tests/ExpectedFailure/MasterCheckpointCannotPrescribeOutput.lean.fail	semantic-type	7	55	(master.checkpoint profile).output = prescribed
+Tests/ExpectedFailure/AcceptedTargetCannotReplaceProducedOutput.lean.fail	dependent-type	13	2	target = retainedExecutedOperationalTargetProfile reduction → List AnswerTarget

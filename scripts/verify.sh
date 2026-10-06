@@ -85,6 +85,9 @@ else
 fi
 "${python_command[@]}" scripts/check-unified-codegen.py
 "${python_command[@]}" scripts/check-agent-codegen.py
+"${python_command[@]}" scripts/check-continuation-signature-codegen.py
+"${python_command[@]}" scripts/check-variable-master-codegen.py
+"${python_command[@]}" scripts/check-integrated-machine-codegen.py
 
 bash scripts/check-expected-failures.sh
 

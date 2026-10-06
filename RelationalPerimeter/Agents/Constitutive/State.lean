@@ -131,31 +131,80 @@ def followingCursorProducer {cursor : MasterResources.Cursor} {kinds : List Hist
   outputKind := fun _ => .cursor
   operation := fun args => args.1.next
 
+/-- A formation of this historical support, not a certificate of its values
+alone. Only the initial master/profile is given; every other resource is the
+output of the indicated producer reading earlier typed ports. -/
+inductive HistoricalFormation : {kinds : List HistoricalKind} →
+    Support HistoricalValue kinds → Type 3 where
+  | initial {input : Nat} (master : UnifiedMaster.Instance input)
+      (profile : RoleOccurrenceProfile master.roles) :
+      HistoricalFormation (Support.given (Value := HistoricalValue)
+        (context := [.initialization input]) ((⟨master, profile⟩), PUnit.unit))
+  | normalized {kinds} {support : Support HistoricalValue kinds}
+      (prior : HistoricalFormation support) {input : Nat}
+      (port : Ref kinds (.initialization input)) :
+      HistoricalFormation (support.extend (normalizationProducer port))
+  | cursored {kinds} {support : Support HistoricalValue kinds}
+      (prior : HistoricalFormation support) {input : Nat}
+      (port : Ref kinds (.initialization input)) :
+      HistoricalFormation (support.extend (initialCursorProducer port))
+  | component {kinds} {support : Support HistoricalValue kinds}
+      (prior : HistoricalFormation support) {register : List AnswerTarget}
+      (port : Ref kinds (.bundle register)) {target : AnswerTarget}
+      (component : Ref register target) :
+      HistoricalFormation (support.extend (componentProducer port component))
+  | production {kinds} {support : Support HistoricalValue kinds}
+      (prior : HistoricalFormation support) (port : Ref kinds .cursor) :
+      HistoricalFormation (support.extend (historicalProductionProducer port))
+  | answered {kinds} {support : Support HistoricalValue kinds}
+      (prior : HistoricalFormation support) {cursor : MasterResources.Cursor}
+      (port : Ref kinds (.production cursor)) :
+      HistoricalFormation (support.extend (producedTargetProducer port))
+  | continued {kinds} {support : Support HistoricalValue kinds}
+      (prior : HistoricalFormation support) {cursor : MasterResources.Cursor}
+      (port : Ref kinds (.production cursor)) :
+      HistoricalFormation (support.extend (followingCursorProducer port))
+
 structure RegisterRealization (register : List AnswerTarget) (cursor : MasterResources.Cursor) : Type 3 where
   private mk ::
   kinds : List HistoricalKind
   support : Support HistoricalValue kinds
+  formation : HistoricalFormation support
   cursorRef : Ref kinds .cursor
   cursorExact : support.read cursorRef = cursor
   reference : {target : AnswerTarget} → Ref register target → Ref kinds .target
   reads : ∀ {target} (ref : Ref register target), support.read (reference ref) = target
   injective : ∀ {target} (one two : Ref register target), reference one = reference two → one = two
 
+theorem HistoricalFormation.not_given {kinds : List HistoricalKind}
+    {support : Support HistoricalValue kinds} (formation : HistoricalFormation support)
+    (target : Ref kinds .target) : support.formation ≠ .given support.values := by
+  intro same
+  cases formation with
+  | initial master profile => cases target <;> contradiction
+  | normalized prior port => cases same
+  | cursored prior port => cases same
+  | component prior port component => cases same
+  | production prior port => cases same
+  | answered prior port => cases same
+  | continued prior port => cases same
+
 /- Install tail first, then produce the head from its material bundle port.
 This returns the actual extension of the input support alongside the rows. -/
 def installTargets {all : List AnswerTarget} :
     (register : List AnswerTarget) → {kinds : List HistoricalKind} →
-    (support : Support HistoricalValue kinds) → (bundle : Ref kinds (.bundle all)) →
+    (support : Support HistoricalValue kinds) → HistoricalFormation support →
+    (bundle : Ref kinds (.bundle all)) →
     ({target : AnswerTarget} → Ref register target → Ref all target) →
     (cursorRef : Ref kinds .cursor) →
     (realization : RegisterRealization register (support.read cursorRef)) ×
       Support.Extension support realization.support
-  | [], _, support, _, _, cursorRef =>
-      ⟨⟨_, support, cursorRef, rfl, (fun ref => nomatch ref), (fun ref => nomatch ref),
+  | [], _, support, formation, _, _, cursorRef =>
+      ⟨⟨_, support, formation, cursorRef, rfl, (fun ref => nomatch ref), (fun ref => nomatch ref),
           (fun ref => nomatch ref)⟩,
         .identity support⟩
-  | target :: rest, _, support, bundle, select, cursorRef =>
-      let tail := installTargets rest support bundle (fun ref => select (.prior ref)) cursorRef
+  | target :: rest, _, support, formation, bundle, select, cursorRef =>
+      let tail := installTargets rest support formation bundle (fun ref => select (.prior ref)) cursorRef
       let producer := componentProducer (tail.2.references bundle) (select .here)
       let formed := tail.1.support.extend producer
       let transport := Support.Extension.produced tail.1.support producer
@@ -182,7 +231,8 @@ def installTargets {all : List AnswerTarget} :
           | prior second =>
               exact congrArg Ref.prior (tail.1.injective first second
                 (transport.injective _ _ same))
-      ⟨⟨_, formed, transport.references tail.1.cursorRef,
+      ⟨⟨_, formed, .component tail.1.formation (tail.2.references bundle) (select .here),
+          transport.references tail.1.cursorRef,
           (transport.reads tail.1.cursorRef).trans tail.1.cursorExact, reference, reads, injective⟩,
         tail.2.compose transport⟩
 
@@ -192,7 +242,9 @@ def initialRegisterRealization {input : Nat} (master : UnifiedMaster.Instance in
   let initial : Support HistoricalValue [.initialization input] := .given ((⟨master, profile⟩), PUnit.unit)
   let normalized := initial.extend (normalizationProducer .here)
   let cursored := normalized.extend (initialCursorProducer (.prior .here))
-  (installTargets (normalizedRegister master profile) cursored (.prior .here) id .here).1
+  (installTargets (normalizedRegister master profile) cursored
+    (.cursored (.normalized (.initial master profile) .here) (.prior .here))
+    (.prior .here) id .here).1
 
 def appendReference {register : List AnswerTarget} {target : AnswerTarget} {kinds : List HistoricalKind}
     (old : {item : AnswerTarget} → Ref register item → Ref kinds .target)
@@ -306,7 +358,9 @@ def RegisterRealization.advance {register : List AnswerTarget} {cursor : MasterR
     change Ref.prior (Ref.prior (Ref.prior (old.reference ref))) = Ref.prior Ref.here at same
     have impossible := prior_injective _ _ same
     cases impossible
-  ⟨⟨_, continued, .here, (produced.read actual).next_exact,
+  ⟨⟨_, continued,
+      .continued (.answered (.production old.formation old.cursorRef) actual) (.prior actual),
+      .here, (produced.read actual).next_exact,
       appendReference oldReference newReference,
       appendReference_reads continued oldReference newReference oldReads newRead,
       appendReference_injective oldReference newReference oldInjective apart⟩, transport⟩
@@ -338,9 +392,39 @@ theorem gatherTargets_exact : ∀ (register : List AnswerTarget)
           (congrArg (List.cons head)
             (gatherTargets_exact rest (fun ref => reader (.prior ref)) (fun ref => exactRead (.prior ref))))
 
+/-- A reading of a formed support. Its value is fixed by the actual typed
+references, not supplied by the projected register. The formation is retained
+on this scientific side, never on the runtime restart path. -/
+structure MaterialReading {register : List AnswerTarget} {cursor : MasterResources.Cursor}
+    (realization : RegisterRealization register cursor) : Type 3 where
+  formation : HistoricalFormation realization.support
+  formationExact : formation = realization.formation
+  references : {target : AnswerTarget} → Ref register target → Ref realization.kinds .target
+  referencesExact : ∀ {target} (ref : Ref register target), references ref = realization.reference ref
+
+def MaterialReading.values {register : List AnswerTarget} {cursor : MasterResources.Cursor}
+    {realization : RegisterRealization register cursor} (reading : MaterialReading realization) :
+    List AnswerTarget :=
+  gatherTargets register (fun ref => realization.support.read (reading.references ref))
+
+theorem MaterialReading.reads {register : List AnswerTarget} {cursor : MasterResources.Cursor}
+    {realization : RegisterRealization register cursor} (reading : MaterialReading realization)
+    {target : AnswerTarget} (reference : Ref register target) :
+    realization.support.read (reading.references reference) = target :=
+  (congrArg realization.support.read (reading.referencesExact reference)).trans (realization.reads reference)
+
+theorem MaterialReading.values_exact {register : List AnswerTarget} {cursor : MasterResources.Cursor}
+    {realization : RegisterRealization register cursor} (reading : MaterialReading realization) :
+    reading.values = register := gatherTargets_exact _ _ reading.reads
+
+def RegisterRealization.materialReading {register : List AnswerTarget} {cursor : MasterResources.Cursor}
+    (realization : RegisterRealization register cursor) : MaterialReading realization :=
+  ⟨realization.formation, rfl,
+    realization.reference, fun _ => rfl⟩
+
 def RegisterRealization.materialRegister {register : List AnswerTarget} {cursor : MasterResources.Cursor}
     (realization : RegisterRealization register cursor) : List AnswerTarget :=
-  gatherTargets register (fun ref => realization.support.read (realization.reference ref))
+  realization.materialReading.values
 
 theorem RegisterRealization.materialRegister_exact {register : List AnswerTarget}
     {cursor : MasterResources.Cursor} (realization : RegisterRealization register cursor) :
@@ -454,6 +538,8 @@ end ConstitutiveSearch.Agent
 #print axioms ConstitutiveSearch.Agent.producedTargetProducer
 #print axioms ConstitutiveSearch.Agent.followingCursorProducer
 #print axioms ConstitutiveSearch.Agent.RegisterRealization
+#print axioms ConstitutiveSearch.Agent.HistoricalFormation
+#print axioms ConstitutiveSearch.Agent.HistoricalFormation.not_given
 #print axioms ConstitutiveSearch.Agent.installTargets
 #print axioms ConstitutiveSearch.Agent.initialRegisterRealization
 #print axioms ConstitutiveSearch.Agent.appendReference
@@ -465,6 +551,11 @@ end ConstitutiveSearch.Agent
 #print axioms ConstitutiveSearch.Agent.RegisterRealization.advance_old
 #print axioms ConstitutiveSearch.Agent.RegisterRealization.advance_position
 #print axioms ConstitutiveSearch.Agent.RegisterRealization.materialRegister
+#print axioms ConstitutiveSearch.Agent.MaterialReading
+#print axioms ConstitutiveSearch.Agent.MaterialReading.values
+#print axioms ConstitutiveSearch.Agent.MaterialReading.reads
+#print axioms ConstitutiveSearch.Agent.MaterialReading.values_exact
+#print axioms ConstitutiveSearch.Agent.RegisterRealization.materialReading
 #print axioms ConstitutiveSearch.Agent.RegisterRealization.materialRegister_exact
 #print axioms ConstitutiveSearch.Agent.gatherTargets
 #print axioms ConstitutiveSearch.Agent.gatherTargets_exact

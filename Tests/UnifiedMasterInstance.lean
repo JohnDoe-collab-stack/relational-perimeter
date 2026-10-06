@@ -102,17 +102,17 @@ theorem actual_growth_composes (input first second : Nat)
   UnifiedMaster.public_growth_composes input first second p
 
 theorem actual_growth_count {input extra : Nat} (master : UnifiedMaster.Instance input)
-    (growth : UnifiedMaster.Growth master.execution master.cursor master.endpoint_exact extra) :
+    (growth : UnifiedMaster.Growth master.origin master.execution master.cursor master.endpoint_exact extra) :
     growth.grown.count = resolutionLength input + extra := growth.count_exact
 
 theorem actual_resource_reads {input extra : Nat} (master : UnifiedMaster.Instance input)
-    (growth : UnifiedMaster.Growth master.execution master.cursor master.endpoint_exact extra)
+    (growth : UnifiedMaster.Growth master.origin master.execution master.cursor master.endpoint_exact extra)
     {kind : MasterResources.Kind} (ref : Resources.Ref master.origin.kinds kind) :
     growth.suffix.finish.support.read ((master.referencesThrough growth).references ref) =
       master.origin.support.read ref := master.referencesThrough_read growth ref
 
 theorem actual_resource_distinction {input extra : Nat} (master : UnifiedMaster.Instance input)
-    (growth : UnifiedMaster.Growth master.execution master.cursor master.endpoint_exact extra)
+    (growth : UnifiedMaster.Growth master.origin master.execution master.cursor master.endpoint_exact extra)
     {kind : MasterResources.Kind} (first second : Resources.Ref master.origin.kinds kind)
     (same : (master.referencesThrough growth).references first =
       (master.referencesThrough growth).references second) : first = second :=
@@ -122,9 +122,10 @@ theorem actual_resource_composition {depth count extra more : Nat}
     {assignment : SequentialAssignment depth} {state : ThreadedConstitutiveState depth assignment}
     {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
     {old : CausalOperationalExecutionHistory (_count := count) state context}
+    {origin : MasterResources.Cursor}
     {cursor : MasterResources.Cursor} {boundary : cursor.boundary = MasterResources.endpoint old}
-    (one : UnifiedMaster.Growth old cursor boundary extra)
-    (two : UnifiedMaster.Growth one.grown.history one.suffix.finish one.endpoint_exact more)
+    (one : UnifiedMaster.Growth origin old cursor boundary extra)
+    (two : UnifiedMaster.Growth origin one.grown.history one.suffix.finish one.endpoint_exact more)
     {kind : MasterResources.Kind} (ref : Resources.Ref cursor.kinds kind) :
     (one.referencesThrough two).references ref =
       two.suffix.references.references (one.suffix.references.references ref) := rfl
@@ -204,6 +205,131 @@ theorem certified_growth {input : Nat} (certificate : UnifiedMaster.Certificate 
       (MasterResources.executeWithReferences (extra + resolutionLength input) certificate.master.origin).history :=
   certificate.facts.growthOneRun extra
 
+theorem certified_advance {input : Nat} (certificate : UnifiedMaster.Certificate input)
+    (p : RoleOccurrenceProfile certificate.master.roles) (steps : Nat) :
+    Nonempty (ProducedContinuation.allow (certificate.master.checkpoint p) (.advance steps)) :=
+  certificate.facts.advanceAdmission p steps
+
+theorem certified_source_advance {input : Nat} (certificate : UnifiedMaster.Certificate input)
+    (p : RoleOccurrenceProfile certificate.master.roles) (steps : Nat) :
+    Nonempty (ProducedContinuation.allow
+      (ProducedContinuation.project (certificate.master.source p)) (.advance steps)) :=
+  certificate.facts.sourceAdvanceAdmission p steps
+
+theorem certified_request_admission {input : Nat} (certificate : UnifiedMaster.Certificate input)
+    (p : RoleOccurrenceProfile certificate.master.roles)
+    (requests : List (ProducedContinuation.Input certificate.master.normalization)) :
+    Nonempty (Continuation.Admitted ProducedContinuation.sourceNext
+      (fun source input => ProducedContinuation.allow (ProducedContinuation.project source) input)
+      (certificate.master.source p) requests) ↔
+    Nonempty (Continuation.Admitted ProducedContinuation.next ProducedContinuation.allow
+      (certificate.master.checkpoint p) requests) := certificate.facts.requestAdmission p requests
+
+theorem certified_source_admission_return {input : Nat} (certificate : UnifiedMaster.Certificate input)
+    (p : RoleOccurrenceProfile certificate.master.roles) {requests}
+    (witness : Continuation.Admitted ProducedContinuation.sourceNext
+      (fun source input => ProducedContinuation.allow (ProducedContinuation.project source) input)
+      (certificate.master.source p) requests) :
+    ProducedContinuation.all_requests_reflected (certificate.master.source p)
+      (ProducedContinuation.all_requests_admitted (certificate.master.source p) witness) = witness :=
+  certificate.facts.sourceAdmissionReturn p witness
+
+theorem certified_memory_admission_return {input : Nat} (certificate : UnifiedMaster.Certificate input)
+    (p : RoleOccurrenceProfile certificate.master.roles) {requests}
+    (witness : Continuation.Admitted ProducedContinuation.next ProducedContinuation.allow
+      (certificate.master.checkpoint p) requests) :
+    ProducedContinuation.all_requests_admitted (certificate.master.source p)
+      (ProducedContinuation.all_requests_reflected (certificate.master.source p) witness) = witness :=
+  certificate.facts.memoryAdmissionReturn p witness
+
+theorem certified_references_injective {input : Nat} (certificate : UnifiedMaster.Certificate input)
+    {kind : MasterResources.Kind} (first second : Resources.Ref certificate.master.origin.kinds kind)
+    (same : certificate.master.references.references first = certificate.master.references.references second) :
+    first = second := certificate.facts.referencesInjective first second same
+
+theorem certified_growth_injective {input extra : Nat} (certificate : UnifiedMaster.Certificate input)
+    (one : UnifiedMaster.Growth certificate.master.origin certificate.master.execution
+      certificate.master.cursor certificate.master.endpoint_exact extra)
+    {kind : MasterResources.Kind} (first second : Resources.Ref certificate.master.origin.kinds kind)
+    (same : (certificate.master.referencesThrough one).references first =
+      (certificate.master.referencesThrough one).references second) : first = second :=
+  certificate.facts.growthReferencesInjective one first second same
+
+theorem certified_composition {input extra more : Nat} (certificate : UnifiedMaster.Certificate input)
+    (one : UnifiedMaster.Growth certificate.master.origin certificate.master.execution
+      certificate.master.cursor certificate.master.endpoint_exact extra)
+    (two : UnifiedMaster.Growth certificate.master.origin one.grown.history
+      one.suffix.finish one.endpoint_exact more)
+    {kind : MasterResources.Kind} (ref : Resources.Ref certificate.master.origin.kinds kind)
+    (profile : RoleOccurrenceProfile certificate.master.roles)
+    (obligation : Extension.Obligation (CertifiedRoleGrouping.rules certificate.master.statuses)) :
+    (certificate.master.references.compose (one.referencesThrough two)).references ref =
+      two.suffix.references.references ((certificate.master.referencesThrough one).references ref) ∧
+    two.suffix.finish.support.read
+      ((certificate.master.references.compose (one.referencesThrough two)).references ref) =
+      certificate.master.origin.support.read ref ∧
+    (one.grown.historical.compose two.grown.historical).embedding profile =
+      two.grown.historical.embedding (one.grown.historical.embedding profile) ∧
+    (one.grown.historical.compose two.grown.historical).extension.obligation obligation =
+      two.grown.historical.extension.obligation (one.grown.historical.extension.obligation obligation) :=
+  ⟨certificate.facts.growthReferencesCompose one two ref,
+    certificate.facts.growthComposedReads one two ref,
+    certificate.facts.growthProfilesCompose one two profile,
+    certificate.facts.growthObligationsCompose one two obligation⟩
+
+/-- A different resource origin is legitimate only under its own index. -/
+def produced_prefix (count : Nat) (origin : MasterResources.Cursor) :
+    MasterResources.ProducedPrefix origin
+      (MasterResources.executeWithReferences count origin).history
+      (MasterResources.executeWithReferences count origin).finish := ⟨rfl, HEq.rfl, rfl⟩
+
+def preloaded_origin (origin : MasterResources.Cursor) : MasterResources.Cursor :=
+  let support := origin.support.extend (MasterResources.discover origin.source)
+  ⟨origin.depth, origin.assignment, _, support, .prior origin.source,
+    .prior origin.past, .prior origin.fresh⟩
+
+theorem preloaded_boundary (origin : MasterResources.Cursor) :
+    (preloaded_origin origin).boundary = origin.boundary := rfl
+
+theorem preloaded_origin_distinct (origin : MasterResources.Cursor) :
+    preloaded_origin origin ≠ origin := by
+  intro same
+  have lengths := congrArg (fun cursor : MasterResources.Cursor => cursor.kinds.length) same
+  exact Nat.ne_of_gt (Nat.lt_succ_self origin.kinds.length) lengths
+
+theorem foreign_zero_prefix_rejected (origin : MasterResources.Cursor) :
+    ¬ Nonempty (MasterResources.ProducedPrefix origin
+      (MasterResources.executeWithReferences 0 origin).history (preloaded_origin origin)) := by
+  intro witness
+  cases witness with
+  | intro produced => exact preloaded_origin_distinct origin produced.cursorExact
+
+private theorem cancel_resource_suffix : (suffix first second : Nat) →
+    first + suffix = second + suffix → first = second
+  | 0, _, _, same => same
+  | suffix + 1, first, second, same =>
+      cancel_resource_suffix suffix first second (congrArg Nat.pred same)
+
+theorem foreign_prefix_rejected (origin : MasterResources.Cursor) (count : Nat) :
+    ¬ Nonempty (MasterResources.ProducedPrefix origin
+      (MasterResources.executeWithReferences count origin).history
+      (MasterResources.executeWithReferences count (preloaded_origin origin)).finish) := by
+  intro witness
+  cases witness with
+  | intro produced =>
+    have lengths := congrArg (fun cursor : MasterResources.Cursor => cursor.kinds.length) produced.cursorExact
+    rw [MasterResources.execute_finish_resource_length,
+      MasterResources.execute_finish_resource_length] at lengths
+    change origin.kinds.length + 1 + 7 * count = origin.kinds.length + 7 * count at lengths
+    exact Nat.ne_of_gt (Nat.lt_succ_self origin.kinds.length)
+      (cancel_resource_suffix (7 * count) _ _ lengths)
+
+def preloaded_growth (origin : MasterResources.Cursor) (count extra : Nat) :=
+  let start := preloaded_origin origin
+  let execution := MasterResources.executeWithReferences count start
+  UnifiedMaster.resource_history_extension start execution.history execution.finish
+    (MasterResources.executeWithReferences_endpoint count start).symm extra (produced_prefix count start)
+
 theorem growth_keeps_produced_cursor {input : Nat} (master : UnifiedMaster.Instance input) (extra : Nat) :
     (master.grow extra).suffix.finish =
       (MasterResources.executeWithReferences (master.grow extra).grown.count
@@ -219,6 +345,8 @@ theorem growth_keeps_produced_cursor {input : Nat} (master : UnifiedMaster.Insta
 #guard actual_growth.suffix.finish.depth == 2
 #guard actual_growth_twice.grown.count == 3
 #guard actual_growth_twice.suffix.finish.depth == 3
+#guard (preloaded_growth (ProducedContinuation.publicOrigin 0) 0 0).grown.count == 0
+#guard (preloaded_growth (ProducedContinuation.publicOrigin 0) 0 1).grown.count == 1
 
 end UnifiedMasterTests
 /- AXIOM_AUDIT_BEGIN -/
@@ -260,5 +388,20 @@ end UnifiedMasterTests
 #print axioms UnifiedMasterTests.certified_inspection
 #print axioms UnifiedMasterTests.certified_rejection
 #print axioms UnifiedMasterTests.certified_growth
+#print axioms UnifiedMasterTests.certified_advance
+#print axioms UnifiedMasterTests.certified_source_advance
+#print axioms UnifiedMasterTests.certified_request_admission
+#print axioms UnifiedMasterTests.certified_source_admission_return
+#print axioms UnifiedMasterTests.certified_memory_admission_return
+#print axioms UnifiedMasterTests.certified_references_injective
+#print axioms UnifiedMasterTests.certified_growth_injective
+#print axioms UnifiedMasterTests.certified_composition
+#print axioms UnifiedMasterTests.produced_prefix
+#print axioms UnifiedMasterTests.preloaded_origin
+#print axioms UnifiedMasterTests.preloaded_boundary
+#print axioms UnifiedMasterTests.preloaded_origin_distinct
+#print axioms UnifiedMasterTests.foreign_zero_prefix_rejected
+#print axioms UnifiedMasterTests.foreign_prefix_rejected
+#print axioms UnifiedMasterTests.preloaded_growth
 #print axioms UnifiedMasterTests.growth_keeps_produced_cursor
 /- AXIOM_AUDIT_END -/

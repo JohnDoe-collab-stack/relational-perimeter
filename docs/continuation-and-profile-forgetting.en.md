@@ -12,7 +12,12 @@ this shared result. `UnifiedMaster.certificate` packages that instance and
 proofs about it; it is not retained in restart memory.
 
 The closed certificate pins the actual image regime, restart cursor, produced
-readers, head-horizon agreement, historical growth and reference reads.
+readers, head-horizon agreement, historical growth, reference reads and
+injectivity, and reference composition together with profile and obligation
+composition. It also closes positive `advance` admission, admission transport
+for finite request lists in both directions, and both return laws for these
+concrete witnesses. Witness producers remain available in `Type`; the
+propositional certificate does not replace them.
 Inspection admission is equivalent to the produced role bound; its event is
 the corresponding read of the produced output, not merely an agreement
 between two implementations. The compiled-path gate separately guards against
@@ -70,9 +75,13 @@ are proved. The instance transport is pinned to its producer's result rather
 than supplied independently. These historical references are not added to
 restart memory: its contract admits only the future operations and reads below.
 
-The generic extension also requires a positively constructed `ProducedPrefix`:
-the complete cursor must be the resource executor's returned cursor, not an
-unrelated support sharing its boundary. Stored attachment is proved equal to
+The generic extension also requires a positively constructed
+`ProducedPrefix origin history cursor`. The full origin, including its support,
+is an index fixed by the caller; the public master fixes it to `master.origin`.
+`Growth` and its resumptions preserve that index. The complete cursor must be
+returned by the resource executor from that origin, not from an unrelated
+support sharing its boundary. Another constituted origin remains legitimate
+for a distinct chain explicitly indexed by it. Stored attachment is proved equal to
 one uninterrupted execution; this proof does not run that execution again.
 
 ## The exact future contract
@@ -120,8 +129,8 @@ forgetting normalized source profiles is impossible.
 
 ## Code references
 
-The grouping interfaces are autonomous local reconstructions informed by the
-Apache-2.0 comparison material. They use the local role, trace, finite-image
+The grouping interfaces adapt Apache-2.0 comparison material to the local
+interfaces. They use the local role, trace, finite-image
 and continuation interfaces; no external foundation or path dependency is
 required. The repository's license remains Apache-2.0.
 
@@ -153,3 +162,21 @@ git diff --check
 
 Public clients include concrete checkpoint computations alongside the general
 proofs. These local checks are not an independent audit.
+
+The C check separates the static-reference graph from application multiplicity
+at published entries: one for `publicInstance` and each suffix, two for
+`publicContinuation`, three for `publicGrowthTwice`, and no new execution for
+`stagewise`, `normalization` or `checkpoint`. It follows helpers, aliases,
+closures and static objects on these paths; exclusive branches are not summed,
+and unresolved sensitive forms cause failure. The producer's internal recursion
+is a counting boundary, not a measured elementary cost.
+
+A separate flow check follows `produce`, `Instance.source` and
+`Instance.checkpoint` to the retained fields: live state, output and readers.
+It flags captures of historical packets, even in mathematically unchanged
+readers. Executed-value selection and the live projection are explicit
+authorized boundaries. Only fully qualified symbols defined in the expected
+C artifacts receive these boundary policies; a helper with a similar name
+receives no authorization. This check does not certify the environments of all
+callbacks a client could supply. It supplements field-type checks without
+proving a physical-memory bound or a general heap theorem.

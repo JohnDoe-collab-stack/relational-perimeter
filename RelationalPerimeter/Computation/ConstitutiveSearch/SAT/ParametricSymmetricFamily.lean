@@ -350,6 +350,7 @@ def reduceFlipSymmetricSiblings
     AcceptedIrreducibleFrontierReduction
       (system := generatedStructuralBranchSystem rootFormula)
       (generatedStructuralFlipAtSearch rootFormula var)
+      (generatedStructuralFlipAtAction rootFormula var)
       [GeneratedStructuralBranchContext.child
           parent var false fresh,
         GeneratedStructuralBranchContext.child
@@ -360,9 +361,7 @@ def reduceFlipSymmetricSiblings
   { retained :=
       [GeneratedStructuralBranchContext.child
         parent var true fresh]
-    preservation :=
-      AcceptedFrontierPreservation.absorbFirstIntoSecond
-        relation.toAcceptingTransport
+    code := .absorbFirst relation
     irreducible :=
       SearchIrreducible.singleton
         (generatedStructuralFlipAtSearch rootFormula var)

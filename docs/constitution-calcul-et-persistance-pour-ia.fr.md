@@ -702,13 +702,14 @@ observations promises et les réponses négatives. Construire des usages
 concrets qui satisfont ce contrat, plutôt qu’un contrat réduit à des opérations
 qui ne consultent rien de pertinent.
 
-Le contrat actuel fournit une reprise réelle et des inspections non vides.
+Le contrat de `ProducedContinuation` fournit une reprise réelle et des inspections non vides.
 L’élargir à un agent exige de nouvelles lois, et non une extrapolation de
 `advance` et `inspect` à toute interaction.
 
 Si l’agent doit aussi consulter les nouvelles productions après chaque
 avancement, il faudra construire leurs lecteurs et démontrer l’évolution du
-contrat d’inspection. Le contrat actuel ne fournit pas cette extension.
+contrat d’inspection. L'extension `Agents/Constitutive` construit désormais ce
+raccord pour son domaine symbolique de demandes, décrit en section 9.7.
 
 ### 9.3. Des actions produites et des garanties consommées
 
@@ -741,10 +742,9 @@ Aux changements de type ou de représentation, ce suivi exige des applications
 et des accords explicites. Une affirmation d’égalité entre des valeurs de deux
 strates ne remplace pas le transport de la détermination et de ses témoins.
 
-Le dépôt possède plusieurs de ces accords, leur composition et une façade
-commune. Il n’existe pas encore, dans les résultats cités ici, un théorème
-portant sur une détermination d’IA concrète depuis sa constitution jusqu’à
-toutes ses interactions futures.
+Le dépôt possède ces accords sur son moteur et, dans `Agents/Constitutive`, sur
+une instance symbolique à exigence reçue. Cela ne certifie pas une détermination
+d'un modèle de langage extérieur ni toutes les interactions possibles d'une IA.
 
 ### 9.5. Une réduction de mémoire justifiée par le contrat de l’agent
 
@@ -767,6 +767,29 @@ ou son implémentation extérieure.
 La preuve finale doit concerner l’instance construite, avec ses entrées, ses
 actions et son mécanisme de continuation. Une interface générique dont les
 hypothèses restent ouvertes est un contrat conditionnel, pas cette instance.
+
+### 9.7. Réalisation symbolique et état de validation
+
+L'[agent constitutif](agent-constitutif-et-persistance.fr.md) ferme un contrat
+concret : périmètre non vide reçu, code décodé sur les rôles réellement produits,
+consultation ou obtention de cibles, proposition de valeur et refus motivés.
+`InitializationCertificate` raccorde l'entrée exacte à sa mémoire ; les valeurs
+restituées et leur acceptation viennent de `TargetOrigin`, non du contrôleur.
+
+`HistoricalFormation` porte l'arbre de production du support riche et
+`RichOperation` sa lecture effective. `InternalStepAgreement` et
+`FollowedStages` suivent les extensions du moteur et du support des cibles à
+chaque étape interne. Le suivi implique `FiniteResponseCriterion` sur
+l'exécuteur réel ; `Certificate.satisfaction` consomme cette preuve.
+L'irrécoverabilité du profil initial concerne la mémoire runtime entière et
+reste compatible avec les lectures et les continuations de ce contrat.
+
+L'audit de la première version, au commit
+`f6c6d2c051ae0886056d47cf5357253c137a1319`, a conclu
+`AGENT TARGET REQUIRES CORRECTIONS` et `NO REGRESSION VERIFIED`. Les raccords
+ci-dessus sont la correction de ses constats, pas un verdict indépendant sur
+la version corrigée. Cette instance ne transforme pas les obligations de la
+section 9.6 en garantie sur un modèle appris ou sur l'alignement humain général.
 
 ## 10. Critères de fidélité de la démonstration future
 
@@ -853,7 +876,8 @@ transformer son organisation et sa mémoire tout en suivant les déterminations
 et les garanties qui rendent ses actions admissibles, sur une histoire et un
 contrat d’interaction explicitement construits.
 
-Pour fermer cette cible, le prochain résultat devra porter sur une exigence
-d’agent concrète, son domaine réel d’interaction et le suivi de cette exigence
-dans toute la chaîne. Une nouvelle appellation des objets actuels, une réponse
-correcte isolée ou une mémoire simplement plus courte ne suffira pas.
+L'instance symbolique de la section 9.7 réalise une exigence concrète sur son
+domaine d'interaction, avec un suivi fini de toute la chaîne. Une transposition
+à un modèle appris devra encore fermer son propre raccord au calcul exécuté :
+une nouvelle appellation des objets, une réponse correcte isolée ou une mémoire
+simplement plus courte ne suffira pas.

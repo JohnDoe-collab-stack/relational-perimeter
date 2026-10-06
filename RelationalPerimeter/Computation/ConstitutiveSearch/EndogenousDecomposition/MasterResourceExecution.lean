@@ -316,12 +316,19 @@ An endpoint agreement alone does not establish this resource provenance. -/
 structure ProducedPrefix {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
     {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
+    (origin : Cursor)
     (history : CausalOperationalExecutionHistory (_count := count) state context)
     (cursor : Cursor) : Type 3 where
-  origin : Cursor
   originBoundary : origin.boundary = (⟨depth, assignment, state, context⟩ : Boundary)
   historyExact : HEq history (executeWithReferences count origin).history
   cursorExact : cursor = (executeWithReferences count origin).finish
+
+/-- Read the designated index, never choose another origin with the same boundary. -/
+def ProducedPrefix.origin {depth count : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
+    {start : Cursor} {history : CausalOperationalExecutionHistory (_count := count) state context}
+    {cursor : Cursor} (_prefix : ProducedPrefix start history cursor) : Cursor := start
 
 theorem execute_finish_append (extra count : Nat) (cursor : Cursor) :
     (executeWithReferences extra (executeWithReferences count cursor).finish).finish =
@@ -329,6 +336,20 @@ theorem execute_finish_append (extra count : Nat) (cursor : Cursor) :
   induction count generalizing cursor with
   | zero => rfl
   | succ count ih => exact ih cursor.next
+
+/-- Resource cardinality is used only to separate complete origins with the
+same operational boundary, not as a computation-cost model. -/
+theorem cursor_next_resource_length (cursor : Cursor) :
+    cursor.next.kinds.length = cursor.kinds.length + 7 := rfl
+
+theorem execute_finish_resource_length (count : Nat) (cursor : Cursor) :
+    (executeWithReferences count cursor).finish.kinds.length = cursor.kinds.length + 7 * count := by
+  induction count generalizing cursor with
+  | zero => rfl
+  | succ count ih =>
+    change (executeWithReferences count cursor.next).finish.kinds.length = _
+    rw [ih cursor.next, cursor_next_resource_length, Nat.mul_succ,
+      Nat.add_assoc, Nat.add_comm 7 (7 * count)]
 
 set_option maxHeartbeats 2000000 in
 theorem execute_erases (count : Nat) (cursor : Cursor) :
@@ -384,5 +405,8 @@ end ConstitutiveSearch.EndogenousDecomposition
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.execute_endpoint
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.executeWithReferences_endpoint
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.ProducedPrefix
+#print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.ProducedPrefix.origin
 #print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.execute_finish_append
+#print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.cursor_next_resource_length
+#print axioms ConstitutiveSearch.EndogenousDecomposition.MasterResources.execute_finish_resource_length
 /- AXIOM_AUDIT_END -/

@@ -65,6 +65,7 @@ def normalizeWithTransportClosure
     (frontier : List system.State) :
     AcceptedIrreducibleFrontierReduction
       search
+      (transportClosureAction action)
       frontier :=
   normalizeAcceptedFrontier
     search

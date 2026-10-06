@@ -80,6 +80,12 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "compiled-code dependency check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-agent-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled agent dependency check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-continuation-signature-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled signature dependency check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-variable-master-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled variable-master sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-integrated-machine-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled integrated machine sharing check failed" }
   & (Join-Path $PSScriptRoot "check-expected-failures.ps1")
   if ($LASTEXITCODE -ne 0) { throw "expected-failure check failed" }
 

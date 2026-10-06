@@ -38,22 +38,85 @@ theorem sourceRunSteps_exact {input : Nat} {master : UnifiedMaster.Instance inpu
       exact congrArg (fun result : Memory × List LiveContinuation.Event =>
         (result.1, (sourceStep source).2 :: result.2)) exactTail
 
-def sourcePerform {input : Nat} {master : UnifiedMaster.Instance input}
-    (source : Source master) : Request → Source master × Event
-  | .advance count =>
-      let produced := sourceRunSteps count source
-      (produced.1, ⟨produced.2, .advanced count⟩)
+/-- The rich operation retains its actual material reading and decision. Its
+result is eliminated from those objects; it is not a runtime result annotated
+afterwards with an unrelated historical certificate. -/
+inductive RichOperation {input : Nat} {master : UnifiedMaster.Instance input}
+    (source : Source master) : Request → Type 3 where
+  | advance (count : Nat) : RichOperation source (.advance count)
+  | inspect (handle : Nat) (var : Var) (reading : MaterialReading source.history.realization)
+      (decision : Decision source.requirement reading.values handle var none)
+      (decisionExact : decision = decideReply source.requirement reading.values handle var none) :
+      RichOperation source (.inspect handle var)
+  | propose (handle : Nat) (var : Var) (value : Bool)
+      (reading : MaterialReading source.history.realization)
+      (decision : Decision source.requirement reading.values handle var (some value))
+      (decisionExact : decision = decideReply source.requirement reading.values handle var (some value)) :
+      RichOperation source (.propose handle var value)
+  | outside (handle : Nat) (var : Var) (absent : source.requirement.permission var = none) :
+      RichOperation source (.obtain handle var)
+  | obtain (handle : Nat) (var : Var) (permission : Ref source.requirement.realizedScope var)
+      (initial : MaterialReading source.history.realization)
+      (reading : MaterialReading (sourceRunSteps (needed initial.values.length handle) source).1.history.realization)
+      (decision : Decision (sourceRunSteps (needed initial.values.length handle) source).1.requirement
+        reading.values handle var none)
+      (decisionExact : decision = decideReply
+        (sourceRunSteps (needed initial.values.length handle) source).1.requirement reading.values handle var none) :
+      RichOperation source (.obtain handle var)
+
+def RichOperation.result {input : Nat} {master : UnifiedMaster.Instance input}
+    {source : Source master} {request : Request} : RichOperation source request → Source master × Event
+  | .advance count => let produced := sourceRunSteps count source
+                      (produced.1, ⟨produced.2, .advanced count⟩)
+  | .inspect _ _ _ decision _ => (source, ⟨[], decision.message⟩)
+  | .propose _ _ _ _ decision _ => (source, ⟨[], decision.message⟩)
+  | .outside handle var _ => (source, ⟨[], .refused handle var .outsideScope⟩)
+  | .obtain handle _ _ initial _ decision _ =>
+      let produced := sourceRunSteps (needed initial.values.length handle) source
+      (produced.1, ⟨produced.2, decision.message⟩)
+
+def sourceProduced {input : Nat} {master : UnifiedMaster.Instance input}
+    (source : Source master) : (request : Request) → RichOperation source request
+  | .advance count => .advance count
   | .inspect handle var =>
-      (source, ⟨[], (decideReply source.requirement source.history.realization.materialRegister handle var none).message⟩)
+      let reading := source.history.realization.materialReading
+      .inspect handle var reading (decideReply source.requirement reading.values handle var none) rfl
   | .propose handle var value =>
-      (source, ⟨[], (decideReply source.requirement source.history.realization.materialRegister handle var (some value)).message⟩)
-  | .obtain handle var =>
+      let reading := source.history.realization.materialReading
+      .propose handle var value reading (decideReply source.requirement reading.values handle var (some value)) rfl
+  | .obtain handle var => match permitted : source.requirement.permission var with
+      | none => .outside handle var permitted
+      | some permission =>
+          let initial := source.history.realization.materialReading
+          let produced := sourceRunSteps (needed initial.values.length handle) source
+          let reading := produced.1.history.realization.materialReading
+          .obtain handle var permission initial reading
+            (decideReply produced.1.requirement reading.values handle var none) rfl
+
+def sourcePerform {input : Nat} {master : UnifiedMaster.Instance input}
+    (source : Source master) (request : Request) : Source master × Event :=
+  (sourceProduced source request).result
+
+theorem sourcePerform_obtain {input : Nat} {master : UnifiedMaster.Instance input}
+    (source : Source master) (handle : Nat) (var : Var) :
+    sourcePerform source (.obtain handle var) =
       match source.requirement.permission var with
       | none => (source, ⟨[], .refused handle var .outsideScope⟩)
       | some _ =>
           let produced := sourceRunSteps (needed source.history.realization.materialRegister.length handle) source
           (produced.1, ⟨produced.2,
-            (decideReply produced.1.requirement produced.1.history.realization.materialRegister handle var none).message⟩)
+            (decideReply produced.1.requirement produced.1.history.realization.materialRegister handle var none).message⟩) := by
+  dsimp only [sourcePerform, sourceProduced]
+  split
+  · rename_i absent
+    change (source, Event.mk [] (.refused handle var .outsideScope)) = _
+    rw [absent]
+  · rename_i permission present
+    change ((sourceRunSteps (needed source.history.realization.materialRegister.length handle) source).1,
+      Event.mk (sourceRunSteps (needed source.history.realization.materialRegister.length handle) source).2
+        (decideReply (sourceRunSteps (needed source.history.realization.materialRegister.length handle) source).1.requirement
+          (sourceRunSteps (needed source.history.realization.materialRegister.length handle) source).1.history.realization.materialRegister handle var none).message) = _
+    rw [present]
 
 theorem sourcePerform_exact {input : Nat} {master : UnifiedMaster.Instance input}
     (source : Source master) (request : Request) :
@@ -75,8 +138,8 @@ theorem sourcePerform_exact {input : Nat} {master : UnifiedMaster.Instance input
       rw [source.history.realization.materialRegister_exact]
       rfl
   | obtain handle var =>
-      rw [perform_obtain]
-      dsimp only [sourcePerform, project]
+      rw [perform_obtain, sourcePerform_obtain]
+      dsimp only [project]
       cases permitted : source.requirement.permission var with
       | none => rfl
       | some permission =>
@@ -455,11 +518,51 @@ theorem authorized_target_accepted {requirement : Requirement} {register : List 
     GeneratedStructuralBranchAccept authorization.occurrence.1.context
       authorization.occurrence.1.continuation := authorization.occurrence.1.accepted
 
+/-- The criterion required of an actual reply, independent of the responder.
+Acceptance is a conclusion about the authorized occurrence, not a premise
+supplied by its caller. -/
+def ReplyCriterion (requirement : Requirement) (register : List AnswerTarget) : Message → Prop
+  | .answer handle var value => ∃ authorization : Authorization requirement register handle var value,
+      GeneratedStructuralBranchAccept authorization.occurrence.1.context authorization.occurrence.1.continuation
+  | .advanced _ => True
+  | .refused _ _ _ => True
+
+theorem ResponseEvidence.criterion {requirement : Requirement} {register : List AnswerTarget}
+    {handle : Nat} {var : Var} {candidate : Option Bool} {message : Message}
+    (evidence : ResponseEvidence requirement register handle var candidate message) :
+    ReplyCriterion requirement register message := by
+  cases evidence with
+  | answer value authorization _ => exact ⟨authorization, authorized_target_accepted authorization⟩
+  | outside _ => exact True.intro
+  | missing _ _ => exact True.intro
+  | incorrect _ _ _ _ _ _ => exact True.intro
+
+def RequestCriterion (memory : Memory) : Request → Memory × Event → Prop
+  | .advance _, _ => True
+  | .inspect _ _, result => ReplyCriterion memory.requirement memory.register result.2.message
+  | .propose _ _ _, result => ReplyCriterion memory.requirement memory.register result.2.message
+  | .obtain _ _, result => ReplyCriterion result.1.requirement result.1.register result.2.message
+
+theorem RequestEvidence.criterion {memory : Memory} {request : Request} {result : Memory × Event}
+    (evidence : RequestEvidence memory request result) : RequestCriterion memory request result := by
+  cases request with
+  | advance _ => exact True.intro
+  | inspect _ _ => exact ResponseEvidence.criterion evidence
+  | propose _ _ _ => exact ResponseEvidence.criterion evidence
+  | obtain _ _ => exact ResponseEvidence.criterion evidence
+
+theorem executed_reply_criterion (memory : Memory) (request : Request) :
+    RequestCriterion memory request (executeInput memory request) := (executedEvidence memory request).criterion
+
 end ConstitutiveSearch.Agent
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.Agent.sourceStep
 #print axioms ConstitutiveSearch.Agent.sourceRunSteps_exact
 #print axioms ConstitutiveSearch.Agent.sourcePerform
+#print axioms ConstitutiveSearch.Agent.RichOperation
+#print axioms ConstitutiveSearch.Agent.RichOperation.result
+#print axioms ConstitutiveSearch.Agent.sourceProduced
+#print axioms ConstitutiveSearch.Agent.sourcePerform_obtain
 #print axioms ConstitutiveSearch.Agent.sourcePerform_exact
 #print axioms ConstitutiveSearch.Agent.table
 #print axioms ConstitutiveSearch.Agent.Admission
@@ -499,4 +602,9 @@ end ConstitutiveSearch.Agent
 #print axioms ConstitutiveSearch.Agent.executeInput_register_monotone
 #print axioms ConstitutiveSearch.Agent.executeInput_old_read
 #print axioms ConstitutiveSearch.Agent.authorized_target_accepted
+#print axioms ConstitutiveSearch.Agent.ReplyCriterion
+#print axioms ConstitutiveSearch.Agent.ResponseEvidence.criterion
+#print axioms ConstitutiveSearch.Agent.RequestCriterion
+#print axioms ConstitutiveSearch.Agent.RequestEvidence.criterion
+#print axioms ConstitutiveSearch.Agent.executed_reply_criterion
 /- AXIOM_AUDIT_END -/

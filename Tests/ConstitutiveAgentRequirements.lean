@@ -46,6 +46,24 @@ theorem both_source_codes_admitted (input : Nat) :
       (initializeAgent input [0] (encodeSelection master.roles master.distinctPair.right)).isOk = true :=
   ⟨initialized_codes_admitted input 0 _, initialized_codes_admitted input 0 _⟩
 
+theorem public_wrong_length_refused (input : Nat) (code : List Bool)
+    (different : code.length ≠ resolutionLength input) :
+    initializeAgent input [0] code = .error .invalidSelection :=
+  initialize_wrong_length input [0] code (singletonRequirement 0) rfl different
+
+theorem initialization_pins_decoded_profile {input : Nat} {scope : List Nat} {code : List Bool}
+    (prepared : Prepared input scope code) :
+    decodeSelection prepared.master.roles code = some prepared.profile := prepared.certificate.decoded
+
+theorem initialization_pins_actual_prepare {input : Nat} {scope : List Nat} {code : List Bool}
+    (prepared : Prepared input scope code) : prepare input scope code = .ok prepared :=
+  prepared.certificate.initialized
+
+theorem initialized_memory_keeps_finite_contract {input : Nat} {scope : List Nat} {code : List Bool}
+    (prepared : Prepared input scope code) (requests : List Request) :
+    FiniteResponseCriterion prepared.memory requests :=
+  prepared.certificate.continuation.satisfaction prepared.profile requests
+
 -- Finite code-generation checks, not a confirmatory complexity experiment.
 #eval (publicAgent 0 [] [false]).map (fun session => session.memory.register.length)
 #eval (publicAgent 0 [0] []).map (fun session => session.memory.register.length)
@@ -58,4 +76,8 @@ end Tests.ConstitutiveAgentRequirements
 #print axioms Tests.ConstitutiveAgentRequirements.concrete_good_proposal
 #print axioms Tests.ConstitutiveAgentRequirements.concrete_bad_proposal
 #print axioms Tests.ConstitutiveAgentRequirements.both_source_codes_admitted
+#print axioms Tests.ConstitutiveAgentRequirements.public_wrong_length_refused
+#print axioms Tests.ConstitutiveAgentRequirements.initialization_pins_decoded_profile
+#print axioms Tests.ConstitutiveAgentRequirements.initialization_pins_actual_prepare
+#print axioms Tests.ConstitutiveAgentRequirements.initialized_memory_keeps_finite_contract
 /- AXIOM_AUDIT_END -/

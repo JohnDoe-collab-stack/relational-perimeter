@@ -231,6 +231,7 @@ below.
 
 ## Documents
 
+- [Résultats sur la constitution, le calcul endogène et la persistance de l’alignement](docs/resultats-constitution-calcul-alignement.fr.md)
 - [English presentation](docs/primitive-relations-and-perimeter-constitution.en.md)
 - [Présentation française](docs/relations-primitives-constitution-perimetre.fr.md)
 - [Positioning and scope](docs/positioning-and-scope.en.md)
@@ -241,6 +242,8 @@ below.
 - [Continuation et oubli des profils normalisés](docs/continuation-et-oubli-des-profils.fr.md)
 - [Constitutive interactive agent and persistence](docs/constitutive-agent-and-persistence.en.md)
 - [Agent constitutif interactif et persistance](docs/agent-constitutif-et-persistance.fr.md)
+- [Exact continuation signatures: role reads and the full reachable agent contract](docs/continuation-signatures.en.md)
+- [Signatures exactes : lectures des rôles et états atteignables de l’agent](docs/signatures-de-continuation.fr.md)
 - [Conceptual authorship and AI-generation disclosure](AI_AUTHORSHIP.md)
 
 ## Foundational Lean sources
@@ -307,10 +310,12 @@ bash scripts/verify.sh
 
 Both gates require Python 3, traverse the declared import boundaries, build
 the library, sweep every repository constant (including private declarations),
-check the generated C dependency graph and then compile all 22 expected-failure fixtures listed in the shared
+check the generated C dependency graph and then compile all 23 expected-failure fixtures listed in the shared
 `scripts/expected-failures.tsv` inventory. Unlisted, missing or duplicate fixtures
 fail both gates. Privacy, dependent-type, semantic-type and termination tests
-are reported separately; a termination rejection is not a general causality
+are reported separately. Both gates validate the same structured Lean errors at
+the frozen file, line and column; printed text, unrelated errors and extra errors
+cannot stand in for the intended rejection. A termination rejection is not a general causality
 proof. `python3 scripts/test-expected-failure-gates.py --output /tmp/gate-tests`
 exercises both gates after the build (PowerShell is required). These fixtures verify that the scientific
 certificate and causal-regime constructors remain private, that profiles from
@@ -319,6 +324,14 @@ decision cannot replace the transformed decision, that the projection
 collision remains indexed by the authoritative instruction transport, and
 that an interpreter which ignores an arbitrary raw instruction cannot satisfy
 its semantic output specification.
+
+The interactive agent's initialization certificate links the received scope and
+actual selection code to its memory. Its finite-response certificate derives
+target acceptance from produced origins and follows both engine and historical
+support transports through every internal step. Rich formation remains separate
+from runtime restart memory. The compiled-agent check includes session wrappers
+and transitive closure applications, within its explicitly bounded unfolding
+scope; it is not a general time or physical-memory theorem.
 
 All Lean sources are constructive: they contain no `sorry`, `axiom`, or
 `noncomputable` declaration, and their final axiom-audit blocks report no axiom
@@ -329,9 +342,14 @@ modules and the regression suites.
 reports compiler-generated exceptions separately. Both verification scripts
 check that its module coverage equals the complete Lean inventory. The compiled
 code check follows transitive calls, statically named closures and initializers.
-It checks static producer routes at the public construction and extension
-entries, rejects calls to the old executor on those paths, and excludes
-historical-support dependencies from the restricted restart entry. The Lean
+It keeps static producer-route checks and separately checks application
+multiplicity through helpers and closures at the public construction and
+extension entries. It also checks `stagewise`, `normalization` and `checkpoint`
+for replay, and follows archive captures from source/checkpoint factories to
+retained readers, with explicit executed-value and live-projection boundaries.
+Those boundaries are pinned to exact qualified symbols and their unique
+defining C artifacts; similar helper names grant no authorization.
+It excludes historical-support dependencies from the restricted restart entry. The Lean
 gate also checks the field types of restart memory and its nested live record.
 These are checks of the declared interfaces and compiled paths, not a general
 dynamic heap analysis, total-cost theorem or physical-memory bound.
@@ -450,6 +468,32 @@ Il s’agit d’un théorème sur la largeur exacte d’un carrier et l’adress
 factorisé dans la classe formalisée, non d’une borne universelle en temps ou en
 mémoire. La projection auditée par état et quantité et les coûts instrumentés
 de l’exécution restent des résultats aval distincts.
+
+## Décomposition variable / Variable decomposition
+
+Le chemin `VariableMaster.execute` lit les rôles exécutés du maître et cherche
+les relations sur les contextes reçus. Deux entrées constituées de même
+profondeur, sur une même formule, donnent des largeurs retenues un et deux.
+La chaîne conserve SAT et s'efface exactement vers le maître existant.
+Portée et contrat futur : [français](docs/variable-master-execution.fr.md),
+[English](docs/variable-master-execution.en.md).
+
+## Machine intégrée / Integrated machine
+
+La même instance maître initialise le moteur vivant réduit. Chaque reprise
+partage sa production vivante avec la recherche SAT sur les contextes reçus,
+puis conserve la frontière retenue et le circuit produit pour les requêtes
+suivantes. Le contrat combiné est prouvé exact pour tous ses futurs finis.
+Ce runtime logiciel ne constitue pas encore une réalisation matérielle.
+
+The same master initializes the reduced live engine. Each advance shares its
+live production with SAT search on received contexts, then retains the resulting
+frontier and circuit for subsequent requests. The combined contract is proved
+exact for all its finite futures. This software runtime is not hardware.
+
+Architecture, preuves, contrat et portée :
+[français](docs/integrated-master-machine.fr.md),
+[English](docs/integrated-master-machine.en.md).
 
 ## License
 

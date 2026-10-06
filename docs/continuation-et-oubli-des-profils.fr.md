@@ -14,7 +14,12 @@ dans la mémoire de reprise.
 
 Le certificat fermé fixe le régime d'image effectif, le curseur de reprise,
 les lecteurs produits, l'accord des têtes entre horizons, le prolongement
-historique et les lectures des références. L'admission d'une inspection
+historique, les lectures et l'injectivité des références, ainsi que leur
+composition avec celle des profils et des obligations. Il ferme aussi
+l'admission positive de `advance`, le passage des admissions de suites finies
+dans les deux directions et les deux lois de retour de ces témoins concrets.
+Les producteurs de témoins restent disponibles dans `Type` ; le certificat
+propositionnel ne les remplace pas. L'admission d'une inspection
 équivaut à la borne des rôles produits ; son événement est la lecture
 correspondante de la sortie produite, pas seulement un accord entre deux
 implémentations. Le contrôle des chemins compilés interdit séparément la
@@ -75,9 +80,13 @@ est fixé au résultat de son producteur, pas fourni indépendamment. Ces réfé
 historiques ne sont pas ajoutées à la mémoire de reprise : son contrat n'autorise
 que les opérations et lectures futures décrites ci-dessous.
 
-Le prolongement générique exige aussi un `ProducedPrefix` construit
-positivement : le curseur complet doit être celui retourné par l'exécuteur
-de ressources, pas un support étranger ayant la même frontière. Le raccord
+Le prolongement générique exige aussi un `ProducedPrefix origin history cursor`
+construit positivement. L'origine complète, support compris, est un indice
+fixé par l'appelant ; le maître public fixe cet indice à `master.origin`.
+`Growth` et ses reprises conservent cet indice. Le curseur complet doit être
+celui retourné par l'exécuteur depuis cette origine, pas depuis un support
+étranger ayant la même frontière. Une autre origine constituée reste légitime
+pour une chaîne distincte explicitement indexée par elle. Le raccord
 conservé est prouvé égal à une exécution ininterrompue ; cette preuve ne lance
 pas une seconde exécution.
 
@@ -127,8 +136,8 @@ Il ne prouve pas l'impossibilité de l'oubli des profils normalisés.
 
 ## Repères dans le code
 
-Les interfaces de regroupement sont des reconstructions locales autonomes,
-informées par le matériau de comparaison sous Apache-2.0. Elles utilisent les
+Les interfaces de regroupement sont des adaptations aux interfaces locales
+de matériau de comparaison sous Apache-2.0. Elles utilisent les
 interfaces locales de rôles, traces, images finies et continuation ; aucune
 fondation extérieure ni dépendance par chemin n'est requise. La licence du
 dépôt reste Apache-2.0.
@@ -161,3 +170,23 @@ git diff --check
 
 Les clients publics incluent des calculs concrets du checkpoint, en plus des
 preuves générales. Ces contrôles locaux ne sont pas un audit indépendant.
+
+Le contrôle C sépare le graphe des références statiques du nombre d'applications
+aux entrées publiées : une pour `publicInstance` et chaque suffixe, deux pour
+`publicContinuation`, trois pour `publicGrowthTwice`, aucune nouvelle exécution
+pour `stagewise`, `normalization` ou `checkpoint`. Il suit les helpers, alias,
+fermetures et objets statiques sur ces chemins ; les branches exclusives ne
+sont pas additionnées et une forme sensible non résolue provoque un échec.
+La récursion interne du producteur est une frontière de comptage, pas un coût
+élémentaire mesuré.
+
+Un contrôle de flux distinct suit `produce`, `Instance.source` et
+`Instance.checkpoint` jusqu'aux champs conservés : état vivant, sortie et
+lecteurs. Il signale les captures de paquets historiques, même dans un lecteur
+mathématiquement inchangé. La sélection de la valeur exécutée et la projection
+vivante sont des frontières autorisées explicites. Elles sont réservées aux
+symboles entièrement qualifiés définis dans les artefacts C attendus ; un
+helper au nom ressemblant ne reçoit aucune autorisation. Ce contrôle ne
+certifie pas les environnements de tous les callbacks qu'un client pourrait fournir.
+Il complète le contrôle des types de champs, sans démontrer une borne physique
+de mémoire ou un théorème général sur le tas.

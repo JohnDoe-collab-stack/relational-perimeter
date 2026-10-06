@@ -212,6 +212,27 @@ def allow {normalization : ExecutedCausalNormalization reduction}
   | .advance _ => ULift.{3} Unit
   | .inspect query => ULift.{3} (PLift (query.slot < memory.readers.length))
 
+/-- Positive admission, independent of agreement between two empty predicates. -/
+def advance_admission {normalization : ExecutedCausalNormalization reduction}
+    (memory : Memory normalization) (steps : Nat) : allow memory (.advance steps) := ⟨()⟩
+
+def source_advance_admission {normalization : ExecutedCausalNormalization reduction}
+    (source : Source normalization) (steps : Nat) :
+    allow (project source) (.advance steps) := advance_admission (project source) steps
+
+theorem allow_witness_unique {normalization : ExecutedCausalNormalization reduction}
+    (memory : Memory normalization) (input : Input normalization)
+    (first second : allow memory input) : first = second := by
+  cases input with
+  | advance =>
+    cases first with
+    | up left => cases second with
+      | up right => cases left; cases right; rfl
+  | inspect =>
+    cases first with
+    | up left => cases second with
+      | up right => cases left; cases right; rfl
+
 /-- Admission is pinned to the number of produced role continuations, not
 merely to agreement between two implementations of the same predicate. -/
 theorem inspect_admitted_iff {normalization : ExecutedCausalNormalization reduction}
@@ -293,6 +314,41 @@ def all_requests_reflected {normalization : ExecutedCausalNormalization reductio
     (admitted : Continuation.Admitted next allow (project source) inputs) :
     Continuation.Admitted sourceNext (fun source input => allow (project source) input) source inputs :=
   (contract normalization).admittedSource admitted
+
+private theorem admitted_unique {S : Type u} {I : Type v} {next : S → I → S}
+    {permits : S → I → Type w}
+    (unique : ∀ state input (first second : permits state input), first = second)
+    {state : S} {inputs : List I}
+    (first second : Continuation.Admitted next permits state inputs) : first = second := by
+  induction first with
+  | nil => cases second; rfl
+  | cons witness tail ih =>
+    cases second with
+    | cons other rest =>
+      cases unique _ _ witness other
+      exact congrArg (Continuation.Admitted.cons witness) (ih rest)
+
+/-- Return laws belong to this concrete admission interface, not every Exact contract. -/
+theorem requests_source_return {normalization : ExecutedCausalNormalization reduction}
+    (source : Source normalization) {inputs : List (Input normalization)}
+    (witness : Continuation.Admitted sourceNext
+      (fun source input => allow (project source) input) source inputs) :
+    all_requests_reflected source (all_requests_admitted source witness) = witness :=
+  admitted_unique (fun source input => allow_witness_unique (project source) input) _ _
+
+theorem requests_memory_return {normalization : ExecutedCausalNormalization reduction}
+    (source : Source normalization) {inputs : List (Input normalization)}
+    (witness : Continuation.Admitted next allow (project source) inputs) :
+    all_requests_admitted source (all_requests_reflected source witness) = witness :=
+  admitted_unique allow_witness_unique _ _
+
+theorem requests_admission_iff {normalization : ExecutedCausalNormalization reduction}
+    (source : Source normalization) (inputs : List (Input normalization)) :
+    Nonempty (Continuation.Admitted sourceNext
+      (fun source input => allow (project source) input) source inputs) ↔
+      Nonempty (Continuation.Admitted next allow (project source) inputs) :=
+  ⟨fun ⟨witness⟩ => ⟨all_requests_admitted source witness⟩,
+    fun ⟨witness⟩ => ⟨all_requests_reflected source witness⟩⟩
 
 theorem same_memory (normalization : ExecutedCausalNormalization reduction)
     (cursor : MasterResources.Cursor) (left right : RoleOccurrenceProfile roles) :
@@ -462,6 +518,12 @@ end ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.all_future_reads
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.all_requests_admitted
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.all_requests_reflected
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.advance_admission
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.source_advance_admission
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.allow_witness_unique
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.requests_source_return
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.requests_memory_return
+#print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.requests_admission_iff
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.executeInput
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.executeInput_next
 #print axioms ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.executeInput_event

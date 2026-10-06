@@ -20,13 +20,22 @@ inductive TargetOrigin : (root : Cnf) → (context : GeneratedStructuralBranchCo
   | resumed {memory : LiveContinuation.Memory} (production : LiveContinuation.Production memory) :
       TargetOrigin _ production.built.stage.schedule.entry.target production.built.stage.application.output
 
+theorem TargetOrigin.accepted {root : Cnf} {context : GeneratedStructuralBranchContext root}
+    {continuation : GeneratedStructuralBranchContinuation context}
+    (origin : TargetOrigin root context continuation) : GeneratedStructuralBranchAccept context continuation :=
+  match origin with
+  | .normalized license => license.retainedAccepted
+  | .resumed production => production.built.stage.outputAccepted
+
 structure AnswerTarget where
   private mk ::
   root : Cnf
   context : GeneratedStructuralBranchContext root
   continuation : GeneratedStructuralBranchContinuation context
-  accepted : GeneratedStructuralBranchAccept context continuation
   origin : TargetOrigin root context continuation
+
+theorem AnswerTarget.accepted (target : AnswerTarget) :
+    GeneratedStructuralBranchAccept target.context target.continuation := target.origin.accepted
 
 def AnswerTarget.read (target : AnswerTarget) (var : Var) : Bool :=
   target.continuation.1 var
@@ -42,7 +51,7 @@ def initialTargets : {count : Nat} → {state : CausalConstitutiveState} →
   | _, state, _, _, _, @ExecutedRoleReductionHistory.step
       _ _ head _ _ _ _ _ license rest, target, accepted, exactOutput =>
       ⟨_, causalOpeningRight state head.selected head.fresh,
-        target.1, accepted.1, (congrArg Prod.fst exactOutput).symm ▸ TargetOrigin.normalized license⟩ ::
+        target.1, (congrArg Prod.fst exactOutput).symm ▸ TargetOrigin.normalized license⟩ ::
         initialTargets rest target.2 accepted.2 (congrArg Prod.snd exactOutput)
 
 theorem initialTargets_length : {count : Nat} → {state : CausalConstitutiveState} →
@@ -60,8 +69,7 @@ theorem initialTargets_length : {count : Nat} → {state : CausalConstitutiveSta
 def resumedTarget {memory : LiveContinuation.Memory}
     (production : LiveContinuation.Production memory) : AnswerTarget :=
   ⟨_, production.built.stage.schedule.entry.target,
-    production.built.stage.application.output,
-    production.built.stage.outputAccepted, .resumed production⟩
+    production.built.stage.application.output, .resumed production⟩
 
 theorem resumedTarget_read {memory : LiveContinuation.Memory}
     (production : LiveContinuation.Production memory) (var : Var) :
@@ -146,7 +154,9 @@ theorem readRegister_append : ∀ (register extra : List AnswerTarget) (handle :
 end ConstitutiveSearch.Agent
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.Agent.TargetOrigin
+#print axioms ConstitutiveSearch.Agent.TargetOrigin.accepted
 #print axioms ConstitutiveSearch.Agent.AnswerTarget
+#print axioms ConstitutiveSearch.Agent.AnswerTarget.accepted
 #print axioms ConstitutiveSearch.Agent.AnswerTarget.read
 #print axioms ConstitutiveSearch.Agent.initialTargets
 #print axioms ConstitutiveSearch.Agent.initialTargets_length

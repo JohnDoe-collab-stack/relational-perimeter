@@ -86,7 +86,7 @@ while IFS=$'\t' read -r module layer migration role extra; do
   [[ -z "$module" || "${module:0:1}" == '#' ]] && continue
   [[ -z "${extra:-}" && -n "$role" ]] || { echo "$manifest:$line_number: expected four tab-separated fields" >&2; exit 1; }
   [[ -z "${stratum[$module]+x}" ]] || { echo "$manifest:$line_number: duplicate module $module" >&2; exit 1; }
-  [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 A17 " == *" $layer "* ]] || { echo "$manifest:$line_number: unknown stratum $layer" >&2; exit 1; }
+  [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 A17 " == *" $layer "* || "$layer" =~ ^M([0-9]|1[0-9])$ ]] || { echo "$manifest:$line_number: unknown stratum $layer" >&2; exit 1; }
   [[ "$migration" == enforced ]] || { echo "$manifest:$line_number: every production module must be enforced, found $migration" >&2; exit 1; }
   stratum[$module]="$layer"; status[$module]="$migration"; responsibility[$module]="$role"
 done < "$manifest"
@@ -101,6 +101,12 @@ for relative in "${production_files[@]}"; do
   module="${relative%.lean}"; module="${module//\//.}"; module="${module//\\/.}"
   file_for[$module]="$relative"
   mapfile -t direct < <(lean_imports "$relative")
+  for dependency in "${direct[@]}"; do
+    [[ "$dependency" != Tests && "$dependency" != Tests.* ]] || {
+      echo "production module imports a test: $module -> $dependency" >&2
+      exit 1
+    }
+  done
   imports[$module]="$(printf '%s\n' "${direct[@]:-}")"
 done
 
@@ -111,6 +117,16 @@ for module in "${!stratum[@]}"; do [[ -n "${file_for[$module]+x}" ]] || stale+=(
 [[ ${#stale[@]} -eq 0 ]] || { echo "manifest modules without source: ${stale[*]}" >&2; exit 1; }
 
 allowed_dependency() {
+  # Machine layers cannot depend on themselves or later machine layers.
+  if [[ "$1" =~ ^M([0-9]|1[0-9])$ ]]; then
+    local rank="${BASH_REMATCH[1]}"
+    if [[ "$2" =~ ^M([0-9]|1[0-9])$ ]]; then
+      (( BASH_REMATCH[1] < rank ))
+    else
+      [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 A17 " == *" $2 "* ]]
+    fi
+    return
+  fi
   case "$1" in
     U) [[ "$2" == U ]] ;;
     F) [[ " U F " == *" $2 "* ]] ;;

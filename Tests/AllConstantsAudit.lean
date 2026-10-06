@@ -20,6 +20,26 @@ import Tests.UnifiedMasterInstance
 import Tests.ConstitutiveAgentRequirements
 import Tests.ConstitutiveAgentExecution
 import Tests.ConstitutiveAgentPersistence
+import Tests.ContinuationSignatureBehavior
+import Tests.ContinuationSignatureMinimality
+import Tests.ContinuationSignatureProduction
+import Tests.ContinuationSignatureReachableAgent
+import Tests.ContinuationSignatureAxiomCoverage
+import Tests.VariableMasterExecution
+import Tests.Machine.CausalChecks
+import Tests.Machine.Checks
+import Tests.Machine.ConstitutiveLiveChecks
+import Tests.Machine.DirectMachine
+import Tests.Machine.LiveRunnerSmoke
+import Tests.Machine.LiveSmoke
+import Tests.Machine.MasterIntegration
+import Tests.Machine.R4ContractChecks
+import Tests.Machine.R6StatementTypes
+import Tests.Machine.R7StatementTypes
+import Tests.Machine.ReducedLiveChecks
+import Tests.Machine.ReducedLiveRunnerChecks
+import Tests.Machine.Run
+import Tests.Machine.RunMachine
 
 /-! Build-time tooling, not a mathematical hypothesis or a new production
 dependency. Scan every constant in every imported repository module, including

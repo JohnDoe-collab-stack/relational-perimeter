@@ -164,9 +164,12 @@ def executedSiblingReduction {depth : Nat}
         (distinctGrowingDiscoveryFormula
           (constructStage (depth + 1)).searchIndex)
         stage.discovery.var)
+      (generatedStructuralFlipAtAction
+        (distinctGrowingDiscoveryFormula (constructStage (depth + 1)).searchIndex)
+        stage.discovery.var)
       (executedOpenedFrontier _run) :=
   { retained := retainedFrontier (executedOperationalStatus _run)
-    preservation := outcomePreservation (executedOperationalStatus _run)
+    code := .absorbFirst stage.discovery.relation
     irreducible :=
       SearchIrreducible.singleton
         (generatedStructuralFlipAtSearch

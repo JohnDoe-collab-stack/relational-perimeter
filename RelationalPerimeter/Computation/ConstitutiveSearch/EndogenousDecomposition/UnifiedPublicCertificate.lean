@@ -194,11 +194,12 @@ are pinned. Old heads are read, not executed again. -/
 structure Growth {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
     {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
+    (origin : MasterResources.Cursor)
     (old : CausalOperationalExecutionHistory (_count := count) state context)
     (cursor : MasterResources.Cursor) (boundary : cursor.boundary = MasterResources.endpoint old)
     (extra : Nat) : Type 3 where
   provenance : MasterResources.ProducedPrefix (depth := depth) (count := count)
-    (assignment := assignment) (state := state) (context := context) old cursor
+    (assignment := assignment) (state := state) (context := context) origin old cursor
   suffix : MasterResources.Result extra cursor
   suffixExact : suffix = MasterResources.executeWithReferences extra cursor
   grown : CertifiedRoleGrouping.StoredGrowth old
@@ -208,10 +209,12 @@ structure Growth {depth count : Nat} {assignment : SequentialAssignment depth}
 def resource_history_extension {depth count : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
     {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
+    (origin : MasterResources.Cursor)
     (old : CausalOperationalExecutionHistory (_count := count) state context)
     (cursor : MasterResources.Cursor) (boundary : cursor.boundary = MasterResources.endpoint old)
     (extra : Nat) (provenance : MasterResources.ProducedPrefix (depth := depth) (count := count)
-      (assignment := assignment) (state := state) (context := context) old cursor) : Growth old cursor boundary extra :=
+      (assignment := assignment) (state := state) (context := context) origin old cursor) :
+      Growth origin old cursor boundary extra :=
   let suffix := MasterResources.executeWithReferences extra cursor
   let grown := CertifiedRoleGrouping.growStored old
     (MasterResources.transportHistory boundary suffix.history)
@@ -281,13 +284,14 @@ variable {depth count extra : Nat} {assignment : SequentialAssignment depth}
   {state : ThreadedConstitutiveState depth assignment}
   {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
   {old : CausalOperationalExecutionHistory (_count := count) state context}
+  {origin : MasterResources.Cursor}
   {cursor : MasterResources.Cursor} {boundary : cursor.boundary = MasterResources.endpoint old}
 
-theorem count_exact (growth : Growth old cursor boundary extra) : growth.grown.count = count + extra := by
+theorem count_exact (growth : Growth origin old cursor boundary extra) : growth.grown.count = count + extra := by
   rw [growth.grownExact]
   exact CertifiedRoleGrouping.growStored_count _ _
 
-theorem endpoint_exact (growth : Growth old cursor boundary extra) :
+theorem endpoint_exact (growth : Growth origin old cursor boundary extra) :
     growth.suffix.finish.boundary = MasterResources.endpoint growth.grown.history := by
   rw [growth.grownExact]
   have agreement : MasterResources.endpoint
@@ -300,23 +304,23 @@ theorem endpoint_exact (growth : Growth old cursor boundary extra) :
   exact executedEnd.trans
     (agreement.symm.trans (CertifiedRoleGrouping.growStored_endpoint _ _).symm)
 
-theorem history_is_one_run (growth : Growth old cursor boundary extra) :
+theorem history_is_one_run (growth : Growth origin old cursor boundary extra) :
     HEq growth.grown.history
       (MasterResources.executeWithReferences (extra + count) growth.provenance.origin).history := by
   cases growth.provenance with
-  | mk start startExact historyExact cursorExact =>
+  | mk startExact historyExact cursorExact =>
     cases startExact
     have oldExact := eq_of_heq historyExact
     subst old
     subst cursor
     rw [growth.grownExact, growth.suffixExact]
-    exact stored_growth_is_one_run extra count start _
+    exact stored_growth_is_one_run extra count origin _
 
-def producedPrefix (growth : Growth old cursor boundary extra) :
+def producedPrefix (growth : Growth origin old cursor boundary extra) :
     MasterResources.ProducedPrefix (depth := depth) (count := growth.grown.count)
       (assignment := assignment) (state := state) (context := context)
-      growth.grown.history growth.suffix.finish := by
-  refine ⟨growth.provenance.origin, growth.provenance.originBoundary, ?_, ?_⟩
+      origin growth.grown.history growth.suffix.finish := by
+  refine ⟨growth.provenance.originBoundary, ?_, ?_⟩
   · exact growth.history_is_one_run.trans
       (executed_history_count_heq _ _ (growth.count_exact.trans (Nat.add_comm count extra)).symm
         growth.provenance.origin)
@@ -328,8 +332,8 @@ def producedPrefix (growth : Growth old cursor boundary extra) :
           (congrArg (fun n => (MasterResources.executeWithReferences n growth.provenance.origin).finish)
             length.symm)))
 
-def resume (growth : Growth old cursor boundary extra) (more : Nat) :=
-  resource_history_extension growth.grown.history growth.suffix.finish growth.endpoint_exact more
+def resume (growth : Growth origin old cursor boundary extra) (more : Nat) :=
+  resource_history_extension origin growth.grown.history growth.suffix.finish growth.endpoint_exact more
     growth.producedPrefix
 end Growth
 
@@ -342,8 +346,7 @@ theorem Instance.endpoint_exact {input : Nat} (master : Instance input) :
 def Instance.producedPrefix {input : Nat} (master : Instance input) :
     MasterResources.ProducedPrefix (depth := master.origin.depth) (count := resolutionLength input)
       (assignment := master.origin.assignment) (state := master.origin.state) (context := master.origin.context)
-      master.execution master.cursor where
-  origin := master.origin
+      master.origin master.execution master.cursor where
   originBoundary := rfl
   historyExact := by
     unfold Instance.execution
@@ -355,16 +358,16 @@ def Instance.producedPrefix {input : Nat} (master : Instance input) :
     rfl
 
 def Instance.grow {input : Nat} (master : Instance input) (extra : Nat) :=
-  resource_history_extension master.execution master.cursor master.endpoint_exact extra master.producedPrefix
+  resource_history_extension master.origin master.execution master.cursor master.endpoint_exact extra master.producedPrefix
 
 /-- Transport from the original support through an already produced extension.
 The extension is an argument, not a second call of its executor. -/
 def Instance.referencesThrough {input extra : Nat} (master : Instance input)
-    (growth : Growth master.execution master.cursor master.endpoint_exact extra) :=
+    (growth : Growth master.origin master.execution master.cursor master.endpoint_exact extra) :=
   master.references.compose growth.suffix.references
 
 theorem Instance.referencesThrough_read {input extra : Nat} (master : Instance input)
-    (growth : Growth master.execution master.cursor master.endpoint_exact extra)
+    (growth : Growth master.origin master.execution master.cursor master.endpoint_exact extra)
     {kind : MasterResources.Kind} (ref : Resources.Ref master.origin.kinds kind) :
     growth.suffix.finish.support.read ((master.referencesThrough growth).references ref) =
       master.origin.support.read ref :=
@@ -374,9 +377,10 @@ def Growth.referencesThrough {depth count extra more : Nat} {assignment : Sequen
     {state : ThreadedConstitutiveState depth assignment}
     {context : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
     {old : CausalOperationalExecutionHistory (_count := count) state context}
+    {origin : MasterResources.Cursor}
     {cursor : MasterResources.Cursor} {boundary : cursor.boundary = MasterResources.endpoint old}
-    (one : Growth old cursor boundary extra)
-    (two : Growth one.grown.history one.suffix.finish one.endpoint_exact more) :=
+    (one : Growth origin old cursor boundary extra)
+    (two : Growth origin one.grown.history one.suffix.finish one.endpoint_exact more) :=
   one.suffix.references.compose two.suffix.references
 
 def publicContinuation (input extra : Nat) :=
@@ -482,6 +486,25 @@ structure Facts {input : Nat} (master : Instance input) : Prop where
   restartCursorExact : ∀ p, (master.checkpoint p).live = LiveContinuation.project master.cursor
   readersExact : ∀ p, (master.checkpoint p).readers =
     ProducedContinuation.targetReaders master.reduction (master.normalization.target p)
+  advanceAdmission : ∀ p steps,
+    Nonempty (ProducedContinuation.allow (master.checkpoint p) (.advance steps))
+  sourceAdvanceAdmission : ∀ p steps,
+    Nonempty (ProducedContinuation.allow (ProducedContinuation.project (master.source p)) (.advance steps))
+  requestAdmission : ∀ p requests,
+    Nonempty (Continuation.Admitted ProducedContinuation.sourceNext
+      (fun source input => ProducedContinuation.allow (ProducedContinuation.project source) input)
+      (master.source p) requests) ↔
+      Nonempty (Continuation.Admitted ProducedContinuation.next ProducedContinuation.allow
+        (master.checkpoint p) requests)
+  sourceAdmissionReturn : ∀ p {requests} (witness : Continuation.Admitted ProducedContinuation.sourceNext
+      (fun source input => ProducedContinuation.allow (ProducedContinuation.project source) input)
+      (master.source p) requests),
+    ProducedContinuation.all_requests_reflected (master.source p)
+      (ProducedContinuation.all_requests_admitted (master.source p) witness) = witness
+  memoryAdmissionReturn : ∀ p {requests} (witness : Continuation.Admitted ProducedContinuation.next
+      ProducedContinuation.allow (master.checkpoint p) requests),
+    ProducedContinuation.all_requests_admitted (master.source p)
+      (ProducedContinuation.all_requests_reflected (master.source p) witness) = witness
   inspectAdmission : ∀ (memory : ProducedContinuation.Memory master.normalization) query,
     Nonempty (ProducedContinuation.allow memory (.inspect query)) ↔ query.slot < resolutionLength input
   inspectEvent : ∀ p query, ProducedContinuation.event (master.checkpoint p) (.inspect query) =
@@ -502,6 +525,38 @@ structure Facts {input : Nat} (master : Instance input) : Prop where
   growthReferences : ∀ extra {kind : MasterResources.Kind} (ref : Resources.Ref master.origin.kinds kind),
     (master.grow extra).suffix.finish.support.read
       ((master.referencesThrough (master.grow extra)).references ref) = master.origin.support.read ref
+  referencesInjective : ∀ {kind : MasterResources.Kind} (first second : Resources.Ref master.origin.kinds kind),
+    master.references.references first = master.references.references second → first = second
+  growthReferencesInjective : ∀ {extra}
+    (growth : Growth master.origin master.execution master.cursor master.endpoint_exact extra)
+    {kind : MasterResources.Kind} (first second : Resources.Ref master.origin.kinds kind),
+    (master.referencesThrough growth).references first =
+      (master.referencesThrough growth).references second → first = second
+  growthReferencesCompose : ∀ {extra more}
+    (one : Growth master.origin master.execution master.cursor master.endpoint_exact extra)
+    (two : Growth master.origin one.grown.history one.suffix.finish one.endpoint_exact more)
+    {kind : MasterResources.Kind} (ref : Resources.Ref master.origin.kinds kind),
+    (master.references.compose (one.referencesThrough two)).references ref =
+      two.suffix.references.references ((master.referencesThrough one).references ref)
+  growthComposedReads : ∀ {extra more}
+    (one : Growth master.origin master.execution master.cursor master.endpoint_exact extra)
+    (two : Growth master.origin one.grown.history one.suffix.finish one.endpoint_exact more)
+    {kind : MasterResources.Kind} (ref : Resources.Ref master.origin.kinds kind),
+    two.suffix.finish.support.read
+      ((master.references.compose (one.referencesThrough two)).references ref) =
+        master.origin.support.read ref
+  growthProfilesCompose : ∀ {extra more}
+    (one : Growth master.origin master.execution master.cursor master.endpoint_exact extra)
+    (two : Growth master.origin one.grown.history one.suffix.finish one.endpoint_exact more)
+    (p : RoleOccurrenceProfile master.roles),
+    (one.grown.historical.compose two.grown.historical).embedding p =
+      two.grown.historical.embedding (one.grown.historical.embedding p)
+  growthObligationsCompose : ∀ {extra more}
+    (one : Growth master.origin master.execution master.cursor master.endpoint_exact extra)
+    (two : Growth master.origin one.grown.history one.suffix.finish one.endpoint_exact more)
+    (p : Extension.Obligation (CertifiedRoleGrouping.rules master.statuses)),
+    (one.grown.historical.compose two.grown.historical).extension.obligation p =
+      two.grown.historical.extension.obligation (one.grown.historical.extension.obligation p)
   arbitraryTracePreserves : ∀ {p q} (trace : Trace master.groupingRules.Step p q) (data : RoleProfilePayload p),
     RoleSemantics.ProfileAccept p data →
       RoleSemantics.ProfileAccept q (master.groupingAction.transport trace data)
@@ -541,6 +596,11 @@ theorem facts {input : Nat} (master : Instance input) : Facts master where
   restartCursorExact := fun _ => rfl
   readersExact := fun p => (master.checkpoint p).readersExact.trans
     (congrArg (ProducedContinuation.targetReaders master.reduction) (master.checkpoint_output_exact p))
+  advanceAdmission := fun p steps => ⟨ProducedContinuation.advance_admission (master.checkpoint p) steps⟩
+  sourceAdvanceAdmission := fun p steps => ⟨ProducedContinuation.source_advance_admission (master.source p) steps⟩
+  requestAdmission := fun p requests => ProducedContinuation.requests_admission_iff (master.source p) requests
+  sourceAdmissionReturn := fun p {_} witness => ProducedContinuation.requests_source_return (master.source p) witness
+  memoryAdmissionReturn := fun p {_} witness => ProducedContinuation.requests_memory_return (master.source p) witness
   inspectAdmission := ProducedContinuation.inspect_admitted_iff
   inspectEvent := fun p query =>
     (ProducedContinuation.inspect_event_exact (master.checkpoint p) query).trans
@@ -553,6 +613,15 @@ theorem facts {input : Nat} (master : Instance input) : Facts master where
   growthEndpoint := fun extra => (master.grow extra).endpoint_exact
   growthOneRun := fun extra => (master.grow extra).history_is_one_run
   growthReferences := fun extra {_} ref => master.referencesThrough_read (master.grow extra) ref
+  referencesInjective := master.references.injective
+  growthReferencesInjective := fun {_} growth => (master.referencesThrough growth).injective
+  growthReferencesCompose := fun {_ _} _ _ {_} _ => rfl
+  growthComposedReads := fun {_ _} one two {_} ref =>
+    (master.references.compose (one.referencesThrough two)).reads ref
+  growthProfilesCompose := fun {_ _} one two p =>
+    CertifiedRoleGrouping.Historical.embedding_composes one.grown.historical two.grown.historical p
+  growthObligationsCompose := fun {_ _} one two p =>
+    (CertifiedRoleGrouping.Historical.obligation_composes one.grown.historical two.grown.historical p).symm
   arbitraryTracePreserves := master.arbitrary_trace_preserves
   coherentTraces := master.normalizing_trace_coherent
   profileNotRecoverable := master.profile_irrecoverable

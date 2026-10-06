@@ -113,7 +113,8 @@ foreach ($line in Get-Content -LiteralPath $manifestPath) {
   if ($parts.Count -ne 4) { throw "$manifestPath`:${lineNumber}: expected four tab-separated fields" }
   $module, $stratum, $status, $responsibility = $parts
   if ($entries.ContainsKey($module)) { throw "$manifestPath`:${lineNumber}: duplicate module $module" }
-  if ($stratum -notin @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14','A15','A16','A17')) {
+  if ($stratum -notin @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14','A15','A16','A17') -and
+      $stratum -notmatch '^M([0-9]|1[0-9])$') {
     throw "$manifestPath`:${lineNumber}: unknown stratum $stratum"
   }
   if ($status -ne 'enforced') {
@@ -144,6 +145,11 @@ foreach ($relative in $relativeFiles) {
   $filesByModule[$module] = $relative
   $source = Get-Content -LiteralPath (Join-Path $repoRoot $relative) -Raw
   $imports[$module] = @(Get-LeanImports -Source $source)
+  foreach ($dependency in $imports[$module]) {
+    if ($dependency -eq 'Tests' -or $dependency.StartsWith('Tests.')) {
+      throw "production module imports a test: $module -> $dependency"
+    }
+  }
 }
 
 $missing = @($filesByModule.Keys | Where-Object { -not $entries.ContainsKey($_) } | Sort-Object)
@@ -184,6 +190,14 @@ $allowed = @{
   A15 = @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14')
   A16 = @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14','A15')
   A17 = @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14','A15','A16')
+}
+
+# Machine strata are strictly downstream of scientific strata. M0..M19 can
+# only read an earlier machine stratum; none is an unconstrained bucket.
+$scientificStrata = @($allowed.Keys)
+foreach ($rank in 0..19) {
+  $lowerMachine = @(0..($rank - 1) | Where-Object { $_ -ge 0 -and $_ -lt $rank } | ForEach-Object { "M$_" })
+  $allowed["M$rank"] = @($scientificStrata) + $lowerMachine
 }
 
 foreach ($root in ($entries.Keys | Sort-Object)) {

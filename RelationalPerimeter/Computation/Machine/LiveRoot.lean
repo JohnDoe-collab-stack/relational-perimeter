@@ -1,0 +1,16 @@
+import RelationalPerimeter.Computation.Machine.ReducedLiveMinimality
+import RelationalPerimeter.Computation.Machine.ReducedLiveRunner
+import RelationalPerimeter.Computation.Machine.ConstitutiveLiveExecution
+
+/-! Public root for the executable live reduction. This software root does not
+claim a physical implementation or a minimum byte cost. -/
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.ReconfigurableMachine.LiveReduction.liveReduction
+#print axioms ConstitutiveSearch.ReconfigurableMachine.LiveReduction.all_futures_exact
+#print axioms ConstitutiveSearch.ReconfigurableMachine.LiveReduction.minimal_projection_iff_futures
+#print axioms ConstitutiveSearch.ReconfigurableMachine.LiveReduction.any_exact_realization_retains_projection
+#print axioms ConstitutiveSearch.ReconfigurableMachine.LiveReduction.runReduced_exact_outcome
+#print axioms ConstitutiveSearch.ReconfigurableMachine.LiveReduction.executed_all_futures_exact
+#print axioms ConstitutiveSearch.ReconfigurableMachine.LiveReduction.executed_source_futures_exact
+#print axioms ConstitutiveSearch.ReconfigurableMachine.LiveReduction.minimal_projection_iff_executed_futures
+/- AXIOM_AUDIT_END -/
