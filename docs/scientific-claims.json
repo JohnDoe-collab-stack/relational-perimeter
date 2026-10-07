@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "evidence_revision": "a13c9a707afb43f0dca79576d6bc073e1bcc1bfa",
+  "evidence_revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
   "immutable_target": {
-    "revision": "d3c18a963a4c7f06f404a645b582379e81255a9a",
+    "revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
     "anchors": [
       {
         "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
@@ -20,13 +20,13 @@
         "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
         "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
         "paragraph": 3,
-        "sha256": "c3d3c17b7212e202c40a6d7c8a63f67087d7dc73d8df5b09bfebb169c7b3c372"
+        "sha256": "a0a2688beb10352cf5731cf825fabc7e4ae1a4e5149a6bf838d61480dde64403"
       },
       {
         "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
         "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
         "paragraph": 4,
-        "sha256": "e8283cb0ebbb2ea332d4e64c6afb4d9f54440ecb6acb60a4f0980fb1cba41575"
+        "sha256": "91b8a9ee7cf613bdf145e6d089d8360e27ff4c632007edef85b2bc084334cfc9"
       }
     ]
   },
@@ -46,13 +46,13 @@
           "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
           "heading": "Des objets constitués avant leur dénombrement",
           "paragraph": null,
-          "sha256": "5012b330f5319cdd93211bb8cd3fe64d9a892ed5d43ed7382434ddcc18698983"
+          "sha256": "53628bf6818d9be746cdc41c4aa8706ea69d54c3fa9b1bacc553090719384ae8"
         },
         {
           "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
           "heading": "Objects constituted before they are counted",
           "paragraph": null,
-          "sha256": "4cace9de9ddcf17ca6d642f9b43fb04879f0dd81db26efd94b90fbe4b37a4bc4"
+          "sha256": "afc247cfef1786afa5a3ed200dfda6e271b8479cdb99ee29d92aafc6da6fca06"
         },
         {
           "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
@@ -193,7 +193,7 @@
           "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
           "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
           "paragraph": 3,
-          "sha256": "c3d3c17b7212e202c40a6d7c8a63f67087d7dc73d8df5b09bfebb169c7b3c372"
+          "sha256": "a0a2688beb10352cf5731cf825fabc7e4ae1a4e5149a6bf838d61480dde64403"
         },
         {
           "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
@@ -258,7 +258,7 @@
           "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
           "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
           "paragraph": 4,
-          "sha256": "e8283cb0ebbb2ea332d4e64c6afb4d9f54440ecb6acb60a4f0980fb1cba41575"
+          "sha256": "91b8a9ee7cf613bdf145e6d089d8360e27ff4c632007edef85b2bc084334cfc9"
         },
         {
           "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
@@ -331,13 +331,13 @@
           "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
           "heading": "Des objets constitués avant leur dénombrement",
           "paragraph": null,
-          "sha256": "5012b330f5319cdd93211bb8cd3fe64d9a892ed5d43ed7382434ddcc18698983"
+          "sha256": "53628bf6818d9be746cdc41c4aa8706ea69d54c3fa9b1bacc553090719384ae8"
         },
         {
           "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
           "heading": "Objects constituted before they are counted",
           "paragraph": null,
-          "sha256": "4cace9de9ddcf17ca6d642f9b43fb04879f0dd81db26efd94b90fbe4b37a4bc4"
+          "sha256": "afc247cfef1786afa5a3ed200dfda6e271b8479cdb99ee29d92aafc6da6fca06"
         }
       ],
       "proofs": [
@@ -548,7 +548,7 @@
     {
       "id": "MASTER_COUPLING",
       "kind": "causal",
-      "scope": "Une reprise partage le résultat vivant effectivement recherché avec SAT et l'installation. Le sélecteur reste déterminé par la profondeur ; le raccord n'implique pas un retour SAT vers le moteur vivant.",
+      "scope": "Initialisation épinglée au maître public pour tout input, scope, formule et contextes reçus. Une reprise partage le résultat vivant effectivement recherché avec SAT et l'installation. Le sélecteur reste déterminé par la profondeur ; le raccord n'implique pas un retour SAT vers le moteur vivant.",
       "anchors": [
         {
           "path": "docs/integrated-master-machine.fr.md",
@@ -566,19 +566,46 @@
           "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
           "heading": "La relation trouvée devient une action réutilisable",
           "paragraph": null,
-          "sha256": "0ce69bd1284c2bd72c10be0a0a83056270cbba0d1aac5d97afead2ddc2f70e03"
+          "sha256": "42473f65c1e80db12d505df9d953227dcf4f2924d095fd58e13bb871b3dd6c65"
         },
         {
           "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
           "heading": "The discovered relation becomes a reusable action",
           "paragraph": null,
-          "sha256": "5fd38b6919545a10174b663e21049a27e9bca1f6b9f1f967f7241c8c0969b536"
+          "sha256": "ef8dfec5e62f46e3a88b16c05392411f1eb0bc2e7604a685fb399ccff6b95681"
+        },
+        {
+          "path": "docs/integrated-master-machine.fr.md",
+          "heading": "Ce que les preuves établissent",
+          "paragraph": 3,
+          "sha256": "c1ecc4047120bff1449f0ad16d0d3c6e6bbb03e8432ad57c9a2da61a38f2dfba"
+        },
+        {
+          "path": "docs/integrated-master-machine.en.md",
+          "heading": "What the proofs establish",
+          "paragraph": 3,
+          "sha256": "ef51985361b67297d5b099b253665d049e7eba618f975c32f9fb49a7e136a993"
         }
       ],
       "proofs": [
         {
           "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
           "name": "ConstitutiveSearch.MasterMachine.receive",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.receive_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.receive_core_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.receive_problem_exact",
           "role": "production"
         },
         {
@@ -608,7 +635,7 @@
         "scripts/unified_codegen_selftest.py"
       ],
       "dependencies": {
-        "formation": "Le runtime reçoit le maître existant, les contextes SAT et une permission de lecture.",
+        "formation": "Le runtime reçoit le maître existant, les contextes SAT et une permission de lecture ; receive_exact épingle la projection pour tout input, sans supposer l'atteignabilité canonique des contextes.",
         "execution": "Une production vivante fournit le sélecteur ; ouverture, réduction et configuration sont partagées.",
         "proof": "Le successeur et la viabilité sont raccordés à la frontière produite, pas à une largeur souhaitée.",
         "transport": "La mémoire conserve la frontière nécessaire à la prochaine recherche."
@@ -618,7 +645,7 @@
         "FULL_FUTURES",
         "SINGLE_EXECUTION"
       ],
-      "source_sha256": "93ac936d1001eb41af16789ab79f60d1c5493743ce4ab2dbe247d4bcd0ab86d4",
+      "source_sha256": "ede445b457f9329ecf9dc0d927c3df36897149bf07c0e867e5f39218d1a85dac",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -640,25 +667,25 @@
           "path": "docs/integrated-master-machine.fr.md",
           "heading": "Ce que les preuves établissent",
           "paragraph": null,
-          "sha256": "47917507972326478c4f5ff52b096cf29c0908e0b9cca4fd27aadbe9a3f8c2a1"
+          "sha256": "cb319afcd774b05cef0ab2b1e68775b0dbc916bd7af00437ffbc12956a2cffea"
         },
         {
           "path": "docs/integrated-master-machine.en.md",
           "heading": "What the proofs establish",
           "paragraph": null,
-          "sha256": "0c43754c9a8dcfd53dbde8d3e9e47f1941c2d8d8ef37bfe7cd4072df1eef735c"
+          "sha256": "3b84d6882f7b83a21c9ee70a8f379a1df0f206fffc58f4ec2c7af9a2664d1b94"
         },
         {
           "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
           "heading": "La relation trouvée devient une action réutilisable",
           "paragraph": null,
-          "sha256": "0ce69bd1284c2bd72c10be0a0a83056270cbba0d1aac5d97afead2ddc2f70e03"
+          "sha256": "42473f65c1e80db12d505df9d953227dcf4f2924d095fd58e13bb871b3dd6c65"
         },
         {
           "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
           "heading": "The discovered relation becomes a reusable action",
           "paragraph": null,
-          "sha256": "5fd38b6919545a10174b663e21049a27e9bca1f6b9f1f967f7241c8c0969b536"
+          "sha256": "ef8dfec5e62f46e3a88b16c05392411f1eb0bc2e7604a685fb399ccff6b95681"
         }
       ],
       "proofs": [
@@ -694,7 +721,7 @@
         "FULL_FUTURES",
         "MACHINE_EXAMPLE"
       ],
-      "source_sha256": "70dedf25364564491264bce738a48a905e583b2780073f1b3e4ddc5fcf687958",
+      "source_sha256": "7c772a9033d131294ebf07b517f467758a7820d667d82efdb9d29b2ea9cd160b",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -769,7 +796,7 @@
       "consumers": [
         "SINGLE_EXECUTION"
       ],
-      "source_sha256": "8b89bbdaba8def3841334ac5e124343b08b4b15c7d34fa560d77105616bda1c6",
+      "source_sha256": "556375a130de7eb0303434d2dd8a7b8a9c7e6ac234a5351484ca903ebfe5b04d",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -820,6 +847,21 @@
         },
         {
           "module": "Tests.Machine.MasterIntegration",
+          "name": "ConstitutiveSearch.MasterMachine.Checks.initialization_all_inputs",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.MasterIntegration",
+          "name": "ConstitutiveSearch.MasterMachine.Checks.initialization_core_all_inputs",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.MasterIntegration",
+          "name": "ConstitutiveSearch.MasterMachine.Checks.initialization_problem_all_inputs",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.MasterIntegration",
           "name": "ConstitutiveSearch.MasterMachine.Checks.source_distinct",
           "role": "test"
         },
@@ -852,7 +894,7 @@
         "transport": "L'échec des deux directions du chercheur ne démontre pas l'absence universelle d'une relation."
       },
       "consumers": [],
-      "source_sha256": "e98808dbb925abda1047d013ab28b51ef0e470214ef6f3ff318daa4ceb7e64c9",
+      "source_sha256": "36f660d8480c816e07edc89bb5c99ba6542d0f3f8b6a1380f7e3f78e32199a12",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -868,19 +910,19 @@
     {
       "id": "SINGLE_EXECUTION",
       "kind": "implementation",
-      "scope": "Trois runners à transition appariée : événement et successeur proviennent de la même paire. Une reprise intégrée atteint une recherche vivante commune et transmet ses champs retournés. Les écritures des helpers sur des objets reçus sont refusées, pas résumées comme effets du tas. Contrôles locaux du C épinglé, sans borne de coût global ni matériel.",
+      "scope": "Trois runners à transition appariée : événement et successeur proviennent de la même paire. Une reprise intégrée atteint une recherche vivante commune et transmet ses champs retournés. Les écritures des helpers sur des objets reçus sont refusées, pas résumées comme effets du tas. Contrôles locaux du C épinglé, sans borne de coût global ni matériel. Le routage configuré est contrôlé depuis fire, Routing.apply et routeProblem, helpers transitifs inclus.",
       "anchors": [
         {
           "path": "docs/integrated-master-machine.fr.md",
           "heading": "Vérification et frontière matérielle",
           "paragraph": null,
-          "sha256": "ef4b387c84b34e3c848345ccf8769a25fe6388f0167ed5f23eec8c3ca38aab13"
+          "sha256": "1c9481ce212a34ce290267a081e96dd8df3b7e01a531b11514521a722fe0693f"
         },
         {
           "path": "docs/integrated-master-machine.en.md",
           "heading": "Verification and hardware boundary",
           "paragraph": null,
-          "sha256": "113911ef26bb05cfe8adfb1935c7945bed320f03ed58bd0a37501b028becbc20"
+          "sha256": "32575d3eaf784e16820277fb786e7f9d62db1c38ec26f8b5a3d121c4bc7398ff"
         },
         {
           "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
@@ -930,11 +972,11 @@
       "dependencies": {
         "formation": "La spécification à callbacks est distincte du runner apparié.",
         "execution": "Les trois runners partagent la paire courante et récursent sur son successeur et la queue reçue. La reprise lit le sélecteur trouvé et installe la même production.",
-        "proof": "Lean raccorde les comportements ; le C est contrôlé par comptage commun et origines de champs sur chaque chemin local pris en charge.",
+        "proof": "Lean raccorde les comportements ; le C est contrôlé par comptage commun et origines de champs sur chaque chemin local pris en charge. Les artefacts du routage sont contrôlés transitivement ; les dépendances SAT, callbacks lean_apply et corps projet manquants sont rejetés.",
         "transport": "Les gates restent représentées par constructeurs logiciels ; ni FPGA ni coût de routage physique prouvé."
       },
       "consumers": [],
-      "source_sha256": "f96536f21899e2af01d3bf4ac7fb826b9d4e1811c9cc9d213110f7019376a2de",
+      "source_sha256": "e7c36553da7101788552ddc9cc25e57ec31b6fdf461c84ef029dcd3132619634",
       "reviews": {
         "reader": {
           "status": "pending"
