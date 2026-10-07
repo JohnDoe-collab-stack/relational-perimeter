@@ -14,7 +14,7 @@ relation witness.
 
 namespace ConstitutiveSearch
 
-universe uRelation
+universe uRelation uState uContinuation
 
 namespace AcceptingFrontierTransport
 
@@ -112,6 +112,42 @@ def prepend
 
 end AcceptedFrontierPreservation
 
+/-- Finite routing syntax produced inside the relation search. Source and target
+frontiers stay indexed by their constituted states; absorption stores the actual
+positive relation witness, not a supplied width or an unlicensed constant map. -/
+inductive AcceptedFrontierCode {system : SearchSystem.{uState, uContinuation}}
+    {Relation : system.State → system.State → Type uRelation}
+    (action : AcceptedRelationalAction system Relation) :
+    List system.State → List system.State → Type (max uState uRelation) where
+  | identity (source : List system.State) : AcceptedFrontierCode action source source
+  | swap {first second : system.State} {rest : List system.State} :
+      AcceptedFrontierCode action (first :: second :: rest) (second :: first :: rest)
+  | absorbFirst {first second : system.State} {rest : List system.State}
+      (relation : Relation first second) :
+      AcceptedFrontierCode action (first :: second :: rest) (second :: rest)
+  | absorbSecond {first second : system.State} {rest : List system.State}
+      (relation : Relation second first) :
+      AcceptedFrontierCode action (first :: second :: rest) (first :: rest)
+  | prepend {source target : List system.State} (head : system.State)
+      (code : AcceptedFrontierCode action source target) :
+      AcceptedFrontierCode action (head :: source) (head :: target)
+  | compose {source middle target : List system.State}
+      (first : AcceptedFrontierCode action source middle)
+      (second : AcceptedFrontierCode action middle target) :
+      AcceptedFrontierCode action source target
+
+def AcceptedFrontierCode.eval {system : SearchSystem}
+    {Relation : system.State → system.State → Type uRelation}
+    {action : AcceptedRelationalAction system Relation} :
+    {source target : List system.State} → AcceptedFrontierCode action source target →
+      AcceptedFrontierPreservation system source target
+  | _, _, .identity source => .identity system source
+  | _, _, .swap => .swapFirstTwo
+  | _, _, .absorbFirst relation => action.absorbFirstIntoSecond relation
+  | _, _, .absorbSecond relation => action.absorbSecondIntoFirst relation
+  | _, _, .prepend _ code => code.eval.prepend
+  | _, _, .compose first second => first.eval.trans second.eval
+
 /--
 Result of inserting one state into an already search-irreducible frontier.
 
@@ -122,14 +158,11 @@ structure AcceptedInsertIrreducibleReduction
     {system : SearchSystem}
     {Relation : system.State → system.State → Type uRelation}
     (search : RelationSearch Relation)
+    (action : AcceptedRelationalAction system Relation)
     (state : system.State)
     (rest : List system.State) where
   retained : List system.State
-  preservation :
-    AcceptedFrontierPreservation
-      system
-      (state :: rest)
-      retained
+  code : AcceptedFrontierCode action (state :: rest) retained
   irreducible : SearchIrreducible search retained
   retainedFromSource :
     ∀ candidate : system.State,
@@ -138,15 +171,23 @@ structure AcceptedInsertIrreducibleReduction
 
 namespace AcceptedInsertIrreducibleReduction
 
+def preservation {system : SearchSystem}
+    {Relation : system.State → system.State → Type uRelation}
+    {search : RelationSearch Relation} {action : AcceptedRelationalAction system Relation}
+    {state : system.State} {rest : List system.State}
+    (reduction : AcceptedInsertIrreducibleReduction search action state rest) :
+    AcceptedFrontierPreservation system (state :: rest) reduction.retained := reduction.code.eval
+
 /-- Width is derived only after the certified insertion has been constructed. -/
 def width
     {system : SearchSystem}
     {Relation : system.State → system.State → Type uRelation}
     {search : RelationSearch Relation}
+    {action : AcceptedRelationalAction system Relation}
     {state : system.State}
     {rest : List system.State}
     (reduction :
-      AcceptedInsertIrreducibleReduction search state rest) : Nat :=
+      AcceptedInsertIrreducibleReduction search action state rest) : Nat :=
   reduction.retained.length
 
 /-- Insertion preserves frontier viability exactly. -/
@@ -154,10 +195,11 @@ theorem viable_iff
     {system : SearchSystem}
     {Relation : system.State → system.State → Type uRelation}
     {search : RelationSearch Relation}
+    {action : AcceptedRelationalAction system Relation}
     {state : system.State}
     {rest : List system.State}
     (reduction :
-      AcceptedInsertIrreducibleReduction search state rest) :
+      AcceptedInsertIrreducibleReduction search action state rest) :
     FrontierViable system (state :: rest) ↔
       FrontierViable system reduction.retained :=
   reduction.preservation.viable_iff
@@ -178,11 +220,10 @@ def insertAcceptedIntoIrreducible
     (state : system.State) :
     (rest : List system.State) →
       SearchIrreducible search rest →
-        AcceptedInsertIrreducibleReduction search state rest
+        AcceptedInsertIrreducibleReduction search action state rest
   | [], _ =>
       { retained := [state]
-        preservation :=
-          AcceptedFrontierPreservation.identity system [state]
+        code := .identity [state]
         irreducible := SearchIrreducible.singleton search state
         retainedFromSource := fun candidate member => by
           cases member with
@@ -194,19 +235,13 @@ def insertAcceptedIntoIrreducible
       match classification : search.classifyPairCertified state current with
       | .bidirectional forward _backward _forwardFound _backwardFound =>
           { retained := current :: tail
-            preservation :=
-              action.absorbFirstIntoSecond
-                (rest := tail)
-                forward
+            code := .absorbFirst forward
             irreducible := restIrreducible
             retainedFromSource := fun _candidate member =>
               Or.inr member }
       | .forwardOnly forward _forwardFound _backwardNotFound =>
           { retained := current :: tail
-            preservation :=
-              action.absorbFirstIntoSecond
-                (rest := tail)
-                forward
+            code := .absorbFirst forward
             irreducible := restIrreducible
             retainedFromSource := fun _candidate member =>
               Or.inr member }
@@ -215,11 +250,7 @@ def insertAcceptedIntoIrreducible
             insertAcceptedIntoIrreducible
               search action state tail tailIrreducible
           { retained := recursive.retained
-            preservation :=
-              (action.absorbSecondIntoFirst
-                (rest := tail)
-                backward).trans
-                recursive.preservation
+            code := .compose (.absorbSecond backward) recursive.code
             irreducible := recursive.irreducible
             retainedFromSource := fun candidate member => by
               cases recursive.retainedFromSource candidate member with
@@ -245,14 +276,7 @@ def insertAcceptedIntoIrreducible
             | inr tailMember =>
                 exact currentAgainstTail other tailMember
           { retained := current :: recursive.retained
-            preservation :=
-              (AcceptedFrontierPreservation.swapFirstTwo
-                (system := system)
-                (first := state)
-                (second := current)
-                (rest := tail)).trans
-                (recursive.preservation.prepend
-                  (head := current))
+            code := .compose .swap (.prepend current recursive.code)
             irreducible :=
               ⟨currentAgainstRetained, recursive.irreducible⟩
             retainedFromSource := fun candidate member => by
@@ -273,22 +297,30 @@ structure AcceptedIrreducibleFrontierReduction
     {system : SearchSystem}
     {Relation : system.State → system.State → Type uRelation}
     (search : RelationSearch Relation)
+    (action : AcceptedRelationalAction system Relation)
     (source : List system.State) where
   retained : List system.State
-  preservation :
-    AcceptedFrontierPreservation system source retained
+  code : AcceptedFrontierCode action source retained
   irreducible : SearchIrreducible search retained
 
 namespace AcceptedIrreducibleFrontierReduction
+
+def preservation {system : SearchSystem}
+    {Relation : system.State → system.State → Type uRelation}
+    {search : RelationSearch Relation} {action : AcceptedRelationalAction system Relation}
+    {source : List system.State}
+    (reduction : AcceptedIrreducibleFrontierReduction search action source) :
+    AcceptedFrontierPreservation system source reduction.retained := reduction.code.eval
 
 /-- Width is derived from the retained frontier. -/
 def width
     {system : SearchSystem}
     {Relation : system.State → system.State → Type uRelation}
     {search : RelationSearch Relation}
+    {action : AcceptedRelationalAction system Relation}
     {source : List system.State}
     (reduction :
-      AcceptedIrreducibleFrontierReduction search source) : Nat :=
+      AcceptedIrreducibleFrontierReduction search action source) : Nat :=
   reduction.retained.length
 
 /-- Complete normalization preserves viability exactly. -/
@@ -296,9 +328,10 @@ theorem viable_iff
     {system : SearchSystem}
     {Relation : system.State → system.State → Type uRelation}
     {search : RelationSearch Relation}
+    {action : AcceptedRelationalAction system Relation}
     {source : List system.State}
     (reduction :
-      AcceptedIrreducibleFrontierReduction search source) :
+      AcceptedIrreducibleFrontierReduction search action source) :
     FrontierViable system source ↔
       FrontierViable system reduction.retained :=
   reduction.preservation.viable_iff
@@ -315,11 +348,10 @@ def normalizeAcceptedFrontier
     (search : RelationSearch Relation)
     (action : AcceptedRelationalAction system Relation) :
     (source : List system.State) →
-      AcceptedIrreducibleFrontierReduction search source
+      AcceptedIrreducibleFrontierReduction search action source
   | [] =>
       { retained := []
-        preservation :=
-          AcceptedFrontierPreservation.identity system []
+        code := .identity []
         irreducible := SearchIrreducible.nil search }
   | state :: tail =>
       let tailReduction :=
@@ -332,10 +364,7 @@ def normalizeAcceptedFrontier
           tailReduction.retained
           tailReduction.irreducible
       { retained := inserted.retained
-        preservation :=
-          (tailReduction.preservation.prepend
-            (head := state)).trans
-            inserted.preservation
+        code := .compose (.prepend state tailReduction.code) inserted.code
         irreducible := inserted.irreducible }
 
 /-- Operational width produced by this exact hardened normalization engine. -/
@@ -350,6 +379,10 @@ def normalizedAcceptedWidth
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.AcceptedFrontierCode
+#print axioms ConstitutiveSearch.AcceptedFrontierCode.eval
+#print axioms ConstitutiveSearch.AcceptedInsertIrreducibleReduction.preservation
+#print axioms ConstitutiveSearch.AcceptedIrreducibleFrontierReduction.preservation
 #print axioms ConstitutiveSearch.AcceptingFrontierTransport.swapFirstTwo
 #print axioms ConstitutiveSearch.AcceptingFrontierTransport.prepend
 #print axioms ConstitutiveSearch.AcceptedFrontierPreservation.swapFirstTwo

@@ -4,15 +4,6 @@ namespace ConstitutiveSearch.EndogenousDecomposition
 
 open SAT
 
-theorem ComparisonWork.total_add (first second : ComparisonWork) :
-    (first.add second).total = first.total + second.total :=
-  Nat.add_add_add_comm _ _ _ _
-
-theorem ComparisonWork.total_visit (work : ComparisonWork) :
-    work.visit.total = work.total + 1 := by
-  change (work.nodes + 1) + work.labelSteps = (work.nodes + work.labelSteps) + 1
-  rw [Nat.add_assoc, Nat.add_comm 1 work.labelSteps, ← Nat.add_assoc]
-
 def unaryListSize {α : Type} (size : α → Nat) : List α → Nat
   | [] => 1
   | head :: tail => size head + unaryListSize size tail + 1
@@ -162,8 +153,6 @@ theorem constructMeasuredChild_bound {root : Cnf}
 end ConstitutiveSearch.EndogenousDecomposition
 
 /- AXIOM_AUDIT_BEGIN -/
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ComparisonWork.total_add
-#print axioms ConstitutiveSearch.EndogenousDecomposition.ComparisonWork.total_visit
 #print axioms ConstitutiveSearch.EndogenousDecomposition.compareUnary_total_le
 #print axioms ConstitutiveSearch.EndogenousDecomposition.compareMeasuredList_bound
 #print axioms ConstitutiveSearch.EndogenousDecomposition.compareMeasuredLiteral_bound

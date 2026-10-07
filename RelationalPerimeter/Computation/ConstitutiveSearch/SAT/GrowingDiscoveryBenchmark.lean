@@ -1,5 +1,6 @@
 import RelationalPerimeter.Computation.ConstitutiveSearch.SAT.SecondAuditCausalBenchmark
 import RelationalPerimeter.Computation.ConstitutiveSearch.SAT.ExplicitStackedSymmetricFamily
+import RelationalPerimeter.Computation.ConstitutiveSearch.SAT.GrowingDiscoveryFamily
 
 set_option linter.defProp false
 
@@ -19,11 +20,6 @@ is passed to the discovery engine.
 
 namespace ConstitutiveSearch
 namespace SAT
-
-/-- Put `count` copies of one value in front of a supplied tail. -/
-def copiesBefore {α : Type} : Nat → α → List α → List α
-  | 0, _value, tail => tail
-  | count + 1, value, tail => value :: copiesBefore count value tail
 
 /-- Appending after a repeated prefix only changes its supplied tail. -/
 theorem copiesBefore_append
@@ -186,37 +182,6 @@ theorem exploreStructuralCandidates_cons_success
         rw [found]
       · unfold exploreStructuralCandidates
         rw [found]
-
-/-- One nonempty syntactic clause containing only the decoy variable. -/
-def growingDiscoveryDecoyClause (input : Nat) : Clause :=
-  copiesBefore
-    (input + 1)
-    (Literal.positive 0)
-    []
-
-/-- The useful variable varies with the input and is never the decoy `0`. -/
-def growingDiscoverySplitVar (input : Nat) : Var :=
-  input + 2
-
-/-- A separate anchor for the useful symmetric block. -/
-def growingDiscoveryAnchorVar (input : Nat) : Var :=
-  input + 3
-
-/-- Decoy prefix followed by the useful flip-symmetric block. -/
-def growingDiscoveryFormula (input : Nat) : Cnf :=
-  growingDiscoveryDecoyClause input ::
-    symmetricBlockFamily
-      (growingDiscoverySplitVar input)
-      (growingDiscoveryAnchorVar input)
-      []
-
-/-- Root state consumed by the ordinary endogenous discovery engine. -/
-def growingDiscoveryRoot
-    (input : Nat) :
-    GeneratedStructuralBranchContext
-      (growingDiscoveryFormula input) :=
-  GeneratedStructuralBranchContext.root
-    (growingDiscoveryFormula input)
 
 /-- The anchor and useful split variable are distinct. -/
 theorem growingDiscoveryAnchor_ne_split
@@ -716,17 +681,6 @@ theorem growingDiscovery_found_after_exact_attempts
 
 /-! ## Stronger family with pairwise distinct decoy variables -/
 
-/-- Descending list `count - 1, ..., 0` of pairwise distinct decoy variables. -/
-def distinctDecoyVariables : Nat → List Var
-  | 0 => []
-  | count + 1 => count :: distinctDecoyVariables count
-
-/-- One positive-literal clause carrying exactly the distinct decoy variables. -/
-def distinctDecoyClause : Nat → Clause
-  | 0 => []
-  | count + 1 =>
-      Literal.positive count :: distinctDecoyClause count
-
 /-- Structural extraction returns exactly the announced distinct variables. -/
 theorem distinctDecoyClause_candidates
     (count : Nat) :
@@ -920,22 +874,6 @@ theorem exploreStructuralCandidates_append_failure
           _ =
               (exploreStructuralCandidates state tail).attempts +
                 (candidate :: rest).length := rfl
-
-/-- Strong formula: distinct decoy variables precede the useful symmetric block. -/
-def distinctGrowingDiscoveryFormula (input : Nat) : Cnf :=
-  distinctDecoyClause (input + 1) ::
-    symmetricBlockFamily
-      (growingDiscoverySplitVar input)
-      (growingDiscoveryAnchorVar input)
-      []
-
-/-- Generated root of the distinct-decoy family. -/
-def distinctGrowingDiscoveryRoot
-    (input : Nat) :
-    GeneratedStructuralBranchContext
-      (distinctGrowingDiscoveryFormula input) :=
-  GeneratedStructuralBranchContext.root
-    (distinctGrowingDiscoveryFormula input)
 
 /-- Every decoy below `count` avoids any supplied upper bound. -/
 theorem distinctDecoyClause_avoids_above
@@ -1455,13 +1393,11 @@ end SAT
 end ConstitutiveSearch
 
 /- AXIOM_AUDIT_BEGIN -/
-#print axioms ConstitutiveSearch.SAT.copiesBefore
 #print axioms ConstitutiveSearch.SAT.Clause.candidateVariables_copiesBefore
 #print axioms ConstitutiveSearch.SAT.extractClauseCandidateRun_copiesBefore_literalVisits
 #print axioms ConstitutiveSearch.SAT.exploreStructuralCandidates_cons_failure
 #print axioms ConstitutiveSearch.SAT.exploreStructuralCandidates_copiesBefore_failure
 #print axioms ConstitutiveSearch.SAT.exploreStructuralCandidates_cons_success
-#print axioms ConstitutiveSearch.SAT.growingDiscoveryFormula
 #print axioms ConstitutiveSearch.SAT.growingDiscoveryAnchor_ne_split
 #print axioms ConstitutiveSearch.SAT.growingDiscoveryDecoy_ne_split
 #print axioms ConstitutiveSearch.SAT.Clause.copiesBefore_positiveZero_avoids
@@ -1479,12 +1415,10 @@ end ConstitutiveSearch
 #print axioms ConstitutiveSearch.SAT.growingDiscovery_candidates
 #print axioms ConstitutiveSearch.SAT.growingDiscovery_extraction_stats
 #print axioms ConstitutiveSearch.SAT.growingDiscovery_found_after_exact_attempts
-#print axioms ConstitutiveSearch.SAT.distinctDecoyVariables
 #print axioms ConstitutiveSearch.SAT.distinctDecoyVariables_mem_lt
 #print axioms ConstitutiveSearch.SAT.distinctDecoyClause_contains_positive
 #print axioms ConstitutiveSearch.SAT.distinctDecoyClause_contains_negative_false
 #print axioms ConstitutiveSearch.SAT.exploreStructuralCandidates_append_failure
-#print axioms ConstitutiveSearch.SAT.distinctGrowingDiscoveryFormula
 #print axioms ConstitutiveSearch.SAT.distinctDecoyClause_avoids_split
 #print axioms ConstitutiveSearch.SAT.distinctGrowingDiscoveryBody_avoids_candidate
 #print axioms ConstitutiveSearch.SAT.distinctGrowingDiscovery_flipSymmetric

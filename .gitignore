@@ -2,3 +2,4 @@
 *.olean
 *.ilean
 *.c
+__pycache__/

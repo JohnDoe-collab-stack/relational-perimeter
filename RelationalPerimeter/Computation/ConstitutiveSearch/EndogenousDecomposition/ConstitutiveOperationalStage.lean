@@ -1,5 +1,5 @@
 import RelationalPerimeter.Computation.ConstitutiveGeneration
-import RelationalPerimeter.Computation.ConstitutiveSearch.SAT.GrowingDiscoveryBenchmark
+import RelationalPerimeter.Computation.ConstitutiveSearch.SAT.GrowingDiscoveryFamily
 
 /-!
 # Constitutive stages and their operational execution

@@ -517,8 +517,8 @@ absorbed one impossible.
 
 The executed result also produces the retained state, seed, decisions, and
 provenance consumed by the next stage. Structural multiplicity and operational
-independence are therefore not conflated: the latter is determined during the
-computation from relations and data that the computation has itself
+independence are therefore not conflated: the operational status is constituted
+during the computation from relations and data that the computation has itself
 reconstructed or produced. The detailed presentation and exact scope of this
 result are given in
 [Endogenous Operational Decomposition](endogenous-operational-decomposition.en.md).

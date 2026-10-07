@@ -1,0 +1,1426 @@
+{
+  "schema_version": 2,
+  "document_relocations": {
+    "docs/science/chaine-constitutive-machine.fr.md": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+    "docs/science/constitutive-machine-chain.en.md": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+    "docs/science/preuves-chaine-constitutive-machine.fr.md": "docs/work/PREUVES_CHAINE_CONSTITUTIVE_MACHINE.fr.md"
+  },
+  "evidence_revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
+  "immutable_target": {
+    "revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
+    "anchors": [
+      {
+        "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
+        "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+        "paragraph": 1,
+        "sha256": "c8990e1b9b51f2bd7b913ba47a9b5e21f758f09474436ad2f087b6c5fe3b45fe"
+      },
+      {
+        "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
+        "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+        "paragraph": 2,
+        "sha256": "a18377603bbf1425342df59ca58ec642497c07eea165cccfcb52af72b9fa77f4"
+      },
+      {
+        "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
+        "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+        "paragraph": 3,
+        "sha256": "a0a2688beb10352cf5731cf825fabc7e4ae1a4e5149a6bf838d61480dde64403"
+      },
+      {
+        "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
+        "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+        "paragraph": 4,
+        "sha256": "91b8a9ee7cf613bdf145e6d089d8360e27ff4c632007edef85b2bc084334cfc9"
+      }
+    ]
+  },
+  "claims": [
+    {
+      "id": "TARGET_1",
+      "kind": "causal",
+      "scope": "Constitution relative aux primitives reçues ; décomposition locale de l'exécution publique, non auto-production des primitives ni imprévisibilité.",
+      "anchors": [
+        {
+          "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
+          "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+          "paragraph": 1,
+          "sha256": "c8990e1b9b51f2bd7b913ba47a9b5e21f758f09474436ad2f087b6c5fe3b45fe"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "Des objets constitués avant leur dénombrement",
+          "paragraph": null,
+          "sha256": "53628bf6818d9be746cdc41c4aa8706ea69d54c3fa9b1bacc553090719384ae8"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Objects constituted before they are counted",
+          "paragraph": null,
+          "sha256": "afc247cfef1786afa5a3ed200dfda6e271b8479cdb99ee29d92aafc6da6fca06"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "La décomposition est produite avant sa continuation",
+          "paragraph": null,
+          "sha256": "7f94e2aba3f23c7c918fee958df8c648b13fd74ce117efcacabcd0795764e123"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Decomposition is produced before its continuation",
+          "paragraph": null,
+          "sha256": "0499be2501c740c6c8fa257cebbef0f5b6400c4531ea5fe8bcb54ad884e7e7d7"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.RelationalProfileConstitution",
+          "name": "ConstitutiveSearch.RelationalExtensive.RelationallyConstitutedOccurrence",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecution",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.executeCausalOperationalExecutionHistory_allHeadsExact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CausalOperationalExecution",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.publicCausalOperationalExecution_roles_exact",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Les occurrences sont indexées par leur étape et leur histoire dépendante.",
+        "execution": "La récursion produit la tête locale avant sa queue à partir de l'étape exécutée.",
+        "proof": "L'exactitude des têtes et l'égalité des rôles publics relient cette production à l'exécution faisant autorité.",
+        "transport": "La lecture quantitative ne constitue pas les occurrences ni leur identité."
+      },
+      "consumers": [
+        "TARGET_2",
+        "SEARCH_CONTEXTS",
+        "MASTER_COUPLING"
+      ],
+      "source_sha256": "5a69e2217115909a80770431fb92cb242b281ac83489d80581061377dc6cae04",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "TARGET_2",
+      "kind": "causal",
+      "scope": "Même carrier public : largeur source 2^(input+1), largeur exécutée 1 et profils distincts portés ensemble ; pas de borne de coût total.",
+      "anchors": [
+        {
+          "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
+          "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+          "paragraph": 2,
+          "sha256": "a18377603bbf1425342df59ca58ec642497c07eea165cccfcb52af72b9fa77f4"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "La décomposition est produite avant sa continuation",
+          "paragraph": null,
+          "sha256": "7f94e2aba3f23c7c918fee958df8c648b13fd74ce117efcacabcd0795764e123"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Decomposition is produced before its continuation",
+          "paragraph": null,
+          "sha256": "0499be2501c740c6c8fa257cebbef0f5b6400c4531ea5fe8bcb54ad884e7e7d7"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Instance.source_width",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Instance.executed_width",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Instance.carry_fibres",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparation",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.publicCertificateProfiles_distinct",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparation",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.publicCertificateProfiles_carryTogether",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Les profils sélectionnent des occurrences déjà constituées de la même histoire.",
+        "execution": "Les cibles normalisées et leurs traces sont produites avant le régime.",
+        "proof": "La convergence, l'image exacte et les fibres de carry établissent le regroupement.",
+        "transport": "L'égalité d'obligation n'égalise pas les profils sources."
+      },
+      "consumers": [
+        "TARGET_4",
+        "PROFILE_FORGETTING"
+      ],
+      "source_sha256": "d0b053c12e4eb13cba63001ed721d88e6b3efeb2de14cf1d233610511ca80e83",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "TARGET_3",
+      "kind": "cardinality",
+      "scope": "Toute famille binaire formalisée, tout problème et régime surjectif : pleine largeur iff conservation distincte ; adressage construit, non hypothèse indépendante.",
+      "anchors": [
+        {
+          "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
+          "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+          "paragraph": 3,
+          "sha256": "a0a2688beb10352cf5731cf825fabc7e4ae1a4e5149a6bf838d61480dde64403"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "Les largeurs sont des conséquences de ces régimes",
+          "paragraph": null,
+          "sha256": "78c7f9f704e958b993bcfa81826d811c1312aa3361c5839f82132899039b0b7c"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Widths are consequences of these regimes",
+          "paragraph": null,
+          "sha256": "4a118efd819d981f9223396d935beccde3746e7b91e97848675a14e1ff2c22e7"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.RelationalRoleExtensiveFamily",
+          "name": "ConstitutiveSearch.RelationalExtensive.BinaryRelationalRoleExtensiveFamily.exponentialWidth_iff_preservesConstitutedIdentities",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.RelationalRoleExtensiveFamily",
+          "name": "ConstitutiveSearch.RelationalExtensive.BinaryRelationalRoleExtensiveFamily.exponentialWidth_iff_distinctSeparateConservation",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRelationalExtensiveFamily",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.publicBinary_exponentialWidth_iff_carry_injective_on_executedCarrier",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Le carrier fini est dérivé de l'histoire et de ses arités réalisées.",
+        "execution": "Un régime surjectif porte les profils vers ses obligations.",
+        "proof": "Le lemme fini cardinal ne consomme pas le contenu spécifique des relations ; la classe binaire fournit 2^n.",
+        "transport": "L'adressage factorise par les obligations, sans contourner carry."
+      },
+      "consumers": [
+        "TARGET_4",
+        "PARTIAL_WIDTHS"
+      ],
+      "source_sha256": "3aa28d7e2e286f9eae3f092424538952dd48c918ccdc290424da0027051c0312",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "TARGET_4",
+      "kind": "cardinality",
+      "scope": "Caractérisation de la pleine largeur opérationnelle dans la classe surjective ; le contre-régime public autorisé n'en fait pas une nécessité intrinsèque, sans conclusion universelle sur tout coût.",
+      "anchors": [
+        {
+          "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
+          "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+          "paragraph": 4,
+          "sha256": "91b8a9ee7cf613bdf145e6d089d8360e27ff4c632007edef85b2bc084334cfc9"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "Les largeurs sont des conséquences de ces régimes",
+          "paragraph": null,
+          "sha256": "78c7f9f704e958b993bcfa81826d811c1312aa3361c5839f82132899039b0b7c"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Widths are consequences of these regimes",
+          "paragraph": null,
+          "sha256": "4a118efd819d981f9223396d935beccde3746e7b91e97848675a14e1ff2c22e7"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.class_carrier_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.class_iff_on_master_carrier",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.class_iff_on_executed_regime",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Instance.executed_width",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Le carrier de classe est celui du maître, pas un carrier ajouté à la fin.",
+        "execution": "Le régime exécuté provient des cibles et autorisations de la chaîne.",
+        "proof": "Le iff surjectif et le régime exécuté sur la même source ferment le contraste.",
+        "transport": "La non-conservation indépendante n'efface pas les identités ; la portée reste celle de largeur, non du temps."
+      },
+      "consumers": [],
+      "source_sha256": "d0b053c12e4eb13cba63001ed721d88e6b3efeb2de14cf1d233610511ca80e83",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "ROLE_READOUT",
+      "kind": "constitution",
+      "scope": "Profils d'une histoire dépendante à arités réalisées ; frontière complète et sans doublon avant lecture de sa largeur.",
+      "anchors": [
+        {
+          "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
+          "heading": "Stratification qui donne son sens au résultat",
+          "paragraph": null,
+          "sha256": "3b166a95311049ba1a7d44bb08a067d48c2e8595d1eb8c810683cdaa583ab869"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "Des objets constitués avant leur dénombrement",
+          "paragraph": null,
+          "sha256": "53628bf6818d9be746cdc41c4aa8706ea69d54c3fa9b1bacc553090719384ae8"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Objects constituted before they are counted",
+          "paragraph": null,
+          "sha256": "afc247cfef1786afa5a3ed200dfda6e271b8479cdb99ee29d92aafc6da6fca06"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.RelationalProfileConstitution",
+          "name": "ConstitutiveSearch.RelationalExtensive.RelationalOpeningStage.formationWitness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.RelationalProfileConstitution",
+          "name": "ConstitutiveSearch.RelationalExtensive.RelationalOpeningStage.provenanceWitness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.RelationalProfileConstitution",
+          "name": "ConstitutiveSearch.RelationalExtensive.relationalProfileFrontier_complete",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.RelationalProfileConstitution",
+          "name": "ConstitutiveSearch.RelationalExtensive.relationalProfileFrontier_nodup",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.RelationalProfileConstitution",
+          "name": "ConstitutiveSearch.RelationalExtensive.relationalProfileWidth_eq_arityProduct",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Formation et provenance positives sont récupérées depuis l'étape indexée.",
+        "execution": "La frontière des profils est dérivée de l'histoire, non fournie comme produit abstrait global.",
+        "proof": "Complétude, absence de doublons puis produit des arités sont des obligations séparées.",
+        "transport": "Le readout de longueur ne remplace pas les relations de constitution."
+      },
+      "consumers": [
+        "TARGET_1",
+        "TARGET_3"
+      ],
+      "source_sha256": "3f8b48e04b9f61baaab9f7c5e6b3c23ae9f26111f4c0a118c6cad7e3240f64aa",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "SEARCH_CONTEXTS",
+      "kind": "causal",
+      "scope": "Même maître, formule, profondeur et variable ; deux histoires reçues donnent une ou deux branches avec le même chercheur. Échec relatif à ce chercheur.",
+      "anchors": [
+        {
+          "path": "docs/variable-master-execution.fr.md",
+          "heading": "Variation construite",
+          "paragraph": null,
+          "sha256": "8214813e5b9e4b064891cb0726f1ff1596c9d4bf13d54d768a56f4d1e856a4f9"
+        },
+        {
+          "path": "docs/variable-master-execution.en.md",
+          "heading": "Constructed variation",
+          "paragraph": null,
+          "sha256": "290de803fe0c9baff02415712a9a008e21bac689dae6ed3ce5532dc978ab80f5"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterInstance",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.Example.grouped_width",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterInstance",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.Example.unresolved_width",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterInstance",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.Example.grouped_search",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterInstance",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.Example.unresolved_search",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterInstance",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.Example.preserved_after_action",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterInstance",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.Example.master_unchanged",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Contextes reçus constitués avec décision et fraîcheur ; pas de partition fournie.",
+        "execution": "La recherche des flips lit les contextes ouverts par la variable du maître.",
+        "proof": "Préservation SAT et largeurs sont prouvées sur les entrées concrètes.",
+        "transport": "La viabilité et l'identité des sources ne se réduisent pas à la possibilité de regroupement."
+      },
+      "consumers": [
+        "MASTER_COUPLING",
+        "MACHINE_EXAMPLE"
+      ],
+      "source_sha256": "0ce024d307bed5ccd453e503221925c81aef8ae7e8b8863c356f55140c64abe5",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "STAGE_SHARING",
+      "kind": "implementation",
+      "scope": "La tête utilise les producteurs du maître et ne dépend pas de l'horizon futur ; le C contrôle seulement les frontières locales nommées.",
+      "anchors": [
+        {
+          "path": "docs/variable-master-execution.fr.md",
+          "heading": "Chaîne effective",
+          "paragraph": null,
+          "sha256": "f03b6095812c53fce459361fa27da60d2944bf1d42064a0778b60bdb0597bd37"
+        },
+        {
+          "path": "docs/variable-master-execution.en.md",
+          "heading": "Actual chain",
+          "paragraph": null,
+          "sha256": "d2adf12309084b2a178bb3d3751e8d014cea1a3053f11c16204367a789ce0b38"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "La décomposition est produite avant sa continuation",
+          "paragraph": null,
+          "sha256": "7f94e2aba3f23c7c918fee958df8c648b13fd74ce117efcacabcd0795764e123"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Decomposition is produced before its continuation",
+          "paragraph": null,
+          "sha256": "0499be2501c740c6c8fa257cebbef0f5b6400c4531ea5fe8bcb54ad884e7e7d7"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterExecution",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.masterHead",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterExecution",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.step_next_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterExecution",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.execute_erases",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterExecution",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.head_horizon_independent",
+          "role": "production"
+        }
+      ],
+      "checks": [
+        "scripts/check-variable-master-codegen.py",
+        "scripts/check-agent-codegen.py",
+        "scripts/check-unified-codegen.py"
+      ],
+      "dependencies": {
+        "formation": "Le curseur et la tête sont indexés par les ressources existantes du maître.",
+        "execution": "Découverte, application, décomposition et assemblage sont partagées dans cet ordre.",
+        "proof": "L'effacement retrouve l'exécuteur maître ; l'indépendance d'horizon porte sur les types et égalités.",
+        "transport": "Le contrôle compilé ne prouve pas l'absence de tout travail caché dans les arguments."
+      },
+      "consumers": [
+        "MASTER_COUPLING",
+        "SINGLE_EXECUTION"
+      ],
+      "source_sha256": "c7ac84aa789d60377a43f785dc4082d4367c81fc8629486a4b93fe5c1d44cbad",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "MASTER_COUPLING",
+      "kind": "causal",
+      "scope": "Initialisation épinglée au maître public pour tout input, scope, formule et contextes reçus. Une reprise partage le résultat vivant effectivement recherché avec SAT et l'installation. Le sélecteur reste déterminé par la profondeur ; le raccord n'implique pas un retour SAT vers le moteur vivant.",
+      "anchors": [
+        {
+          "path": "docs/integrated-master-machine.fr.md",
+          "heading": "Ce qui est construit",
+          "paragraph": null,
+          "sha256": "a126c113cdb689b1166760c6f52833b152850607dfe0d91855bca8d20229ce8f"
+        },
+        {
+          "path": "docs/integrated-master-machine.en.md",
+          "heading": "What is constructed",
+          "paragraph": null,
+          "sha256": "a666005b62a506e88618ab09817ec745daf689e70ed268cade019e74bdb42d1b"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "La relation trouvée devient une action réutilisable",
+          "paragraph": null,
+          "sha256": "42473f65c1e80db12d505df9d953227dcf4f2924d095fd58e13bb871b3dd6c65"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "The discovered relation becomes a reusable action",
+          "paragraph": null,
+          "sha256": "ef8dfec5e62f46e3a88b16c05392411f1eb0bc2e7604a685fb399ccff6b95681"
+        },
+        {
+          "path": "docs/integrated-master-machine.fr.md",
+          "heading": "Ce que les preuves établissent",
+          "paragraph": 3,
+          "sha256": "c1ecc4047120bff1449f0ad16d0d3c6e6bbb03e8432ad57c9a2da61a38f2dfba"
+        },
+        {
+          "path": "docs/integrated-master-machine.en.md",
+          "heading": "What the proofs establish",
+          "paragraph": 3,
+          "sha256": "ef51985361b67297d5b099b253665d049e7eba618f975c32f9fb49a7e136a993"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.receive",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.receive_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.receive_core_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.receive_problem_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.advance",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.advance_frontier_is_produced",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.advance_preserves_SAT",
+          "role": "production"
+        }
+      ],
+      "checks": [
+        "scripts/check-integrated-machine-codegen.py",
+        "scripts/integrated_machine_analysis.py",
+        "scripts/integrated_machine_checks.py",
+        "scripts/check-variable-master-codegen.py",
+        "scripts/check-agent-codegen.py",
+        "scripts/check-unified-codegen.py",
+        "scripts/unified_codegen_analysis.py",
+        "scripts/unified_codegen_selftest.py"
+      ],
+      "dependencies": {
+        "formation": "Le runtime reçoit le maître existant, les contextes SAT et une permission de lecture ; receive_exact épingle la projection pour tout input, sans supposer l'atteignabilité canonique des contextes.",
+        "execution": "Une production vivante fournit le sélecteur ; ouverture, réduction et configuration sont partagées.",
+        "proof": "Le successeur et la viabilité sont raccordés à la frontière produite, pas à une largeur souhaitée.",
+        "transport": "La mémoire conserve la frontière nécessaire à la prochaine recherche."
+      },
+      "consumers": [
+        "CONFIGURED_ACTION",
+        "FULL_FUTURES",
+        "SINGLE_EXECUTION"
+      ],
+      "source_sha256": "ede445b457f9329ecf9dc0d927c3df36897149bf07c0e867e5f39218d1a85dac",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "CONFIGURED_ACTION",
+      "kind": "causal",
+      "scope": "Action du circuit égale à la lecture de la continuation transportée pour toute continuation typée admissible ; la préservation SAT est une preuve séparée.",
+      "anchors": [
+        {
+          "path": "docs/integrated-master-machine.fr.md",
+          "heading": "Ce que les preuves établissent",
+          "paragraph": null,
+          "sha256": "cb319afcd774b05cef0ab2b1e68775b0dbc916bd7af00437ffbc12956a2cffea"
+        },
+        {
+          "path": "docs/integrated-master-machine.en.md",
+          "heading": "What the proofs establish",
+          "paragraph": null,
+          "sha256": "3b84d6882f7b83a21c9ee70a8f379a1df0f206fffc58f4ec2c7af9a2664d1b94"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "La relation trouvée devient une action réutilisable",
+          "paragraph": null,
+          "sha256": "42473f65c1e80db12d505df9d953227dcf4f2924d095fd58e13bb871b3dd6c65"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "The discovered relation becomes a reusable action",
+          "paragraph": null,
+          "sha256": "ef8dfec5e62f46e3a88b16c05392411f1eb0bc2e7604a685fb399ccff6b95681"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.Machine.FrontierCircuit",
+          "name": "ConstitutiveSearch.ConnectedFabric.lowerFrontier_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.FrontierCircuit",
+          "name": "ConstitutiveSearch.ConnectedFabric.circuit_preserves_SAT",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.ScopedProblemProduction.route_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.advance_exact",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "AcceptedFrontierCode est indexé par ses contextes sources et cibles.",
+        "execution": "Le code réellement trouvé est abaissé vers un circuit et installé dans la mémoire.",
+        "proof": "L'exactitude pointwise et la préservation SAT ne sont pas déduites de l'égalité de largeur.",
+        "transport": "Le transport dirigé ne donne ni une égalité des sources ni une équivalence de tout paquet arbitraire."
+      },
+      "consumers": [
+        "FULL_FUTURES",
+        "MACHINE_EXAMPLE"
+      ],
+      "source_sha256": "7c772a9033d131294ebf07b517f467758a7820d667d82efdb9d29b2ea9cd160b",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "FULL_FUTURES",
+      "kind": "behavioral",
+      "scope": "Contrat combiné : toutes listes finies et entrelacements de reprises, lectures, impulsions, routages et refus. Pas d'inspection historique arbitraire.",
+      "anchors": [
+        {
+          "path": "docs/integrated-master-machine.fr.md",
+          "heading": "Contrat, mémoire et largeur",
+          "paragraph": null,
+          "sha256": "33fc44e21940be728922d53b3390f2b6ec81514cc22242c2b9e7cb247874645e"
+        },
+        {
+          "path": "docs/integrated-master-machine.en.md",
+          "heading": "Contract, memory and width",
+          "paragraph": null,
+          "sha256": "2c08e9750c25b11b3d722f4ccece02654afa70f5330a02387afbf57ce4a21ac0"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "Une mémoire exacte pour les futurs permis",
+          "paragraph": null,
+          "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Exact memory for the permitted futures",
+          "paragraph": null,
+          "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterContract",
+          "name": "ConstitutiveSearch.MasterMachine.admission",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterContract",
+          "name": "ConstitutiveSearch.MasterMachine.realization",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterContract",
+          "name": "ConstitutiveSearch.MasterMachine.all_futures_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterContract",
+          "name": "ConstitutiveSearch.MasterMachine.enabled_exact",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Le contrat spécifie requêtes, événements, lectures et admissions positives.",
+        "execution": "Le runtime utilise l'état vivant réduit et la frontière SAT reçue puis produite.",
+        "proof": "La réalisation compare au moteur riche avec le même algorithme SAT, pour toutes suites finies.",
+        "transport": "La minimalité du moteur vivant sous son contrat ne devient pas une minimalité de la mémoire combinée."
+      },
+      "consumers": [
+        "SINGLE_EXECUTION"
+      ],
+      "source_sha256": "556375a130de7eb0303434d2dd8a7b8a9c7e6ac234a5351484ca903ebfe5b04d",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "MACHINE_EXAMPLE",
+      "kind": "causal",
+      "scope": "Exemple intégré sur le même maître, formule et sélecteur ; la décision reçue sur 1 change. Dans le cas à deux branches, les positions sont routées avec permutation de leurs slots, pas conservation de leurs numéros.",
+      "anchors": [
+        {
+          "path": "docs/integrated-master-machine.fr.md",
+          "heading": "Une et deux branches sur le même maître",
+          "paragraph": null,
+          "sha256": "3952f36866458e63180d791dc606e2cc99a39126e674a9898efa0859ce5a6350"
+        },
+        {
+          "path": "docs/integrated-master-machine.en.md",
+          "heading": "One and two branches on the same master",
+          "paragraph": null,
+          "sha256": "2707fefcdae9994659b167a38a5a0212cd62ee1f12ce9e828bce222115cc5787"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "Une et deux branches avec le même chercheur",
+          "paragraph": null,
+          "sha256": "9372c27c4e354b377e21f3077fc80d5ba7266ab126f7cd43c41e6396e6c15ddf"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "One and two branches with the same searcher",
+          "paragraph": null,
+          "sha256": "ea76181a962f31744dc8699459a7b38b65483299f02ea515a0d69f1b7ece508b"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "Tests.Machine.MasterIntegration",
+          "name": "ConstitutiveSearch.MasterMachine.Checks.initialization_is_existing_master",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.MasterIntegration",
+          "name": "ConstitutiveSearch.MasterMachine.Checks.initialization_all_inputs",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.MasterIntegration",
+          "name": "ConstitutiveSearch.MasterMachine.Checks.initialization_core_all_inputs",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.MasterIntegration",
+          "name": "ConstitutiveSearch.MasterMachine.Checks.initialization_problem_all_inputs",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.MasterIntegration",
+          "name": "ConstitutiveSearch.MasterMachine.Checks.source_distinct",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.MasterIntegration",
+          "name": "ConstitutiveSearch.MasterMachine.Checks.grouped_width",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.MasterIntegration",
+          "name": "ConstitutiveSearch.MasterMachine.Checks.unresolved_width",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.MasterIntegration",
+          "name": "ConstitutiveSearch.MasterMachine.Checks.same_finder_fails_both_ways",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.MasterIntegration",
+          "name": "ConstitutiveSearch.MasterMachine.Checks.all_interleavings_exact",
+          "role": "test"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Les deux entrées reçues ne sont pas présentées comme deux sorties de la course canonique.",
+        "execution": "Le même runtime ouvre puis recherche sur chaque entrée.",
+        "proof": "Les tests prouvent viabilité, distinction, largeurs et routage des paquets.",
+        "transport": "L'échec des deux directions du chercheur ne démontre pas l'absence universelle d'une relation."
+      },
+      "consumers": [],
+      "source_sha256": "36f660d8480c816e07edc89bb5c99ba6542d0f3f8b6a1380f7e3f78e32199a12",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "SINGLE_EXECUTION",
+      "kind": "implementation",
+      "scope": "Trois runners à transition appariée : événement et successeur proviennent de la même paire. Une reprise intégrée atteint une recherche vivante commune et transmet ses champs retournés. Les écritures des helpers sur des objets reçus sont refusées, pas résumées comme effets du tas. Contrôles locaux du C épinglé, sans borne de coût global ni matériel. Le routage configuré est contrôlé depuis fire, Routing.apply et routeProblem, helpers transitifs inclus.",
+      "anchors": [
+        {
+          "path": "docs/integrated-master-machine.fr.md",
+          "heading": "Vérification et frontière matérielle",
+          "paragraph": null,
+          "sha256": "1c9481ce212a34ce290267a081e96dd8df3b7e01a531b11514521a722fe0693f"
+        },
+        {
+          "path": "docs/integrated-master-machine.en.md",
+          "heading": "Verification and hardware boundary",
+          "paragraph": null,
+          "sha256": "32575d3eaf784e16820277fb786e7f9d62db1c38ec26f8b5a3d121c4bc7398ff"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "Les productions sont partagées à chaque demande",
+          "paragraph": null,
+          "sha256": "b7a774d2ef1c2739acad95a47533390a17ac143cff3205767a15b6e71456a19d"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Productions are shared at each request",
+          "paragraph": null,
+          "sha256": "d084e1cf464065e7c450040a04fdda43afdc08c5235004720851fc21aa26a400"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterContract",
+          "name": "ConstitutiveSearch.MasterMachine.run",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterContract",
+          "name": "ConstitutiveSearch.MasterMachine.run_shared_transition",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterContract",
+          "name": "ConstitutiveSearch.MasterMachine.run_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.MasterRuntime",
+          "name": "ConstitutiveSearch.MasterMachine.produceProblem",
+          "role": "production"
+        }
+      ],
+      "checks": [
+        "scripts/check-integrated-machine-codegen.py",
+        "scripts/check-variable-master-codegen.py",
+        "scripts/check-agent-codegen.py",
+        "scripts/check-unified-codegen.py",
+        "scripts/integrated_machine_analysis.py",
+        "scripts/integrated_machine_checks.py",
+        "scripts/unified_codegen_analysis.py",
+        "scripts/unified_codegen_selftest.py"
+      ],
+      "dependencies": {
+        "formation": "La spécification à callbacks est distincte du runner apparié.",
+        "execution": "Les trois runners partagent la paire courante et récursent sur son successeur et la queue reçue. La reprise lit le sélecteur trouvé et installe la même production.",
+        "proof": "Lean raccorde les comportements ; le C est contrôlé par comptage commun et origines de champs sur chaque chemin local pris en charge. Les artefacts du routage sont contrôlés transitivement ; les dépendances SAT, callbacks lean_apply et corps projet manquants sont rejetés.",
+        "transport": "Les gates restent représentées par constructeurs logiciels ; ni FPGA ni coût de routage physique prouvé."
+      },
+      "consumers": [],
+      "source_sha256": "e7c36553da7101788552ddc9cc25e57ec31b6fdf461c84ef029dcd3132619634",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "ASSIGNMENT_FORGETTING",
+      "kind": "behavioral",
+      "scope": "Deux états reçus valides diffèrent en affectation à la variable 1. Tous les futurs coïncident sous la permission 2 et la demande advance les distingue sous la permission 1. Pas deux préfixes publics atteignables, ni minimalité combinée.",
+      "anchors": [
+        {
+          "path": "docs/integrated-master-machine.fr.md",
+          "heading": "Contrat, mémoire et largeur",
+          "paragraph": 3,
+          "sha256": "3a9acef0bf524f296f37b2ee2608ab34eb9097c81c3bef81d76f29d78d93a437"
+        },
+        {
+          "path": "docs/integrated-master-machine.en.md",
+          "heading": "Contract, memory and width",
+          "paragraph": 3,
+          "sha256": "075684e69582777c960fbac9a404b291bb12304225c5303b7eb4cc9454262e62"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "Une mémoire exacte pour les futurs permis",
+          "paragraph": null,
+          "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Exact memory for the permitted futures",
+          "paragraph": null,
+          "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "Tests.Machine.ValidAssignmentForgetting",
+          "name": "ConstitutiveSearch.ReconfigurableMachine.LiveReduction.AssignmentForgetting.assignment_values_differ",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.ValidAssignmentForgetting",
+          "name": "ConstitutiveSearch.ReconfigurableMachine.LiveReduction.AssignmentForgetting.received_distinct",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.ValidAssignmentForgetting",
+          "name": "ConstitutiveSearch.ReconfigurableMachine.LiveReduction.AssignmentForgetting.outside_permission_all_futures",
+          "role": "test"
+        },
+        {
+          "module": "Tests.Machine.ValidAssignmentForgetting",
+          "name": "ConstitutiveSearch.ReconfigurableMachine.LiveReduction.AssignmentForgetting.separating_future",
+          "role": "test"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "flipLowBit reconstruit positivement lecteur exact, affectation séquentielle valide et état avec décisions satisfaites ; les exemples ferment leurs hypothèses.",
+        "execution": "La demande advance agit sur la valeur de la permission ; l'observation présente commune ne révèle pas la différence d'affectation.",
+        "proof": "La projection exacte donne tous les futurs sous 2 ; l'action involutive et la valeur différente donnent un futur séparateur sous 1.",
+        "transport": "L'oubli est relatif aux futurs permis, sans identification des sources ni suppression d'une demande du contrat."
+      },
+      "consumers": [],
+      "source_sha256": "2c62244972e2f8094d8a4d102373e036166d639214965bd5d81aa067c0de6ab3",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "PROFILE_FORGETTING",
+      "kind": "behavioral",
+      "scope": "Le contrat de continuation conserve reprises, événements et lectures admises ; l'origine des profils normalisés peut être irrécupérable sans identifier les profils.",
+      "anchors": [
+        {
+          "path": "docs/continuation-et-oubli-des-profils.fr.md",
+          "heading": "Ce qui est effectivement oublié",
+          "paragraph": null,
+          "sha256": "b37977e49d4351bfa50a383edb5239b5ce9e6f620bf1c1a244141f1481624536"
+        },
+        {
+          "path": "docs/continuation-and-profile-forgetting.en.md",
+          "heading": "What is actually forgotten",
+          "paragraph": null,
+          "sha256": "35328b5b2ce74e90e3924461a99d97757df63725208bfc39cafa380526956712"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "Une mémoire exacte pour les futurs permis",
+          "paragraph": null,
+          "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Exact memory for the permitted futures",
+          "paragraph": null,
+          "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ProducedProfileContinuation",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.public_profile_irrecoverable",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ProducedProfileContinuation",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.public_all_future_events",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ProducedProfileContinuation",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.ProducedContinuation.executeRequests_events",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Instance.profile_irrecoverable",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Les profils transformé et retenu conservent leurs occurrences historiques distinctes.",
+        "execution": "La mémoire de reprise résulte de la normalisation et consomme les lecteurs produits.",
+        "proof": "Toutes requêtes autorisées donnent des futurs égaux ; aucun décodeur uniforme du profil depuis cette mémoire.",
+        "transport": "L'oubli sous ce contrat n'abolit pas la reconstruction de préfixes qui conservent profondeur et provenance."
+      },
+      "consumers": [
+        "REACHABLE_SIGNATURE"
+      ],
+      "source_sha256": "d0b053c12e4eb13cba63001ed721d88e6b3efeb2de14cf1d233610511ca80e83",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "REACHABLE_SIGNATURE",
+      "kind": "behavioral",
+      "scope": "Maître et exigence fixés, tous états atteignables de l'agent ; signature = nombre de productions, avec couverture et admissions transportées. Pas de minimum d'octets ni temps constant.",
+      "anchors": [
+        {
+          "path": "docs/signatures-de-continuation.fr.md",
+          "heading": "Signatures de tous les états atteignables de l’agent",
+          "paragraph": null,
+          "sha256": "0f309de7d3ea94d39626b6f3f8448126d1c7d88ff44c22b03b31d2d273ee2267"
+        },
+        {
+          "path": "docs/continuation-signatures.en.md",
+          "heading": "Signatures of all reachable agent states",
+          "paragraph": null,
+          "sha256": "139124edfdc7933d30e364d6cdcae3acad4693553a2ec7cca9e980d2d230b38a"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.ReachableAgent",
+          "name": "ConstitutiveSearch.ContinuationSignatures.ReachableAgent.signature_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.ReachableAgent",
+          "name": "ConstitutiveSearch.ContinuationSignatures.ReachableAgent.countRealization",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.ReachableAgent",
+          "name": "ConstitutiveSearch.ContinuationSignatures.ReachableAgent.recoverCount_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.ReachableAgent",
+          "name": "ConstitutiveSearch.ContinuationSignatures.ReachableAgent.every_signature_reachable",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.ReachableAgent",
+          "name": "ConstitutiveSearch.ContinuationSignatures.ReachableAgent.no_singleton_realization",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.ReachableAgent",
+          "name": "ConstitutiveSearch.ContinuationSignatures.ReachableAgent.publicCertificate",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Le domaine ferme les états atteignables pour un maître et une exigence reçue fixés.",
+        "execution": "La signature est lue depuis la production réelle ; les réponses peuvent être reconstruites par le moteur existant.",
+        "proof": "Équivalence de tous futurs, couverture et séparateurs imposent la distinguabilité à toute réalisation exacte.",
+        "transport": "Les droits ont deux lois de retour ; la réalisation par nombre n'est pas une gratuité physique."
+      },
+      "consumers": [],
+      "source_sha256": "650101f22467c9ea72601049c88008b54201865d650263865accf6ae6359dbe4",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "RESTRICTED_FUTURES",
+      "kind": "behavioral",
+      "scope": "Contrat distinct : répétition de lectures de x10 dans la continuation après action. Pas de reprise, d'impulsion ni d'archive originale.",
+      "anchors": [
+        {
+          "path": "docs/variable-master-execution.fr.md",
+          "heading": "Distinctions futures : contrat fixé",
+          "paragraph": null,
+          "sha256": "60a2f3d165bee0fd5df0f341cdc17a765dd8513acbf8e3e0ab4d0c68fb4ffa13"
+        },
+        {
+          "path": "docs/variable-master-execution.en.md",
+          "heading": "Future distinctions under a fixed contract",
+          "paragraph": null,
+          "sha256": "73e4ad8e1cdfe0ffb6e480e7a2cda87cc8669075fa11be85a3327633f0a1f2c1"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "Une mémoire exacte pour les futurs permis",
+          "paragraph": null,
+          "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Exact memory for the permitted futures",
+          "paragraph": null,
+          "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterFutures",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.Futures.exact_future_fibres",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterFutures",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.Futures.every_exact_realization_distinguishes",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterFutures",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.VariableMaster.Futures.covers_read_values",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Les sources du contrat sont des continuations reçues et actionnées.",
+        "execution": "La lecture applique la production locale avant d'observer la variable demandée.",
+        "proof": "Les fibres exactes et le séparateur futur établissent les distinctions requises sous ce contrat seul.",
+        "transport": "Cette réduction ne retire aucune demande d'un autre contrat complet."
+      },
+      "consumers": [],
+      "source_sha256": "ee043ecc02a48919c572ccd452a2da8ab37d42a26045c42b3f8d3d324bdabe79",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "PARTIAL_WIDTHS",
+      "kind": "cardinality",
+      "scope": "Politiques comparatives sur les mêmes rôles : spectre exact 2^k, 0 <= k <= n, pour cette classe de statuts ; une politique non injective de largeur 2^(n-1) pour chaque n positif. Ce ne sont pas de nouvelles exécutions SAT ni tous les régimes possibles.",
+      "anchors": [
+        {
+          "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
+          "heading": "Raccord après l’audit adversarial",
+          "paragraph": null,
+          "sha256": "0cd82d5f05066790d6c193b8ec7bf8be49d7e34de3d3ba69965764cd141edc3a"
+        },
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "Les largeurs sont des conséquences de ces régimes",
+          "paragraph": null,
+          "sha256": "78c7f9f704e958b993bcfa81826d811c1312aa3361c5839f82132899039b0b7c"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Widths are consequences of these regimes",
+          "paragraph": null,
+          "sha256": "4a118efd819d981f9223396d935beccde3746e7b91e97848675a14e1ff2c22e7"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Instance.partial_width",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Instance.source_width",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Instance.executed_width",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRolePolicySpectrum",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.PolicySpectrum.spectrum",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRolePolicySpectrum",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.PolicySpectrum.half_width",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRolePolicySpectrum",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.PolicySpectrum.every_positive_count",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Les statuts sont indexés par l'histoire existante du maître.",
+        "execution": "Les politiques comparent ce qui est conservé séparément ; elles ne pilotent pas la frontière publique.",
+        "proof": "Le produit des arités locales en attente donne la largeur partielle.",
+        "transport": "Comparer 4, 2, 1 sur les mêmes rôles n'identifie pas leurs occurrences."
+      },
+      "consumers": [],
+      "source_sha256": "7f37b9f73f5bc0ab2cf0d802eea584b64fb0310c3f4eb47d04dc5ca92cf361db",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "CORE_MINIMALITY",
+      "kind": "behavioral",
+      "scope": "À scope fixé : exactitude du noyau sur toutes les mémoires sources et suites finies ; égalité de projection iff futurs égaux sur mémoires cohérentes, sans hypothèse d'égalité des moteurs vivants. Nécessité pour toute réalisation exacte du même contrat ; ni minimum physique ni minimalité de la mémoire SAT intégrée.",
+      "anchors": [
+        {
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
+          "heading": "Une mémoire exacte pour les futurs permis",
+          "paragraph": null,
+          "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
+        },
+        {
+          "path": "docs/science/constitutive-machine-chain.en.md",
+          "heading": "Exact memory for the permitted futures",
+          "paragraph": null,
+          "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
+        },
+        {
+          "path": "docs/science/preuves-chaine-constitutive-machine.fr.md",
+          "heading": "C08 Futurs et mémoire nécessaire",
+          "paragraph": null,
+          "sha256": "a6f953e61921d31cf4c3dcfc4aa29912aa9c3b98c1ccc2f07bf1e08b9f03b5ad"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.Machine.ConstitutiveLiveExecution",
+          "name": "ConstitutiveSearch.ReconfigurableMachine.LiveReduction.ConstitutiveExecution.all_sources_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.ConstitutiveLiveExecution",
+          "name": "ConstitutiveSearch.ReconfigurableMachine.LiveReduction.ConstitutiveExecution.minimality",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.ConstitutiveLiveExecution",
+          "name": "ConstitutiveSearch.ReconfigurableMachine.LiveReduction.ConstitutiveExecution.any_realization",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Le scope et le contrat advance/sample/pulse sont fixés avant la projection ; la cohérence fixe les longueurs des connexions et des deux lectures de banque.",
+        "execution": "La projection extrait les valeurs finies autorisées ; le runner constitutif poursuit depuis le front et les valeurs produits sans restaurer le moteur fonctionnel historique.",
+        "proof": "Les effets des impulsions et des reprises reconstruisent les distinctions futures ; minimality et any_realization consomment les preuves de cohérence.",
+        "transport": "La réalisation conserve tous les futurs finis et les admissions ; la minimalité exprime une distinguabilité comportementale, pas un encodage imposé. Elle ne se transfère pas automatiquement au contrat SAT combiné."
+      },
+      "consumers": [
+        "FULL_FUTURES"
+      ],
+      "source_sha256": "36f62f46a9564280d2a9df705a94df72795c2a543a75be6c515eeb7a9b9ff837",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    }
+  ]
+}

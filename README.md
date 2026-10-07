@@ -96,9 +96,211 @@ reconstructs a directed transport between them, and a separate preservation
 proof permits one obligation to be absorbed for the criterion under study.
 Neither equality of the alternatives nor impossibility of the absorbed one is
 asserted. The retained result and its provenance then condition the next
-discovery.
+discovery. The public fused executor forms the local operational production at
+the current stage before recursing from the state that stage produced; the
+local production type has no future-history parameter.
 
 ![Endogenous operational decomposition](docs/figures/endogenous-operational-decomposition.svg)
+
+## Machine intégrée / Integrated machine
+
+Le calcul et la machine forment une même chaîne constitutive. Les occurrences
+et les contextes sont constitués avant leur dénombrement. La recherche
+effectivement exécutée produit les relations qui, avec leurs preuves séparées
+de préservation, autorisent la décomposition courante. Cette décomposition
+est produite avant sa continuation, sans recevoir la queue future ni une
+partition attendue. Sur le même maître, à formule, profondeur, variable et
+chercheur fixés, deux histoires reçues conduisent respectivement à une et deux
+branches viables ; le regroupement n'identifie pas les sources.
+
+Pour tout indice du maître, la machine s'initialise depuis l'instance publique
+correspondante, avec la formule, les contextes et les permissions reçus.
+Chaque reprise partage une même production vivante : son sélecteur ouvre
+les contextes SAT, et son successeur devient l'état vivant suivant. Le code
+de réduction trouvé par cette recherche fournit à la fois la frontière retenue
+et l'action à configurer sur de nouvelles entrées.
+Son action sur une continuation typée donne
+exactement la lecture de la continuation transportée ; la préservation de
+SAT est établie séparément. Le routage utilise cette organisation sans relancer
+la recherche. À la reprise suivante, la recherche reçoit effectivement la
+frontière retenue et l'état vivant produits auparavant. Le sélecteur va du
+moteur vivant vers SAT ; la frontière SAT alimente la recherche SAT suivante.
+Il ne s'agit pas d'une rétroaction de SAT sur le moteur vivant.
+
+La mémoire n'est pas seulement raccourcie : ses distinctions sont confrontées
+aux futurs que le contrat autorise. Pour les mémoires sources cohérentes du
+noyau, à permission de lecture fixée, deux projections réduites sont égales
+si et seulement si tous leurs futurs observables sont égaux. Toute réalisation
+exacte du même contrat doit conserver cette distinguabilité, quel que soit
+son encodage. Une distinction devenue inobservable peut être oubliée sans
+identifier les sources. Le contrat intégré préserve exactement toutes les
+suites finies de reprises, lectures, impulsions et routages, y compris leurs
+entrelacements et refus ; la minimalité du noyau n'est pas étendue sans preuve
+à la mémoire SAT combinée.
+
+Chaque demande du runner actif utilise une transition partagée contenant
+l'événement et l'état suivant, au lieu de réexécuter la production pour lire
+ces deux résultats. Le circuit est encore représenté et interprété par du
+logiciel ; l'incarnation matérielle et le coût physique total restent distincts.
+Les largeurs présentées ci-dessous sont des lectures aval de cette chaîne,
+pas ce qui la définit.
+
+The computation and machine form one constitutive chain. Occurrences and
+contexts are constituted before they are counted. Executed search produces
+relations whose separate preservation proofs authorize the current
+decomposition. This decomposition is produced before its continuation, without
+receiving a future tail or an expected partition. With the same master,
+formula, depth, variable and finder, two received histories lead respectively
+to one and two viable branches; grouping does not identify the sources.
+
+For every master index, the machine initializes from the corresponding public
+instance with the received formula, contexts and read permissions. Each
+advance shares one live production: its selector opens the SAT contexts, and
+its successor becomes the next live state. The reduction code found by this
+search supplies both the retained frontier and the action to configure on new
+inputs. Its action on a typed continuation equals the reading of the
+transported continuation; SAT preservation is established separately. Routing
+uses this organization without restarting search. The next search actually
+receives the previously produced retained frontier and live state. The
+selector flows from the live engine to SAT, and the SAT frontier feeds the
+next SAT search. This is not feedback from SAT to the live engine.
+
+Memory is not merely shortened: its distinctions are tested against the
+futures allowed by the contract. For coherent source memories of the core at
+a fixed read scope, equality of reduced projections is equivalent to equality
+of all observable futures. Every exact realization of that contract must
+retain this distinguishability, whatever its encoding. An unobservable
+distinction can be forgotten without identifying the sources. The integrated
+contract preserves all finite sequences of advances, reads, pulses and
+routing, including their interleavings and refusals; core minimality is not
+extended without proof to the combined SAT memory.
+
+Each request of the active runner consumes one shared transition containing
+the event and successor state, rather than executing the production again
+to read those two results. The circuit is still represented and interpreted
+in software; hardware realization and total physical cost remain separate.
+The widths below are downstream readings of this chain, not its definition.
+
+Texte scientifique complet / Complete scientific text :
+[français](docs/science/chaine-constitutive-machine.fr.md),
+[English](docs/science/constitutive-machine-chain.en.md).
+Raccords formels / Formal connections :
+[preuves et contrats](docs/science/preuves-chaine-constitutive-machine.fr.md).
+Architecture du runtime / Runtime architecture :
+[français](docs/integrated-master-machine.fr.md),
+[English](docs/integrated-master-machine.en.md).
+
+## Extensive readouts and operational regimes
+
+The framework first constitutes each role occurrence through its positive
+formation and provenance relations, then derives the complete profile carrier
+on which the computation acts. For `n` binary openings the extensive readout
+of this source has exact width `2^n`. A downstream regime has that full
+exponential width exactly when it keeps the constituted profiles as distinct,
+separately addressable obligations. For every source profile, the executed
+normalizer constructs a target occurrence profile together with the exact
+dependent trace that produces it. The transformed decision eliminates an
+action-produced target whose private construction is indexed by a preserving
+absorption witness. That witness consumes the reconstructed total action, its
+exact output, the separate preservation proof, non-identity, and occurrence
+distinction; the retained case consumes positive viability. The normalizer
+recurses on the complete constitutive chain carrying those witnesses rather
+than rebuilding targets from the retained output; its result is a derived
+elimination of that chain, not a replaceable stored field. The operational
+target carrier remains the full dependent product of the continuation spaces;
+it is not restricted in advance to a singleton. The executed traces prove that
+the produced targets converge. Each head production stores the full image
+of its actual local output map. Its frontier removes duplicate local outputs,
+with equality justified by the executed output agreement. The history composes
+these images without enumerating all source profiles. A two-sided transport
+realizes their actual values in the admitted image; its inverse copies those
+values rather than selecting a fixed source occurrence. Completeness and
+duplicate-freedom follow from the return laws before numerical width is read.
+Separately, an `ExecutedOperationalGroupingAuthorization` is projected
+from the complete causal chain and therefore retains its preservation and
+occurrence-separation witnesses. `ExactExecutedOperationalRegime` joins this
+authorization to the exact target-image realization; it does not identify
+realization with admission. Obligation equality is exactly equality of
+produced targets and exactly codetermination by two authorized executed traces;
+width one follows local output convergence and the exact transport. The traces
+prove agreement with the same actual outputs. Two explicit source profiles are
+proved distinct while being carried together. No source profiles are
+identified.
+
+A state-and-quantity projection preserves the observed states, output, width
+readout, and bound, but does not determine the total operational action. At the
+generic level, `ActionFactorsThrough` expresses recoverability of a total
+action from a projection, while `AnchoredActionProjectionCollision` records
+equal projected values whose total actions differ at one argument and fixes
+its first preimage in the witness type. On the
+actual executed generated system, the total transport stored by the
+authoritative instruction and a comparison transport instantiate this
+collision: their separately constructed views are equal, they agree at the
+observed executed continuation, and their total actions differ on another
+admissible continuation. The instruction acts pointwise as the discovered
+relation on every continuation. The public collision theorem mentions that
+authoritative instruction explicitly in its conclusion. In this exact sense,
+the specified state-and-quantity view is a forgetful projection of the
+constituted operational process.
+
+![Endogenous operational stability](docs/figures/endogenous-operational-stability.svg)
+
+The repository now proves the extensive equivalence at the level of a general
+relational class. Primitive source, formation, target, and provenance relations
+constitute a dependent history of role occurrences. Its source carrier is made
+of `RelationallyConstitutedOccurrence` values: each selected occurrence is
+indexed by its constituting relational stage, from which its exact formation
+and provenance witnesses are recovered in `Type`. Complete occurrence profiles
+are derived from that history before any program or operational regime. Their
+width is the product of the realized local arities; uniform
+binary histories therefore have exact width `2^n`. The class is unbounded and
+has an inhabitant independent of the public SAT execution; the wider class also
+contains variable-arity histories.
+
+An operational regime may preserve those profile identities as distinct
+obligations or group them. Lean proves, for every problem in every binary
+relational family formalized by the class:
+
+```text
+regime width = 2^stageCount
+  ↔ constituted identities remain distinct and separately addressable
+     through that regime.
+```
+
+The same condition is equivalent to exact minimum addressing capacity
+factorized through the regime. On the public carrier, the certificate
+constructs the full-width identity regime and positively proves its complete
+conservation condition. On the same constituted identities, the executed
+normalizer produces one full typed operational target and one exact trace for
+each source profile. These traces come from the stagewise decomposition whose
+head is produced from the current executed stage before any future tail. The
+normalizer consumes a dependent constitutive chain whose every link exposes
+the authoritative relational action, exact output, separate preservation,
+viability, non-identity, and persistent occurrence distinction.
+The complete source-indexed family of produced targets and traces is exposed
+before the operational regime. Preservation and persistent occurrence
+separation are projected from the complete causal chain into the grouping
+authorization. The traces separately prove convergence. Each local output
+image is stored by the head producer; `publicExecutedOutputPolicy` composes
+those images. `policyObligationTransport` connects their actual values to the
+admitted obligations with two return laws and source-wise carry and action
+agreements. `publicRegimeWidth_eq_producedOutputs` relates the admitted width
+to that output policy. Its values remain the actual produced targets.
+The fused causal run and its role history are proved equal to the authoritative
+public realization. The general class and the executed instance use the same
+occurrence-profile carrier definitionally, so the class theorem is stated
+directly on the authoritative executed carrier. Two explicit source profiles are
+proved distinct, codetermined by their traces, and carried together. The regime
+therefore has width one and fails separate preservation without equating any
+source profiles. A separate public theorem states the literal exponential
+`iff` directly on this role-profile carrier.
+
+![Extensive readout and operational obligations](docs/figures/relational-extensive-iff.svg)
+
+This is a theorem about exact carrier width and factorized finite addressing in
+the formalized class, not a universal time or memory lower bound. The audited
+state-and-quantity projection and instrumented execution costs remain distinct
+downstream results.
 
 ## Positioning and scope
 
@@ -119,12 +321,19 @@ below.
 
 ## Documents
 
+- [Résultats sur la constitution, le calcul endogène et la persistance de l’alignement](docs/resultats-constitution-calcul-alignement.fr.md)
 - [English presentation](docs/primitive-relations-and-perimeter-constitution.en.md)
 - [Présentation française](docs/relations-primitives-constitution-perimetre.fr.md)
 - [Positioning and scope](docs/positioning-and-scope.en.md)
 - [Positionnement et portée](docs/positionnement-et-portee.fr.md)
 - [Endogenous operational decomposition](docs/endogenous-operational-decomposition.en.md)
 - [Décomposition opérationnelle endogène](docs/decomposition-operationnelle-endogene.fr.md)
+- [Continuation and normalized-profile forgetting](docs/continuation-and-profile-forgetting.en.md)
+- [Continuation et oubli des profils normalisés](docs/continuation-et-oubli-des-profils.fr.md)
+- [Constitutive interactive agent and persistence](docs/constitutive-agent-and-persistence.en.md)
+- [Agent constitutif interactif et persistance](docs/agent-constitutif-et-persistance.fr.md)
+- [Exact continuation signatures: role reads and the full reachable agent contract](docs/continuation-signatures.en.md)
+- [Signatures exactes : lectures des rôles et états atteignables de l’agent](docs/signatures-de-continuation.fr.md)
 - [Conceptual authorship and AI-generation disclosure](AI_AUTHORSHIP.md)
 
 ## Foundational Lean sources
@@ -146,18 +355,41 @@ below.
 - `RelationalPerimeter/Computation/ConstitutiveSearch/` contains the complete
   executable construction, its relational transports, SAT instance, feedback
   recursion, and production-level measured accounting;
+- `PrefixLocalOperationalProduction.lean`,
+  `ExecutedRoleIndexedReduction.lean`, `ExecutedCausalNormalization.lean`, and
+  `ExactOperationalImage.lean` construct the stage-only production interface
+  and the source-indexed executed traces,
+  prove convergence of their produced targets, and derive the operational
+  regime while retaining those actual target values;
 - `Tests/ComputationalPhenomenonRegression.lean` protects the production
   statements corresponding to the independently enumerated adversarial probes,
   including the production seed and the causal connection between measured
   initialization and the first threaded state;
 - `Tests/ConstitutiveExecutionRegression.lean` protects the complete executed
-  and measured surface.
+  and measured surface;
+- `Tests/EndogenousOperationalStabilityRegression.lean` protects the exact
+  structural, pending, executed, and transient widths together with the causal
+  map, measured-failure, wrong-singleton, and non-factorization boundaries. In
+  particular, it checks the public `ActionFactorsThrough` statement and a
+  generic projection collision whose equality is propositional rather than
+  definitional.
+- `Tests/RelationalExtensiveIffRegression.lean` protects the class-level
+  exponential `iff`, its exact factorized-capacity form, the independent
+  unbounded members of the relational classes, and the one-chain public
+  normalization from typed action outputs and source-indexed traces to the
+  exactly realized operational image.
 
 The computational tree imports the foundational modules directly. It has no
 dependency on an external alignment layer, a separate foundation layer, or a
 readout facade.
 
 ## Build
+
+Scientific changes follow the repository's [mandatory agent instructions](AGENTS.md)
+and [scientific work procedure](docs/methode-de-travail-scientifique.fr.md).
+The [claim/proof registry](docs/scientific-claims.json) points to canonical
+passages and checked declarations. Both gates check its freshness and references;
+these checks do not replace mathematical reading or an independent audit.
 
 The repository pins Lean 4.33.1 and has no Mathlib dependency.
 
@@ -168,14 +400,57 @@ lake build
 The complete repository gate is available on both supported command surfaces:
 
 ```text
-powershell -File scripts/verify.ps1
+pwsh -NoProfile -File scripts/verify.ps1
 bash scripts/verify.sh
 ```
+
+Both gates require Python 3, traverse the declared import boundaries, build
+the library, sweep every repository constant (including private declarations),
+check the generated C dependency graph and then compile all 23 expected-failure fixtures listed in the shared
+`scripts/expected-failures.tsv` inventory. Unlisted, missing or duplicate fixtures
+fail both gates. Privacy, dependent-type, semantic-type and termination tests
+are reported separately. Both gates validate the same structured Lean errors at
+the frozen file, line and column; printed text, unrelated errors and extra errors
+cannot stand in for the intended rejection. A termination rejection is not a general causality
+proof. `python3 scripts/test-expected-failure-gates.py --output /tmp/gate-tests`
+exercises both gates after the build (PowerShell is required). These fixtures verify that the scientific
+certificate and causal-regime constructors remain private, that profiles from
+distinct stored instructions are not directly interchangeable, that a retained
+decision cannot replace the transformed decision, that the projection
+collision remains indexed by the authoritative instruction transport, and
+that an interpreter which ignores an arbitrary raw instruction cannot satisfy
+its semantic output specification.
+
+The interactive agent's initialization certificate links the received scope and
+actual selection code to its memory. Its finite-response certificate derives
+target acceptance from produced origins and follows both engine and historical
+support transports through every internal step. Rich formation remains separate
+from runtime restart memory. The compiled-agent check includes session wrappers
+and transitive closure applications, within its explicitly bounded unfolding
+scope; it is not a general time or physical-memory theorem.
 
 All Lean sources are constructive: they contain no `sorry`, `axiom`, or
 `noncomputable` declaration, and their final axiom-audit blocks report no axiom
 dependency for the audited declarations. The default build includes the public
-modules and both regression suites.
+modules and the regression suites.
+
+`Tests/AllConstantsAudit.lean` rejects any handwritten axiom dependency and
+reports compiler-generated exceptions separately. Both verification scripts
+check that its module coverage equals the complete Lean inventory. The compiled
+code check follows transitive calls, statically named closures and initializers.
+It keeps static producer-route checks and separately checks application
+multiplicity through helpers and closures at the public construction and
+extension entries. It also checks `stagewise`, `normalization` and `checkpoint`
+for replay, and follows archive captures from source/checkpoint factories to
+retained readers, with explicit executed-value and live-projection boundaries.
+Those boundaries are pinned to exact qualified symbols and their unique
+defining C artifacts; similar helper names grant no authorization.
+It excludes historical-support dependencies from the restricted restart entry. The Lean
+gate also checks the field types of restart memory and its nested live record.
+These are checks of the declared interfaces and compiled paths, not a general
+dynamic heap analysis, total-cost theorem or physical-memory bound.
+`RELATIONAL_PERIMETER_PYTHON` can select a Python 3 executable when
+`python3` is not on the command path.
 
 ## Résumé français
 
@@ -190,9 +465,129 @@ l'incorporation de cette continuation dans le même régime devient impossible.
 Cette architecture porte aussi une décomposition opérationnelle endogène de la
 recherche. L’ouverture produit une multiplicité structurelle ; une relation
 dirigée est ensuite reconstruite par l’exécution, sa préservation est prouvée
-séparément, et le résultat retenu conditionne la découverte suivante. Ainsi, le
-nombre d’alternatives engendrées et le nombre d’obligations qui doivent rester
-indépendantes ne sont pas confondus.
+séparément, et le résultat retenu conditionne la découverte suivante. La même
+récursion forme la production opérationnelle de l’étape courante avant de
+poursuivre depuis l’état produit. Ainsi, le nombre d’alternatives engendrées et
+le nombre d’obligations qui doivent rester indépendantes ne sont pas confondus.
+
+Pour `n` ouvertures binaires exécutées, la lecture extensive du carrier source
+des profils constitués a une largeur exacte `2^n`. Un régime aval possède cette
+largeur exponentielle complète si et seulement s’il conserve ces profils comme
+identités distinctes et séparément adressables. Pour chaque profil source, le
+normaliseur exécuté construit une cible dépendamment typée avec la trace exacte
+qui la produit. Cette cible est le profil complet des continuations retournées
+par les décisions locales ; la liste d’assignations n’en est qu’une lecture
+représentationnelle aval. La décision transformée élimine une cible produite
+par l’action, dont la construction privée est indexée par l’absorption qui
+consomme l’action relationnelle reconstruite, sa sortie exacte, la préservation
+séparée, la non-identité et la distinction des occurrences ; le cas retenu
+consomme la viabilité positive. Le normaliseur effectue sa récursion sur la chaîne
+constitutive complète qui porte ces témoins, sans reconstruire les cibles
+depuis la seule sortie retenue ; son résultat est l’élimination dérivée de cette
+chaîne, et non un champ stocké remplaçable.
+La famille complète des cibles produites et de leurs traces indexées par leur
+source est exposée avant le régime. Leur convergence est démontrée. Chaque
+production de tête enregistre l’image complète de ses sorties locales réelles ;
+sa frontière retire les doublons selon l’accord de sortie exécuté. L’histoire
+compose ces images sans énumérer tous les profils sources. Un transport exact
+réalise leurs valeurs dans l’image admise ; son inverse recopie ces valeurs,
+sans choisir une occurrence source fixe. Les retours établissent la complétude
+et l’absence de doublons avant la lecture numérique. La largeur un découle de
+la convergence locale et de ce raccord. Deux profils sources restent distincts tout en
+étant codéterminés par leurs traces et portés par la même obligation.
+Une projection par état et quantité conserve cette stabilité
+observée sans déterminer l’action opérationnelle totale. Le transport total
+porté par l’instruction faisant autorité et le transport de comparaison sont
+projetés séparément vers deux vues égales, alors que leurs actions totales
+diffèrent sur une autre continuation admissible. L’instruction agit point par
+point comme la relation découverte sur toute continuation. Le théorème
+générique de non-factorisation consomme explicitement cette égalité de
+projections.
+
+Le dépôt prouve désormais l’équivalence extensive au niveau d’une classe
+relationnelle générale. Des relations primitives de source, de formation, de
+cible et de provenance constituent une histoire dépendante d’occurrences de
+rôle. Les profils complets d’occurrences sont dérivés de cette histoire avant
+tout programme et tout régime opérationnel. Leur largeur est le produit des
+arités locales réalisées ; une histoire uniformément binaire de longueur `n`
+a donc une largeur exacte `2^n`. La classe est non bornée et possède un membre
+indépendant de l’exécution SAT publique ; la classe plus large contient aussi
+des histoires à arités variables.
+
+Un régime opérationnel peut conserver ces identités de profil comme obligations
+distinctes ou les regrouper. Lean prouve, pour tout problème de toute famille
+relationnelle à ouvertures binaires :
+
+```text
+largeur du régime = 2^stageCount
+  ↔ les identités constituées restent distinctes et séparément adressables
+     à travers ce régime.
+```
+
+La même condition équivaut à la capacité minimale exacte d’un adressage
+factorisé par le régime. Le carrier de la classe contient des occurrences
+indexées par l’étape relationnelle qui les constitue. Chaque étape expose les
+relations primitives de formation et de provenance et reconstruit
+constructivement dans `Type` leurs témoins positifs pour toute occurrence
+réalisée.
+Sur le carrier public, le certificat construit le
+régime identitaire de pleine largeur et prouve positivement sa condition
+complète de conservation. Sur les mêmes identités constituées, le normaliseur
+exécuté produit pour chaque profil source une cible opérationnelle complète et
+une trace dépendante. Ces traces proviennent de la même décomposition par
+étapes, dont la tête est produite depuis la seule étape exécutée courante avant
+la queue future. Le normaliseur consomme ensuite une chaîne constitutive
+dépendante dont chaque lien expose l’action relationnelle faisant autorité, sa
+sortie exacte, la préservation séparée, la viabilité, la non-identité et la
+distinction persistante des occurrences. La famille source-indexée des cibles et
+de leurs traces est construite avant le régime. La préservation et la séparation
+persistante sont projetées depuis toute cette chaîne dans l’autorisation de
+regroupement. Les traces démontrent séparément la convergence. Chaque image
+locale est enregistrée par le producteur de tête ; `publicExecutedOutputPolicy`
+compose ces images. `policyObligationTransport` relie leurs valeurs réelles aux
+obligations admises avec deux retours et des accords de portage et d’action.
+`publicRegimeWidth_eq_producedOutputs` relie la largeur admise à cette politique
+de sorties. Ses valeurs restent les cibles produites.
+La course causale fusionnée et son histoire de rôles sont prouvées égales à la
+réalisation publique faisant autorité. La classe générale et l’instance exécutée
+utilisent définitionnellement le même carrier de profils d’occurrences ; le
+théorème de classe est donc énoncé directement sur le carrier exécuté faisant
+autorité. Deux profils sources explicites sont prouvés distincts, codéterminés
+par leurs traces et portés ensemble. Sa frontière a
+donc une largeur un sans égaliser les profils sources. Un théorème public
+séparé énonce le `iff` exponentiel littéral directement sur ce carrier de
+profils de rôles.
+
+![Lecture extensive et obligations opérationnelles](docs/figures/relational-extensive-iff.svg)
+
+Il s’agit d’un théorème sur la largeur exacte d’un carrier et l’adressage fini
+factorisé dans la classe formalisée, non d’une borne universelle en temps ou en
+mémoire. La projection auditée par état et quantité et les coûts instrumentés
+de l’exécution restent des résultats aval distincts.
+
+## Décomposition variable / Variable decomposition
+
+Le chemin `VariableMaster.execute` lit les rôles exécutés du maître et cherche
+les relations sur les contextes reçus. Deux entrées constituées de même
+profondeur, sur une même formule, donnent des largeurs retenues un et deux.
+La chaîne conserve SAT et s'efface exactement vers le maître existant.
+Portée et contrat futur : [français](docs/variable-master-execution.fr.md),
+[English](docs/variable-master-execution.en.md).
+
+## Scientific reading / Lecture scientifique
+
+The complete constitutive chain, its contracts and its boundaries are described
+in [English](docs/science/constitutive-machine-chain.en.md) and
+[French](docs/science/chaine-constitutive-machine.fr.md). The
+[proof and contract map](docs/science/preuves-chaine-constitutive-machine.fr.md)
+connects these passages to production declarations and reproducible examples.
+These documents are canonical explanations, not a new independent audit verdict.
+
+La chaîne complète, ses contrats et ses limites sont exposés dans ces deux
+textes ; la table de preuves en donne les raccords formels. Les plans, prompts
+et matériaux bruts de chantier ne font pas partie de l'arbre publié.
+Les [rapports historiques conservés](docs/reports/README.md) restent attachés
+à leur révision propre, sans validation transférée au code ultérieur.
 
 ## License
 
