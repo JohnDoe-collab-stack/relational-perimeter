@@ -4,9 +4,9 @@
 
 **Cette exécution ne produit pas d’explosion exponentielle de la largeur opérationnelle : bien que le déploiement extensif des profils constitués ait une largeur 2ⁿ, le régime exécuté les regroupe en une seule obligation sans identifier les profils eux-mêmes.**
 
-**Dans la classe binaire formalisée, une largeur opérationnelle exponentielle apparaît si et seulement si le régime impose de conserver séparément toute la multiplicité extensive, c’est-à-dire si son application `carry` est injective.**
+**Dans la classe binaire formalisée, la largeur opérationnelle est égale à la pleine largeur extensive 2^n si et seulement si le régime impose de conserver séparément toute la multiplicité extensive, c’est-à-dire si son application `carry` est injective.**
 
-**L’explosion exponentielle de la largeur opérationnelle est donc démontrée ici comme l’effet exact de cette exigence extensive de conservation indépendante, et non comme une conséquence nécessaire de la structure relationnelle du problème elle-même.**
+**La conservation intégrale de la largeur extensive exponentielle comme largeur opérationnelle est donc démontrée ici comme l’effet exact de cette exigence extensive de conservation indépendante, et non comme une conséquence nécessaire de la structure relationnelle du problème elle-même.**
 
 ## Résultat démontré
 
@@ -145,9 +145,9 @@ distinction des identités du carrier source
   ≠ conservation comme obligations opérationnelles distinctes
 ```
 
-La quantité exponentielle des profils sources ne suffit donc pas à imposer une
-largeur opérationnelle exponentielle. Cette largeur apparaît exactement lorsque
-le régime porte séparément toutes les identités sources.
+La quantité exponentielle des profils sources ne suffit donc pas à imposer la
+pleine largeur opérationnelle 2^n. Cette pleine largeur apparaît exactement
+lorsque le régime porte séparément toutes les identités sources.
 
 Le régime exécuté ne compresse pas 2ⁿ obligations préexistantes. Avant son
 introduction, il existe un carrier source de 2ⁿ profils distincts, dont
@@ -162,8 +162,8 @@ n’intervient dans cet énoncé scientifique.
 Le résultat central peut ainsi être formulé sans le réduire à un problème de
 compression :
 
-> **Dans la classe formalisée, l'explosion exponentielle de la largeur des
-> obligations apparaît exactement lorsque le régime impose que toutes les
+> **Dans la classe formalisée, la largeur des obligations est égale à la pleine
+> largeur extensive 2^n exactement lorsque le régime impose que toutes les
 > identités structurelles soient conservées comme obligations distinctes et
 > séparément adressables.**
 
@@ -281,3 +281,12 @@ Il ne s'agit pas d'une borne universelle de temps ou de mémoire, ni d'une
 formalisation de tout arbre adaptatif possible. Il s'agit d'une
 caractérisation exacte du moment où la largeur de la frontière des obligations
 reprend intégralement la quantité lue sur le carrier source.
+
+La non-injectivité seule ne garantit pas une largeur non exponentielle : sur
+les mêmes rôles, `PolicySpectrum.half_width` construit une politique non
+injective de largeur `2^(n-1)` pour chaque nombre positif de rôles. Dans
+l'exécution publique étudiée, c'est la convergence des cibles effectivement
+produites et la réalisation de leur image exacte qui donnent la largeur un.
+Cette précision conserve le théorème de pleine largeur et distingue son contenu
+de l'affirmation plus forte, non démontrée, que toute non-injectivité éliminerait
+toute croissance exponentielle.

@@ -61,6 +61,17 @@ constructeurs d'absorption portent le témoin relationnel réellement trouvé.
 Le normaliseur produit ce code dans ses branches de recherche. La
 préservation est dérivée du code, non ajoutée comme champ indépendant.
 
+Le témoin relationnel intervient dans l'évaluation du code et dans la preuve
+de préservation. Les valeurs des gates sont calculées depuis les constructeurs
+du code et le sélecteur ; elles ne lisent pas le témoin propositionnel effacé.
+Il faut distinguer l'autorisation du transport de son incarnation configurée.
+
+`receive_exact` épingle, pour tout `input`, tout scope, toute formule et tous
+contextes reçus, la mémoire entière à la projection du maître
+`UnifiedMaster.publicInstance input`. `receive_core_exact` et
+`receive_problem_exact` exposent séparément le noyau et le problème initial.
+Ces théorèmes publics ne sont pas limités à l'exemple d'indice zéro.
+
 `lowerFrontier_exact` prouve, pour toute continuation typée admissible,
 l'égalité entre l'action du circuit sur ses lectures et la lecture de la
 continuation transportée. `ScopedProblemProduction.route_exact` raccorde cette
@@ -184,8 +195,24 @@ peut jamais valider seul : le second passage suit aussi les helpers susceptibles
 d'écrire sur les objets reçus. Un contrôle sur le C réel vérifie qu'un helper
 volumineux, au retour ignoré, n'échappe pas à ce second passage.
 
-Il interdit la recherche SAT et les callbacks d'affectation dans le chemin
-des paquets configurés. Il ne prouve pas un coût physique total, une borne
+Le contrôle de routage couvre `FrontierCircuit.fire`, `Routing.apply` et
+`routeProblem`, ainsi que leurs helpers transitifs et cibles de fermetures
+statiquement nommées. Il rejette une dépendance SAT même sous un nom anodin,
+un callback `lean_apply_*` et un symbole de projet dont le corps manque.
+Les opérations de circuit fini et les interfaces de routage sont les
+artéfacts autorisés ; la longueur de liste est une frontière explicite de
+la bibliothèque du compilateur. Les auto-tests exigent le motif de rejet
+attendu : une erreur étrangère n'est pas un test réussi.
+
+Le partage observé dans le code compilé peut aussi résulter de l'élimination
+des sous-expressions communes par le compilateur. La garantie porte sur les
+appels du code généré, pas sur une absence universelle de doublons syntaxiques.
+La confidentialité des constructeurs de `ScopedProblemProduction` et
+`MasterHead` est un contrôle d'accès ; son rejet ne doit pas être présenté
+comme une impossibilité de type indépendante. Leurs accords exacts restent
+des obligations distinctes.
+
+Ce contrôle ne prouve pas un coût physique total, une borne
 globale de mémoire ni une réalisation matérielle.
 
 Le champ inactif `Routing.targetWidth` est supprimé : la largeur cible reste

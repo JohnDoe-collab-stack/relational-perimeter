@@ -8,9 +8,15 @@ module par un lien ; ils ne désignent pas des copies des objets de production.
 
 Cette revue locale porte sur les passages cités. Elle n'est ni un nouveau
 verdict indépendant ni une lecture exhaustive de chaque ligne du dépôt.
-La cible canonique et les contrats ne sont pas modifiés.
+Les contrats et les énoncés Lean sont inchangés. La formulation canonique
+est précisée explicitement pour désigner la pleine largeur `2^n`, comme
+détaillé dans la [revue des corrections](REVUE_CORRECTIONS_CHAINE_CONSTITUTIVE.fr.md).
 
 ## Vérifications locales du 7 octobre 2026
+
+Cette section conserve les résultats de l'arbre antérieur décrit ci-dessous,
+et non ceux du lot de corrections. Les nouveaux contrôles sont distingués
+dans la revue des corrections ; aucun succès historique n'y est transféré.
 
 Branche : `codex/integrated-master-machine-audit-20261006`.
 Tête conservée : `39a3a352082e63c0fca27171d903bb367467b22c`.
@@ -135,7 +141,10 @@ Sources : [ConstitutiveDiscovery](../../RelationalPerimeter/Computation/Machine/
 - Exécution : `ConstitutiveExecution.produce` effectue la découverte vivante,
   la validation et l'application. `MasterMachine.advance` partage cette
   production et donne `production.action.selected` à `produceProblem`.
-- Preuve : `produce_exact`, `advance_core_exact` et
+- Preuve : `receive_exact`, `receive_core_exact` et `receive_problem_exact`
+  épinglent l'initialisation entière pour tout `input`, scope, formule et
+  contextes reçus, et pas seulement pour l'exemple d'indice zéro.
+  `produce_exact`, `advance_core_exact` et
   `advance_frontier_is_produced` relient ces constructions à leurs sorties.
 - Distinctions : la valeur canonique du sélecteur peut dépendre seulement de
   la profondeur ; la décomposition SAT dépend aussi des contextes réellement
@@ -151,6 +160,9 @@ et [MasterRuntime](../../RelationalPerimeter/Computation/Machine/MasterRuntime.l
 - Exécution : la normalisation effectue les recherches dirigées et construit
   ses branches de code selon leurs résultats. `produceProblem` réemploie
   ce code et sa frontière retenue.
+  Le témoin relationnel agit dans `AcceptedFrontierCode.eval` et dans la
+  préservation ; le circuit abaissé lit l'arbre des constructeurs et le
+  sélecteur, non le témoin de preuve effacé.
 - Preuve : `AcceptedIrreducibleFrontierReduction.preservation` évalue le
   code ; `ScopedProblemProduction.preservation` compose cette garantie avec
   celle de l'ouverture. `advance_preserves_SAT` expose la viabilité avant
@@ -232,9 +244,17 @@ et [check-integrated-machine-codegen.py](../../scripts/check-integrated-machine-
 - Preuve : `run_shared_transition` fixe ce chemin et `run_exact` l'accorde à
   la spécification. Les contrôles compilés suivent aussi les origines de
   champs et effets entre helpers, pas seulement leurs noms.
+  Le contrôleur suit aussi toutes les dépendances de `FrontierCircuit.fire`,
+  `Routing.apply` et `routeProblem`, y compris les helpers et les fermetures
+  statiques. Les artefacts extérieurs au circuit et au routage, les callbacks
+  d'affectation et les corps de fonctions projet manquants sont rejetés.
 - Distinctions : ces contrôles portent sur les chemins locaux supportés ;
   ils ne certifient pas tout le tas, les callbacks arbitraires d'un client,
   une architecture matérielle ou le coût total.
+  Le partage porte sur le code généré : une élimination de sous-expressions
+  communes par le compilateur peut supprimer une duplication syntaxique.
+  Le refus d'accès à un constructeur privé n'est pas, à lui seul, une
+  impossibilité de forge démontrée par les types.
 
 ### C10 Largeurs après constitution et action
 
@@ -359,15 +379,18 @@ Le [registre existant](../scientific-claims.json) couvre notamment
 L'entrée `CORE_MINIMALITY` référence explicitement
 `ConstitutiveExecution.minimality` et `any_realization`, avec leur domaine
 cohérent. Les ancrages français et anglais relient les sections du texte
-aux affirmations correspondantes. La révision d'évidence est
-`a13c9a707afb43f0dca79576d6bc073e1bcc1bfa`, qui contient ces textes et
-leurs sources. Les revues concernées sont rouvertes ; aucun verdict
+aux affirmations correspondantes. La révision d'évidence est indiquée
+dans ce registre et contient ces textes et leurs sources.
+Les revues concernées sont rouvertes ; aucun verdict
 historique n'est reporté sur ce nouveau paquet.
 Les statuts `pending` et `not_recorded` restent ouverts ; un contrôle statique
 réussi ne constitue pas un avis scientifique indépendant sur ce texte.
 
-Le nouveau protocole cite sans changement la cible canonique et S1–S8 /
+Le protocole antérieur cite la cible de son commit et S1–S8 /
 G1–G10, puis demande l'examen du texte entier, de C01–C10 et de leurs
 consommateurs. Il est épinglé séparément au paquet complet publié.
+La précision autorisée sur la pleine largeur est documentée dans la
+[revue des corrections](REVUE_CORRECTIONS_CHAINE_CONSTITUTIVE.fr.md) ;
+elle ne modifie aucun énoncé Lean et ne réécrit pas ce protocole historique.
 Le reçu de soumission est distinct de cette table : une acceptation API
 ne constitue pas un verdict scientifique.

@@ -35,6 +35,11 @@ The machine receives this master, along with a SAT formula, constituted
 contexts and reading permissions declared as inputs. These received contexts
 are not presented as outputs of the canonical public run.
 
+Initialization is pinned for every master index, formula, received contexts
+and scope by `MasterMachine.receive_exact`. The `receive_core_exact` and
+`receive_problem_exact` laws expose both components; this guarantee does
+not rely only on the index-zero example.
+
 ## Decomposition is produced before its continuation
 
 The current stage searches for a transformation on the data it receives.
@@ -67,6 +72,11 @@ this production opens the received SAT contexts. The searcher compares these
 contexts and constructs reduction code whose absorptions carry the discovered
 relations. This code supplies both the retained frontier and the program to
 configure; no partition or expected width is passed to the search.
+
+The discovered relation witness is consumed by evaluation of the code on
+continuations and by the preservation proof. The compiled circuit reads
+the code's constructor tree and selector, not the erased proof witness.
+Its agreement with the transport is established separately in Lean.
 
 The configured program then acts on packets containing a position and values
 of variables permitted for reading. For every typed continuation of the
@@ -203,5 +213,7 @@ neither unpredictability, a general polynomial SAT solver, a total-cost bound,
 nor originality established by Lean checks alone.
 
 This file and its companion are the working documents submitted for independent
-review. Their publication is not an audit verdict. The canonical target,
-contracts and figures are unchanged.
+review. Their publication is not an audit verdict. Contracts, figures and
+Lean statements are unchanged. The canonical wording is explicitly clarified
+to mean full width `2^n`, not every exponential growth. The earlier protocol
+and verdict remain tied to their commit; they are not a new audit of this lot.

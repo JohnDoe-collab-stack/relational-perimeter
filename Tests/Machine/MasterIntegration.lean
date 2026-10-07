@@ -23,6 +23,23 @@ def received (previous : Bool) := project scope (rich previous)
 theorem initialization_is_existing_master (previous : Bool) :
     received previous = receive 0 scope formula (incoming previous) := rfl
 
+theorem initialization_all_inputs (input : Nat) (permissions : Scope) (problem : Cnf)
+    (source : VariableMaster.States problem) :
+    receive input permissions problem source =
+      project permissions (fromMaster permissions (UnifiedMaster.publicInstance input) problem source) :=
+  receive_exact input permissions problem source
+
+theorem initialization_core_all_inputs (input : Nat) (permissions : Scope) (problem : Cnf)
+    (source : VariableMaster.States problem) :
+    (receive input permissions problem source).core =
+      projectMemory permissions (fromMaster permissions (UnifiedMaster.publicInstance input) problem source).core :=
+  receive_core_exact input permissions problem source
+
+theorem initialization_problem_all_inputs (input : Nat) (permissions : Scope) (problem : Cnf)
+    (source : VariableMaster.States problem) :
+    (receive input permissions problem source).problem = initialProblem problem source :=
+  receive_problem_exact input permissions problem source
+
 theorem same_live (one two : Bool) : (received one).core = (received two).core := rfl
 theorem same_depth : (parent false).depth = (parent true).depth := rfl
 theorem selector (previous : Bool) :
@@ -100,6 +117,9 @@ theorem old_grouped_result : master.regime.frontier.length = 1 := master.execute
 end ConstitutiveSearch.MasterMachine.Checks
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.MasterMachine.Checks.initialization_is_existing_master
+#print axioms ConstitutiveSearch.MasterMachine.Checks.initialization_all_inputs
+#print axioms ConstitutiveSearch.MasterMachine.Checks.initialization_core_all_inputs
+#print axioms ConstitutiveSearch.MasterMachine.Checks.initialization_problem_all_inputs
 #print axioms ConstitutiveSearch.MasterMachine.Checks.same_live
 #print axioms ConstitutiveSearch.MasterMachine.Checks.selector
 #print axioms ConstitutiveSearch.MasterMachine.Checks.every_child_viable

@@ -37,6 +37,11 @@ formule SAT, des contextes constitués et des permissions de lecture déclarés
 comme entrées. Ces contextes reçus ne sont pas présentés comme des sorties
 de la course publique canonique.
 
+L'initialisation est épinglée pour tout indice du maître, toute formule,
+tous contextes reçus et tout scope par `MasterMachine.receive_exact`.
+Les lois `receive_core_exact` et `receive_problem_exact` exposent ses deux
+composantes ; cette garantie ne repose pas sur le seul exemple d'indice zéro.
+
 ## La décomposition est produite avant sa continuation
 
 L'étape courante recherche une transformation sur les données qu'elle reçoit.
@@ -70,6 +75,11 @@ compare ces contextes et construit un code de réduction dont les absorptions
 portent les relations trouvées. Ce code fournit à la fois la frontière retenue
 et le programme à configurer ; aucune partition ni largeur attendue n'est
 passée à la recherche.
+
+Le témoin relationnel trouvé est consommé par l'évaluation du code sur les
+continuations et par la preuve de préservation. Le circuit compilé lit
+l'arbre des constructeurs du code et le sélecteur, pas le témoin de preuve
+effacé. Son accord avec le transport est établi séparément en Lean.
 
 Le programme configuré agit ensuite sur des paquets contenant une position
 et les valeurs des variables autorisées à la lecture. Pour toute continuation
@@ -215,4 +225,7 @@ ni borne de coût total, ni originalité établie par le seul contrôle Lean.
 
 Ce fichier et son complément sont les documents de travail soumis à la revue
 indépendante. Leur publication ne constitue pas un verdict d'audit.
-La cible canonique, les contrats et les figures ne sont pas modifiés.
+Les contrats, les figures et les énoncés Lean sont inchangés. La formulation
+canonique est explicitement précisée pour désigner la pleine largeur `2^n`,
+et non toute croissance exponentielle. Le protocole et le verdict antérieurs
+restent attachés à leur commit ; ils ne valent pas nouvel audit de ce lot.

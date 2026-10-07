@@ -110,6 +110,25 @@ def receive (input : Nat) (scope : Scope) (formula : Cnf) (source : VariableMast
   let master := UnifiedMaster.publicInstance input
   project scope (fromMaster scope master formula source)
 
+/-- Every input is received from its exact existing public master, with the
+given formula, contexts and scope. This pins the whole memory, not just its
+width or the index-zero example. Runtime call sharing is checked separately. -/
+theorem receive_exact (input : Nat) (scope : Scope) (formula : Cnf)
+    (source : VariableMaster.States formula) :
+    receive input scope formula source =
+      project scope (fromMaster scope (UnifiedMaster.publicInstance input) formula source) := rfl
+
+theorem receive_core_exact (input : Nat) (scope : Scope) (formula : Cnf)
+    (source : VariableMaster.States formula) :
+    (receive input scope formula source).core =
+      ReconfigurableMachine.LiveReduction.projectMemory scope
+        (fromMaster scope (UnifiedMaster.publicInstance input) formula source).core :=
+  congrArg (fun memory => memory.core) (receive_exact input scope formula source)
+
+theorem receive_problem_exact (input : Nat) (scope : Scope) (formula : Cnf)
+    (source : VariableMaster.States formula) :
+    (receive input scope formula source).problem = initialProblem formula source := rfl
+
 def advance {scope : Scope} {formula : Cnf} (memory : Memory scope formula) : Memory scope formula :=
   let coreProduction := ReconfigurableMachine.LiveReduction.ConstitutiveExecution.produce memory.core.live
   let problemProduction := produceProblem scope formula coreProduction.action.selected memory.problem.frontier
@@ -163,6 +182,9 @@ end ConstitutiveSearch.MasterMachine
 #print axioms ConstitutiveSearch.MasterMachine.ScopedProblemProduction.circuit_exact
 #print axioms ConstitutiveSearch.MasterMachine.ScopedProblemProduction.route_exact
 #print axioms ConstitutiveSearch.MasterMachine.receive
+#print axioms ConstitutiveSearch.MasterMachine.receive_exact
+#print axioms ConstitutiveSearch.MasterMachine.receive_core_exact
+#print axioms ConstitutiveSearch.MasterMachine.receive_problem_exact
 #print axioms ConstitutiveSearch.MasterMachine.advance
 #print axioms ConstitutiveSearch.MasterMachine.advance_exact
 #print axioms ConstitutiveSearch.MasterMachine.advance_core_exact

@@ -57,6 +57,17 @@ constructors contain the relation witness actually found. The normalizer
 produces the code inside its search branches. Preservation is derived from
 that code, not supplied as an independent record field.
 
+The relation witness contributes to code evaluation and the preservation proof.
+Gate values are computed from the code constructors and the selector; they
+do not read the erased propositional witness. Transport authorization and
+its configured realization are distinct.
+
+`receive_exact` pins the entire memory, for every `input`, scope, formula and
+received contexts, to the projection of `UnifiedMaster.publicInstance input`.
+`receive_core_exact` and `receive_problem_exact` expose the core and initial
+problem separately. These public theorems are not limited to the index-zero
+example.
+
 `lowerFrontier_exact` proves, for every admissible typed continuation,
 equality between the circuit acting on its readings and the readings of its
 transported continuation. `ScopedProblemProduction.route_exact` connects this
@@ -173,8 +184,23 @@ never establish acceptance on its own: the second pass also expands helpers
 that may write to received objects. An actual-C fixture checks that a large
 helper with an ignored return cannot bypass this second pass.
 
-It excludes SAT search
-and assignment callbacks from configured packet handling. It proves neither
+The routing check covers `FrontierCircuit.fire`, `Routing.apply` and
+`routeProblem`, including transitive helpers and statically named closure
+targets. It rejects a SAT dependency even under an innocuous name, a
+`lean_apply_*` callback and a project symbol whose body is missing.
+Finite circuit operations and routing interfaces are the authorized
+artifacts; list length is an explicit compiler-library boundary.
+Self-tests require the intended rejection reason: an unrelated error
+does not count as a successful test.
+
+Sharing observed in generated code may also result from the compiler's
+common-subexpression elimination. The guarantee concerns generated calls,
+not a universal absence of syntactic duplicates. Constructor privacy for
+`ScopedProblemProduction` and `MasterHead` is access control; its rejection
+must not be presented as an independent type-level impossibility. Their
+exactness fields remain separate obligations.
+
+This check proves neither
 total physical cost, a global memory bound nor hardware realization.
 
 The inactive `Routing.targetWidth` field is removed: target width remains a
