@@ -501,6 +501,21 @@ Architecture, preuves, contrat et portée :
 [français](docs/integrated-master-machine.fr.md),
 [English](docs/integrated-master-machine.en.md).
 
+## Scientific reading / Lecture scientifique
+
+The complete constitutive chain, its contracts and its boundaries are described
+in [English](docs/science/constitutive-machine-chain.en.md) and
+[French](docs/science/chaine-constitutive-machine.fr.md). The
+[proof and contract map](docs/science/preuves-chaine-constitutive-machine.fr.md)
+connects these passages to production declarations and reproducible examples.
+These documents are canonical explanations, not a new independent audit verdict.
+
+La chaîne complète, ses contrats et ses limites sont exposés dans ces deux
+textes ; la table de preuves en donne les raccords formels. Les plans, prompts
+et matériaux bruts de chantier ne font pas partie de l'arbre publié.
+Les [rapports historiques conservés](docs/reports/README.md) restent attachés
+à leur révision propre, sans validation transférée au code ultérieur.
+
 ## License
 
 Apache-2.0. See [LICENSE](LICENSE).

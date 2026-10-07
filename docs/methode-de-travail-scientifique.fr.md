@@ -82,6 +82,20 @@ les sources actuelles et les empreintes enregistrées. Une dépendance ajoutée
 ou modifiée invalide cette évidence. Les fichiers nouveaux doivent d'abord
 avoir une révision de référence avant de recevoir une évidence figée.
 
+Le schéma 2 permet uniquement un déplacement documentaire explicite :
+`document_relocations` relie le chemin Markdown publié à son chemin original
+dans la révision d'évidence. Les ancrages doivent conserver exactement leurs
+empreintes dans les deux fichiers. Cette table ne modifie ni la révision,
+ni les empreintes des sources, ni les statuts des revues. Elle ne s'applique
+pas aux fichiers Lean, aux contrôles, ni à la cible immuable ; les chaînes de
+renommages et les chemins non enregistrés sont refusés. Un nouveau passage
+ou une modification scientifique exige toujours une nouvelle évidence.
+
+Le contrôle des liens porte sur tous les documents Markdown publiables,
+y compris les nouveaux documents non encore commités, et ignore les fichiers
+retirés de l'arbre. La lecture des snapshots active `core.longpaths` pour cette
+commande Git seulement, sans modifier la configuration du poste.
+
 Une modification intentionnelle demande une lecture des changements, une
 révision des consommateurs et une réouverture explicite des revues. Le checker
 ne comporte aucun mode de rafraîchissement et n'écrit pas le registre.

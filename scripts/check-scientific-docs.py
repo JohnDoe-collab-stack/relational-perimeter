@@ -20,6 +20,7 @@ from unittest.mock import patch
 from urllib.parse import unquote, urlsplit
 
 sys.dont_write_bytecode = True
+from lean_imports import ImportSyntaxError, imports as parse_lean_imports
 ROOT = Path(__file__).resolve().parent.parent
 REGISTRY = "docs/scientific-claims.json"
 CONFIG = ("lean-toolchain", "lakefile.toml", "lake-manifest.json")
@@ -71,9 +72,10 @@ def read_current(root, path):
 
 def git_text(root, revision, path):
     safe_path(root, path)
-    result = subprocess.run(["git", "show", f"{revision}:{path}"], cwd=root,
+    result = subprocess.run(["git", "-c", "core.longpaths=true", "show", f"{revision}:{path}"], cwd=root,
                             capture_output=True, check=False)
-    require(result.returncode == 0, f"SNAPSHOT: missing {path} at {revision}")
+    require(result.returncode == 0,
+            f"SNAPSHOT: cannot read {path} at {revision}: " + result.stderr.decode("utf-8", errors="replace").strip())
     return result.stdout.decode("utf-8").replace("\r\n", "\n")
 
 
@@ -140,77 +142,12 @@ def validate_anchor(root, anchor, reader):
             f"STALE_TEXT: {anchor['path']} / {anchor['heading']} / {anchor['paragraph']}")
 
 
-def lean_code(text):
-    """Remove nested comments and strings before reading the import header."""
-    output, index, depth = [], 0, 0
-    quoted = False
-    while index < len(text):
-        pair = text[index:index + 2]
-        char = text[index]
-        if depth:
-            if pair == "/-":
-                depth += 1
-                output.extend("  ")
-                index += 2
-            elif pair == "-/":
-                depth -= 1
-                output.extend("  ")
-                index += 2
-            else:
-                output.append("\n" if char == "\n" else " ")
-                index += 1
-        elif quoted:
-            if char == "\\":
-                output.extend("  ")
-                index += 2
-            else:
-                quoted = char != '"'
-                output.append("\n" if char == "\n" else " ")
-                index += 1
-        elif pair == "/-":
-            depth = 1
-            output.extend("  ")
-            index += 2
-        elif pair == "--":
-            end = text.find("\n", index)
-            end = len(text) if end < 0 else end
-            output.extend(" " * (end - index))
-            index = end
-        elif char == '"':
-            quoted = True
-            output.append(" ")
-            index += 1
-        else:
-            output.append(char)
-            index += 1
-    require(depth == 0 and not quoted, "IMPORT_PARSE: unclosed comment/string")
-    return "".join(output)
-
-
 @lru_cache(maxsize=None)
 def imports(text):
-    tokens = re.findall(NAME.pattern + r"|[^\s]", lean_code(text))
-    result, index = [], 0
-    stops = {"import", "module", "prelude", "public", "private", "meta", "namespace",
-             "section", "end", "open", "set_option", "def", "theorem", "abbrev", "instance",
-             "structure", "inductive", "opaque", "example", "attribute", "export", "deriving",
-             "universe", "variable", "noncomputable", "macro", "syntax", "elab", "initialize"}
-    while index < len(tokens):
-        if tokens[index] in ("module", "prelude"):
-            index += 1
-            continue
-        start = index
-        while index < len(tokens) and tokens[index] in ("public", "private", "meta"):
-            index += 1
-        if index >= len(tokens) or tokens[index] != "import":
-            break
-        index += 1
-        first = index
-        while index < len(tokens) and tokens[index] not in stops and NAME.fullmatch(tokens[index]):
-            result.append(tokens[index])
-            index += 1
-        require(index > first, f"IMPORT_PARSE: empty import at token {start}")
-    return result
+    try:
+        return parse_lean_imports(text)
+    except ImportSyntaxError as error:
+        raise Invalid(str(error)) from error
 
 
 def module_path(module):
@@ -301,16 +238,51 @@ def load_registry(root):
     return json.loads(read_current(root, REGISTRY), object_pairs_hook=unique_pairs)
 
 
+def document_relocations(root, registry):
+    """Relocate prose only; keep the original committed evidence and hashes."""
+    version = registry.get("schema_version")
+    require(type(version) is int and version in (1, 2), "SCHEMA: version")
+    keys = ("schema_version", "evidence_revision", "immutable_target", "claims")
+    fields(registry, keys + (("document_relocations",) if version == 2 else ()), "registry")
+    aliases = registry.get("document_relocations", {})
+    require(isinstance(aliases, dict), "RELOCATION: expected path mapping")
+    require(all(isinstance(c, dict) and isinstance(c.get("anchors"), list)
+                and all(isinstance(a, dict) for a in c["anchors"]) for c in registry["claims"]),
+            "SCHEMA: claim anchors")
+    require(isinstance(registry["immutable_target"].get("anchors"), list)
+            and all(isinstance(a, dict) for a in registry["immutable_target"]["anchors"]),
+            "SCHEMA: target anchors")
+    registered = {a.get("path") for c in registry["claims"] for a in c.get("anchors", [])}
+    protected = {a.get("path") for a in registry["immutable_target"].get("anchors", [])}
+    for current, original in aliases.items():
+        safe_path(root, current)
+        safe_path(root, original)
+        require(current.endswith(".md") and original.endswith(".md"), "RELOCATION: Markdown only")
+        require(current != original and original not in aliases, "RELOCATION: identity or chained mapping")
+        require(current in registered, "RELOCATION: unregistered document")
+        require(current not in protected and original not in protected, "RELOCATION: immutable target")
+    require(len(set(aliases.values())) == len(aliases), "RELOCATION: duplicate original document")
+    return aliases
+
+
+def published_markdown(root):
+    result = subprocess.run(["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", "*.md"],
+                            cwd=root, capture_output=True, check=False)
+    require(result.returncode == 0, "LINK: cannot inventory Markdown")
+    return {p for p in result.stdout.decode("utf-8").split("\0") if p and safe_path(root, p).is_file()}
+
+
 def validate(root, registry):
-    fields(registry, ("schema_version", "evidence_revision", "immutable_target", "claims"), "registry")
-    require(type(registry["schema_version"]) is int and registry["schema_version"] == 1, "SCHEMA: version")
+    require(isinstance(registry, dict) and isinstance(registry.get("claims"), list)
+            and isinstance(registry.get("immutable_target"), dict), "SCHEMA: registry")
+    aliases = document_relocations(root, registry)
     revision = registry["evidence_revision"]
     require(isinstance(revision, str) and REV.fullmatch(revision), "SCHEMA: revision")
     exists = subprocess.run(["git", "cat-file", "-e", revision + "^{commit}"], cwd=root,
                             capture_output=True, check=False)
     require(exists.returncode == 0, f"SNAPSHOT: unavailable commit {revision}")
     current = lru_cache(maxsize=None)(lambda path: read_current(root, path))
-    snapshot = lru_cache(maxsize=None)(lambda path: git_text(root, revision, path))
+    snapshot = lru_cache(maxsize=None)(lambda path: git_text(root, revision, aliases.get(path, path)))
     target = registry["immutable_target"]
     fields(target, ("revision", "anchors"), "immutable target")
     require(isinstance(target["revision"], str) and REV.fullmatch(target["revision"]), "SCHEMA: target revision")
@@ -370,7 +342,7 @@ def validate(root, registry):
     for claim in registry["claims"]:
         require(all(consumer in ids and consumer != claim["id"] for consumer in claim["consumers"]),
                 f"SCHEMA: invalid consumer for {claim['id']}")
-    check_links(root, docs)
+    check_links(root, docs | published_markdown(root))
     print(f"SCIENTIFIC_DOCS_STATIC_OK claims={len(ids)} declarations={len({p['name'] for p in references})}")
     print("SCIENTIFIC_DOCS_OPEN_REVIEWS " + ", ".join(open_reviews))
     return references
@@ -410,7 +382,7 @@ class SelfTests(unittest.TestCase):
         self.assertIn(expected, str(caught.exception))
 
     def test_imports(self):
-        source = '/- outer /- import Bad.X -/ -/\nimport\n A.B\n /- nested /- x -/ -/ C.D\npublic import E.F\nnamespace N\ndef x := "import Wrong.X"'
+        source = '/- outer /- import Bad.X -/ -/\nimport\n A.B\n import /- nested /- x -/ -/ C.D\npublic import E.F\nnamespace N\ndef x := "import Wrong.X"'
         self.assertEqual(imports(source), ["A.B", "C.D", "E.F"])
         self.assertEqual(imports('import A.B -- import Bad.X\nset_option x true\n'), ["A.B"])
         self.assertEqual(imports('module\nprelude\nmeta import Lean\nimport Init\n'), ["Lean", "Init"])
@@ -436,6 +408,19 @@ class SelfTests(unittest.TestCase):
         self.rejects("SCHEMA", lambda: validate_review(ROOT, {"status": "reviewed"}, "a" * 40, "test"))
         self.rejects("REVIEW", lambda: validate_review(ROOT, {"status": "pass"}, "a" * 40, "test"))
 
+    def test_document_relocations(self):
+        base = {"schema_version": 2, "evidence_revision": "a" * 40,
+                "immutable_target": {"anchors": [{"path": "docs/target.md"}]},
+                "claims": [{"anchors": [{"path": "docs/science/current.md"}]}],
+                "document_relocations": {"docs/science/current.md": "docs/work/original.md"}}
+        self.assertEqual(document_relocations(ROOT, base), base["document_relocations"])
+        for mapping, expected in (({"docs/science/current.md": "../bad.md"}, "PATH"),
+                                  ({"docs/science/current.md": "A.lean"}, "Markdown only"),
+                                  ({"docs/unused.md": "docs/work/original.md"}, "unregistered"),
+                                  ({"docs/science/current.md": "docs/target.md"}, "immutable target"),
+                                  ({"docs/science/current.md": "docs/science/current.md"}, "chained")):
+            self.rejects(expected, lambda mapping=mapping: document_relocations(ROOT, {**base, "document_relocations": mapping}))
+
     def test_source_fingerprint_and_links(self):
         with tempfile.TemporaryDirectory(prefix="scientific-docs-tests-") as directory:
             root = Path(directory)
@@ -456,6 +441,13 @@ class SelfTests(unittest.TestCase):
             self.rejects("LINK: missing fragment", lambda: check_links(root, {"README.md"}))
             (root / "README.md").write_text("[bad](missing.md)", encoding="utf-8")
             self.rejects("LINK: missing", lambda: check_links(root, {"README.md"}))
+            listed = subprocess.CompletedProcess([], 0, stdout=b"docs/x.md\0docs/removed.md\0README.md\0", stderr=b"")
+            with patch.object(subprocess, "run", return_value=listed):
+                self.assertEqual(published_markdown(root), {"docs/x.md", "README.md"})
+            (root / "README.md").write_text("[ok](docs/x.md)", encoding="utf-8")
+            (root / "docs/x.md").write_text("[bad](absent.md)", encoding="utf-8")
+            with patch.object(subprocess, "run", return_value=listed):
+                self.rejects("LINK: missing", lambda: check_links(root, published_markdown(root)))
 
     def test_lean_failure_is_not_success(self):
         references = [{"module": "RelationalPerimeter", "name": "MissingDeclaration", "role": "production"}]
@@ -500,6 +492,19 @@ class SelfTests(unittest.TestCase):
                 (root / "RelationalPerimeter/Example.lean").write_text(files["RelationalPerimeter/Example.lean"], encoding="utf-8")
                 (root / "docs/target.md").write_text(files["docs/target.md"].replace("one", "changed"), encoding="utf-8")
                 self.rejects("STALE_TEXT", lambda: validate(root, registry))
+                (root / "docs/target.md").write_text(files["docs/target.md"], encoding="utf-8")
+                original = "docs/work/original.md"
+                relocated = "docs/science/current.md"
+                files[original] = "# Evidence\n\noriginal evidence\n"
+                safe_path(root, relocated).parent.mkdir(parents=True)
+                safe_path(root, relocated).write_text(files[original], encoding="utf-8")
+                moved_claim = {**claim, "anchors": [{"path": relocated, "heading": "Evidence",
+                               "paragraph": None, "sha256": digest("original evidence")}]}
+                moved = {**registry, "schema_version": 2, "claims": [moved_claim],
+                         "document_relocations": {relocated: original}}
+                validate(root, moved)
+                safe_path(root, relocated).write_text("# Evidence\n\nchanged evidence\n", encoding="utf-8")
+                self.rejects("STALE_TEXT", lambda: validate(root, moved))
 
 
 def main():

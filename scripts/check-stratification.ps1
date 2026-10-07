@@ -3,86 +3,19 @@ $ErrorActionPreference = "Stop"
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 $manifestPath = Join-Path $repoRoot "scripts/stratification.tsv"
 
-function Remove-LeanComments {
-  param([Parameter(Mandatory = $true)][string]$Source)
-
-  $result = [Text.StringBuilder]::new($Source.Length)
-  $index = 0
-  $blockDepth = 0
-  $inLineComment = $false
-  $inString = $false
-  $escaped = $false
-  while ($index -lt $Source.Length) {
-    $current = $Source[$index]
-    $next = if ($index + 1 -lt $Source.Length) { $Source[$index + 1] } else { [char]0 }
-
-    if ($inLineComment) {
-      if ($current -eq "`n") {
-        [void]$result.Append($current)
-        $inLineComment = $false
-      } else {
-        [void]$result.Append(' ')
-      }
-      $index += 1
-      continue
-    }
-
-    if ($blockDepth -gt 0) {
-      if ($current -eq '/' -and $next -eq '-') {
-        [void]$result.Append(' ')
-        [void]$result.Append(' ')
-        $blockDepth += 1
-        $index += 2
-      } elseif ($current -eq '-' -and $next -eq '/') {
-        [void]$result.Append(' ')
-        [void]$result.Append(' ')
-        $blockDepth -= 1
-        $index += 2
-      } else {
-        [void]$result.Append($(if ($current -eq "`n") { "`n" } else { ' ' }))
-        $index += 1
-      }
-      continue
-    }
-
-    if ($inString) {
-      [void]$result.Append($current)
-      if ($escaped) {
-        $escaped = $false
-      } elseif ($current -eq '\') {
-        $escaped = $true
-      } elseif ($current -eq '"') {
-        $inString = $false
-      }
-      $index += 1
-      continue
-    }
-
-    if ($current -eq '-' -and $next -eq '-') {
-      [void]$result.Append(' ')
-      [void]$result.Append(' ')
-      $inLineComment = $true
-      $index += 2
-    } elseif ($current -eq '/' -and $next -eq '-') {
-      [void]$result.Append(' ')
-      [void]$result.Append(' ')
-      $blockDepth = 1
-      $index += 2
-    } else {
-      [void]$result.Append($current)
-      if ($current -eq '"') { $inString = $true }
-      $index += 1
-    }
-  }
-  if ($blockDepth -ne 0) { throw "unterminated Lean block comment" }
-  return $result.ToString()
+if ($env:RELATIONAL_PERIMETER_PYTHON) {
+  $pythonCommand = $env:RELATIONAL_PERIMETER_PYTHON
+} elseif (Get-Command python3 -ErrorAction SilentlyContinue) {
+  $pythonCommand = "python3"
+} else {
+  throw "Python 3 is required for stratification checks"
 }
 
 function Get-LeanImports {
   param([Parameter(Mandatory = $true)][string]$Source)
-  $withoutComments = Remove-LeanComments -Source $Source
-  $pattern = '(?m)^[ \t]*import[ \t]*(?:\r?\n[ \t]*)?([A-Z][A-Za-z0-9_'']*(?:\.[A-Za-z0-9_'']+)*)'
-  return @([regex]::Matches($withoutComments, $pattern) | ForEach-Object { $_.Groups[1].Value })
+  $parsed = @($Source | & $pythonCommand (Join-Path $PSScriptRoot "lean_imports.py") --stdin)
+  if ($LASTEXITCODE -ne 0) { throw "Lean import-header parsing failed" }
+  return $parsed
 }
 
 if ($args.Count -gt 0 -and $args[0] -eq "--self-test") {

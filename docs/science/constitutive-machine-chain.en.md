@@ -200,20 +200,21 @@ cells and computation cost remain distinct quantities.
 The chain connects an organization actually produced, its action on
 continuation and the distinctions for which memory must account under a
 contract. Its passages and proofs are detailed in the
-[evidence table](PREUVES_CHAINE_CONSTITUTIVE_MACHINE.fr.md), with the contract
-map and example reproduction. The [French version](TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md)
+[evidence table](preuves-chaine-constitutive-machine.fr.md), with the contract
+map and example reproduction. The [French version](chaine-constitutive-machine.fr.md)
 describes the same objects, hypotheses and boundaries.
 
 This explanation does not replace the four protected paragraphs of the
 [canonical target](../conclusion-largeur-exponentielle-conservation-identites.fr.md),
-or S1–S8 and G1–G10 of the [existing protocol](ARISTOTLE_INTEGRATED_MASTER_MACHINE_AUDIT.md).
+or S1–S8 and G1–G10 of the [historical protocol](https://github.com/JohnDoe-collab-stack/relational-perimeter/blob/81f67adfaa239e1af606c82233ca91ce314dab95/docs/work/ARISTOTLE_INTEGRATED_MASTER_MACHINE_AUDIT.md).
 The class theorem is a general finite result; the search and machine described
 are constructions of the master and its received contexts. The text claims
 neither unpredictability, a general polynomial SAT solver, a total-cost bound,
 nor originality established by Lean checks alone.
 
-This file and its companion are the working documents submitted for independent
-review. Their publication is not an audit verdict. Contracts, figures and
-Lean statements are unchanged. The canonical wording is explicitly clarified
+This file and its companion are canonical scientific documents. Their
+publication is not an audit verdict. The registry records their relocation
+from the work folder; registered passages, hashes and the evidence revision
+are preserved. Contracts and Lean statements are unchanged. The canonical wording is explicitly clarified
 to mean full width `2^n`, not every exponential growth. The earlier protocol
 and verdict remain tied to their commit; they are not a new audit of this lot.

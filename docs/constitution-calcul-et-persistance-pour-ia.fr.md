@@ -67,17 +67,19 @@ La cible suivante est conservée, et non remplacée par la cible future sur l’
 > une largeur 2ⁿ, le régime exécuté les regroupe en une seule obligation sans
 > identifier les profils eux-mêmes.
 >
-> Dans la classe binaire formalisée, une largeur opérationnelle exponentielle
-> apparaît si et seulement si le régime impose de conserver séparément toute
-> la multiplicité extensive, c’est-à-dire si son application `carry` est
-> injective.
+> Dans la classe binaire formalisée, la largeur opérationnelle est égale à la
+> pleine largeur extensive 2^n si et seulement si le régime impose de conserver
+> séparément toute la multiplicité extensive, c’est-à-dire si son application
+> `carry` est injective.
 >
-> L’explosion exponentielle de la largeur opérationnelle est donc démontrée
-> ici comme l’effet exact de cette exigence extensive de conservation
-> indépendante, et non comme une conséquence nécessaire de la structure
-> relationnelle du problème elle-même.
+> La conservation intégrale de la largeur extensive exponentielle comme largeur
+> opérationnelle est donc démontrée ici comme l’effet exact de cette exigence
+> extensive de conservation indépendante, et non comme une conséquence
+> nécessaire de la structure relationnelle du problème elle-même.
 
-Cette citation reprend la [conclusion scientifique](conclusion-largeur-exponentielle-conservation-identites.fr.md).
+Cette citation reprend la [conclusion scientifique](conclusion-largeur-exponentielle-conservation-identites.fr.md)
+avec la précision de portée sur la pleine largeur ; les états de référence
+historiques de la section 1 restent ceux de cette note, pas un nouvel audit.
 Dans ce texte, « déploiement extensif » désigne la lecture quantitative des
 profils déjà constitués, non une opération qui constituerait leurs identités.
 La largeur exponentielle visée est la pleine largeur `2ⁿ`, non toute croissance

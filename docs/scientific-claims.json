@@ -1,5 +1,10 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "document_relocations": {
+    "docs/science/chaine-constitutive-machine.fr.md": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+    "docs/science/constitutive-machine-chain.en.md": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+    "docs/science/preuves-chaine-constitutive-machine.fr.md": "docs/work/PREUVES_CHAINE_CONSTITUTIVE_MACHINE.fr.md"
+  },
   "evidence_revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
   "immutable_target": {
     "revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
@@ -43,25 +48,25 @@
           "sha256": "c8990e1b9b51f2bd7b913ba47a9b5e21f758f09474436ad2f087b6c5fe3b45fe"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "Des objets constitués avant leur dénombrement",
           "paragraph": null,
           "sha256": "53628bf6818d9be746cdc41c4aa8706ea69d54c3fa9b1bacc553090719384ae8"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Objects constituted before they are counted",
           "paragraph": null,
           "sha256": "afc247cfef1786afa5a3ed200dfda6e271b8479cdb99ee29d92aafc6da6fca06"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "La décomposition est produite avant sa continuation",
           "paragraph": null,
           "sha256": "7f94e2aba3f23c7c918fee958df8c648b13fd74ce117efcacabcd0795764e123"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Decomposition is produced before its continuation",
           "paragraph": null,
           "sha256": "0499be2501c740c6c8fa257cebbef0f5b6400c4531ea5fe8bcb54ad884e7e7d7"
@@ -121,13 +126,13 @@
           "sha256": "a18377603bbf1425342df59ca58ec642497c07eea165cccfcb52af72b9fa77f4"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "La décomposition est produite avant sa continuation",
           "paragraph": null,
           "sha256": "7f94e2aba3f23c7c918fee958df8c648b13fd74ce117efcacabcd0795764e123"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Decomposition is produced before its continuation",
           "paragraph": null,
           "sha256": "0499be2501c740c6c8fa257cebbef0f5b6400c4531ea5fe8bcb54ad884e7e7d7"
@@ -196,13 +201,13 @@
           "sha256": "a0a2688beb10352cf5731cf825fabc7e4ae1a4e5149a6bf838d61480dde64403"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "Les largeurs sont des conséquences de ces régimes",
           "paragraph": null,
           "sha256": "78c7f9f704e958b993bcfa81826d811c1312aa3361c5839f82132899039b0b7c"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Widths are consequences of these regimes",
           "paragraph": null,
           "sha256": "4a118efd819d981f9223396d935beccde3746e7b91e97848675a14e1ff2c22e7"
@@ -261,13 +266,13 @@
           "sha256": "91b8a9ee7cf613bdf145e6d089d8360e27ff4c632007edef85b2bc084334cfc9"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "Les largeurs sont des conséquences de ces régimes",
           "paragraph": null,
           "sha256": "78c7f9f704e958b993bcfa81826d811c1312aa3361c5839f82132899039b0b7c"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Widths are consequences of these regimes",
           "paragraph": null,
           "sha256": "4a118efd819d981f9223396d935beccde3746e7b91e97848675a14e1ff2c22e7"
@@ -328,13 +333,13 @@
           "sha256": "3b166a95311049ba1a7d44bb08a067d48c2e8595d1eb8c810683cdaa583ab869"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "Des objets constitués avant leur dénombrement",
           "paragraph": null,
           "sha256": "53628bf6818d9be746cdc41c4aa8706ea69d54c3fa9b1bacc553090719384ae8"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Objects constituted before they are counted",
           "paragraph": null,
           "sha256": "afc247cfef1786afa5a3ed200dfda6e271b8479cdb99ee29d92aafc6da6fca06"
@@ -483,13 +488,13 @@
           "sha256": "d2adf12309084b2a178bb3d3751e8d014cea1a3053f11c16204367a789ce0b38"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "La décomposition est produite avant sa continuation",
           "paragraph": null,
           "sha256": "7f94e2aba3f23c7c918fee958df8c648b13fd74ce117efcacabcd0795764e123"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Decomposition is produced before its continuation",
           "paragraph": null,
           "sha256": "0499be2501c740c6c8fa257cebbef0f5b6400c4531ea5fe8bcb54ad884e7e7d7"
@@ -563,13 +568,13 @@
           "sha256": "a666005b62a506e88618ab09817ec745daf689e70ed268cade019e74bdb42d1b"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "La relation trouvée devient une action réutilisable",
           "paragraph": null,
           "sha256": "42473f65c1e80db12d505df9d953227dcf4f2924d095fd58e13bb871b3dd6c65"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "The discovered relation becomes a reusable action",
           "paragraph": null,
           "sha256": "ef8dfec5e62f46e3a88b16c05392411f1eb0bc2e7604a685fb399ccff6b95681"
@@ -676,13 +681,13 @@
           "sha256": "3b84d6882f7b83a21c9ee70a8f379a1df0f206fffc58f4ec2c7af9a2664d1b94"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "La relation trouvée devient une action réutilisable",
           "paragraph": null,
           "sha256": "42473f65c1e80db12d505df9d953227dcf4f2924d095fd58e13bb871b3dd6c65"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "The discovered relation becomes a reusable action",
           "paragraph": null,
           "sha256": "ef8dfec5e62f46e3a88b16c05392411f1eb0bc2e7604a685fb399ccff6b95681"
@@ -752,13 +757,13 @@
           "sha256": "2c08e9750c25b11b3d722f4ccece02654afa70f5330a02387afbf57ce4a21ac0"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "Une mémoire exacte pour les futurs permis",
           "paragraph": null,
           "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Exact memory for the permitted futures",
           "paragraph": null,
           "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
@@ -827,13 +832,13 @@
           "sha256": "2707fefcdae9994659b167a38a5a0212cd62ee1f12ce9e828bce222115cc5787"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "Une et deux branches avec le même chercheur",
           "paragraph": null,
           "sha256": "9372c27c4e354b377e21f3077fc80d5ba7266ab126f7cd43c41e6396e6c15ddf"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "One and two branches with the same searcher",
           "paragraph": null,
           "sha256": "ea76181a962f31744dc8699459a7b38b65483299f02ea515a0d69f1b7ece508b"
@@ -925,13 +930,13 @@
           "sha256": "32575d3eaf784e16820277fb786e7f9d62db1c38ec26f8b5a3d121c4bc7398ff"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "Les productions sont partagées à chaque demande",
           "paragraph": null,
           "sha256": "b7a774d2ef1c2739acad95a47533390a17ac143cff3205767a15b6e71456a19d"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Productions are shared at each request",
           "paragraph": null,
           "sha256": "d084e1cf464065e7c450040a04fdda43afdc08c5235004720851fc21aa26a400"
@@ -1007,13 +1012,13 @@
           "sha256": "075684e69582777c960fbac9a404b291bb12304225c5303b7eb4cc9454262e62"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "Une mémoire exacte pour les futurs permis",
           "paragraph": null,
           "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Exact memory for the permitted futures",
           "paragraph": null,
           "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
@@ -1080,13 +1085,13 @@
           "sha256": "35328b5b2ce74e90e3924461a99d97757df63725208bfc39cafa380526956712"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "Une mémoire exacte pour les futurs permis",
           "paragraph": null,
           "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Exact memory for the permitted futures",
           "paragraph": null,
           "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
@@ -1226,13 +1231,13 @@
           "sha256": "73e4ad8e1cdfe0ffb6e480e7a2cda87cc8669075fa11be85a3327633f0a1f2c1"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "Une mémoire exacte pour les futurs permis",
           "paragraph": null,
           "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Exact memory for the permitted futures",
           "paragraph": null,
           "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
@@ -1288,13 +1293,13 @@
           "sha256": "0cd82d5f05066790d6c193b8ec7bf8be49d7e34de3d3ba69965764cd141edc3a"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "Les largeurs sont des conséquences de ces régimes",
           "paragraph": null,
           "sha256": "78c7f9f704e958b993bcfa81826d811c1312aa3361c5839f82132899039b0b7c"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Widths are consequences of these regimes",
           "paragraph": null,
           "sha256": "4a118efd819d981f9223396d935beccde3746e7b91e97848675a14e1ff2c22e7"
@@ -1359,19 +1364,19 @@
       "scope": "À scope fixé : exactitude du noyau sur toutes les mémoires sources et suites finies ; égalité de projection iff futurs égaux sur mémoires cohérentes, sans hypothèse d'égalité des moteurs vivants. Nécessité pour toute réalisation exacte du même contrat ; ni minimum physique ni minimalité de la mémoire SAT intégrée.",
       "anchors": [
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "path": "docs/science/chaine-constitutive-machine.fr.md",
           "heading": "Une mémoire exacte pour les futurs permis",
           "paragraph": null,
           "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
         },
         {
-          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "path": "docs/science/constitutive-machine-chain.en.md",
           "heading": "Exact memory for the permitted futures",
           "paragraph": null,
           "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
         },
         {
-          "path": "docs/work/PREUVES_CHAINE_CONSTITUTIVE_MACHINE.fr.md",
+          "path": "docs/science/preuves-chaine-constitutive-machine.fr.md",
           "heading": "C08 Futurs et mémoire nécessaire",
           "paragraph": null,
           "sha256": "a6f953e61921d31cf4c3dcfc4aa29912aa9c3b98c1ccc2f07bf1e08b9f03b5ad"

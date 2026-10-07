@@ -210,22 +210,24 @@ des grandeurs distinctes.
 La chaîne associe une organisation effectivement produite, son action
 sur la continuation et les distinctions dont la mémoire doit répondre
 sous contrat. Ses passages et leurs preuves sont détaillés dans la
-[table d'évidence](PREUVES_CHAINE_CONSTITUTIVE_MACHINE.fr.md), avec la
+[table d'évidence](preuves-chaine-constitutive-machine.fr.md), avec la
 carte des contrats et la reproduction de l'exemple. La
-[version anglaise](TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md) expose
+[version anglaise](constitutive-machine-chain.en.md) expose
 les mêmes objets, hypothèses et limites.
 
 Ce développement ne remplace pas les quatre paragraphes protégés de la
 [cible canonique](../conclusion-largeur-exponentielle-conservation-identites.fr.md),
-ni S1–S8 et G1–G10 du [protocole existant](ARISTOTLE_INTEGRATED_MASTER_MACHINE_AUDIT.md).
+ni S1–S8 et G1–G10 du [protocole historique](https://github.com/JohnDoe-collab-stack/relational-perimeter/blob/81f67adfaa239e1af606c82233ca91ce314dab95/docs/work/ARISTOTLE_INTEGRATED_MASTER_MACHINE_AUDIT.md).
 Le théorème de classe est un résultat fini général ; la recherche et la
 machine décrites sont des constructions du maître et de ses contextes reçus.
 Le texte ne revendique ni imprévisibilité, ni solveur SAT polynomial général,
 ni borne de coût total, ni originalité établie par le seul contrôle Lean.
 
-Ce fichier et son complément sont les documents de travail soumis à la revue
-indépendante. Leur publication ne constitue pas un verdict d'audit.
-Les contrats, les figures et les énoncés Lean sont inchangés. La formulation
+Ce fichier et son complément sont des documents scientifiques canoniques.
+Leur publication ne constitue pas un verdict d'audit. Leur déplacement depuis
+le dossier de chantier est tracé dans le registre ; les passages enregistrés,
+leurs empreintes et la révision d'évidence sont conservés. Les contrats et
+les énoncés Lean sont inchangés. La formulation
 canonique est explicitement précisée pour désigner la pleine largeur `2^n`,
 et non toute croissance exponentielle. Le protocole et le verdict antérieurs
 restent attachés à leur commit ; ils ne valent pas nouvel audit de ce lot.

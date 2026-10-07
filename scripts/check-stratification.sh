@@ -5,59 +5,17 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 manifest="scripts/stratification.tsv"
 
+if [[ -n "${RELATIONAL_PERIMETER_PYTHON:-}" ]]; then
+  python_command=("$RELATIONAL_PERIMETER_PYTHON")
+elif command -v python3 >/dev/null 2>&1; then
+  python_command=(python3)
+else
+  echo 'Python 3 is required for stratification checks' >&2
+  exit 1
+fi
+
 lean_imports() {
-  awk '
-    BEGIN { block = 0; in_string = 0; escaped = 0; awaiting = 0 }
-    {
-      source = $0 "\n"
-      clean = ""
-      line_comment = 0
-      for (i = 1; i <= length(source); i++) {
-        current = substr(source, i, 1)
-        nextc = (i < length(source) ? substr(source, i + 1, 1) : "")
-        if (line_comment) {
-          if (current == "\n") clean = clean "\n"
-          else clean = clean " "
-        } else if (block > 0) {
-          if (current == "/" && nextc == "-") {
-            clean = clean "  "; block++; i++
-          } else if (current == "-" && nextc == "/") {
-            clean = clean "  "; block--; i++
-          } else {
-            clean = clean (current == "\n" ? "\n" : " ")
-          }
-        } else if (in_string) {
-          clean = clean current
-          if (escaped) escaped = 0
-          else if (current == "\\") escaped = 1
-          else if (current == "\"") in_string = 0
-        } else if (current == "-" && nextc == "-") {
-          clean = clean "  "; line_comment = 1; i++
-        } else if (current == "/" && nextc == "-") {
-          clean = clean "  "; block = 1; i++
-        } else {
-          clean = clean current
-          if (current == "\"") in_string = 1
-        }
-      }
-      sub(/\n$/, "", clean)
-      trimmed = clean
-      sub(/^[ \t\r]+/, "", trimmed)
-      sub(/[ \t\r]+$/, "", trimmed)
-      if (awaiting && trimmed == "") next
-      if (awaiting) {
-        if (match(trimmed, /^[A-Z][A-Za-z0-9_'\''.]*/)) print substr(trimmed, RSTART, RLENGTH)
-        awaiting = 0
-      }
-      if (match(clean, /^[ \t]*import[ \t]*/)) {
-        rest = substr(clean, RLENGTH + 1)
-        sub(/^[ \t]+/, "", rest)
-        if (rest == "" || rest == "\r") awaiting = 1
-        else if (match(rest, /^[A-Z][A-Za-z0-9_'\''.]*/)) print substr(rest, RSTART, RLENGTH)
-      }
-    }
-    END { if (block != 0) exit 3 }
-  ' "$1"
+  "${python_command[@]}" "$repo_root/scripts/lean_imports.py" "$1"
 }
 
 if [[ "${1:-}" == "--self-test" ]]; then
@@ -70,7 +28,8 @@ if [[ "${1:-}" == "--self-test" ]]; then
     '  Allowed.Split' \
     '/- comment -/' \
     'import Allowed.Direct -- import Forbidden.Trailing' > "$fixture"
-  mapfile -t actual < <(lean_imports "$fixture")
+  parsed="$(lean_imports "$fixture")" || exit 1
+  mapfile -t actual <<< "$parsed"
   [[ "${actual[*]}" == 'Allowed.Split Allowed.Direct' ]] || {
     echo "stratification parser self-test failed: ${actual[*]}" >&2
     exit 1
@@ -100,7 +59,9 @@ done
 for relative in "${production_files[@]}"; do
   module="${relative%.lean}"; module="${module//\//.}"; module="${module//\\/.}"
   file_for[$module]="$relative"
-  mapfile -t direct < <(lean_imports "$relative")
+  parsed="$(lean_imports "$relative")" || exit 1
+  direct=()
+  if [[ -n "$parsed" ]]; then mapfile -t direct <<< "$parsed"; fi
   for dependency in "${direct[@]}"; do
     [[ "$dependency" != Tests && "$dependency" != Tests.* ]] || {
       echo "production module imports a test: $module -> $dependency" >&2

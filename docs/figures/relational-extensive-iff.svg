@@ -87,7 +87,7 @@
     <text x="135" y="872" class="bodyLight">carry is injective; addressing factors through obligations.</text>
     <text x="135" y="904" class="metric">regime width = 2^stageCount</text>
     <line x1="135" y1="927" x2="745" y2="927" stroke="#f3ddea" stroke-width="2"/>
-    <text x="135" y="960" class="metric">exponential width ↔ distinct + separately addressable</text>
+    <text x="135" y="960" class="metric">full width ↔ distinct + separately addressable</text>
   </g>
 
   <g filter="url(#shadow)">

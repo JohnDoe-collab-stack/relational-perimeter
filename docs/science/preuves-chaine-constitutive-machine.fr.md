@@ -1,7 +1,7 @@
 # Preuves et contrats de la chaîne constitutive et de la machine
 
-Ce complément permet de vérifier le [texte français](TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md)
-et sa [version anglaise](TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md).
+Ce complément permet de vérifier le [texte français](chaine-constitutive-machine.fr.md)
+et sa [version anglaise](constitutive-machine-chain.en.md).
 Il distingue les passages construits, leurs domaines et les contrôles
 d'implémentation. Les noms abrégés ci-dessous sont toujours rattachés à leur
 module par un lien ; ils ne désignent pas des copies des objets de production.
@@ -10,13 +10,13 @@ Cette revue locale porte sur les passages cités. Elle n'est ni un nouveau
 verdict indépendant ni une lecture exhaustive de chaque ligne du dépôt.
 Les contrats et les énoncés Lean sont inchangés. La formulation canonique
 est précisée explicitement pour désigner la pleine largeur `2^n`, comme
-détaillé dans la [revue des corrections](REVUE_CORRECTIONS_CHAINE_CONSTITUTIVE.fr.md).
+détaillé dans la [conclusion canonique](../conclusion-largeur-exponentielle-conservation-identites.fr.md).
 
 ## Vérifications locales du 7 octobre 2026
 
 Cette section conserve les résultats de l'arbre antérieur décrit ci-dessous,
-et non ceux du lot de corrections. Les nouveaux contrôles sont distingués
-dans la revue des corrections ; aucun succès historique n'y est transféré.
+et non ceux du lot de corrections. Cette section est un relevé historique ; aucun succès historique n'est
+transféré à une révision ultérieure.
 
 Branche : `codex/integrated-master-machine-audit-20261006`.
 Tête conservée : `39a3a352082e63c0fca27171d903bb367467b22c`.
@@ -380,7 +380,9 @@ L'entrée `CORE_MINIMALITY` référence explicitement
 `ConstitutiveExecution.minimality` et `any_realization`, avec leur domaine
 cohérent. Les ancrages français et anglais relient les sections du texte
 aux affirmations correspondantes. La révision d'évidence est indiquée
-dans ce registre et contient ces textes et leurs sources.
+dans ce registre et contient les passages originaux et leurs sources.
+La table `document_relocations` indique leurs chemins actuels ; elle ne
+change ni les empreintes des passages ni celles des preuves.
 Les revues concernées sont rouvertes ; aucun verdict
 historique n'est reporté sur ce nouveau paquet.
 Les statuts `pending` et `not_recorded` restent ouverts ; un contrôle statique
@@ -390,7 +392,7 @@ Le protocole antérieur cite la cible de son commit et S1–S8 /
 G1–G10, puis demande l'examen du texte entier, de C01–C10 et de leurs
 consommateurs. Il est épinglé séparément au paquet complet publié.
 La précision autorisée sur la pleine largeur est documentée dans la
-[revue des corrections](REVUE_CORRECTIONS_CHAINE_CONSTITUTIVE.fr.md) ;
+[conclusion canonique](../conclusion-largeur-exponentielle-conservation-identites.fr.md) ;
 elle ne modifie aucun énoncé Lean et ne réécrit pas ce protocole historique.
 Le reçu de soumission est distinct de cette table : une acceptation API
 ne constitue pas un verdict scientifique.
