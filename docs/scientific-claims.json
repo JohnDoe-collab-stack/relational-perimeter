@@ -1,30 +1,30 @@
 {
   "schema_version": 1,
-  "evidence_revision": "9330fa3585473b000f285565dd9c1f94bc706442",
+  "evidence_revision": "a13c9a707afb43f0dca79576d6bc073e1bcc1bfa",
   "immutable_target": {
     "revision": "d3c18a963a4c7f06f404a645b582379e81255a9a",
     "anchors": [
       {
         "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
-        "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+        "heading": "Conclusion de la branche : largeur exponentielle et conservation s�par�e des identit�s",
         "paragraph": 1,
         "sha256": "c8990e1b9b51f2bd7b913ba47a9b5e21f758f09474436ad2f087b6c5fe3b45fe"
       },
       {
         "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
-        "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+        "heading": "Conclusion de la branche : largeur exponentielle et conservation s�par�e des identit�s",
         "paragraph": 2,
         "sha256": "a18377603bbf1425342df59ca58ec642497c07eea165cccfcb52af72b9fa77f4"
       },
       {
         "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
-        "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+        "heading": "Conclusion de la branche : largeur exponentielle et conservation s�par�e des identit�s",
         "paragraph": 3,
         "sha256": "c3d3c17b7212e202c40a6d7c8a63f67087d7dc73d8df5b09bfebb169c7b3c372"
       },
       {
         "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
-        "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+        "heading": "Conclusion de la branche : largeur exponentielle et conservation s�par�e des identit�s",
         "paragraph": 4,
         "sha256": "e8283cb0ebbb2ea332d4e64c6afb4d9f54440ecb6acb60a4f0980fb1cba41575"
       }
@@ -34,13 +34,37 @@
     {
       "id": "TARGET_1",
       "kind": "causal",
-      "scope": "Constitution relative aux primitives reçues ; décomposition locale de l'exécution publique, non auto-production des primitives ni imprévisibilité.",
+      "scope": "Constitution relative aux primitives re�ues ; d�composition locale de l'ex�cution publique, non auto-production des primitives ni impr�visibilit�.",
       "anchors": [
         {
           "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
-          "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+          "heading": "Conclusion de la branche : largeur exponentielle et conservation s�par�e des identit�s",
           "paragraph": 1,
           "sha256": "c8990e1b9b51f2bd7b913ba47a9b5e21f758f09474436ad2f087b6c5fe3b45fe"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "Des objets constitu�s avant leur d�nombrement",
+          "paragraph": null,
+          "sha256": "5012b330f5319cdd93211bb8cd3fe64d9a892ed5d43ed7382434ddcc18698983"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Objects constituted before they are counted",
+          "paragraph": null,
+          "sha256": "4cace9de9ddcf17ca6d642f9b43fb04879f0dd81db26efd94b90fbe4b37a4bc4"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "La d�composition est produite avant sa continuation",
+          "paragraph": null,
+          "sha256": "7f94e2aba3f23c7c918fee958df8c648b13fd74ce117efcacabcd0795764e123"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Decomposition is produced before its continuation",
+          "paragraph": null,
+          "sha256": "0499be2501c740c6c8fa257cebbef0f5b6400c4531ea5fe8bcb54ad884e7e7d7"
         }
       ],
       "proofs": [
@@ -62,10 +86,10 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Les occurrences sont indexées par leur étape et leur histoire dépendante.",
-        "execution": "La récursion produit la tête locale avant sa queue à partir de l'étape exécutée.",
-        "proof": "L'exactitude des têtes et l'égalité des rôles publics relient cette production à l'exécution faisant autorité.",
-        "transport": "La lecture quantitative ne constitue pas les occurrences ni leur identité."
+        "formation": "Les occurrences sont index�es par leur �tape et leur histoire d�pendante.",
+        "execution": "La r�cursion produit la t�te locale avant sa queue � partir de l'�tape ex�cut�e.",
+        "proof": "L'exactitude des t�tes et l'�galit� des r�les publics relient cette production � l'ex�cution faisant autorit�.",
+        "transport": "La lecture quantitative ne constitue pas les occurrences ni leur identit�."
       },
       "consumers": [
         "TARGET_2",
@@ -78,7 +102,7 @@
           "status": "pending"
         },
         "translation": {
-          "status": "not_recorded"
+          "status": "pending"
         },
         "independent": {
           "status": "not_recorded"
@@ -88,13 +112,25 @@
     {
       "id": "TARGET_2",
       "kind": "causal",
-      "scope": "Même carrier public : largeur source 2^(input+1), largeur exécutée 1 et profils distincts portés ensemble ; pas de borne de coût total.",
+      "scope": "M�me carrier public : largeur source 2^(input+1), largeur ex�cut�e 1 et profils distincts port�s ensemble ; pas de borne de co�t total.",
       "anchors": [
         {
           "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
-          "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+          "heading": "Conclusion de la branche : largeur exponentielle et conservation s�par�e des identit�s",
           "paragraph": 2,
           "sha256": "a18377603bbf1425342df59ca58ec642497c07eea165cccfcb52af72b9fa77f4"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "La d�composition est produite avant sa continuation",
+          "paragraph": null,
+          "sha256": "7f94e2aba3f23c7c918fee958df8c648b13fd74ce117efcacabcd0795764e123"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Decomposition is produced before its continuation",
+          "paragraph": null,
+          "sha256": "0499be2501c740c6c8fa257cebbef0f5b6400c4531ea5fe8bcb54ad884e7e7d7"
         }
       ],
       "proofs": [
@@ -126,10 +162,10 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Les profils sélectionnent des occurrences déjà constituées de la même histoire.",
-        "execution": "Les cibles normalisées et leurs traces sont produites avant le régime.",
-        "proof": "La convergence, l'image exacte et les fibres de carry établissent le regroupement.",
-        "transport": "L'égalité d'obligation n'égalise pas les profils sources."
+        "formation": "Les profils s�lectionnent des occurrences d�j� constitu�es de la m�me histoire.",
+        "execution": "Les cibles normalis�es et leurs traces sont produites avant le r�gime.",
+        "proof": "La convergence, l'image exacte et les fibres de carry �tablissent le regroupement.",
+        "transport": "L'�galit� d'obligation n'�galise pas les profils sources."
       },
       "consumers": [
         "TARGET_4",
@@ -141,7 +177,7 @@
           "status": "pending"
         },
         "translation": {
-          "status": "not_recorded"
+          "status": "pending"
         },
         "independent": {
           "status": "not_recorded"
@@ -151,13 +187,25 @@
     {
       "id": "TARGET_3",
       "kind": "cardinality",
-      "scope": "Toute famille binaire formalisée, tout problème et régime surjectif : pleine largeur iff conservation distincte ; adressage construit, non hypothèse indépendante.",
+      "scope": "Toute famille binaire formalis�e, tout probl�me et r�gime surjectif : pleine largeur iff conservation distincte ; adressage construit, non hypoth�se ind�pendante.",
       "anchors": [
         {
           "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
-          "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+          "heading": "Conclusion de la branche : largeur exponentielle et conservation s�par�e des identit�s",
           "paragraph": 3,
           "sha256": "c3d3c17b7212e202c40a6d7c8a63f67087d7dc73d8df5b09bfebb169c7b3c372"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "Les largeurs sont des cons�quences de ces r�gimes",
+          "paragraph": null,
+          "sha256": "78c7f9f704e958b993bcfa81826d811c1312aa3361c5839f82132899039b0b7c"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Widths are consequences of these regimes",
+          "paragraph": null,
+          "sha256": "4a118efd819d981f9223396d935beccde3746e7b91e97848675a14e1ff2c22e7"
         }
       ],
       "proofs": [
@@ -179,9 +227,9 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Le carrier fini est dérivé de l'histoire et de ses arités réalisées.",
-        "execution": "Un régime surjectif porte les profils vers ses obligations.",
-        "proof": "Le lemme fini cardinal ne consomme pas le contenu spécifique des relations ; la classe binaire fournit 2^n.",
+        "formation": "Le carrier fini est d�riv� de l'histoire et de ses arit�s r�alis�es.",
+        "execution": "Un r�gime surjectif porte les profils vers ses obligations.",
+        "proof": "Le lemme fini cardinal ne consomme pas le contenu sp�cifique des relations ; la classe binaire fournit 2^n.",
         "transport": "L'adressage factorise par les obligations, sans contourner carry."
       },
       "consumers": [
@@ -194,7 +242,7 @@
           "status": "pending"
         },
         "translation": {
-          "status": "not_recorded"
+          "status": "pending"
         },
         "independent": {
           "status": "not_recorded"
@@ -204,13 +252,25 @@
     {
       "id": "TARGET_4",
       "kind": "cardinality",
-      "scope": "Caractérisation de la pleine largeur opérationnelle dans la classe surjective ; le contre-régime public autorisé n'en fait pas une nécessité intrinsèque, sans conclusion universelle sur tout coût.",
+      "scope": "Caract�risation de la pleine largeur op�rationnelle dans la classe surjective ; le contre-r�gime public autoris� n'en fait pas une n�cessit� intrins�que, sans conclusion universelle sur tout co�t.",
       "anchors": [
         {
           "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
-          "heading": "Conclusion de la branche : largeur exponentielle et conservation séparée des identités",
+          "heading": "Conclusion de la branche : largeur exponentielle et conservation s�par�e des identit�s",
           "paragraph": 4,
           "sha256": "e8283cb0ebbb2ea332d4e64c6afb4d9f54440ecb6acb60a4f0980fb1cba41575"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "Les largeurs sont des cons�quences de ces r�gimes",
+          "paragraph": null,
+          "sha256": "78c7f9f704e958b993bcfa81826d811c1312aa3361c5839f82132899039b0b7c"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Widths are consequences of these regimes",
+          "paragraph": null,
+          "sha256": "4a118efd819d981f9223396d935beccde3746e7b91e97848675a14e1ff2c22e7"
         }
       ],
       "proofs": [
@@ -237,10 +297,10 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Le carrier de classe est celui du maître, pas un carrier ajouté à la fin.",
-        "execution": "Le régime exécuté provient des cibles et autorisations de la chaîne.",
-        "proof": "Le iff surjectif et le régime exécuté sur la même source ferment le contraste.",
-        "transport": "La non-conservation indépendante n'efface pas les identités ; la portée reste celle de largeur, non du temps."
+        "formation": "Le carrier de classe est celui du ma�tre, pas un carrier ajout� � la fin.",
+        "execution": "Le r�gime ex�cut� provient des cibles et autorisations de la cha�ne.",
+        "proof": "Le iff surjectif et le r�gime ex�cut� sur la m�me source ferment le contraste.",
+        "transport": "La non-conservation ind�pendante n'efface pas les identit�s ; la port�e reste celle de largeur, non du temps."
       },
       "consumers": [],
       "source_sha256": "d0b053c12e4eb13cba63001ed721d88e6b3efeb2de14cf1d233610511ca80e83",
@@ -249,7 +309,7 @@
           "status": "pending"
         },
         "translation": {
-          "status": "not_recorded"
+          "status": "pending"
         },
         "independent": {
           "status": "not_recorded"
@@ -259,13 +319,25 @@
     {
       "id": "ROLE_READOUT",
       "kind": "constitution",
-      "scope": "Profils d'une histoire dépendante à arités réalisées ; frontière complète et sans doublon avant lecture de sa largeur.",
+      "scope": "Profils d'une histoire d�pendante � arit�s r�alis�es ; fronti�re compl�te et sans doublon avant lecture de sa largeur.",
       "anchors": [
         {
           "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
-          "heading": "Stratification qui donne son sens au résultat",
+          "heading": "Stratification qui donne son sens au r�sultat",
           "paragraph": null,
           "sha256": "3b166a95311049ba1a7d44bb08a067d48c2e8595d1eb8c810683cdaa583ab869"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "Des objets constitu�s avant leur d�nombrement",
+          "paragraph": null,
+          "sha256": "5012b330f5319cdd93211bb8cd3fe64d9a892ed5d43ed7382434ddcc18698983"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Objects constituted before they are counted",
+          "paragraph": null,
+          "sha256": "4cace9de9ddcf17ca6d642f9b43fb04879f0dd81db26efd94b90fbe4b37a4bc4"
         }
       ],
       "proofs": [
@@ -297,9 +369,9 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Formation et provenance positives sont récupérées depuis l'étape indexée.",
-        "execution": "La frontière des profils est dérivée de l'histoire, non fournie comme produit abstrait global.",
-        "proof": "Complétude, absence de doublons puis produit des arités sont des obligations séparées.",
+        "formation": "Formation et provenance positives sont r�cup�r�es depuis l'�tape index�e.",
+        "execution": "La fronti�re des profils est d�riv�e de l'histoire, non fournie comme produit abstrait global.",
+        "proof": "Compl�tude, absence de doublons puis produit des arit�s sont des obligations s�par�es.",
         "transport": "Le readout de longueur ne remplace pas les relations de constitution."
       },
       "consumers": [
@@ -312,7 +384,7 @@
           "status": "pending"
         },
         "translation": {
-          "status": "not_recorded"
+          "status": "pending"
         },
         "independent": {
           "status": "not_recorded"
@@ -322,7 +394,7 @@
     {
       "id": "SEARCH_CONTEXTS",
       "kind": "causal",
-      "scope": "Même maître, formule, profondeur et variable ; deux histoires reçues donnent une ou deux branches avec le même chercheur. Échec relatif à ce chercheur.",
+      "scope": "M�me ma�tre, formule, profondeur et variable ; deux histoires re�ues donnent une ou deux branches avec le m�me chercheur. �chec relatif � ce chercheur.",
       "anchors": [
         {
           "path": "docs/variable-master-execution.fr.md",
@@ -371,10 +443,10 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Contextes reçus constitués avec décision et fraîcheur ; pas de partition fournie.",
-        "execution": "La recherche des flips lit les contextes ouverts par la variable du maître.",
-        "proof": "Préservation SAT et largeurs sont prouvées sur les entrées concrètes.",
-        "transport": "La viabilité et l'identité des sources ne se réduisent pas à la possibilité de regroupement."
+        "formation": "Contextes re�us constitu�s avec d�cision et fra�cheur ; pas de partition fournie.",
+        "execution": "La recherche des flips lit les contextes ouverts par la variable du ma�tre.",
+        "proof": "Pr�servation SAT et largeurs sont prouv�es sur les entr�es concr�tes.",
+        "transport": "La viabilit� et l'identit� des sources ne se r�duisent pas � la possibilit� de regroupement."
       },
       "consumers": [
         "MASTER_COUPLING",
@@ -396,11 +468,11 @@
     {
       "id": "STAGE_SHARING",
       "kind": "implementation",
-      "scope": "La tête utilise les producteurs du maître et ne dépend pas de l'horizon futur ; le C contrôle seulement les frontières locales nommées.",
+      "scope": "La t�te utilise les producteurs du ma�tre et ne d�pend pas de l'horizon futur ; le C contr�le seulement les fronti�res locales nomm�es.",
       "anchors": [
         {
           "path": "docs/variable-master-execution.fr.md",
-          "heading": "Chaîne effective",
+          "heading": "Cha�ne effective",
           "paragraph": null,
           "sha256": "f03b6095812c53fce459361fa27da60d2944bf1d42064a0778b60bdb0597bd37"
         },
@@ -409,6 +481,18 @@
           "heading": "Actual chain",
           "paragraph": null,
           "sha256": "d2adf12309084b2a178bb3d3751e8d014cea1a3053f11c16204367a789ce0b38"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "La d�composition est produite avant sa continuation",
+          "paragraph": null,
+          "sha256": "7f94e2aba3f23c7c918fee958df8c648b13fd74ce117efcacabcd0795764e123"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Decomposition is produced before its continuation",
+          "paragraph": null,
+          "sha256": "0499be2501c740c6c8fa257cebbef0f5b6400c4531ea5fe8bcb54ad884e7e7d7"
         }
       ],
       "proofs": [
@@ -439,10 +523,10 @@
         "scripts/check-unified-codegen.py"
       ],
       "dependencies": {
-        "formation": "Le curseur et la tête sont indexés par les ressources existantes du maître.",
-        "execution": "Découverte, application, décomposition et assemblage sont partagées dans cet ordre.",
-        "proof": "L'effacement retrouve l'exécuteur maître ; l'indépendance d'horizon porte sur les types et égalités.",
-        "transport": "Le contrôle compilé ne prouve pas l'absence de tout travail caché dans les arguments."
+        "formation": "Le curseur et la t�te sont index�s par les ressources existantes du ma�tre.",
+        "execution": "D�couverte, application, d�composition et assemblage sont partag�es dans cet ordre.",
+        "proof": "L'effacement retrouve l'ex�cuteur ma�tre ; l'ind�pendance d'horizon porte sur les types et �galit�s.",
+        "transport": "Le contr�le compil� ne prouve pas l'absence de tout travail cach� dans les arguments."
       },
       "consumers": [
         "MASTER_COUPLING",
@@ -464,7 +548,7 @@
     {
       "id": "MASTER_COUPLING",
       "kind": "causal",
-      "scope": "Une reprise partage le résultat vivant effectivement recherché avec SAT et l'installation. Le sélecteur reste déterminé par la profondeur ; le raccord n'implique pas un retour SAT vers le moteur vivant.",
+      "scope": "Une reprise partage le r�sultat vivant effectivement recherch� avec SAT et l'installation. Le s�lecteur reste d�termin� par la profondeur ; le raccord n'implique pas un retour SAT vers le moteur vivant.",
       "anchors": [
         {
           "path": "docs/integrated-master-machine.fr.md",
@@ -477,6 +561,18 @@
           "heading": "What is constructed",
           "paragraph": null,
           "sha256": "a666005b62a506e88618ab09817ec745daf689e70ed268cade019e74bdb42d1b"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "La relation trouv�e devient une action r�utilisable",
+          "paragraph": null,
+          "sha256": "0ce69bd1284c2bd72c10be0a0a83056270cbba0d1aac5d97afead2ddc2f70e03"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "The discovered relation becomes a reusable action",
+          "paragraph": null,
+          "sha256": "5fd38b6919545a10174b663e21049a27e9bca1f6b9f1f967f7241c8c0969b536"
         }
       ],
       "proofs": [
@@ -512,10 +608,10 @@
         "scripts/unified_codegen_selftest.py"
       ],
       "dependencies": {
-        "formation": "Le runtime reçoit le maître existant, les contextes SAT et une permission de lecture.",
-        "execution": "Une production vivante fournit le sélecteur ; ouverture, réduction et configuration sont partagées.",
-        "proof": "Le successeur et la viabilité sont raccordés à la frontière produite, pas à une largeur souhaitée.",
-        "transport": "La mémoire conserve la frontière nécessaire à la prochaine recherche."
+        "formation": "Le runtime re�oit le ma�tre existant, les contextes SAT et une permission de lecture.",
+        "execution": "Une production vivante fournit le s�lecteur ; ouverture, r�duction et configuration sont partag�es.",
+        "proof": "Le successeur et la viabilit� sont raccord�s � la fronti�re produite, pas � une largeur souhait�e.",
+        "transport": "La m�moire conserve la fronti�re n�cessaire � la prochaine recherche."
       },
       "consumers": [
         "CONFIGURED_ACTION",
@@ -538,11 +634,11 @@
     {
       "id": "CONFIGURED_ACTION",
       "kind": "causal",
-      "scope": "Action du circuit égale à la lecture de la continuation transportée pour toute continuation typée admissible ; la préservation SAT est une preuve séparée.",
+      "scope": "Action du circuit �gale � la lecture de la continuation transport�e pour toute continuation typ�e admissible ; la pr�servation SAT est une preuve s�par�e.",
       "anchors": [
         {
           "path": "docs/integrated-master-machine.fr.md",
-          "heading": "Ce que les preuves établissent",
+          "heading": "Ce que les preuves �tablissent",
           "paragraph": null,
           "sha256": "47917507972326478c4f5ff52b096cf29c0908e0b9cca4fd27aadbe9a3f8c2a1"
         },
@@ -551,6 +647,18 @@
           "heading": "What the proofs establish",
           "paragraph": null,
           "sha256": "0c43754c9a8dcfd53dbde8d3e9e47f1941c2d8d8ef37bfe7cd4072df1eef735c"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "La relation trouv�e devient une action r�utilisable",
+          "paragraph": null,
+          "sha256": "0ce69bd1284c2bd72c10be0a0a83056270cbba0d1aac5d97afead2ddc2f70e03"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "The discovered relation becomes a reusable action",
+          "paragraph": null,
+          "sha256": "5fd38b6919545a10174b663e21049a27e9bca1f6b9f1f967f7241c8c0969b536"
         }
       ],
       "proofs": [
@@ -577,10 +685,10 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "AcceptedFrontierCode est indexé par ses contextes sources et cibles.",
-        "execution": "Le code réellement trouvé est abaissé vers un circuit et installé dans la mémoire.",
-        "proof": "L'exactitude pointwise et la préservation SAT ne sont pas déduites de l'égalité de largeur.",
-        "transport": "Le transport dirigé ne donne ni une égalité des sources ni une équivalence de tout paquet arbitraire."
+        "formation": "AcceptedFrontierCode est index� par ses contextes sources et cibles.",
+        "execution": "Le code r�ellement trouv� est abaiss� vers un circuit et install� dans la m�moire.",
+        "proof": "L'exactitude pointwise et la pr�servation SAT ne sont pas d�duites de l'�galit� de largeur.",
+        "transport": "Le transport dirig� ne donne ni une �galit� des sources ni une �quivalence de tout paquet arbitraire."
       },
       "consumers": [
         "FULL_FUTURES",
@@ -602,11 +710,11 @@
     {
       "id": "FULL_FUTURES",
       "kind": "behavioral",
-      "scope": "Contrat combiné : toutes listes finies et entrelacements de reprises, lectures, impulsions, routages et refus. Pas d'inspection historique arbitraire.",
+      "scope": "Contrat combin� : toutes listes finies et entrelacements de reprises, lectures, impulsions, routages et refus. Pas d'inspection historique arbitraire.",
       "anchors": [
         {
           "path": "docs/integrated-master-machine.fr.md",
-          "heading": "Contrat, mémoire et largeur",
+          "heading": "Contrat, m�moire et largeur",
           "paragraph": null,
           "sha256": "33fc44e21940be728922d53b3390f2b6ec81514cc22242c2b9e7cb247874645e"
         },
@@ -615,6 +723,18 @@
           "heading": "Contract, memory and width",
           "paragraph": null,
           "sha256": "2c08e9750c25b11b3d722f4ccece02654afa70f5330a02387afbf57ce4a21ac0"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "Une m�moire exacte pour les futurs permis",
+          "paragraph": null,
+          "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Exact memory for the permitted futures",
+          "paragraph": null,
+          "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
         }
       ],
       "proofs": [
@@ -641,10 +761,10 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Le contrat spécifie requêtes, événements, lectures et admissions positives.",
-        "execution": "Le runtime utilise l'état vivant réduit et la frontière SAT reçue puis produite.",
-        "proof": "La réalisation compare au moteur riche avec le même algorithme SAT, pour toutes suites finies.",
-        "transport": "La minimalité du moteur vivant sous son contrat ne devient pas une minimalité de la mémoire combinée."
+        "formation": "Le contrat sp�cifie requ�tes, �v�nements, lectures et admissions positives.",
+        "execution": "Le runtime utilise l'�tat vivant r�duit et la fronti�re SAT re�ue puis produite.",
+        "proof": "La r�alisation compare au moteur riche avec le m�me algorithme SAT, pour toutes suites finies.",
+        "transport": "La minimalit� du moteur vivant sous son contrat ne devient pas une minimalit� de la m�moire combin�e."
       },
       "consumers": [
         "SINGLE_EXECUTION"
@@ -665,11 +785,11 @@
     {
       "id": "MACHINE_EXAMPLE",
       "kind": "causal",
-      "scope": "Exemple intégré sur le même maître, formule et sélecteur ; la décision reçue sur 1 change. Dans le cas à deux branches, les positions sont routées avec permutation de leurs slots, pas conservation de leurs numéros.",
+      "scope": "Exemple int�gr� sur le m�me ma�tre, formule et s�lecteur ; la d�cision re�ue sur 1 change. Dans le cas � deux branches, les positions sont rout�es avec permutation de leurs slots, pas conservation de leurs num�ros.",
       "anchors": [
         {
           "path": "docs/integrated-master-machine.fr.md",
-          "heading": "Une et deux branches sur le même maître",
+          "heading": "Une et deux branches sur le m�me ma�tre",
           "paragraph": null,
           "sha256": "3952f36866458e63180d791dc606e2cc99a39126e674a9898efa0859ce5a6350"
         },
@@ -678,6 +798,18 @@
           "heading": "One and two branches on the same master",
           "paragraph": null,
           "sha256": "2707fefcdae9994659b167a38a5a0212cd62ee1f12ce9e828bce222115cc5787"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "Une et deux branches avec le m�me chercheur",
+          "paragraph": null,
+          "sha256": "9372c27c4e354b377e21f3077fc80d5ba7266ab126f7cd43c41e6396e6c15ddf"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "One and two branches with the same searcher",
+          "paragraph": null,
+          "sha256": "ea76181a962f31744dc8699459a7b38b65483299f02ea515a0d69f1b7ece508b"
         }
       ],
       "proofs": [
@@ -714,10 +846,10 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Les deux entrées reçues ne sont pas présentées comme deux sorties de la course canonique.",
-        "execution": "Le même runtime ouvre puis recherche sur chaque entrée.",
-        "proof": "Les tests prouvent viabilité, distinction, largeurs et routage des paquets.",
-        "transport": "L'échec des deux directions du chercheur ne démontre pas l'absence universelle d'une relation."
+        "formation": "Les deux entr�es re�ues ne sont pas pr�sent�es comme deux sorties de la course canonique.",
+        "execution": "Le m�me runtime ouvre puis recherche sur chaque entr�e.",
+        "proof": "Les tests prouvent viabilit�, distinction, largeurs et routage des paquets.",
+        "transport": "L'�chec des deux directions du chercheur ne d�montre pas l'absence universelle d'une relation."
       },
       "consumers": [],
       "source_sha256": "e98808dbb925abda1047d013ab28b51ef0e470214ef6f3ff318daa4ceb7e64c9",
@@ -736,11 +868,11 @@
     {
       "id": "SINGLE_EXECUTION",
       "kind": "implementation",
-      "scope": "Trois runners à transition appariée : événement et successeur proviennent de la même paire. Une reprise intégrée atteint une recherche vivante commune et transmet ses champs retournés. Les écritures des helpers sur des objets reçus sont refusées, pas résumées comme effets du tas. Contrôles locaux du C épinglé, sans borne de coût global ni matériel.",
+      "scope": "Trois runners � transition appari�e : �v�nement et successeur proviennent de la m�me paire. Une reprise int�gr�e atteint une recherche vivante commune et transmet ses champs retourn�s. Les �critures des helpers sur des objets re�us sont refus�es, pas r�sum�es comme effets du tas. Contr�les locaux du C �pingl�, sans borne de co�t global ni mat�riel.",
       "anchors": [
         {
           "path": "docs/integrated-master-machine.fr.md",
-          "heading": "Vérification et frontière matérielle",
+          "heading": "V�rification et fronti�re mat�rielle",
           "paragraph": null,
           "sha256": "ef4b387c84b34e3c848345ccf8769a25fe6388f0167ed5f23eec8c3ca38aab13"
         },
@@ -749,6 +881,18 @@
           "heading": "Verification and hardware boundary",
           "paragraph": null,
           "sha256": "113911ef26bb05cfe8adfb1935c7945bed320f03ed58bd0a37501b028becbc20"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "Les productions sont partag�es � chaque demande",
+          "paragraph": null,
+          "sha256": "b7a774d2ef1c2739acad95a47533390a17ac143cff3205767a15b6e71456a19d"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Productions are shared at each request",
+          "paragraph": null,
+          "sha256": "d084e1cf464065e7c450040a04fdda43afdc08c5235004720851fc21aa26a400"
         }
       ],
       "proofs": [
@@ -784,10 +928,10 @@
         "scripts/unified_codegen_selftest.py"
       ],
       "dependencies": {
-        "formation": "La spécification à callbacks est distincte du runner apparié.",
-        "execution": "Les trois runners partagent la paire courante et récursent sur son successeur et la queue reçue. La reprise lit le sélecteur trouvé et installe la même production.",
-        "proof": "Lean raccorde les comportements ; le C est contrôlé par comptage commun et origines de champs sur chaque chemin local pris en charge.",
-        "transport": "Les gates restent représentées par constructeurs logiciels ; ni FPGA ni coût de routage physique prouvé."
+        "formation": "La sp�cification � callbacks est distincte du runner appari�.",
+        "execution": "Les trois runners partagent la paire courante et r�cursent sur son successeur et la queue re�ue. La reprise lit le s�lecteur trouv� et installe la m�me production.",
+        "proof": "Lean raccorde les comportements ; le C est contr�l� par comptage commun et origines de champs sur chaque chemin local pris en charge.",
+        "transport": "Les gates restent repr�sent�es par constructeurs logiciels ; ni FPGA ni co�t de routage physique prouv�."
       },
       "consumers": [],
       "source_sha256": "f96536f21899e2af01d3bf4ac7fb826b9d4e1811c9cc9d213110f7019376a2de",
@@ -806,11 +950,11 @@
     {
       "id": "ASSIGNMENT_FORGETTING",
       "kind": "behavioral",
-      "scope": "Deux états reçus valides diffèrent en affectation à la variable 1. Tous les futurs coïncident sous la permission 2 et la demande advance les distingue sous la permission 1. Pas deux préfixes publics atteignables, ni minimalité combinée.",
+      "scope": "Deux �tats re�us valides diff�rent en affectation � la variable 1. Tous les futurs co�ncident sous la permission 2 et la demande advance les distingue sous la permission 1. Pas deux pr�fixes publics atteignables, ni minimalit� combin�e.",
       "anchors": [
         {
           "path": "docs/integrated-master-machine.fr.md",
-          "heading": "Contrat, mémoire et largeur",
+          "heading": "Contrat, m�moire et largeur",
           "paragraph": 3,
           "sha256": "3a9acef0bf524f296f37b2ee2608ab34eb9097c81c3bef81d76f29d78d93a437"
         },
@@ -819,6 +963,18 @@
           "heading": "Contract, memory and width",
           "paragraph": 3,
           "sha256": "075684e69582777c960fbac9a404b291bb12304225c5303b7eb4cc9454262e62"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "Une m�moire exacte pour les futurs permis",
+          "paragraph": null,
+          "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Exact memory for the permitted futures",
+          "paragraph": null,
+          "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
         }
       ],
       "proofs": [
@@ -845,27 +1001,33 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "flipLowBit reconstruit positivement lecteur exact, affectation séquentielle valide et état avec décisions satisfaites ; les exemples ferment leurs hypothèses.",
-        "execution": "La demande advance agit sur la valeur de la permission ; l'observation présente commune ne révèle pas la différence d'affectation.",
-        "proof": "La projection exacte donne tous les futurs sous 2 ; l'action involutive et la valeur différente donnent un futur séparateur sous 1.",
+        "formation": "flipLowBit reconstruit positivement lecteur exact, affectation s�quentielle valide et �tat avec d�cisions satisfaites ; les exemples ferment leurs hypoth�ses.",
+        "execution": "La demande advance agit sur la valeur de la permission ; l'observation pr�sente commune ne r�v�le pas la diff�rence d'affectation.",
+        "proof": "La projection exacte donne tous les futurs sous 2 ; l'action involutive et la valeur diff�rente donnent un futur s�parateur sous 1.",
         "transport": "L'oubli est relatif aux futurs permis, sans identification des sources ni suppression d'une demande du contrat."
       },
       "consumers": [],
       "source_sha256": "2c62244972e2f8094d8a4d102373e036166d639214965bd5d81aa067c0de6ab3",
       "reviews": {
-        "reader": { "status": "pending" },
-        "translation": { "status": "pending" },
-        "independent": { "status": "not_recorded" }
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
       }
     },
     {
       "id": "PROFILE_FORGETTING",
       "kind": "behavioral",
-      "scope": "Le contrat de continuation conserve reprises, événements et lectures admises ; l'origine des profils normalisés peut être irrécupérable sans identifier les profils.",
+      "scope": "Le contrat de continuation conserve reprises, �v�nements et lectures admises ; l'origine des profils normalis�s peut �tre irr�cup�rable sans identifier les profils.",
       "anchors": [
         {
           "path": "docs/continuation-et-oubli-des-profils.fr.md",
-          "heading": "Ce qui est effectivement oublié",
+          "heading": "Ce qui est effectivement oubli�",
           "paragraph": null,
           "sha256": "b37977e49d4351bfa50a383edb5239b5ce9e6f620bf1c1a244141f1481624536"
         },
@@ -874,6 +1036,18 @@
           "heading": "What is actually forgotten",
           "paragraph": null,
           "sha256": "35328b5b2ce74e90e3924461a99d97757df63725208bfc39cafa380526956712"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "Une m�moire exacte pour les futurs permis",
+          "paragraph": null,
+          "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Exact memory for the permitted futures",
+          "paragraph": null,
+          "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
         }
       ],
       "proofs": [
@@ -900,10 +1074,10 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Les profils transformé et retenu conservent leurs occurrences historiques distinctes.",
-        "execution": "La mémoire de reprise résulte de la normalisation et consomme les lecteurs produits.",
-        "proof": "Toutes requêtes autorisées donnent des futurs égaux ; aucun décodeur uniforme du profil depuis cette mémoire.",
-        "transport": "L'oubli sous ce contrat n'abolit pas la reconstruction de préfixes qui conservent profondeur et provenance."
+        "formation": "Les profils transform� et retenu conservent leurs occurrences historiques distinctes.",
+        "execution": "La m�moire de reprise r�sulte de la normalisation et consomme les lecteurs produits.",
+        "proof": "Toutes requ�tes autoris�es donnent des futurs �gaux ; aucun d�codeur uniforme du profil depuis cette m�moire.",
+        "transport": "L'oubli sous ce contrat n'abolit pas la reconstruction de pr�fixes qui conservent profondeur et provenance."
       },
       "consumers": [
         "REACHABLE_SIGNATURE"
@@ -924,11 +1098,11 @@
     {
       "id": "REACHABLE_SIGNATURE",
       "kind": "behavioral",
-      "scope": "Maître et exigence fixés, tous états atteignables de l'agent ; signature = nombre de productions, avec couverture et admissions transportées. Pas de minimum d'octets ni temps constant.",
+      "scope": "Ma�tre et exigence fix�s, tous �tats atteignables de l'agent ; signature = nombre de productions, avec couverture et admissions transport�es. Pas de minimum d'octets ni temps constant.",
       "anchors": [
         {
           "path": "docs/signatures-de-continuation.fr.md",
-          "heading": "Signatures de tous les états atteignables de l’agent",
+          "heading": "Signatures de tous les �tats atteignables de l�agent",
           "paragraph": null,
           "sha256": "0f309de7d3ea94d39626b6f3f8448126d1c7d88ff44c22b03b31d2d273ee2267"
         },
@@ -973,10 +1147,10 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Le domaine ferme les états atteignables pour un maître et une exigence reçue fixés.",
-        "execution": "La signature est lue depuis la production réelle ; les réponses peuvent être reconstruites par le moteur existant.",
-        "proof": "Équivalence de tous futurs, couverture et séparateurs imposent la distinguabilité à toute réalisation exacte.",
-        "transport": "Les droits ont deux lois de retour ; la réalisation par nombre n'est pas une gratuité physique."
+        "formation": "Le domaine ferme les �tats atteignables pour un ma�tre et une exigence re�ue fix�s.",
+        "execution": "La signature est lue depuis la production r�elle ; les r�ponses peuvent �tre reconstruites par le moteur existant.",
+        "proof": "�quivalence de tous futurs, couverture et s�parateurs imposent la distinguabilit� � toute r�alisation exacte.",
+        "transport": "Les droits ont deux lois de retour ; la r�alisation par nombre n'est pas une gratuit� physique."
       },
       "consumers": [],
       "source_sha256": "650101f22467c9ea72601049c88008b54201865d650263865accf6ae6359dbe4",
@@ -995,11 +1169,11 @@
     {
       "id": "RESTRICTED_FUTURES",
       "kind": "behavioral",
-      "scope": "Contrat distinct : répétition de lectures de x10 dans la continuation après action. Pas de reprise, d'impulsion ni d'archive originale.",
+      "scope": "Contrat distinct : r�p�tition de lectures de x10 dans la continuation apr�s action. Pas de reprise, d'impulsion ni d'archive originale.",
       "anchors": [
         {
           "path": "docs/variable-master-execution.fr.md",
-          "heading": "Distinctions futures : contrat fixé",
+          "heading": "Distinctions futures : contrat fix�",
           "paragraph": null,
           "sha256": "60a2f3d165bee0fd5df0f341cdc17a765dd8513acbf8e3e0ab4d0c68fb4ffa13"
         },
@@ -1008,6 +1182,18 @@
           "heading": "Future distinctions under a fixed contract",
           "paragraph": null,
           "sha256": "73e4ad8e1cdfe0ffb6e480e7a2cda87cc8669075fa11be85a3327633f0a1f2c1"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "Une m�moire exacte pour les futurs permis",
+          "paragraph": null,
+          "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Exact memory for the permitted futures",
+          "paragraph": null,
+          "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
         }
       ],
       "proofs": [
@@ -1029,10 +1215,10 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Les sources du contrat sont des continuations reçues et actionnées.",
-        "execution": "La lecture applique la production locale avant d'observer la variable demandée.",
-        "proof": "Les fibres exactes et le séparateur futur établissent les distinctions requises sous ce contrat seul.",
-        "transport": "Cette réduction ne retire aucune demande d'un autre contrat complet."
+        "formation": "Les sources du contrat sont des continuations re�ues et actionn�es.",
+        "execution": "La lecture applique la production locale avant d'observer la variable demand�e.",
+        "proof": "Les fibres exactes et le s�parateur futur �tablissent les distinctions requises sous ce contrat seul.",
+        "transport": "Cette r�duction ne retire aucune demande d'un autre contrat complet."
       },
       "consumers": [],
       "source_sha256": "ee043ecc02a48919c572ccd452a2da8ab37d42a26045c42b3f8d3d324bdabe79",
@@ -1051,13 +1237,25 @@
     {
       "id": "PARTIAL_WIDTHS",
       "kind": "cardinality",
-      "scope": "Politiques de statuts sur les mêmes rôles, largeur 2^pendingCount ; ce ne sont pas de nouvelles exécutions SAT.",
+      "scope": "Politiques comparatives sur les m�mes r�les : spectre exact 2^k, 0 <= k <= n, pour cette classe de statuts ; une politique non injective de largeur 2^(n-1) pour chaque n positif. Ce ne sont pas de nouvelles ex�cutions SAT ni tous les r�gimes possibles.",
       "anchors": [
         {
           "path": "docs/conclusion-largeur-exponentielle-conservation-identites.fr.md",
-          "heading": "Raccord après l’audit adversarial",
+          "heading": "Raccord apr�s l�audit adversarial",
           "paragraph": null,
           "sha256": "0cd82d5f05066790d6c193b8ec7bf8be49d7e34de3d3ba69965764cd141edc3a"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "Les largeurs sont des cons�quences de ces r�gimes",
+          "paragraph": null,
+          "sha256": "78c7f9f704e958b993bcfa81826d811c1312aa3361c5839f82132899039b0b7c"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Widths are consequences of these regimes",
+          "paragraph": null,
+          "sha256": "4a118efd819d981f9223396d935beccde3746e7b91e97848675a14e1ff2c22e7"
         }
       ],
       "proofs": [
@@ -1075,23 +1273,102 @@
           "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.UnifiedPublicCertificate",
           "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.Instance.executed_width",
           "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRolePolicySpectrum",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.PolicySpectrum.spectrum",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRolePolicySpectrum",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.PolicySpectrum.half_width",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRolePolicySpectrum",
+          "name": "ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.PolicySpectrum.every_positive_count",
+          "role": "production"
         }
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Les statuts sont indexés par l'histoire existante du maître.",
-        "execution": "Les politiques comparent ce qui est conservé séparément ; elles ne pilotent pas la frontière publique.",
-        "proof": "Le produit des arités locales en attente donne la largeur partielle.",
-        "transport": "Comparer 4, 2, 1 sur les mêmes rôles n'identifie pas leurs occurrences."
+        "formation": "Les statuts sont index�s par l'histoire existante du ma�tre.",
+        "execution": "Les politiques comparent ce qui est conserv� s�par�ment ; elles ne pilotent pas la fronti�re publique.",
+        "proof": "Le produit des arit�s locales en attente donne la largeur partielle.",
+        "transport": "Comparer 4, 2, 1 sur les m�mes r�les n'identifie pas leurs occurrences."
       },
       "consumers": [],
-      "source_sha256": "d0b053c12e4eb13cba63001ed721d88e6b3efeb2de14cf1d233610511ca80e83",
+      "source_sha256": "7f37b9f73f5bc0ab2cf0d802eea584b64fb0310c3f4eb47d04dc5ca92cf361db",
       "reviews": {
         "reader": {
           "status": "pending"
         },
         "translation": {
+          "status": "pending"
+        },
+        "independent": {
           "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "CORE_MINIMALITY",
+      "kind": "behavioral",
+      "scope": "� scope fix� : exactitude du noyau sur toutes les m�moires sources et suites finies ; �galit� de projection iff futurs �gaux sur m�moires coh�rentes, sans hypoth�se d'�galit� des moteurs vivants. N�cessit� pour toute r�alisation exacte du m�me contrat ; ni minimum physique ni minimalit� de la m�moire SAT int�gr�e.",
+      "anchors": [
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
+          "heading": "Une m�moire exacte pour les futurs permis",
+          "paragraph": null,
+          "sha256": "1f06ac411a75e0954f1e7c5d9a6c8edfa43c8bf457c645382124bed76aadcccc"
+        },
+        {
+          "path": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
+          "heading": "Exact memory for the permitted futures",
+          "paragraph": null,
+          "sha256": "a7f48f455bbe53614b6f4d5b4cf5b4d295a387f094de7315e6912e2a0433cd72"
+        },
+        {
+          "path": "docs/work/PREUVES_CHAINE_CONSTITUTIVE_MACHINE.fr.md",
+          "heading": "C08 Futurs et m�moire n�cessaire",
+          "paragraph": null,
+          "sha256": "a6f953e61921d31cf4c3dcfc4aa29912aa9c3b98c1ccc2f07bf1e08b9f03b5ad"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Computation.Machine.ConstitutiveLiveExecution",
+          "name": "ConstitutiveSearch.ReconfigurableMachine.LiveReduction.ConstitutiveExecution.all_sources_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.ConstitutiveLiveExecution",
+          "name": "ConstitutiveSearch.ReconfigurableMachine.LiveReduction.ConstitutiveExecution.minimality",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Computation.Machine.ConstitutiveLiveExecution",
+          "name": "ConstitutiveSearch.ReconfigurableMachine.LiveReduction.ConstitutiveExecution.any_realization",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Le scope et le contrat advance/sample/pulse sont fix�s avant la projection ; la coh�rence fixe les longueurs des connexions et des deux lectures de banque.",
+        "execution": "La projection extrait les valeurs finies autoris�es ; le runner constitutif poursuit depuis le front et les valeurs produits sans restaurer le moteur fonctionnel historique.",
+        "proof": "Les effets des impulsions et des reprises reconstruisent les distinctions futures ; minimality et any_realization consomment les preuves de coh�rence.",
+        "transport": "La r�alisation conserve tous les futurs finis et les admissions ; la minimalit� exprime une distinguabilit� comportementale, pas un encodage impos�. Elle ne se transf�re pas automatiquement au contrat SAT combin�."
+      },
+      "consumers": [
+        "FULL_FUTURES"
+      ],
+      "source_sha256": "36f62f46a9564280d2a9df705a94df72795c2a543a75be6c515eeb7a9b9ff837",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
         },
         "independent": {
           "status": "not_recorded"
