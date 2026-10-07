@@ -356,18 +356,18 @@ Le [registre existant](../scientific-claims.json) couvre notamment
 `MASTER_COUPLING`, `CONFIGURED_ACTION`, `FULL_FUTURES`, `MACHINE_EXAMPLE`,
 `SINGLE_EXECUTION`, `ASSIGNMENT_FORGETTING`, `PROFILE_FORGETTING`,
 `RESTRICTED_FUTURES`, `REACHABLE_SIGNATURE` et `PARTIAL_WIDTHS`.
-Il ne porte pas encore un ancrage explicite de ce nouveau texte et de
-`ConstitutiveExecution.minimality` / `any_realization`.
-
-Pour une publication, ajouter une entrée de minimalité du noyau à domaine
-cohérent explicite et répartir les ancrages de la chaîne sur le texte revu.
-Cela exige une révision de référence autorisée et la réouverture de leurs
-revues. Les empreintes et verdicts existants ne sont pas rafraîchis ici.
+L'entrée `CORE_MINIMALITY` référence explicitement
+`ConstitutiveExecution.minimality` et `any_realization`, avec leur domaine
+cohérent. Les ancrages français et anglais relient les sections du texte
+aux affirmations correspondantes. La révision d'évidence est
+`a13c9a707afb43f0dca79576d6bc073e1bcc1bfa`, qui contient ces textes et
+leurs sources. Les revues concernées sont rouvertes ; aucun verdict
+historique n'est reporté sur ce nouveau paquet.
 Les statuts `pending` et `not_recorded` restent ouverts ; un contrôle statique
 réussi ne constitue pas un avis scientifique indépendant sur ce texte.
 
-Le prompt suivant devra citer sans changement la cible canonique et S1–S8 /
-G1–G10, puis demander l'examen de C01–C10 et de leurs consommateurs. Il devra
-être épinglé au SHA distant du paquet réellement publié, et non à la seule
-tête locale précédant ces documents. Sa publication et son envoi ne sont pas
-effectués par cette revue.
+Le nouveau protocole cite sans changement la cible canonique et S1–S8 /
+G1–G10, puis demande l'examen du texte entier, de C01–C10 et de leurs
+consommateurs. Il est épinglé séparément au paquet complet publié.
+Le reçu de soumission est distinct de cette table : une acceptation API
+ne constitue pas un verdict scientifique.
