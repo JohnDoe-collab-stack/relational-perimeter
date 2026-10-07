@@ -43,7 +43,7 @@ Ces commandes n'ont pas été lancées dans un clone propre figé à un nouveau
 commit. Les noms audités et les résultats calculés confirment les références
 du texte ; ils ne remplacent pas l'examen sémantique des preuves ni un audit
 indépendant. Le checker documentaire existant contrôle ses ancrages enregistrés,
-pas à lui seul les affirmations de ce nouveau document de travail.
+mais ne valide pas à lui seul le sens des affirmations de ce complément scientifique.
 
 ## Ce qui est fourni et ce qui est produit
 
@@ -259,14 +259,19 @@ et [check-integrated-machine-codegen.py](../../scripts/check-integrated-machine-
 ### C10 Largeurs après constitution et action
 
 Sources : [UnifiedPublicCertificate](../../RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/UnifiedPublicCertificate.lean),
+[ExecutedOutputObligations](../../RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExecutedOutputObligations.lean),
 [RolePolicySpectrum](../../RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/RolePolicySpectrum.lean)
 et [PublicRolePolicySpectrum](../../RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/PublicRolePolicySpectrum.lean).
 
-- Formation : les régimes sont surjectifs sur le carrier constitué. La
-  politique comparative reçoit les rôles et leurs transports autorisés.
-- Exécution : la lecture extensive énumère les profils ; l'image exécutée
-  lit leurs sorties. La comparaison `pending` conserve certains rôles,
-  sans prétendre découvrir à nouveau ces statuts.
+- Formation : sur le carrier constitué, `carry` est une application surjective
+  vers les obligations du régime. La politique comparative reçoit les rôles
+  et leurs transports autorisés.
+- Exécution : la lecture extensive énumère la frontière complète des profils.
+  Le régime exécuté compose les images locales de sorties enregistrées par
+  les étapes, sans parcourir cette frontière exhaustive : `ofStagewise`
+  utilise chaque `head.outputRegime`, et `ofStagewise_exact` raccorde cette
+  composition à la réduction exécutée. La comparaison `pending` conserve
+  certains rôles, sans prétendre découvrir à nouveau ces statuts.
 - Preuve : `class_iff_on_master_carrier` et `class_iff_on_executed_regime`
   appliquent l'équivalence de pleine largeur au même carrier. `PolicySpectrum.width`,
   `injective_iff` et `spectrum` donnent les largeurs `2^k` des politiques

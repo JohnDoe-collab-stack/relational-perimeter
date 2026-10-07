@@ -102,6 +102,96 @@ local production type has no future-history parameter.
 
 ![Endogenous operational decomposition](docs/figures/endogenous-operational-decomposition.svg)
 
+## Machine intégrée / Integrated machine
+
+Le calcul et la machine forment une même chaîne constitutive. Les occurrences
+et les contextes sont constitués avant leur dénombrement. La recherche
+effectivement exécutée produit les relations qui, avec leurs preuves séparées
+de préservation, autorisent la décomposition courante. Cette décomposition
+est produite avant sa continuation, sans recevoir la queue future ni une
+partition attendue. Sur le même maître, à formule, profondeur, variable et
+chercheur fixés, deux histoires reçues conduisent respectivement à une et deux
+branches viables ; le regroupement n'identifie pas les sources.
+
+Pour tout indice du maître, la machine s'initialise depuis l'instance publique
+correspondante, avec la formule, les contextes et les permissions reçus.
+Chaque reprise partage une même production vivante : son sélecteur ouvre
+les contextes SAT, et son successeur devient l'état vivant suivant. Le code
+de réduction trouvé par cette recherche fournit à la fois la frontière retenue
+et l'action à configurer sur de nouvelles entrées.
+Son action sur une continuation typée donne
+exactement la lecture de la continuation transportée ; la préservation de
+SAT est établie séparément. Le routage utilise cette organisation sans relancer
+la recherche. À la reprise suivante, la recherche reçoit effectivement la
+frontière retenue et l'état vivant produits auparavant. Le sélecteur va du
+moteur vivant vers SAT ; la frontière SAT alimente la recherche SAT suivante.
+Il ne s'agit pas d'une rétroaction de SAT sur le moteur vivant.
+
+La mémoire n'est pas seulement raccourcie : ses distinctions sont confrontées
+aux futurs que le contrat autorise. Pour les mémoires sources cohérentes du
+noyau, à permission de lecture fixée, deux projections réduites sont égales
+si et seulement si tous leurs futurs observables sont égaux. Toute réalisation
+exacte du même contrat doit conserver cette distinguabilité, quel que soit
+son encodage. Une distinction devenue inobservable peut être oubliée sans
+identifier les sources. Le contrat intégré préserve exactement toutes les
+suites finies de reprises, lectures, impulsions et routages, y compris leurs
+entrelacements et refus ; la minimalité du noyau n'est pas étendue sans preuve
+à la mémoire SAT combinée.
+
+Chaque demande du runner actif utilise une transition partagée contenant
+l'événement et l'état suivant, au lieu de réexécuter la production pour lire
+ces deux résultats. Le circuit est encore représenté et interprété par du
+logiciel ; l'incarnation matérielle et le coût physique total restent distincts.
+Les largeurs présentées ci-dessous sont des lectures aval de cette chaîne,
+pas ce qui la définit.
+
+The computation and machine form one constitutive chain. Occurrences and
+contexts are constituted before they are counted. Executed search produces
+relations whose separate preservation proofs authorize the current
+decomposition. This decomposition is produced before its continuation, without
+receiving a future tail or an expected partition. With the same master,
+formula, depth, variable and finder, two received histories lead respectively
+to one and two viable branches; grouping does not identify the sources.
+
+For every master index, the machine initializes from the corresponding public
+instance with the received formula, contexts and read permissions. Each
+advance shares one live production: its selector opens the SAT contexts, and
+its successor becomes the next live state. The reduction code found by this
+search supplies both the retained frontier and the action to configure on new
+inputs. Its action on a typed continuation equals the reading of the
+transported continuation; SAT preservation is established separately. Routing
+uses this organization without restarting search. The next search actually
+receives the previously produced retained frontier and live state. The
+selector flows from the live engine to SAT, and the SAT frontier feeds the
+next SAT search. This is not feedback from SAT to the live engine.
+
+Memory is not merely shortened: its distinctions are tested against the
+futures allowed by the contract. For coherent source memories of the core at
+a fixed read scope, equality of reduced projections is equivalent to equality
+of all observable futures. Every exact realization of that contract must
+retain this distinguishability, whatever its encoding. An unobservable
+distinction can be forgotten without identifying the sources. The integrated
+contract preserves all finite sequences of advances, reads, pulses and
+routing, including their interleavings and refusals; core minimality is not
+extended without proof to the combined SAT memory.
+
+Each request of the active runner consumes one shared transition containing
+the event and successor state, rather than executing the production again
+to read those two results. The circuit is still represented and interpreted
+in software; hardware realization and total physical cost remain separate.
+The widths below are downstream readings of this chain, not its definition.
+
+Texte scientifique complet / Complete scientific text :
+[français](docs/science/chaine-constitutive-machine.fr.md),
+[English](docs/science/constitutive-machine-chain.en.md).
+Raccords formels / Formal connections :
+[preuves et contrats](docs/science/preuves-chaine-constitutive-machine.fr.md).
+Architecture du runtime / Runtime architecture :
+[français](docs/integrated-master-machine.fr.md),
+[English](docs/integrated-master-machine.en.md).
+
+## Extensive readouts and operational regimes
+
 The framework first constitutes each role occurrence through its positive
 formation and provenance relations, then derives the complete profile carrier
 on which the computation acts. For `n` binary openings the extensive readout
@@ -483,23 +573,6 @@ profondeur, sur une même formule, donnent des largeurs retenues un et deux.
 La chaîne conserve SAT et s'efface exactement vers le maître existant.
 Portée et contrat futur : [français](docs/variable-master-execution.fr.md),
 [English](docs/variable-master-execution.en.md).
-
-## Machine intégrée / Integrated machine
-
-La même instance maître initialise le moteur vivant réduit. Chaque reprise
-partage sa production vivante avec la recherche SAT sur les contextes reçus,
-puis conserve la frontière retenue et le circuit produit pour les requêtes
-suivantes. Le contrat combiné est prouvé exact pour tous ses futurs finis.
-Ce runtime logiciel ne constitue pas encore une réalisation matérielle.
-
-The same master initializes the reduced live engine. Each advance shares its
-live production with SAT search on received contexts, then retains the resulting
-frontier and circuit for subsequent requests. The combined contract is proved
-exact for all its finite futures. This software runtime is not hardware.
-
-Architecture, preuves, contrat et portée :
-[français](docs/integrated-master-machine.fr.md),
-[English](docs/integrated-master-machine.en.md).
 
 ## Scientific reading / Lecture scientifique
 

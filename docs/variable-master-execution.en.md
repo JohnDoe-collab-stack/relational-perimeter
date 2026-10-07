@@ -80,8 +80,14 @@ differs from the project's restart contracts. This normalizer traverses an
 explicit frontier: no general non-extensive cost bound, unpredictability, or
 efficient solution of arbitrary SAT is claimed.
 
-The package already sent for audit remains unchanged. This extension requires
-its own independent audit before being described as independently validated.
+The independent audit of the integrated chain at commit
+[`b32946c708393fc3574bd492edc32d5022a0cfec`](https://github.com/JohnDoe-collab-stack/relational-perimeter/commit/b32946c708393fc3574bd492edc32d5022a0cfec)
+concluded `EXACT INTEGRATED TARGET REQUIRES CORRECTIONS`. The reference revision
+of the published Lean sources,
+[`a6785356c5e9ecc879386064c52df5f9ce205247`](https://github.com/JohnDoe-collab-stack/relational-perimeter/commit/a6785356c5e9ecc879386064c52df5f9ce205247),
+includes the subsequent corrections. No new independent verdict on this
+revision is recorded in the [scientific registry](scientific-claims.json).
+The earlier verdict does not validate this revision.
 
 ## Reproducible local verification
 

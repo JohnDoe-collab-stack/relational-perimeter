@@ -190,7 +190,8 @@ All modules are reachable from `import RelationalPerimeter`.
 
 The [Agents/Constitutive](../RelationalPerimeter/Agents/Constitutive/PublicInstance.lean)
 layer is terminal: earlier modules do not import it. Both stratification checkers
-enforce ranks A10 through A16 and public-root rank A17.
+enforce ranks A10 through A16 and public-root rank M19, as recorded in the
+[inventory](../scripts/stratification.tsv).
 
 ```text
 lake clean

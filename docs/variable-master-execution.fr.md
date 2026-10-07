@@ -85,8 +85,14 @@ projet. Le normaliseur parcourt une frontière explicite : aucune borne généra
 de coût non extensif, aucune imprévisibilité et aucune résolution efficace de
 SAT arbitraire ne sont revendiquées.
 
-Le paquet déjà envoyé à l'audit demeure inchangé. Cette extension doit être
-auditée séparément avant d'être présentée comme résultat indépendant validé.
+L'audit indépendant de la chaîne intégrée au commit
+[`b32946c708393fc3574bd492edc32d5022a0cfec`](https://github.com/JohnDoe-collab-stack/relational-perimeter/commit/b32946c708393fc3574bd492edc32d5022a0cfec)
+a conclu `EXACT INTEGRATED TARGET REQUIRES CORRECTIONS`. La révision de
+référence des sources Lean publiées,
+[`a6785356c5e9ecc879386064c52df5f9ce205247`](https://github.com/JohnDoe-collab-stack/relational-perimeter/commit/a6785356c5e9ecc879386064c52df5f9ce205247),
+inclut les corrections ultérieures. Aucun nouveau verdict indépendant sur
+cette révision n'est enregistré dans le [registre scientifique](scientific-claims.json).
+Le verdict antérieur ne vaut pas validation de cette révision.
 
 ## Vérification locale reproductible
 

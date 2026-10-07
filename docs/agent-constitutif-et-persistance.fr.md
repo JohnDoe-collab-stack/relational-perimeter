@@ -194,7 +194,8 @@ Tous les modules sont accessibles depuis `import RelationalPerimeter`.
 
 La couche [Agents/Constitutive](../RelationalPerimeter/Agents/Constitutive/PublicInstance.lean)
 est terminale : aucun module antérieur ne l’importe. Les rangs A10 à A16 et le
-root A17 sont contrôlés par les deux vérificateurs de stratification.
+rang M19 de la racine publique sont contrôlés par les deux vérificateurs de
+stratification, conformément à l'[inventaire](../scripts/stratification.tsv).
 
 ```text
 lake clean
