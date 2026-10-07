@@ -1,6 +1,16 @@
 $ErrorActionPreference = "Stop"
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+$pythonCommand = $env:RELATIONAL_PERIMETER_PYTHON
+if (-not $pythonCommand) {
+  $pythonCommand = (Get-Command python3 -ErrorAction SilentlyContinue).Source
+}
+if (-not $pythonCommand) { throw "Python 3 is required for documentation and compiled-code checks" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-scientific-docs.py") --self-test
+if ($LASTEXITCODE -ne 0) { throw "scientific documentation self-test failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-scientific-docs.py") --static
+if ($LASTEXITCODE -ne 0) { throw "scientific documentation check failed" }
+
 Push-Location $repoRoot
 try {
   $relativeLeanFiles = @(& git ls-files --cached --others --exclude-standard -- '*.lean') |
@@ -71,11 +81,8 @@ try {
       "^ALL_CONSTANTS_OK constants=[0-9]+ modules=$expectedModules generatedExceptions=[0-9]+ writtenExceptions=0$") {
     throw "Missing or incomplete exhaustive constant audit (including all test modules)"
   }
-  $pythonCommand = $env:RELATIONAL_PERIMETER_PYTHON
-  if (-not $pythonCommand) {
-    $pythonCommand = (Get-Command python3 -ErrorAction SilentlyContinue).Source
-  }
-  if (-not $pythonCommand) { throw "Python 3 is required for the compiled-code dependency check" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-scientific-docs.py") --lean
+  if ($LASTEXITCODE -ne 0) { throw "scientific Lean reference check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-unified-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled-code dependency check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-agent-codegen.py")

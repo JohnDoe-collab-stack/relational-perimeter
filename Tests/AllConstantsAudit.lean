@@ -14,6 +14,7 @@ import Tests.ProductionTimelineRegression
 import Tests.PublicRootImport
 import Tests.RealizedConstitutionRegression
 import Tests.RelationalExtensiveIffRegression
+import Tests.RolePolicySpectrum
 import Tests.SemanticImageRegression
 import Tests.UnifiedConstitution
 import Tests.UnifiedMasterInstance

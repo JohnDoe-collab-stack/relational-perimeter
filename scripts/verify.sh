@@ -4,6 +4,17 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 
+if [[ -n "${RELATIONAL_PERIMETER_PYTHON:-}" ]]; then
+  python_command=("$RELATIONAL_PERIMETER_PYTHON")
+elif command -v python3 >/dev/null 2>&1; then
+  python_command=(python3)
+else
+  echo 'Python 3 is required for documentation and compiled-code checks' >&2
+  exit 1
+fi
+"${python_command[@]}" scripts/check-scientific-docs.py --self-test
+"${python_command[@]}" scripts/check-scientific-docs.py --static
+
 if command -v lake >/dev/null 2>&1; then
   lake_command=(lake)
 elif [[ -x "$HOME/.elan/bin/lake" ]]; then
@@ -75,14 +86,7 @@ if [[ "$(grep -c 'ALL_CONSTANTS_OK ' "$build_log" || true)" != 1 ]] ||
   echo 'Missing or incomplete exhaustive constant audit (including all test modules)' >&2
   exit 1
 fi
-if [[ -n "${RELATIONAL_PERIMETER_PYTHON:-}" ]]; then
-  python_command=("$RELATIONAL_PERIMETER_PYTHON")
-elif command -v python3 >/dev/null 2>&1; then
-  python_command=(python3)
-else
-  echo 'Python 3 is required for the compiled-code dependency check' >&2
-  exit 1
-fi
+"${python_command[@]}" scripts/check-scientific-docs.py --lean
 "${python_command[@]}" scripts/check-unified-codegen.py
 "${python_command[@]}" scripts/check-agent-codegen.py
 "${python_command[@]}" scripts/check-continuation-signature-codegen.py

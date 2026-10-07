@@ -155,6 +155,8 @@ RelationalPerimeter.Computation.ConstitutiveSearch.SemanticImage	G	enforced	Gene
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleProfileSemantics	D	enforced	Total action, preservation, and constitutive agreements on the authoritative occurrence profiles
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedFeedbackBridge	A6	enforced	Existing endogenous step proofs and transient frontier trace on the authoritative fused history
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RolewiseOperationalStatus	D	enforced	Local preserving status and mixed-policy exact finite images on the authoritative profiles
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RolePolicySpectrum	D	enforced	Constructed comparison policies and exact width spectrum on the same constituted role history
+RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.PublicRolePolicySpectrum	A10	enforced	Comparison spectrum consuming the existing public master without another executor
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.LocalOperationalStatus	D	enforced	Local occurrence status and preserving action available before prefix-local production
 RelationalPerimeter.Computation.ConstitutiveSearch.ProducedOutputImage	K	enforced	Actual target-image carrier and local duplicate removal justified by produced-output convergence
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.ExecutedOutputObligations	D	enforced	Dependent composition and exact value realization of executed local output images

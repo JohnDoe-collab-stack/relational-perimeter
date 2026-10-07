@@ -295,6 +295,12 @@ readout facade.
 
 ## Build
 
+Scientific changes follow the repository's [mandatory agent instructions](AGENTS.md)
+and [scientific work procedure](docs/methode-de-travail-scientifique.fr.md).
+The [claim/proof registry](docs/scientific-claims.json) points to canonical
+passages and checked declarations. Both gates check its freshness and references;
+these checks do not replace mathematical reading or an independent audit.
+
 The repository pins Lean 4.33.1 and has no Mathlib dependency.
 
 ```text
