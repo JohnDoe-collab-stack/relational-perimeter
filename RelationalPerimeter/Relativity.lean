@@ -10,6 +10,7 @@ import RelationalPerimeter.Relativity.Production.TransportedInfluences
 import RelationalPerimeter.Relativity.Production.ArrivalComparisons
 import RelationalPerimeter.Relativity.Production.InstrumentFutures
 import RelationalPerimeter.Relativity.Production.RecurringFutures
+import RelationalPerimeter.Relativity.Production.TransportedRecurringRequests
 
 /-!
 The numerical prerequisites and first declared local-production candidate.
@@ -33,8 +34,11 @@ successor. A further closed extension admits repeated comparisons of actual
 receptions on that same support, with a fixed contract covering every finite
 interleaving, transported arrivals and used dependencies. Comparison outputs
 are not receptions; new receptions must be executed before such outputs can
-serve as arrival ports. Presentation transport of the extension and the final
-physical contract remain open obligations.
+serve as arrival ports. This recurring contract is now transported through
+actual independent exchanges and all later shared productions, in both
+directions, including exact refusals. Typed receptions and used dependencies
+return positively; numerical addresses follow the current occurrence map.
+The final physical contract remains an open obligation.
 The calibrated signal law
 neither receives nor reconstructs a spacetime metric.
 The computation master and its contracts are unchanged.
@@ -91,4 +95,8 @@ The computation master and its contracts are unchanged.
 #print axioms RelationalPerimeter.Relativity.Production.recurring_all_futures_exact
 #print axioms RelationalPerimeter.Relativity.Production.recurring_repetition_length
 #print axioms RelationalPerimeter.Relativity.Production.recurring_futures_preserve_readout
+#print axioms RelationalPerimeter.Relativity.Production.independentRecurringPair
+#print axioms RelationalPerimeter.Relativity.Production.recurring_transported_admission_exact
+#print axioms RelationalPerimeter.Relativity.Production.recurring_transported_all_futures
+#print axioms RelationalPerimeter.Relativity.Production.recurring_corresponding_continuation_exact
 /- AXIOM_AUDIT_END -/

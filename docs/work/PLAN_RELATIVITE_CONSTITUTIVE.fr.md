@@ -3349,3 +3349,183 @@ antérieurs, la cible canonique et le registre scientifique, sont inchangés.
 Aucun commit, push, changement de branche ou audit indépendant n'a été
 réalisé. La branche reste `relativite`. Ce lot instrumental est vérifié dans
 la portée précisée ci-dessus ; la cible relativiste finale demeure ouverte.
+
+## 28. Transport du contrat de comparaisons successives
+
+### 28.1. Obligation traitée, sans changement de cible
+
+Ce lot poursuit la section 27 depuis le commit
+`d7402956939171f632e81027f9533f978b0ab2e6`, sur `relativite`. Il ferme le
+transport du contrat instrumental enrichi entre présentations constituées,
+pas la reconstruction du domaine relativiste de la section 1. Il ne change
+aucune admission, loi locale ou observation du contrat `recurringContract`.
+
+L'implémentation se trouve dans
+[RecurringPresentation.lean](../../RelationalPerimeter/Relativity/Production/RecurringPresentation.lean),
+[TransportedRecurringRequests.lean](../../RelationalPerimeter/Relativity/Production/TransportedRecurringRequests.lean)
+et leur
+[client public fermé](../../Tests/Relativity/TransportedRecurringChecks.lean).
+Ces fichiers ne reconstituent pas une racine reçue sur un support produit.
+Ils consomment les curseurs, déterminations et témoins de réception existants.
+
+### 28.2. Formation et transport positif des déterminations
+
+`RecurringRaccord` porte les références de sorte préservée et leurs deux
+lois de retour, l'exactitude des lectures, puis des fonctions positives
+transportant les réceptions et les dépendances utilisées dans les deux sens.
+Une égalité numérique n'est donc pas suffisante pour devenir une réception.
+Les vues `RecurringArrival.view` et `RecurringUsed.view` éliminent les
+témoins effectivement stockés ; elles ne rappellent pas leurs producteurs.
+Les équivalences propositionnelles finales sont des conséquences de ces
+transports de témoins en `Type`, pas leurs substituts.
+
+`RecurringPair.rename` transporte les deux réceptions exactes, leurs signaux
+et leur distinction. `recurring_renamed_gap` conserve la lecture de leur
+comparaison. Les prolongements `afterSignal` et `afterComparison` consomment
+les déterminations déjà produites dans les deux présentations. Ils forment
+les nouveaux transports de réception et de dépendance depuis ces témoins.
+Leur projection de références est directement l'extension du transport
+antérieur ; la lecture d'une adresse n'élimine pas tous les témoins de rôle.
+
+La sortie d'une comparaison reste une lecture calculée, non une réception.
+Sa sortie fraîche n'admet aucun témoin de réception. Une réception exécutée
+ultérieure peut en revanche fournir un nouveau port reçu. La différence
+entre ces deux formations reste visible dans les types et dans l'admission.
+
+`independentRecurringPair` ferme le raccord initial sur deux productions
+effectives des mêmes instructions indépendantes, dans les deux ordres.
+`independentPairArrival` conserve le signal réellement reçu, y compris les
+réceptions déjà présentes dans l'histoire antérieure. Ce raccord n'est pas
+une hypothèse de compatibilité laissée ouverte dans le client.
+
+### 28.3. Exécution partagée et preuves du contrat complet
+
+`RecurringAdmission.rename` construit l'admission transportée ; `.returned`
+la ramène au port source exact. L'unicité de l'admission est prouvée à partir
+des résolveurs existants et de leurs témoins positifs. Le théorème
+`recurring_transported_admission_exact` conserve toutes les admissions et
+tous les refus, pour toute requête, pas seulement les requêtes admises.
+
+`pairedRecurringRequest` résout une admission source courante. Pour une
+action admise, `pairedRecurringAdmitted` effectue une production dans
+chaque présentation, puis partage les déterminations pour l'événement,
+l'histoire et le raccord suivant. Le runner de comparaison exécute donc
+deux présentations ; il n'est pas annoncé comme un seul appel de production
+au total. Aucun producteur n'est rappelé pour reconstruire le raccord ou
+l'événement d'une même présentation. Inspection et refus ne produisent
+aucune ressource et conservent les curseurs.
+
+Les deux théorèmes d'exactitude de `pairedRecurringRequest` raccordent ses
+réponses entières aux performers existants, y compris au résolveur propre
+de la présentation cible. Le transport positif de l'admission ne remplace
+donc pas le contrat cible par une interface plus facile.
+
+`runCorrespondingRecurring` produit la tête et son raccord avant la suite,
+puis poursuit depuis les deux curseurs réellement produits. Chaque requête
+est traduite avec ce raccord courant. Le raccord final et les histoires
+stockées permettent une nouvelle continuation sans replay. Les preuves
+`correspondingRecurring_source_exact` et `correspondingRecurring_target_exact`
+raccordent les exécutions entières aux deux runners antérieurs.
+`recurring_transported_all_futures` conserve le rapport complet du contrat
+sur toute liste finie de requêtes, de longueur arbitraire, dans les deux
+directions du raccord. Les comptes de productions et de requêtes sont
+raccordés séparément ; ils ne sont pas des bornes de coût ou de durée.
+
+Les helpers `firstContinuedHistory` et `secondContinuedHistory` reçoivent
+la continuation déjà exécutée, et composent uniquement ses histoires
+stockées avec celles du préfixe. Leur première version recevait une liste
+de requêtes et relançait `.continue` : la lecture du C a révélé ce défaut,
+corrigé avant la validation finale. `recurring_continued_history_uses_cached_suffix`
+raccorde les deux assemblages à ces mêmes histoires conservées.
+
+### 28.4. Cas fermé et distinction entre preuve et smoke test
+
+Le client importe uniquement `RelationalPerimeter`. Il échange un relais
+et une réception qui utilisent tous deux l'ancien signal, sans que la
+seconde instruction reçoive le nouveau résultat de la première. Les deux
+présentations ont donc des ordres et des adresses différents sur des
+occurrences réellement constituées.
+
+Le cas prouvé entrelace une inspection, une nouvelle réception, une
+comparaison et deux refus. Il conserve le rapport, transporte les requêtes
+avec les adresses courantes, produit deux nouvelles ressources par
+présentation et calcule un écart un. Les réceptions et dépendances initiales
+sont transportées jusqu'aux curseurs finaux puis ramenées positivement.
+Le client poursuit depuis ces curseurs. Des contrôles séparés refusent le
+même port deux fois et une lecture initiale non reçue, même à valeur égale.
+
+Un contre-exemple fermé montre qu'une traduction figée à la permutation
+initiale ne conserve pas ce contrat : après une réception, elle désigne
+un signal au lieu du port de lecture attendu et sa comparaison est refusée.
+Le transport courant admet la comparaison correspondante.
+
+Le smoke test plus long exécute treize requêtes, cinq productions dans
+chaque présentation, et observe deux comparaisons, de valeurs un puis zéro.
+Il est identifié comme une vérification d'exécutabilité, non comme une
+preuve par évaluation native, une mesure physique ou un résultat expérimental
+confirmatoire. L'exactitude de toute longueur vient des théorèmes généraux.
+
+Les premières réductions intégrales du tableau long ont dépassé le budget
+par défaut du noyau. Le cas numérique prouvé a été réduit, tandis que la
+séquence longue reste exécutée et que la portée générale reste inchangée.
+Aucune limite de preuve n'a été relevée et aucun trou n'est conservé.
+Deux helpers initiaux dépendaient d'un lemme du compilateur non admissible :
+leurs définitions ont été remplacées par des cas constructeurs exhaustifs
+et un codage numérique de test. Leurs audits finaux doivent être sans axiome,
+comme ceux de toutes les déclarations écrites de ce lot.
+
+### 28.5. Stratification, préservation et suite du plan
+
+Les nouveaux modules sont `H8` et `H9` ; la façade locale devient `H10`.
+Les contrôleurs Bash et PowerShell gardent la même règle strictement
+descendante et les mêmes exclusions, avec H10 explicitement classifié.
+Aucun niveau libre n'est ajouté. Le maître, la machine, les quatre
+fondations, les modules numériques et instrumentaux antérieurs, les cibles
+canoniques et le registre scientifique restent inchangés.
+
+Le transport instrumental ouvert en 27.6 est maintenant construit. Restent
+le contrat physique final, les autorisations de regroupement compatibles
+avec ses effets, la continuité intrinsèque, la géométrie, la dynamique et
+la reconstruction exacte du domaine relativiste. Le transport de
+présentation ne devient ni un regroupement des événements, ni un oubli de
+parcours, ni une preuve de colocation ou de gravitation.
+
+### 28.6. Vérifications sur les sources finales du lot
+
+`bash scripts/verify.sh` et `pwsh -NoProfile -File scripts/verify.ps1`
+réussissent tous deux, le second sous Windows natif. Leur construction
+complète réussit sur 291 jobs, sans erreur ni avertissement Lean. Les deux
+scripts contrôlent les mêmes 289 fichiers Lean, 235 modules de production
+classifiés et accessibles sans orphelin, et 23 fixtures de rejet avec leurs
+diagnostics attendus.
+
+Le balayage global contrôle 24 533 constantes dans 288 modules : les 364
+exceptions sont générées par le compilateur, aucune déclaration écrite
+dans les sources ne dépend d'un axiome. Les déclarations de ce lot ont
+toutes un audit sans axiome. Les scans des termes interdits et des blocs
+d'audit réussissent. Les contrôleurs compilés existants du maître, des
+agents et de la machine intégrée réussissent également.
+
+La lecture manuelle des corps C générés des nouveaux runners, transports
+et assemblages confirme le partage sur les chemins nommés en 28.3. En
+particulier, les deux assemblages d'histoire prolongée appellent uniquement
+la composition des histoires stockées, sans relancer la continuation.
+Ce contrôle local n'est ni une couverture automatique générale du nouveau
+code compilé, ni une borne de coût physique.
+
+`git diff --check` réussit ; les trois nouveaux fichiers sont aussi
+contrôlés séparément pour leurs espaces et leurs blocs d'audit finaux.
+Les 56 liens locaux du plan sont valides. Le registre scientifique passe
+ses contrôles statiques sans modification de ses statuts ouverts.
+
+La comparaison SHA-256 avec le départ du lot relève trois fichiers ajoutés,
+six modifiés et aucun supprimé. Les changements restent limités aux deux
+modules, au client, à la façade, à l'import du balayage global, à l'inventaire
+de stratification, à ses deux contrôleurs et à ce plan. Les autres sources
+et documents, notamment les fondations, le maître, la machine, les contrats
+antérieurs, les cibles canoniques et le registre, sont inchangés.
+
+Aucun commit, push, changement de branche ou audit indépendant n'est
+effectué pour ce lot. La branche reste `relativite`, à partir de `d740295`.
+Ces vérifications ferment la portée instrumentale de la section 28 ; elles
+ne déclarent pas atteinte la cible physique finale.
