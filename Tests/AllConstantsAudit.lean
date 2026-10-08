@@ -52,6 +52,7 @@ import Tests.Relativity.ArrivalComparisonChecks
 import Tests.Relativity.InstrumentFutureChecks
 import Tests.Relativity.RecurringInteractionChecks
 import Tests.Relativity.TransportedRecurringChecks
+import Tests.Relativity.DiscoveredGroupingChecks
 
 /-! Build-time tooling, not a mathematical hypothesis or a new production
 dependency. Scan every constant in every imported repository module, including

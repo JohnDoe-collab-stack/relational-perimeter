@@ -11,6 +11,7 @@ import RelationalPerimeter.Relativity.Production.ArrivalComparisons
 import RelationalPerimeter.Relativity.Production.InstrumentFutures
 import RelationalPerimeter.Relativity.Production.RecurringFutures
 import RelationalPerimeter.Relativity.Production.TransportedRecurringRequests
+import RelationalPerimeter.Relativity.Production.GroupedRecurringContinuation
 
 /-!
 The numerical prerequisites and first declared local-production candidate.
@@ -38,7 +39,13 @@ serve as arrival ports. This recurring contract is now transported through
 actual independent exchanges and all later shared productions, in both
 directions, including exact refusals. Typed receptions and used dependencies
 return positively; numerical addresses follow the current occurrence map.
-The final physical contract remains an open obligation.
+A local recognizer now finds old-port exchanges or a positively used fresh
+port that refuses this exchange grammar. Its action reorders the cached
+determinations without rerunning either producer. The recurring continuation
+then executes one shared action and positively transports that same output
+and role into the other presentation, preserving the full existing contract.
+Both presented histories and their source distinctions remain available;
+this is not yet an exact memory reduction or the final physical contract.
 The calibrated signal law
 neither receives nor reconstructs a spacetime metric.
 The computation master and its contracts are unchanged.
@@ -99,4 +106,10 @@ The computation master and its contracts are unchanged.
 #print axioms RelationalPerimeter.Relativity.Production.recurring_transported_admission_exact
 #print axioms RelationalPerimeter.Relativity.Production.recurring_transported_all_futures
 #print axioms RelationalPerimeter.Relativity.Production.recurring_corresponding_continuation_exact
+#print axioms RelationalPerimeter.Relativity.Production.searchStoredExchange
+#print axioms RelationalPerimeter.Relativity.Production.exchange_found_iff_old
+#print axioms RelationalPerimeter.Relativity.Production.exchanged_outputs_are_cached
+#print axioms RelationalPerimeter.Relativity.Production.shared_recurring_all_futures
+#print axioms RelationalPerimeter.Relativity.Production.shared_continuation_exact
+#print axioms RelationalPerimeter.Relativity.Production.discovered_exchange_all_futures
 /- AXIOM_AUDIT_END -/

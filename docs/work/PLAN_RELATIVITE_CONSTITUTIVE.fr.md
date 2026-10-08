@@ -3529,3 +3529,204 @@ Aucun commit, push, changement de branche ou audit indépendant n'est
 effectué pour ce lot. La branche reste `relativite`, à partir de `d740295`.
 Ces vérifications ferment la portée instrumentale de la section 28 ; elles
 ne déclarent pas atteinte la cible physique finale.
+
+## 29. Recherche locale d'un échange et continuation regroupée
+
+### 29.1. Obligation et critères fixés avant l'implémentation
+
+Ce lot part de `fc58a178da0cd35261120a0589cb26c438349775`. La demande de
+poursuite autorise l'implémentation locale, sans commit, push ou audit externe.
+La cible finale et les contrats existants restent inchangés.
+
+Le premier chercheur reconnaîtra une classe précise de relations : l'échange
+de deux productions dont la seconde utilise uniquement les ressources
+antérieures à la première. Il inspectera les ports réellement utilisés,
+retournera leur instruction d'origine ou un port frais positivement utilisé.
+Un refus signifie l'impossibilité de cet échange de ports anciens ; il ne
+signifie pas l'inexistence de toute autre relation de regroupement.
+
+La relation trouvée devra agir sur les déterminations stockées : changer la
+présentation de ces productions, conserver leurs sorties, réceptions et
+dépendances, sans rappeler leurs producteurs. Les deux retours de références
+et l'accord de toutes les suites du contrat récurrent autoriseront ensuite
+une continuation commune. Cet échange de présentation ne sera pas appelé
+une nouvelle interaction physique.
+
+Le runner regroupé devra produire une seule détermination par demande
+productive, puis transporter cette même détermination dans l'autre
+présentation. Il ne devra pas appeler le producteur une seconde fois pour
+fabriquer sa preuve d'accord. Les admissions, refus, événements, successeurs,
+histoires et demandes traduites seront raccordés aux runners existants.
+La reprise partira des sorties conservées ; l'assemblage consommera un
+suffixe déjà exécuté. Aucun avenir achevé ne sera une entrée du chercheur.
+
+Le client fermé devra comporter un échange trouvé, un échange refusé parce
+que la seconde production consomme la sortie fraîche, et une lecture future
+qui distingue ce cas dépendant d'un échange naïf. Il devra aussi conserver
+les occurrences sources distinctes et poursuivre des comparaisons admises
+avec les adresses courantes. Les preuves générales porteront sur toutes
+les listes finies, pas seulement sur ce client.
+
+La validation comprend les deux gates complètes, l'audit axiomatique, les
+liens et le diff, ainsi qu'une lecture des corps C des nouveaux chemins de
+recherche, transport et continuation. Ce lot ne ferme pas le contrat physique
+final, la minimalité mémoire, la continuité ou la reconstruction relativiste.
+
+### 29.2. Relation reconstruite depuis les rôles effectivement produits
+
+Le module [DiscoveredExchange](../../RelationalPerimeter/Relativity/Production/DiscoveredExchange.lean)
+reçoit un `StoredPairProduction`. Sa seconde instruction peut consommer la
+sortie fraîche de la première ; l'indépendance n'est donc pas une hypothèse
+de ce préfixe reçu. Les deux déterminations sont positives et leurs indices
+imposent le contexte effectivement produit par la première.
+
+`searchStoredExchange` lit `recordedInstruction` sur le rôle stocké de la
+seconde production. Le chercheur `findOldInstruction` inspecte ses ports,
+sans lire une continuation ni comparer seulement leurs valeurs. Il retourne
+soit l'instruction sur les ressources anciennes avec son égalité de renommage,
+soit un `InputPort` frais réellement utilisé. `recordedInstruction_exact`
+relie cette instruction lue à l'indice de la production reçue.
+
+`exchange_found_iff_old` caractérise exactement la portée de ce chercheur :
+l'échange est trouvé si et seulement si cette instruction peut être ramenée
+aux seuls ports anciens. `exchange_refusal_excludes_old` interdit alors ce
+même témoin dans le cas refusé. Il ne conclut pas que deux calculs utilisant
+une ressource fraîche ne pourraient jamais être reliés autrement.
+
+Les sélecteurs `discoveredExchangeOfFound` et `freshPortOfRefusedExchange`
+retournent les données de cette recherche exécutée, pas une hypothèse de
+relation. `freshUsedEdge` raccorde le port refusant l'échange à une dépendance
+positive entre les deux occurrences effectivement produites.
+
+### 29.3. Action sur les déterminations et préservation séparée
+
+`exchangeStored` consomme les deux déterminations existantes. `returnOld`
+ramène le rôle indépendant de la seconde aux ports anciens ; `weaken`
+transporte celui de la première sous la seconde devenue première. Les
+sorties sont les projections des déterminations reçues, dans l'ordre inversé.
+`exchanged_outputs_are_cached` donne leurs deux égalités exactes.
+
+`realizeStoredExchange` consomme le résultat positif du chercheur et produit
+l'exécution échangée ainsi que son `AddressedRecurringRaccord`. Ce dernier
+reprend les transports réversibles déjà construits : références courantes,
+réceptions positives, dépendances utilisées et valeurs lues. Il ne remplace
+pas les occurrences par leurs valeurs égales.
+
+La préservation de toutes les suites du contrat récurrent est ensuite
+prouvée par `discovered_exchange_all_futures`. Elle n'est pas une simple
+égalité de la dernière lecture ni la définition d'un marqueur singleton.
+Il s'agit d'une relation entre présentations et d'une autorisation de partager
+leur continuation, pas d'une identification des événements ni d'une nouvelle
+loi physique de rencontre.
+
+### 29.4. Une production partagée, puis une continuation effective
+
+Le module [GroupedRecurringContinuation](../../RelationalPerimeter/Relativity/Production/GroupedRecurringContinuation.lean)
+construit `sharedRecurringAdmitted`. Chaque branche productive appelle une
+fois `performRecurring` sur la source. `transportRecurringDetermination`
+transporte le rôle positif avec le raccord reçu et garde la même sortie
+stockée. Le successeur de l'autre présentation est formé avec cette
+détermination transportée, sans appeler son producteur.
+
+`shared_request_exact` et `shared_run_exact` raccordent ces données entières
+aux exécuteurs antérieurs, qui restent inchangés. `shared_recurring_runners_exact`
+raccorde les deux exécutions entières aux runners de référence.
+`shared_recurring_all_futures` porte sur toutes les listes finies, de longueur
+arbitraire, du contrat existant : admissions, refus, inspections, émissions,
+relais, réceptions et comparaisons entre réceptions effectivement constituées.
+Le sens inverse utilise le raccord inverse, sans autre hypothèse de valeur.
+
+`runSharedRecurring` produit sa tête avant sa queue. La queue reçoit les
+curseurs et le raccord réellement produits par cette tête. La traduction de
+chaque demande utilise ses adresses courantes, pas la permutation initiale.
+`continueShared` reprend ces mêmes curseurs finaux. Les assemblages d'histoire
+existants reçoivent le suffixe déjà exécuté, sans relancer sa continuation.
+
+`searchExchangeAndContinue` relie explicitement les deux passages : il
+exécute une recherche, puis consomme son résultat. En cas de succès, la
+continuation partagée utilise le raccord trouvé. En cas de refus, l'exécution
+source se poursuit et le port frais demeure disponible comme témoin du refus.
+`search_continuation_source_exact` conserve le runner source dans les deux cas.
+
+### 29.5. Client fermé, refus réel et séparateur futur
+
+Le client [DiscoveredGroupingChecks](../../Tests/Relativity/DiscoveredGroupingChecks.lean)
+importe uniquement l'API publique. Dans le cas accepté, un relais puis une
+réception utilisent l'ancien signal. Le chercheur trouve l'échange ; ses
+sorties réemploient les déterminations produites. Les deux premières adresses
+sont échangées, non identifiées. Les occurrences sources restent distinctes
+après les prolongements.
+
+Le client entrelace une inspection, une réception, une comparaison et deux
+refus. Les autorisations valent exactement `[true, true, true, false, false]`.
+Les deux rapports sont égaux, les demandes traduites emploient les adresses
+courantes, et une nouvelle continuation reprend les curseurs produits.
+Les réceptions se transportent positivement jusqu'à ces curseurs et reviennent.
+Les théorèmes génériques, et non la longueur de ce client, établissent
+l'accord sur toute suite finie dans les deux directions.
+
+Dans le cas refusé, la même première détermination est conservée mais la
+seconde réception consomme le signal fraîchement relayé. La recherche retourne
+son port utilisé et la dépendance effective correspondante. Un échange naïf
+recevrait au contraire l'ancien signal : une inspection future donne zéro
+au lieu d'un. `future_report_separates_naive_exchange` prouve la différence
+des rapports du contrat, pas seulement celle de deux valeurs internes.
+
+### 29.6. Contrôle de calculabilité et partage du code compilé
+
+La première version du transport de comparaison éliminait directement le
+témoin `RecurringComputed` dans une définition de données. Le C généré
+recalculait alors `recurringDifference` dans l'autre présentation, malgré
+l'égalité prouvée de la sortie extérieure. Ce défaut a été corrigé avant la
+validation finale : `RecurringComputed.output_exact` conserve l'égalité
+dans la preuve, et le transport de données garde opaque la sortie reçue.
+Le corps C final stocke cette même sortie dans le rôle transporté sans
+recalculer la différence.
+
+La lecture des corps C complets vérifie les quatre branches productives de
+`sharedRecurringAdmitted` : chacune appelle un producteur, puis transporte
+ce même résultat et assemble les deux réponses stockées. L'inspection et
+le refus n'appellent aucun producteur. La lecture vérifie aussi les
+successeurs, les assemblages, la recherche unique et l'ordre tête puis queue.
+
+Le graphe des appels directs des chemins de recherche, d'échange stocké,
+de transport du rôle et de la production, et d'assemblage ne rappelle aucun
+producteur. Les fonctions d'opération conservées dans les formations restent
+des capacités stockées ; leur allocation n'est pas assimilée à leur appel.
+Les fermetures de traduction et de transport ont été lues séparément.
+Ce contrôle local du C ne constitue ni une gate automatique exhaustive du
+nouveau runtime ni une borne de coût, de mémoire ou de durée physique.
+
+### 29.7. Vérifications, préservation et obligations restantes
+
+Sur les sources finales de ce lot, `bash scripts/verify.sh` et
+`pwsh -NoProfile -File scripts/verify.ps1` réussissent ; PowerShell est exécuté
+sous Windows natif. Le build complet comporte 294 jobs, sans erreur ni
+avertissement Lean. Les gates sélectionnent les mêmes 292 fichiers Lean et
+contrôlent 237 modules de production classifiés, accessibles et sans orphelin,
+ainsi que les 23 fixtures de rejet existantes.
+
+Le balayage global contrôle 24 788 constantes dans 291 modules, avec 364
+exceptions générées par le compilateur et aucune déclaration écrite dépendant
+d'un axiome. Les audits de toutes les déclarations ajoutées sont sans axiome.
+Les blocs finaux, les scans des termes interdits, les liens du registre et
+les contrôleurs compilés existants du maître, des agents et de la machine
+intégrée réussissent. Les statuts ouverts du registre ne sont pas modifiés.
+
+Le nouveau chercheur est classifié `H9`, sa continuation partagée `H10` et
+la façade locale `H11`. Les deux contrôleurs imposent encore des dépendances
+strictement descendantes, sans nouveau niveau libre. La comparaison SHA-256
+avec le départ du lot relève trois fichiers ajoutés, six modifiés et aucun
+supprimé : les deux modules, le client, la façade, l'import du balayage global,
+l'inventaire, ses deux contrôleurs et ce plan. Toutes les autres sources et
+documents sont inchangés, notamment les quatre fondations, le maître, la
+machine, les contrats antérieurs, les cibles canoniques et le registre.
+
+Cette section ferme la recherche locale d'un échange et son utilisation par
+une continuation productive partagée sous le contrat récurrent existant.
+Les deux présentations et leurs histoires restent représentées : aucune
+réduction mémoire minimale n'est revendiquée. La recherche d'autres relations,
+le contrat physique final, les regroupements exacts sous ce contrat, la
+continuité, la géométrie, la dynamique et la reconstruction relativiste
+restent des obligations du plan. La cible finale de la section 1 est inchangée.
+Aucun commit, push, changement de branche ou audit externe n'est effectué.
