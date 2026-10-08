@@ -52,6 +52,7 @@ import Tests.Relativity.ArrivalComparisonChecks
 import Tests.Relativity.InstrumentFutureChecks
 import Tests.Relativity.RecurringInteractionChecks
 import Tests.Relativity.RelativePathChecks
+import Tests.Relativity.RelativeRefinementChecks
 import Tests.Relativity.TransportedRecurringChecks
 import Tests.Relativity.DiscoveredGroupingChecks
 import Tests.Relativity.ConstitutedDescriptionChecks
@@ -171,4 +172,6 @@ run_cmd do
 #print axioms Nat
 #print axioms Tests.Relativity.RelativePathChecks.every_finite_pair_is_realized
 #print axioms Tests.Relativity.RelativePathChecks.same_ratio_does_not_erase_future_path_effects
+#print axioms Tests.Relativity.RelativeRefinementChecks.arbitrary_precision_is_realized
+#print axioms Tests.Relativity.RelativeRefinementChecks.requests_are_not_reversed
 /- AXIOM_AUDIT_END -/

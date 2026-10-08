@@ -5730,3 +5730,158 @@ nouveau client et deux commandes d'audit, sans changer ses règles.
 
 La cible de la section 1 et les statuts d'audit indépendant restent inchangés.
 Aucun commit, push, changement de branche ni audit extérieur n'est effectué.
+
+## 43. Raffinement productif des parcours relatifs reçus
+
+### 43.1. Obligation fixée avant implementation
+
+Après le lot 42, des fractions sont réalisables séparément, mais leur seule
+existence ne construit pas les raccords demandés par R4.2. Le prochain lot
+doit repartir du curseur et des deux parcours effectivement reçus. Une
+demande locale choisit l'une des deux subdivisions instrumentales : prolonger
+le premier parcours de son propre compte, avec éventuellement un relais
+supplémentaire, et le second de son propre compte. Les nouvelles réceptions
+restent issues de la même émission ; les anciennes sont transportées, jamais
+réexécutées ni remplacées.
+
+Le choix de subdivision est une entrée de demande déclarée, pas une décision
+physique découverte ni une coordonnée reçue. Les comptes sont lus dans les
+parcours positifs enregistrés. Le réalisateur doit partager les résultats
+des deux runners et des deux réceptions avant de construire le raccord.
+Pour toute liste finie de demandes, conserver l'origine, les références,
+les lectures et les effets de parcours des réceptions antérieures.
+
+Prouver ensuite, en aval, le doublement du compte de référence, le raccord
+des rapports et l'emboîtement de leurs bornes numériques. Ces bornes servent
+au contrôle de précision ; elles ne sont ni des fenêtres ouvertes physiques
+ni des points d'espace-temps. Une succession de choix n'est pas la réception
+libre d'une suite numérique. Aucun futur achevé ne sera consulté par une tête.
+La continuité, les localisations physiques, la couverture et les structures
+relativistes restent les obligations séparées de la section 1.
+
+### 43.2. Construction productive et raccord des réalisations
+
+[RefinedRelativePaths](../../RelationalPerimeter/Relativity/Production/RefinedRelativePaths.lean)
+reprend un `RelativePathState` constitué : curseur réellement atteint, lecteur
+sur ses deux réceptions et calibration unité disponible. La demande `lower`
+ou `upper` n'apporte aucun rapport cible. `refineRelativePaths` lit les comptes
+des deux parcours, prolonge le premier de son compte avec zéro ou un relais
+de plus, le reçoit, puis prolonge le parcours de référence transporté de son
+propre compte et le reçoit. Les deux runners et les deux réceptions sont
+liés une fois ; leurs sorties servent à leurs rôles, successeurs et histoires.
+
+L'égalité d'origine relie la nouvelle lecture à l'émission antérieure par le
+transport de cette histoire exacte. Les deux nouvelles réceptions sont
+positivement distinctes. Le lecteur antérieur conserve, sur le support final,
+sa valeur, ses deux sources et son record de référence complet. La longueur
+de ce nouveau suffixe est le compte antérieur du premier parcours, augmenté
+du relais optionnel, plus le compte du second parcours, plus deux réceptions.
+Il n'y a pas de nouvelle émission et aucune ancienne production n'est rejouée.
+
+La chaîne positive conserve chaque tête réellement retournée, avec son
+raccord exact au réalisateur. `resume` consomme le préfixe déjà reçu ;
+`runMore` passe la nouvelle tête à la demande suivante dans l'ordre déclaré.
+La composition de deux listes est prouvée comme égalité des résultats
+complets. L'ordre des demandes, l'émission commune, les références distinctes
+et la valeur du lecteur ancien persistent pour toute longueur finie.
+`RelativePathState.prolong` permet aussi de transporter cet état par un
+suffixe instrumental ordinaire déjà exécuté avant une nouvelle demande.
+
+### 43.3. Précision en aval, sans la confondre avec une localisation
+
+[RelativePathPrecision](../../RelationalPerimeter/Relativity/Production/RelativePathPrecision.lean)
+interprète les comptes réels comme des fractions : si les comptes reçus
+étaient `p` et `d`, le nouveau couple est `2*p + b`, `2*d`, avec `b` égal à
+zéro ou un selon la demande reçue. Ces nombres sont des lectures de parcours
+déjà constitués. Ils ne constituent pas à leur place les parcours ou les
+réceptions et ne sont pas utilisés comme identités d'événement.
+
+La borne inférieure est le rapport effectivement lu ; la borne supérieure
+est `(p+1)/d`. Leur écart positif vaut `1/d`. Le lot prouve l'emboîtement
+des bornes et la division de cet écart par deux à chaque demande, puis ces
+lois pour toute chaîne finie. Les choix inférieur et supérieur donnent des
+rapports différents sur tout état admis, pas seulement sur un exemple.
+Les bornes sont fermées et instrumentales : ce ne sont pas les fenêtres
+ouvertes des lots descriptifs, ni des voisinages physiques.
+Les deux subdivisions réalisées se rejoignent à leur borne commune et
+couvrent exactement l'intervalle rationnel parent. La requête numérique de
+ce théorème de couverture n'est une entrée d'aucun de leurs producteurs ;
+la preuve ne construit pas un événement depuis cette requête.
+
+Le compte de référence après `m` demandes vaut le compte initial multiplié
+par `2^m`. Une borne constructive suffisante pour toute précision rationnelle
+positive est prouvée : une liste d'au moins son dénominateur en demandes
+suffit pour que l'écart final soit au plus cette précision. Cette borne est
+volontairement non optimale ; elle compte des demandes, pas les relais,
+opérations, allocations ou durées. Le nombre de relais croît avec le compte
+de référence : aucune affirmation d'efficacité ne découle de cette preuve.
+
+`refineToPrecision` ferme aussi cette obligation par un témoin exécutable :
+il construit une liste finie de subdivisions inférieures de la longueur
+suffisante, lie une seule fois sa reprise du préfixe reçu et retourne cette
+réalisation positive avec sa borne prouvée. La liste suffisante n'est donc
+pas une hypothèse extérieure laissée ouverte. Ce choix instrumental conserve
+la borne inférieure actuelle ; il ne prétend pas choisir une localisation
+physique ni établir l'équivalence entre toutes les demandes de subdivisions.
+
+### 43.4. Client et limites conservées
+
+[RelativeRefinementChecks](../../Tests/Relativity/RelativeRefinementChecks.lean)
+part du même candidat zéro/un avec payload reçu, réalise d'abord zéro sur
+un, puis consomme des demandes de raffinements. Ses preuves couvrent toutes
+les listes finies, leur reprise, l'émission et les réceptions anciennes,
+les records complets, les bornes et toute précision positive.
+La précision possède également un témoin produit sans liste fournie, dont
+le raccord exact à la reprise du préfixe est vérifié.
+Un suffixe instrumental ordinaire peut être intercalé ; il conserve le lecteur ancien
+et les sources de la demande suivante. Le smoke compilé inférieur après
+supérieur retourne les comptes deux/quatre et neuf productions nouvelles.
+Ce smoke n'est ni une mesure physique ni une expérience de complexité.
+
+Le lot construit donc des réalisations instrumentales successives raccordées,
+plutôt qu'une famille de fractions réalisées indépendamment. Il ne ferme
+pas encore une présentation idéale avec ses lois de limite, ni la famille
+de localisations physiques de R4.2, ni sa couverture ou sa structure
+relativiste. Aucun regroupement ou oubli d'effets n'est autorisé par ces
+bornes numériques. Les contrats, les primitives et la cible de la section 1
+restent inchangés.
+
+### 43.5. Vérification de la réalisation livrée
+
+`lake build +RelationalPerimeter` passe sur 255 jobs. Après ajout du témoin
+exécutable de précision, les deux gates complètes passent sur le même état :
+`scripts/verify.sh` sous Bash et `scripts/verify.ps1` sous PowerShell natif
+Windows. Chacune vérifie 318 fichiers Lean et les 23 fixtures de rejet
+attendu ; le build complet couvre 320 jobs. Le balayage porte sur 27 161
+constantes de 317 modules : 364 exceptions générées par le compilateur,
+aucune déclaration écrite à la main dépendante d'un axiome. Les 254 modules
+de production sont tous atteignables, sans orphelin, et leur stratification
+est imposée. Aucun avertissement Lean n'est présent. Le message Git sur une
+future conversion LF/CRLF de l'inventaire n'est pas un avertissement Lean.
+
+Une inspection bornée du C généré confirme deux appels au runner de relais
+et deux nouvelles réceptions dans `refineRelativePaths`, un seul appel à
+ce réalisateur dans `resume`, puis un seul appel à `resume` dans chaque
+passage de `runMore`. Les lecteurs de l'histoire et des demandes stockées,
+le transport d'état `prolong` et les deux lecteurs de bornes ne rejoignent
+aucun de ces producteurs dans leur graphe statique. Les appels dynamiques
+de transport de références sont recensés ; ce contrôle ne démontre ni un
+coût total ni une propriété universelle de tout code appelant.
+
+L'extension de ce contrôle pour `refineToPrecision` vérifie un seul appel à
+`runMore`, aucune production directe ni aucun appel dynamique dans cette
+entrée. Son corps compilé retourne directement le résultat reçu : la preuve
+de borne n'ajoute pas de seconde réalisation. Les scripts d'inspection ont
+été figés et hachés avant leurs exécutions, et restent avec leurs logs hors
+du dépôt. Ce sont des diagnostics compilés locaux, pas une nouvelle expérience
+physique ni un audit indépendant. Les statuts de revue du registre restent
+inchangés.
+
+La comparaison SHA-256 avec le début du lot compte trois ajouts, quatre
+modifications, 407 fichiers inchangés et aucune suppression. Les quatre
+fondations, les contrats et primitives anciens, le maître, la machine, les
+lots précédents, la toolchain, le manifeste, le registre et les figures sont
+inchangés. L'inventaire est étendu de deux lignes, sans modifier ses règles ;
+le balayage de constantes importe le nouveau client sans changer ses règles.
+La section 1 reste identique et les 90 liens locaux du plan sont valides.
+Aucun commit, push, changement de branche ni audit extérieur n'est effectué.

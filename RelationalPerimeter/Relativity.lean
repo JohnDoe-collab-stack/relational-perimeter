@@ -12,6 +12,7 @@ import RelationalPerimeter.Relativity.Production.InstrumentFutures
 import RelationalPerimeter.Relativity.Production.RecurringFutures
 import RelationalPerimeter.Relativity.Production.ProducedReadingLaws
 import RelationalPerimeter.Relativity.Production.RealizedRelativePaths
+import RelationalPerimeter.Relativity.Production.RelativePathPrecision
 import RelationalPerimeter.Relativity.Production.TransportedRecurringRequests
 import RelationalPerimeter.Relativity.Production.GroupedRecurringContinuation
 import RelationalPerimeter.Relativity.Production.ConstitutedDescriptions
@@ -119,9 +120,25 @@ nonnegative rational path ratios without changing the integral raw readings.
 Its continuation transports the recorded reader from the actual returned
 cursor. These relative instrumental readings are not spacetime coordinates
 or a completed family of continuous physical localizations.
+Productive refinements now extend the two stored paths before receiving new
+endpoints, with their original emission and all old records still available.
+Each received subdivision request produces a nested numerical bracket with
+halved span. Finite resumption preserves request order and can meet every
+positive rational precision through a constructed executable witness.
+The reference path itself doubles per request;
+no efficient cost bound or physical localization is inferred from this law.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Relativity.Production.refineRelativePaths
+#print axioms RelationalPerimeter.Relativity.Production.relative_refinement_chain_keeps_sources
+#print axioms RelationalPerimeter.Relativity.Production.relative_refinement_requested_order
+#print axioms RelationalPerimeter.Relativity.Production.relative_refinement_chain_brackets
+#print axioms RelationalPerimeter.Relativity.Production.relative_refinement_chain_scale
+#print axioms RelationalPerimeter.Relativity.Production.relative_refinement_reaches_requested_precision
+#print axioms RelationalPerimeter.Relativity.Production.RelativeRefinementRun.refineToPrecision
+#print axioms RelationalPerimeter.Relativity.Production.relative_precision_realization_is_resumption
+#print axioms RelationalPerimeter.Relativity.Production.relative_subdivision_choices_have_different_readings
 #print axioms RelationalPerimeter.Relativity.Production.RelativePathReading.measured_ratio_exact
 #print axioms RelationalPerimeter.Relativity.Production.realizeRelativeReading
 #print axioms RelationalPerimeter.Relativity.Production.realized_relative_reading_exact
