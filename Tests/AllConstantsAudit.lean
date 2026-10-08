@@ -53,6 +53,8 @@ import Tests.Relativity.InstrumentFutureChecks
 import Tests.Relativity.RecurringInteractionChecks
 import Tests.Relativity.RelativePathChecks
 import Tests.Relativity.RelativeRefinementChecks
+import Tests.Relativity.ProductivePresentationChecks
+import Tests.Relativity.ProductiveWindowChecks
 import Tests.Relativity.TransportedRecurringChecks
 import Tests.Relativity.DiscoveredGroupingChecks
 import Tests.Relativity.ConstitutedDescriptionChecks
@@ -174,4 +176,8 @@ run_cmd do
 #print axioms Tests.Relativity.RelativePathChecks.same_ratio_does_not_erase_future_path_effects
 #print axioms Tests.Relativity.RelativeRefinementChecks.arbitrary_precision_is_realized
 #print axioms Tests.Relativity.RelativeRefinementChecks.requests_are_not_reversed
+#print axioms Tests.Relativity.ProductivePresentationChecks.alternating_readout_is_not_constant
+#print axioms Tests.Relativity.ProductivePresentationChecks.every_positive_precision_has_a_positive_realization
+#print axioms Tests.Relativity.ProductiveWindowChecks.every_cover_is_selected_from_a_real_prefix
+#print axioms Tests.Relativity.ProductiveWindowChecks.upper_endpoint_blocks_every_finite_left_certificate
 /- AXIOM_AUDIT_END -/

@@ -5885,3 +5885,286 @@ inchangés. L'inventaire est étendu de deux lignes, sans modifier ses règles ;
 le balayage de constantes importe le nouveau client sans changer ses règles.
 La section 1 reste identique et les 90 liens locaux du plan sont valides.
 Aucun commit, push, changement de branche ni audit extérieur n'est effectué.
+
+## 44. Familles productives et présentations idéales instrumentales
+
+### 44.1. Obligation fixée avant implementation
+
+Le lot 43 fournit les raccords entre préfixes effectivement raffinés, pas
+encore les lois d'une famille de réalisations à précision arbitraire. Construire
+un générateur qui consomme son préfixe stocké et une règle locale déclarée de
+subdivision. Sa tête ne reçoit ni indice d'horizon, ni suite numérique libre,
+ni futur achevé. Chaque reprise conserve l'émission, les sources et les effets
+anciens ; sa composition doit être l'égalité du résultat complet.
+
+Fermer sur ces réalisations le contrôle de Cauchy avec un module de précision
+exécutable, puis l'accord numérique entre une famille et sa reprise. Donner
+des règles concrètes inférieure, supérieure et alternante, cette dernière
+lisant le compte du parcours effectivement reçu. Ce sont des commandes
+instrumentales déclarées, pas des lois physiques découvertes.
+
+La famille idéale est une spécification des réalisations finies possibles.
+Une requête indépendante de profondeur peut calculer son préfixe depuis la
+racine stockée ; elle ne sera pas annoncée comme un lecteur gratuit ni comme
+un cache global. La reprise runtime doit, elle, partir du préfixe retourné.
+Les limites numériques doivent rester en aval des réceptions et ne seront
+jamais des paramètres causaux des producteurs anciens.
+
+Construire aussi les accords avec les bornes pour les règles inférieure et
+supérieure, avec module explicite, sans identifier leurs réceptions. Ces lois
+d'accord ne peuvent autoriser un regroupement physique ou l'oubli d'un effet.
+La classe de règles de ce lot ne couvre pas tous les points du continu :
+la couverture, les localisations physiques et la reconstruction relativiste
+de R4-R7 demeurent les obligations inchangées de la section 1.
+
+### 44.2. Générateur sur un préfixe reçu
+
+[ProductiveRelativePresentations](../../RelationalPerimeter/Relativity/Production/ProductiveRelativePresentations.lean)
+importe la réalisation de précision du lot 43. `RelativePathPresentation`
+contient un `RelativeRefinementRun` effectivement formé et une commande de la
+grammaire fermée `RelativeRefinementRule`. Il ne contient ni point reçu,
+ni suite d'approximations fournie, ni histoire future.
+
+`next` lit la commande sur l'état reçu puis appelle une fois la reprise du
+producteur existant. `evolve` passe ce résultat complet à son appel suivant.
+Le nombre de pas borne cette récursion finie ; il n'est pas transmis à la
+commande locale ou au producteur. `resume` stocke le préfixe effectivement
+retourné, et `relative_presentation_resume_exact` prouve l'égalité du résultat
+complet entre reprise et exécution composée, pas seulement celle des nombres.
+
+Les commandes inférieure et supérieure demandent les subdivisions déclarées.
+La commande alternante lit la parité du compte de relais du numérateur reçu.
+Elle ne prétend découvrir une loi physique ni produire une décision
+imprévisible. Toutes les profondeurs finies conservent l'émission commune,
+les réceptions sources distinctes et les anciens records par le transport
+de l'histoire effectivement prolongée. Les deux nouvelles réceptions restent
+elles aussi distinctes.
+
+### 44.3. Interprétation numérique et accords construits
+
+`numeric.approximate n` est la lecture relative du préfixe effectivement
+produit à profondeur `n`. Les bornes emboîtées du producteur donnent
+`relative_evolution_future_close`, puis `relative_evolution_cauchy` pour deux
+profondeurs arbitraires assez grandes. Le module explicite est le dénominateur
+de la précision rationnelle positive demandée. `realizePrecision` construit
+un préfixe et sa preuve de borne sans demander une liste ou une hypothèse de
+suffisance extérieure. Ce module est suffisant, pas annoncé optimal.
+
+`resumptionAgreement` construit un accord numérique positif entre la famille
+et toute reprise depuis un préfixe retourné. La commande inférieure conserve
+la borne inférieure ; la commande supérieure approche la borne supérieure.
+Les accords avec ces bornes sont construits avec leurs modules. La commande
+supérieure sur la subdivision inférieure et la commande inférieure sur la
+subdivision supérieure ont alors un accord à leur frontière numérique commune,
+obtenu à partir des comptes des deux subdivisions effectivement réalisées.
+Ce n'est ni une égalité des réceptions riches ni une autorisation physique
+de regroupement.
+
+[ProductivePresentationChecks](../../Tests/Relativity/ProductivePresentationChecks.lean)
+importe seulement l'API publique et ferme les témoins sur le candidat reçu
+zéro/un. Il vérifie les raccords complets, les sources et les records, toute
+précision positive, Cauchy, la reprise et les accords de frontière. Deux
+commandes agissent différemment sur le même préfixe ; la lecture alternante
+à profondeur zéro diffère de celle à profondeur un. Il ne s'agit donc pas
+d'une suite numérique constante substituée aux lectures produites.
+Le smoke exécutable de trois pas retourne les comptes cinq/huit et dix-huit
+productions nouvelles. Il n'est pas une mesure physique ou de complexité.
+
+Une demande numérique indépendante peut refaire son préfixe depuis le
+préfixe stocké. Seule la reprise explicite conserve le résultat déjà obtenu
+pour calculer le suffixe. Aucun cache global ou coût nul de consultation
+n'est affirmé. Le parcours de référence double encore par subdivision.
+
+Ces trois commandes construisent des familles idéales instrumentales et
+leurs accords. Elles ne caractérisent pas tous les points du continu, ne
+ferment pas les localisations physiques de R4.2 et ne reconstruisent pas
+la structure relativiste de R4-R7. L'accord numérique reste un readout aval,
+pas une identification des sources ou l'oubli d'effets révélables par le
+contrat. La cible, les contrats et les fondations restent inchangés.
+
+### 44.4. Vérification de la réalisation livrée
+
+Le build public passe sur 256 jobs. Les gates complètes Bash et PowerShell
+natif Windows passent toutes deux : 320 fichiers Lean, build de 322 jobs,
+23 fixtures de rejet attendu vérifiées à leur site et pour leur diagnostic.
+Aucun avertissement Lean n'est présent. Le balayage exhaustif porte sur
+27 254 constantes de 319 modules, avec 364 exceptions générées par le
+compilateur et aucune dépendance axiomatique écrite à la main. Les 255
+modules de production sont atteignables et leur stratification est imposée,
+sans orphelin. Le message Git de conversion future LF/CRLF de l'inventaire
+n'est pas un avertissement Lean.
+
+L'inspection locale du C généré résout les définitions par leur nom complet
+et leur artifact propriétaire. `next` appelle une fois la commande puis une
+fois la reprise existante ; `evolve` appelle cette tête avec deux arguments,
+sans horizon. `realize`, `resume` et `realizePrecision` ont chacun un appel
+au réalisateur approprié. L'approximation numérique appelle effectivement
+`realize` puis lit le chemin produit : une consultation indépendante n'est
+donc pas présentée comme gratuite. La commande alternante lit le compte
+de relais reçu, tandis que le module de précision n'exécute pas de préfixe.
+Aucun appel dynamique n'apparaît dans les huit corps locaux inspectés.
+Ce contrôle borné ne constitue ni une borne de coût total, ni une mesure
+physique, ni un audit indépendant.
+
+Le script d'inspection a été figé et haché avant le run ; son empreinte
+SHA-256 est `F6A0D4B616FF68CC8A40E77A1DF622D606026AA2F5127FAE7D07884F365C2A15`.
+Le script et les logs restent hors du dépôt. Les contrôleurs de production
+et leurs règles ne sont pas modifiés ; leurs contrôles antérieurs de partage,
+de routage et de continuation passent dans les deux gates.
+
+La comparaison avec le début du lot compte deux ajouts, quatre modifications,
+410 fichiers inchangés et aucune suppression. Les quatre fondations, les
+anciens producteurs, contrats et lecteurs, le maître, la machine, les autres
+lots, la toolchain, le manifeste, le registre et les figures sont inchangés.
+L'inventaire reçoit une ligne de strate H11 ; le balayage importe le nouveau
+client. La section 1 demeure identique et les 92 liens locaux du plan sont
+valides. Les statuts de revue du registre restent inchangés. Aucun commit,
+push, changement de branche ou audit extérieur n'est effectué dans ce lot.
+
+## 45. Fenêtres ouvertes et recouvrements des familles produites
+
+### 45.1. Obligation fixée avant implementation
+
+Raccorder les fenêtres instrumentales ouvertes existantes aux familles du
+lot 44. Un certificat doit contenir le préfixe effectivement réalisé, son
+raccord complet au générateur et l'inclusion stricte de tout son intervalle
+de précision, pas seulement celle de la valeur à un indice choisi. Les
+subdivisions suivantes doivent préserver ce certificat et les anciennes
+sources par leurs transports. Construire la restriction, l'intersection
+réalisée et les passages positifs dans les deux sens d'une reprise.
+
+Une recherche à budget fini inspectera ces préfixes dans l'ordre et ne
+rejouera pas leurs producteurs. Elle devra retourner soit un certificat,
+soit le préfixe terminal réellement produit et la preuve que les indices
+inspectés ne certifient pas la fenêtre. Cette seconde sortie ne sera pas
+présentée comme une impossibilité globale ou la décision d'une comparaison
+de réels.
+
+Un recouvrement fini à fenêtres strictement chevauchantes doit sélectionner
+une feuille pour toute famille déjà certifiée dans la fenêtre grossière.
+Calculer une précision suffisante depuis le chevauchement rationnel,
+raffiner depuis le préfixe stocké, puis lire la branche sur ce résultat.
+Ne pas fournir la branche, le point limite ou une liste de combinaisons.
+La sélection conserve le préfixe produit et sa dérivation de feuille ; sa
+restriction retrouve la garantie grossière sur ce même résultat, pas
+l'égalité avec un ancien certificat avant les nouvelles productions.
+
+La nouvelle interface reste instrumentale : ses fenêtres ne constituent
+pas des voisinages physiques par leur seul nom. L'invariance sous tout
+accord numérique entre familles différentes, la couverture du domaine
+physique et les obligations relativistes de R4-R7 restent distinctes.
+Les contrats, les anciens producteurs et la cible de la section 1 ne sont
+pas modifiés. Le lot 44 non commité est préservé.
+
+### 45.2. Certificats sur les productions, restriction et reprise
+
+[ProductivePresentationWindows](../../RelationalPerimeter/Relativity/Production/ProductivePresentationWindows.lean)
+consomme les familles du lot 44 et les fenêtres instrumentales existantes.
+`ProductiveWindowCertificate` contient une profondeur, le résultat complet
+effectivement réalisé, son égalité au préfixe canonique et deux inégalités
+strictes encadrant son intervalle fermé. Toute lecture rationnelle entre
+ces bornes appartient à la fenêtre ouverte. Toutes les lectures suivantes
+de la même famille y restent par l'emboîtement effectivement prouvé.
+Un certificat est construit au départ pour toute famille, dans une fenêtre
+calculée depuis son intervalle initial et son échelle positive.
+
+`advance` prolonge une fois le résultat reçu. `restrict` conserve ce résultat
+et compose les bornes de fenêtres. `common` prolonge le premier résultat
+jusqu'à la somme des deux profondeurs et produit un certificat dans
+l'intersection. L'autre prolongement sert uniquement à la preuve du raccord
+complet et n'est pas une deuxième exécution du producteur dans le runtime.
+Les passages `toResumed` et `fromResumed` donnent positivement les deux sens
+de l'existence d'un certificat après une reprise arbitraire. Le premier
+effectue un suffixe, le second réutilise le résultat reçu. L'équivalence
+propositionnelle ne masque pas ces constructions exécutables dans `Type`.
+
+### 45.3. Recherche bornée et recouvrement effectivement sélectionné
+
+`searchProductiveWindowFrom` inspecte d'abord l'intervalle du préfixe reçu.
+Lorsqu'il n'est pas certifié et qu'il reste du budget, elle exécute une tête
+locale et donne son résultat au suffixe. Au plus `fuel` subdivisions nouvelles
+et `fuel + 1` inspections d'intervalles sont autorisées ; ce compte ne mesure
+pas les opérations internes des producteurs ou de l'arithmétique.
+Le succès porte son certificat et une borne de profondeur construite.
+L'épuisement porte le préfixe terminal exact et une preuve d'échec pour
+toutes les profondeurs inspectées. `resumeSearch` réutilise ce résultat et
+réinspecte son intervalle avant de produire un nouveau suffixe. Aucun échec
+fini n'est traduit en impossibilité globale ou comparaison décidée de réels.
+
+Pour une division strictement chevauchante, `strictReadingGap` construit une
+précision positive dont la valeur est exactement la différence des coupures.
+Sa moitié fournit un budget fini suffisant au producteur existant, sans
+hypothèse de suffisance extérieure. `chooseProductive` raffine le préfixe
+stocké puis lit la borne supérieure réellement produite. Si cette borne est
+strictement sous la coupure supérieure, elle certifie la fenêtre gauche ;
+sinon, la borne de précision et le chevauchement certifient la droite.
+Les deux sorties portent littéralement le même résultat complet raffiné,
+avec la même profondeur. La branche n'est pas une donnée d'entrée.
+
+`InstrumentalReadingCover.selectProductive` consomme structurellement un
+recouvrement fini arbitraire et ne parcourt que la branche sélectionnée.
+Il retourne sa fenêtre, sa dérivation de feuille et le certificat produit.
+`productive_cover_extends_only_its_received_prefix` prouve que le résultat
+est un prolongement complet du préfixe reçu, et pas un préfixe reconstruit
+depuis l'origine. Sa restriction conserve ce nouveau résultat. Les lectures
+ultérieures restent dans la feuille sélectionnée ; les transports de
+l'histoire conservent les sources distinctes et les anciens records.
+La dérivation de feuille peut conserver le recouvrement fourni au runtime :
+aucune minimalité de mémoire ni borne efficace de coût n'est affirmée.
+
+[ProductiveWindowChecks](../../Tests/Relativity/ProductiveWindowChecks.lean)
+importe uniquement la racine publique. Il construit le préfixe reçu zéro/un,
+les fenêtres et leur chevauchement, puis ferme les certificats des trois
+commandes. Il vérifie toute reprise, les raccords complets, toute sélection
+finie, les sources et les records conservés. Une seule lecture intérieure
+ne suffit pas à certifier un intervalle dont la borne supérieure est exclue.
+Le budget zéro échoue ; une production inférieure certifie la même fenêtre.
+La recherche peut reprendre après cet échec. La commande supérieure garde
+sa borne exclue à toute profondeur finie. Sur le même recouvrement, les
+commandes inférieure et supérieure sélectionnent respectivement gauche et
+droite depuis leurs résultats effectivement produits. Ces faits finis sont
+aussi prouvés par réduction dans le noyau ; le smoke compilé reste seulement
+un contrôle d'exécutabilité, pas une mesure physique ou de complexité.
+
+Les fenêtres restent un readout instrumental aval. Ce lot ne les rebaptise
+pas voisinages physiques et ne fournit pas la topologie relativiste comme
+entrée primitive. L'invariance sous tout accord numérique entre familles
+différentes, les localisations physiques et R4-R7 restent à établir. Il ne
+modifie ni la cible de la section 1 ni les contrats autorisant le regroupement.
+
+### 45.4. Vérification du lot
+
+Le module et les clients compilent sans axiomes écrits. L'inspection locale
+du C généré vérifie les corps nommés, leurs artifacts propriétaires, le
+passage du résultat de la tête au suffixe et la reprise du préfixe épuisé.
+Le sélecteur comporte un appel au choix et deux sites récursifs alternatifs,
+pas deux appels simultanés annoncés comme un. Aucun appel dynamique ni
+reconstruction par `realize` n'apparaît dans les sept corps locaux inspectés.
+Ce contrôle n'est pas une analyse transitive de coût ou de mémoire.
+
+Le script local V2 a été figé et haché avant exécution ; SHA-256 :
+`E23CB40B6CEF3C62F0A2EAE5D7D9B89106DF8889141ADCEBE8FC2C6CC58D5441`.
+La première version s'arrêtait à l'import du contrôleur, avant toute
+inspection ; elle n'est pas une preuve de réussite. Les scripts et leurs
+logs restent hors du dépôt, sans remplacer les contrôleurs de production.
+
+La construction publique finale passe avec 257 jobs. Les deux gates
+complètes, Bash et PowerShell natif Windows, passent sur les mêmes 322
+fichiers Lean : 324 jobs, aucun avertissement Lean, 23 fixtures rejetées
+pour leurs diagnostics et sites attendus. Le balayage complet contrôle
+27 450 constantes de 321 modules : 364 exceptions générées, aucune
+dépendance axiomatique écrite à la main. Les 256 modules de production
+sont accessibles et couverts par l'inventaire, sans module orphelin.
+Les contrôles existants de partage, routage, continuation, import et
+documentation passent également.
+
+La comparaison avec le début de ce lot compte deux ajouts, quatre
+modifications, 412 fichiers inchangés et aucune suppression. Les deux
+fichiers propres au lot 44 sont conservés octet pour octet. Les quatre
+fondations, les anciens producteurs, contrats et lecteurs, le maître,
+la machine, la toolchain, le manifeste, le registre et les figures sont
+inchangés. La section 1 reste identique ; les 94 liens locaux du plan
+sont valides et le diff ne contient pas de défaut d'espacement. Aucun
+commit, push, changement de branche ni audit extérieur n'est effectué.
+Ces vérifications ferment le lot instrumental 45, pas les obligations
+physiques R4-R7 ni la cible relativiste finale.

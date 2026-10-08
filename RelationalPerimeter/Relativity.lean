@@ -13,6 +13,7 @@ import RelationalPerimeter.Relativity.Production.RecurringFutures
 import RelationalPerimeter.Relativity.Production.ProducedReadingLaws
 import RelationalPerimeter.Relativity.Production.RealizedRelativePaths
 import RelationalPerimeter.Relativity.Production.RelativePathPrecision
+import RelationalPerimeter.Relativity.Production.ProductiveRelativePresentations
 import RelationalPerimeter.Relativity.Production.TransportedRecurringRequests
 import RelationalPerimeter.Relativity.Production.GroupedRecurringContinuation
 import RelationalPerimeter.Relativity.Production.ConstitutedDescriptions
@@ -24,6 +25,7 @@ import RelationalPerimeter.Relativity.Production.ConstitutedReadingConstraints
 import RelationalPerimeter.Relativity.Production.InstrumentalReadingCovers
 import RelationalPerimeter.Relativity.Production.ConjunctiveReadingCovers
 import RelationalPerimeter.Relativity.Production.PreciseReadingRefinements
+import RelationalPerimeter.Relativity.Production.ProductivePresentationWindows
 import RelationalPerimeter.Relativity.Production.ReadingCompatibility
 import RelationalPerimeter.Relativity.Production.ContinuedReadingCovers
 import RelationalPerimeter.Relativity.Production.RestrictedReadingCovers
@@ -127,9 +129,35 @@ halved span. Finite resumption preserves request order and can meet every
 positive rational precision through a constructed executable witness.
 The reference path itself doubles per request;
 no efficient cost bound or physical localization is inferred from this law.
+Closed local rules now generate coherent families of actual finite prefixes.
+Their numerical Cauchy readouts have explicit moduli and positive agreements
+under resumption. The upper rule on the lower subdivision and the lower rule
+on the upper subdivision agree at their common numerical boundary.
+These are ideal instrumental presentations, not physical points or
+coverage of all continuous localizations. Independent depth queries can run
+their prefixes; explicit resume alone reuses a stored returned prefix.
+Open instrumental windows now certify complete produced brackets. Finite
+search returns either an actual certified prefix or a resumable exhausted
+budget. Overlapping covers compute a sufficient precision and select a leaf
+from its returned bracket, without supplying a completed numerical limit.
+Restriction keeps this newly produced prefix, not the old pre-refinement
+state. All its later readings remain inside the selected window. These
+windows are not physical neighborhoods or an erasure of source distinctions.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Relativity.Production.searchProductiveWindowFrom
+#print axioms RelationalPerimeter.Relativity.Production.ProductiveWindowExhaustion.resumeSearch
+#print axioms RelationalPerimeter.Relativity.Production.productive_window_resumption_iff
+#print axioms RelationalPerimeter.Relativity.Production.productive_split_data_exact
+#print axioms RelationalPerimeter.Relativity.Production.productive_cover_extends_only_its_received_prefix
+#print axioms RelationalPerimeter.Relativity.Production.productive_cover_has_no_later_escape
+#print axioms RelationalPerimeter.Relativity.Production.RelativePathPresentation.realize
+#print axioms RelationalPerimeter.Relativity.Production.RelativePathPresentation.realizePrecision
+#print axioms RelationalPerimeter.Relativity.Production.RelativePathPresentation.numeric
+#print axioms RelationalPerimeter.Relativity.Production.RelativePathPresentation.resumptionAgreement
+#print axioms RelationalPerimeter.Relativity.Production.relative_presentation_resume_exact
+#print axioms RelationalPerimeter.Relativity.Production.relative_children_boundary_agreement
 #print axioms RelationalPerimeter.Relativity.Production.refineRelativePaths
 #print axioms RelationalPerimeter.Relativity.Production.relative_refinement_chain_keeps_sources
 #print axioms RelationalPerimeter.Relativity.Production.relative_refinement_requested_order
