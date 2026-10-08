@@ -10,6 +10,8 @@ import RelationalPerimeter.Relativity.Production.TransportedInfluences
 import RelationalPerimeter.Relativity.Production.ArrivalComparisons
 import RelationalPerimeter.Relativity.Production.InstrumentFutures
 import RelationalPerimeter.Relativity.Production.RecurringFutures
+import RelationalPerimeter.Relativity.Production.ProducedReadingLaws
+import RelationalPerimeter.Relativity.Production.RealizedRelativePaths
 import RelationalPerimeter.Relativity.Production.TransportedRecurringRequests
 import RelationalPerimeter.Relativity.Production.GroupedRecurringContinuation
 import RelationalPerimeter.Relativity.Production.ConstitutedDescriptions
@@ -22,6 +24,8 @@ import RelationalPerimeter.Relativity.Production.InstrumentalReadingCovers
 import RelationalPerimeter.Relativity.Production.ConjunctiveReadingCovers
 import RelationalPerimeter.Relativity.Production.PreciseReadingRefinements
 import RelationalPerimeter.Relativity.Production.ReadingCompatibility
+import RelationalPerimeter.Relativity.Production.ContinuedReadingCovers
+import RelationalPerimeter.Relativity.Production.RestrictedReadingCovers
 
 /-!
 The numerical prerequisites and first declared local-production candidate.
@@ -92,9 +96,36 @@ Two realized finite descriptions now construct a common refinement with exact
 returns to both sets of certificates. Positive windows separate different
 constituted numerical readings. All window or conjunctive admissions determine
 only those values, not source identity, attached effects or physical location.
+Finite cover substitutions now resume from the recorded leaf and its actual
+certificate, without repeating the earlier decisions. Whole selections agree
+with composed covers, return all coarse certificates and commute with the
+same presentation transports and cached continuation. Finite descriptive
+courses consume each preceding returned choice; they are not physical runs.
+Realized intersections also return to received, possibly noncanonical cover
+choices without selecting them again. Subsequent cover resumption consumes
+those returned certificates and preserves the whole result under the same
+transports and cached continuations. This is descriptive restriction only.
+The stored positive formations now yield numerical derivations from their
+actual received root, without replaying any producer. Every finite recurring
+suffix of the zero-reading/unit-calibration candidate keeps integral readings;
+the open numerical interval from zero to one is unattainable by those laws.
+This is a limitation of that declared instrument candidate, not a physical
+localization theorem or an impossibility result about the framework.
+Another downstream reader now compares two actually received unit-calibrated
+paths from one emission. It computes a relative reading with its actual
+reference path, has an exact measured-ratio law, and keeps both reception
+sources and rich path records. A shared finite executor realizes arbitrary
+nonnegative rational path ratios without changing the integral raw readings.
+Its continuation transports the recorded reader from the actual returned
+cursor. These relative instrumental readings are not spacetime coordinates
+or a completed family of continuous physical localizations.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Relativity.Production.RelativePathReading.measured_ratio_exact
+#print axioms RelationalPerimeter.Relativity.Production.realizeRelativeReading
+#print axioms RelationalPerimeter.Relativity.Production.realized_relative_reading_exact
+#print axioms RelationalPerimeter.Relativity.Production.relative_continuation_value_exact
 #print axioms RelationalPerimeter.Relativity.Production.DescriptionPath.reads
 #print axioms RelationalPerimeter.Relativity.Production.DescriptionPath.arrival
 #print axioms RelationalPerimeter.Relativity.Production.DescriptionPath.used
@@ -206,4 +237,21 @@ only those values, not source identity, attached effects or physical location.
 #print axioms RelationalPerimeter.Relativity.Production.numeric_separator_admissions
 #print axioms RelationalPerimeter.Relativity.Production.numerical_readers_determine_values
 #print axioms RelationalPerimeter.Relativity.Production.joint_numerical_readers_determine_values
+#print axioms RelationalPerimeter.Relativity.Production.composed_cover_selection_is_resumption
+#print axioms RelationalPerimeter.Relativity.Production.resumed_cover_keeps_the_prefix
+#print axioms RelationalPerimeter.Relativity.Production.composed_joint_substitution_flattens_exactly
+#print axioms RelationalPerimeter.Relativity.Production.resumed_joint_cover_returns_every_source
+#print axioms RelationalPerimeter.Relativity.Production.cover_course_selection_is_exact
+#print axioms RelationalPerimeter.Relativity.Production.cover_course_returns_every_source
+#print axioms RelationalPerimeter.Relativity.Production.cover_course_continuation_square
+#print axioms RelationalPerimeter.Relativity.Production.recorded_intersection_returns_both_certificates
+#print axioms RelationalPerimeter.Relativity.Production.intersection_recovers_the_recorded_choice
+#print axioms RelationalPerimeter.Relativity.Production.intersection_resumption_is_exact
+#print axioms RelationalPerimeter.Relativity.Production.intersection_course_is_exact
+#print axioms RelationalPerimeter.Relativity.Production.intersection_course_continuation_square
+#print axioms RelationalPerimeter.Relativity.Production.recurring_history_received_root
+#print axioms RelationalPerimeter.Relativity.Production.recurring_requests_generated_reading
+#print axioms RelationalPerimeter.Relativity.Production.ReadingGeneration.integral
+#print axioms RelationalPerimeter.Relativity.Production.generated_unit_reading_gap
+#print axioms RelationalPerimeter.Relativity.Production.recurring_unit_history_ne_half
 /- AXIOM_AUDIT_END -/

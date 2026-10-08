@@ -388,6 +388,232 @@ theorem the_separation_follows_the_cached_first_history :
       numericWindowAdmitted ((attached (Rational.ofNat 3)).prolong .root) .arrival continued.window = false :=
   numeric_separator_admissions _
 
+/- Suffix cover decisions consume the stored positive prefix choices. -/
+def leftArrivalSuffix : OverlappingWindowSplit arrivalSplit.left :=
+  ⟨Rational.zero, Rational.ofParts 3 0 1, by decide, by decide, by decide⟩
+
+def rightArrivalSuffix : OverlappingWindowSplit arrivalSplit.right :=
+  ⟨Rational.ofNat 2, Rational.ofNat 3, by decide, by decide, by decide⟩
+
+def rightComparisonSuffix : OverlappingWindowSplit comparisonSplit.right :=
+  ⟨Rational.zero, Rational.ofParts 1 0 1, by decide, by decide, by decide⟩
+
+def arrivalSuffixCovers : ReadingCoverSubstitution arrivalCover :=
+  .split (.leaf (.split leftArrivalSuffix (.identity _) (.identity _)))
+    (.leaf (.split rightArrivalSuffix (.identity _) (.identity _)))
+
+def suffixCovers : ConstraintCoverSubstitution cover :=
+  .cons arrivalSuffixCovers
+    (.cons (.split (.leaf (.identity _))
+      (.leaf (.split rightComparisonSuffix (.identity _) (.identity _)))) .nil)
+
+def oneContinued := suffixCovers.resume oneChoice
+def threeContinued := suffixCovers.resume threeChoice
+
+set_option maxRecDepth 2048 in
+theorem a_real_suffix_decision_is_taken : oneContinued.paths = [[true, true], [false, true]] := rfl
+set_option maxRecDepth 2048 in
+theorem a_different_received_reading_takes_a_different_suffix :
+    threeContinued.paths = [[false, false], [false, true]] := rfl
+
+theorem resumed_selection_is_the_whole_composed_selection :
+    suffixCovers.flatten.select oneReadings = oneContinued := composed_joint_selection_is_resumption ..
+
+theorem resumed_selection_returns_the_complete_received_source : oneContinued.restrict = oneReadings :=
+  (resumed_joint_cover_returns_every_source suffixCovers oneChoice).trans restriction_returns_all_inputs
+
+theorem resumed_selection_keeps_the_actual_values : oneContinued.refined.values = oneChoice.refined.values :=
+  resumed_joint_cover_keeps_values ..
+
+theorem resumed_selection_keeps_every_port : oneContinued.fine.map AttachedReadingConstraint.port =
+    clauses.map AttachedReadingConstraint.port := joint_cover_keeps_ports oneContinued
+
+theorem every_local_prefix_is_retained
+    {source pair head current attached port window original}
+    (substitution : @ReadingCoverSubstitution window original)
+    (chosen : @CoveredNumericReading source pair head current attached port window original) :
+    (substitution.resume chosen).leaf.branches = chosen.leaf.branches ++
+      ((substitution.atLeaf chosen.leaf).select chosen.reading).leaf.branches := resumed_cover_keeps_the_prefix ..
+
+theorem joint_substitution_composes_on_the_same_cover
+    (later : ConstraintCoverSubstitution suffixCovers.flatten) :
+    (suffixCovers.compose later).flatten = later.flatten := composed_joint_substitution_flattens_exactly ..
+
+def coverCourse : ReadingCoverCourse cover :=
+  .step suffixCovers (.step (.identity suffixCovers.flatten) .done)
+
+def courseChoice := coverCourse.run oneChoice
+
+theorem the_course_result_is_exact : coverCourse.finalCover.select oneReadings = courseChoice :=
+  cover_course_selection_is_exact ..
+
+theorem every_course_returns_its_actual_prefix (course : ReadingCoverCourse cover) :
+    (course.run oneChoice).restrict = oneReadings :=
+  (cover_course_returns_every_source course oneChoice).trans restriction_returns_all_inputs
+
+theorem a_course_suffix_consumes_the_stored_result (tail : ReadingCoverCourse suffixCovers.flatten) :
+    (ReadingCoverCourse.step suffixCovers tail).run oneChoice = tail.run oneContinued :=
+  cover_course_consumes_its_produced_choice ..
+
+theorem the_resumed_cover_transports_as_a_whole :
+    oneContinued.transport (agreement Rational.one) = suffixCovers.resume (oneChoice.transport (agreement Rational.one)) :=
+  resumed_joint_cover_transport_square ..
+
+theorem the_resumed_cover_uses_the_cached_history :
+    oneContinued.prolong extension.execution.first.history =
+      suffixCovers.resume (oneChoice.prolong extension.execution.first.history) := resumed_joint_cover_prolong_square ..
+
+theorem resumed_cover_and_shared_continuation_commute :
+    (oneContinued.prolong extension.execution.first.history).transport (extension.rich (agreement Rational.one)) =
+      (suffixCovers.resume (oneChoice.transport (agreement Rational.one))).prolong extension.execution.second.history :=
+  resumed_joint_cover_continuation_square ..
+
+theorem every_course_transports_as_a_whole (course : ReadingCoverCourse cover) :
+    (course.run oneChoice).transport (agreement Rational.one) = course.run (oneChoice.transport (agreement Rational.one)) :=
+  cover_course_transport_square ..
+
+theorem every_course_and_shared_continuation_commute (course : ReadingCoverCourse cover) :
+    ((course.run oneChoice).prolong extension.execution.first.history).transport (extension.rich (agreement Rational.one)) =
+      (course.run (oneChoice.transport (agreement Rational.one))).prolong extension.execution.second.history :=
+  cover_course_continuation_square ..
+
+def continuedPrecision := oneContinued.precise precisionRequests
+
+theorem precision_consumes_the_resumed_certificates :
+    continuedPrecision.readings.restrict continuedPrecision.refinement = oneReadings :=
+  (covered_precisions_return_the_selected_source oneContinued precisionRequests).trans
+    resumed_selection_returns_the_complete_received_source
+
+theorem precision_keeps_its_bounds_after_cover_resumption :
+    ReadingSpansBounded Analysis.Precision.unit.half continuedPrecision.fine :=
+  covered_precisions_last_bound oneContinued [Analysis.Precision.unit] Analysis.Precision.unit.half
+
+theorem incompatible_constraints_still_cannot_supply_a_choice (value : Rational)
+    (chosen : CoveredReadingConstraints (attached value) (InstrumentalConstraintCover.identity incompatible.clauses)) : False :=
+  aligned_ports_do_not_supply_a_realization value chosen.restrict.satisfied
+
+/- A received positive choice in the overlap need not be the canonical
+chooser's preferred branch. Resumption must keep it, not silently reselect.
+This is a valid descriptive input, not a second execution entry. -/
+def overlapChoice : CoveredNumericReading (attached Rational.one) .arrival arrivalSuffixCovers.flatten :=
+  ⟨leftArrivalSuffix.right, .left (.right .here), ⟨Rational.one, rfl, by decide⟩⟩
+
+def overlapResume := (ReadingCoverSubstitution.identity arrivalSuffixCovers.flatten).resume overlapChoice
+
+set_option maxRecDepth 2048 in
+theorem a_received_overlap_choice_is_not_replaced : overlapResume.leaf.branches = [true, false] := rfl
+
+set_option maxRecDepth 2048 in
+theorem replaying_the_prefix_would_change_that_received_choice :
+    (arrivalSuffixCovers.flatten.select
+      (CertifiedNumericReading.mk Rational.one (by rfl) (by decide) :
+        CertifiedNumericReading (attached Rational.one) .arrival arrivalWindow)).leaf.branches = [true, true] := rfl
+
+theorem a_replayed_prefix_cannot_equal_the_resumed_path :
+    overlapResume.leaf.branches ≠ [true, true] := by
+  rw [a_received_overlap_choice_is_not_replaced]
+  decide
+
+/- Intersections consume finer certificates without replacing recorded leaves. -/
+def recordedIntersection := oneChoice.intersect precise
+def returnedChoice := oneChoice.recoverFromIntersection recordedIntersection
+
+theorem recorded_intersection_has_two_complete_returns :
+    recordedIntersection.readings.restrict recordedIntersection.alignment.left = oneChoice.refined ∧
+      recordedIntersection.readings.restrict recordedIntersection.alignment.right = precise.readings :=
+  recorded_intersection_returns_both_certificates oneChoice precise
+
+theorem recorded_intersection_keeps_the_original_source :
+    recordedIntersection.readings.restrict (oneChoice.refinement.compose recordedIntersection.alignment.left) = oneReadings :=
+  (recorded_intersection_returns_both_coarse_sources oneChoice precise).1.trans restriction_returns_all_inputs
+
+theorem returned_choice_is_the_complete_original : returnedChoice = oneChoice :=
+  received_intersection_recovers_the_recorded_choice oneChoice recordedIntersection
+
+theorem the_suffix_consumes_the_intersection_return :
+    suffixCovers.resumeAfterIntersection oneChoice precise = suffixCovers.resume returnedChoice :=
+  resumed_intersection_consumes_the_returned_choice ..
+
+theorem the_suffix_after_intersection_is_exact :
+    suffixCovers.resumeAfterIntersection oneChoice precise = oneContinued := intersection_resumption_is_exact ..
+
+theorem every_fine_realization_keeps_the_same_recorded_choice
+    (fine : RealizedReadingRefinement (attached Rational.one) clauses) : oneChoice.recoverIntersection fine = oneChoice :=
+  intersection_recovers_the_recorded_choice ..
+
+theorem every_course_after_intersection_keeps_its_whole_result (course : ReadingCoverCourse cover) :
+    course.runAfterIntersection oneChoice precise = course.run oneChoice := intersection_course_is_exact ..
+
+theorem every_course_after_intersection_returns_the_source (course : ReadingCoverCourse cover) :
+    (course.runAfterIntersection oneChoice precise).restrict = oneReadings :=
+  (intersection_course_returns_every_source course oneChoice precise).trans restriction_returns_all_inputs
+
+theorem the_returned_choice_transports_as_a_whole :
+    returnedChoice.transport (agreement Rational.one) =
+      (oneChoice.transport (agreement Rational.one)).recoverIntersection (precise.transport (agreement Rational.one)) :=
+  intersection_return_transport_square ..
+
+theorem the_suffix_after_intersection_uses_the_cached_history :
+    (suffixCovers.resumeAfterIntersection oneChoice precise).prolong extension.execution.first.history =
+      suffixCovers.resumeAfterIntersection (oneChoice.prolong extension.execution.first.history)
+        (precise.prolong extension.execution.first.history) := intersection_resumption_prolong_square ..
+
+theorem the_suffix_after_intersection_and_continuation_commute :
+    ((suffixCovers.resumeAfterIntersection oneChoice precise).prolong extension.execution.first.history).transport
+        (extension.rich (agreement Rational.one)) =
+      (suffixCovers.resumeAfterIntersection (oneChoice.transport (agreement Rational.one))
+        (precise.transport (agreement Rational.one))).prolong extension.execution.second.history :=
+  intersection_resumption_continuation_square ..
+
+theorem every_intersection_course_and_continuation_commute (course : ReadingCoverCourse cover) :
+    ((course.runAfterIntersection oneChoice precise).prolong extension.execution.first.history).transport
+        (extension.rich (agreement Rational.one)) =
+      (course.runAfterIntersection (oneChoice.transport (agreement Rational.one))
+        (precise.transport (agreement Rational.one))).prolong extension.execution.second.history :=
+  intersection_course_continuation_square ..
+
+def recordedOverlap : CoveredReadingConstraints (attached Rational.one)
+    (InstrumentalConstraintCover.cons (port := .arrival) arrivalSuffixCovers.flatten .nil) := .cons overlapChoice .nil
+
+def overlapPrecision := recordedOverlap.precise [Analysis.Precision.unit.half]
+def overlapIntersection := recordedOverlap.intersect overlapPrecision
+def overlapReturned := recordedOverlap.recoverFromIntersection overlapIntersection
+
+theorem the_noncanonical_intersection_returns_both_inputs :
+    overlapIntersection.readings.restrict overlapIntersection.alignment.left = recordedOverlap.refined ∧
+      overlapIntersection.readings.restrict overlapIntersection.alignment.right = overlapPrecision.readings :=
+  recorded_intersection_returns_both_certificates ..
+
+theorem a_noncanonical_choice_is_recovered_as_a_whole : overlapReturned = recordedOverlap :=
+  received_intersection_recovers_the_recorded_choice ..
+
+set_option maxRecDepth 2048 in
+theorem intersection_return_keeps_the_noncanonical_leaf : overlapReturned.paths = [[true, false]] := by
+  rw [a_noncanonical_choice_is_recovered_as_a_whole]
+  rfl
+
+theorem reselecting_cannot_replace_the_noncanonical_intersection_return : overlapReturned.paths ≠ [[true, true]] := by
+  rw [intersection_return_keeps_the_noncanonical_leaf]
+  decide
+
+theorem the_actual_intersection_keeps_the_fine_precision :
+    ReadingSpansBounded Analysis.Precision.unit.half overlapIntersection.alignment.clauses :=
+  span_bounds_survive_refinement overlapIntersection.alignment.right Analysis.Precision.unit.half
+    (covered_precisions_last_bound recordedOverlap [] Analysis.Precision.unit.half)
+
+theorem the_stored_intersection_is_consumed_without_rebuilding :
+    returnedChoice = oneChoice.withReadings
+      (recordedIntersection.readings.restrict recordedIntersection.alignment.left) :=
+  received_intersection_return_consumes_its_certificates ..
+
+theorem the_new_suffix_accepts_the_stored_intersection :
+    suffixCovers.resumeFromIntersection oneChoice recordedIntersection = oneContinued :=
+  stored_intersection_resumption_is_exact ..
+
+theorem every_course_accepts_the_stored_intersection (course : ReadingCoverCourse cover) :
+    course.runFromIntersection oneChoice recordedIntersection = course.run oneChoice :=
+  stored_intersection_course_is_exact ..
+
 end Tests.Relativity.ConjunctiveCoverChecks
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms Tests.Relativity.ConjunctiveCoverChecks.arrivals
@@ -476,4 +702,64 @@ end Tests.Relativity.ConjunctiveCoverChecks
 #print axioms Tests.Relativity.ConjunctiveCoverChecks.the_separating_window_survives_reference_transport
 #print axioms Tests.Relativity.ConjunctiveCoverChecks.transported_separation_still_admits_and_refuses
 #print axioms Tests.Relativity.ConjunctiveCoverChecks.the_separation_follows_the_cached_first_history
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.leftArrivalSuffix
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.rightArrivalSuffix
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.rightComparisonSuffix
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.arrivalSuffixCovers
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.suffixCovers
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.oneContinued
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.threeContinued
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.a_real_suffix_decision_is_taken
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.a_different_received_reading_takes_a_different_suffix
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.resumed_selection_is_the_whole_composed_selection
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.resumed_selection_returns_the_complete_received_source
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.resumed_selection_keeps_the_actual_values
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.resumed_selection_keeps_every_port
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.every_local_prefix_is_retained
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.joint_substitution_composes_on_the_same_cover
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.coverCourse
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.courseChoice
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.the_course_result_is_exact
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.every_course_returns_its_actual_prefix
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.a_course_suffix_consumes_the_stored_result
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.the_resumed_cover_transports_as_a_whole
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.the_resumed_cover_uses_the_cached_history
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.resumed_cover_and_shared_continuation_commute
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.every_course_transports_as_a_whole
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.every_course_and_shared_continuation_commute
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.continuedPrecision
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.precision_consumes_the_resumed_certificates
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.precision_keeps_its_bounds_after_cover_resumption
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.incompatible_constraints_still_cannot_supply_a_choice
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.overlapChoice
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.overlapResume
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.a_received_overlap_choice_is_not_replaced
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.replaying_the_prefix_would_change_that_received_choice
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.a_replayed_prefix_cannot_equal_the_resumed_path
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.recordedIntersection
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.returnedChoice
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.recorded_intersection_has_two_complete_returns
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.recorded_intersection_keeps_the_original_source
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.returned_choice_is_the_complete_original
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.the_suffix_consumes_the_intersection_return
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.the_suffix_after_intersection_is_exact
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.every_fine_realization_keeps_the_same_recorded_choice
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.every_course_after_intersection_keeps_its_whole_result
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.every_course_after_intersection_returns_the_source
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.the_returned_choice_transports_as_a_whole
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.the_suffix_after_intersection_uses_the_cached_history
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.the_suffix_after_intersection_and_continuation_commute
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.every_intersection_course_and_continuation_commute
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.recordedOverlap
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.overlapPrecision
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.overlapIntersection
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.overlapReturned
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.the_noncanonical_intersection_returns_both_inputs
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.a_noncanonical_choice_is_recovered_as_a_whole
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.intersection_return_keeps_the_noncanonical_leaf
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.reselecting_cannot_replace_the_noncanonical_intersection_return
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.the_actual_intersection_keeps_the_fine_precision
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.the_stored_intersection_is_consumed_without_rebuilding
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.the_new_suffix_accepts_the_stored_intersection
+#print axioms Tests.Relativity.ConjunctiveCoverChecks.every_course_accepts_the_stored_intersection
 /- AXIOM_AUDIT_END -/

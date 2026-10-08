@@ -196,6 +196,48 @@ theorem path_effect_remains_future_distinguishable :
   cases separated
 
 -- Smoke evaluations of compiled definitions; no timing or physical claim.
+theorem actual_received_root : start.formation.receivedRoot = input := rfl
+
+/-- Every address in the actual final cursor, not just transported old ports
+or a fixed request schedule. The witnesses are executable numerical data. -/
+def every_finite_suffix_integral (requests : List RecurringRequest)
+    (ref : Ref (runRecurringRequests start requests).cursor.kinds .reading) :
+    IntegralReading ((runRecurringRequests start requests).cursor.read ref) :=
+  (recurring_requests_generated_reading start requests ref).integral rfl rfl
+
+theorem every_finite_suffix_excludes_half (requests : List RecurringRequest)
+    (ref : Ref (runRecurringRequests start requests).cursor.kinds .reading) :
+    (runRecurringRequests start requests).cursor.read ref ≠ Rational.ofParts 1 0 1 :=
+  recurring_unit_history_ne_half (runRecurringRequests start requests).history rfl rfl ref
+
+theorem every_finite_suffix_has_a_numerical_gap (requests : List RecurringRequest)
+    (ref : Ref (runRecurringRequests start requests).cursor.kinds .reading) :
+    Rational.Le ((runRecurringRequests start requests).cursor.read ref) Rational.zero ∨
+      Rational.Le Rational.one ((runRecurringRequests start requests).cursor.read ref) :=
+  generated_unit_reading_gap (recurring_requests_generated_reading start requests ref) rfl rfl
+
+theorem every_finite_suffix_cannot_realize_the_open_window (requests : List RecurringRequest)
+    (ref : Ref (runRecurringRequests start requests).cursor.kinds .reading) :
+    ¬ (ReadingWindow.mk Rational.zero Rational.one).Contains
+      ((runRecurringRequests start requests).cursor.read ref) := by
+  intro inside
+  cases every_finite_suffix_has_a_numerical_gap requests ref with
+  | inl below => exact inside.1.2 (Rational.le_antisymm inside.1.1 below)
+  | inr above => exact inside.2.2 (Rational.le_antisymm inside.2.1 above)
+
+def actual_second_comparison_integral : IntegralReading secondComparison.determination.1 :=
+  (secondComparison.successor.generatedReading .here).integral rfl rfl
+
+def stored_session_integral : IntegralReading (session.cursor.read (.prior .here)) :=
+  (session.generatedReading (.prior .here)).integral rfl rfl
+
+theorem diagnostic_keeps_both_positive_sources (requests : List RecurringRequest) :
+    (recurringHistoryTransport (runRecurringRequests start requests).history).references startingPair.first ≠
+      (recurringHistoryTransport (runRecurringRequests start requests).history).references startingPair.second :=
+  recurring_requests_preserve_distinction start requests startingPair.first startingPair.second startingPair.distinct
+
+#eval (actual_second_comparison_integral.balance.positive, actual_second_comparison_integral.balance.negative)
+#eval (stored_session_integral.balance.positive, stored_session_integral.balance.negative)
 #eval (recurringEnabled start (.compare 0 1), recurringEnabled start (.compare 3 1))
 #eval (StrongPerimetralTurning.History.length session.history,
   StrongPerimetralTurning.History.length (repeatRecurringPair startingPair 40).history)
@@ -233,4 +275,12 @@ end Tests.Relativity.RecurringInteractionChecks
 #print axioms Tests.Relativity.RecurringInteractionChecks.repeated_reads_do_not_reexecute
 #print axioms Tests.Relativity.RecurringInteractionChecks.same_present_reading_different_path
 #print axioms Tests.Relativity.RecurringInteractionChecks.path_effect_remains_future_distinguishable
+#print axioms Tests.Relativity.RecurringInteractionChecks.actual_received_root
+#print axioms Tests.Relativity.RecurringInteractionChecks.every_finite_suffix_integral
+#print axioms Tests.Relativity.RecurringInteractionChecks.every_finite_suffix_excludes_half
+#print axioms Tests.Relativity.RecurringInteractionChecks.every_finite_suffix_has_a_numerical_gap
+#print axioms Tests.Relativity.RecurringInteractionChecks.every_finite_suffix_cannot_realize_the_open_window
+#print axioms Tests.Relativity.RecurringInteractionChecks.actual_second_comparison_integral
+#print axioms Tests.Relativity.RecurringInteractionChecks.stored_session_integral
+#print axioms Tests.Relativity.RecurringInteractionChecks.diagnostic_keeps_both_positive_sources
 /- AXIOM_AUDIT_END -/

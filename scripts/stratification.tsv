@@ -52,9 +52,12 @@ RelationalPerimeter.Relativity.Production.TransportedRequests	H6	enforced	Comple
 RelationalPerimeter.Relativity.Production.TransportedInfluences	H6	enforced	Two-way preservation of permitted local influence and its execution schedule through exact occurrence transports
 RelationalPerimeter.Relativity.Production.ArrivalContexts	H5	enforced	Positive actual receptions and exact arrival resolution from stored productions without replay
 RelationalPerimeter.Relativity.Production.ArrivalComparisons	H6	enforced	Declared two-arrival instrumental interaction with same-support formation shared execution and actual continuations
+RelationalPerimeter.Relativity.Production.RelativePathReadings	H7	enforced	Relative instrumental reader from two actual common-origin received unit-calibrated paths with measured ratio law and exact stored history transport
+RelationalPerimeter.Relativity.Production.RealizedRelativePaths	H8	enforced	Closed shared finite executor realizes relative path readings from one emission and resumes their actual cursor with preserved paths and source distinctions
 RelationalPerimeter.Relativity.Production.InstrumentFutures	H7	enforced	Explicit post-comparison request contract with shared productions exact finite futures refusals and retained source distinctions
 RelationalPerimeter.Relativity.Production.RecurringInteractions	H7	enforced	Prefix-licensed repeated comparisons of actual receptions on the same support and exact occurrence and used-dependency continuation
 RelationalPerimeter.Relativity.Production.RecurringFutures	H8	enforced	Fixed repeated-comparison contract with positive admissions exact refusals shared responses and arbitrary finite futures
+RelationalPerimeter.Relativity.Production.ProducedReadingLaws	H9	enforced	Numerical derivations from actual stored formation and received root with integral reading gap for every finite zero-unit recurring history without producer replay
 RelationalPerimeter.Relativity.Production.RecurringPresentation	H8	enforced	Positive reversible presentation of actual receptions and used dependencies extended by cached recurring productions
 RelationalPerimeter.Relativity.Production.TransportedRecurringRequests	H9	enforced	Complete recurring request contract through current occurrence addresses with exact admissions refusals shared heads and actual continuation
 RelationalPerimeter.Relativity.Production.DiscoveredExchange	H9	enforced	Executed old-port recognizer and positive fresh-port refusal with exchange of cached constituted productions
@@ -69,7 +72,9 @@ RelationalPerimeter.Relativity.Production.InstrumentalReadingCovers	H17	enforced
 RelationalPerimeter.Relativity.Production.ConjunctiveReadingCovers	H18	enforced	Joint positive cover selections and realized finite intersections on the same constituted attachment with exact restrictions and cached continuation transport
 RelationalPerimeter.Relativity.Production.PreciseReadingRefinements	H19	enforced	Computed precision-bounded joint reading refinements with exact returns arbitrary finite resumption and shared continuation transports without physical location
 RelationalPerimeter.Relativity.Production.ReadingCompatibility	H20	enforced	Positive common refinements and exact separation of constituted numerical readings without identifying occurrences or physical localization
-RelationalPerimeter.Relativity	H21	enforced	Public numerical utilities and local candidate without relativistic certificate
+RelationalPerimeter.Relativity.Production.ContinuedReadingCovers	H21	enforced	Finite indexed cover substitutions and courses consume recorded leaf choices with exact complete returns and shared continuation transport without replaying prefix decisions
+RelationalPerimeter.Relativity.Production.RestrictedReadingCovers	H22	enforced	Realized intersections of recorded cover choices with finer certificates return complete stored paths and commute with cover resumption and shared continuation
+RelationalPerimeter.Relativity	H23	enforced	Public numerical utilities and local candidate without relativistic certificate
 RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement
 RelationalPerimeter.Agents.Constitutive.ProducedEvidence	A11	enforced	Constitutive agent ProducedEvidence
 RelationalPerimeter.Agents.Constitutive.State	A12	enforced	Constitutive agent State
