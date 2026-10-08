@@ -12,6 +12,7 @@ import RelationalPerimeter.Relativity.Production.InstrumentFutures
 import RelationalPerimeter.Relativity.Production.RecurringFutures
 import RelationalPerimeter.Relativity.Production.TransportedRecurringRequests
 import RelationalPerimeter.Relativity.Production.GroupedRecurringContinuation
+import RelationalPerimeter.Relativity.Production.ConstitutedDescriptions
 
 /-!
 The numerical prerequisites and first declared local-production candidate.
@@ -46,12 +47,22 @@ then executes one shared action and positively transports that same output
 and role into the other presentation, preserving the full existing contract.
 Both presented histories and their source distinctions remain available;
 this is not yet an exact memory reduction or the final physical contract.
+Occurrence-attached descriptions now incorporate cached productions and exact
+presentation changes. Complementary signal readers have common refinements
+whose restrictions need no support reread; selecting them creates no event.
+Partial reading agreement cannot erase a path still exposed by the contract.
 The calibrated signal law
 neither receives nor reconstructs a spacetime metric.
 The computation master and its contracts are unchanged.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Relativity.Production.DescriptionPath.reads
+#print axioms RelationalPerimeter.Relativity.Production.DescriptionPath.arrival
+#print axioms RelationalPerimeter.Relativity.Production.DescriptionPath.used
+#print axioms RelationalPerimeter.Relativity.Production.described_signal_common_refinement
+#print axioms RelationalPerimeter.Relativity.Production.continued_exchange_description_exact
+#print axioms RelationalPerimeter.Relativity.Production.differing_paths_separate_futures
 #print axioms RelationalPerimeter.Relativity.Analysis.Polynomial.interpretationAgreement
 #print axioms RelationalPerimeter.Relativity.Analysis.Polynomial.rationalReading
 #print axioms RelationalPerimeter.Relativity.Rational.equal_iff_agree

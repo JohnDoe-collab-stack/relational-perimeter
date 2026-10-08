@@ -3730,3 +3730,168 @@ le contrat physique final, les regroupements exacts sous ce contrat, la
 continuité, la géométrie, la dynamique et la reconstruction relativiste
 restent des obligations du plan. La cible finale de la section 1 est inchangée.
 Aucun commit, push, changement de branche ou audit externe n'est effectué.
+
+## 30. Descriptions attachées et raffinements des lecteurs
+
+### 30.1. Obligation fixée avant l'implémentation
+
+Le départ est `57db7ff72f54f53508aacd9d35aebe1eae20bfc6`, sur `relativite`.
+Ce lot poursuit les constructeurs descriptifs de R2-R3 ; il ne ferme pas le
+contrat physique final ni la reconstruction du domaine relativiste.
+
+Une description doit suivre une occurrence du support effectivement constitué.
+Sa grammaire partira de ce support, incorporera les productions déjà stockées
+et consommera les transports exacts autorisés. Ses références conserveront
+leur sorte, leurs valeurs, leurs réceptions et leurs dépendances utilisées.
+Le raccord trouvé par la recherche sera utilisé par un consommateur concret,
+y compris après la continuation partagée du lot 29. Aucun producteur ne sera
+rappelé pour former ces descriptions.
+
+Pour les signaux, trois lecteurs complémentaires porteront sur le payload,
+la lecture rationnelle et la liste des incréments effectivement enregistrés.
+Le raffinement décrit ici ajoute des lecteurs de ce contrat existant ; il
+ne prétend pas affiner une précision numérique ou produire une mesure nouvelle.
+La restriction d'une description plus riche devra fonctionner sur cette
+description seule, sans relire le support. Un raffinement commun sera construit,
+avec ses deux restrictions. Les lecteurs conjoints retrouveront exactement
+le record, sans retrouver ni identifier par là l'occurrence source.
+
+Le prolongement physique et le changement de lecteurs auront des opérations
+et indices distincts. Les preuves raccorderont restriction, transport et
+prolongement, sur toute longueur finie. Les descriptions après continuation
+consommeront les sorties et histoires reçues, pas des suffixes réexécutés.
+
+Un client public fermé montrera un échange découvert, sa continuation et
+ses descriptions raffinées. Un autre construira deux parcours ayant les mêmes
+payload et lecture finale, mais des listes d'incréments différentes ; une
+inspection future du contrat récurrent devra les distinguer. L'accord de
+lecteurs partiels ne sera jamais exporté comme autorisation d'oubli.
+
+Les deux gates, l'audit global et les contrôles du code compilé devront passer.
+Fondations, maître, machine, contrats et cibles antérieurs resteront inchangés.
+Cette demande n'autorise ni commit, ni push, ni audit externe.
+
+### 30.2. Grammaire de description sur le support constitué
+
+[ConstitutedDescriptions](../../RelationalPerimeter/Relativity/Production/ConstitutedDescriptions.lean)
+définit `DescriptionPath origin current`. Ses constructeurs sont la racine
+sur un curseur constitué, l'incorporation d'un `RecurringProduction` stocké,
+et le changement de présentation par `AddressedRecurringRaccord`. Les deux
+curseurs portent leurs formations et constitutions positives ; les références
+des occurrences ne sont jamais reconstruites depuis des valeurs numériques.
+
+`reference` compose les transports réellement reçus. `reads` conserve la
+valeur de l'occurrence ancienne et `injective` conserve ses distinctions.
+`arrival` et `used` transportent positivement les réceptions et les dépendances,
+pas seulement leurs valeurs. Le retour d'un changement de présentation retrouve
+la référence source. Il ne donne pas un inverse à une extension physique.
+
+`prolong` élimine une histoire déjà produite pour incorporer ses déterminations.
+`append` compose deux chemins descriptifs raccordés. Leurs lois de références
+et `prolong_count` portent sur toute histoire finie de longueur arbitraire.
+`producedCount` compte les incorporations de productions, pas le temps physique
+ni le coût d'évaluation. Un changement de présentation n'augmente pas cet indice.
+Ces descriptions peuvent être formées après les productions qu'elles décrivent ;
+elles ne prétendent pas refaire ni remplacer leur exécution stagewise.
+
+### 30.3. Lecteurs complémentaires et raffinement commun
+
+`SignalReaders` sélectionne les trois composantes d'un `SignalRecord` déjà
+produit : payload, lecture rationnelle et liste des incréments. `describeSignal`
+consomme un chemin et la référence de l'occurrence source, transporte cette
+référence puis lit son record conservé. `described_signal_exact` raccorde
+cette lecture à celle de l'origine constituée. Aucun record libre ne remplace
+ce record dans le constructeur descriptif.
+
+`ReaderRefinement` exprime l'inclusion des lecteurs. `SignalObservation.restrict`
+fonctionne sur l'observation reçue seule, sans chemin, support ou producteur.
+`restrict_signal_exact` et `signal_restriction_compose` prouvent ses lois.
+`SignalReaders.join` construit un raffinement commun et
+`described_signal_common_refinement` donne ses deux restrictions exactes.
+`joint_signal_readers_exact` caractérise l'accord des lecteurs complets par
+l'égalité du record, jamais par l'identité de ses occurrences sources.
+
+`described_signal_prolong` et `described_signal_reexpress` conservent ces
+descriptions lors des passages autorisés. La restriction retrouve donc les
+lectures moins riches avant ou après transport et prolongement. Il s'agit
+de lecteurs supplémentaires du cache déjà accessible dans le contrat récurrent,
+pas de précision analytique nouvelle, d'une nouvelle sonde physique ou d'une
+autorisation de supprimer de la mémoire les champs non affichés.
+
+### 30.4. Consommation de la continuation et cas fermés
+
+`continuedExchangeDescription` reçoit l'échange trouvé et un résultat de
+continuation raccordé à ses deux présentations. Il incorpore l'histoire source
+stockée, puis le raccord des curseurs finaux effectivement reçus. L'échange
+fixe les indices des présentations ; à ce stade, le consommateur utilise les
+données de la continuation, sans relire la recherche ni rappeler le runner.
+`continued_exchange_description_exact` conserve le record de l'occurrence
+source à travers ce passage.
+
+Le client [ConstitutedDescriptionChecks](../../Tests/Relativity/ConstitutedDescriptionChecks.lean)
+importe uniquement l'API publique. Il construit un relais et une réception
+sur un ancien signal, trouve leur échange et poursuit par réception,
+comparaison puis refus. Les deux productions de cette continuation sont
+incorporées dans la description ; le raffinement de lecteurs n'en ajoute
+aucune. Les réceptions et dépendances anciennes sont transportées positivement.
+Les deux signaux sources restent distincts. Les lois génériques conservent
+le record sur toute suite finie, pas seulement sur ce client.
+
+Un second cas construit deux relais d'incrément un et un relais d'incrément
+deux, avec les calibrations reçues déclarées. Payload et lecture finale sont
+identiques ; les listes d'incréments ont des longueurs différentes.
+`differing_paths_separate_inspection` construit le séparateur : l'inspection
+du signal à son adresse courante. `actual_future_reports_differ` le raccorde
+aux deux rapports réellement exécutés. L'accord partiel n'autorise donc pas
+l'oubli sous ce même contrat, sans supposer de géométrie ou d'effet de courbure.
+
+### 30.5. Calculabilité et frontière de portée
+
+La lecture des corps C des constructeurs descriptifs, de leurs restrictions
+et de leurs consommateurs confirme la réutilisation des curseurs,
+déterminations et raccords reçus. `prolong` assemble des nœuds depuis les
+déterminations stockées ; `describeSignal` transporte une référence et lit
+les valeurs du curseur ; `restrict` ne reçoit que l'observation et les lecteurs.
+Le graphe local des appels directs et des fermetures statiques comprend
+31 racines et 46 fonctions de production accessibles, sans appel à un
+producteur, au chercheur ou au calcul de différence des comparaisons.
+
+Les helpers externes sont les transports de support identité/composition
+et la lecture d'une ressource stockée. Les callbacks du raccord concret sont
+ceux de l'échange et de la continuation partagée du lot 29. Ce contrôle local
+ne prouve ni un coût total, ni une minimalité mémoire, ni l'absence de travail
+dans tous les callbacks qu'un utilisateur pourrait fournir à l'interface
+générique de transport.
+
+Ce lot ferme la grammaire descriptive attachée, les restrictions et le
+raffinement commun de ces lecteurs du record. Il ne ferme pas `LocationAgreement`,
+une précision numérique raffinable, une rencontre physique, le contrat physique
+final, un quotient de mémoire, le continuum, la géométrie ou la dynamique.
+L'accord de valeurs ne devient pas un accord de localisation. La cible finale
+de la section 1 reste inchangée.
+
+### 30.6. Vérification complète et préservation
+
+Les deux commandes `bash scripts/verify.sh` et
+`pwsh -NoProfile -File scripts/verify.ps1` réussissent sur cet état, la seconde
+sous Windows natif. Le build complet compte 296 jobs, sans avertissement Lean.
+Les gates contrôlent les mêmes 294 fichiers Lean, les blocs d'audit finaux,
+la constructivité, les frontières d'import et de migration, les contrôles
+documentaires et les contrôles existants de partage du code compilé.
+Les 238 modules de production inventoriés sont accessibles et stratifiés,
+sans orphelin ; les 23 fixtures de rejet échouent aux sites attendus.
+
+Le contrôle exhaustif porte sur 24 957 constantes de 293 modules. Les
+364 exceptions sont générées par le compilateur ; aucune déclaration écrite
+à la main ne dépend d'un axiome. Les sources nouvelles ne contiennent aucun
+terme interdit et ont chacune un unique bloc d'audit à leur fin.
+
+Le lot ajoute deux fichiers et en modifie six, sans suppression. Les
+empreintes des 382 autres fichiers présents avant l'implémentation sont
+identiques, notamment celles des quatre fondations, du maître, de la machine,
+des contrats antérieurs, des cibles canoniques et du registre scientifique.
+Les 61 liens locaux du plan sont valides et `git diff --check` est propre.
+
+Cette vérification clôt ce lot descriptif, pas le plan relativiste complet.
+Les obligations physiques énumérées en section 30.5 restent ouvertes.
+Aucun commit, push, changement de branche ou audit externe n'est effectué.
