@@ -4182,3 +4182,295 @@ complet et la reconstruction du domaine relativiste restent à construire.
 Il serait faux de déclarer R3.2 physique, le continuum, la métrique ou la
 dynamique fermés par ces accords. Aucun commit, push, changement de branche
 ou audit extérieur n'est effectué.
+
+## 33. Persistance des accords dans la continuation partagée
+
+### 33.1. Obligation fixée avant l'implémentation
+
+Le départ est `34901a824d9f77d802f41a49a9c527b1953cc07a`, sur `relativite`,
+avec un arbre propre. Ce lot poursuit les lois de R3.3 dans le candidat
+instrumental existant, sans déclarer fermé leur volet physique.
+Les accords du lot 32 doivent maintenant être transportés au long des deux
+histoires réellement produites par une continuation partagée.
+
+Prouver le carré des références : prolonger dans la première présentation
+puis changer de présentation doit retrouver la référence obtenue en changeant
+d'abord de présentation puis en suivant la seconde histoire. Le construire
+pour une production, une demande admise ou refusée, puis toute liste finie.
+Le raccord final doit être celui de cette même exécution, pas un raccord
+reconstruit depuis les valeurs observées.
+
+Le constructeur exécutable doit lier le runner partagé une fois. Les
+attachements, leurs accords et les descriptions observées consommeront ses
+histoires stockées. Les reprises doivent partir des curseurs qu'il produit ;
+la composition des historiques utilisera leurs suffixes stockés. Distinguer
+le nombre de productions de la sélection des lecteurs. Prouver l'accord des
+restrictions et du raffinement commun après continuation, sans nouvelle
+production et sans autoriser un oubli mémoire.
+
+Le client fermé doit partir de l'échange effectivement trouvé du lot 32,
+traiter comparaisons, inspections, émission, réception et refus, puis reprendre
+depuis le résultat. Les anciennes réceptions et leurs effets révélables
+doivent rester distincts. Contrôler les constructions compilées et exécuter
+les deux gates. Préserver fondations, maître, machine, anciens contrats et
+cible finale. Aucun commit, push, changement de branche ou audit extérieur
+n'est autorisé pour ce lot.
+
+### 33.2. Carré des transports sur les productions et les demandes
+
+Le module [ContinuedInteractionDescriptions](../../RelationalPerimeter/Relativity/Production/ContinuedInteractionDescriptions.lean)
+prouve `recurring_production_reference_square` à partir des deux productions
+et de leurs transports réels. Le cas admis conserve cette loi ; une inspection
+ou un refus ne produit aucune occurrence. L'induction de
+`shared_run_reference_square` compose les historiques des têtes et suffixes.
+Pour chaque référence ancienne, transport dans la première histoire puis
+changement de présentation rejoint changement initial puis seconde histoire.
+La preuve n'utilise pas l'égalité des valeurs comme substitut à cette référence.
+
+`SharedDescriptionExtension` contient une continuation stockée et ce carré.
+Son interface générique admet les exécutions dont ce carré est prouvé ; elle
+ne prétend pas rendre canonique toute histoire reçue. `runDescriptionExtension`
+ferme l'interface en liant une fois `runSharedRecurring`. Les producteurs,
+admissions, refus et traductions restent ceux du contrat récurrent existant.
+`description_extension_is_shared_run` fixe cette construction canonique.
+
+Les attachements `first` et `second` suivent les historiques stockés.
+Les constructeurs `site` et `rich` consomment le carré et les accords initiaux
+pour retrouver l'ancrage, la réception et le signal dans les présentations
+finales. Leur raccord est exactement celui de la continuation, non un raccord
+calculé après coup depuis les records. Les témoins positifs d'arrivée et de
+port utilisés restent transportables sur les mêmes chemins.
+
+### 33.3. Reprise, composition et sélection des lecteurs
+
+`resume` transmet les deux curseurs finaux et leur raccord à une nouvelle
+continuation partagée. `append` consomme les deux exécutions stockées : il
+compose leurs historiques, leurs rapports et leurs demandes traduites, sans
+rejouer les producteurs. Les types exigent le curseur intermédiaire produit.
+`appended_description_reference` retrouve chaque référence par les deux voies.
+
+`appendRecurringReport` conserve tous les événements et bits d'admission.
+La lecture terminale intermédiaire est `Unit` dans ce contrat ; sa disparition
+à la jonction ne supprime aucune lecture informative. Les théorèmes
+`appended_description_source_report_exact` et
+`appended_description_target_report_exact` raccordent le rapport composé au
+contrat sur la liste entière, dans chacune des présentations. Les demandes
+de la seconde présentation suivent les traductions successives réelles.
+
+`continued_production_counts` compte seulement les occurrences produites par
+les histoires ; ce n'est pas un coût d'évaluation ni un temps physique.
+`continued_observation_square` et `continued_refinement_square` conservent les
+observations et leurs restrictions après prolongement. Le raffinement commun
+du lot 32 demeure disponible pour les attachements prolongés. Choisir ces
+lecteurs n'ajoute aucun événement et ne donne aucune autorisation d'effacement.
+Des effets différents réfutent encore un accord riche après continuation,
+même quand l'accord de leur interaction est conservé.
+
+### 33.4. Client fermé et contrôle du partage compilé
+
+Le client [ContinuedDescriptionChecks](../../Tests/Relativity/ContinuedDescriptionChecks.lean)
+importe uniquement `RelationalPerimeter`. Il construit des réceptions réelles,
+trouve un échange, transporte une tête stockée et exécute huit demandes :
+comparaison, inspection de signal, comparaison refusée, émission, réception,
+inspection de lecture, comparaison refusée et comparaison des arrivées
+anciennes. Les admissions sont `[true, true, false, true, true, true, false,
+true]` ; quatre productions sont constituées dans chaque présentation.
+
+Une reprise inspecte ensuite le signal ancien et compare les deux anciennes
+réceptions. Elle est admise par leurs références, leurs témoins d'arrivée
+et leur distinction conservée, pas par une valeur d'adresse supposée valide.
+Les rapports composés correspondent au contrat entier, les références se
+composent et les effets restent observables pour toute liste finie ultérieure.
+Un accord d'interaction ne devient toujours pas un accord riche entre les
+participants aux records `[one, one]` et `[]`.
+
+Pour éviter une réduction répétée de tout l'objet dépendant pendant
+l'élaboration, la définition de test `extension` est marquée `irreducible`.
+Son corps reste exécutable ; `extension_is_the_executed_run` prouve son égalité
+exacte au constructeur public. Les permissions concrètes sont vérifiées via
+l'égalité prouvée avec le runner source de référence. Aucun budget de preuve
+n'est relevé et aucune nouvelle hypothèse n'est introduite.
+
+L'inspection locale du C généré, avec les parseurs de corps et de fermetures
+statiques existants, confirme un appel du runner partagé dans le constructeur
+et un dans la reprise. Les corps transmettent le raccord reçu ou les curseurs
+et le raccord réellement produits. Les 19 racines descriptives et leurs 22
+fonctions accessibles n'appellent aucun chercheur, producteur ou runner de
+demandes. La composition manipule uniquement les historiques, rapports et
+demandes stockés. Ce contrôle complémentaire ne certifie ni les callbacks
+arbitraires d'un raccord fourni, ni le coût total, ni une réduction mémoire.
+
+### 33.5. Portée et obligations physiques maintenues
+
+Ce lot ferme la persistance des accords dans la continuation partagée et
+le raccord des prolongements avec les lecteurs du candidat instrumental.
+Il ne donne pas une précision numérique aux lecteurs booléens, ne constitue
+pas une rencontre physique et ne produit pas une localisation à partir de
+la seule interaction. Il ne ferme pas R3.3 physique, le contrat A4, le continuum,
+la métrique ou la dynamique. La cible finale de la section 1 reste inchangée.
+
+### 33.6. Vérifications et périmètre final du lot
+
+Sur l'arbre de travail de `relativite`, issu de
+`34901a824d9f77d802f41a49a9c527b1953cc07a` :
+
+- `lake build +RelationalPerimeter` réussit : 242 jobs.
+- `scripts/verify.sh` sous Git Bash et `scripts/verify.ps1` sous PowerShell
+  natif Windows réussissent : 300 fichiers Lean, build complet de 302 jobs,
+  23 fixtures rejetées pour les diagnostics et sites attendus.
+- Le balayage couvre 25 343 constantes dans 299 modules ; aucune déclaration
+  écrite ne dépend d'un axiome. Les 364 exceptions sont générées par Lean.
+- L'inventaire impose les strates de 241 modules de production, tous
+  accessibles depuis l'API publique, sans module orphelin. Ce module occupe
+  H14 ; la façade passe à H15 sans relâcher les dépendances descendantes.
+- Les contrôles documentaires statiques passent. Les 67 liens locaux du plan
+  résolvent et la section 1 est identique à celle du commit de départ.
+- La comparaison SHA-256 de tous les fichiers hors caches trouve deux ajouts,
+  six modifications, 388 fichiers inchangés et aucune suppression. Les quatre
+  fondations, le maître, la machine, leurs contrats et le registre scientifique
+  sont inchangés. `git diff --check` est propre.
+
+Les deux ajouts sont le module de persistance des accords et son client fermé.
+Les six modifications sont la façade, l'import du balayage des constantes,
+l'inventaire des strates, ses deux contrôleurs et ce plan. Aucun commit, push,
+changement de branche ou audit extérieur n'est effectué dans ce lot.
+
+## 34. Fenêtres numériques sur les lectures constituées
+
+### 34.1. Obligation fixée avant l'implémentation
+
+Sur `relativite`, à partir de `34901a8` et du lot 33 vérifié mais non commité,
+traiter le manque numérique de R3.3 : distinguer la sélection de champs des
+garanties d'enclosure d'une lecture. La cible de la section 1 ne change pas.
+Conserver intégralement le lot 33 et les autres fichiers existants.
+
+Un port numérique choisit soit la réception du participant, soit l'ancrage de
+la comparaison effectivement produite. Ses références viennent de l'attachement
+constitué ; le lecteur ne reçoit pas une valeur libre à laquelle ajouter une
+provenance. Une fenêtre ouverte à bords rationnels donne une demande de
+description, non une position géométrique. Le contrôle exécutable doit construire
+un certificat sur la valeur réellement lue ou son refus exact, bords exclus.
+
+Prouver les bornes d'erreur depuis la fenêtre, les restrictions par inclusion,
+leur identité et composition, et un raffinement commun par intersection lorsque
+les deux descriptions sont certifiées sur ce même port. Ne pas postuler la
+compatibilité de mesures différentes. Le raffinement ne produit aucune action
+et ne modifie ni l'histoire, ni le contrat, ni les effets attachés.
+
+Transporter les certificats par les accords exacts et les historiques stockés
+du lot 33. Prouver le carré extension/restriction et la conservation des
+valeurs et garanties sans refaire une réception ou une comparaison. Le client
+fermé doit varier fenêtres et lectures, rejeter une borne et une fenêtre
+inversée, puis poursuivre la même production partagée.
+
+Vérifier l'exécutabilité et l'absence de producteurs dans les chemins numériques
+compilés ; exécuter les deux gates. Ne prétendre fermer ni un contrat physique
+complet, ni les recouvrements physiques de R4, ni le continuum ou la localisation.
+Aucun commit, push, changement de branche ou audit extérieur pour ce lot.
+
+### 34.2. Ports constitués, décision et garanties numériques
+
+[NumericDescriptionWindows](../../RelationalPerimeter/Relativity/Production/NumericDescriptionWindows.lean)
+consomme les attachements du lot 33. `AttachedNumericPort` distingue la
+réception du participant de l'ancrage de la comparaison. La référence choisie
+et sa lecture viennent du même support constitué ; leurs valeurs peuvent
+différer, même dans une seule interaction.
+
+`CertifiedNumericReading` porte une valeur fixée par une égalité à la lecture
+de ce port exact, ainsi que son appartenance stricte à la fenêtre demandée.
+`certifyNumericReading` lit ce port et décide les comparaisons rationnelles :
+il retourne ce certificat ou la réfutation de l'enclosure. La demande peut
+être inversée ou manquer sa lecture ; elle n'est pas rendue admissible par
+un résultat prescrit. `certifiedNumericReadingOfAdmitted` retourne le certificat
+de cette même décision exécutée, plutôt que de reconstruire son résultat
+depuis une preuve d'admission ; cette égalité est prouvée en production et
+dans le client fermé. Les deux bornes sont exclues, et une fenêtre certifiée
+a une amplitude positive. Les garanties portent sur les données rationnelles
+exactes du candidat, non sur une erreur physique d'instrument non modélisée.
+
+`certified_numeric_error_bounds` borne les deux écarts entre la lecture et
+les bords par l'amplitude de la fenêtre. Les bords ne sont ni des distances
+primitives ni des coordonnées ; ils décrivent une lecture instrumentale.
+
+### 34.3. Restrictions et intersections compatibles
+
+`WindowRefinement` exprime l'inclusion des bornes, avec identité et composition.
+Sa restriction élargit la fenêtre sans changer la lecture constituée.
+L'amplitude fine est au plus celle de la fenêtre grossière. Ce n'est ni une
+nouvelle mesure, ni un changement de valeur, ni un transport inversible de
+toute information.
+
+L'intersection prend le maximum des bornes inférieures et le minimum des
+bornes supérieures, par comparaisons exécutables. `CertifiedNumericReading.common`
+construit le certificat commun seulement à partir de deux certificats sur
+le même attachement et le même port. Leurs deux restrictions retrouvent les
+certificats initiaux. L'interface ne promet pas la compatibilité de deux
+instruments ou mesures quelconques ; une intersection vide ne reçoit aucun
+certificat libre.
+
+### 34.4. Continuation, transport et client fermé
+
+Les prolongements consomment les historiques stockés. Le changement de
+présentation consomme l'accord riche exact, pas une égalité numérique seule.
+Les valeurs et enclosures sont conservées. Les carrés de prolongement avec
+restriction, de transport avec restriction et de continuation partagée
+avec changement de présentation sont prouvés. Admission et refus restent
+les mêmes sous ces transports ; le contrat récurrent complet est inchangé.
+
+[NumericWindowChecks](../../Tests/Relativity/NumericWindowChecks.lean) importe
+uniquement l'API publique. Les lectures initiales un et deux sont des données
+reçues explicitement ; deux réceptions réelles suivent chaque émission. Le
+lecteur ne produit pas ces données. Sur la lecture un, les fenêtres ouvertes
+`(-1, 3)` et `(0, 3)` sont compatibles avec `(-1, 2)` ; leur intersection
+est `(0, 2)`. Son amplitude deux est strictement inférieure à l'amplitude
+quatre de la fenêtre grossière. La même fenêtre `(0, 2)` refuse la lecture
+deux et exclut ses bornes ; une fenêtre inversée est aussi refusée.
+
+La réception lit un tandis que la comparaison produite lit zéro. Les deux
+participants peuvent partager une valeur numérique tout en restant des
+occurrences distinctes. Une valeur prescrite différente ne peut fournir le
+certificat de ce port. Une continuation mêle inspection, comparaison admise
+et refus : une seule nouvelle production est constituée. Les garanties
+numériques utilisent cet historique stocké ; les reprises sont quantifiées
+sur toute liste finie de demandes.
+
+### 34.5. Frontière inchangée
+
+Ce lot construit des descriptions numériques finies et leurs garanties de
+restriction dans le candidat instrumental. Il ne prouve ni la fidélité d'un
+instrument physique, ni un accord de localisation, ni les règles physiques
+de recouvrement de R4. Les garanties d'enclosure ne sont pas une autorisation
+d'oubli des effets attachés ou du runtime. Aucun point, continuum, atlas,
+métrique ou dynamique relativiste n'est fourni. La cible finale de la
+section 1 et les résultats acquis restent inchangés.
+
+### 34.6. Vérifications et périmètre final du lot
+
+Sur les sources finales du lot, avec Lean 4.33.1 :
+
+- `lake build +RelationalPerimeter` réussit : 243 jobs.
+- `scripts/verify.sh` sous Git Bash et `scripts/verify.ps1` sous PowerShell
+  natif Windows réussissent : 302 fichiers Lean et 304 jobs pour le build
+  complet. Les 23 fixtures échouent pour leurs diagnostics et sites attendus.
+- Le balayage couvre 25 506 constantes dans 301 modules ; aucune déclaration
+  écrite ne dépend d'un axiome. Les 364 exceptions sont générées par Lean.
+- Les 242 modules de production sont tous accessibles et stratifiés, sans
+  orphelin. Le module numérique est H15, la façade H16 ; les imports locaux
+  restent strictement descendants, les strates antérieures inchangées.
+- L'inspection complémentaire du C généré couvre 29 racines numériques et
+  72 fonctions accessibles, fermetures statiques comprises. Aucun producteur
+  local, runner ou chercheur d'échange n'est appelé. Le constructeur admis
+  appelle le certifieur une fois et retourne le champ de ce même résultat.
+  La normalisation rationnelle reste autorisée et n'est pas déclarée gratuite.
+  Ce contrôle ne borne ni les callbacks arbitraires ni le coût total.
+- Les contrôles documentaires statiques passent ; les 69 liens locaux du
+  plan résolvent et la section 1 est identique au commit de départ.
+- Par rapport à l'arbre de début du lot 34, les empreintes SHA-256 trouvent
+  deux ajouts, six modifications, 390 fichiers inchangés et aucune suppression.
+  Le module et le client du lot 33 sont inchangés, comme les quatre fondations,
+  le maître, la machine, les contrats et le registre. Le diff est propre.
+
+Les modifications sont limitées à la façade, l'import de l'audit des constantes,
+l'inventaire et ses deux contrôleurs, ainsi qu'à ce plan. Les ajouts sont le
+module numérique et son client. Aucun commit, push, changement de branche ni
+audit extérieur n'est effectué dans ce lot.

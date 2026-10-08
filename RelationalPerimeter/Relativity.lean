@@ -15,6 +15,8 @@ import RelationalPerimeter.Relativity.Production.GroupedRecurringContinuation
 import RelationalPerimeter.Relativity.Production.ConstitutedDescriptions
 import RelationalPerimeter.Relativity.Production.InteractionAttachments
 import RelationalPerimeter.Relativity.Production.InteractionDescriptionAgreement
+import RelationalPerimeter.Relativity.Production.ContinuedInteractionDescriptions
+import RelationalPerimeter.Relativity.Production.NumericDescriptionWindows
 
 /-!
 The numerical prerequisites and first declared local-production candidate.
@@ -61,6 +63,12 @@ positive reception and used-port witnesses and their separately readable path
 records. Sharing that interaction anchor does not assert physical colocation.
 Exact agreements distinguish the interaction anchor from the participant's
 rich description. Their reader restrictions do not authorize memory erasure.
+The same cached shared continuation now prolongs those agreements: its final
+raccord commutes with both actual history transports, and stored suffixes
+compose without replay. Reader refinement remains distinct from production.
+Open rational windows now certify constituted reception and comparison ports.
+Their numerical bounds, restrictions and compatible intersections preserve the
+stored reading through the same continuation, without supplying spacetime.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -139,4 +147,12 @@ rich description. Their reader restrictions do not authorize memory erasure.
 #print axioms RelationalPerimeter.Relativity.Production.differing_effects_refute_rich_agreement
 #print axioms RelationalPerimeter.Relativity.Production.attached_observation_common_refinement
 #print axioms RelationalPerimeter.Relativity.Production.attached_rich_return_reference
+#print axioms RelationalPerimeter.Relativity.Production.shared_run_reference_square
+#print axioms RelationalPerimeter.Relativity.Production.SharedDescriptionExtension.rich
+#print axioms RelationalPerimeter.Relativity.Production.continued_refinement_square
+#print axioms RelationalPerimeter.Relativity.Production.appended_description_source_report_exact
+#print axioms RelationalPerimeter.Relativity.Production.numeric_admission_exact
+#print axioms RelationalPerimeter.Relativity.Production.numeric_common_restrictions
+#print axioms RelationalPerimeter.Relativity.Production.certified_numeric_error_bounds
+#print axioms RelationalPerimeter.Relativity.Production.numeric_continuation_square
 /- AXIOM_AUDIT_END -/
