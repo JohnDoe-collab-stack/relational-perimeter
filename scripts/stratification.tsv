@@ -75,10 +75,14 @@ RelationalPerimeter.Relativity.Production.InstrumentalReadingCovers	H17	enforced
 RelationalPerimeter.Relativity.Production.ConjunctiveReadingCovers	H18	enforced	Joint positive cover selections and realized finite intersections on the same constituted attachment with exact restrictions and cached continuation transport
 RelationalPerimeter.Relativity.Production.PreciseReadingRefinements	H19	enforced	Computed precision-bounded joint reading refinements with exact returns arbitrary finite resumption and shared continuation transports without physical location
 RelationalPerimeter.Relativity.Production.ProductivePresentationWindows	H20	enforced	Complete produced-bracket open certificates bounded resumable searches and constructive finite overlapping covers on generated instrumental families without physical localization
+RelationalPerimeter.Relativity.Production.ProductiveWindowAgreements	H21	enforced	Positive numerical agreement and strict margins construct window certificates from the second stored prefix without source identification or physical grouping
+RelationalPerimeter.Relativity.Production.ProductiveWindowCompleteness	H22	enforced	Positive window certificate transfer reconstructs numerical agreement from actually returned prefixes and finite precision bounds without physical localization or source identification
 RelationalPerimeter.Relativity.Production.ReadingCompatibility	H20	enforced	Positive common refinements and exact separation of constituted numerical readings without identifying occurrences or physical localization
 RelationalPerimeter.Relativity.Production.ContinuedReadingCovers	H21	enforced	Finite indexed cover substitutions and courses consume recorded leaf choices with exact complete returns and shared continuation transport without replaying prefix decisions
 RelationalPerimeter.Relativity.Production.RestrictedReadingCovers	H22	enforced	Realized intersections of recorded cover choices with finer certificates return complete stored paths and commute with cover resumption and shared continuation
-RelationalPerimeter.Relativity	H23	enforced	Public numerical utilities and local candidate without relativistic certificate
+RelationalPerimeter.Relativity.Production.ProductivePrecisionCourses	H23	enforced	Successive positive precision requests consume actual returned prefixes with nested realized windows and head horizon independence without physical localization
+RelationalPerimeter.Relativity.Production.AgreedPrecisionCourses	H24	enforced	Matching finite precision courses consume actual returned certificates under positive numerical agreement without replaying source heads or identifying histories
+RelationalPerimeter.Relativity	H25	enforced	Public numerical utilities and local candidate without relativistic certificate
 RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement
 RelationalPerimeter.Agents.Constitutive.ProducedEvidence	A11	enforced	Constitutive agent ProducedEvidence
 RelationalPerimeter.Agents.Constitutive.State	A12	enforced	Constitutive agent State

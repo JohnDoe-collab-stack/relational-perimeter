@@ -55,6 +55,10 @@ import Tests.Relativity.RelativePathChecks
 import Tests.Relativity.RelativeRefinementChecks
 import Tests.Relativity.ProductivePresentationChecks
 import Tests.Relativity.ProductiveWindowChecks
+import Tests.Relativity.ProductiveAgreementChecks
+import Tests.Relativity.ProductiveCompletenessChecks
+import Tests.Relativity.ProductivePrecisionCourseChecks
+import Tests.Relativity.AgreedPrecisionCourseChecks
 import Tests.Relativity.TransportedRecurringChecks
 import Tests.Relativity.DiscoveredGroupingChecks
 import Tests.Relativity.ConstitutedDescriptionChecks
@@ -171,6 +175,8 @@ run_cmd do
   logInfo m!"ALL_CONSTANTS_OK constants={checked} modules={modules.size} generatedExceptions={generated} writtenExceptions=0"
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms Tests.Relativity.AgreedPrecisionCourseChecks.requested_precision_controls_both_futures
+#print axioms Tests.Relativity.AgreedPrecisionCourseChecks.continuing_uses_the_returned_second_endpoint
 #print axioms Nat
 #print axioms Tests.Relativity.RelativePathChecks.every_finite_pair_is_realized
 #print axioms Tests.Relativity.RelativePathChecks.same_ratio_does_not_erase_future_path_effects
@@ -180,4 +186,10 @@ run_cmd do
 #print axioms Tests.Relativity.ProductivePresentationChecks.every_positive_precision_has_a_positive_realization
 #print axioms Tests.Relativity.ProductiveWindowChecks.every_cover_is_selected_from_a_real_prefix
 #print axioms Tests.Relativity.ProductiveWindowChecks.upper_endpoint_blocks_every_finite_left_certificate
+#print axioms Tests.Relativity.ProductiveAgreementChecks.neighboring_certificate_existence
+#print axioms Tests.Relativity.ProductiveAgreementChecks.agreement_preserves_the_second_sources
+#print axioms Tests.Relativity.ProductiveCompletenessChecks.separated_generated_families_have_no_total_transfer
+#print axioms Tests.Relativity.ProductiveCompletenessChecks.resumption_agrees_at_every_later_index
+#print axioms Tests.Relativity.ProductivePrecisionCourseChecks.every_course_keeps_the_source_record
+#print axioms Tests.Relativity.ProductivePrecisionCourseChecks.fine_then_coarse_is_still_nested
 /- AXIOM_AUDIT_END -/

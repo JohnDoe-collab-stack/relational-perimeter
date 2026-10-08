@@ -26,6 +26,10 @@ import RelationalPerimeter.Relativity.Production.InstrumentalReadingCovers
 import RelationalPerimeter.Relativity.Production.ConjunctiveReadingCovers
 import RelationalPerimeter.Relativity.Production.PreciseReadingRefinements
 import RelationalPerimeter.Relativity.Production.ProductivePresentationWindows
+import RelationalPerimeter.Relativity.Production.ProductiveWindowAgreements
+import RelationalPerimeter.Relativity.Production.ProductiveWindowCompleteness
+import RelationalPerimeter.Relativity.Production.ProductivePrecisionCourses
+import RelationalPerimeter.Relativity.Production.AgreedPrecisionCourses
 import RelationalPerimeter.Relativity.Production.ReadingCompatibility
 import RelationalPerimeter.Relativity.Production.ContinuedReadingCovers
 import RelationalPerimeter.Relativity.Production.RestrictedReadingCovers
@@ -143,9 +147,43 @@ from its returned bracket, without supplying a completed numerical limit.
 Restriction keeps this newly produced prefix, not the old pre-refinement
 state. All its later readings remain inside the selected window. These
 windows are not physical neighborhoods or an erasure of source distinctions.
+Positive numerical agreements now yield actual window certificates on the
+other generated family. Strict received margins and the agreement modulus
+supply the finite precision request; only that family's stored prefix is
+extended as data. Window certification is invariant, not the rich histories
+or selected cover leaves. No physical grouping or forgetting is licensed.
+Conversely, a positive procedure producing certificates of the same open
+windows now constructs a numerical agreement. Each requested precision
+forms one narrow window from an actual first prefix, then consumes one
+returned second certificate. Their depths determine the modulus for all
+later readings. This characterizes numerical agreement for these generated
+families, not physical location or equality of their rich histories.
+Successive precision requests now consume the actually returned certificate.
+Their single produced bracket satisfies both the received constraint and
+the new precision window. Intersections give nested windows throughout any
+finite course, even when later requests are coarser. A continued course
+executes only its additional requests from its returned endpoint. This is
+coherence of instrumental realizations, not coverage of a physical domain.
+Agreement certification now follows a stored precision course head by head.
+Each second-family response extends its actually received prefix and certifies
+exactly the first head's window. Both returned endpoints can then be continued
+without replaying the old courses. This numerical raccord neither equates
+source histories nor licenses physical grouping or erasure.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Relativity.Production.ProductiveAgreedPrecisionCourse.runExact
+#print axioms RelationalPerimeter.Relativity.Production.productive_agreed_course_head_horizon_independent
+#print axioms RelationalPerimeter.Relativity.Production.productive_agreed_continued_run_exact
+#print axioms RelationalPerimeter.Relativity.Production.ProductivePrecisionCourse.runExact
+#print axioms RelationalPerimeter.Relativity.Production.productive_precision_head_horizon_independent
+#print axioms RelationalPerimeter.Relativity.Production.productive_precision_continued_run_exact
+#print axioms RelationalPerimeter.Relativity.Production.RelativePathPresentation.requestWindow
+#print axioms RelationalPerimeter.Relativity.Production.ProductiveWindowTransfer.toAgreement
+#print axioms RelationalPerimeter.Relativity.Production.productive_numeric_agreement_iff_window_transfer
+#print axioms RelationalPerimeter.Relativity.Production.ProductiveWindowCertificate.certifyAgreed
+#print axioms RelationalPerimeter.Relativity.Production.productive_window_agreement_iff
+#print axioms RelationalPerimeter.Relativity.Production.productive_agreed_cover_extends_the_second_prefix
 #print axioms RelationalPerimeter.Relativity.Production.searchProductiveWindowFrom
 #print axioms RelationalPerimeter.Relativity.Production.ProductiveWindowExhaustion.resumeSearch
 #print axioms RelationalPerimeter.Relativity.Production.productive_window_resumption_iff

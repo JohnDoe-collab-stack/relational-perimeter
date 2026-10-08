@@ -6168,3 +6168,566 @@ sont valides et le diff ne contient pas de défaut d'espacement. Aucun
 commit, push, changement de branche ni audit extérieur n'est effectué.
 Ces vérifications ferment le lot instrumental 45, pas les obligations
 physiques R4-R7 ni la cible relativiste finale.
+
+## 46. Certification des fenêtres sous accord numérique positif
+
+### 46.1. Obligation fixée avant implementation
+
+Fermer l'invariance laissée ouverte au lot 45 : un accord numérique positif
+entre deux familles productives doit permettre de construire un certificat
+dans la même fenêtre ouverte sur la seconde famille. Calculer une précision
+depuis les deux marges strictes du certificat reçu, consommer le modulus de
+l'accord et prolonger le préfixe effectivement stocké de la seconde famille.
+La suffisance du budget doit être prouvée, non fournie comme hypothèse.
+Le résultat porte le run complet et son raccord exact à cette seconde famille.
+
+Construire les deux directions de l'existence des certificats. Leur accord
+numérique ne donne pas l'égalité des préfixes, des occurrences ou des feuilles
+choisies par un recouvrement chevauchant. Aucun aller-retour identitaire ne
+sera annoncé pour ces certificats : les nouvelles productions restent réelles.
+Raccorder le résultat reçu à la sélection de recouvrement sans refaire ce
+prolongement. Fermer des clients par les accords déjà construits de reprise
+et de frontière commune des deux subdivisions, pas seulement par une interface
+conditionnelle sans consommateur.
+
+Ce lot reste instrumental. Il n'autorise aucun regroupement physique ni oubli
+mémoire, ne construit pas toutes les localisations de R4.2 et ne ferme pas
+R4-R7. La cible de la section 1, les fondations, les contrats, les producteurs
+et les contrôleurs existants restent inchangés.
+
+### 46.2. Budget construit et réalisation sur la seconde famille
+
+[ProductiveWindowAgreements](../../RelationalPerimeter/Relativity/Production/ProductiveWindowAgreements.lean)
+consomme un certificat déjà réalisé et un accord numérique positif entre
+deux familles du lot 44. La précision choisie est la plus petite entre la
+moitié de la marge inférieure et le quart de la marge supérieure. Elle est
+strictement positive. Les deux marges sont lues depuis l'intervalle complet
+stocké dans le certificat, pas depuis une valeur limite fournie.
+
+`certifyAgreed` applique le modulus reçu à cette précision puis ajoute son
+dénominateur pour construire un budget suffisant. Son producteur privé,
+paramétré par ce budget, reçoit des obligations toutes fermées par l'appelant
+public : aucune hypothèse de suffisance n'est laissée ouverte. La comparaison
+avec un prolongement du premier certificat intervient dans la preuve.
+Seul le préfixe stocké de la seconde famille est prolongé comme donnée ; le
+nouveau certificat conserve littéralement le résultat complet de ce producteur.
+Le certificat ne transplante pas l'histoire de la première famille.
+
+La preuve combine l'emboîtement du premier intervalle, l'accord des deux
+lectures au budget calculé et la précision du second intervalle. Sa borne
+inférieure reste strictement au-dessus de celle de la fenêtre ; sa borne
+supérieure reste strictement en dessous de l'autre borne. La certification
+porte donc sur tout l'intervalle produit, pas seulement sur une lecture.
+`productive_window_agreement_iff` ferme les deux directions de l'existence
+des certificats, avec des constructeurs exécutables dans `Type`. L'accord
+inverse fournit la deuxième construction ; aucune égalité des certificats
+ou loi de retour identitaire n'est déduite.
+
+`selectAgreed` donne une fois ce certificat produit au sélecteur de
+recouvrement existant. Le résultat est prouvé être un prolongement complet
+du préfixe reçu de la seconde famille. Deux familles en accord numérique
+peuvent sélectionner des feuilles différentes d'un recouvrement chevauchant.
+L'invariance établie concerne l'existence d'un certificat dans une même
+fenêtre ouverte, pas l'identité des sources, des histoires ou des feuilles.
+
+### 46.3. Consommateurs construits et frontière du résultat
+
+[ProductiveAgreementChecks](../../Tests/Relativity/ProductiveAgreementChecks.lean)
+importe uniquement la racine publique. Il ferme l'interface pour les trois
+lois de subdivision et toute reprise finie, avec un certificat complet et
+toutes les lectures suivantes conservées dans la fenêtre. Il utilise aussi
+l'accord déjà construit entre les deux subdivisions voisines : leurs
+lectures initiales sont distinctes, mais leurs certificats d'une même
+fenêtre existent dans les deux directions. Le certificat produit sur la
+seconde conserve ses sources distinctes et ses anciens records par les
+transports de sa propre histoire. Toute sélection de recouvrement repart
+de ce préfixe et ne le remplace pas par celui de la première famille.
+
+Le smoke compilé utilise la fenêtre ouverte de moins deux à cinq et une
+reprise supérieure d'une étape. Il retourne `(4, 32)` : quatre subdivisions
+nouvelles et trente-deux relais dans le parcours de référence retourné.
+Ce résultat contrôle seulement l'exécutabilité. Une première évaluation dans
+une autre fenêtre, exigeant huit subdivisions, a été interrompue ; elle
+n'est pas une mesure ni une preuve de réussite. Les théorèmes génériques,
+notamment la quantification sur toute fenêtre, n'ont pas été restreints.
+
+Ce lot ferme l'invariance instrumentale laissée ouverte au lot 45. Il ne
+convertit pas l'accord numérique en un regroupement physique ou un oubli
+mémoire. Les lois de propagation, les localisations physiques, la couverture
+du domaine et R4-R7 restent à construire. Le modulus reçu peut avoir un coût
+propre ; le producteur existant double son parcours de référence à chaque
+subdivision. Aucune borne efficace de coût, minimalité de mémoire ou nouvelle
+validation indépendante n'est annoncée.
+
+### 46.4. Vérifications exécutées et non-régression
+
+Le module et tous les clients publics compilent sans axiomes écrits.
+La construction de la racine publique passe avec 258 jobs. Les deux gates
+complètes, Bash et PowerShell natif Windows, passent sur les mêmes 324
+fichiers Lean : 326 jobs, aucun avertissement Lean, 23 fixtures rejetées pour
+leurs diagnostics et sites attendus. Le balayage complet contrôle 27 505
+constantes de 323 modules : 364 exceptions générées et aucune dépendance
+axiomatique écrite à la main. Les 257 modules de production sont accessibles,
+classés et contraints par l'inventaire, sans module orphelin. Les contrôles
+existants de partage, routage, continuation, imports et documentation passent.
+
+Un contrôle local du C généré inspecte trois corps propriétaires précisément
+nommés. Il vérifie un appel au modulus reçu sur la précision calculée, un
+appel au générateur depuis le préfixe stocké de la seconde famille et le
+passage de son résultat réel au certificat puis au sélecteur existant.
+Les prolongements de la première famille employés dans la preuve sont
+absents de ces corps runtime. Le contrôle n'est pas une analyse transitive
+du coût du modulus ou des producteurs, ni une minimalité mémoire.
+
+Le script local a été figé et haché avant exécution ; SHA-256 :
+`ACD8AE8040EFA109CE23BEA650238467CD95EEECFFF7A5EE3CB3E8037F29E592`.
+Sa commande, les empreintes des trois artifacts inspectés et les logs sont
+conservés hors du dépôt. Il ne remplace aucun contrôleur de production.
+
+La comparaison avec le début du lot compte deux ajouts, quatre modifications,
+414 fichiers inchangés et aucune suppression. Les quatre fondations, les
+anciens producteurs, les contrats, le maître, la machine, la toolchain,
+le manifeste, le registre et les figures sont conservés octet pour octet.
+La section 1 reste inchangée ; les 96 liens locaux du plan sont valides et
+le diff ainsi que les deux nouveaux fichiers ne présentent pas de défaut
+d'espacement. Aucun commit, push, changement de branche ou audit extérieur
+n'est effectué. Le lot instrumental 46 est fermé dans cette portée ;
+la cible physique de la section 1 et R4-R7 restent ouvertes et inchangées.
+
+## 47. Reconstruire l'accord depuis les certificats effectivement produits
+
+### 47.1. Obligation fixée avant implémentation
+
+Compléter l'invariance du lot 46 par sa réciproque constructive. Une procédure
+qui transforme tout certificat d'une fenêtre de la première famille en un
+certificat réalisé de la même fenêtre sur la seconde doit permettre de
+construire leur accord numérique et son modulus. La procédure est une donnée
+exécutable en `Type`, pas une implication d'existences effacées dont on
+extrairait implicitement un choix.
+
+Pour chaque précision positive reçue, produire un préfixe de la première
+famille depuis son état stocké, puis former une fenêtre stricte dont le diamètre
+est prouvé inférieur ou égal à cette précision. Donner son certificat à la
+procédure une fois. Lire les profondeurs des deux résultats pour obtenir une
+borne commune. Prouver l'accord de toutes leurs lectures ultérieures depuis
+ces certificats, sans donner de queue future au producteur.
+
+Construire les passages dans les deux directions entre accord numérique et
+transfert de certificats. Fermer des consommateurs avec les reprises arbitraires
+et les subdivisions voisines existantes. Vérifier aussi que les familles
+inférieure et supérieure, qui atteignent des bornes numériques différentes,
+n'admettent pas ce transfert total. Leurs certificats retournés conservent
+les sources distinctes et leurs records.
+
+Ce résultat concerne la complétude des fenêtres pour l'accord numérique des
+familles productives actuelles. Il ne prétend ni reconstruire un accord physique
+de localisation, ni déduire un transfert de leurs histoires riches, ni autoriser
+un oubli. Les fenêtres numériques ne deviennent pas des voisinages physiques.
+La cible de la section 1 et les obligations physiques R4-R7 restent inchangées.
+Le lot 46 non commité, les anciens producteurs et tous les contrats sont préservés.
+
+### 47.2. Réciproque constructive sur les mêmes familles productives
+
+[ProductiveWindowCompleteness](../../RelationalPerimeter/Relativity/Production/ProductiveWindowCompleteness.lean)
+importe le producteur du lot 46. `requestWindow` prolonge réellement l'état
+stocké de la première famille au dénominateur de la demi-précision reçue.
+Il forme la fenêtre depuis les deux bornes de ce résultat, avec un quart
+de précision de chaque côté. La preuve de résolution fournit une borne
+de diamètre inférieure ou égale à la précision entière. Les deux marges
+strictes et le résultat complet du prolongement sont dans le certificat.
+Aucune limite numérique ni queue future n'est une entrée de ce producteur.
+
+`ProductiveWindowTransfer` porte une fonction exécutable : pour toute
+fenêtre et tout certificat de la première famille, elle retourne un
+certificat réalisé de la seconde dans cette même fenêtre. `compare` produit
+une seule requête puis applique une seule fois cette fonction au certificat
+réellement reçu. Il conserve la fenêtre et les deux certificats complets.
+L'identité réutilise le certificat entier ; la composition donne le résultat
+retourné par la première fonction à la seconde.
+
+`toAgreement` construit un accord numérique sans recevoir d'accord
+préalable. Pour chaque précision, son modulus est la somme des profondeurs
+des deux certificats retournés par `compare`. Toute lecture ultérieure de
+chaque famille reste dans la fenêtre certifiée. Deux lectures dans cette
+fenêtre de diamètre borné sont donc proches à la précision reçue, même
+si leurs indices ultérieurs sont indépendants.
+
+`productive_numeric_agreement_iff_window_transfer` ferme les deux directions
+entre l'existence d'un accord numérique et celle d'un tel transfert positif.
+La direction accord vers transfert utilise le constructeur du lot 46.
+La direction transfert vers accord utilise les profondeurs effectivement
+retournées. Les deux constructeurs vivent dans `Type` et compilent.
+Ce n'est pas un théorème extrayant une fonction depuis une simple implication
+entre existences propositionnelles effacées ; aucun choix de ce genre
+n'est utilisé.
+
+Le transfert inverse passe par l'accord reconstruit et son inverse numérique.
+Il ne prétend pas retourner le même certificat ou la même histoire riche.
+La symétrie de l'accord numérique n'est pas une loi de retour identitaire
+des productions.
+
+### 47.3. Consommateurs fermés, séparation et portée
+
+[ProductiveCompletenessChecks](../../Tests/Relativity/ProductiveCompletenessChecks.lean)
+importe uniquement la racine publique. Pour toute famille et toute reprise
+finie, son transfert prolonge le certificat reçu par le constructeur de
+reprise du lot 45. Son nouvel accord est reconstruit depuis ce transfert,
+sans fournir l'ancien accord de reprise comme entrée. Les clients prouvent
+les préfixes réellement produits, la consommation du certificat reçu,
+la formule exacte du modulus et toutes les lectures ultérieures.
+Ce modulus vaut deux fois le dénominateur de la demi-précision ; cette
+formule ne borne pas le travail des producteurs.
+
+Les subdivisions voisines fournissent un second consommateur, avec l'accord
+de frontière du lot 44. Leurs lectures initiales restent distinctes.
+Les sources et les anciens records du certificat produit sur la seconde
+famille sont conservés par les transports de sa propre histoire.
+
+Le client négatif ferme également un cas non trivial : les familles
+inférieure et supérieure issues de l'état reçu construit ont des limites
+numériques zéro et un. Un transfert total donnerait un accord entre ces
+deux constantes, contredit à la demi-précision unitaire. Le dépôt prouve
+donc l'absence de ce transfert ; il ne confond pas des lectures initiales
+différentes avec une séparation de limites.
+
+Le smoke compilé reconstruit le modulus du transfert identitaire de la
+famille supérieure à la précision unitaire et retourne `4`. Il contrôle
+uniquement l'exécutabilité. Une comparaison de constantes dans le client
+négatif a d'abord atteint la limite de réduction du compilateur ; la preuve
+a été rendue explicite par les deux égalités de valeurs construites.
+Aucune limite de réduction n'a été augmentée et cette tentative n'est pas
+présentée comme une vérification réussie.
+
+La complétude obtenue est celle des fenêtres pour l'accord numérique de
+ces familles générées. Elle n'est ni une égalité des histoires ou des
+sources, ni un accord de localisation physique, ni une autorisation de
+regroupement ou d'oubli. Les indices futurs interviennent dans les preuves,
+pas dans les entrées du producteur. Le modulus exécute sa requête et sa
+fonction de transfert lorsqu'il est demandé ; le coût de cette fonction
+reste à examiner pour chaque réalisation. Le doublement du parcours par
+le producteur existant demeure inchangé. Aucune borne de coût total,
+minimalité mémoire ou reconstruction relativiste n'est déduite.
+La cible de la section 1 et les obligations physiques R4-R7 restent ouvertes.
+
+### 47.4. Vérifications exécutées et conservation des acquis
+
+Le module et ses clients publics compilent sans axiome écrit. La racine
+publique se construit avec 259 jobs. Les gates complètes Bash et PowerShell
+natif Windows passent toutes deux sur les mêmes 326 fichiers Lean :
+328 jobs et aucun avertissement Lean. Le balayage complet contrôle
+27 601 constantes de 325 modules, y compris les déclarations privées :
+364 exceptions générées et aucune dépendance axiomatique écrite à la main.
+Les 258 modules de production sont accessibles, classés et contraints,
+sans module orphelin. Les contrôleurs existants de partage, routage,
+continuation, imports et documentation passent, ainsi que les 23 fixtures
+rejetées pour leurs diagnostics et sites attendus.
+
+Un contrôle local du C généré vérifie cinq corps propriétaires exactement
+nommés. La requête appelle une fois le producteur et conserve son préfixe
+réel. La comparaison forme une requête, applique une fois le transfert reçu
+et conserve ses deux certificats effectifs. Le modulus appelle une fois
+cette comparaison et lit les deux profondeurs réellement retournées.
+La composition donne la réponse du premier transfert au second.
+La conversion depuis un accord retourne le certificat réellement produit
+par le constructeur du lot 46.
+
+Ce contrôle local ne suit pas transitivement le travail de fonctions de
+transfert arbitraires. Il ne prouve ni leur coût total, ni une borne physique
+de mémoire, ni la génération d'un domaine relativiste. Son script a été
+figé et haché avant exécution ; SHA-256 :
+`E201E947ABCC81160F9011D3C1CD295F7FDCAF7732B88DBCE435D762F084828F`.
+La commande, les empreintes du script et de l'artifact inspecté, les logs
+et la comparaison des empreintes sources sont conservés hors du dépôt.
+
+La comparaison avec le début du lot compte deux ajouts, quatre modifications,
+416 fichiers inchangés et aucune suppression. Les deux fichiers du lot 46,
+les quatre fondations, les anciens producteurs, le maître, les contrats,
+la machine, la toolchain, le manifeste, le registre et les figures restent
+identiques octet pour octet. La section 1 reste inchangée ; les 98 liens
+locaux du plan sont valides. Le diff et les nouveaux fichiers ne présentent
+pas de défaut d'espacement.
+
+Aucun commit, push, changement de branche ou audit extérieur n'est effectué.
+Le lot instrumental 47 est fermé dans la portée des familles générées
+actuelles. Les localisations physiques cohérentes du second volet de R4.2,
+leurs lois de propagation et de rencontre, puis la reconstruction R4-R7
+restent à construire. L'accord numérique ne remplace aucune de ces obligations.
+
+## 48. Demandes successives de précision depuis les certificats retournés
+
+### 48.1. Obligation fixée avant implémentation
+
+Raccorder les requêtes du lot 47 en une course finie de longueur arbitraire.
+Chaque demande reçoit le certificat complet précédemment retourné. Produire
+son nouveau préfixe depuis ce résultat, pas depuis l'origine reconstruite.
+Former la nouvelle fenêtre en intersectant la contrainte reçue avec la
+fenêtre de précision effectivement produite. Les deux conditions devront
+être satisfaites par le même intervalle réalisé, pas par deux réalisations
+indépendantes déclarées compatibles.
+
+Le résultat de chaque tête porte le certificat dans la famille d'origine,
+la restriction à la contrainte précédente, la borne de diamètre demandée,
+la profondeur exacte et le prolongement réel du préfixe reçu. La tête
+n'a pas de paramètre pour les demandes futures. Le runner donne ensuite
+son certificat retourné à la queue et conserve ses productions positives.
+
+Prouver l'emboîtement sur toute course, la formule des profondeurs, l'égalité
+au prolongement total pour les données effectivement retournées, l'absence
+d'évasion des lectures ultérieures et l'indépendance de la tête envers la
+queue. Permettre de prolonger une course déjà produite sans réexécuter ses
+producteurs. Fermer des clients depuis la racine publique, notamment sur
+des demandes fines puis grossières : la seconde ne doit pas rouvrir la
+contrainte précédente.
+
+Ce lot concerne encore les familles instrumentales générées actuelles.
+Il ne fournit pas de nouvelle loi physique ni de localisation extérieure,
+ne couvre pas toutes les familles d'un domaine relativiste et n'autorise
+aucun oubli des sources ou des parcours. Les trois contrôles instrumentaux
+existants ne deviennent pas une classe universelle de producteurs physiques.
+La cible de la section 1, R4-R7, les lots précédents et les contrats restent
+inchangés. Aucun commit, push ou audit extérieur n'est autorisé par ce lot.
+
+### 48.2. Construction depuis le préfixe réellement reçu
+
+[ProductivePrecisionCourses.lean](../../RelationalPerimeter/Relativity/Production/ProductivePrecisionCourses.lean)
+importe le producteur du lot 47, sans modifier celui-ci. Le certificat reçu
+fournit son préfixe réalisé ; une présentation locale prend ce préfixe comme
+entrée et conserve la règle reçue. Une seule requête produit son prolongement
+et sa fenêtre. L'intersection avec la contrainte précédente contient les deux
+bornes du même intervalle produit. Elle porte donc simultanément l'ancien
+engagement et la précision demandée, avec une preuve positive de diamètre.
+
+Le certificat retourné conserve littéralement ce prolongement. Son égalité
+à la lecture de la famille d'origine est une preuve de composition, pas un
+nouveau calcul depuis cette origine. La profondeur est celle du certificat
+reçu augmentée du nombre de subdivisions demandé par la précision.
+`ProductivePrecisionContinuation` exige explicitement la restriction à la
+fenêtre reçue, le diamètre, cette profondeur et ce prolongement exact.
+
+`runPrecisions` produit une tête puis transmet son certificat à la queue.
+La tête n'a aucun paramètre pour les demandes suivantes. La course conserve
+les productions réalisées ; son endpoint lit ces enregistrements sans refaire
+leurs requêtes. Les preuves portent sur toute liste finie de précisions,
+sans longueur maximale : profondeur totale, prolongement composé, restriction
+à la fenêtre initiale et maintien de toutes les lectures ultérieures dedans.
+
+`continue` prend l'endpoint déjà retourné et exécute seulement les demandes
+supplémentaires. `append` traverse les enregistrements et les listes pour les
+raccorder ; il ne rejoue pas leurs producteurs. Ce raccord n'est donc pas
+déclaré gratuit, minimal en mémoire ou constant en temps.
+
+### 48.3. Clients publics et portée exacte
+
+[ProductivePrecisionCourseChecks.lean](../../Tests/Relativity/ProductivePrecisionCourseChecks.lean)
+importe seulement la racine publique. Les clients ferment les propriétés
+pour les trois règles instrumentales et pour toute liste finie de demandes.
+Ils conservent les deux références sources distinctes et leurs enregistrements
+à travers le transport de l'histoire réellement produite. Deux queues
+différentes donnent la même production de tête.
+
+Une demande fine suivie d'une demande grossière reste emboîtée : la seconde
+ne rouvre pas la première fenêtre. La course vide retourne le certificat
+reçu entier ; une continuation utilise le dernier préfixe retourné. Chaque
+fenêtre retournée garde un diamètre strictement positif. L'évaluation de deux
+demandes unitaires retourne une profondeur de quatre ; c'est un smoke test
+d'exécutabilité, non confirmatoire pour le coût ou pour la physique.
+
+Ce résultat assure une cohérence instrumentale des demandes successives sur
+les familles déjà générées. Il ne constitue pas des localisations physiques,
+ne déduit pas une règle physique de l'intersection numérique et n'identifie
+pas les sources. Le producteur ancien et son double parcours demeurent
+inchangés. Aucun coût total, oubli, domaine relativiste ou fermeture de R4-R7
+n'est revendiqué.
+
+### 48.4. Vérifications exécutées et conservation des acquis
+
+Le module compile avec 59 jobs, ses clients publics avec 261 jobs et la
+racine publique avec 260 jobs. Les gates complètes Bash et PowerShell natif
+Windows passent sur les mêmes 328 fichiers Lean : 330 jobs, aucun avertissement
+Lean. Le balayage complet contrôle 27 721 constantes de 327 modules,
+y compris les déclarations privées : 364 exceptions générées, aucune
+dépendance axiomatique écrite à la main. Les 259 modules de production
+sont accessibles, classés et contraints, sans orphelin. Les contrôleurs
+existants et les 23 fixtures rejetées pour leurs diagnostics et sites
+attendus passent.
+
+Le nouveau module est H23 et la racine de relativité H24. Les deux
+contrôleurs de stratification reconnaissent maintenant H24 ; la règle
+strictement décroissante des imports reste inchangée, comme les autres
+strates et frontières. La première gate avait refusé ce rang absent de sa
+configuration ; son log est conservé séparément des deux runs réussis.
+Les erreurs initiales d'élaboration, corrigées avant ces runs, sont également
+conservées ; elles ne sont pas des vérifications réussies. Aucune hypothèse
+de preuve ou limite de compilation n'a été relâchée pour les résoudre.
+
+Un contrôle local du C généré vérifie quatre corps propriétaires exactement
+nommés. La tête construit sa présentation depuis le préfixe reçu dans les
+deux branches d'allocation, appelle une fois la requête et intersecte la
+fenêtre réellement retournée avec la contrainte reçue. Le runner transmet
+le certificat de cette tête à la queue. La continuation consomme l'endpoint
+stocké et exécute une seule course supplémentaire. Le raccord des records
+ne contient que sa récursion et celle des listes, aucun appel de producteur
+ni callback dans le corps nommé.
+
+Ce contrôle ne borne ni le tas ni le coût total ; il ne supprime pas les
+parcours du producteur ancien. Son script a été figé et haché avant sa
+première exécution puis réexécuté inchangé après les gates ; SHA-256 :
+`5ADA57D6267FFD60856CEDB92AE0748F2F278D7EDFEBD0F75DAA475F4EDEC3BE`.
+Les commandes, empreintes, logs et comparaisons sources sont conservés
+hors du dépôt.
+
+La comparaison avec le début du lot compte deux ajouts, six modifications,
+416 fichiers inchangés et aucune suppression. Les quatre fichiers ajoutés
+aux lots 46 et 47, les quatre fondations, les anciens producteurs, le maître,
+les contrats, la machine, la toolchain, le manifeste, le registre et les
+figures restent identiques octet pour octet. La section 1 est inchangée ;
+les 100 liens locaux du plan sont valides. Le diff et les nouveaux fichiers
+ne présentent pas de défaut d'espacement.
+
+Aucun commit, push, changement de branche ou audit extérieur n'est effectué.
+Le lot instrumental 48 est fermé dans sa portée déclarée. Les localisations
+physiques cohérentes du second volet de R4.2, leurs lois de propagation et
+de rencontre, puis la reconstruction R4-R7 restent à construire. Les courses
+de fenêtres ne se substituent à aucune de ces obligations physiques.
+
+## 49. Raccord de courses depuis deux certificats effectivement retournés
+
+### 49.1. Obligation fixée avant implémentation
+
+Poursuivre le raccord de R4.2 entre réalisations compatibles à toute précision,
+dans la portée instrumentale actuellement construite. Le lot 48 prolonge une
+famille ; le lot 46 certifie une fenêtre sur une autre famille en accord,
+depuis son préfixe stocké. Il manque leur composition successive : chaque
+réponse de la seconde famille doit devenir l'entrée de sa réponse suivante.
+
+Recevoir une course déjà produite de la première famille, un certificat de
+la seconde dans la même fenêtre initiale et un accord numérique positif.
+Chaque tête consomme seulement la production locale enregistrée de la première
+et le dernier certificat de la seconde. Construire une présentation depuis
+ce dernier préfixe réel ; lui transférer la nouvelle fenêtre en réutilisant
+le producteur existant. Revenir à l'indice de la famille d'origine par une
+preuve de composition, sans exécuter son origine pour reconstituer le préfixe.
+
+La queue reçoit cette réponse entière. Les fenêtres de toute la course
+raccordée sont exactement celles de la course reçue, pas des fenêtres
+supplémentaires déclarées compatibles. Prouver la profondeur accumulée,
+le prolongement réel, le maintien de toutes les lectures ultérieures dans
+la contrainte initiale, l'indépendance de la tête envers la queue et la
+possibilité de reprendre depuis les deux endpoints déjà retournés.
+Fermer les clients pour des familles voisines dont les lectures initiales
+diffèrent mais dont les limites instrumentales ont un accord construit.
+
+L'accord numérique reçu n'est ni un accord de localisation physique ni une
+égalité des histoires. Le raccord conserve les références et enregistrements
+de chaque source ; il n'autorise aucun regroupement ou oubli. Ne pas appeler
+ces familles une couverture du domaine relativiste, ne pas réduire la cible
+de la section 1 et ne pas annoncer R4-R7 fermés. Les producteurs anciens,
+fondations, contrats, machine, registre et figures restent inchangés.
+Aucun commit, push, changement de branche ou audit extérieur n'est autorisé.
+
+### 49.2. Construction et consommation dans l'ordre
+
+[AgreedPrecisionCourses.lean](../../RelationalPerimeter/Relativity/Production/AgreedPrecisionCourses.lean)
+importe le lot 48 sans modifier les producteurs précédents. La présentation
+locale de la seconde famille stocke littéralement le préfixe de son certificat
+reçu. L'accord sur cette présentation garde le module de précision reçu ; sa
+preuve replace l'indice local après la profondeur déjà produite. Aucun nouveau
+module d'accord, transport d'histoire ou parcours depuis l'origine n'est posé.
+
+Chaque tête appelle une fois `certifyAgreed` sur cette présentation locale et
+sur le certificat enregistré de la première tête. `fromReceived` conserve le
+résultat réel, ajoute les deux profondeurs et justifie son indice par composition.
+Le nombre local de subdivisions est exactement le module de l'accord à la
+précision des marges du certificat source, augmenté du dénominateur de cette
+précision. C'est un budget de subdivisions, pas une borne du coût total.
+
+`matchAgreed` parcourt la course source déjà produite. Sa tête n'a aucun
+paramètre de queue ; la récursion transmet le certificat entier retourné.
+Le type de l'endpoint impose exactement la fenêtre de l'endpoint source.
+Les preuves couvrent toute liste finie : profondeur accumulée, prolongement
+du préfixe réellement reçu, restriction à la fenêtre initiale et maintien
+des lectures ultérieures dans celle-ci. `comparison` rapproche les lectures
+ultérieures des deux familles lorsqu'une borne du diamètre de cette même
+fenêtre est fournie ; ce n'est pas une hypothèse d'égalité des histoires.
+
+`continue` reçoit les deux endpoints déjà enregistrés. Il exécute une seule
+course source supplémentaire, puis la raccorde depuis l'endpoint effectif de
+la seconde famille. Il retourne ces suffixes, sans rejouer les courses anciennes.
+La lecture des records et le module de l'accord reçu ne sont pas déclarés
+gratuits ou de coût borné par ces seules preuves.
+
+### 49.3. Clients fermés et limites
+
+[AgreedPrecisionCourseChecks.lean](../../Tests/Relativity/AgreedPrecisionCourseChecks.lean)
+importe seulement la racine publique. Deux subdivisions voisines réellement
+produites fournissent des familles convergeant vers leur frontière commune,
+avec un accord numérique construit. Leurs lectures initiales sont distinctes.
+Leurs certificats initiaux dans la fenêtre commune sont construits positivement.
+
+Les clients portent sur toute liste finie de demandes et conservent les
+références sources distinctes ainsi que la lecture de leur enregistrement.
+Ils vérifient la même fenêtre, les deux continuations depuis les endpoints,
+la profondeur réelle, l'indépendance de tête, l'impossibilité de rouvrir une
+fenêtre fine par une demande grossière et le diamètre non nul. Pour une demande
+de précision, ils ferment aussi le rapprochement de toutes les lectures
+ultérieures des deux familles à la précision demandée.
+
+L'unique évaluation ajoutée porte sur la course vide et retourne zéro. C'est
+seulement un smoke test d'exécutabilité du cas vide, pas une mesure des courses
+non vides. Ni le coût total, ni la localisation physique, ni l'égalité des
+sources, ni leur oubli ne sont établis par ce lot. Le raccord instrumental
+ne ferme pas les obligations physiques de R4-R7.
+
+### 49.4. Vérifications et conservation des acquis
+
+Le module compile avec 60 jobs, ses clients publics avec 262 jobs et la
+racine publique avec 261 jobs. Les gates finales Bash et PowerShell natif
+Windows passent sur les mêmes 330 fichiers Lean : 332 jobs, aucun avertissement
+Lean. Le balayage complet couvre 27 834 constantes de 329 modules, y compris
+les déclarations privées : 364 exceptions générées, aucune dépendance
+axiomatique écrite à la main. Les 260 modules de production sont accessibles
+et contraints par la stratification, sans orphelin. Les contrôleurs existants
+et les 23 fixtures rejetées pour leurs diagnostics et sites attendus passent.
+
+Le nouveau module est H24 et la racine de relativité H25. Les deux contrôleurs
+acceptent ces rangs ; leur règle d'import strictement décroissante et les
+frontières avec les utilitaires numériques, le maître et la machine ne changent
+pas. Les fichiers des lots 46-48 sont conservés sans modification.
+
+Un contrôle du C généré vérifie six corps propriétaires nommés : présentation
+depuis le préfixe reçu, conservation du résultat retourné dans les deux branches
+d'allocation, tête locale, relais du module de précision, récursion de raccord
+et continuation. La tête contient un seul appel au producteur de certificat ;
+la queue reçoit le certificat réel de cette tête. La continuation consomme
+les deux endpoints enregistrés et appelle une fois chacun des deux producteurs
+de suffixe. Le contrôle local du lot 48 passe également, inchangé.
+
+Cette vérification locale ne borne ni le coût interne du module d'accord reçu,
+ni le tas, ni le coût total ; elle ne supprime pas les parcours du producteur
+ancien. Son script a été figé et haché avant la première exécution, puis
+réexécuté inchangé ; SHA-256 :
+`390C473FCE1BA1840C9D23E02A816994A940F49A4362BABB701350D72FB05805`.
+Les commandes, empreintes, sources et logs sont conservés hors du dépôt.
+
+Les erreurs initiales d'élaboration sont conservées comme diagnostics de
+développement, pas comme vérifications réussies. Les preuves ont été réparées
+en explicitant les indices et la transparence locale des définitions, sans
+affaiblir leurs hypothèses ni augmenter les limites du module de production.
+Les clients utilisent explicitement `maxRecDepth 4096`. Le contrôle documentaire
+initial a trouvé une ligne blanche superflue en fin du nouveau client ; elle
+a été retirée, sans modifier le contrôleur. Les deux gates complètes ont
+ensuite été réexécutées sur les sources corrigées.
+
+La comparaison avec le début du lot compte deux ajouts, six modifications,
+418 fichiers inchangés et aucune suppression. Les quatre fondations, le
+maître, les contrats, la machine, les anciens producteurs, la toolchain,
+le manifeste, le registre et les figures restent identiques octet pour octet.
+La cible de la section 1 est inchangée. Les 102 liens locaux du plan sont
+valides ; le diff et les nouveaux fichiers ne présentent pas de défaut
+d'espacement. Les cinq références extérieures n'ont pas été revérifiées.
+
+Aucun commit, push, changement de branche ou audit extérieur n'est effectué.
+Le lot 49 fournit le raccord instrumental annoncé, pas les localisations
+physiques du second volet de R4.2. Leurs lois de propagation et de rencontre,
+puis la reconstruction du domaine et des structures R4-R7 restent à construire.
+Ce raccord ne remplace ni ne modifie aucune de ces obligations.
