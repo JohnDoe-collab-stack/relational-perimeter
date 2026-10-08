@@ -58,6 +58,8 @@ import Tests.Relativity.InteractionAttachmentChecks
 import Tests.Relativity.InteractionDescriptionAgreementChecks
 import Tests.Relativity.ContinuedDescriptionChecks
 import Tests.Relativity.NumericWindowChecks
+import Tests.Relativity.ReadingCoverChecks
+import Tests.Relativity.ConjunctiveCoverChecks
 
 /-! Build-time tooling, not a mathematical hypothesis or a new production
 dependency. Scan every constant in every imported repository module, including

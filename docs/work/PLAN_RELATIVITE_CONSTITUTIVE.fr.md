@@ -4474,3 +4474,643 @@ Les modifications sont limitées à la façade, l'import de l'audit des constant
 l'inventaire et ses deux contrôleurs, ainsi qu'à ce plan. Les ajouts sont le
 module numérique et son client. Aucun commit, push, changement de branche ni
 audit extérieur n'est effectué dans ce lot.
+
+## 35. Contraintes conjointes et premier recouvrement de lectures
+
+### 35.1. Obligation fixée avant l'implémentation
+
+Le départ est `3d8495b849a71bf2243e923cfc3cf9a98c80458d`, sur `relativite`,
+avec un arbre propre. Poursuivre R4.1 depuis les attachements et fenêtres des
+lots 31-34, sans recevoir de points, de topologie ou de géométrie.
+
+Construire une liste finie de contraintes sur les ports du même attachement
+constitué. Sa réalisation positive doit certifier toutes les lectures sur
+ce même support ; des compatibilités deux à deux ne la remplacent pas.
+Le décideur consomme les résultats du certifieur existant, avec refus exact.
+Les restrictions, transports et prolongements réutilisent leurs certificats,
+sans réexécuter une production. Le contrat récurrent reste inchangé.
+
+Construire ensuite une première règle de recouvrement instrumental : deux
+fenêtres ouvertes strictement plus fines et positivement chevauchantes
+couvrent une fenêtre. Le choix d'une branche lit la valeur certifiée et doit
+produire son certificat, pas recevoir une branche ou une lecture prescrites.
+Composer cette règle dans une grammaire finie et conserver le chemin positif
+jusqu'à la fenêtre choisie. La restriction doit retrouver la lecture d'origine.
+Le changement exact de description et la continuation stockée doivent
+conserver ces choix et ces garanties.
+
+Le client fermé doit réaliser plusieurs ports conjointement, refuser des
+contraintes incompatibles sur le même port, choisir effectivement les deux
+branches en faisant varier les lectures, traiter le chevauchement et ses
+bords, et poursuivre depuis une production partagée. Les différences de
+sources et de parcours ne deviennent pas des égalités de valeurs.
+
+Ce recouvrement de lectures ne sera pas nommé `PhysicalCover` : les lois
+instrumentales actuelles ne donnent pas encore les localisations physiques
+ni leur couverture. Ce lot ne ferme pas la continuité, R4 physique, la
+métrique ou la reconstruction relativiste. La cible de la section 1 reste
+inchangée. Préserver les fondations, le maître, la machine, les contrats,
+les figures et le registre. Vérifier le client public, le code compilé et
+les deux gates. Aucun commit, push, changement de branche ou audit extérieur.
+
+### 35.2. Réalisation conjointe sur le même attachement
+
+[ConstitutedReadingConstraints](../../RelationalPerimeter/Relativity/Production/ConstitutedReadingConstraints.lean)
+définit des contraintes sur les ports de l'attachement constitué. Le support
+n'est pas remplacé par une liste de valeurs libres. `CertifiedReadingConstraints`
+est une construction positive dans `Type` : chaque tête porte le certificat
+du port exact, et chaque suffixe reste certifié sur le même attachement.
+
+`certifyReadingConstraints` visite structurellement la liste demandée. Chaque
+clause visitée appelle une fois le certifieur numérique existant ; le premier
+refus termine la décision et réfute la conjonction. En cas d'admission, les
+certificats effectivement retournés sont assemblés. L'équivalence
+`reading_constraints_admission_exact` relie cette décision à toutes les
+contraintes, et `admitted_constraints_are_the_decision_output` fixe le
+constructeur admis au résultat de cette même décision.
+
+`ReadingConstraintRefinement` porte positivement les raffinements successifs
+des mêmes ports. Identité, composition et restriction sont exécutables ; les
+valeurs restent exactement celles des lectures constituées. Deux fenêtres
+disjointes sur un même port ne peuvent fournir de réalisation conjointe,
+quelle que soit la valeur reçue. Cela ne décide pas l'existence d'un autre
+support physique satisfaisant des contraintes libres.
+
+### 35.3. Recouvrement fini et sélection effective
+
+[InstrumentalReadingCovers](../../RelationalPerimeter/Relativity/Production/InstrumentalReadingCovers.lean)
+part d'une fenêtre et de deux coupures rationnelles données avec trois
+comparaisons strictes : borne inférieure, première coupure, seconde coupure,
+borne supérieure. Ces données descriptives justifient le chevauchement et
+la réduction stricte des deux amplitudes ; elles ne sont pas une loi physique
+de localisation découverte.
+
+`split_cover_exact` prouve que l'appartenance à la fenêtre initiale équivaut
+à l'appartenance à au moins une des deux fenêtres fines. `choose` compare
+la lecture certifiée à la seconde coupure et construit le certificat de la
+branche effectivement retenue. Le chevauchement donne priorité à gauche ;
+sa borne supérieure exclue conduit à droite, sans perdre cette lecture.
+
+`InstrumentalReadingCover` compose cette règle dans une grammaire finie.
+`Leaf` conserve une dérivation positive du chemin choisi, indexée par ce
+recouvrement exact. `select` appelle le choix une fois par noeud visité puis
+descend seulement dans la branche choisie. La restriction de sa sortie
+retrouve exactement le certificat initial. Le chemin n'identifie ni les
+occurrences sources ni leurs parcours.
+
+Le greffage `refine` remplace les feuilles par des recouvrements reçus ;
+l'identité et l'associativité sont prouvées. La famille de greffages est un
+paramètre descriptif fourni, non un résultat de recherche ou un futur lu
+par le producteur. Aucun coût général n'est promis pour ce paramètre.
+
+### 35.4. Raccord conjoint, intersections et continuation
+
+`coverConstraintHead` affine la première contrainte tout en conservant son
+suffixe certifié. Sa restriction retrouve la conjonction initiale entière ;
+toutes ses valeurs sont conservées. Le recouvrement n'autorise donc ni
+l'effacement des autres contraintes ni une réduction de mémoire.
+
+`coveredWindowIntersection` part d'une lecture fine déjà certifiée, la
+restreint à la fenêtre du recouvrement, exécute le choix puis construit
+l'intersection avec la fenêtre fine. Les deux retours sont exacts. C'est
+une intersection localement réalisée sur un même port, pas une preuve de
+compatibilité de fenêtres ou d'instruments arbitraires.
+
+Les contraintes et les feuilles choisies se prolongent par les historiques
+stockés et se transportent par l'accord riche exact de description. Les
+carrés sélection/prolongement, sélection/transport et continuation partagée
+sont prouvés, ainsi que les carrés avec restriction. Les valeurs et la
+satisfaction conjointe sont conservées sans nouvelle réception, comparaison
+ou recherche. Le contrat récurrent complet reste inchangé.
+
+[ReadingCoverChecks](../../Tests/Relativity/ReadingCoverChecks.lean) importe
+seulement l'API publique. Une émission, deux réceptions et leur comparaison
+produisent réellement son attachement. La réception lit un, la comparaison
+zéro ; leur conjonction est certifiée sur ce même attachement. Le client
+refuse les contraintes disjointes et une borne externe. Les lectures zéro,
+un, deux, trois et trois demis exercent les deux branches, le chevauchement
+et ses bords. Le recouvrement composé choisit des chemins différents.
+Une continuation mêlant inspection, comparaison admise et refus ne produit
+qu'une nouvelle détermination partagée ; ses reprises restent quantifiées
+sur toute liste finie de demandes. Les participants restent distincts.
+
+### 35.5. Frontière et prochaine obligation
+
+Ce lot ferme la réalisation de contraintes conjointes sur un attachement
+déjà constitué et une première règle finie de recouvrement de ses lectures
+instrumentales. Il n'a pas construit un recouvrement de lieux physiques,
+une présentation continue complète, une métrique ou la relativité. La
+cible de la section 1 reste inchangée.
+
+La suite doit raccorder ces règles finies aux descriptions conjointes et
+aux lois admissibles du domaine, en établissant ce que leurs restrictions
+et raffinements déterminent effectivement. Elle ne pourra pas substituer
+une couverture de valeurs rationnelles à une localisation physique, ni
+poser d'avance les points ou la géométrie qu'elle doit reconstruire. R3
+physique, R4 physique et les obligations ultérieures restent ouverts.
+
+### 35.6. Vérifications et périmètre final du lot
+
+Sur les sources finales du lot, avec Lean 4.33.1 :
+
+- `lake build +RelationalPerimeter` réussit : 245 jobs.
+- `scripts/verify.sh` sous Git Bash et `scripts/verify.ps1` sous PowerShell
+  natif Windows réussissent : 305 fichiers Lean, 307 jobs pour le build
+  complet et 23 fixtures rejetées pour les diagnostics et sites attendus.
+  Aucune erreur ni aucun avertissement Lean ne subsiste.
+- Le balayage couvre 25 872 constantes dans 304 modules ; aucune déclaration
+  écrite ne dépend d'un axiome. Les 364 exceptions sont générées par Lean.
+  Les 41 entrées de l'audit du nouveau client ne dépendent d'aucun axiome.
+- Les 244 modules de production sont tous accessibles et stratifiés, sans
+  orphelin. Les contraintes sont H16, les recouvrements H17 et la façade H18.
+  Les contrôleurs étendent leurs rangs sans assouplir la descente stricte des
+  imports. Les strates antérieures restent inchangées.
+- L'inspection locale complémentaire du C généré, avec les analyseurs de
+  corps et d'accessibilité de `scripts/check-unified-codegen.py`, couvre
+  128 racines des deux nouveaux modules et 159 fonctions accessibles,
+  fermetures statiques comprises. Aucun producteur, runner récurrent,
+  chercheur d'échange ou exécuteur d'extension de description n'y est appelé.
+  Le constructeur admis appelle le certifieur une fois ; le sélecteur appelle
+  le choix une fois par noeud visité puis seulement la branche choisie.
+  Le greffage à callback `refine` est exclu de cette inspection. Celle-ci
+  n'est pas une nouvelle gate permanente ni une borne de coût total. Le
+  chemin positif compilé conserve aussi des données de l'arbre ; aucune
+  minimalité de mémoire n'est revendiquée.
+- Les contrôles documentaires statiques passent ; les 72 liens locaux du
+  plan résolvent et la section 1 est identique au commit de départ.
+- Les empreintes SHA-256 comparées à l'arbre de début du lot trouvent trois
+  ajouts, six modifications, 392 fichiers inchangés et aucune suppression.
+  Tous les modules antérieurs, les quatre fondations, le maître, la machine,
+  les contrats, les figures et le registre sont inchangés. Le diff est propre.
+
+Les modifications sont limitées à la façade, l'import de l'audit des
+constantes, l'inventaire et ses deux contrôleurs, ainsi qu'à ce plan. Les
+ajouts sont les deux modules de production et leur client public. Aucun
+commit, push, changement de branche ou audit extérieur n'est effectué.
+
+## 36. Recouvrements conjoints et intersections finies réalisées
+
+### 36.1. Obligation fixée avant l'implémentation
+
+Poursuivre sur `relativite` depuis le lot 35 vérifié, encore non commité.
+Conserver ses neuf fichiers de travail. La cible de la section 1, les
+fondations, les productions, le maître et les contrats restent inchangés.
+
+Étendre le choix de fenêtre à toute liste finie de contraintes, sur le même
+attachement constitué. Construire positivement les feuilles choisies et
+leurs certificats conjoints ; restreindre la sortie doit retrouver toute
+l'entrée, pas seulement une égalité de valeurs. Le décideur consomme une
+seule décision conjointe et n'impose pas de feuille avant cette décision.
+
+Construire identité et concaténation des recouvrements sans énumérer le
+produit de leurs branches. Former l'intersection de deux listes alignées
+sur les mêmes ports : son certificat doit consommer leurs deux réalisations
+conjointes, avec deux restrictions exactes. Un alignement de ports ou un
+recoupement de fenêtres ne fournit pas, à lui seul, cette réalisation.
+Raccorder le choix à une réalisation plus fine par une intersection
+effectivement certifiée, sans reconstruire une lecture prescrite.
+
+Prouver que ces choix et intersections suivent les accords riches et les
+historiques stockés, avec les carrés de restriction et de continuation.
+Le client public doit exercer plusieurs ports, deux branches réellement
+choisies, une intersection réalisée et une intersection refusée, puis
+reprendre le même contrat depuis une production partagée. Contrôler les
+chemins compilés et exécuter les deux gates complètes.
+
+Ce sont des recouvrements instrumentaux conjoints, pas `PhysicalCover` ni
+un domaine relativiste. Ils ne ferment pas la localisation, les lois de
+propagation, les présentations idéales ou le continuum. Aucun changement
+de branche, commit, push ou audit extérieur n'est autorisé par ce lot.
+
+### 36.2. Choix conjoints positifs et couverture exacte
+
+[ConjunctiveReadingCovers](../../RelationalPerimeter/Relativity/Production/ConjunctiveReadingCovers.lean)
+construit `InstrumentalConstraintCover` sur la liste des contraintes du lot
+35. Chaque clause possède son recouvrement de fenêtres justifié ; chaque
+sortie `CoveredReadingConstraints` conserve sa feuille locale et son
+certificat, puis la sortie de son suffixe sur le même attachement.
+
+La liste fine est calculée depuis ces feuilles, pas reçue comme cible.
+`select` consomme les certificats conjoints déjà produits et exécute chaque
+choix local une fois. Il ne construit pas la liste de toutes les combinaisons
+de feuilles. `decideConjunctiveCover` prend une seule décision conjointe,
+puis sélectionne ses certificats retournés ou conserve son refus.
+
+`conjunctive_cover_exact` prouve les deux directions entre satisfaction de
+la liste initiale et existence d'une réalisation positive de son recouvrement.
+Le témoin exécuté reste disponible dans `Type` ; l'énoncé propositionnel ne
+le remplace pas. `selected_joint_cover_restricts` retrouve toute l'entrée.
+Les valeurs, tous les ports et leur ordre sont conservés. L'identité garde
+la liste et produit des chemins vides ; la concaténation sélectionne les
+deux réalisations séparément et assemble exactement leurs sorties.
+
+### 36.3. Intersections effectivement réalisées et retour au grossier
+
+`ReadingConstraintIntersection` construit l'intersection des fenêtres de
+deux listes alignées sur les mêmes ports. Cet alignement ne contient ni
+valeur ni certificat d'admission. L'intersection peut être vide. Son
+équivalence de satisfaction avec la conjonction des deux listes est prouvée.
+
+`certify` consomme deux réalisations entières sur le même attachement pour
+former le certificat commun. `realized_intersection_returns` prouve ses
+deux restrictions exactes. Ce n'est pas une sélection de mesures seulement
+compatibles deux à deux sur des supports indépendants.
+
+`pullbackConjunctiveCover` reçoit une réalisation fine avec son raffinement
+de la liste grossière. Il la restreint, exécute le choix conjoint, construit
+l'alignement entre la liste sélectionnée et la liste fine, puis certifie
+leur intersection depuis ces deux résultats. Les deux retours sont exacts,
+ainsi que le retour composé jusqu'à la réalisation grossière d'origine.
+La sortie est une paire dépendante positive, non une intersection présumée.
+Les lois portent sur ces listes alignées ; elles ne fournissent pas encore
+le système général de recouvrements physiques de R4.
+
+### 36.4. Transport, continuation partagée et client public
+
+Les choix conjoints se transportent par l'accord riche et se prolongent par
+l'historique stocké. Leur sélection commute avec ces passages ; les chemins
+restent identiques. Les restrictions commutent avec transport et prolongement,
+et le carré de continuation partagée est prouvé sur toute sortie conjointe.
+Les intersections certifiées se transportent et se prolongent de la même
+manière. Aucun de ces chemins descriptifs ne produit une nouvelle réception,
+comparaison ou recherche.
+
+[ConjunctiveCoverChecks](../../Tests/Relativity/ConjunctiveCoverChecks.lean)
+importe seulement l'API publique. Des émissions et réceptions constituent
+ses contextes ; la recherche trouve réellement l'échange de deux réceptions
+sur anciens ports. La comparaison fournit la tête consommée par son
+transport, qui ne la réexécute pas.
+Le changement de présentation déplace effectivement la référence de
+réception de la position deux à la position un.
+
+La lecture reçue un donne les choix gauche/droite sur les ports réception
+et comparaison ; la lecture trois donne droite/droite avec le même
+recouvrement. Les sorties contiennent respectivement les valeurs un/zéro
+et trois/zéro. Une borne externe est refusée. Une intersection réalisée
+rend les deux entrées ; une autre, pourtant alignée, est réfutée pour toute
+lecture reçue et refusée par le décideur. Deux ports différents ne peuvent
+fournir cet alignement.
+
+La continuation mêle inspection, comparaison et refus, avec une seule
+nouvelle production partagée. Les lois suivent l'historique stocké et toutes
+les reprises finies du contrat inchangé. Les sources restent distinctes.
+Six équations fermées du client demandent une profondeur d'élaboration
+locale de 2048 ; elles sont vérifiées par réduction du noyau. Cette limite
+de l'élaborateur n'est ni une hypothèse mathématique ni une borne du runtime.
+
+### 36.5. Portée et prochaine obligation
+
+Le raccord des contraintes, de leurs choix conjoints et de leurs
+intersections réalisées est désormais exécutable sur les productions
+instrumentales existantes. L'ordre constitution, lecture, décision,
+sélection et transport reste visible ; il ne devient pas une genèse
+géométrique par le seul nom de recouvrement.
+
+Il manque toujours les lois physiques de propagation et de rencontre,
+les accords de localisation et les réalisations cohérentes à toute
+précision exigées par R4.2. Les recouvrements actuels ne pourront pas être
+rebaptisés physiques pour franchir cette frontière. La suite doit établir
+leur raccord à ces lois et réalisations, avant de former un domaine de
+points, un atlas ou une métrique. La cible de la section 1 est inchangée.
+
+### 36.6. Vérification du lot
+
+Vérification avec Lean 4.33.1, sur l'arbre de travail de `relativite` :
+
+- Le module et le client sont élaborés séparément. Leurs 45 et 41 entrées
+  d'audit ne dépendent d'aucun axiome ; aucun avertissement Lean ne subsiste.
+- `lake build +RelationalPerimeter` passe avec 246 jobs. Les deux gates
+  complètes, Bash et PowerShell natif Windows, passent avec 307 fichiers Lean,
+  309 jobs de build et 23 fixtures de rejet vérifiées à leur diagnostic exact.
+- Le balayage couvre 26 126 constantes dans 306 modules : aucune déclaration
+  écrite ne dépend d'un axiome ; les 364 exceptions sont générées par Lean.
+- Les 245 modules de production sont accessibles et stratifiés sans orphelin.
+  Le nouveau module est H18 et la façade H19. La descente stricte des imports
+  est conservée ; aucune strate antérieure n'est assouplie.
+- L'inspection complémentaire du C généré, avec les analyseurs de corps et
+  d'accessibilité de `scripts/check-unified-codegen.py`, couvre 99 racines
+  du nouveau module et 140 fonctions accessibles. Aucun producteur, runner
+  récurrent, chercheur d'échange, exécuteur d'extension de description ou
+  énumérateur de produit cartésien n'y est appelé. Le décideur appelle le
+  certifieur conjoint une fois ; le sélecteur appelle le sélecteur local une
+  fois par clause puis poursuit sur le certificat du suffixe. Le pullback
+  réutilise les résultats liés, sans refaire le choix conjoint.
+- Cette inspection porte sur les appels statiquement accessibles, pas sur
+  des callbacks arbitraires. Ce n'est ni une nouvelle gate permanente ni
+  une borne de coût. Les intersections compilées reconstruisent notamment
+  les indices de leurs suffixes ; les structures positives conservent aussi
+  des données de recouvrement. Aucune optimalité de temps ou de mémoire
+  n'est revendiquée par ce lot.
+- Les contrôles documentaires statiques passent ; les 74 liens locaux du
+  plan résolvent et sa section 1 est identique au commit de départ.
+- Les empreintes SHA-256, comparées à l'arbre de début du lot, donnent deux
+  ajouts, six modifications, 395 fichiers inchangés et aucune suppression.
+  Les modules et le client du lot 35, les quatre fondations, le maître, la
+  machine, les contrats, les figures et le registre sont inchangés. Le diff
+  est propre.
+
+Les six modifications concernent la façade, l'import de l'audit des
+constantes, l'inventaire et ses deux contrôleurs, ainsi que ce plan. Les
+deux ajouts sont le module de production et son client public. Aucun commit,
+push, changement de branche ou audit extérieur n'est effectué.
+
+## 37. Raffinements réalisés à toute précision demandée
+
+### 37.1. Obligation fixée avant l'implémentation
+
+Poursuivre le premier volet de R4.2 depuis le lot 36 : toute liste de lectures
+déjà certifiées doit fournir, pour chaque précision rationnelle positive
+demandée, une liste fine réalisée, une restriction exacte et une borne sur
+la largeur de chaque fenêtre. Construire les fenêtres depuis ces lectures,
+puis leur intersection avec les contraintes antérieures ; ne pas recevoir
+une liste fine présumée habitée. La précision reste descriptive, distincte
+du nombre de productions physiques et de la longueur des continuations.
+
+Construire les reprises de cette opération pour toute liste finie de
+précisions, sans plafond global. Chaque tête lit ses certificats reçus et
+sa seule précision ; la queue reprend ses certificats produits. Prouver le
+retour composé, la concaténation des reprises et la compatibilité avec les
+transports et historiques stockés. Consommer les feuilles du recouvrement
+déjà sélectionné, sans relancer sa sélection ni la production instrumentale.
+
+Étendre le client public du lot 36, sans une nouvelle instance de production :
+plusieurs ports, plusieurs précisions, continuation partagée, changement
+effectif de référence et refus antérieurs conservés. Vérifier l'élaboration,
+les audits, le code compilé et les deux gates complètes.
+
+Ce lot ne construit pas le deuxième volet de R4.2 : les localisations qui
+ne sont pas déjà les descriptions d'un événement exécuté. Il ne ferme ni
+les lois physiques de propagation et de rencontre, ni `PhysicalCover`, ni
+le domaine relativiste. La cible reste inchangée. Les onze fichiers de
+travail antérieurs sont préservés ; aucun commit, push, changement de branche
+ou audit extérieur n'est autorisé.
+
+### 37.2. Précision construite et réalisation de toutes les clauses
+
+[PreciseReadingRefinements](../../RelationalPerimeter/Relativity/Production/PreciseReadingRefinements.lean)
+réemploie `Precision` du backend numérique existant. Sa valeur et celle de
+sa demi-précision sont strictement positives, avec une preuve fermée. Pour
+une lecture certifiée, `ReadingWindow.atPrecision` calcule les bords autour
+de sa valeur reçue ; sa largeur est exactement la précision demandée.
+`refineReadingPrecision` intersecte cette fenêtre avec la fenêtre antérieure
+et construit le certificat commun. Il répète ce passage pour toutes les
+clauses, sur le même attachement, avec leurs ports inchangés.
+
+La liste fine est produite depuis les certificats ; elle n'est pas un
+paramètre libre. `reading_precision_restricts_exactly` rend toute la liste
+reçue et `reading_precision_bounds_every_window` borne chaque fenêtre fine.
+Les certificats positifs donnent aussi leur réalisation ; une borne seule
+ne fournit pas une lecture admise. `RealizedReadingRefinement` conserve la
+liste fine, son raffinement positif et ces certificats. Cette interface
+descriptive est distincte d'une autorisation de production physique.
+
+### 37.3. Reprises finies arbitraires et retour composé
+
+`refineReadingPrecisions` récure structurellement sur la liste de précisions.
+Sa tête calcule une seule fois le raffinement de la liste reçue ; sa queue
+consomme les certificats de ce résultat. Elle ne reçoit ni point extérieur
+ni queue de productions physiques. La composition des raffinements construit
+le retour jusqu'à la liste initiale. Les lois d'identité et d'associativité
+portent sur les témoins positifs de liste, pas seulement leurs valeurs.
+
+`precision_runs_append` identifie exactement une course concaténée à la
+reprise de son résultat intermédiaire. `resume` accepte ce résultat déjà
+produit : il ne réexécute pas le préfixe. Le retour composé, toutes les
+valeurs et tous les ports sont conservés. Chaque précision appartenant à
+la liste reste une borne de toutes les fenêtres finales, même après une
+demande moins fine. Cette propriété est prouvée pour toute liste finie,
+sans horizon maximal ni sélection implicite d'une famille infinie.
+
+Le module transporte ces résultats par les accords riches et les historiques
+stockés. La course entière commute avec ces deux passages ; son carré de
+continuation utilise la même production partagée. `CoveredReadingConstraints.precise`
+consomme les certificats des feuilles déjà sélectionnées, sans appeler de
+nouveau le sélecteur de recouvrement. Sa restriction composée retrouve le
+certificat grossier de ce choix.
+
+### 37.4. Client existant, distinctions et frontière
+
+Le [client public du lot 36](../../Tests/Relativity/ConjunctiveCoverChecks.lean)
+est étendu sans nouvelle entrée maître ni copie du scénario. Il demande les
+précisions un puis un demi sur ses réceptions et comparaison réelles.
+Les fenêtres changent effectivement, toutes les clauses restent présentes,
+les valeurs restent un et zéro, et la restriction rend les certificats
+initiaux. La reprise depuis le premier résultat égale la course complète.
+Les lois sont aussi exercées sur des listes arbitraires de précisions.
+
+Les lectures reçues un et trois ne peuvent pas donner les mêmes fenêtres
+fines : leur écart contredit la largeur certifiée. Une précision non positive
+ne peut être construite ; une conjonction antérieure réfutée ne fournit pas
+les certificats nécessaires pour commencer ce chemin. Le transport déplace
+toujours la référence réelle de réception ; la continuation utilise le même
+historique stocké, sans changer le contrat de toutes les reprises finies.
+Trois nouvelles preuves du client utilisent la profondeur d'élaboration
+locale de 2048 déjà employée pour ses données constituées ; aucune limite
+globale du runtime ni hypothèse de preuve n'est ajoutée.
+
+Ce lot ferme les raffinements instrumentaux réalisés à toute précision
+rationnelle positive demandée, pas `PhysicalPresentation`. Il traite les
+descriptions des déterminations déjà constituées, et non la deuxième
+obligation de R4.2. Les lois physiques de propagation, l'admission de rencontre,
+les accords de localisation et les réalisations cohérentes non réduites aux
+noms d'événements exécutés restent nécessaires avant la reconstruction du
+domaine. La cible de la section 1, les fondations, le maître et les contrats
+restent inchangés. Aucune borne de coût, minimalité mémoire ou validation
+relativiste n'est déduite de ces fenêtres exactes.
+
+### 37.5. Vérifications et périmètre final du lot
+
+Vérification sur `relativite`, avec Lean 4.33.1 inchangé :
+
+- Le nouveau module et le client public étendu s'élaborent séparément.
+  Leurs 44 et 63 entrées d'audit n'affichent aucun axiome ni avertissement
+  Lean. Les 41 entrées antérieures du client sont conservées.
+- `lake build +RelationalPerimeter` passe avec 247 jobs. Bash et PowerShell
+  natif Windows vérifient chacun 308 fichiers Lean, un build de 310 jobs et
+  les 23 fixtures de rejet avec leurs diagnostics exacts. Les contrôleurs
+  du maître, de la machine et des agents passent sans modification.
+- Le balayage exhaustif couvre 26 221 constantes dans 307 modules : aucune
+  déclaration écrite ne dépend d'un axiome ; les 364 exceptions sont générées
+  par Lean. Le scan des sources ne trouve aucun terme interdit.
+- Les 246 modules de production sont stratifiés et accessibles, sans
+  orphelin. Le nouveau module est H19 et la façade H20 ; le backend numérique
+  reste en amont et la descente stricte des imports est conservée.
+- L'inspection locale du C généré, avec les analyseurs de
+  `scripts/check-unified-codegen.py`, couvre 31 racines du nouveau module
+  et 63 fonctions accessibles. Aucun producteur, runner récurrent, chercheur
+  d'échange ou sélecteur de recouvrement n'est accessible depuis ces racines.
+  Le chemin de clause construit sa fenêtre une fois et recurse une fois
+  sur les autres certificats reçus. Le chemin de précisions construit sa
+  tête une fois puis passe ses champs `fine` et `readings` au suffixe. Le
+  chemin `resume` lit ceux du résultat reçu, sans reprendre son ancien run.
+- La demi-précision numérique est partagée entre les deux bords dans le C
+  inspecté. Cependant, ce chemin utilise toujours la normalisation rationnelle
+  du backend existant, avec sa recherche finie de représentant. Il conserve
+  aussi des indices de fenêtres et des témoins de raffinement en `Type`.
+  L'inspection n'est pas une borne de coût ou une minimalité mémoire, ni une
+  gate permanente supplémentaire pour des callbacks arbitraires.
+- Les contrôles documentaires statiques passent, les 76 liens locaux du
+  plan résolvent et la cible de la section 1 est inchangée. Le diff est propre.
+- Les empreintes SHA-256 comparées au début du lot donnent un ajout, six
+  modifications, 397 fichiers inchangés et aucune suppression. Les quatre
+  fondations, tous les anciens modules de production, le maître, la machine,
+  les contrats, le registre et les figures sont inchangés, hors de la façade
+  enrichie par le nouvel import et ses audits.
+
+L'ajout est le module de raffinements. Les modifications sont le client
+public étendu, la façade, l'inventaire et ses deux contrôleurs, ainsi que ce
+plan. Aucun commit, push, changement de branche ou audit extérieur n'est
+effectué. Le lot instrumental est vérifié ; les obligations physiques
+énoncées en 37.4 et la cible finale restent ouvertes.
+
+## 38. Compatibilité des descriptions et séparation des lectures
+
+### 38.1. Obligation fixée avant l'implémentation
+
+Poursuivre le premier volet de R4.2, sans le confondre avec son second
+volet physique. Deux courses finies de précision issues des mêmes
+certificats constitués doivent fournir un raffinement conjoint positif,
+avec retour exact aux deux descriptions reçues puis aux certificats
+initiaux. La construction consomme les résultats déjà calculés ; elle
+ne rejoue ni leurs courses de précision, ni la sélection de recouvrement,
+ni une production instrumentale. Le raccord doit suivre les transports
+riches et la continuation partagée du même contrat.
+
+Fermer aussi une limite exacte de ces lecteurs : sur les ports constitués,
+deux lectures rationnelles différentes doivent fournir effectivement une
+fenêtre qui admet la première et refuse la seconde. L'accord de toutes
+les admissions par fenêtres doit être équivalent à l'égalité des valeurs
+lues, et non à l'égalité des occurrences ou à un accord de localisation.
+Le séparateur est une donnée positive calculée depuis les deux lectures
+reçues ; aucune existence de fenêtre n'est laissée comme hypothèse.
+
+Le client public existant doit établir les retours pour deux résolutions,
+un refus positif entre lectures différentes, et l'accord numérique de
+participants dont les occurrences restent distinctes. Il réutilise les
+mêmes productions et la même continuation, sans nouvelle instance maître.
+
+Ce lot ne définit pas un domaine de points, une mesure physique, un accord
+de localisation ni une loi de propagation. Les familles descriptives
+restent attachées à des déterminations déjà produites. Les réalisations
+constitutives compatibles qui ne sont pas réduites à ces événements finis,
+ainsi que les lois physiques de R3-R7, restent à construire. La cible de
+la section 1 et les contrats acquis ne sont pas modifiés.
+
+### 38.2. Raffinement conjoint des résultats reçus
+
+Le module [ReadingCompatibility](../../RelationalPerimeter/Relativity/Production/ReadingCompatibility.lean)
+forme `RealizedReadingRefinement.common` depuis deux résultats sur le même
+attachement et la même liste initiale de contraintes. Il construit l'alignement
+de leurs ports depuis leurs raffinements positifs, puis certifie leurs
+intersections avec les deux listes de certificats déjà reçues. Les fenêtres
+communes sont calculées, et non prescrites comme résultat du constructeur.
+
+`realized_common_returns` retrouve les deux listes de certificats complètes,
+pas seulement leurs valeurs. `realized_common_coarse_returns` compose chacun
+de ces retours avec sa restriction initiale. Pour deux courses quelconques
+de précisions finies depuis les mêmes certificats,
+`precision_courses_common_return` ferme les deux retours à ces certificats.
+Les bornes de précision des deux côtés sont conservées dans le raffinement
+commun. Les lois de prolongement, de transport riche et le carré de la
+continuation partagée portent sur tout le résultat.
+
+`CommonReadingRefinement` est une interface descriptive positive, indexée
+par les deux listes de contraintes, et non un certificat de causalité ou de
+localisation. Ses retours exacts sont démontrés pour le producteur construit
+`common`, pas postulés pour une structure libre. Cette indexation évite de
+demander une égalité d'encodage des résultats intermédiaires pour effectuer
+le transport des mêmes lectures.
+
+### 38.3. Ce que les lecteurs numériques déterminent exactement
+
+`separateNumericReadings` lit les deux ports constitués reçus. Il décide
+l'égalité des valeurs rationnelles. En cas de différence, il compare leur
+ordre et construit une fenêtre : le bord excluant est la valeur du second
+port ; l'autre bord vient de la fenêtre positive construite autour du
+premier. Le résultat positif porte le certificat du premier et le refus
+du second par cette même fenêtre. Les deux directions d'ordre sont closes.
+
+`numeric_separator_admissions` relie ces données aux admissions du code,
+avec `true` pour le premier port et `false` pour le second.
+`numerical_readers_determine_values` prouve les deux sens : l'accord de
+toutes les admissions par fenêtres équivaut exactement à l'égalité des
+valeurs de ces ports. `joint_numerical_readers_determine_values` étend ce
+résultat aux conjonctions finies et aux deux ports numériques. Aucun témoin
+de séparation requis n'est laissé dans une existence propositionnelle.
+
+Ces équivalences sont des propriétés de ces lecteurs, pas des accords de
+localisation, de provenance, de parcours ou de mémoire complète. Le client
+[ConjunctiveCoverChecks](../../Tests/Relativity/ConjunctiveCoverChecks.lean)
+réutilise les réceptions et la comparaison existantes. Les valeurs un et
+trois produisent deux séparateurs orientés, dont le bord refusé vient bien
+de la seconde lecture. La même lecture de comparaison ne détermine pas
+l'arrivée. Inversement, deux participants ont toutes leurs admissions
+numériques égales tout en conservant des références d'occurrence prouvées
+distinctes. Un accord numérique ne peut donc devenir leur identification.
+
+Le séparateur conserve sa fenêtre et ses deux garanties sous les transports
+riches et les histoires déjà produites. Le raffinement conjoint suit la même
+continuation partagée ; le contrat de toutes les suites finies est inchangé.
+Quatre limites de profondeur supplémentaires sont locales aux équations du
+client fermé : elles règlent son élaboration, pas la longueur des courses.
+Aucune limite de heartbeats n'est augmentée.
+
+### 38.4. Frontière de la cible
+
+Ce lot ferme la compatibilité positive de plusieurs descriptions finies des
+mêmes lectures déjà produites et la portée exacte de leurs lecteurs numériques.
+Il ne fournit pas les réalisations physiques cohérentes du second volet de
+R4.2, ni un domaine de localisations ou sa structure relativiste. L'égalité
+numérique établie ne remplace pas les lois de propagation, de rencontre et
+de transport physique nécessaires à ces localisations. La cible finale de
+la section 1 reste ouverte et inchangée ; aucune conclusion de complexité,
+de minimalité mémoire ou de mesure physique n'est ajoutée.
+
+### 38.5. Vérifications et périmètre final du lot
+
+Vérification sur `relativite`, avec Lean 4.33.1 inchangé :
+
+- Le nouveau module s'élabore avec ses 24 entrées d'audit sans axiome.
+  Le client étendu s'élabore avec 86 entrées, dont les 63 précédentes
+  conservées et 23 nouvelles ; aucune ne dépend d'un axiome.
+- `lake build +RelationalPerimeter` passe avec 248 jobs. Les gates Bash
+  et PowerShell natif Windows passent toutes deux : 309 fichiers Lean,
+  build complet de 311 jobs et 23 fixtures de rejet avec leurs diagnostics
+  exacts, sans erreur étrangère. Aucun avertissement Lean n'est émis.
+- Le balayage exhaustif couvre 26 316 constantes dans 308 modules :
+  aucune déclaration écrite ne dépend d'un axiome. Les 364 exceptions
+  proviennent de déclarations générées par Lean. Le scan sensible à la
+  casse des sources ne trouve aucun terme interdit.
+- Les 247 modules de production sont accessibles et strictement stratifiés,
+  sans orphelin. Le module d'accord de lectures est H20, la façade H21 ;
+  aucun autre rang ni droit d'import n'est changé.
+- L'inspection complémentaire du C utilise les analyseurs existants de
+  `scripts/check-unified-codegen.py`. Elle couvre les 36 racines du nouveau
+  module et 90 fonctions statiquement accessibles. Aucun appel nommé à un
+  producteur, runner récurrent, chercheur d'échange, raffineur de précision
+  ou sélecteur de recouvrement n'est accessible. Le constructeur commun
+  lit les deux raffinements et certificats reçus, puis appelle une fois
+  l'alignement et une fois la certification conjointe.
+- Dans le corps C du séparateur, chaque port est lu une fois. La fenêtre
+  centrée est construite une fois, uniquement après détection d'une
+  différence ; son bord conservé et la seconde valeur forment la fenêtre
+  retournée. L'extraction positive depuis une différence prouvée appelle
+  le discriminateur une fois et conserve son résultat. Ces constats portent
+  sur les appels statiques inspectés. Les 17 sites de callbacks transitifs,
+  notamment les lectures du support reçu, ne sont pas une garantie globale
+  sur les fonctions d'un client. Le backend de normalisation rationnelle
+  existant reste utilisé ; aucune borne de coût n'est déduite.
+- Les contrôles documentaires passent, les 78 liens locaux du plan résolvent,
+  sa section 1 est strictement inchangée et `git diff --check` est propre.
+  Le seul avertissement Git concerne la conversion LF/CRLF de l'inventaire.
+- Les empreintes SHA-256 comparées au début de ce lot montrent un ajout,
+  six modifications, 398 fichiers inchangés et aucune suppression. Les
+  quatre fondations, tous les anciens modules de production hors façade,
+  le maître, la machine, les contrats, le manifeste Lean, le registre et
+  les figures sont inchangés. Les lots précédents sont préservés.
+
+L'ajout est `ReadingCompatibility.lean`. Les modifications portent sur le
+client public existant, la façade, l'inventaire et ses deux contrôleurs,
+ainsi que le plan. Aucun commit, push, changement de branche ou audit
+extérieur n'est effectué. Ce lot descriptif est vérifié ; la frontière
+physique de 38.4 et la cible finale restent ouvertes.

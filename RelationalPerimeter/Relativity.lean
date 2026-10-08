@@ -17,6 +17,11 @@ import RelationalPerimeter.Relativity.Production.InteractionAttachments
 import RelationalPerimeter.Relativity.Production.InteractionDescriptionAgreement
 import RelationalPerimeter.Relativity.Production.ContinuedInteractionDescriptions
 import RelationalPerimeter.Relativity.Production.NumericDescriptionWindows
+import RelationalPerimeter.Relativity.Production.ConstitutedReadingConstraints
+import RelationalPerimeter.Relativity.Production.InstrumentalReadingCovers
+import RelationalPerimeter.Relativity.Production.ConjunctiveReadingCovers
+import RelationalPerimeter.Relativity.Production.PreciseReadingRefinements
+import RelationalPerimeter.Relativity.Production.ReadingCompatibility
 
 /-!
 The numerical prerequisites and first declared local-production candidate.
@@ -69,6 +74,24 @@ compose without replay. Reader refinement remains distinct from production.
 Open rational windows now certify constituted reception and comparison ports.
 Their numerical bounds, restrictions and compatible intersections preserve the
 stored reading through the same continuation, without supplying spacetime.
+Finite conjunctions now require certificates on that same constituted support.
+Positively overlapping windows cover its certified readings; the executed
+selector records a justified leaf and keeps the other clauses. Restrictions,
+intersections and cached continuation preserve those readings. These are
+instrumental covers, not physical locations or a reconstructed continuum.
+Conjunctive covers now select a certified leaf for every clause on the same
+attachment, without enumerating branch combinations. Realized finite
+intersections consume both joint certificates and return them exactly through
+restriction; these constructions follow the cached shared continuation.
+Every requested positive rational precision now computes realized joint
+windows from the stored certificates and their previous constraints. Arbitrary
+finite resumption preserves all requested bounds and exact restrictions;
+transport and cached continuation commute with the entire refinement. This
+descriptive precision does not provide physical localization or new events.
+Two realized finite descriptions now construct a common refinement with exact
+returns to both sets of certificates. Positive windows separate different
+constituted numerical readings. All window or conjunctive admissions determine
+only those values, not source identity, attached effects or physical location.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -155,4 +178,32 @@ stored reading through the same continuation, without supplying spacetime.
 #print axioms RelationalPerimeter.Relativity.Production.numeric_common_restrictions
 #print axioms RelationalPerimeter.Relativity.Production.certified_numeric_error_bounds
 #print axioms RelationalPerimeter.Relativity.Production.numeric_continuation_square
+#print axioms RelationalPerimeter.Relativity.Production.reading_constraints_admission_exact
+#print axioms RelationalPerimeter.Relativity.Production.constraint_continuation_square
+#print axioms RelationalPerimeter.Relativity.Production.disjoint_constraints_unrealizable
+#print axioms RelationalPerimeter.Relativity.Production.split_cover_exact
+#print axioms RelationalPerimeter.Relativity.Production.selected_cover_restricts_to_source
+#print axioms RelationalPerimeter.Relativity.Production.cover_selection_prolong_square
+#print axioms RelationalPerimeter.Relativity.Production.constraint_cover_preserves_all_values
+#print axioms RelationalPerimeter.Relativity.Production.conjunctive_cover_exact
+#print axioms RelationalPerimeter.Relativity.Production.selected_joint_cover_restricts
+#print axioms RelationalPerimeter.Relativity.Production.joint_selection_append
+#print axioms RelationalPerimeter.Relativity.Production.joint_continuation_square
+#print axioms RelationalPerimeter.Relativity.Production.constraint_intersection_satisfaction_iff
+#print axioms RelationalPerimeter.Relativity.Production.realized_intersection_returns
+#print axioms RelationalPerimeter.Relativity.Production.conjunctive_pullback_coarse_return
+#print axioms RelationalPerimeter.Relativity.Production.reading_precision_bounds_every_window
+#print axioms RelationalPerimeter.Relativity.Production.precision_run_restricts_exactly
+#print axioms RelationalPerimeter.Relativity.Production.precision_runs_append
+#print axioms RelationalPerimeter.Relativity.Production.precision_run_bounds_every_requested_precision
+#print axioms RelationalPerimeter.Relativity.Production.precision_run_transport_square
+#print axioms RelationalPerimeter.Relativity.Production.realized_refinement_continuation_square
+#print axioms RelationalPerimeter.Relativity.Production.covered_precisions_return_the_selected_source
+#print axioms RelationalPerimeter.Relativity.Production.realized_common_returns
+#print axioms RelationalPerimeter.Relativity.Production.precision_courses_common_return
+#print axioms RelationalPerimeter.Relativity.Production.common_continuation_square
+#print axioms RelationalPerimeter.Relativity.Production.separateNumericReadings
+#print axioms RelationalPerimeter.Relativity.Production.numeric_separator_admissions
+#print axioms RelationalPerimeter.Relativity.Production.numerical_readers_determine_values
+#print axioms RelationalPerimeter.Relativity.Production.joint_numerical_readers_determine_values
 /- AXIOM_AUDIT_END -/
