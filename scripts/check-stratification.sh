@@ -45,8 +45,23 @@ while IFS=$'\t' read -r module layer migration role extra; do
   [[ -z "$module" || "${module:0:1}" == '#' ]] && continue
   [[ -z "${extra:-}" && -n "$role" ]] || { echo "$manifest:$line_number: expected four tab-separated fields" >&2; exit 1; }
   [[ -z "${stratum[$module]+x}" ]] || { echo "$manifest:$line_number: duplicate module $module" >&2; exit 1; }
-  [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 A17 " == *" $layer "* || "$layer" =~ ^M([0-9]|1[0-9])$ ]] || { echo "$manifest:$line_number: unknown stratum $layer" >&2; exit 1; }
+  [[ " U F G S B E M R X P K D Q N API A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 A17 " == *" $layer "* || "$layer" =~ ^M([0-9]|1[0-9])$ || "$layer" =~ ^T[0-7]$ || "$layer" =~ ^H[0-9]$ ]] || { echo "$manifest:$line_number: unknown stratum $layer" >&2; exit 1; }
   [[ "$migration" == enforced ]] || { echo "$manifest:$line_number: every production module must be enforced, found $migration" >&2; exit 1; }
+  if [[ "$layer" == API ]]; then
+    [[ "$module" == RelationalPerimeter ]] || { echo "$manifest:$line_number: API is reserved for the public root" >&2; exit 1; }
+  elif [[ "$module" == RelationalPerimeter ]]; then
+    echo "$manifest:$line_number: public root must use API" >&2; exit 1
+  fi
+  if [[ "$layer" =~ ^T[0-7]$ ]]; then
+    [[ "$module" == RelationalPerimeter.Relativity.ExactArithmetic || "$module" == RelationalPerimeter.Relativity.Arithmetic.* || "$module" == RelationalPerimeter.Relativity.Analysis.* ]] || { echo "$manifest:$line_number: numerical stratum outside numerical modules" >&2; exit 1; }
+  elif [[ "$module" == RelationalPerimeter.Relativity.ExactArithmetic || "$module" == RelationalPerimeter.Relativity.Arithmetic.* || "$module" == RelationalPerimeter.Relativity.Analysis.* ]]; then
+    echo "$manifest:$line_number: unclassified numerical relativity module" >&2; exit 1
+  fi
+  if [[ "$layer" =~ ^H[0-9]$ ]]; then
+    [[ "$module" == RelationalPerimeter.Relativity || "$module" == RelationalPerimeter.Relativity.Production.* ]] || { echo "$manifest:$line_number: local-production stratum outside its modules" >&2; exit 1; }
+  elif [[ "$module" == RelationalPerimeter.Relativity || "$module" == RelationalPerimeter.Relativity.Production.* ]]; then
+    echo "$manifest:$line_number: unclassified local-production module" >&2; exit 1
+  fi
   stratum[$module]="$layer"; status[$module]="$migration"; responsibility[$module]="$role"
 done < "$manifest"
 
@@ -78,6 +93,24 @@ for module in "${!stratum[@]}"; do [[ -n "${file_for[$module]+x}" ]] || stale+=(
 [[ ${#stale[@]} -eq 0 ]] || { echo "manifest modules without source: ${stale[*]}" >&2; exit 1; }
 
 allowed_dependency() {
+  if [[ "$1" == API ]]; then
+    [[ "$2" != API ]]
+    return
+  fi
+  if [[ "$1" =~ ^T[0-7]$ ]]; then
+    local numerical_rank="${1#T}"
+    [[ "$2" =~ ^T[0-7]$ ]] && (( ${2#T} < numerical_rank ))
+    return
+  fi
+  if [[ "$1" =~ ^H[0-9]$ ]]; then
+    local physical_rank="${1#H}"
+    if [[ "$2" =~ ^H[0-9]$ ]]; then
+      (( ${2#H} < physical_rank ))
+    else
+      [[ "$2" == U || "$2" == F || "$2" =~ ^T[0-6]$ ]]
+    fi
+    return
+  fi
   # Machine layers cannot depend on themselves or later machine layers.
   if [[ "$1" =~ ^M([0-9]|1[0-9])$ ]]; then
     local rank="${BASH_REMATCH[1]}"

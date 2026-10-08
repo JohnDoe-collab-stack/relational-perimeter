@@ -42,6 +42,15 @@ import Tests.Machine.ValidAssignmentForgetting
 import Tests.Machine.ReducedLiveRunnerChecks
 import Tests.Machine.Run
 import Tests.Machine.RunMachine
+import Tests.Relativity.NumericalChecks
+import Tests.Relativity.LocalProductionChecks
+import Tests.Relativity.LocalContinuationChecks
+import Tests.Relativity.IndependentExchangeChecks
+import Tests.Relativity.TransportedRequestChecks
+import Tests.Relativity.InfluenceChecks
+import Tests.Relativity.ArrivalComparisonChecks
+import Tests.Relativity.InstrumentFutureChecks
+import Tests.Relativity.RecurringInteractionChecks
 
 /-! Build-time tooling, not a mathematical hypothesis or a new production
 dependency. Scan every constant in every imported repository module, including

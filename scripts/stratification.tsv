@@ -22,7 +22,40 @@ SegmentedResidualRole	F	enforced	Primitive residual roles and exact internal rea
 AbstractSegmentedTurning	F	enforced	Abstract segmented boundary and turning
 ExactTypeTransport	U	enforced	Constructive exact transport between carriers
 StrongPerimetralTurning	F	enforced	Strong relational perimeter and affirmative turning
-RelationalPerimeter	M19	enforced	Public root joining scientific production and the integrated master machine
+RelationalPerimeter	API	enforced	Public root joining independent scientific machine and numerical prerequisite closures
+RelationalPerimeter.Relativity.Arithmetic.NaturalLaws	T0	enforced	Constructive natural numerical laws with explicit equality proofs
+RelationalPerimeter.Relativity.Arithmetic.SignedBalance	T1	enforced	Signed intermediate numerical encodings and cross-balance agreement
+RelationalPerimeter.Relativity.Arithmetic.PairEnumeration	T1	enforced	Executable pair enumeration with proved coverage
+RelationalPerimeter.Relativity.Arithmetic.FractionRepresentation	T2	enforced	Exact fraction representation laws without identification of encodings
+RelationalPerimeter.Relativity.ExactArithmetic	T3	enforced	Canonical rational normalization and numerical equality reflection
+RelationalPerimeter.Relativity.Arithmetic.OrderedFractions	T4	enforced	Constructed decisions and ordered rational representation laws
+RelationalPerimeter.Relativity.Analysis.ConstructiveContinuum	T5	enforced	Rational Cauchy representations positive agreement and bounded additive multiplicative operations
+RelationalPerimeter.Relativity.Analysis.PolynomialCalculus	T5	enforced	Exact polynomial and shared jet evaluation with formal derivative and primitive laws
+RelationalPerimeter.Relativity.Analysis.PolynomialInterpretation	T6	enforced	Constructed analytic polynomial evaluation and agreement preservation
+RelationalPerimeter.Relativity.Analysis.ReadoutInterpretation	T6	enforced	Faithful constant rational interpretation and distinct agreeing encodings
+RelationalPerimeter.Relativity.Production.PhysicalPrimitives	H0	enforced	Received rational calibration and declared non-geometric local signal law
+RelationalPerimeter.Relativity.Production.LocalInstructions	H1	enforced	Closed typed ports and positive input-indexed production relations
+RelationalPerimeter.Relativity.Production.OccurrenceTransport	H1	enforced	Exact old-fresh resource split and constructed residual-role realization
+RelationalPerimeter.Relativity.Production.ConstitutedEvents	H2	enforced	Formed histories and one paired local production before the actual suffix
+RelationalPerimeter.Relativity.Production.CalibratedRelay	H3	enforced	Closed received-data family with finite arbitrary relay length
+RelationalPerimeter.Relativity.Production.UsedDependencies	H3	enforced	Positive edges from actual input ports and transported acyclic dependency paths
+RelationalPerimeter.Relativity.Production.PortAdmissions	H3	enforced	Constructed typed occurrence resolution with positive local admission or exact refusal
+RelationalPerimeter.Relativity.Production.ReferenceRenaming	H3	enforced	Exact kind-preserving occurrence reference transports and renamed input action
+RelationalPerimeter.Relativity.Production.LocalFutureContract	H4	enforced	Fixed calibrated-record request contract including complete signal-record inspection
+RelationalPerimeter.Relativity.Production.IndependentExchange	H4	enforced	Two actual independent old-port productions and positive transport of their used dependencies
+RelationalPerimeter.Relativity.Production.AddressTransport	H4	enforced	Occurrence-indexed address permutations preserving positive admissions and exact refusals
+RelationalPerimeter.Relativity.Production.SignalJourneys	H4	enforced	Positive emitted origin relay provenance and arrival from cached signal productions without replay
+RelationalPerimeter.Relativity.Production.InfluencePlans	H4	enforced	Permitted local port paths realized through shared productions into the actual founded history and used dependencies
+RelationalPerimeter.Relativity.Production.RequestedExecution	H5	enforced	Paired request production arbitrary finite futures and continuation from actual cursor
+RelationalPerimeter.Relativity.Production.TransportedContinuations	H5	enforced	Constituted dependency raccord extended through shared finite typed continuations
+RelationalPerimeter.Relativity.Production.TransportedRequests	H6	enforced	Complete addressed local contract through actual paired productions and current occurrence transports
+RelationalPerimeter.Relativity.Production.TransportedInfluences	H6	enforced	Two-way preservation of permitted local influence and its execution schedule through exact occurrence transports
+RelationalPerimeter.Relativity.Production.ArrivalContexts	H5	enforced	Positive actual receptions and exact arrival resolution from stored productions without replay
+RelationalPerimeter.Relativity.Production.ArrivalComparisons	H6	enforced	Declared two-arrival instrumental interaction with same-support formation shared execution and actual continuations
+RelationalPerimeter.Relativity.Production.InstrumentFutures	H7	enforced	Explicit post-comparison request contract with shared productions exact finite futures refusals and retained source distinctions
+RelationalPerimeter.Relativity.Production.RecurringInteractions	H7	enforced	Prefix-licensed repeated comparisons of actual receptions on the same support and exact occurrence and used-dependency continuation
+RelationalPerimeter.Relativity.Production.RecurringFutures	H8	enforced	Fixed repeated-comparison contract with positive admissions exact refusals shared responses and arbitrary finite futures
+RelationalPerimeter.Relativity	H9	enforced	Public numerical utilities and local candidate without relativistic certificate
 RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement
 RelationalPerimeter.Agents.Constitutive.ProducedEvidence	A11	enforced	Constitutive agent ProducedEvidence
 RelationalPerimeter.Agents.Constitutive.State	A12	enforced	Constitutive agent State

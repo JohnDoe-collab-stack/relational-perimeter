@@ -18,6 +18,7 @@ import RelationalPerimeter.Constitution.Continuation.CostModel
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterFutures
 import RelationalPerimeter.Computation.Machine.LiveRoot
 import RelationalPerimeter.Computation.Machine.MasterContract
+import RelationalPerimeter.Relativity
 
 /-!
 # Relational Perimeter

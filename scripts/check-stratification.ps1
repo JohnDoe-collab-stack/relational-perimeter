@@ -46,7 +46,9 @@ foreach ($line in Get-Content -LiteralPath $manifestPath) {
   if ($parts.Count -ne 4) { throw "$manifestPath`:${lineNumber}: expected four tab-separated fields" }
   $module, $stratum, $status, $responsibility = $parts
   if ($entries.ContainsKey($module)) { throw "$manifestPath`:${lineNumber}: duplicate module $module" }
-  if ($stratum -notin @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14','A15','A16','A17') -and
+  if ($stratum -notin @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','API','A0','A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14','A15','A16','A17') -and
+      $stratum -notmatch '^T[0-7]$' -and
+      $stratum -notmatch '^H[0-9]$' -and
       $stratum -notmatch '^M([0-9]|1[0-9])$') {
     throw "$manifestPath`:${lineNumber}: unknown stratum $stratum"
   }
@@ -55,6 +57,20 @@ foreach ($line in Get-Content -LiteralPath $manifestPath) {
   }
   if ([string]::IsNullOrWhiteSpace($responsibility)) {
     throw "$manifestPath`:${lineNumber}: empty responsibility"
+  }
+  if (($stratum -eq 'API') -ne ($module -eq 'RelationalPerimeter')) {
+    throw "$manifestPath`:${lineNumber}: API is reserved for the public root"
+  }
+  $isNumerical = $module -eq 'RelationalPerimeter.Relativity.ExactArithmetic' -or
+    $module.StartsWith('RelationalPerimeter.Relativity.Arithmetic.') -or
+    $module.StartsWith('RelationalPerimeter.Relativity.Analysis.')
+  if (($stratum -match '^T[0-7]$') -ne $isNumerical) {
+    throw "$manifestPath`:${lineNumber}: numerical strata and numerical modules must match"
+  }
+  $isLocalProduction = $module -eq 'RelationalPerimeter.Relativity' -or
+    $module.StartsWith('RelationalPerimeter.Relativity.Production.')
+  if (($stratum -match '^H[0-9]$') -ne $isLocalProduction) {
+    throw "$manifestPath`:${lineNumber}: local-production strata and modules must match"
   }
   $entries[$module] = [pscustomobject]@{ Stratum = $stratum; Status = $status }
 }
@@ -132,6 +148,19 @@ foreach ($rank in 0..19) {
   $lowerMachine = @(0..($rank - 1) | Where-Object { $_ -ge 0 -and $_ -lt $rank } | ForEach-Object { "M$_" })
   $allowed["M$rank"] = @($scientificStrata) + $lowerMachine
 }
+
+# Numerical utilities cannot import productions, foundations or the master.
+# Local physical candidates may consume foundations and numerical utilities,
+# but cannot consume the computational master or machine.
+foreach ($rank in 0..7) {
+  $allowed["T$rank"] = @(0..($rank - 1) | Where-Object { $_ -ge 0 -and $_ -lt $rank } | ForEach-Object { "T$_" })
+}
+foreach ($rank in 0..9) {
+  $lowerPhysical = @(0..($rank - 1) | Where-Object { $_ -ge 0 -and $_ -lt $rank } | ForEach-Object { "H$_" })
+  $allowed["H$rank"] = @('U','F') + @(0..6 | ForEach-Object { "T$_" }) + $lowerPhysical
+}
+$allowed['API'] = @($scientificStrata) + @(0..19 | ForEach-Object { "M$_" }) +
+  @(0..7 | ForEach-Object { "T$_" }) + @(0..9 | ForEach-Object { "H$_" })
 
 foreach ($root in ($entries.Keys | Sort-Object)) {
   $queue = [Collections.Generic.Queue[string]]::new()
