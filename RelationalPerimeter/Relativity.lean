@@ -13,6 +13,8 @@ import RelationalPerimeter.Relativity.Production.RecurringFutures
 import RelationalPerimeter.Relativity.Production.TransportedRecurringRequests
 import RelationalPerimeter.Relativity.Production.GroupedRecurringContinuation
 import RelationalPerimeter.Relativity.Production.ConstitutedDescriptions
+import RelationalPerimeter.Relativity.Production.InteractionAttachments
+import RelationalPerimeter.Relativity.Production.InteractionDescriptionAgreement
 
 /-!
 The numerical prerequisites and first declared local-production candidate.
@@ -54,6 +56,11 @@ Partial reading agreement cannot erase a path still exposed by the contract.
 The calibrated signal law
 neither receives nor reconstructs a spacetime metric.
 The computation master and its contracts are unchanged.
+Participants are now attached to one cached comparison occurrence, with their
+positive reception and used-port witnesses and their separately readable path
+records. Sharing that interaction anchor does not assert physical colocation.
+Exact agreements distinguish the interaction anchor from the participant's
+rich description. Their reader restrictions do not authorize memory erasure.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -123,4 +130,13 @@ The computation master and its contracts are unchanged.
 #print axioms RelationalPerimeter.Relativity.Production.shared_recurring_all_futures
 #print axioms RelationalPerimeter.Relativity.Production.shared_continuation_exact
 #print axioms RelationalPerimeter.Relativity.Production.discovered_exchange_all_futures
+#print axioms RelationalPerimeter.Relativity.Production.participants_share_anchor
+#print axioms RelationalPerimeter.Relativity.Production.participants_remain_distinct
+#print axioms RelationalPerimeter.Relativity.Production.attached_effects_separate_inspections
+#print axioms RelationalPerimeter.Relativity.Production.attached_head_independent
+#print axioms RelationalPerimeter.Relativity.Production.attached_continuation_exact
+#print axioms RelationalPerimeter.Relativity.Production.attached_agreement_effects
+#print axioms RelationalPerimeter.Relativity.Production.differing_effects_refute_rich_agreement
+#print axioms RelationalPerimeter.Relativity.Production.attached_observation_common_refinement
+#print axioms RelationalPerimeter.Relativity.Production.attached_rich_return_reference
 /- AXIOM_AUDIT_END -/

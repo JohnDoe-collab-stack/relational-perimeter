@@ -54,6 +54,8 @@ import Tests.Relativity.RecurringInteractionChecks
 import Tests.Relativity.TransportedRecurringChecks
 import Tests.Relativity.DiscoveredGroupingChecks
 import Tests.Relativity.ConstitutedDescriptionChecks
+import Tests.Relativity.InteractionAttachmentChecks
+import Tests.Relativity.InteractionDescriptionAgreementChecks
 
 /-! Build-time tooling, not a mathematical hypothesis or a new production
 dependency. Scan every constant in every imported repository module, including

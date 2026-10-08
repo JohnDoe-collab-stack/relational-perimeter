@@ -3895,3 +3895,290 @@ Les 61 liens locaux du plan sont valides et `git diff --check` est propre.
 Cette vérification clôt ce lot descriptif, pas le plan relativiste complet.
 Les obligations physiques énumérées en section 30.5 restent ouvertes.
 Aucun commit, push, changement de branche ou audit externe n'est effectué.
+
+## 31. Attachements à une interaction produite et effets conservés
+
+### 31.1. Obligation fixée avant l'implémentation
+
+Le départ est `1f8e67681512159f60bdc379f729357b63e9f0a9`, sur `relativite`.
+Ce lot poursuit le raccord constitutif A1/R3. Le candidat instrumental actuel
+ne comporte pas de loi de propagation ou d'admission de colocalisation ;
+il serait faux de renommer sa comparaison en rencontre physique.
+La cible finale reste celle de la section 1, non une simple comparaison.
+
+Le passage disponible doit être fermé avant cette interprétation physique :
+les deux arrivées participantes seront attachées à l'occurrence fraîche
+d'une même comparaison effectivement produite. Leurs références et leurs
+effets viendront du support et des rôles de cette production, pas d'un point,
+d'un identifiant ou d'une valeur de comparaison fournis indépendamment.
+Le transport suivra le chemin descriptif déjà construit. L'ancrage commun
+ne devra identifier ni les réceptions ni les signaux sources et n'autorisera
+aucun oubli sous le contrat récurrent complet.
+
+Construire les témoins positifs de réception et d'utilisation des ports,
+les lois de lecture et de persistance pour tous les suffixes finis, et un
+runner qui partage la tête avant de poursuivre depuis son successeur réel.
+Une seconde comparaison pourra produire la même valeur tout en constituant
+une nouvelle occurrence ; cette différence devra être prouvée.
+
+Le client fermé devra joindre, dans le même support et la même interaction,
+deux signaux aux mêmes payload et lecture finale mais aux effets de parcours
+différents. Les inspections réellement permises devront révéler la différence.
+Les deux gates, l'audit exhaustif et la vérification du partage compilé devront
+réussir. Aucun contrat ancien, fondation, maître, machine ou cible canonique
+ne sera modifié. Aucun commit, push ou audit extérieur n'est autorisé ici.
+
+### 31.2. Ancrage issu de la production et participants positifs
+
+Le module [InteractionAttachments](../../RelationalPerimeter/Relativity/Production/InteractionAttachments.lean)
+consomme une `RecurringProduction source (.compare pair)` déjà construite.
+`comparisonAnchor` désigne son occurrence fraîche ; `comparisonExtension`
+est le transport de son histoire réelle. L'égalité de sortie vient de
+`head.determination.2.output_exact`, pas d'un résultat numérique extérieur.
+`comparison_anchor_fresh` distingue cet ancrage de toute lecture source.
+
+`InteractionAttachment` relie une réception source et son signal à cette
+tête précise, par un témoin positif d'arrivée, un port de la comparaison
+et un `DescriptionPath` depuis son successeur. `transportedArrival` et
+`usedPort` transportent ces témoins dans la présentation courante.
+Le record des effets est lu à la référence signal transportée dans le
+curseur courant. `attached_effects_exact` raccorde cette lecture au record
+source, tandis que `attached_anchor_output` lit la sortie réellement produite.
+
+Les deux ports d'une même tête partagent l'ancrage mais restent des réceptions
+distinctes (`participants_remain_distinct`). La distinction des signaux est
+également conservée lorsqu'elle existe en amont ; deux réceptions distinctes
+n'impliquent pas à elles seules deux signaux distincts. La lecture de l'ancrage
+commun ne remplace donc aucune de ces distinctions constituées.
+
+### 31.3. Continuation partagée et changements de présentation
+
+`runAttachedComparison` produit une tête une fois, puis appelle le runner
+récurrent depuis son successeur réel. `attached_head_independent` établit
+que la tête entière ne dépend pas de la liste des demandes futures.
+Les descriptions `first` et `second` utilisent ensuite l'histoire stockée
+de la continuation ; elles ne produisent pas rétroactivement la tête.
+
+`attached_continuation_exact` conserve tous les rapports des suffixes finis
+du contrat récurrent existant, y compris les refus. La loi
+`cached_comparison_event_exact` raccorde séparément l'événement de tête à
+la demande de comparaison admise. Ces deux lois ne sont pas présentées
+comme une égalité complète du nouvel objet avec le runner du préfixe
+comparaison suivi du suffixe : cette égalité n'est pas ajoutée dans ce lot.
+
+`prolong` suit l'histoire stockée et `reexpress` suit un raccord adressé
+effectif. Leurs lois conservent les records et transportent l'ancrage ;
+le retour par le raccord inverse restitue la référence de cet ancrage.
+Ces opérations ne suppriment aucune ressource du contrat.
+
+### 31.4. Cas fermé et distinctions encore révélables
+
+Le client [InteractionAttachmentChecks](../../Tests/Relativity/InteractionAttachmentChecks.lean)
+importe uniquement `RelationalPerimeter`. Il construit dans une même histoire
+deux réceptions : le premier signal a subi deux relais d'incrément un ; le
+second est une réémission depuis la première réception. Les payloads et les
+lectures finales sont égaux, mais les records portent respectivement
+`[one, one]` et `[]`. La comparaison admise produit la sortie zéro.
+
+Les deux participants ont un même ancrage d'interaction, des références de
+réception et de signal démontrées distinctes, et des témoins positifs de
+réception et d'utilisation de ports. Les inspections effectivement exécutées
+aux deux références révèlent les records différents. Ce séparateur compare
+deux requêtes permises dans un même état ; ce n'est pas une caractérisation
+nouvelle de l'équivalence future entre deux états arbitraires.
+
+Pour toute liste finie de demandes ultérieures, le client conserve la tête,
+les deux records, l'ancrage commun et la distinction des réceptions.
+Une seconde comparaison des arrivées transportées produit la même valeur
+numérique mais une occurrence fraîche distincte. L'ancienne interaction
+reste transportée : égalité des résultats ne signifie pas identité des
+interactions.
+
+### 31.5. Vérifications et portée exacte du lot
+
+`lake build +RelationalPerimeter` réussit avec 240 jobs. Les deux gates
+`bash scripts/verify.sh` et `pwsh -NoProfile -File scripts/verify.ps1`
+réussissent, la seconde sous Windows natif. Le build complet compte
+298 jobs sans avertissement Lean. Les mêmes 296 fichiers Lean sont vérifiés,
+les 239 modules de production sont accessibles et strictement stratifiés,
+et les 23 fixtures existantes sont rejetées aux sites attendus.
+
+L'audit exhaustif porte sur 25 086 constantes de 295 modules : 364 exceptions
+générées par le compilateur, aucune déclaration écrite à la main dépendante
+d'un axiome. Les deux nouveaux fichiers ont chacun leur unique bloc d'audit
+final. Le module est placé en H12, au-dessus des descriptions H11 et sous la
+façade H13 ; les deux contrôleurs gardent l'exigence de dépendance descendante.
+
+Le contrôle local du C généré réemploie les parseurs de corps et de fermetures
+statiques de `check-unified-codegen.py`. Il confirme un appel de
+`performRecurring`, un appel de `runRecurringRequests` et le passage du
+successeur de cette même tête au runner. Les constructeurs, transports et
+lectures des attachements couvrent 52 racines compilées et 79 fonctions
+accessibles, sans appel à ces producteurs, au runner de demandes ou au calcul
+de différence. Ce contrôle est une inspection locale complémentaire,
+pas une nouvelle gate permanente ; il ne borne ni les callbacks arbitraires
+d'un raccord fourni, ni le coût total, ni la mémoire physique.
+
+Le lot ajoute deux fichiers et en modifie six, sans suppression. Les
+empreintes des 384 autres fichiers du départ sont identiques, notamment
+celles des fondations, du maître, de la machine, des anciens contrats,
+des cibles canoniques et du registre scientifique.
+
+Cette réalisation ferme l'attachement constitutif à une interaction produite
+et le maintien des effets séparément lisibles. Elle ne ferme pas la loi
+physique de rencontre de A1, `LocationAgreement`, le contrat physique complet
+de A4, une réduction mémoire, le continuum, la métrique ou la dynamique.
+Une admission physique de rencontre devra être construite depuis les lois
+primitives et les parcours, sans être déduite de la seule comparaison ou
+coexistence des réceptions. La cible finale de la section 1 reste inchangée.
+Aucun commit, push, changement de branche ou audit extérieur n'est effectué.
+
+## 32. Accords des descriptions attachées et conservation des lecteurs
+
+### 32.1. Obligation fixée avant l'implémentation
+
+Ce lot poursuit R3.2 sur l'état local de la section 31, sans remplacer la
+cible finale. Un accord sur l'interaction produite et un accord sur la
+description riche des participants seront deux objets distincts.
+Les deux consommeront un raccord exact des présentations constituées ;
+le premier raccordera l'ancrage, le second raccordera aussi la réception
+et le signal. Ni une égalité de lectures ni un code numérique libre ne
+servira à fabriquer ces accords.
+
+Construire identité, composition et retour des raccords adressés, puis
+ces opérations pour les accords attachés à une même tête constituée.
+Raccorder les observations de leurs effets aux lecteurs déjà définis,
+avec restriction, raffinement commun et persistance sous prolongement
+et changement exact de présentation. L'accord limité à l'interaction
+n'autorisera pas l'oubli d'effets encore révélables au contrat complet.
+
+Le client fermé devra utiliser un échange effectivement trouvé, puis le
+transport d'une tête de comparaison déjà produite, sans la rejouer.
+Il distinguera le partage de cette interaction du partage de tous les
+effets attachés, et vérifiera les lois sur les références transportées.
+La portée restera instrumentale : ces accords ne seront pas renommés
+`LocationAgreement` et ne fermeront pas une admission physique de rencontre.
+
+Conserver les sources du lot 31, les fondations, le maître, la machine et
+les contrats précédents. Intégrer l'ajout dans l'API et la stratification,
+exécuter les deux gates et contrôler les corps compilés des constructeurs.
+Aucun commit, push, changement de branche ou audit externe n'est autorisé.
+
+### 32.2. Deux accords sur une même interaction constituée
+
+Le module [InteractionDescriptionAgreement](../../RelationalPerimeter/Relativity/Production/InteractionDescriptionAgreement.lean)
+consomme les attachements du lot 31. Les deux descriptions sont indexées par
+la même tête effectivement produite ; l'accord n'invente pas cette origine.
+`InteractionSiteAgreement` raccorde uniquement la référence de l'ancrage de
+l'interaction. `AttachedDescriptionAgreement` raccorde en plus la réception
+participante et son signal. Chaque objet contient un raccord exact entre les
+présentations, et non une égalité de nombres fournie pour remplacer ce raccord.
+Ces types ne sont pas des accords de localisation physique.
+
+`AddressedRecurringRaccord.identity` et `.compose` conservent les transports
+aller/retour des références, des adresses et des témoins positifs d'arrivée
+et d'utilisation. Les deux accords disposent d'identité, composition et
+inverse. L'associativité ajoutée est une égalité point par point des références
+transportées ; elle n'est pas présentée comme une égalité de tous les objets
+fonctionnels. `attached_rich_return_reference` restitue chaque référence après
+l'aller et le retour.
+
+Les dépendances de lecture restent explicites : `attached_agreement_effects`
+consomme le raccord exact du signal et la conservation de sa lecture ; la
+réception et l'ancrage ont leurs lois séparées. Un accord riche donne un accord
+d'ancrage, mais l'accord d'ancrage ne donne pas un accord riche. Deux records
+différents réfutent tout accord riche, sans nier leur interaction commune.
+
+### 32.3. Lecteurs, changements de présentation et demandes futures
+
+`InteractionAttachment.observe` lit le record attaché avec les lecteurs
+déclarés. La restriction et le raffinement commun retrouvent les lectures
+partielles depuis leurs observations ; ils ne produisent pas de nouvel
+événement. Le prolongement suit une histoire réellement constituée et conserve
+les anciennes lectures. Le changement de présentation suit son raccord exact.
+Ces opérations ne suppriment aucune ressource et ne changent aucun contrat.
+
+`attached_joint_observations_exact` caractérise l'égalité des records par
+l'accord de tous leurs lecteurs. Il ne caractérise ni l'identité des réceptions,
+ni l'identité des descriptions riches, ni celle des événements sources.
+Un accord riche conserve toutes ces observations. Les records différents
+restent révélables par les inspections du contrat récurrent complet.
+
+`attached_agreement_all_futures` conserve toutes les listes finies de demandes,
+y compris les refus, par le runner partagé existant. Les demandes suivent
+le raccord qui évolue après chaque production : ce n'est pas une comparaison
+des mêmes codes d'adresse dans deux présentations différentes. Cette loi
+consomme le raccord de l'accord ; les contraintes supplémentaires sur l'ancrage
+et les références participantes servent aux lois des descriptions, pas à
+une nouvelle preuve de l'exactitude du runner. `outcome` reste la spécification
+de référence, sans revendication d'une exécution unique de son évaluateur.
+
+### 32.4. Client fermé : échange trouvé et lectures insuffisantes pour identifier
+
+Le client [InteractionDescriptionAgreementChecks](../../Tests/Relativity/InteractionDescriptionAgreementChecks.lean)
+importe uniquement `RelationalPerimeter`. Dans une histoire produite, il
+reçoit deux signaux indépendants, exécute le chercheur d'échange, puis transporte
+une tête de comparaison déjà stockée. Sa sortie est partagée ; la référence
+de la première réception change effectivement de position, de 2 à 1.
+Les témoins d'arrivée et d'utilisation restent disponibles après ce transport.
+L'égalité avec une exécution de référence est une loi de correction ; elle
+n'est pas utilisée comme preuve suffisante de l'absence de réexécution.
+
+Les participants partagent l'ancrage de la comparaison mais leurs records
+portent `[one, one]` et `[]`. Les lecteurs de payload et de lecture finale
+s'accordent ; les lecteurs complets les distinguent. Un accord riche entre
+ces participants est impossible. Deux inspections permises dans le même
+curseur révèlent la différence ; ce séparateur ne compare pas deux états
+arbitraires au sens de l'équivalence future.
+
+Un second cas exécute deux réceptions distinctes du même signal. Tous les
+lecteurs de record s'accordent et les références de réception restent
+distinctes. Un accord riche utilisant le raccord identité est alors impossible.
+Ce résultat n'interdit pas un autre transport exact, non identitaire, entre
+les occurrences : il interdit de transformer leur égalité de lectures en
+une identité des sources.
+
+Le client ferme aussi le retour des références, leur composition, le
+raffinement commun, l'exactitude des futurs traduits et la persistance des
+effets sur tout suffixe fini depuis le successeur de la tête transportée.
+
+### 32.5. Vérifications, fichiers préservés et frontière restante
+
+`lake build +RelationalPerimeter` réussit avec 241 jobs. Les gates complètes
+`bash scripts/verify.sh` et `pwsh -NoProfile -File scripts/verify.ps1`
+réussissent, la seconde sous Windows natif. Le build complet compte 300 jobs
+sans avertissement Lean ; les deux scripts vérifient 298 fichiers Lean et
+les 23 fixtures existantes, rejetées pour leurs erreurs et sites attendus.
+Les 240 modules de production sont accessibles et strictement stratifiés.
+Le nouveau module est H13 et la façade H14 ; les deux contrôleurs imposent
+toujours des dépendances descendantes.
+
+L'audit exhaustif porte sur 25 225 constantes de 297 modules, avec 364
+exceptions générées par le compilateur et aucune déclaration écrite à la
+main dépendante d'un axiome. Les deux fichiers ajoutés ont chacun leur unique
+bloc d'audit final ; leurs constructions dans `Type` sont compilées.
+
+Le contrôle local du C généré réemploie les parseurs de corps et de fermetures
+statiques de `check-unified-codegen.py`. Sur les 52 racines du nouveau module
+et leurs 110 fonctions accessibles, aucun appel au chercheur d'échange,
+aux producteurs récurrents, aux runners de demandes ou au calcul de différence
+n'est trouvé. Les constructeurs consomment les raccords reçus et les lectures
+consomment les records attachés. Les corps de composition transportent les
+références et les témoins à travers les deux raccords. Cette inspection locale
+complète la vérification du partage existante ; elle ne borne ni les callbacks
+arbitraires d'un raccord reçu, ni le coût total, ni la mémoire physique.
+
+Le lot ajoute deux fichiers, en modifie six et n'en supprime aucun. Les
+empreintes des 386 autres fichiers du départ local sont identiques, y compris
+les deux sources du lot 31, les fondations, le maître, la machine, les contrats,
+les cibles canoniques et le registre scientifique. La cible finale de la
+section 1 reste inchangée.
+
+Ce lot ferme les accords exacts de descriptions attachées dans le candidat
+instrumental existant. Le raffinement des lecteurs n'est ni une précision
+numérique ni une nouvelle mesure physique. Aucun oubli runtime n'est autorisé.
+L'admission physique de rencontre, `LocationAgreement`, le contrat physique
+complet et la reconstruction du domaine relativiste restent à construire.
+Il serait faux de déclarer R3.2 physique, le continuum, la métrique ou la
+dynamique fermés par ces accords. Aucun commit, push, changement de branche
+ou audit extérieur n'est effectué.
