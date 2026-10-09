@@ -1,0 +1,16 @@
+{
+  "command": "scripts/verify.ps1",
+  "exit_code": 0,
+  "lean_files": 246,
+  "exhaustive_constants": 20868,
+  "exhaustive_modules": 245,
+  "written_exceptions": 0,
+  "expected_failure_fixtures": 23,
+  "existing_scientific_claims": 18,
+  "existing_scientific_declarations": 81,
+  "transport_cases": 14,
+  "strict_json_cases": 6,
+  "kernel_named_audits_without_axioms": 34,
+  "model_loop_named_audits_without_axioms": 23,
+  "full_gate_log_sha256": "9bd081339681d34b3e46b7955526001128836a323b88e16fc81e574c7b5a9553"
+}

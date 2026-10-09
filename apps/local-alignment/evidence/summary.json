@@ -1,0 +1,27 @@
+{
+  "mode": "confirm",
+  "protocol_sha256": "f97ca3e5c88c341558c2711a545fed4eccd284bba0addc1af34c30b7ee63717d",
+  "timestamp_utc": "2026-10-09T12:29:49.816061+00:00",
+  "model_sha256": "7485fe6f11af29433bc51cab58009521f205840f5b4ae3a32fa7f92e8534fdf5",
+  "model_calls": 12,
+  "context_resets": 4,
+  "responses": {
+    "answer": 7,
+    "outside_scope": 2,
+    "incorrect_value": 1,
+    "advanced": 1,
+    "missing_handle": 1
+  },
+  "produced_stages": 8,
+  "answers_after_reset": 3,
+  "cached_answers": 4,
+  "final_observation": {
+    "scope": [
+      0
+    ],
+    "available": 9
+  },
+  "lean_replay_exact": true,
+  "trace_sha256": "5f4618e1a6ffb776ac33eebdede4805cc17c2aceebc55998baa450bb340bb375",
+  "required_observations_met": true
+}

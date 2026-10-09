@@ -1,4 +1,5 @@
 import Lean
+import Tests.LocalAlignment.Kernel
 import Tests.AristotleCorrectionRegression
 import Tests.ComputationalPhenomenonRegression
 import Tests.ConstitutiveComplexityHierarchyRegression

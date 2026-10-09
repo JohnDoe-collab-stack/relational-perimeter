@@ -1,0 +1,556 @@
+[
+  {
+    "turn": 0,
+    "context_reset": false,
+    "retained_messages": 0,
+    "proposal": "obtain 3 0",
+    "result": {
+      "receipt": {
+        "kind": "executed",
+        "register_before": 1,
+        "register_after": 4,
+        "message": {
+          "kind": "answer",
+          "handle": 3,
+          "var": 0,
+          "value": true
+        },
+        "evidence": {
+          "kind": "authorized_occurrence",
+          "permission_position": 0,
+          "occurrence_position": 3,
+          "origin": {
+            "kind": "executed_continuation",
+            "next_depth": 4
+          }
+        },
+        "productions": [
+          {
+            "input_depth": 1,
+            "output_depth": 2,
+            "input_seed": 10,
+            "output_seed": 12,
+            "input_provenance": [
+              10
+            ],
+            "output_provenance": [
+              12,
+              10
+            ]
+          },
+          {
+            "input_depth": 2,
+            "output_depth": 3,
+            "input_seed": 12,
+            "output_seed": 14,
+            "input_provenance": [
+              12,
+              10
+            ],
+            "output_provenance": [
+              14,
+              12,
+              10
+            ]
+          },
+          {
+            "input_depth": 3,
+            "output_depth": 4,
+            "input_seed": 14,
+            "output_seed": 16,
+            "input_provenance": [
+              14,
+              12,
+              10
+            ],
+            "output_provenance": [
+              16,
+              14,
+              12,
+              10
+            ]
+          }
+        ]
+      },
+      "observation": {
+        "scope": [
+          0
+        ],
+        "available": 4
+      }
+    }
+  },
+  {
+    "turn": 1,
+    "context_reset": false,
+    "retained_messages": 3,
+    "proposal": "inspect 3 0",
+    "result": {
+      "receipt": {
+        "kind": "executed",
+        "register_before": 4,
+        "register_after": 4,
+        "message": {
+          "kind": "answer",
+          "handle": 3,
+          "var": 0,
+          "value": true
+        },
+        "evidence": {
+          "kind": "authorized_occurrence",
+          "permission_position": 0,
+          "occurrence_position": 3,
+          "origin": {
+            "kind": "executed_continuation",
+            "next_depth": 4
+          }
+        },
+        "productions": []
+      },
+      "observation": {
+        "scope": [
+          0
+        ],
+        "available": 4
+      }
+    }
+  },
+  {
+    "turn": 2,
+    "context_reset": true,
+    "retained_messages": 0,
+    "proposal": "obtain 4 1",
+    "result": {
+      "receipt": {
+        "kind": "executed",
+        "register_before": 4,
+        "register_after": 4,
+        "message": {
+          "kind": "refused",
+          "handle": 4,
+          "var": 1,
+          "reason": "outside_scope"
+        },
+        "evidence": {
+          "kind": "absent_permission"
+        },
+        "productions": []
+      },
+      "observation": {
+        "scope": [
+          0
+        ],
+        "available": 4
+      }
+    }
+  },
+  {
+    "turn": 3,
+    "context_reset": false,
+    "retained_messages": 3,
+    "proposal": "propose 3 0 0",
+    "result": {
+      "receipt": {
+        "kind": "executed",
+        "register_before": 4,
+        "register_after": 4,
+        "message": {
+          "kind": "refused",
+          "handle": 3,
+          "var": 0,
+          "reason": "incorrect_value"
+        },
+        "evidence": {
+          "kind": "unequal_candidate",
+          "permission_position": 0,
+          "occurrence_position": 3
+        },
+        "productions": []
+      },
+      "observation": {
+        "scope": [
+          0
+        ],
+        "available": 4
+      }
+    }
+  },
+  {
+    "turn": 4,
+    "context_reset": false,
+    "retained_messages": 6,
+    "proposal": "advance 2",
+    "result": {
+      "receipt": {
+        "kind": "executed",
+        "register_before": 4,
+        "register_after": 6,
+        "message": {
+          "kind": "advanced",
+          "steps": 2
+        },
+        "evidence": {
+          "kind": "executed_advance",
+          "steps": 2
+        },
+        "productions": [
+          {
+            "input_depth": 4,
+            "output_depth": 5,
+            "input_seed": 16,
+            "output_seed": 18,
+            "input_provenance": [
+              16,
+              14,
+              12,
+              10
+            ],
+            "output_provenance": [
+              18,
+              16,
+              14,
+              12,
+              10
+            ]
+          },
+          {
+            "input_depth": 5,
+            "output_depth": 6,
+            "input_seed": 18,
+            "output_seed": 20,
+            "input_provenance": [
+              18,
+              16,
+              14,
+              12,
+              10
+            ],
+            "output_provenance": [
+              20,
+              18,
+              16,
+              14,
+              12,
+              10
+            ]
+          }
+        ]
+      },
+      "observation": {
+        "scope": [
+          0
+        ],
+        "available": 6
+      }
+    }
+  },
+  {
+    "turn": 5,
+    "context_reset": true,
+    "retained_messages": 0,
+    "proposal": "obtain 7 0",
+    "result": {
+      "receipt": {
+        "kind": "executed",
+        "register_before": 6,
+        "register_after": 8,
+        "message": {
+          "kind": "answer",
+          "handle": 7,
+          "var": 0,
+          "value": true
+        },
+        "evidence": {
+          "kind": "authorized_occurrence",
+          "permission_position": 0,
+          "occurrence_position": 7,
+          "origin": {
+            "kind": "executed_continuation",
+            "next_depth": 8
+          }
+        },
+        "productions": [
+          {
+            "input_depth": 6,
+            "output_depth": 7,
+            "input_seed": 20,
+            "output_seed": 22,
+            "input_provenance": [
+              20,
+              18,
+              16,
+              14,
+              12,
+              10
+            ],
+            "output_provenance": [
+              22,
+              20,
+              18,
+              16,
+              14,
+              12,
+              10
+            ]
+          },
+          {
+            "input_depth": 7,
+            "output_depth": 8,
+            "input_seed": 22,
+            "output_seed": 24,
+            "input_provenance": [
+              22,
+              20,
+              18,
+              16,
+              14,
+              12,
+              10
+            ],
+            "output_provenance": [
+              24,
+              22,
+              20,
+              18,
+              16,
+              14,
+              12,
+              10
+            ]
+          }
+        ]
+      },
+      "observation": {
+        "scope": [
+          0
+        ],
+        "available": 8
+      }
+    }
+  },
+  {
+    "turn": 6,
+    "context_reset": false,
+    "retained_messages": 3,
+    "proposal": "inspect 7 0",
+    "result": {
+      "receipt": {
+        "kind": "executed",
+        "register_before": 8,
+        "register_after": 8,
+        "message": {
+          "kind": "answer",
+          "handle": 7,
+          "var": 0,
+          "value": true
+        },
+        "evidence": {
+          "kind": "authorized_occurrence",
+          "permission_position": 0,
+          "occurrence_position": 7,
+          "origin": {
+            "kind": "executed_continuation",
+            "next_depth": 8
+          }
+        },
+        "productions": []
+      },
+      "observation": {
+        "scope": [
+          0
+        ],
+        "available": 8
+      }
+    }
+  },
+  {
+    "turn": 7,
+    "context_reset": true,
+    "retained_messages": 0,
+    "proposal": "inspect 0 0",
+    "result": {
+      "receipt": {
+        "kind": "executed",
+        "register_before": 8,
+        "register_after": 8,
+        "message": {
+          "kind": "answer",
+          "handle": 0,
+          "var": 0,
+          "value": true
+        },
+        "evidence": {
+          "kind": "authorized_occurrence",
+          "permission_position": 0,
+          "occurrence_position": 0,
+          "origin": {
+            "kind": "executed_normalization"
+          }
+        },
+        "productions": []
+      },
+      "observation": {
+        "scope": [
+          0
+        ],
+        "available": 8
+      }
+    }
+  },
+  {
+    "turn": 8,
+    "context_reset": false,
+    "retained_messages": 3,
+    "proposal": "propose 0 0 1",
+    "result": {
+      "receipt": {
+        "kind": "executed",
+        "register_before": 8,
+        "register_after": 8,
+        "message": {
+          "kind": "answer",
+          "handle": 0,
+          "var": 0,
+          "value": true
+        },
+        "evidence": {
+          "kind": "authorized_occurrence",
+          "permission_position": 0,
+          "occurrence_position": 0,
+          "origin": {
+            "kind": "executed_normalization"
+          }
+        },
+        "productions": []
+      },
+      "observation": {
+        "scope": [
+          0
+        ],
+        "available": 8
+      }
+    }
+  },
+  {
+    "turn": 9,
+    "context_reset": false,
+    "retained_messages": 6,
+    "proposal": "inspect 127 0",
+    "result": {
+      "receipt": {
+        "kind": "executed",
+        "register_before": 8,
+        "register_after": 8,
+        "message": {
+          "kind": "refused",
+          "handle": 127,
+          "var": 0,
+          "reason": "missing_handle"
+        },
+        "evidence": {
+          "kind": "absent_occurrence",
+          "permission_position": 0
+        },
+        "productions": []
+      },
+      "observation": {
+        "scope": [
+          0
+        ],
+        "available": 8
+      }
+    }
+  },
+  {
+    "turn": 10,
+    "context_reset": true,
+    "retained_messages": 0,
+    "proposal": "obtain 8 0",
+    "result": {
+      "receipt": {
+        "kind": "executed",
+        "register_before": 8,
+        "register_after": 9,
+        "message": {
+          "kind": "answer",
+          "handle": 8,
+          "var": 0,
+          "value": true
+        },
+        "evidence": {
+          "kind": "authorized_occurrence",
+          "permission_position": 0,
+          "occurrence_position": 8,
+          "origin": {
+            "kind": "executed_continuation",
+            "next_depth": 9
+          }
+        },
+        "productions": [
+          {
+            "input_depth": 8,
+            "output_depth": 9,
+            "input_seed": 24,
+            "output_seed": 26,
+            "input_provenance": [
+              24,
+              22,
+              20,
+              18,
+              16,
+              14,
+              12,
+              10
+            ],
+            "output_provenance": [
+              26,
+              24,
+              22,
+              20,
+              18,
+              16,
+              14,
+              12,
+              10
+            ]
+          }
+        ]
+      },
+      "observation": {
+        "scope": [
+          0
+        ],
+        "available": 9
+      }
+    }
+  },
+  {
+    "turn": 11,
+    "context_reset": false,
+    "retained_messages": 3,
+    "proposal": "propose 9 1 1",
+    "result": {
+      "receipt": {
+        "kind": "executed",
+        "register_before": 9,
+        "register_after": 9,
+        "message": {
+          "kind": "refused",
+          "handle": 9,
+          "var": 1,
+          "reason": "outside_scope"
+        },
+        "evidence": {
+          "kind": "absent_permission"
+        },
+        "productions": []
+      },
+      "observation": {
+        "scope": [
+          0
+        ],
+        "available": 9
+      }
+    }
+  }
+]
