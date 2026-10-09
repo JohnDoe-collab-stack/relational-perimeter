@@ -151,8 +151,6 @@ select { font: inherit; font-size: 13px; padding: 4px 8px; border-radius: 6px; b
     <h1 id="title">Research Labyrinth</h1>
     <p class="sub" id="subtitle">What is charted (blue), walled off (rust), conditionally walled or open (gold) and still dark (grey fog).
       Speculation is kept apart from proof.</p>
-    <p class="small" id="orientation"></p>
-    <p class="small"><a href="../../docs/priorite-relationnelle-et-perimetre-interieur.fr.md">Lire la reprise : relations premières et périmètre intérieur</a></p>
     <p class="small muted" id="gen"></p>
     <div class="tiers" id="tiers"></div>
   </header>
@@ -330,7 +328,6 @@ const DATA = /*LABYRINTH_DATA*/null;
   if (META.title) { $("#title").textContent = META.title; document.title = META.title; }
   if (META.eyebrow) $("#eyebrow").textContent = META.eyebrow;
   if (META.subtitle) $("#subtitle").textContent = META.subtitle;
-  if (META.orientation) $("#orientation").textContent = META.orientation[0] || "";
   $("#gen").textContent = `Snapshot built ${DATA.generated.replace("T", " ").replace("Z", " UTC")} from the knowledge graph, the event log and the computation outputs.`;
 
   const STATUS = [
@@ -608,11 +605,8 @@ const DATA = /*LABYRINTH_DATA*/null;
       const inn = links.filter(l => l.target.id === d.id).map(l => `${esc(l.source.title)} ${esc(l.rel)} this`);
       const extra = ["hypotheses", "consumed", "why", "next", "vivid", "test", "lesson", "answer", "note"].filter(k => d[k]).map(k => `<dt>${k}</dt><dd>${esc(tex(d[k]))}</dd>`).join("");
       const rv = d.review ? `<dt>review</dt><dd>${esc(d.review.state)}${d.review.by ? " · " + esc([].concat(d.review.by).join(", ")) : ""}${d.review.verdict ? " · " + esc(d.review.verdict) : ""}</dd>` : "";
-      const labels = {received: "Données reçues", constructed: "Constitution", readout: "Lectures dérivées", scope: "Portée constitutive", correction: "Reprise de l’analyse"};
-      const constitution = d.constitution ? Object.entries(labels).filter(([key]) => d.constitution[key]).map(([key, label]) => `<dt>${label}</dt><dd>${esc(d.constitution[key])}</dd>`).join("") : "";
-      const crv = d.constitutive_review ? `<dt>Revue constitutive</dt><dd>${esc(d.constitutive_review.state)} · ${esc(d.constitutive_review.verdict)}</dd>` : "";
       $("#kg-detail").innerHTML = `<div class="t">${esc(tex(d.title))}</div><div class="meta"><span class="chip"><span class="d ${CATDOT[d.cat]}"></span>${esc(CATL[d.cat])}</span>${d.tier ? `<span class="chip">${d.tier}</span>` : ""}${d.status ? `<span class="chip">${esc(d.status)}</span>` : ""}<span class="chip mono">${esc(d.id)}</span></div>
-        <div>${esc(tex(d.statement))}</div><dl>${constitution}${crv}${extra}${rv}${(d.where || []).length ? `<dt>where</dt><dd>${esc(d.where.join("; "))}</dd>` : ""}${(d.evidence || []).length ? `<dt>evidence</dt><dd>${esc(d.evidence.join("; "))}</dd>` : ""}
+        <div>${esc(tex(d.statement))}</div><dl>${extra}${rv}${(d.where || []).length ? `<dt>where</dt><dd>${esc(d.where.join("; "))}</dd>` : ""}${(d.evidence || []).length ? `<dt>evidence</dt><dd>${esc(d.evidence.join("; "))}</dd>` : ""}
         ${out.length ? `<dt>links</dt><dd>${out.slice(0, 12).join("<br>")}</dd>` : ""}${inn.length ? `<dt>linked from</dt><dd>${inn.slice(0, 12).join("<br>")}</dd>` : ""}</dl>`;
     }
   }

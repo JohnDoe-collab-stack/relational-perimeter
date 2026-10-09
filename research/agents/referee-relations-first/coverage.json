@@ -1,0 +1,2190 @@
+{
+  "map": "labyrinth/knowledge.json",
+  "nodeCount": 93,
+  "duplicateIds": [],
+  "referenceCount": 184.0,
+  "badAnchors": [],
+  "nodes": [
+    {
+      "id": "src.main",
+      "kind": "source",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "src.plan",
+      "kind": "source",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "m.presentation",
+      "kind": "method",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "m.core",
+      "kind": "method",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "m.history",
+      "kind": "method",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.residual",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "SegmentedResidualRole.lean",
+          "declaration": "SegmentedResidualRole.ResidualDeterminationCore.occurrences_unique",
+          "line": 136,
+          "anchor": "theorem occurrences_unique",
+          "lineMatches": true,
+          "actualLine": "theorem occurrences_unique"
+        },
+        {
+          "file": "SegmentedResidualRole.lean",
+          "declaration": "SegmentedResidualRole.positiveCore_hasUniqueResidualOccurrence",
+          "line": 167,
+          "anchor": "def positiveCore_hasUniqueResidualOccurrence",
+          "lineMatches": true,
+          "actualLine": "def positiveCore_hasUniqueResidualOccurrence"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.internal-reconstruction",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "SegmentedResidualRole.lean",
+          "declaration": "SegmentedResidualRole.ResidualUniquenessKernel.toExactInternalCompletion_of_positive",
+          "line": 595,
+          "anchor": "def toExactInternalCompletion_of_positive",
+          "lineMatches": true,
+          "actualLine": "def toExactInternalCompletion_of_positive"
+        }
+      ],
+      "referenceCount": 1,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.abstract-exit",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "AbstractSegmentedTurning.lean",
+          "declaration": "AbstractSegmentedTurning.ObstructedRegime.exactClassification",
+          "line": 352,
+          "anchor": "def exactClassification",
+          "lineMatches": true,
+          "actualLine": "def exactClassification"
+        },
+        {
+          "file": "AbstractSegmentedTurning.lean",
+          "declaration": "AbstractSegmentedTurning.ObstructedRegime.continuation_outside_regime",
+          "line": 370,
+          "anchor": "theorem continuation_outside_regime",
+          "lineMatches": true,
+          "actualLine": "theorem continuation_outside_regime"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.transport-backward",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "ExactTypeTransport.lean",
+          "declaration": "ExactTypeTransport.backward_eq_of_forward_eq",
+          "line": 101,
+          "anchor": "theorem backward_eq_of_forward_eq",
+          "lineMatches": true,
+          "actualLine": "theorem backward_eq_of_forward_eq"
+        }
+      ],
+      "referenceCount": 1,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.perimeter-exact",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.occurrenceToRequirement_toOccurrence",
+          "line": 3197,
+          "anchor": "theorem occurrenceToRequirement_toOccurrence",
+          "lineMatches": true,
+          "actualLine": "theorem occurrenceToRequirement_toOccurrence"
+        },
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.requirementToOccurrence_toRequirement",
+          "line": 3205,
+          "anchor": "theorem requirementToOccurrence_toRequirement",
+          "lineMatches": true,
+          "actualLine": "theorem requirementToOccurrence_toRequirement"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.rooted-structure",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.ExactNonClosingRealization.realize_injective",
+          "line": 4040,
+          "anchor": "theorem realize_injective",
+          "lineMatches": true,
+          "actualLine": "theorem realize_injective"
+        },
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.ExactNonClosingRealization.preservesPrecedence",
+          "line": 4084,
+          "anchor": "theorem preservesPrecedence",
+          "lineMatches": true,
+          "actualLine": "theorem preservesPrecedence"
+        },
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.ExactNonClosingRealization.preservesNext",
+          "line": 4115,
+          "anchor": "theorem preservesNext",
+          "lineMatches": true,
+          "actualLine": "theorem preservesNext"
+        }
+      ],
+      "referenceCount": 3,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.factorization",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.ExactNonClosingRealization.toPerimeterExtension",
+          "line": 4654,
+          "anchor": "def toPerimeterExtension",
+          "lineMatches": true,
+          "actualLine": "def toPerimeterExtension"
+        }
+      ],
+      "referenceCount": 1,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.positive-continuation",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.oneStepAfterPerimeterStrict",
+          "line": 2705,
+          "anchor": "def oneStepAfterPerimeterStrict",
+          "lineMatches": true,
+          "actualLine": "def oneStepAfterPerimeterStrict"
+        },
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.oneStepAfterPerimeter_ne",
+          "line": 2715,
+          "anchor": "theorem oneStepAfterPerimeter_ne",
+          "lineMatches": true,
+          "actualLine": "theorem oneStepAfterPerimeter_ne"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.no-return",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.positiveGeneratedHistory_source_ne_target",
+          "line": 2556,
+          "anchor": "theorem positiveGeneratedHistory_source_ne_target",
+          "lineMatches": true,
+          "actualLine": "theorem positiveGeneratedHistory_source_ne_target"
+        }
+      ],
+      "referenceCount": 1,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.labelled-residual",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.FaithfullyLabelledPerimeterExtension.newOccurrence_label_is_final",
+          "line": 5211,
+          "anchor": "theorem newOccurrence_label_is_final",
+          "lineMatches": true,
+          "actualLine": "theorem newOccurrence_label_is_final"
+        },
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.FaithfullyLabelledPerimeterExtension.continuation_occurrences_unique",
+          "line": 5221,
+          "anchor": "theorem continuation_occurrences_unique",
+          "lineMatches": true,
+          "actualLine": "theorem continuation_occurrences_unique"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.circular-classification",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.exactCircularRefinementClassification",
+          "line": 6853,
+          "anchor": "def exactCircularRefinementClassification",
+          "lineMatches": true,
+          "actualLine": "def exactCircularRefinementClassification"
+        },
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.oneStepAfterPerimeter_notCircularRefinement",
+          "line": 6864,
+          "anchor": "theorem oneStepAfterPerimeter_notCircularRefinement",
+          "lineMatches": true,
+          "actualLine": "theorem oneStepAfterPerimeter_notCircularRefinement"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.specification",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.circularRefinement_soundSpecification",
+          "line": 6906,
+          "anchor": "def circularRefinement_soundSpecification",
+          "lineMatches": true,
+          "actualLine": "def circularRefinement_soundSpecification"
+        },
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.circularSpecification_complete",
+          "line": 6086,
+          "anchor": "def circularSpecification_complete",
+          "lineMatches": true,
+          "actualLine": "def circularSpecification_complete"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.turning",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.strongPerimetralTurning",
+          "line": 7001,
+          "anchor": "def strongPerimetralTurning",
+          "lineMatches": true,
+          "actualLine": "def strongPerimetralTurning"
+        }
+      ],
+      "referenceCount": 1,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.numeric-readout",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.admissible_length_le_perimeter",
+          "line": 7138,
+          "anchor": "theorem admissible_length_le_perimeter",
+          "lineMatches": true,
+          "actualLine": "theorem admissible_length_le_perimeter"
+        }
+      ],
+      "referenceCount": 1,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.concrete-interpretation",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.exactlyInterpretHistory",
+          "line": 7607,
+          "anchor": "def exactlyInterpretHistory",
+          "lineMatches": true,
+          "actualLine": "def exactlyInterpretHistory"
+        }
+      ],
+      "referenceCount": 1,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.separator-order",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.Example.permutedExample_not_order_preserved",
+          "line": 8161,
+          "anchor": "theorem permutedExample_not_order_preserved",
+          "lineMatches": true,
+          "actualLine": "theorem permutedExample_not_order_preserved :"
+        }
+      ],
+      "referenceCount": 1,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.separator-bridge",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.Example.interleavedExample_order_preserved",
+          "line": 8284,
+          "anchor": "def interleavedExample_order_preserved",
+          "lineMatches": true,
+          "actualLine": "def interleavedExample_order_preserved :"
+        },
+        {
+          "file": "StrongPerimetralTurning.lean",
+          "declaration": "StrongPerimetralTurning.Example.interleavedExample_no_effective_bridge_p1_p2",
+          "line": 8356,
+          "anchor": "theorem interleavedExample_no_effective_bridge_p1_p2",
+          "lineMatches": true,
+          "actualLine": "theorem interleavedExample_no_effective_bridge_p1_p2 :"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.separator-injectivity",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "labyrinth/probes/FoundationalSeparators.lean.in",
+          "declaration": "FoundationalSeparators.weakened_core_does_not_force_uniqueness",
+          "line": 33,
+          "anchor": "theorem weakened_core_does_not_force_uniqueness",
+          "lineMatches": true,
+          "actualLine": "theorem weakened_core_does_not_force_uniqueness :"
+        },
+        {
+          "file": "labyrinth/probes/FoundationalSeparators.lean.in",
+          "declaration": "FoundationalSeparators.residual_label_not_injective",
+          "line": 27,
+          "anchor": "theorem residual_label_not_injective",
+          "lineMatches": true,
+          "actualLine": "theorem residual_label_not_injective :"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.separator-transport",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "labyrinth/probes/FoundationalSeparators.lean.in",
+          "declaration": "FoundationalSeparators.swap_does_not_preserve_order",
+          "line": 80,
+          "anchor": "theorem swap_does_not_preserve_order",
+          "lineMatches": true,
+          "actualLine": "theorem swap_does_not_preserve_order :"
+        }
+      ],
+      "referenceCount": 1,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.final-role-carrier",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "labyrinth/probes/FoundationalSeparators.lean.in",
+          "declaration": "FoundationalSeparators.finalRoleUnitTransport",
+          "line": 86,
+          "anchor": "def finalRoleUnitTransport",
+          "lineMatches": true,
+          "actualLine": "def finalRoleUnitTransport (P : StrongPerimetralTurning.CircularPresentation) :"
+        }
+      ],
+      "referenceCount": 1,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.local-order",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.order-bridge",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.weak-unique",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.exact-order",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "q.positive-circle",
+      "kind": "question",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "q.equipped-final-role",
+      "kind": "question",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "q.rich-transport",
+      "kind": "question",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "q.rigidity",
+      "kind": "question",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "q.multiple-generation",
+      "kind": "question",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "q.quantity",
+      "kind": "question",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "q.converse-traces",
+      "kind": "question",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "q.concrete-faithfulness",
+      "kind": "question",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "h.equipped-morphisms",
+      "kind": "hunch",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "h.free-paths",
+      "kind": "hunch",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.separator-old-completion",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "research/agents/referee-foundations/IndependentProbes.lean.in",
+          "declaration": "FoundationReferee.collapsedOld_no_exact_completion",
+          "line": 35,
+          "anchor": "theorem collapsedOld_no_exact_completion",
+          "lineMatches": true,
+          "actualLine": "theorem collapsedOld_no_exact_completion :"
+        },
+        {
+          "file": "labyrinth/probes/FoundationalSeparators.lean.in",
+          "declaration": "FoundationalSeparators.positive_kernel_does_not_force_internal_completion",
+          "line": 65,
+          "anchor": "theorem positive_kernel_does_not_force_internal_completion",
+          "lineMatches": true,
+          "actualLine": "theorem positive_kernel_does_not_force_internal_completion :"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.positive-old-completion",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.positive-split",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/PositivePresentation.lean",
+          "declaration": "StrongPerimetralTurning.PositiveCircularPresentation",
+          "line": 18,
+          "anchor": "structure PositiveCircularPresentation where",
+          "lineMatches": true,
+          "actualLine": "structure PositiveCircularPresentation where"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositivePresentation.lean",
+          "declaration": "StrongPerimetralTurning.CircularClosureObstruction.endpointsSeparated",
+          "line": 62,
+          "anchor": "theorem endpointsSeparated",
+          "lineMatches": true,
+          "actualLine": "theorem endpointsSeparated"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/Examples.lean",
+          "declaration": "RelationalPerimeter.Constitution.Examples.identifiedBoundary_no_obstruction",
+          "line": 46,
+          "anchor": "theorem identifiedBoundary_no_obstruction :",
+          "lineMatches": true,
+          "actualLine": "theorem identifiedBoundary_no_obstruction :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/Examples.lean",
+          "declaration": "RelationalPerimeter.Constitution.Examples.same_positive_data",
+          "line": 68,
+          "anchor": "theorem same_positive_data : obstructed.toPositiveCircularPresentation = positive := rfl",
+          "lineMatches": true,
+          "actualLine": "theorem same_positive_data : obstructed.toPositiveCircularPresentation = positive := rfl"
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.circular-bridge",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/CircularPresentationBridge.lean",
+          "declaration": "StrongPerimetralTurning.CircularPresentation.positive_roundTrip",
+          "line": 48,
+          "anchor": "theorem positive_roundTrip",
+          "lineMatches": true,
+          "actualLine": "theorem positive_roundTrip"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularPresentationBridge.lean",
+          "declaration": "StrongPerimetralTurning.CircularPresentation.boundary_roundTrip",
+          "line": 55,
+          "anchor": "theorem boundary_roundTrip",
+          "lineMatches": true,
+          "actualLine": "theorem boundary_roundTrip"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularPresentationBridge.lean",
+          "declaration": "StrongPerimetralTurning.CircularPresentation.obstruction_roundTrip",
+          "line": 63,
+          "anchor": "theorem obstruction_roundTrip",
+          "lineMatches": true,
+          "actualLine": "theorem obstruction_roundTrip"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularPresentationBridge.lean",
+          "declaration": "StrongPerimetralTurning.CircularPresentation.historical_roundTrip",
+          "line": 72,
+          "anchor": "theorem historical_roundTrip (P : CircularPresentation) :",
+          "lineMatches": true,
+          "actualLine": "theorem historical_roundTrip (P : CircularPresentation) :"
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.boundary-extraction",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.closingBoundary",
+          "line": 31,
+          "anchor": "def closingBoundary (P : StrongPerimetralTurning.PositiveCircularPresentation) :",
+          "lineMatches": true,
+          "actualLine": "def closingBoundary (P : StrongPerimetralTurning.PositiveCircularPresentation) :"
+        },
+        {
+          "file": "research/agents/referee-positive-foundations/IndependentProbes.lean.in",
+          "declaration": "PositiveFoundationReferee.extractedBoundaryReadsExactData",
+          "line": 145,
+          "anchor": "theorem extractedBoundaryReadsExactData (P : PositiveCircularPresentation) :",
+          "lineMatches": true,
+          "actualLine": "theorem extractedBoundaryReadsExactData (P : PositiveCircularPresentation) :"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.boundary-calculus",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.BoundaryTransport.reverse",
+          "line": 79,
+          "anchor": "def reverse {B C : ConstitutiveBoundary} (transport : BoundaryTransport B C) :",
+          "lineMatches": true,
+          "actualLine": "def reverse {B C : ConstitutiveBoundary} (transport : BoundaryTransport B C) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.BoundaryTransport.compose",
+          "line": 102,
+          "anchor": "def compose {B C D : ConstitutiveBoundary}",
+          "lineMatches": true,
+          "actualLine": "def compose {B C D : ConstitutiveBoundary}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.BoundaryTransport.identity_left",
+          "line": 133,
+          "anchor": "theorem identity_left {B C : ConstitutiveBoundary} (transport : BoundaryTransport B C) :",
+          "lineMatches": true,
+          "actualLine": "theorem identity_left {B C : ConstitutiveBoundary} (transport : BoundaryTransport B C) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.BoundaryTransport.identity_right",
+          "line": 138,
+          "anchor": "theorem identity_right {B C : ConstitutiveBoundary} (transport : BoundaryTransport B C) :",
+          "lineMatches": true,
+          "actualLine": "theorem identity_right {B C : ConstitutiveBoundary} (transport : BoundaryTransport B C) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.BoundaryTransport.compose_associative",
+          "line": 143,
+          "anchor": "theorem compose_associative {B C D E : ConstitutiveBoundary}",
+          "lineMatches": true,
+          "actualLine": "theorem compose_associative {B C D E : ConstitutiveBoundary}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.BoundaryTransport.reverse_left",
+          "line": 150,
+          "anchor": "theorem reverse_left {B C : ConstitutiveBoundary} (transport : BoundaryTransport B C) :",
+          "lineMatches": true,
+          "actualLine": "theorem reverse_left {B C : ConstitutiveBoundary} (transport : BoundaryTransport B C) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.BoundaryTransport.reverse_right",
+          "line": 157,
+          "anchor": "theorem reverse_right {B C : ConstitutiveBoundary} (transport : BoundaryTransport B C) :",
+          "lineMatches": true,
+          "actualLine": "theorem reverse_right {B C : ConstitutiveBoundary} (transport : BoundaryTransport B C) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.BoundaryTransport.backward_of_forward",
+          "line": 185,
+          "anchor": "theorem backward_of_forward {B C : ConstitutiveBoundary}",
+          "lineMatches": true,
+          "actualLine": "theorem backward_of_forward {B C : ConstitutiveBoundary}"
+        }
+      ],
+      "referenceCount": 8,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.equipped-role",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.EquippedFinalRole.canonical",
+          "line": 232,
+          "anchor": "def canonical (B : ConstitutiveBoundary) : EquippedFinalRole B := ⟨B.junction, rfl⟩",
+          "lineMatches": true,
+          "actualLine": "def canonical (B : ConstitutiveBoundary) : EquippedFinalRole B := ⟨B.junction, rfl⟩"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.EquippedFinalRole.unique",
+          "line": 228,
+          "anchor": "theorem unique {B : ConstitutiveBoundary} (first second : EquippedFinalRole B) :",
+          "lineMatches": true,
+          "actualLine": "theorem unique {B : ConstitutiveBoundary} (first second : EquippedFinalRole B) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.EquippedFinalRole.source_preserved",
+          "line": 246,
+          "anchor": "theorem source_preserved {B C : ConstitutiveBoundary}",
+          "lineMatches": true,
+          "actualLine": "theorem source_preserved {B C : ConstitutiveBoundary}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.EquippedFinalRole.target_preserved",
+          "line": 250,
+          "anchor": "theorem target_preserved {B C : ConstitutiveBoundary}",
+          "lineMatches": true,
+          "actualLine": "theorem target_preserved {B C : ConstitutiveBoundary}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.EquippedFinalRole.provenance_preserved",
+          "line": 254,
+          "anchor": "theorem provenance_preserved {B C : ConstitutiveBoundary}",
+          "lineMatches": true,
+          "actualLine": "theorem provenance_preserved {B C : ConstitutiveBoundary}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.EquippedFinalRole.transport_identity",
+          "line": 258,
+          "anchor": "theorem transport_identity {B : ConstitutiveBoundary} (role : EquippedFinalRole B) :",
+          "lineMatches": true,
+          "actualLine": "theorem transport_identity {B : ConstitutiveBoundary} (role : EquippedFinalRole B) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.EquippedFinalRole.transport_compose",
+          "line": 263,
+          "anchor": "theorem transport_compose {B C D : ConstitutiveBoundary}",
+          "lineMatches": true,
+          "actualLine": "theorem transport_compose {B C D : ConstitutiveBoundary}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.EquippedFinalRole.exactTransport",
+          "line": 280,
+          "anchor": "def exactTransport {B C : ConstitutiveBoundary} (map : BoundaryTransport B C) :",
+          "lineMatches": true,
+          "actualLine": "def exactTransport {B C : ConstitutiveBoundary} (map : BoundaryTransport B C) :"
+        }
+      ],
+      "referenceCount": 8,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.separator-closing-witness",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/Examples.lean",
+          "declaration": "RelationalPerimeter.Constitution.Examples.closingSwap_preserves_indices",
+          "line": 89,
+          "anchor": "theorem closingSwap_preserves_indices :",
+          "lineMatches": true,
+          "actualLine": "theorem closingSwap_preserves_indices :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/Examples.lean",
+          "declaration": "RelationalPerimeter.Constitution.Examples.closingSwap_cannot_lift",
+          "line": 100,
+          "anchor": "theorem closingSwap_cannot_lift",
+          "lineMatches": true,
+          "actualLine": "theorem closingSwap_cannot_lift"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.separator-provenance-witness",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "research/agents/referee-positive-foundations/IndependentProbes.lean.in",
+          "declaration": "PositiveFoundationReferee.swapProvenanceOnly",
+          "line": 115,
+          "anchor": "def swapProvenanceOnly : BoundaryCarrierTransport (boolBoundary false) (boolBoundary false) where",
+          "lineMatches": true,
+          "actualLine": "def swapProvenanceOnly : BoundaryCarrierTransport (boolBoundary false) (boolBoundary false) where"
+        },
+        {
+          "file": "research/agents/referee-positive-foundations/IndependentProbes.lean.in",
+          "declaration": "PositiveFoundationReferee.provenanceSwapCannotEnrich",
+          "line": 130,
+          "anchor": "theorem provenanceSwapCannotEnrich",
+          "lineMatches": true,
+          "actualLine": "theorem provenanceSwapCannotEnrich"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.separator-positive-recurrence",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/Examples.lean",
+          "declaration": "RelationalPerimeter.Constitution.Examples.raw_node_return",
+          "line": 72,
+          "anchor": "theorem raw_node_return : positive.perimeter.finalNode = positive.initialNode := rfl",
+          "lineMatches": true,
+          "actualLine": "theorem raw_node_return : positive.perimeter.finalNode = positive.initialNode := rfl"
+        },
+        {
+          "file": "research/agents/referee-positive-foundations/IndependentProbes.lean.in",
+          "declaration": "PositiveFoundationReferee.repeatedRawNode",
+          "line": 47,
+          "anchor": "theorem repeatedRawNode : circle.perimeter.finalNode = circle.initialNode := rfl",
+          "lineMatches": true,
+          "actualLine": "theorem repeatedRawNode : circle.perimeter.finalNode = circle.initialNode := rfl"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "src.positive-worktree",
+      "kind": "source",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.carrier-junction",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.junction-provenance",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.positive-no-recurrence",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "q.positive-generation",
+      "kind": "question",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.closing-shape-bridge",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveBoundary.toClosingBoundaryShape",
+          "line": 62,
+          "anchor": "def toClosingBoundaryShape (B : ConstitutiveBoundary) : ClosingBoundaryShape :=",
+          "lineMatches": true,
+          "actualLine": "def toClosingBoundaryShape (B : ConstitutiveBoundary) : ClosingBoundaryShape :="
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.PointedClosingBoundary.toConstitutiveBoundary",
+          "line": 83,
+          "anchor": "def toConstitutiveBoundary {B : ClosingBoundaryShape} (pointed : PointedClosingBoundary B) :",
+          "lineMatches": true,
+          "actualLine": "def toConstitutiveBoundary {B : ClosingBoundaryShape} (pointed : PointedClosingBoundary B) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.PointedClosingBoundary.shape_roundTrip",
+          "line": 96,
+          "anchor": "theorem shape_roundTrip {B : ClosingBoundaryShape} (pointed : PointedClosingBoundary B) :",
+          "lineMatches": true,
+          "actualLine": "theorem shape_roundTrip {B : ClosingBoundaryShape} (pointed : PointedClosingBoundary B) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.PointedClosingBoundary.pointing_roundTrip",
+          "line": 99,
+          "anchor": "theorem pointing_roundTrip {B : ClosingBoundaryShape} (pointed : PointedClosingBoundary B) :",
+          "lineMatches": true,
+          "actualLine": "theorem pointing_roundTrip {B : ClosingBoundaryShape} (pointed : PointedClosingBoundary B) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveBoundary.boundary_roundTrip",
+          "line": 123,
+          "anchor": "theorem boundary_roundTrip (B : ConstitutiveBoundary) :",
+          "lineMatches": true,
+          "actualLine": "theorem boundary_roundTrip (B : ConstitutiveBoundary) :"
+        }
+      ],
+      "referenceCount": 5,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.closing-pointing-exact",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.ClosingBoundaryShape.pointingTransport",
+          "line": 41,
+          "anchor": "def pointingTransport (B : ClosingBoundaryShape) :",
+          "lineMatches": true,
+          "actualLine": "def pointingTransport (B : ClosingBoundaryShape) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.ClosingBoundaryShape.nonempty_pointed_iff",
+          "line": 48,
+          "anchor": "theorem nonempty_pointed_iff (B : ClosingBoundaryShape) :",
+          "lineMatches": true,
+          "actualLine": "theorem nonempty_pointed_iff (B : ClosingBoundaryShape) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.ClosingBoundaryShape.noPointingOfEmpty",
+          "line": 52,
+          "anchor": "theorem noPointingOfEmpty (B : ClosingBoundaryShape)",
+          "lineMatches": true,
+          "actualLine": "theorem noPointingOfEmpty (B : ClosingBoundaryShape)"
+        }
+      ],
+      "referenceCount": 3,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.closing-empty",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.ClosingBoundaryShape.noFinalRoleOfEmpty",
+          "line": 136,
+          "anchor": "theorem noFinalRoleOfEmpty (B : ClosingBoundaryShape)",
+          "lineMatches": true,
+          "actualLine": "theorem noFinalRoleOfEmpty (B : ClosingBoundaryShape)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundaryExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.ClosingBoundaryExamples.empty_no_pointing",
+          "line": 31,
+          "anchor": "theorem empty_no_pointing : Nonempty (PointedClosingBoundary emptyShape) → False :=",
+          "lineMatches": true,
+          "actualLine": "theorem empty_no_pointing : Nonempty (PointedClosingBoundary emptyShape) → False :="
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundaryExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.ClosingBoundaryExamples.empty_no_final_role",
+          "line": 34,
+          "anchor": "theorem empty_no_final_role :",
+          "lineMatches": true,
+          "actualLine": "theorem empty_no_final_role :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundaryExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.ClosingBoundaryExamples.empty_not_from_constitutive",
+          "line": 38,
+          "anchor": "theorem empty_not_from_constitutive",
+          "lineMatches": true,
+          "actualLine": "theorem empty_not_from_constitutive"
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.closing-role-choice",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.PointedClosingBoundary.finalRole",
+          "line": 109,
+          "anchor": "def finalRole {B : ClosingBoundaryShape} (pointed : PointedClosingBoundary B) :",
+          "lineMatches": true,
+          "actualLine": "def finalRole {B : ClosingBoundaryShape} (pointed : PointedClosingBoundary B) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.PointedClosingBoundary.finalRole_unique",
+          "line": 112,
+          "anchor": "theorem finalRole_unique {B : ClosingBoundaryShape} (pointed : PointedClosingBoundary B)",
+          "lineMatches": true,
+          "actualLine": "theorem finalRole_unique {B : ClosingBoundaryShape} (pointed : PointedClosingBoundary B)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.PointedClosingBoundary.finalRole_junction",
+          "line": 116,
+          "anchor": "theorem finalRole_junction {B : ClosingBoundaryShape} (pointed : PointedClosingBoundary B)",
+          "lineMatches": true,
+          "actualLine": "theorem finalRole_junction {B : ClosingBoundaryShape} (pointed : PointedClosingBoundary B)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+          "declaration": "RelationalPerimeter.Constitution.ClosingBoundaryShape.nonempty_finalRole_iff",
+          "line": 130,
+          "anchor": "theorem nonempty_finalRole_iff (B : ClosingBoundaryShape) :",
+          "lineMatches": true,
+          "actualLine": "theorem nonempty_finalRole_iff (B : ClosingBoundaryShape) :"
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.closing-choice-multiplicity",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundaryExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.ClosingBoundaryExamples.unit_fibre_unique",
+          "line": 50,
+          "anchor": "theorem unit_fibre_unique (first second : ClosingWitness unitShape) : first = second := by",
+          "lineMatches": true,
+          "actualLine": "theorem unit_fibre_unique (first second : ClosingWitness unitShape) : first = second := by"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundaryExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.ClosingBoundaryExamples.bool_pointings_distinct",
+          "line": 70,
+          "anchor": "theorem bool_pointings_distinct : falsePointing ≠ truePointing := by",
+          "lineMatches": true,
+          "actualLine": "theorem bool_pointings_distinct : falsePointing ≠ truePointing := by"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundaryExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.ClosingBoundaryExamples.bool_per_choice_role_unique",
+          "line": 84,
+          "anchor": "theorem bool_per_choice_role_unique (pointed : PointedClosingBoundary boolShape)",
+          "lineMatches": true,
+          "actualLine": "theorem bool_per_choice_role_unique (pointed : PointedClosingBoundary boolShape)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingBoundaryExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.ClosingBoundaryExamples.bool_closing_fibre_not_unique",
+          "line": 95,
+          "anchor": "theorem bool_closing_fibre_not_unique :",
+          "lineMatches": true,
+          "actualLine": "theorem bool_closing_fibre_not_unique :"
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.role-unique-choice",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "src.closing-worktree",
+      "kind": "source",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.positive-formation-deployment",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveFormation",
+          "line": 70,
+          "anchor": "structure PositiveFormation where",
+          "lineMatches": true,
+          "actualLine": "structure PositiveFormation where"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.deploy_start",
+          "line": 128,
+          "anchor": "theorem deploy_start {source target : F.State} (history : PositiveHistory F source target) :",
+          "lineMatches": true,
+          "actualLine": "theorem deploy_start {source target : F.State} (history : PositiveHistory F source target) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.deploy_final",
+          "line": 131,
+          "anchor": "theorem deploy_final {source target : F.State} (history : PositiveHistory F source target) :",
+          "lineMatches": true,
+          "actualLine": "theorem deploy_final {source target : F.State} (history : PositiveHistory F source target) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.deploy_link_exact",
+          "line": 207,
+          "anchor": "theorem deploy_link_exact {source target : F.State} (history : PositiveHistory F source target)",
+          "lineMatches": true,
+          "actualLine": "theorem deploy_link_exact {source target : F.State} (history : PositiveHistory F source target)"
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.positive-history-composition",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.nil_append",
+          "line": 105,
+          "anchor": "theorem nil_append {source target : F.State} (history : PositiveHistory F source target) :",
+          "lineMatches": true,
+          "actualLine": "theorem nil_append {source target : F.State} (history : PositiveHistory F source target) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.append_nil",
+          "line": 108,
+          "anchor": "theorem append_nil {source target : F.State} (history : PositiveHistory F source target) :",
+          "lineMatches": true,
+          "actualLine": "theorem append_nil {source target : F.State} (history : PositiveHistory F source target) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.append_associative",
+          "line": 115,
+          "anchor": "theorem append_associative {a b c d : F.State} (first : PositiveHistory F a b)",
+          "lineMatches": true,
+          "actualLine": "theorem append_associative {a b c d : F.State} (first : PositiveHistory F a b)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.deploy_append",
+          "line": 137,
+          "anchor": "theorem deploy_append {a b c : F.State} (first : PositiveHistory F a b)",
+          "lineMatches": true,
+          "actualLine": "theorem deploy_append {a b c : F.State} (first : PositiveHistory F a b)"
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.positive-occurrence-positions",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.nil_noOccurrence",
+          "line": 152,
+          "anchor": "theorem nil_noOccurrence (state : F.State) :",
+          "lineMatches": true,
+          "actualLine": "theorem nil_noOccurrence (state : F.State) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.here_ne_later",
+          "line": 155,
+          "anchor": "theorem here_ne_later {a b c : F.State} {step : F.Step a b}",
+          "lineMatches": true,
+          "actualLine": "theorem here_ne_later {a b c : F.State} {step : F.Step a b}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.positionTransport",
+          "line": 194,
+          "anchor": "def positionTransport {source target : F.State} (history : PositiveHistory F source target) :",
+          "lineMatches": true,
+          "actualLine": "def positionTransport {source target : F.State} (history : PositiveHistory F source target) :"
+        }
+      ],
+      "referenceCount": 3,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.positive-explicit-closing",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.boundary_source_exact",
+          "line": 226,
+          "anchor": "theorem boundary_source_exact {source target : F.State}",
+          "lineMatches": true,
+          "actualLine": "theorem boundary_source_exact {source target : F.State}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.toCircular_initial",
+          "line": 244,
+          "anchor": "theorem toCircular_initial {source target : F.State} (history : PositiveHistory F source target)",
+          "lineMatches": true,
+          "actualLine": "theorem toCircular_initial {source target : F.State} (history : PositiveHistory F source target)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.toCircular_deployment",
+          "line": 248,
+          "anchor": "theorem toCircular_deployment {source target : F.State} (history : PositiveHistory F source target)",
+          "lineMatches": true,
+          "actualLine": "theorem toCircular_deployment {source target : F.State} (history : PositiveHistory F source target)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.toCircular_junction",
+          "line": 252,
+          "anchor": "theorem toCircular_junction {source target : F.State} (history : PositiveHistory F source target)",
+          "lineMatches": true,
+          "actualLine": "theorem toCircular_junction {source target : F.State} (history : PositiveHistory F source target)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.toCircular_boundary",
+          "line": 256,
+          "anchor": "theorem toCircular_boundary {source target : F.State} (history : PositiveHistory F source target)",
+          "lineMatches": true,
+          "actualLine": "theorem toCircular_boundary {source target : F.State} (history : PositiveHistory F source target)"
+        }
+      ],
+      "referenceCount": 5,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.positive-generated-historical-bridge",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationBridge.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.historical_positive",
+          "line": 24,
+          "anchor": "theorem historical_positive (history : PositiveHistory F source target)",
+          "lineMatches": true,
+          "actualLine": "theorem historical_positive (history : PositiveHistory F source target)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationBridge.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.historical_endpoints",
+          "line": 32,
+          "anchor": "theorem historical_endpoints (history : PositiveHistory F source target)",
+          "lineMatches": true,
+          "actualLine": "theorem historical_endpoints (history : PositiveHistory F source target)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationBridge.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.historical_obstruction",
+          "line": 39,
+          "anchor": "theorem historical_obstruction (history : PositiveHistory F source target)",
+          "lineMatches": true,
+          "actualLine": "theorem historical_obstruction (history : PositiveHistory F source target)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationBridge.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.historical_deployment",
+          "line": 46,
+          "anchor": "theorem historical_deployment (history : PositiveHistory F source target)",
+          "lineMatches": true,
+          "actualLine": "theorem historical_deployment (history : PositiveHistory F source target)"
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.positive-successor-choice",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.ChosenPositiveContinuation.walk",
+          "line": 270,
+          "anchor": "def walk {F : PositiveFormation} (choice : ChosenPositiveContinuation F)",
+          "lineMatches": true,
+          "actualLine": "def walk {F : PositiveFormation} (choice : ChosenPositiveContinuation F)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+          "declaration": "RelationalPerimeter.Constitution.ChosenPositiveContinuation.walk_successor_positive",
+          "line": 277,
+          "anchor": "def walk_successor_positive {F : PositiveFormation} (choice : ChosenPositiveContinuation F)",
+          "lineMatches": true,
+          "actualLine": "def walk_successor_positive {F : PositiveFormation} (choice : ChosenPositiveContinuation F)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveGenerationExamples.branching_targets_distinct",
+          "line": 129,
+          "anchor": "theorem branching_targets_distinct :",
+          "lineMatches": true,
+          "actualLine": "theorem branching_targets_distinct :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveGenerationExamples.chosen_successors_distinct",
+          "line": 141,
+          "anchor": "theorem chosen_successors_distinct :",
+          "lineMatches": true,
+          "actualLine": "theorem chosen_successors_distinct :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveGenerationExamples.directed_no_global_continuation",
+          "line": 52,
+          "anchor": "theorem directed_no_global_continuation",
+          "lineMatches": true,
+          "actualLine": "theorem directed_no_global_continuation"
+        }
+      ],
+      "referenceCount": 5,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.separator-generated-unclosed",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveGenerationExamples.directedPositive",
+          "line": 43,
+          "anchor": "def directedPositive : PositiveHistory.Occurrence directedHistory := .here",
+          "lineMatches": true,
+          "actualLine": "def directedPositive : PositiveHistory.Occurrence directedHistory := .here"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveGenerationExamples.directed_closing_empty",
+          "line": 45,
+          "anchor": "theorem directed_closing_empty : ClosingWitness directedHistory.boundaryShape → False :=",
+          "lineMatches": true,
+          "actualLine": "theorem directed_closing_empty : ClosingWitness directedHistory.boundaryShape → False :="
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveGenerationExamples.directed_no_pointing",
+          "line": 48,
+          "anchor": "theorem directed_no_pointing :",
+          "lineMatches": true,
+          "actualLine": "theorem directed_no_pointing :"
+        }
+      ],
+      "referenceCount": 3,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.separator-repeated-positive-occurrences",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveGenerationExamples.raw_nodes_repeat",
+          "line": 159,
+          "anchor": "theorem raw_nodes_repeat :",
+          "lineMatches": true,
+          "actualLine": "theorem raw_nodes_repeat :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveGenerationExamples.repeated_occurrences_distinct",
+          "line": 163,
+          "anchor": "theorem repeated_occurrences_distinct : firstOccurrence ≠ secondOccurrence :=",
+          "lineMatches": true,
+          "actualLine": "theorem repeated_occurrences_distinct : firstOccurrence ≠ secondOccurrence :="
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveGenerationExamples.repeated_positions_distinct",
+          "line": 166,
+          "anchor": "theorem repeated_positions_distinct :",
+          "lineMatches": true,
+          "actualLine": "theorem repeated_positions_distinct :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/PositiveGenerationExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveGenerationExamples.repeated_step_witnesses_distinct",
+          "line": 172,
+          "anchor": "theorem repeated_step_witnesses_distinct :",
+          "lineMatches": true,
+          "actualLine": "theorem repeated_step_witnesses_distinct :"
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.generation-forces-closure",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.positive-unique-successor",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.repeated-nodes-merge-positions",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "src.generation-worktree",
+      "kind": "source",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.signature-fibre-transport",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.compatibility_return",
+          "line": 92,
+          "anchor": "theorem compatibility_return (map : ConstitutiveSignatureTransport S T)",
+          "lineMatches": true,
+          "actualLine": "theorem compatibility_return (map : ConstitutiveSignatureTransport S T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.compatibility_return_target",
+          "line": 97,
+          "anchor": "theorem compatibility_return_target (map : ConstitutiveSignatureTransport S T)",
+          "lineMatches": true,
+          "actualLine": "theorem compatibility_return_target (map : ConstitutiveSignatureTransport S T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.provenance_return",
+          "line": 103,
+          "anchor": "theorem provenance_return (map : ConstitutiveSignatureTransport S T)",
+          "lineMatches": true,
+          "actualLine": "theorem provenance_return (map : ConstitutiveSignatureTransport S T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.provenance_return_target",
+          "line": 108,
+          "anchor": "theorem provenance_return_target (map : ConstitutiveSignatureTransport S T)",
+          "lineMatches": true,
+          "actualLine": "theorem provenance_return_target (map : ConstitutiveSignatureTransport S T)"
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.signature-calculus",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.identity_left_compatibility",
+          "line": 145,
+          "anchor": "theorem identity_left_compatibility (map : ConstitutiveSignatureTransport S T)",
+          "lineMatches": true,
+          "actualLine": "theorem identity_left_compatibility (map : ConstitutiveSignatureTransport S T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.identity_right_compatibility",
+          "line": 150,
+          "anchor": "theorem identity_right_compatibility (map : ConstitutiveSignatureTransport S T)",
+          "lineMatches": true,
+          "actualLine": "theorem identity_right_compatibility (map : ConstitutiveSignatureTransport S T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.identity_left_provenance",
+          "line": 155,
+          "anchor": "theorem identity_left_provenance (map : ConstitutiveSignatureTransport S T)",
+          "lineMatches": true,
+          "actualLine": "theorem identity_left_provenance (map : ConstitutiveSignatureTransport S T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.identity_right_provenance",
+          "line": 159,
+          "anchor": "theorem identity_right_provenance (map : ConstitutiveSignatureTransport S T)",
+          "lineMatches": true,
+          "actualLine": "theorem identity_right_provenance (map : ConstitutiveSignatureTransport S T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.compose_associative_compatibility",
+          "line": 163,
+          "anchor": "theorem compose_associative_compatibility {V : ConstitutiveSignature}",
+          "lineMatches": true,
+          "actualLine": "theorem compose_associative_compatibility {V : ConstitutiveSignature}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.compose_associative_provenance",
+          "line": 170,
+          "anchor": "theorem compose_associative_provenance {V : ConstitutiveSignature}",
+          "lineMatches": true,
+          "actualLine": "theorem compose_associative_provenance {V : ConstitutiveSignature}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.reverse_compatibility_return",
+          "line": 194,
+          "anchor": "theorem reverse_compatibility_return (map : ConstitutiveSignatureTransport S T)",
+          "lineMatches": true,
+          "actualLine": "theorem reverse_compatibility_return (map : ConstitutiveSignatureTransport S T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.reverse_provenance_return",
+          "line": 204,
+          "anchor": "theorem reverse_provenance_return (map : ConstitutiveSignatureTransport S T)",
+          "lineMatches": true,
+          "actualLine": "theorem reverse_provenance_return (map : ConstitutiveSignatureTransport S T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.reverse_compatibility_return_target",
+          "line": 212,
+          "anchor": "theorem reverse_compatibility_return_target (map : ConstitutiveSignatureTransport S T)",
+          "lineMatches": true,
+          "actualLine": "theorem reverse_compatibility_return_target (map : ConstitutiveSignatureTransport S T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.reverse_provenance_return_target",
+          "line": 218,
+          "anchor": "theorem reverse_provenance_return_target (map : ConstitutiveSignatureTransport S T)",
+          "lineMatches": true,
+          "actualLine": "theorem reverse_provenance_return_target (map : ConstitutiveSignatureTransport S T)"
+        }
+      ],
+      "referenceCount": 10,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.signature-boundary-restriction",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.restrict",
+          "line": 251,
+          "anchor": "def restrict {B C : ConstitutiveBoundary}",
+          "lineMatches": true,
+          "actualLine": "def restrict {B C : ConstitutiveBoundary}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.restrict_junction_forward",
+          "line": 266,
+          "anchor": "theorem restrict_junction_forward {B C : ConstitutiveBoundary}",
+          "lineMatches": true,
+          "actualLine": "theorem restrict_junction_forward {B C : ConstitutiveBoundary}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.restrict_provenance_backward",
+          "line": 274,
+          "anchor": "theorem restrict_provenance_backward {B C : ConstitutiveBoundary}",
+          "lineMatches": true,
+          "actualLine": "theorem restrict_provenance_backward {B C : ConstitutiveBoundary}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransportExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.SignatureTransportExamples.selectedRestriction",
+          "line": 99,
+          "anchor": "def selectedRestriction : BoundaryTransport selectedBoundary movedBoundary :=",
+          "lineMatches": true,
+          "actualLine": "def selectedRestriction : BoundaryTransport selectedBoundary movedBoundary :="
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.signature-spine-transport",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/SpineTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.mapSpine_final",
+          "line": 24,
+          "anchor": "theorem mapSpine_final (map : ConstitutiveSignatureTransport S T) {node : S.Node}",
+          "lineMatches": true,
+          "actualLine": "theorem mapSpine_final (map : ConstitutiveSignatureTransport S T) {node : S.Node}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SpineTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.mapSpine_append",
+          "line": 31,
+          "anchor": "theorem mapSpine_append (map : ConstitutiveSignatureTransport S T) {node : S.Node}",
+          "lineMatches": true,
+          "actualLine": "theorem mapSpine_append (map : ConstitutiveSignatureTransport S T) {node : S.Node}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SpineTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.mapSpine_link",
+          "line": 156,
+          "anchor": "theorem mapSpine_link (map : ConstitutiveSignatureTransport S T) {node : S.Node}",
+          "lineMatches": true,
+          "actualLine": "theorem mapSpine_link (map : ConstitutiveSignatureTransport S T) {node : S.Node}"
+        }
+      ],
+      "referenceCount": 3,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.signature-position-order",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/SpineTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.positionTransport",
+          "line": 75,
+          "anchor": "def positionTransport (map : ConstitutiveSignatureTransport S T) {node : S.Node}",
+          "lineMatches": true,
+          "actualLine": "def positionTransport (map : ConstitutiveSignatureTransport S T) {node : S.Node}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SpineTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.precedes_iff",
+          "line": 128,
+          "anchor": "theorem precedes_iff (map : ConstitutiveSignatureTransport S T) {node : S.Node}",
+          "lineMatches": true,
+          "actualLine": "theorem precedes_iff (map : ConstitutiveSignatureTransport S T) {node : S.Node}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SpineTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ConstitutiveSignatureTransport.next_iff",
+          "line": 139,
+          "anchor": "theorem next_iff (map : ConstitutiveSignatureTransport S T) {node : S.Node}",
+          "lineMatches": true,
+          "actualLine": "theorem next_iff (map : ConstitutiveSignatureTransport S T) {node : S.Node}"
+        }
+      ],
+      "referenceCount": 3,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.signature-formation-histories",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/FormationTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveFormation.transport",
+          "line": 28,
+          "anchor": "abbrev transport (F : PositiveFormation) {target : ConstitutiveSignature}",
+          "lineMatches": true,
+          "actualLine": "abbrev transport (F : PositiveFormation) {target : ConstitutiveSignature}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/FormationTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.signatureTransport",
+          "line": 131,
+          "anchor": "def signatureTransport (change : ConstitutiveSignatureTransport F.signature target)",
+          "lineMatches": true,
+          "actualLine": "def signatureTransport (change : ConstitutiveSignatureTransport F.signature target)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/FormationTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.occurrenceSignatureTransport",
+          "line": 208,
+          "anchor": "def occurrenceSignatureTransport",
+          "lineMatches": true,
+          "actualLine": "def occurrenceSignatureTransport"
+        }
+      ],
+      "referenceCount": 3,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.signature-formation-operations",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/FormationTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.transport_append",
+          "line": 140,
+          "anchor": "theorem transport_append (change : ConstitutiveSignatureTransport F.signature target)",
+          "lineMatches": true,
+          "actualLine": "theorem transport_append (change : ConstitutiveSignatureTransport F.signature target)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/FormationTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.transport_deploy",
+          "line": 151,
+          "anchor": "theorem transport_deploy (change : ConstitutiveSignatureTransport F.signature target)",
+          "lineMatches": true,
+          "actualLine": "theorem transport_deploy (change : ConstitutiveSignatureTransport F.signature target)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/FormationTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.transport_position",
+          "line": 217,
+          "anchor": "theorem transport_position",
+          "lineMatches": true,
+          "actualLine": "theorem transport_position"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/FormationTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.ChosenPositiveContinuation.transport_walk",
+          "line": 309,
+          "anchor": "theorem transport_walk {F : PositiveFormation} {target : ConstitutiveSignature}",
+          "lineMatches": true,
+          "actualLine": "theorem transport_walk {F : PositiveFormation} {target : ConstitutiveSignature}"
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.signature-closing-transport",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.closingSignatureTransport",
+          "line": 18,
+          "anchor": "def closingSignatureTransport (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "def closingSignatureTransport (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.circularBoundaryTransport",
+          "line": 45,
+          "anchor": "def circularBoundaryTransport (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "def circularBoundaryTransport (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.circular_junction_preserved",
+          "line": 55,
+          "anchor": "theorem circular_junction_preserved (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem circular_junction_preserved (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/ClosingTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.circular_provenance_preserved",
+          "line": 62,
+          "anchor": "theorem circular_provenance_preserved (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem circular_provenance_preserved (map : ConstitutiveSignatureTransport F.signature T)"
+        }
+      ],
+      "referenceCount": 4,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.separator-sort-fibres",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransportExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.SignatureTransportExamples.same_explicit_sorts",
+          "line": 27,
+          "anchor": "theorem same_explicit_sorts : inhabitedSignature.Explicit = emptySignature.Explicit := rfl",
+          "lineMatches": true,
+          "actualLine": "theorem same_explicit_sorts : inhabitedSignature.Explicit = emptySignature.Explicit := rfl"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/SignatureTransportExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.SignatureTransportExamples.no_family_transport_nonempty",
+          "line": 37,
+          "anchor": "theorem no_family_transport_nonempty :",
+          "lineMatches": true,
+          "actualLine": "theorem no_family_transport_nonempty :"
+        }
+      ],
+      "referenceCount": 2,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.sort-transport-fibres",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "src.transport-worktree",
+      "kind": "source",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.equipped-circular-classification",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoles.lean",
+          "declaration": "RelationalPerimeter.Constitution.EquippedInteriorRole.positionTransport",
+          "line": 42,
+          "anchor": "def positionTransport (P : PositiveCircularPresentation) :",
+          "lineMatches": true,
+          "actualLine": "def positionTransport (P : PositiveCircularPresentation) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoles.lean",
+          "declaration": "RelationalPerimeter.Constitution.EquippedInteriorRole.occurrence_link_readout",
+          "line": 66,
+          "anchor": "theorem occurrence_link_readout {F : PositiveFormation} {source terminal : F.State}",
+          "lineMatches": true,
+          "actualLine": "theorem occurrence_link_readout {F : PositiveFormation} {source terminal : F.State}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoles.lean",
+          "declaration": "RelationalPerimeter.Constitution.CircularRole.classificationTransport",
+          "line": 108,
+          "anchor": "def classificationTransport (P : PositiveCircularPresentation) :",
+          "lineMatches": true,
+          "actualLine": "def classificationTransport (P : PositiveCircularPresentation) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoles.lean",
+          "declaration": "RelationalPerimeter.Constitution.CircularRole.exhaustive",
+          "line": 115,
+          "anchor": "theorem exhaustive (role : CircularRole P) :",
+          "lineMatches": true,
+          "actualLine": "theorem exhaustive (role : CircularRole P) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoles.lean",
+          "declaration": "RelationalPerimeter.Constitution.CircularRole.branches_distinct",
+          "line": 122,
+          "anchor": "theorem branches_distinct (interior : EquippedInteriorRole P)",
+          "lineMatches": true,
+          "actualLine": "theorem branches_distinct (interior : EquippedInteriorRole P)"
+        }
+      ],
+      "referenceCount": 5,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.final-role-no-occurrence",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoles.lean",
+          "declaration": "RelationalPerimeter.Constitution.CircularRole.generatedPosition",
+          "line": 128,
+          "anchor": "def generatedPosition : CircularRole P → Option (NonClosingPosition P.perimeter)",
+          "lineMatches": true,
+          "actualLine": "def generatedPosition : CircularRole P → Option (NonClosingPosition P.perimeter)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoles.lean",
+          "declaration": "RelationalPerimeter.Constitution.CircularRole.final_not_interior_position",
+          "line": 138,
+          "anchor": "theorem final_not_interior_position (role : EquippedFinalRole (closingBoundary P))",
+          "lineMatches": true,
+          "actualLine": "theorem final_not_interior_position (role : EquippedFinalRole (closingBoundary P))"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/HistoricalRoleBridge.lean",
+          "declaration": "RelationalPerimeter.Constitution.HistoricalRoleBridge.final_not_realized",
+          "line": 59,
+          "anchor": "theorem final_not_realized {P : CircularPresentation} {history : RootedGeneratedHistory P}",
+          "lineMatches": true,
+          "actualLine": "theorem final_not_realized {P : CircularPresentation} {history : RootedGeneratedHistory P}"
+        }
+      ],
+      "referenceCount": 3,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.equipped-historical-role-bridge",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/HistoricalRoleBridge.lean",
+          "declaration": "RelationalPerimeter.Constitution.HistoricalRoleBridge.finalRequirementTransport",
+          "line": 8,
+          "anchor": "def finalRequirementTransport (P : CircularPresentation) :",
+          "lineMatches": true,
+          "actualLine": "def finalRequirementTransport (P : CircularPresentation) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/HistoricalRoleBridge.lean",
+          "declaration": "RelationalPerimeter.Constitution.HistoricalRoleBridge.marker_junction_readout",
+          "line": 16,
+          "anchor": "theorem marker_junction_readout (P : CircularPresentation) (marker : FinalRequirement P) :",
+          "lineMatches": true,
+          "actualLine": "theorem marker_junction_readout (P : CircularPresentation) (marker : FinalRequirement P) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/HistoricalRoleBridge.lean",
+          "declaration": "RelationalPerimeter.Constitution.HistoricalRoleBridge.requirementTransport",
+          "line": 19,
+          "anchor": "def requirementTransport (P : CircularPresentation) :",
+          "lineMatches": true,
+          "actualLine": "def requirementTransport (P : CircularPresentation) :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/HistoricalRoleBridge.lean",
+          "declaration": "RelationalPerimeter.Constitution.HistoricalRoleBridge.realization_readout",
+          "line": 41,
+          "anchor": "def realization_readout {P : CircularPresentation} {history : RootedGeneratedHistory P}",
+          "lineMatches": true,
+          "actualLine": "def realization_readout {P : CircularPresentation} {history : RootedGeneratedHistory P}"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/HistoricalRoleBridge.lean",
+          "declaration": "RelationalPerimeter.Constitution.HistoricalRoleBridge.realization_injective",
+          "line": 47,
+          "anchor": "theorem realization_injective {P : CircularPresentation} {history : RootedGeneratedHistory P}",
+          "lineMatches": true,
+          "actualLine": "theorem realization_injective {P : CircularPresentation} {history : RootedGeneratedHistory P}"
+        }
+      ],
+      "referenceCount": 5,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.equipped-interior-role-transport",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.interiorRoleTransport",
+          "line": 64,
+          "anchor": "def interiorRoleTransport (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "def interiorRoleTransport (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.interior_position_preserved",
+          "line": 73,
+          "anchor": "theorem interior_position_preserved (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem interior_position_preserved (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.interior_link_preserved",
+          "line": 82,
+          "anchor": "theorem interior_link_preserved (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem interior_link_preserved (map : ConstitutiveSignatureTransport F.signature T)"
+        }
+      ],
+      "referenceCount": 3,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.equipped-final-role-full-transport",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.finalRoleTransport",
+          "line": 134,
+          "anchor": "def finalRoleTransport (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "def finalRoleTransport (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.final_witness_preserved",
+          "line": 141,
+          "anchor": "theorem final_witness_preserved (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem final_witness_preserved (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.final_source_preserved",
+          "line": 148,
+          "anchor": "theorem final_source_preserved (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem final_source_preserved (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.final_target_preserved",
+          "line": 156,
+          "anchor": "theorem final_target_preserved (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem final_target_preserved (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.final_difference_preserved",
+          "line": 164,
+          "anchor": "theorem final_difference_preserved (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem final_difference_preserved (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.final_provenance_preserved",
+          "line": 171,
+          "anchor": "theorem final_provenance_preserved (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem final_provenance_preserved (map : ConstitutiveSignatureTransport F.signature T)"
+        }
+      ],
+      "referenceCount": 6,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.equipped-role-classification-commutes",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.circularRoleTransport",
+          "line": 179,
+          "anchor": "def circularRoleTransport (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "def circularRoleTransport (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.circular_interior_preserved",
+          "line": 209,
+          "anchor": "theorem circular_interior_preserved (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem circular_interior_preserved (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.circular_final_preserved",
+          "line": 216,
+          "anchor": "theorem circular_final_preserved (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem circular_final_preserved (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.circular_classification_commutes",
+          "line": 239,
+          "anchor": "theorem circular_classification_commutes (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem circular_classification_commutes (map : ConstitutiveSignatureTransport F.signature T)"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+          "declaration": "RelationalPerimeter.Constitution.PositiveHistory.circular_generated_position_commutes",
+          "line": 248,
+          "anchor": "theorem circular_generated_position_commutes (map : ConstitutiveSignatureTransport F.signature T)",
+          "lineMatches": true,
+          "actualLine": "theorem circular_generated_position_commutes (map : ConstitutiveSignatureTransport F.signature T)"
+        }
+      ],
+      "referenceCount": 5,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "th.separator-relative-role-grammar",
+      "kind": "theorem",
+      "refs": [
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRolesExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.CircularRolesExamples.unpointed_empty_no_final",
+          "line": 32,
+          "anchor": "theorem unpointed_empty_no_final :",
+          "lineMatches": true,
+          "actualLine": "theorem unpointed_empty_no_final :"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRolesExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.CircularRolesExamples.chosen_witnesses_distinct",
+          "line": 22,
+          "anchor": "theorem chosen_witnesses_distinct : falseFinal.witness ≠ trueFinal.witness := by",
+          "lineMatches": true,
+          "actualLine": "theorem chosen_witnesses_distinct : falseFinal.witness ≠ trueFinal.witness := by"
+        },
+        {
+          "file": "RelationalPerimeter/Constitution/CircularRolesExamples.lean",
+          "declaration": "RelationalPerimeter.Constitution.CircularRolesExamples.no_exhaustiveness_of_larger_type",
+          "line": 64,
+          "anchor": "theorem no_exhaustiveness_of_larger_type :",
+          "lineMatches": true,
+          "actualLine": "theorem no_exhaustiveness_of_larger_type :"
+        }
+      ],
+      "referenceCount": 3,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "x.universal-role-exhaustiveness",
+      "kind": "deadend",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    },
+    {
+      "id": "src.roles-worktree",
+      "kind": "source",
+      "refs": [],
+      "referenceCount": 0,
+      "allLineAnchorsMatch": true
+    }
+  ]
+}

@@ -88,22 +88,17 @@
         "role": "Les configurations nodales sont relationnelles et les avancées témoignées constituent les places."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -128,22 +123,17 @@
         "role": "Facteur logique de l’unicité, pouvant être obtenu par oubli de l’architecture intérieure riche ou reçu directement dans son interface."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -168,22 +158,17 @@
         "role": "L'occurrence tient son identité de l'histoire composable, avant la valeur de son pas."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -252,22 +237,17 @@
         "role": "Résultat central : le domaine intérieur des places est exactement réalisé par les occurrences engendrées."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -336,22 +316,17 @@
         "role": "La genèse des unités intérieures est exactement reliée à celle des places."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -419,22 +394,17 @@
         "role": "La composition réelle permet de reconstruire les relations entre unités constituées."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -492,22 +462,17 @@
         "role": "La couverture des places internes reconstruit un facteur initial réellement composé."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -594,22 +559,17 @@
         "role": "Les rôles intérieurs lisent les liens des places constituées ; le final lit leur frontière équipée."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -696,22 +656,17 @@
         "role": "Les marqueurs nus retrouvent leur contenu à partir de l'autorité du même parent relationnel."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -780,22 +735,17 @@
         "role": "La frontière finale n'ajoute pas une avancée au domaine intérieur constitué."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -853,22 +803,17 @@
         "role": "La longueur lit une quantité déjà structurée par occurrences et relations."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -944,22 +889,17 @@
         "role": "La chaîne relationnelle positive est constituée indépendamment du rejet ultérieur."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -1035,22 +975,17 @@
         "role": "Les pas relationnels raccordés construisent l'épine et son domaine de places."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -1126,22 +1061,17 @@
         "role": "La constitution globale est une composition avec raccord typé des relations."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -1228,22 +1158,17 @@
         "role": "La clôture intervient après la constitution intérieure et reçoit son témoin propre."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -1323,22 +1248,17 @@
         "role": "L'enrichissement d'obstruction garde le même intérieur constitué."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -1425,22 +1345,17 @@
         "role": "Une sélection de continuation est une donnée relationnelle supplémentaire."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -1516,22 +1431,17 @@
         "role": "Le même parent relationnel demeure l'autorité lors du passage aux interfaces historiques."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -1593,22 +1503,17 @@
         "role": "La frontière est lue depuis les relations du début et du terme du même périmètre."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -1691,22 +1596,17 @@
         "role": "La forme de frontière sépare l'architecture de son témoin distingué."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -1775,22 +1675,17 @@
         "role": "Un témoin positif concret constitue un pointage relationnel utilisable."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -1866,22 +1761,17 @@
         "role": "Une forme relationnelle n'impose pas l'existence de tout témoin de clôture."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -1961,22 +1851,17 @@
         "role": "L'unicité du rôle s'établit relativement à son choix relationnel fixé."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -2056,22 +1941,17 @@
         "role": "La même architecture peut conserver plusieurs témoins relationnels sans perdre ses rôles par choix."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -2120,22 +2000,17 @@
         "role": "Les retours exacts permettent une reconstruction inverse pour des applications déjà choisies."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -2243,22 +2118,17 @@
         "role": "Les morphismes conservent ce qui équipe la frontière, au-delà des porteurs."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -2366,22 +2236,17 @@
         "role": "Le rôle final porte son témoin exact et lit les données de la frontière fixée."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -2457,22 +2322,17 @@
         "role": "Comparer des structures exige préserver leurs relations primitivement témoignées."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -2590,22 +2450,17 @@
         "role": "Les changements de signature conservent les témoins avec leurs indices relationnels."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -2685,22 +2540,17 @@
         "role": "La frontière équipée conserve des choix dans des familles déjà transportées."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -2769,22 +2619,17 @@
         "role": "Le transport suit toute la constitution des nœuds et avancées."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -2853,22 +2698,17 @@
         "role": "Le transport de la constitution conserve le domaine des places et leurs relations."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -2941,22 +2781,17 @@
         "role": "La reconstruction transporte les relations en conservant tous les pas constituants de l'histoire."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -3036,22 +2871,17 @@
         "role": "Les relations et la composition de l'intérieur commutent avec la reconstruction."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -3131,22 +2961,17 @@
         "role": "La même clôture reçue se conserve dans une image du domaine construit."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -3219,22 +3044,17 @@
         "role": "Les unités intérieures conservent position et lien entier lors du changement de signature."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -3324,22 +3144,17 @@
         "role": "La frontière finale et ses témoins restent équipés sous transport."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -3426,22 +3241,17 @@
         "role": "Le transport conserve la délimitation intérieure/finale du système constitué."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -3502,22 +3312,17 @@
         "role": "Une partie nouvelle déjà constituée se détermine dans une classification fidèle."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -3571,22 +3376,17 @@
         "role": "Le domaine ancien exact est reconstruit à partir d'un placement et d'accords précis."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -3642,22 +3442,17 @@
         "role": "Le statut d'une continuation constituée change selon une admission supplémentaire."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -3722,22 +3517,17 @@
         "role": "Le tout intérieur constitué n'épuise pas la génération endogène."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -3786,22 +3576,17 @@
         "role": "La distinction de sources et cibles provient de la progression constitutive historique."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -3862,22 +3647,17 @@
         "role": "Une continuation constituée et fidèlement étiquetée ne réutilise pas les places intérieures déjà réalisées."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -3942,22 +3722,17 @@
         "role": "La maximalité est un statut d'admission du périmètre déjà constitué."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4022,22 +3797,17 @@
         "role": "La même constitution reçoit deux interfaces distinctes de statut."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4099,22 +3869,17 @@
         "role": "Le certificat réunit l'intérieur exact et la continuation dans un cadre de changement de régime."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4168,22 +3933,17 @@
         "role": "Une histoire constituée peut être interprétée sans perdre l'individuation de ses occurrences."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4237,22 +3997,17 @@
         "role": "Une projection qui oublie la composition globale peut perdre une relation constitutive."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4313,22 +4068,17 @@
         "role": "Même une lecture ordonnée ne restitue pas la participation au tout composable."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4393,22 +4143,17 @@
         "role": "Le résidu contractile ne détermine pas les unités nouvelles si la fidélité du label est oubliée."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4470,22 +4215,17 @@
         "role": "Une correspondance de porteurs peut oublier une relation structurale choisie."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4539,22 +4279,17 @@
         "role": "Diagnostic d'une projection du rôle, qui ne décrit pas toute sa constitution équipée."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4622,22 +4357,17 @@
         "role": "La fusion ancienne dans une projection empêche de reconstruire l'intérieur exact."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4703,22 +4433,17 @@
         "role": "Une carte de fibres peut perdre le témoin qui participe à la constitution équipée."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4785,22 +4510,17 @@
         "role": "Le témoin de provenance conserve une information distincte de la jonction."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4862,22 +4582,17 @@
         "role": "La répétition d'une valeur nodale ne détermine pas les occurrences constituées."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -4950,22 +4665,17 @@
         "role": "La génération d'un intérieur positif ne garantit pas sa clôture."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5045,22 +4755,17 @@
         "role": "Les valeurs lues répétées ne constituent pas le principe d'identité des unités."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5122,22 +4827,17 @@
         "role": "Des supports identiques ne définissent pas une constitution relationnelle identique."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5210,22 +4910,17 @@
         "role": "Le domaine d'une classification dépend du système effectivement construit."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5258,22 +4953,17 @@
         "role": "La circularité positive précède les obligations d'obstruction."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5310,22 +5000,17 @@
         "role": "Le rôle final lit la même frontière relationnelle et le même choix que la présentation."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5362,22 +5047,17 @@
         "role": "La comparaison constitutive exige familles, témoins et opérations, au-delà du porteur."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5410,22 +5090,17 @@
         "role": "La réalisation doit être distinguée de l'unicité de toute réalisation admissible."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5458,22 +5133,17 @@
         "role": "Une architecture relationnelle générique peut avoir plusieurs suites constituées."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5506,22 +5176,17 @@
         "role": "Le domaine exact et ses accords existent avant son nombre."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5554,22 +5219,17 @@
         "role": "Restituer le tout exige les raccords oubliés par la trace."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5602,22 +5262,17 @@
         "role": "Des lectures concrètes doivent préserver la distinction souhaitée en plus des occurrences."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5647,22 +5302,17 @@
         "role": "La formation relationnelle construit histoires et domaines, relativement aux pas reçus."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5686,22 +5336,17 @@
         "role": "Limite d'une donnée locale après oubli du tout composable."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5725,22 +5370,17 @@
         "role": "Limite de la précédence lue sans raccord constitutif complet."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5764,22 +5404,17 @@
         "role": "La classification nouvelle doit rester fidèle aux occurrences."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5803,22 +5438,17 @@
         "role": "La conservation des relations est une obligation différente des retours de porteurs."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5842,22 +5472,17 @@
         "role": "La positivité nouvelle ne répare pas un oubli d'identité ancienne."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5880,22 +5505,17 @@
         "role": "Une projection des fibres ne conserve pas automatiquement le choix constitutif."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5918,22 +5538,17 @@
         "role": "La provenance exige son accord propre dans une comparaison."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5956,22 +5571,17 @@
         "role": "L'identité des unités n'est pas l'identité de leurs lectures nodales."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -5994,22 +5604,17 @@
         "role": "La contraction d'une fibre équipée ne contracte pas toute la famille des choix."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6032,22 +5637,17 @@
         "role": "Le témoin fermant n'est pas déduit de l'existence d'un intérieur."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6070,22 +5670,17 @@
         "role": "Les relations admissibles ne doivent pas être confondues avec une sélection canonique."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6108,22 +5703,17 @@
         "role": "Le domaine des unités ne se réduit pas à l'ensemble de leurs valeurs lues."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6146,22 +5736,17 @@
         "role": "L'accord des supports ne reconstitue pas les familles relationnelles."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6184,22 +5769,17 @@
         "role": "La constitution d'un système ne promet pas de classer tout système étendu."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6230,22 +5810,17 @@
         "role": "La piste des morphismes équipés donne déjà des comparaisons relationnelles concrètes."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6271,22 +5846,17 @@
         "role": "Une propriété universelle pourrait caractériser la construction relationnelle des histoires."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6319,22 +5889,17 @@
         "role": "Archive du socle qui constitue les positions et les occurrences avant leurs lectures."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6361,22 +5926,17 @@
         "role": "Programme de constitution relationnelle, explicitement distinct du code acquis."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6404,22 +5964,17 @@
         "role": "Archive du découplage positif qui conserve l'autorité des relations."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6447,22 +6002,17 @@
         "role": "Archive du traitement relationnel de frontière avant pointage."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6490,22 +6040,17 @@
         "role": "Archive des premières constructions autonomes d'intérieur depuis des pas admissibles."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6534,22 +6079,17 @@
         "role": "Archive des comparaisons qui conservent relations et opérations de l'intérieur."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     },
     {
@@ -6576,22 +6116,17 @@
         "role": "Archive de l'équipement des rôles autour du domaine et de sa frontière."
       },
       "constitutive_review": {
-        "state": "refereed",
-        "by": [
-          "research/agents/referee-relations-first"
-        ],
+        "state": "under-review",
+        "by": [],
         "author": "research/agents/relations-first-analysis",
         "human_check": "pending",
         "date": "2026-10-09",
-        "verdict": "Lecture constitutive acceptée au périmètre déclaré par un referee IA indépendant ; corrections intégrées, preuve et tier inchangés. Vérification humaine en attente.",
+        "verdict": "Lecture constitutive proposée puis recoupée par le coordinateur ; relecture indépendante finale en cours. La revue formelle et le tier restent séparés.",
         "evidence": [
           "research/agents/relations-first-analysis/assessment.json",
           "research/agents/relations-first-analysis/report.md",
-          "research/agents/referee-relations-first/report.md",
-          "research/agents/referee-relations-first/phase2-report.md",
-          "research/agents/referee-relations-first/final-acceptance.md"
-        ],
-        "adequacy": "accepted-relative"
+          "research/agents/referee-relations-first/report.md"
+        ]
       }
     }
   ],
@@ -6604,19 +6139,13 @@
     "source_snapshot": "labyrinth/evidence/relations-first-analysis-snapshot.json",
     "author": "research/agents/relations-first-analysis",
     "referee": "research/agents/referee-relations-first",
-    "review_state": "refereed",
+    "review_state": "under-review",
     "formal_snapshot_unchanged": "labyrinth/evidence/roles-source-snapshot.json",
     "document": "docs/priorite-relationnelle-et-perimetre-interieur.fr.md",
     "excluded": [
       "Comparaison de nouveauté historique avec toute la littérature",
       "Chantier computationnel",
       "Modification des preuves Lean"
-    ],
-    "adequacy": "accepted-relative",
-    "human_check": "pending",
-    "review_evidence": [
-      "research/agents/referee-relations-first/phase2-report.md",
-      "research/agents/referee-relations-first/final-acceptance.md"
     ]
   }
 }

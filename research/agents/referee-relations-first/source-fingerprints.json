@@ -1,0 +1,284 @@
+[
+  {
+    "path": "SegmentedResidualRole.lean",
+    "expected": "c996d83b8b652a82993e13e2853d00b174e1a544ac571e441ffc48c097e11098",
+    "actual": "c996d83b8b652a82993e13e2853d00b174e1a544ac571e441ffc48c097e11098",
+    "matches": true
+  },
+  {
+    "path": "AbstractSegmentedTurning.lean",
+    "expected": "4f751df72732bff8438db58dd6d1529987c47a1bcebb1c8b2cf1c9ab651bb459",
+    "actual": "4f751df72732bff8438db58dd6d1529987c47a1bcebb1c8b2cf1c9ab651bb459",
+    "matches": true
+  },
+  {
+    "path": "ExactTypeTransport.lean",
+    "expected": "ddcac9e058f3c738efd92fd7951b5d88260cde25b7905080512bbebd4dadfca0",
+    "actual": "ddcac9e058f3c738efd92fd7951b5d88260cde25b7905080512bbebd4dadfca0",
+    "matches": true
+  },
+  {
+    "path": "StrongPerimetralTurning.lean",
+    "expected": "6b7ce262389ae8a8953ecb2d925ad605767e580fad46128ec059921714ff89e2",
+    "actual": "6b7ce262389ae8a8953ecb2d925ad605767e580fad46128ec059921714ff89e2",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter.lean",
+    "expected": "846199c1cac72725f8fa50f9cd3dd654cac315af1ae9b686fc12b08c1ce801dc",
+    "actual": "846199c1cac72725f8fa50f9cd3dd654cac315af1ae9b686fc12b08c1ce801dc",
+    "matches": true
+  },
+  {
+    "path": "docs/relations-primitives-constitution-perimetre.fr.md",
+    "expected": "5469dc2660898f9aba1d7d6839443c99da35aded80045c5aa77691eacef65882",
+    "actual": "5469dc2660898f9aba1d7d6839443c99da35aded80045c5aa77691eacef65882",
+    "matches": true
+  },
+  {
+    "path": "docs/primitive-relations-and-perimeter-constitution.en.md",
+    "expected": "6f631462dd07c9d0ae95fc974794989f3ef8ae411333a8ddc65c3203efb9212a",
+    "actual": "6f631462dd07c9d0ae95fc974794989f3ef8ae411333a8ddc65c3203efb9212a",
+    "matches": true
+  },
+  {
+    "path": "docs/positionnement-et-portee.fr.md",
+    "expected": "9ca079d0a4c1830431c71d929ac00df1c16ddb01d6b09144d286b35889e086bb",
+    "actual": "9ca079d0a4c1830431c71d929ac00df1c16ddb01d6b09144d286b35889e086bb",
+    "matches": true
+  },
+  {
+    "path": "docs/positioning-and-scope.en.md",
+    "expected": "d4c9cce99413e1cdb08889f9f3f2e91f2b1e5e738b0fe44d2c61eb43a934819b",
+    "actual": "d4c9cce99413e1cdb08889f9f3f2e91f2b1e5e738b0fe44d2c61eb43a934819b",
+    "matches": true
+  },
+  {
+    "path": "docs/plan-reconstruction-fondations-relationnelles.fr.md",
+    "expected": "0ffc3b41dd49f701da7566c98dfdfc935e370f1c662467f0383e4964cbc22088",
+    "actual": "0ffc3b41dd49f701da7566c98dfdfc935e370f1c662467f0383e4964cbc22088",
+    "matches": true
+  },
+  {
+    "path": "lean-toolchain",
+    "expected": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
+    "actual": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
+    "matches": true
+  },
+  {
+    "path": "lakefile.toml",
+    "expected": "d2f7184b3afac8feeef3502141e4168f07c0fa800ec6fb23fda691a661be89f9",
+    "actual": "d2f7184b3afac8feeef3502141e4168f07c0fa800ec6fb23fda691a661be89f9",
+    "matches": true
+  },
+  {
+    "path": "README.md",
+    "expected": "58c6f567fa72d2dba920b1aab1dfe4d5c6f747fba4de161b131761b923d4e7a5",
+    "actual": "58c6f567fa72d2dba920b1aab1dfe4d5c6f747fba4de161b131761b923d4e7a5",
+    "matches": true
+  },
+  {
+    "path": "Tests/PublicRootImport.lean",
+    "expected": "a048442cc192af9b22d8861a10faa195cfc171f0c174b0d6b5408b7d24756a36",
+    "actual": "a048442cc192af9b22d8861a10faa195cfc171f0c174b0d6b5408b7d24756a36",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution.lean",
+    "expected": "e89fd0f9f6859ddb3cad01d76a745335291aabca36fe8b2839bf2c6d8aac8c6a",
+    "actual": "e89fd0f9f6859ddb3cad01d76a745335291aabca36fe8b2839bf2c6d8aac8c6a",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/Primitives.lean",
+    "expected": "3bb3e6b94979608d4284b88c3390f83ad03f69c9fd02df0999cdd6d6f6c12610",
+    "actual": "3bb3e6b94979608d4284b88c3390f83ad03f69c9fd02df0999cdd6d6f6c12610",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/PositivePresentation.lean",
+    "expected": "f11229b2f98f5b40dd98bf5bfb5c540bbce1591b073700f8faab0ce69143e076",
+    "actual": "f11229b2f98f5b40dd98bf5bfb5c540bbce1591b073700f8faab0ce69143e076",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/CircularPresentationBridge.lean",
+    "expected": "1ab64adbbf86ac3dea9e76e25419d97d1c3148ac56683df5dfd094ad6e0b620b",
+    "actual": "1ab64adbbf86ac3dea9e76e25419d97d1c3148ac56683df5dfd094ad6e0b620b",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/BoundaryTransport.lean",
+    "expected": "4f7e12bc6552a97bda710ce1bbf3d92b9ae35d954f5113806b96485fabdd5a4c",
+    "actual": "4f7e12bc6552a97bda710ce1bbf3d92b9ae35d954f5113806b96485fabdd5a4c",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/Examples.lean",
+    "expected": "e8762de0a2555771d6a8d596cf80fddf8adb69d5f73a4b75d770b2ff7dd63d1f",
+    "actual": "e8762de0a2555771d6a8d596cf80fddf8adb69d5f73a4b75d770b2ff7dd63d1f",
+    "matches": true
+  },
+  {
+    "path": "docs/circularite-positive-et-transports-frontiere.fr.md",
+    "expected": "f1913a0ed6127a6188c8d6b6d61cf3e7ba1e95a3479ebd514bdffa9fd6600be2",
+    "actual": "f1913a0ed6127a6188c8d6b6d61cf3e7ba1e95a3479ebd514bdffa9fd6600be2",
+    "matches": true
+  },
+  {
+    "path": "docs/positive-circularity-and-boundary-transports.en.md",
+    "expected": "d01fbba08684022628f289ced9453634e1321baacf4a61c681660f40a3bfce06",
+    "actual": "d01fbba08684022628f289ced9453634e1321baacf4a61c681660f40a3bfce06",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/ClosingBoundary.lean",
+    "expected": "0718ea265f84a94c6fd97008ae3974bc691b3dab0905937e01257010ff524929",
+    "actual": "0718ea265f84a94c6fd97008ae3974bc691b3dab0905937e01257010ff524929",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/ClosingBoundaryExamples.lean",
+    "expected": "aeeb707930ad7d04915bce5b6dffc797301a5cf08132c5f65db3f189836ce80a",
+    "actual": "aeeb707930ad7d04915bce5b6dffc797301a5cf08132c5f65db3f189836ce80a",
+    "matches": true
+  },
+  {
+    "path": "docs/frontiere-sans-jonction-choisie.fr.md",
+    "expected": "33703d2ba31bccaf347b6d12f0db7c3693434a2f42ee9f3095ee97262d512d4a",
+    "actual": "33703d2ba31bccaf347b6d12f0db7c3693434a2f42ee9f3095ee97262d512d4a",
+    "matches": true
+  },
+  {
+    "path": "docs/plan-suite-fondations-positives.fr.md",
+    "expected": "96bdf3ab3805a54f08aee085b9ec13853aefd529ed69cf207825682d481acc0a",
+    "actual": "96bdf3ab3805a54f08aee085b9ec13853aefd529ed69cf207825682d481acc0a",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/PositiveGeneration.lean",
+    "expected": "cea0149e97c79b2ffe912b257d6cb017a7336257969122bec22da28e08780452",
+    "actual": "cea0149e97c79b2ffe912b257d6cb017a7336257969122bec22da28e08780452",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/PositiveGenerationBridge.lean",
+    "expected": "f5d4cee474fe3b8e4515a215dbc7c4997acd9b9d37f95e11a08c336855a0c764",
+    "actual": "f5d4cee474fe3b8e4515a215dbc7c4997acd9b9d37f95e11a08c336855a0c764",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/PositiveGenerationExamples.lean",
+    "expected": "c97dfe5d9c3e1e9ae9cb45e360d9800103ea946ba88cfef70c75903aa01a9088",
+    "actual": "c97dfe5d9c3e1e9ae9cb45e360d9800103ea946ba88cfef70c75903aa01a9088",
+    "matches": true
+  },
+  {
+    "path": "docs/formation-et-generation-positives.fr.md",
+    "expected": "68c86a17f6b3bc3af866259d9568560998d5d7eca14153a084c9e91537f9220e",
+    "actual": "68c86a17f6b3bc3af866259d9568560998d5d7eca14153a084c9e91537f9220e",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/SignatureTransport.lean",
+    "expected": "45722a7256bf45490a947f374a283ef78758a2fab908ab4fac3dfbcf4d10890f",
+    "actual": "45722a7256bf45490a947f374a283ef78758a2fab908ab4fac3dfbcf4d10890f",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/SpineTransport.lean",
+    "expected": "f4b9ac5c5bdd05985fb5dbb2dfb13f41ae7acdf0bd3f482bc5200a5e9f239a10",
+    "actual": "f4b9ac5c5bdd05985fb5dbb2dfb13f41ae7acdf0bd3f482bc5200a5e9f239a10",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/FormationTransport.lean",
+    "expected": "0d46ef4ac1bb3e59e83affb54d14abf926886396d6a33ca1ed12a4823b198d02",
+    "actual": "0d46ef4ac1bb3e59e83affb54d14abf926886396d6a33ca1ed12a4823b198d02",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/ClosingTransport.lean",
+    "expected": "f0d8c7bdf5c0e82ffcf15b34c9da813d77cd0ea6db5f8f3ec118e5e29e34a735",
+    "actual": "f0d8c7bdf5c0e82ffcf15b34c9da813d77cd0ea6db5f8f3ec118e5e29e34a735",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/SignatureTransportExamples.lean",
+    "expected": "0be52e8be15457af70209f496b229f35d07ff84304ff6369f6e0a2fc219470e2",
+    "actual": "0be52e8be15457af70209f496b229f35d07ff84304ff6369f6e0a2fc219470e2",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/FormationTransportExamples.lean",
+    "expected": "adb792f0d2ec080d6d58546a39d3d628eabfebc206084cf1e77b8058152bdc31",
+    "actual": "adb792f0d2ec080d6d58546a39d3d628eabfebc206084cf1e77b8058152bdc31",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/ClosingTransportExamples.lean",
+    "expected": "80f076496a608bfc1ecbddecf81346fff85af31fb5b9527faea7998d0558fc29",
+    "actual": "80f076496a608bfc1ecbddecf81346fff85af31fb5b9527faea7998d0558fc29",
+    "matches": true
+  },
+  {
+    "path": "docs/transports-signature-et-formation.fr.md",
+    "expected": "1a82ffef533aeea6b12c2415466a155c8ccf15b920910d941f6d744faec78f61",
+    "actual": "1a82ffef533aeea6b12c2415466a155c8ccf15b920910d941f6d744faec78f61",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/CircularRoles.lean",
+    "expected": "e7e90060d1c1a596d19ab889fda409658a7e2fb9fa795b0668c6495c4be3be51",
+    "actual": "e7e90060d1c1a596d19ab889fda409658a7e2fb9fa795b0668c6495c4be3be51",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/HistoricalRoleBridge.lean",
+    "expected": "a25a9431b8bfb751c08a96a653a022c8722c4a7e60dc0c0032d74bf84d4e6c45",
+    "actual": "a25a9431b8bfb751c08a96a653a022c8722c4a7e60dc0c0032d74bf84d4e6c45",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/CircularRoleTransport.lean",
+    "expected": "3858855fc113835f367f899a6e2a5b7d4842a012c284ee97b2ce465755c8c47c",
+    "actual": "3858855fc113835f367f899a6e2a5b7d4842a012c284ee97b2ce465755c8c47c",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/CircularRolesExamples.lean",
+    "expected": "6730f7d6a5b9b7f3fa1207551e53e25b5e5f065b0dbc412204c13b820fbc588a",
+    "actual": "6730f7d6a5b9b7f3fa1207551e53e25b5e5f065b0dbc412204c13b820fbc588a",
+    "matches": true
+  },
+  {
+    "path": "RelationalPerimeter/Constitution/CircularRoleTransportExamples.lean",
+    "expected": "053baa589c2062124bbc3564f4c7e62383e7c0b56deed14e9db976e663721ffd",
+    "actual": "053baa589c2062124bbc3564f4c7e62383e7c0b56deed14e9db976e663721ffd",
+    "matches": true
+  },
+  {
+    "path": "docs/classification-roles-equipes.fr.md",
+    "expected": "f428b5434255cf5bbdd9006b3e350eab01d30bbdefe82848f45e9cd455e186c7",
+    "actual": "f428b5434255cf5bbdd9006b3e350eab01d30bbdefe82848f45e9cd455e186c7",
+    "matches": true
+  },
+  {
+    "path": "labyrinth/snapshot.py",
+    "expected": "acb6b709606e4167c366b7f4a138da184170c36cf5e4e844b0eea441d8a49db4",
+    "actual": "acb6b709606e4167c366b7f4a138da184170c36cf5e4e844b0eea441d8a49db4",
+    "matches": true
+  },
+  {
+    "path": "labyrinth/check_foundations.py",
+    "expected": "61d926b0bf0fc4466c088c38a23041f750e40dcf9b4491635ad7c2be9db5d8ab",
+    "actual": "61d926b0bf0fc4466c088c38a23041f750e40dcf9b4491635ad7c2be9db5d8ab",
+    "matches": true
+  },
+  {
+    "path": "labyrinth/rebuild.ps1",
+    "expected": "0cd99c738bb375eba3f9c74382676c4c8c00b9dcbaaae9e5708a763e0f791d0f",
+    "actual": "0cd99c738bb375eba3f9c74382676c4c8c00b9dcbaaae9e5708a763e0f791d0f",
+    "matches": true
+  }
+]

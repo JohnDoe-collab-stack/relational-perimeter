@@ -1,10 +1,14 @@
 {
-  "title": "Relational Perimeter · fondations",
+  "title": "Relational Perimeter · intérieur constitué",
   "sotaRows": 67,
   "sotaVisible": true,
   "frontierTabVisible": false,
+  "orientation": "Le projet part des relations témoignées pour constituer les places, les occurrences et le domaine intérieur. Leur identité et leur quantité ne se réduisent pas aux valeurs ou au nombre que l’on peut ensuite lire.",
+  "firstResult": "Correspondance exacte positions–occurrences\tLes positions non fermantes et les occurrences du déploiement canonique se correspondent avec deux lois de retour.\tT2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente\tStrongPerimetralTurning.lean:3197, StrongPerimetralTurning.lean:3205\t2026-10-09\t–",
   "graphCircles": 93,
+  "constitutiveFieldsVisible": true,
+  "receivedDerivedDistinctionVisible": true,
   "boardCards": 23,
   "pageErrors": [],
-  "verified_at": "2026-10-09T06:53:46.393Z"
+  "verified_at": "2026-10-09T09:00:39.998Z"
 }

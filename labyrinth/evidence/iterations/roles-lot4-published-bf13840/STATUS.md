@@ -1,6 +1,6 @@
 # Labyrinth status
 
-Generated 2026-10-09T11:51:59Z by `labyrinth/lab.py build`. Do not edit by hand.
+Generated 2026-10-09T06:55:37Z by `labyrinth/lab.py build`. Do not edit by hand.
 
 
 ## Conjectures (0)
@@ -8,12 +8,12 @@ Generated 2026-10-09T11:51:59Z by `labyrinth/lab.py build`. Do not edit by hand.
 
 ## Open doors (questions) (9)
 
-- **Circularité positive autonome** [`q.positive-circle`, answered] La séparation de la présentation positive et de l’obstruction, ainsi que le retour exact à la présentation historique, sont réalisés. La génération positive relative à PositiveFormation est réalisée séparément au lot 2, suivie par q.positive-generation.
+- **Circularité positive autonome** [`q.positive-circle`, answered] La séparation de la présentation positive et de l’obstruction, ainsi que le retour exact à la présentation historique, sont réalisés. La génération positive générale reste une question distincte.
 - **Rôle final équipé de sa frontière** [`q.equipped-final-role`, partial] La frontière avant choix, le rôle final par choix et la grammaire des rôles intérieurs/finals sont réalisés. La classification est exhaustive dans cette grammaire, avec retours et conservation des données par transport. La minimalité universelle et la rigidité générale restent ouvertes.
 - **Transport de la constitution relationnelle** [`q.rich-transport`, partial] Toutes les fibres ont des transports exacts avec calcul dépendant et restriction choisie. Les épines, positions et ordre sont transportés ; une formation reconstruite sur les mêmes états et pas conserve exactement ses histoires et commute avec déploiement, composition et clôture.
 - **Réalisation choisie et rigidité** [`q.rigidity`, open] Comment séparer une réalisation exacte distinguée de la propriété selon laquelle toute réalisation admissible impose la même classification ?
 - **Plusieurs témoins ou successeurs** [`q.multiple-generation`, open] Le mécanisme du tournant peut-il être formulé sur une génération générale à plusieurs successeurs tout en conservant la continuation choisie ?
-- **Quantité structurelle générale** [`q.quantity`, open] Les correspondances intérieures exactes, les lectures de liens, l’ordre et la succession sont déjà formalisés. Quelle signature commune et quel critère d’équivalence empaquettent cette quantité structurale pour comparer des constitutions au-delà de leur seul porteur ou nombre ?
+- **Quantité structurelle générale** [`q.quantity`, open] Quelle signature et quel critère d’équivalence constituent une quantité structurelle au-delà de la seule correspondance de porteurs ?
 - **Converse d’une reconstruction de trace** [`q.converse-traces`, open] Sous quelles hypothèses supplémentaires une trace localement exacte, ordonnée et contiguë se reconstruit-elle en histoire enracinée composable ?
 - **Fidélité des cibles sous interprétation** [`q.concrete-faithfulness`, open] Quelles hypothèses sur ConcreteContinuationAlgebra préservent la distinction de la cible fermante et de la continuation libre ?
 - **Algèbre de génération positive générale** [`q.positive-generation`, answered] Une PositiveFormation reçue engendre des histoires finies composables et leur épine, avec nœuds, positions et lectures de compatibilité exacts. Une jonction distincte ferme la chaîne positive ; elle ne se déduit pas de la positivité seule.
@@ -40,8 +40,13 @@ Generated 2026-10-09T11:51:59Z by `labyrinth/lab.py build`. Do not edit by hand.
 - **Les bijections de sortes suffiraient pour toutes les familles** [`x.sort-transport-fibres`, refuted] Réfuté par mêmes sortes Bool et fibres de compatibilité Unit/Empty.
 - **Une grammaire exhaustive couvrirait tout rôle extérieur possible** [`x.universal-role-exhaustiveness`, refuted] Réfuté : CircularRole P est classifié exactement, tandis que son extension CircularRole P ⊕ Unit possède un élément extérieur à l’image de cette grammaire.
 
-## Recent events (41 total)
+## Recent events (36 total)
 
+- 2026-10-09T05:17 · computed · Build complet 104 tâches et script global 107 fichiers Lean : succès, audits sans axiomes et git diff --check propre.
+- 2026-10-09T05:20 · documented · Extension positive validée : build104, gate107, referee clôturé et tableau de bord38/54/18 sans erreur ; limites de génération et transport général maintenues.
+- 2026-10-09T05:35 · proposed · Lot 1 : frontière sans jonction choisie, enrichissement par témoin, retours exacts et modèles vide/Unit/Bool ; résultats sous revue avant intégration.
+- 2026-10-09T05:38 · computed · Lot 1 compilé sous revue : oubli/reconstruction de frontière, enrichissement exact, modèles Empty/Unit/Bool et import public ; audits sans axiomes.
+- 2026-10-09T05:44 · proved · Lot 1 achevé : forme sans jonction, transport exact témoin/pointage, trois retours, vide impossible et rôle unique par choix ; cinq T2 sous revue IA clôturée.
 - 2026-10-09T05:44 · documented · Lot 1 clôturé : build 106, vérification de 109 fichiers Lean, 26 empreintes, 85 ancres ; tableau de bord 43 lignes/61 nœuds/19 cartes sans erreur ; plan actualisé.
 - 2026-10-09T05:44 · refuted · Un rôle unique pour chaque choix ne force pas une jonction unique : deux pointages Bool distincts sur une même forme.
 - 2026-10-09T05:50 · proposed · Lot 2 : formation positive, chemins finis composables, déploiement exact des positions et témoins de compatibilité, puis clôture explicite ; quatre modèles séparateurs.
@@ -62,8 +67,3 @@ Generated 2026-10-09T11:51:59Z by `labyrinth/lab.py build`. Do not edit by hand.
 - 2026-10-09T06:55 · proved · Lot 4 achevé relativement à la grammaire intérieure/finale : classification exacte, absence de nouvelle position intérieure finale, raccord historique, données complètes conservées et carrés de classification commutants.
 - 2026-10-09T06:55 · reviewed · Revue indépendante clôturée sans correction restante : sept T2 et 30 ancres nouvelles, 47 empreintes, 109 audits et scopes cohérents. Hashing CRLF→LF seul ; ancestry et sources exactes couplées, contrôle réel des blobs après commit restant au coordinateur. Humain en attente.
 - 2026-10-09T06:55 · documented · Quatre constructions principales réalisées et intégrées : carte 93 nœuds, 67 lignes, 184 ancres, 47 sources ; tableau de bord 67/93/23 sans erreur. Journal de six sessions, plan et documents actualisés ; livraison Git explicitement demandée.
-- 2026-10-09T08:37 · proposed · Reprise complète de l’analyse à la demande de l’utilisateur : relations premières, constitution exacte du domaine intérieur, quantité structurale avant lecture numérique. Conservation des 58 T2 et de leurs sources ; nouvelle revue constitutive indépendante pour les 93 fiches.
-- 2026-10-09T08:41 · modified · Centre de lecture et ordre SOTA repris depuis l’intérieur constitué. Quantité générale distinguée de la quantité intérieure déjà exacte ; curseur source reçu séparé des accords dérivés ; notes de lots et provenance de bf13840 actualisées. Les énoncés T2 et leurs ancres sont conservés.
-- 2026-10-09T08:48 · modified · Les 93 fiches disposent d’une lecture reçus/construits/lectures/portée, avec revue constitutive séparée sous revue. Rapport d’auteur complet et première phase indépendante disponibles ; aucun nouveau théorème.
-- 2026-10-09T08:59 · reviewed · Reprise constitutive acceptée relativement aux interfaces examinées par le referee indépendant, sans correction restante : 93 lectures, 58 T2/six champs formels inchangés, 184 ancres et 47 empreintes. Généralités ouvertes et vérification humaine en attente.
-- 2026-10-09T09:01 · documented · Reprise complète livrée localement : 93 fiches relues depuis les relations premières et l’intérieur constitué ; présentation, SOTA, guide et dashboard reconstruits. Deux revues séparées, snapshot formel 47 inchangé et snapshot constitutif 16 vérifié ; Chrome 67/93/23 sans erreur, champs visibles.

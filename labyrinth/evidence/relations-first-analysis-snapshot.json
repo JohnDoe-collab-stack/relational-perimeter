@@ -1,0 +1,74 @@
+{
+  "branch": "codex/positive-circular-foundations",
+  "commit": "bf13840cd8f39269a77fa25a3b99260a2930230b",
+  "date": "2026-10-09T08:59:49.182626+00:00",
+  "hash_mode": "sha256-lf-normalized",
+  "revision_mode": "frozen-sources-base-ancestor",
+  "scope": "Constitutive rereading only; the formal 47-source snapshot remains separate.",
+  "files": [
+    {
+      "path": "labyrinth/knowledge.json",
+      "sha256": "98dbe70c3cedf0d7060f6cb193671ee15634dd48f527c38be4c0d47a6fd1330e"
+    },
+    {
+      "path": "labyrinth/sota.json",
+      "sha256": "cc7fb9a1a8cc958de664c945d4f149166ea1524fd108f4ab5dd5f9b7a639cf83"
+    },
+    {
+      "path": "labyrinth/STYLE.fr.md",
+      "sha256": "2b161ea3e8f92637cdd3da008df58a05ab4bbff34063fc64393ba179f0595bc7"
+    },
+    {
+      "path": "labyrinth/README.md",
+      "sha256": "0b9d076b8dad3ca73aa48d529ae7a411d0e0336b9e4e5ff098510933c40734e9"
+    },
+    {
+      "path": "labyrinth/render_foundations.py",
+      "sha256": "8198e2015606e4ad2f815335e801de297b923a0d2387a3e0828daaa2b2e3d921"
+    },
+    {
+      "path": "labyrinth/dashboard/template.html",
+      "sha256": "01bcf8013b3c526e00765b75f1212f92140ce846ee6f5209a9fc84954108b84f"
+    },
+    {
+      "path": "labyrinth/check_constitutive_analysis.py",
+      "sha256": "70bb16dc15f005bcfdeb9a456f07036e9540f6da29585f1c7a1c88cab2886a8c"
+    },
+    {
+      "path": "docs/priorite-relationnelle-et-perimetre-interieur.fr.md",
+      "sha256": "e958b2b1ea4cde49e2333ac8537b17c4cf18af1f93cda9dc5788f3e8533308c9"
+    },
+    {
+      "path": "research/agents/relations-first-analysis/assessment.json",
+      "sha256": "279e842fe427a11e2b912491ef347fd645ea8c9823e09820ab0fe51831775b6d"
+    },
+    {
+      "path": "research/agents/relations-first-analysis/report.md",
+      "sha256": "0db1f6c474a237379da8c332a73406a99158cd1e1ce4103e82ac2953c3e256e2"
+    },
+    {
+      "path": "research/agents/relations-first-analysis/author-phase2-corrections.md",
+      "sha256": "b1414620b3ff1141e8ec49d923a84f216712f901d0b82e72cc893adf9179cc0a"
+    },
+    {
+      "path": "research/agents/referee-relations-first/report.md",
+      "sha256": "776d5975a169e499b1ec88d45cf425dff39bfe64a549a1aa0c391a7c7815e20c"
+    },
+    {
+      "path": "research/agents/referee-relations-first/phase2-report.md",
+      "sha256": "02e57651997f396ac6f27e989a7a1fe958bb929f876b1d3c14350b61b1df1606"
+    },
+    {
+      "path": "research/agents/referee-relations-first/final-acceptance.md",
+      "sha256": "fa1b01f6ca41cbaf392cbd7a597edeee2c908dba9646c26747a1942719d960bd"
+    },
+    {
+      "path": "labyrinth/evidence/iterations/roles-lot4-published-bf13840/knowledge.json",
+      "sha256": "23f5833be748b236e89a3913704ed3acdba96bb6b65cac5f0dff4562f01e8c44"
+    },
+    {
+      "path": "labyrinth/evidence/iterations/roles-lot4-published-bf13840/sota.json",
+      "sha256": "4767422f7e4da8a95c42a7b013b69e84af76c7489366ee8b8cc121b6ed7642d8"
+    }
+  ]
+}

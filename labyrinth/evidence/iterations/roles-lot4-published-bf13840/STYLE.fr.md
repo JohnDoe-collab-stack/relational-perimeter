@@ -4,14 +4,8 @@
 
 Une fiche de résultat distingue l’énoncé exact, les hypothèses de sa signature, les données consommées par la preuve examinée et la portée de son interprétation. `lean_refs` doit nommer la déclaration auditée, le fichier, une ancre et sa ligne. Les journaux conservent les commandes effectivement exécutées et leur issue.
 
-La lecture constitutive part du choix du projet : les relations sont premières. Pour chaque fiche, `constitution` distingue les données reçues (`received`), ce qui est constitué (`constructed`), les lectures dérivées (`readout`), la portée (`scope`) et la correction de perspective (`correction`). Les supports typés ne sont pas confondus avec le domaine intérieur construit ; l’ordre des champs Lean ne prouve aucun ordre ontologique. Les résultats sur l’intérieur exact sont présentés avant leurs généralisations encore ouvertes.
-
-`constitutive_review` porte une revue indépendante de cette lecture, distincte de `review`, qui conserve la provenance de la revue formelle antérieure. Aucun changement de tier ne découle d’une réinterprétation. Les anciennes fiches restent archivées ; une précision de signature ou de portée est enregistrée dans l’histoire SOTA lorsqu’elle change son énoncé affiché.
-
 Les résultats propres au projet restent T2. La revue IA élève le statut de relecture, jamais le niveau de publication. Une question ouverte décrit ce qui manque et un test ; une impasse nomme l’énoncé réfuté, son contre-modèle et sa leçon. Une intuition T6 reste explicitement spéculative, même si elle guide un prochain prototype.
 
 Employer « injectivité », « exactitude », « positivité », « fidélité », « rigidité », « circularité » et « maximalité » seulement avec leur interface et leurs hypothèses. Une continuation reconstruite peut être vide ; une extension stricte exige son témoin propre. Le rôle final, la jonction distinguée et l’occurrence produite restent trois objets séparés.
-
-Une quantité structurale déjà réalisée par correspondances et accords n’est pas présentée comme absente parce que sa signature générale reste ouverte. Une limite d’exhaustivité sur une grammaire arbitrairement élargie ne réfute pas la constitution exacte de l’intérieur fixé. Une équivalence de porteur est décrite avec ses indices et ses témoins ; elle ne se substitue pas au transport de toute la constitution.
 
 Les arêtes `uses` signalent un raccord explicite sélectionné ; `supports` signale une continuité mathématique sans prétendre à un appel direct. Une structure contenant plusieurs champs ne prouve pas leur dépendance causale. Le graphe n’est pas un extracteur automatique de dépendances Lean.

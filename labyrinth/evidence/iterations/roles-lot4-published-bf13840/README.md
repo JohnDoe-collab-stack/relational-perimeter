@@ -1,8 +1,8 @@
 # Labyrinth des fondations
 
-Application locale de la méthode [Labyrinth exploration](https://github.com/nasqret/labyrinth-exploration) aux fondations de Relational Perimeter. La carte est reprise depuis la livraison `bf13840` sur `codex/positive-circular-foundations` : **les relations sont premières ; elles constituent les places, les occurrences et l’intérieur exact**. La lecture distingue données reçues, constructions et lectures dérivées pour chacun des 93 nœuds. Les 58 résultats T2 conservent leurs preuves et leur revue formelle ; une nouvelle revue indépendante examine leur lecture constitutive.
+Application locale de la méthode [Labyrinth exploration](https://github.com/nasqret/labyrinth-exploration) aux fondations de Relational Perimeter. La carte décrit les sources relues pour la livraison de `codex/positive-circular-foundations`, depuis la base `8a5e494e9ac2ee725ff9fdb03dfe08c8b1b30685`. Le snapshot conserve le contexte de revue dans l’arbre de travail avant commit. La première carte sur `main` est conservée dans [l’archive](evidence/iterations/main-8a5e494/knowledge.json).
 
-Lire d’abord [relations premières et périmètre intérieur](../docs/priorite-relationnelle-et-perimetre-interieur.fr.md), puis [la carte détaillée](FONDATIONS.fr.md) ou [le tableau de bord](dashboard/index.html#sota). Les sources Lean restent les preuves canoniques ; `knowledge.json` et `sota.json` portent cette carte. Les documents et le tableau de bord sont régénérés. L’état des résultats commence par la constitution intérieure, puis la formation, la clôture, les transports, les continuations et les limites de portée.
+Lire [la carte en français](FONDATIONS.fr.md), puis ouvrir [le tableau de bord](dashboard/index.html#sota). Les sources Lean existantes restent les preuves canoniques ; `knowledge.json` et `sota.json` sont les données canoniques de cette carte. Les documents et le tableau de bord sont régénérés.
 
 ## Périmètre
 
@@ -16,8 +16,6 @@ Lire d’abord [relations premières et périmètre intérieur](../docs/priorite
 
 Le plan historique est conservé comme référence : ses interfaces générales restent des propositions, tandis que les réalisations disposent de déclarations et de preuves précises dans la carte. Les 47 fichiers couverts et leurs empreintes sont consignés dans [le snapshot actif du lot 4](evidence/roles-source-snapshot.json). Les snapshots [initial](evidence/source-snapshot.json), [positif](evidence/positive-source-snapshot.json), [du lot 1](evidence/closing-source-snapshot.json), [du lot 2](evidence/generation-source-snapshot.json) et [du lot 3](evidence/transport-source-snapshot.json) restent intacts. Leurs cartes et captures sont conservées dans `evidence/iterations/`, dont [signature-transport-lot3](evidence/iterations/signature-transport-lot3/knowledge.json).
 
-La carte de la livraison `bf13840`, son SOTA et ses captures restent dans [l’archive de la première lecture](evidence/iterations/roles-lot4-published-bf13840/knowledge.json). La nouvelle provenance [constitutive](evidence/relations-first-analysis-snapshot.json) couvre les données de la carte, la présentation, le rendu et les rapports. Elle est séparée du snapshot formel de 47 sources, inchangé : une correction d’interprétation ne se substitue pas à la vérification d’une preuve.
-
 Les sondes de recherche sont archivées en `.lean.in`, directement exécutables par `lake env lean`. Ce suffixe permet de les conserver hors des modules de production et de la recherche globale de fichiers `*.lean` faite par `scripts/verify.ps1`, qui attend un fichier compilé pour chaque module. Le rapport de relecture et les premiers événements conservent leurs noms `.lean` historiques ; [le registre d’archivage](PROBES.fr.md) donne les chemins actuels et les empreintes.
 
 ## Reproduire
@@ -26,12 +24,9 @@ Python 3.9+ et le toolchain Lean fixé par `lean-toolchain` sont requis. Sous Wi
 
 ```powershell
 ./labyrinth/rebuild.ps1 -Python 'CHEMIN_VERS_PYTHON3' -VerifyLean
-& 'CHEMIN_VERS_PYTHON3' -B -X utf8 labyrinth/check_constitutive_analysis.py
 ```
 
 Sans `-VerifyLean`, le script contrôle les sources, vérifie les métadonnées et reconstruit seulement les livrables. Sur cette machine, l’alias Windows `python` ne pointe pas vers un interpréteur installé ; la première exécution a utilisé le Python fourni par le runtime Codex, découvert via `load_workspace_dependencies`.
-
-La reprise documentaire utilise ce mode sans compilation globale répétée : les sources Lean n’ont pas changé. `check_constitutive_analysis.py` contrôle la couverture des 93 fiches, la conservation des énoncés T2 et de leur revue, la séparation auteur/referee et les empreintes des entrées de l’analyse. Il ne tranche pas leur sens ; les rapports indépendants portent ce verdict. `--record` fige une analyse acceptée une seule fois et refuse d’écraser son snapshot ; toute modification ultérieure appelle archivage et nouvelle revue.
 
 Pour modifier la carte après une nouvelle révision : archiver le snapshot et les journaux précédents, actualiser les références et les énoncés, refaire les vérifications puis obtenir une relecture indépendante. Les états de revue ne sont pas reconduits automatiquement.
 
@@ -43,9 +38,7 @@ Les résultats formels restent **T2**, même après revue IA ; une vérification
 
 Les liens du graphe sont sélectionnés et relus. Ils ne sont ni un graphe automatiquement extrait des termes de preuve, ni une démonstration que chaque hypothèse est indispensable dans toute preuve possible.
 
-La quantité intérieure structurale est déjà réalisée par correspondances exactes et accords de liens, d’ordre et de succession. Sa signature générale et la comparaison de formations arbitraires restent ouvertes. La complétude intérieure est distinguée de l’arrêt de toute génération ; les critères de continuation et de régime sont lus dans leurs interfaces propres.
-
-Les résultats ci-présents n’établissent pas d’équivalence avec une autre fondation logique, ni une propriété universelle de chemins libres. La comparaison de nouveauté historique n’est pas effectuée par cette reprise. Aucun domaine fini taille × invariant n’est encore défini : aucun pourcentage de recherche résolue n’est fabriqué.
+Les résultats ci-présents n’établissent pas d’équivalence avec une autre fondation logique, ni une propriété universelle de chemins libres. Les propositions correspondantes restent des questions ou pistes T6 explicites. Aucun domaine fini taille × invariant n’est encore défini : aucun pourcentage de recherche résolue n’est fabriqué.
 
 ## Provenance de la méthode
 
@@ -53,6 +46,4 @@ Le moteur `lab.py` et le template HTML proviennent du dépôt amont au commit `0
 
 Les artefacts du tableau de bord sont versionnés avec la branche ; l’usage décrit ici consiste à ouvrir le fichier local. D3 et les fontes du template chargent des ressources depuis leurs CDN ; le graphe nécessite cet accès réseau. Le rapport Markdown reste lisible sans ces ressources.
 
-La première relecture est dans [referee-foundations](../research/agents/referee-foundations/report.md). L’extension positive a sa [relecture](../research/agents/referee-positive-foundations/report.md), le lot 1 son [archive](../research/agents/referee-closing-boundary/report.md), le lot 2 sa [revue](../research/agents/referee-positive-generation/report.md), le lot 3 sa [revue](../research/agents/referee-signature-transport/report.md), et le lot 4 sa [revue indépendante](../research/agents/referee-circular-roles/report.md) avec ses propres sondes. Les brouillons de [formation](../research/agents/author-formation-transport/report.md) et de [transport des rôles](../research/agents/author-circular-role-transport/report.md) gardent leurs rapports d’auteur distincts.
-
-La reprise constitutive possède un [rapport d’auteur](../research/agents/relations-first-analysis/report.md), les [93 fiches de travail](../research/agents/relations-first-analysis/assessment.json) et un [rapport indépendant](../research/agents/referee-relations-first/report.md), avec contrôle propre des ancres et des sources. Le [journal](JOURNAL.fr.md) conserve les sessions et distingue les validations formelles antérieures de cette reprise. Les résultats restent T2 ; vérification humaine en attente.
+La première relecture est dans [referee-foundations](../research/agents/referee-foundations/report.md). L’extension positive a sa [relecture](../research/agents/referee-positive-foundations/report.md), le lot 1 son [archive](../research/agents/referee-closing-boundary/report.md), le lot 2 sa [revue](../research/agents/referee-positive-generation/report.md), le lot 3 sa [revue](../research/agents/referee-signature-transport/report.md), et le lot 4 sa [revue indépendante](../research/agents/referee-circular-roles/report.md) avec ses propres sondes. Les brouillons de [formation](../research/agents/author-formation-transport/report.md) et de [transport des rôles](../research/agents/author-circular-role-transport/report.md) gardent leurs rapports d’auteur distincts. Le [journal](JOURNAL.fr.md) conserve les six sessions. La construction complète et `scripts/verify.ps1` ont réussi ; la portée couverte reste celle explicitée dans les énoncés.
