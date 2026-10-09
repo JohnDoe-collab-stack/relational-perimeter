@@ -1,0 +1,8 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity
+open RelationalPerimeter.Relativity.Production.Encounter
+open RelationalPerimeter.Relativity.Reconstruction
+
+def loseEffects {source : RelativeState} (result : Measurement source) :
+    AttachedEffects (measuredFirst result .root) = AttachedEffects (measuredSecond result .root) :=
+  (measuredEncounterAgreement result .root).site

@@ -31,3 +31,10 @@ Tests/ExpectedFailure/CouplingCannotDiscardOccupiedFormation.lean.fail	dependent
 Tests/ExpectedFailure/LocationAgreementCannotTransferArrivalConstraints.lean.fail	dependent-type	12	50	(locationClauses [window])
 Tests/ExpectedFailure/NetworkCannotUseOtherCellAdmission.lean.fail	dependent-type	5	39	Admission source ⟨1,
 Tests/ExpectedFailure/NetworkCannotReuseConsumedAdmission.lean.fail	dependent-type	6	38	Admission production.next cell
+Tests/ExpectedFailure/MeasuredPathsCannotReuseOldSupport.lean.fail	dependent-type	5	2	PairedPaths (RelationalPerimeter.Relativity.Production.Encounter.measure source).next.coupling.cursor
+Tests/ExpectedFailure/MeasuredEncounterCannotReuseItsAdmission.lean.fail	dependent-type	5	2	EncounterAdmission (RelationalPerimeter.Relativity.Production.Encounter.measure source).head.next
+Tests/ExpectedFailure/MeasuredEncounterCannotErasePathEffects.lean.fail	dependent-type	8	2	AttachedEffects (measuredSecond result StrongPerimetralTurning.History.root)
+Tests/ExpectedFailure/MeasuredConstraintCannotChangeItsEncounter.lean.fail	dependent-type	8	2	MeasuredPathConstraint head.measurement StrongPerimetralTurning.History.root prior.window
+Tests/ExpectedFailure/MeasuredConstraintCannotReplaceHistory.lean.fail	dependent-type	6	2	MeasurementRun result.next
+Tests/ExpectedFailure/MeasuredGroupingCannotUseNumericalEquality.lean.fail	dependent-type	6	11	one.signature.code = two.signature.code
+Tests/ExpectedFailure/MeasuredGroupingCannotReturnSource.lean.fail	dependent-type	6	2	MeasuredLocationSource current

@@ -80,46 +80,237 @@ Ce fichier est un document de chantier. Il devra être retiré de l'arbre
 intégré dans `main`. Les résultats scientifiques définitifs auront leurs
 documents canoniques et leurs entrées de registre propres.
 
-### 2.1 Priorité courante : fermer la rencontre, puis son accord de localisation
+### 2.1 Priorité courante : raccorder rencontres, précision et localisation
 
 Révision documentaire du 9 octobre 2026, depuis
-`fc6df4e994c75efe2f767c0d2f1e713e460406a8`, sur la même branche `relativite`.
-Les repères précédents décrivent le démarrage du chantier ; les sections
-18-57 enregistrent les lots déjà réalisés. Ils ne constituent pas une nouvelle
-liste de prérequis à réimplémenter.
+`53a26d07c9a95cda1b7f844d80f299ffcc9d8d3d`, sur la branche `relativite`.
+Les sections 18-61 conservent les bilans des lots précédents ; elles ne sont
+pas une liste de prérequis à réimplémenter. La cible de la section 1 demeure
+inchangée.
 
-**La prochaine livraison est une rencontre constituée dont on dérive un
-premier `LocationAgreement`, avec des participants distincts et des effets
-de parcours encore révélables.** La cible finale de la section 1 reste
-inchangée. Ce premier accord est une étape vers sa reconstruction, pas un
-remplacement par un exemple fini.
+**La prochaine construction doit faire poursuivre les parcours calibrés et
+les rencontres dans une seule histoire effective, puis former les contraintes
+et les raccords qui peuvent justifier des localisations compatibles.** Une
+nouvelle campagne de généralisation numérique ne remplace pas ce passage.
 
-Les outils instrumentaux des lots 20-57 sont conservés et réemployés. Une
-nouvelle généralisation de leurs tailles, fenêtres, précisions ou courses
-n'est plus un lot prioritaire. Elle ne sera ajoutée que si un consommateur
-physique précis du chemin ci-dessous en démontre la nécessité.
+Le code inspecté établit trois faits différents :
+
+| Acquis | Limite qui détermine le travail suivant |
+| --- | --- |
+| Une rencontre admise produit un `LocationAgreement` entre ses participants | Cet accord est indexé par cette production précise ; il ne forme pas encore les localisations idéales de R4.2.2 |
+| Les parcours relatifs possèdent des raffinements productifs et des garanties de précision | Leur `RelativePathState` utilise `Cursor` et `LocalHistory`, alors que les rencontres poursuivent `RecurringCursor` et leurs histoires d'interactions |
+| Les fenêtres des rencontres caractérisent exactement l'égalité des lectures | Cette complétude numérique ne construit pas un raccord de localisation physique |
+
+Le support enrichi existe déjà. Il faut y porter l'interprétation positive
+des parcours, pas créer une seconde fondation ou reconstruire un ancien
+curseur depuis les valeurs finales. Un prochain raffinement doit recevoir
+le successeur contenant la rencontre réellement accomplie.
+
+Le chemin prioritaire est désormais :
 
 ```text
-loi locale d'interaction declaree et realisee
-  -> propagation et reception sur des ressources constituees
-  -> disponibilite presente et admission de deux arrivees distinctes
-  -> une production de rencontre, partagee avec son successeur
-  -> presentations localisees de ses participants et effets attaches
-  -> premier LocationAgreement construit depuis cette production
-  -> prolongements, changements de description et separateurs de parcours
-  -> regroupements autorises, puis reconstruction R4-R7
+parcours et rencontres sur le meme support constitue
+  -> mesures partagees, admissions et successeurs effectifs
+  -> contraintes attachees et restrictions de precision
+  -> raccords localisants positifs et effets attaches conserves
+  -> familles de realisations compatibles a toute precision
+  -> recouvrements justifies, points et actions continues de R4
+  -> dimension, metrique et dynamique reconstruites de R5-R7
 ```
 
-Le sous-lot est détaillé en section 58. Le point de départ est identifié dans
-le code : `Arrived` et `RecurringArrival` prouvent une réception historique ;
-`InteractionAttachment` prouve une participation à une comparaison produite.
-**Aucun de ces objets ne prouve aujourd'hui l'admission d'une rencontre
-physique.** Cette admission doit être construite avant l'accord, et non
-ajoutée comme un commentaire à l'ancrage instrumental existant.
+Les rencontres locales, l'assemblage et les garanties instrumentales acquis
+restent conservés. L'accord de localisation n'autorise pas l'oubli des effets
+de parcours que le contrat complet peut encore révéler. Le plan ne suppose
+ni une coordonnée ni un point physique pour produire le raccord manquant.
 
-Cette demande autorise la révision du plan uniquement. Aucun fichier Lean,
-contrat, registre de résultats ou diagramme n'est modifié ; aucun commit,
-push, changement de branche ou audit n'est autorisé par cette révision.
+La présente demande autorise uniquement cette correction du plan. Aucun
+fichier Lean, contrat, registre, figure ou résultat d'audit n'est modifié ;
+aucun commit, push, changement de branche ou audit extérieur n'est autorisé.
+
+### 2.2 Chemin d'implémentation prioritaire et critères de clôture
+
+Les objets proposés ci-dessous fixent les obligations du chantier. Les sections
+62-64 précisent les raccords P1-P2, descriptif local de P3 et regroupement local
+sur références constituées maintenant construits ;
+elles ne clôtent pas les obligations localisantes ultérieures. Les lois des rencontres et de l'assemblage
+restent celles des sections 58-61. Les sections R4-R7 fixent la portée finale.
+La longueur des réalisations est finie mais arbitraire ; leur horizon n'est
+pas une entrée des producteurs locaux.
+
+#### P1. Porter les parcours sur le support des interactions
+
+Réemployer `RecurringFormation`, `RecurringCursor` et `RecurringHistory`.
+Construire l'ascendance positive des signaux dans cette formation : origine
+émise, relais réellement utilisés, maintien à travers une autre production
+de signal et maintien à travers une comparaison. L'entrée depuis un ancien
+`Cursor` consomme sa formation existante sans rejouer ses producteurs.
+
+Les compteurs, références d'origine, calibrations et records doivent être
+extraits des rôles enregistrés. Construire leurs transports sur l'histoire
+enrichie, avec conservation des lectures, des comptes et des distinctions.
+L'interprétation des anciens parcours doit retrouver les résultats existants.
+
+**Clôture :** un parcours reçu avant une rencontre reste positivement formé
+après celle-ci, et un relais suivant poursuit ce parcours depuis le successeur
+effectif. Le consommateur immédiat est P2. Une nouvelle bibliothèque de
+comptes sans ce consommateur ne ferme pas P1.
+
+#### P2. Produire les mesures et les rencontres dans une même reprise
+
+Construire un état de mesure sur le support enrichi, raccordé à la formation
+du couplage ou de l'assemblage réellement reçu. Les deux parcours, leur origine
+commune lorsqu'elle est requise, leur calibration et l'échelle positive
+doivent être justifiés par leurs formations, non par leurs valeurs égales.
+
+La production reçoit seulement l'état courant et la demande locale. Elle
+prolonge les parcours, livre les arrivées aux ports disponibles, décide
+l'admission et produit la rencontre. Chaque tête est liée une fois ; lectures,
+histoires, descriptions et preuves consomment ces mêmes résultats. Lorsque
+deux parcours sont mesurés, les deux livraisons utilisent leurs signaux
+respectifs ; le `FillProduction` actuel, qui livre deux fois un même signal,
+reste un cas particulier et ne remplace pas cette mesure.
+
+La lecture relative est calculée depuis les records de ces arrivées. Aucun
+champ libre ne fournit son résultat ou une cible prescrite. Le refus conserve
+sa portée exacte : indisponibilité présente ou échec de la reconnaissance
+déclarée, pas impossibilité de toute rencontre ou de tout transport.
+
+**Clôture :** deux reprises se composent sur le paquet retourné entier,
+incluant rencontres et disponibilité ; la tête complète est indépendante
+du suffixe futur. Des parcours différents donnent des lectures différentes
+lorsque la loi de lecture les distingue. L'accord local et les deux records
+de la rencontre sont les consommateurs de P3 et P4. Ces résultats ferment
+un raccord productif, pas encore la localisation physique.
+
+#### P3. Construire les contraintes et leurs restrictions depuis ces mesures
+
+Une contrainte porte la détermination décrite, son attachement constitué,
+le lecteur admis, la calibration et la garantie de précision. Ces indices
+doivent désigner les ressources exactes de P2. Séparer :
+
+- l'extension qui produit un nouvel événement de mesure ;
+- le transport de la détermination ancienne que l'on décrit ;
+- le raffinement de sa description rendu possible par la mesure.
+
+Construire restriction, composition et persistance depuis les garanties
+produites. La restriction retrouve la contrainte grossière transportée ;
+elle ne prétend pas reconstruire une valeur fine depuis une borne grossière
+ni inverser une perte d'information. Deux nouvelles rencontres successives
+ne deviennent pas la même occurrence au titre de la précision.
+
+Construire un raffinement commun lorsque les ressources, admissions et
+raccords le permettent effectivement. La compatibilité est vérifiée sur
+ces données amont, pas définie comme « le raffinement commun existe ».
+Une branche incompatible ne reçoit ni mesure fictive ni accord forcé.
+
+**Clôture :** le raffinement commun retourne une réalisation constituée et
+ses deux restrictions, consommées par P4. Les fenêtres instrumentales
+existantes peuvent lire ces contraintes ; leur intersection numérique seule
+ne les qualifie pas comme voisinages physiques.
+
+#### P4. Justifier les raccords localisants et le regroupement autorisé
+
+Partir de la rencontre produite pour son accord local, puis des changements
+de description et restrictions de P3. Pour chaque règle localisante nouvelle,
+identifier la loi consommée, les références suivies, les productions partagées
+et l'action autorisée. Construire sa réalisation concrète ; ne pas recevoir
+un champ libre affirmant que les deux descriptions ont le même lieu.
+
+Le regroupement fournit une description localisante commune et les lecteurs
+qui factorisent par elle. Les sources et leurs effets attachés restent
+distincts. Une cible commune n'est pas un inverse de ses traces ; l'accord
+sur la localisation ne devient pas l'équivalence future des mémoires riches.
+Toute réduction du runtime exige sa propre exactitude sous le contrat fixé.
+
+Fermer les traductions de demandes, les admissions, les retours et la
+préservation requise pour les actions revendiquées. Ne pas imposer que tous
+les transports de parcours soient égaux : les effets séparables demeurent
+lisibles. La recherche d'un raccord consomme les contextes et productions
+reçus, avant la continuation ; une famille idéale achevée n'en est pas l'entrée.
+L'action et sa preuve de préservation restent distinctes ; l'autorisation
+est consommée au passage vers la description commune, pas seulement stockée
+à côté d'elle. Le critère et les lecteurs préservés sont fixés avant ce passage.
+
+**Clôture :** les contraintes de P3 sur les productions de P2 possèdent un
+raccord localisant réalisé, compatible avec leurs restrictions de précision,
+et une description commune avec ses lois de factorisation. Un effet attaché
+reste séparable par une même demande du contrat. Le seul accord initial entre
+les participants d'une rencontre ne ferme pas ce nouveau raccord. Les règles
+localisantes ont leur justification et leur consommateur P5 ; aucune n'est
+déduite de la seule égalité des lectures ou de l'indice d'un couplage. Si les
+lois présentes ne ferment qu'un accord instrumental, le manque physique est
+nommé et reste ouvert ; il n'est pas résolu par renommage.
+
+#### P5. Former les familles compatibles et couvrir le domaine de R4
+
+Former les présentations idéales depuis les contraintes réalisées et les
+raccords de P3-P4, avec restrictions et garanties à toute précision demandée.
+Chaque réalisation finie part d'un préfixe reçu et retourne son prolongement
+effectif. Les choix de précision sont des demandes admises ; une règle locale
+ou une famille cohérente de demandes décrit les possibilités sans fournir
+au producteur une trajectoire future terminée ou une suite numérique libre.
+
+Conserver les deux obligations distinctes de R4.2 : préciser une détermination
+déjà constituée ; construire aussi des localisations idéales qui ne sont pas
+simplement les noms des événements d'une course finie. Une famille de lectures
+raffinées d'une seule rencontre ne ferme pas la seconde obligation. Les trois
+contrôles actuels `lower`, `upper`, `alternating` ne sont pas une preuve de
+couverture du domaine annoncé.
+
+Construire les accords entre familles depuis leurs raccords positifs,
+avec composition et restriction. La complétude localisante doit produire
+le raccord sous ses hypothèses précises, et non seulement constater que
+les fenêtres d'un lecteur ne séparent plus les sorties.
+
+Construire ensuite les générateurs justifiés de recouvrement et leur
+interprétation sur ces présentations : sélection positive d'une réalisation,
+intersections finies, invariance sous accord, séparateurs de localisations
+et couverture par les points effectivement construits. Le recoupement de
+voisinages ne devient jamais une identification par clôture transitive.
+Les actions revendiquées continues doivent transporter ces contraintes et
+recouvrements avec contrôle de précision.
+
+**Clôture R4 :** les présentations, leurs accords et les recouvrements portent
+les localisations dans la portée physique annoncée, et leurs réalisations
+constructives ferment les obligations de R4.2 et R4.3. Une complétion numérique
+ou une topologie des seules observations ne donne pas ce verdict. Le
+consommateur est la reconstruction R5 sur ce même domaine.
+
+#### P6. Poursuivre la cible entière sur le domaine ainsi construit
+
+Fermer R5-R7 sans recevoir leurs conclusions en amont : dimension et cartes,
+causalité et métrique calibrée, transports et courbure, continuation dynamique,
+puis comparaison relativiste exacte avec couverture et réciproques. Les lois
+physiques reçues restent explicitement distinguées de leurs conséquences.
+
+Même une réalisation fermée de P1-P2 n'établirait pas la faisabilité de P4-P6.
+Aucune preuve d'impossibilité de ces derniers n'est actuellement fournie.
+Si une loi ou un lemme manque, préciser son énoncé et sa dépendance ; une loi
+supplémentaire ne sera pas ajoutée implicitement ni assimilée au résultat à prouver.
+Les acquis intermédiaires ne clôturent pas la tâche scientifique finale.
+
+#### Discipline de livraison
+
+Chaque ajout doit avoir le consommateur nommé dans ce chemin. Réemployer les
+constructions existantes ; ne pas ajouter de généralité numérique, de
+diagnostic isolé ou de certificat sans réalisation pour remplacer une
+obligation ouverte. Préserver les anciennes déclarations et les fondations.
+P1-P2 appartiennent à `Production` ; les descriptions et accords de P3-P5
+relèvent de `Reconstruction`, avec les noyaux productifs nécessaires en amont.
+Les preuves de futurs restent dans `Continuation`. Aucune dépendance inverse
+n'est introduite pour faire consommer à un producteur sa conclusion aval.
+
+Contrôler le sens avant les gates : mêmes déterminations d'une strate à
+l'autre, même successeur lors des reprises, témoins effectivement consommés,
+aucun point prescrit, aucune confusion entre localisation et effets riches.
+Les clients, audits axiomatiques et contrôles du partage compilé vérifient
+ensuite les constructions livrées ; ils ne définissent pas la cible.
+
+Le bilan distingue fermeture d'une obligation intermédiaire, reconstruction
+physique de R4 et cible relativiste finale. Les textes et le registre ne
+recevront une revendication nouvelle que depuis les preuves correspondantes,
+avec une révision de référence autorisée. Aucun succès des gates ne permet
+de déclarer à lui seul la cible atteinte.
 
 ## 3. Invariants de méthode
 
@@ -8359,8 +8550,11 @@ compatibles, leurs lecteurs séparateurs, leurs points ni leur couverture.
 La suite doit construire ces objets à partir des productions et passages
 déjà présents, en explicitant la loi physique supplémentaire si elle est
 nécessaire ; aucune coordonnée reçue, égalité de lectures ou étiquette de
-couplage ne remplace ce travail. Dimension, métrique et dynamique R5-R7
-ne sont pas déclarées acquises.
+couplage ne remplace ce travail. Le chemin prioritaire corrigé des sections
+2.1-2.2 précise ce raccord : support enrichi commun, mesures et rencontres
+partagées, contraintes et accords localisants, puis familles compatibles et
+couverture. Dimension, métrique et dynamique R5-R7 ne sont pas déclarées
+acquises.
 
 Production reste indépendante de Reconstruction et Continuation ;
 Reconstruction reste indépendante de Continuation. Les fondations, le
@@ -8368,3 +8562,255 @@ maître, la machine, les anciens contrats et résultats sont préservés.
 Les textes scientifiques FR/EN décrivent la même portée. Aucun statut
 d'audit extérieur ni évidence de registre figée n'est actualisé avant
 une révision de référence autorisée.
+
+## 62. Raccord productif des parcours aux rencontres : P1-P2 locaux
+
+Ce lot applique la priorité des sections 2.1-2.2 sans changer la cible de la
+section 1 ni les quantifications R4. Il ne généralise pas encore les lecteurs
+numériques : il répare leur support productif après une rencontre.
+
+### 62.1 Ascendance et interprétation sur la formation enrichie
+
+`Production/RecurringSignalJourneys.lean` reconstruit positivement l'origine
+émise, les relais utilisés et leur maintien à travers réceptions et comparaisons.
+Les entrées `fromCursor` et `fromInstrument` consomment les formations reçues,
+sans nouveau préfixe donné ni réexécution. `RecurringUnitJourney` justifie
+chaque calibration utilisée ; comptes, lectures et payload proviennent de ces
+rôles. Le transport sur `RecurringHistory` conserve cette ascendance.
+`Production/RecurringRelativeReadings.lean` retrouve la lecture antérieure
+sur le même curseur et la transporte à travers les interactions.
+
+### 62.2 Deux parcours respectifs et reprise depuis la rencontre entière
+
+`Production/EncounterRelativePaths.lean` porte les deux parcours et leur origine
+commune sur un couplage constitué dont les ports sont vides. `measure` produit
+les deux livraisons respectives, leur admission et la rencontre, puis conserve
+son successeur. Aucun résultat relatif libre n'est fourni. La lecture relative
+de parcours reste distincte de la différence brute retournée par l'interaction.
+Le constructeur existant livrant deux fois un même signal est conservé comme
+cas particulier ; il n'est pas utilisé à la place des deux parcours mesurés.
+
+`refine` poursuit chacun des parcours depuis son extrémité déjà produite.
+Pour les comptes `a,b`, les nouveaux comptes sont `a+a+extra,b+b`, où `extra`
+est zéro ou un selon la demande instrumentale reçue. Les courses de relais
+puis les trois productions de mesure sont liées et stockées dans la même
+histoire. `MeasurementRun` consomme le successeur retourné, ports vidés inclus.
+Concaténation des paquets, ordre des demandes, conservation de l'origine,
+des anciennes références distinctes et de leurs records sont prouvés pour
+toute liste finie de demandes. La tête locale ne reçoit pas le futur achevé.
+Ce raccord est celui du couplage local, pas encore une mesure relative routée
+à travers l'assemblage de la section 61.
+
+### 62.3 Consommateurs, contrôles et prochaine obligation
+
+`Reconstruction/MeasuredEncounterDescriptions.lean` consomme le paquet stocké
+dans les accords de la même rencontre et les contraintes d'ancre existants.
+Il raccorde la lecture relative au record effectivement consommé et conserve
+les deux effets à travers toute histoire locale. Les contraintes d'ancre
+portent la réponse brute ; elles ne deviennent pas implicitement des
+contraintes localisantes ni des contraintes sur le rapport de parcours.
+
+`Continuation/MeasuredEncounterFutures.lean` réemploie le contrat riche et
+la grammaire principale entiers. Si les records diffèrent, la même demande
+future les sépare, après toute liste finie incluant les refus. Aucun oubli
+des distinctions pertinentes n'est donc autorisé par le seul accord local.
+
+Le client public ferme le cas un/deux, les lectures un demi et trois quarts,
+les reprises, les effets et la consommation d'admission. Trois diagnostics
+de type protègent le support, l'admission consommée et les effets attachés.
+Le contrôle C vérifie les sites nommés et le graphe statique des consommateurs,
+avec la même portée limitée que le contrôle réseau : ni callbacks arbitraires,
+ni coût total, ni validation physique.
+
+**P1-P2 sont raccordés pour les parcours locaux à calibration unitaire.**
+La prochaine obligation est P3 : former les contraintes pertinentes depuis
+ces mesures en séparant production d'une nouvelle rencontre, transport de
+la détermination décrite et raffinement de sa description. Les contraintes
+d'ancre déjà réemployées ne ferment pas cette obligation entière. P4-P6,
+R4.2.2 et R4.3 restent ouverts ; aucune preuve de leur impossibilité ni de
+leur clôture n'est revendiquée. Les lois instrumentales et la subdivision
+restent des entrées déclarées, pas des lois physiques découvertes.
+
+Production reste indépendante de Reconstruction et Continuation ;
+Reconstruction reste indépendante de Continuation. Les fondations, le maître,
+la machine, les contrats et les résultats antérieurs sont inchangés. Aucun
+nouvel audit extérieur ou statut de registre figé n'est annoncé sur cet arbre
+non commité.
+
+## 63. Contraintes depuis les mesures : raccord descriptif local de P3
+
+Le lot sépare les trois passages requis par P3. Une nouvelle rencontre reste
+un événement frais ; l'ancienne détermination suit son transport ; sa fenêtre
+de description peut être raffinée. La cible de la section 1 et R4 restent
+inchangés.
+
+### 63.1 Loi consommée, et non valeur future assimilée à l'ancienne
+
+`Production/EncounterMeasurementLaws.lean` dérive des parcours calibrés
+effectivement prolongés le changement du rapport : `extra/(b+b)`. La nouvelle
+mesure n'est donc pas en général une lecture égale de l'ancienne. L'élimination
+de `MeasurementChain` calcule le changement cumulé depuis les étapes stockées.
+Le soustraire à la lecture finale retrouve le rapport reçu, sans rejouer les
+producteurs, fournir de cible indépendante ou identifier les rencontres.
+
+### 63.2 Contraintes indexées et reprise du paquet entier
+
+`Reconstruction/MeasuredPathConstraints.lean` indexe chaque contrainte par
+le résultat de mesure exact, une histoire positive qui transporte son
+attachement, et sa fenêtre. L'effet attaché, l'origine et l'échelle du résultat
+sont les ressources du lecteur. Une certification reçue peut refuser.
+
+`MeasuredDescriptionRun.advance` lie une fois `refine`, consomme l'effet du
+résultat produit et sa loi de changement, puis crée une fenêtre de précision
+autour de la détermination ancienne ainsi retrouvée. L'intersection conserve
+la garantie reçue. `runMore` reprend depuis le successeur entier de la
+rencontre, avec sa chaîne et sa contrainte. Pour toute liste finie : retour
+exact de la contrainte reçue, composition des paquets et toutes les bornes de
+précision demandées sont prouvés. La précision est descriptive sur une lecture
+déjà exacte ; elle n'est pas une incertitude physique découverte par mesure.
+
+Le raffinement commun reçoit deux descriptions du même résultat constitué.
+Leurs histoires justifient leur détermination commune en amont ; la
+compatibilité ne signifie pas par définition « une intersection existe ».
+Le résultat garde la réalisation de la première description et transporte
+la contrainte de l'ancienne mesure portée par la seconde. Ses restrictions
+retrouvent les deux contraintes, la seconde sur ce support courant, et
+conservent les deux bornes. Ce consommateur n'assemble ni n'identifie les
+événements ultérieurs des deux histoires.
+
+### 63.3 Consommation en aval et prochaine obligation localisante
+
+Le résultat est consommé dans l'accord existant sur la rencontre ancienne,
+via `measuredConstraintLocationAgreement`. `MeasuredEncounterFutures` conserve
+le contrat riche entier après les reprises descriptives et toute suite
+ultérieure de demandes. La même demande sur les effets continue à séparer
+les participants lorsque leurs records diffèrent. Aucune précision ni
+intersection n'autorise leur oubli.
+
+Le client public réalise la lecture initiale un demi, puis deux mesures dont
+les parcours atteignent six/huit, tandis que la contrainte suit toujours la
+détermination initiale. Les lois sont universelles sur les listes finies.
+Les contrôles de type refusent la substitution d'une autre rencontre ou un
+nouveau départ qui omet l'histoire reçue. Le contrôle compilé distingue le
+producteur local unique de ses consommateurs sans producteur, avec sa portée
+statique déclarée ; il ne donne aucune borne de travail total.
+
+**Le raccord descriptif local de P3 est construit.** La prochaine obligation
+est P4 : une loi justifiée et une réalisation de raccords localisants sur ces
+contraintes, au-delà de l'accord sur une même rencontre déjà produite. La
+soustraction du changement instrumental et l'intersection numérique ne
+fournissent pas cette loi physique. P5-P6, R4.2.2 et R4.3 restent ouverts,
+ainsi que le routage de ces mesures dans l'assemblage fini. Aucun ajout
+implicite de loi, aucune impossibilité globale et aucun audit indépendant
+nouveau ne sont revendiqués. Les fondations, le maître et la machine restent
+inchangés.
+
+### 63.4 Vérifications exécutées et limites de livraison
+
+`lake build +RelationalPerimeter` passe avec 291 jobs ; `lake build` passe
+avec 377 jobs. Aucun avertissement Lean. Le client calculable retourne
+`(6,8,true,2)` : comptes finaux, maintien de la lecture initiale, deux demandes
+exécutées. C'est un smoke check, pas une expérience physique.
+
+Les deux gates complètes, Bash et PowerShell 7 natif Windows, passent sur
+375 fichiers Lean, avec 35 échecs attendus rejetés aux sites et diagnostics
+annoncés. L'inventaire couvre 290 modules de production, tous contraints,
+sans orphelin. L'audit exhaustif couvre 30 975 constantes dans 374 modules :
+364 exceptions générées par le compilateur, aucune déclaration écrite à la
+main dépendante d'un axiome. Les contrôles documentaires, de stratification
+et compilés passent dans leur portée déclarée.
+
+`lake update` laisse le manifeste byte-identique ; `git diff --check` ne
+signale aucun défaut d'espacement. La cible de la section 1 et le bloc R4
+ont été comparés au texte de `HEAD` et sont inchangés. Aucun fichier de
+fondation, du maître, de la machine ou des agents n'est modifié. Le registre
+historique garde ses statuts ouverts ; aucune évidence nouvelle n'est figée
+sur ces sources non commitées. Aucun commit, push, changement de branche
+ou audit extérieur n'a été effectué pour ce lot.
+
+## 64. Reconnaissance et regroupement local des descriptions mesurées
+
+Ce passage de P4 consomme les contraintes de P3. Il ne se présente pas comme
+la clôture physique de P4 ni comme la génération du domaine continu de P5.
+La cible de la section 1 et R4 restent inchangés.
+
+### 64.1 Une règle exécutée sur les ressources constituées
+
+`MeasuredLocationGrouping.lean` reçoit deux descriptions contenant chacune
+une mesure exacte, une histoire positive jusqu'au support courant, un
+participant et une contrainte. Le critère précède l'action : correspondance
+exacte de la référence d'interaction, du signal numérateur, de l'origine et
+de l'échelle positive du parcours. La comparaison des positions reconnaît
+les références typées ; leur injectivité est prouvée. Ces positions ne sont
+ni des coordonnées ni des lieux physiques reçus.
+
+`searchMeasuredLocationRaccord` décide cette correspondance, avec témoin
+positif ou refus. `checkAndGroupMeasuredLocations` consomme le résultat de
+ce contrôle pour produire une description commune contrainte. La preuve de
+préservation des lecteurs est séparée de cette action. Les lecteurs fixés
+sont la lecture de l'interaction et la lecture relative jointe de la mesure,
+non l'inspection riche des records individuels.
+
+### 64.2 Factorisation, restrictions et consommateur des courses
+
+Les lecteurs sélectionnés factorisent exactement par la description commune.
+Les restrictions rendent les deux descriptions projetées, références
+comprises, sans inverse des participants ou de leurs traces. Le consommateur
+`groupedMeasuredDescription` passe par le contrôleur après la course reçue.
+Pour toute liste finie de demandes de P3, il conserve toutes les bornes de
+précision demandées. La continuation réelle transporte les signatures et
+conserve les lecteurs ; elle ne peut pas identifier des signatures différentes.
+Restriction et continuation commutent.
+
+Le support vivant n'est pas réduit. Les participants restent des sources
+distinctes ; le contrat riche inchangé révèle encore leurs effets différents
+par une même demande. Les lectures sélectionnées sont totales sur les
+références reçues ; elles ne renouvellent aucune admission de rencontre.
+L'autorisation locale de regroupement n'est pas une admission physique nouvelle.
+
+### 64.3 Limite substantielle et obligation suivante inchangée
+
+Le client construit deux cas avec les mêmes producteurs : deux descriptions
+des participants d'une mesure sont acceptées ; remesurer les mêmes parcours
+donne la même lecture relative mais une occurrence fraîche et le contrôle
+refuse. La loi de fraîcheur est prouvée pour toute mesure. La reconnaissance
+n'est donc pas un test d'égalité des nombres.
+
+Cette règle est suffisante et conservatrice sur les occurrences constituées.
+Elle ne caractérise pas tous les accords de localisation physique : deux
+occurrences distinctes pourraient correspondre au même lieu physique, sans
+que les lois instrumentales présentes le déterminent. La prochaine obligation
+de P4 reste une loi localisante justifiée par des productions et continuations
+physiques admissibles, avec réalisation positive de ses raccords sur les
+contraintes de P3. Son énoncé devra préciser quels effets autorisent le raccord,
+quels lecteurs factorisent et quelles différences de parcours restent lisibles.
+L'égalité numérique ou celle d'une fenêtre ne suffit pas à fermer cette loi.
+
+Le contrat physique complet et le consommateur localisant de P5 restent à
+construire. Ni l'existence de ce raccord manquant ni son impossibilité ne sont
+prouvées ici. Aucune loi physique supplémentaire, coordonnée, cible commune
+libre ou identification des sources n'a été introduite pour contourner ce
+manque. Le regroupement local ne remplace pas les obligations de P4-P6.
+
+### 64.4 Vérifications du lot local
+
+Le build public passe avec 292 jobs et le build complet avec 379 jobs, sans
+avertissement Lean. L'audit exhaustif couvre 31 117 constantes dans 376 modules :
+364 exceptions générées, aucune déclaration écrite à la main dépendante d'un
+axiome. Les deux gates complètes passent sur 377 fichiers Lean et 37 échecs
+attendus, dont les deux nouveaux contrôles aux diagnostics et sites exacts.
+PowerShell 7 a été exécuté nativement sous Windows. L'inventaire couvre les
+291 modules de production, tous contraints, sans orphelin.
+
+Le smoke check retourne `(true,true,true)` : regroupement des deux participants,
+égalité des lectures relatives après remesure, refus de regrouper les deux
+rencontres distinctes. Ses lois de séparation sont aussi prouvées pour toute
+mesure reçue ; l'évaluation n'est pas une expérience physique. Le contrôle C
+vérifie les sites nommés de reconnaissance, d'action et de consommation, sans
+producteur statiquement accessible, dans sa portée limitée déjà déclarée.
+
+`lake update` laisse le manifeste byte-identique et `git diff --check` est
+propre. La cible de la section 1 et R4 sont identiques à `HEAD`. Les fondations,
+le maître, la machine, les agents et leurs contrats sont inchangés. Le registre
+historique n'a pas été rafraîchi ni donné pour audit de ces sources nouvelles.
+Aucun commit, push, changement de branche ou audit extérieur n'a été effectué.

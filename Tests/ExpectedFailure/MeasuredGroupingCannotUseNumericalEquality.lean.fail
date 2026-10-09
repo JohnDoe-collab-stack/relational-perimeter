@@ -1,0 +1,6 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity.Reconstruction
+example {current} (one two : MeasuredLocationSource current)
+    (same : one.signature.read .relative = two.signature.read .relative) :
+    MeasuredLocationRaccord one two :=
+  .checked same

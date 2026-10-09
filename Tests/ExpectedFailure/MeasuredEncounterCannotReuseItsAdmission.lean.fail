@@ -1,0 +1,5 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity.Production.Encounter
+
+def oldAdmission (source : RelativeState) : EncounterAdmission (measure source).head.next :=
+  (measure source).admission

@@ -24,6 +24,7 @@ import RelationalPerimeter.Relativity.Continuation.TransportedEncounterFutures
 import RelationalPerimeter.Relativity.Reconstruction.LinkedEncounterLocations
 import RelationalPerimeter.Relativity.Reconstruction.EncounterReadoutBasis
 import RelationalPerimeter.Relativity.Reconstruction.NetworkEncounterDescriptions
+import RelationalPerimeter.Relativity.Continuation.MeasuredEncounterFutures
 import RelationalPerimeter.Relativity.Production.ContinuedInteractionDescriptions
 import RelationalPerimeter.Relativity.Production.NumericDescriptionWindows
 import RelationalPerimeter.Relativity.Production.ConstitutedReadingConstraints
@@ -73,6 +74,23 @@ ports on the same received constituted support. Selected consumption preserves
 other actual admissions; shared used passages feed an interaction at another
 attachment and resume for any finite request list. Cell indices are not
 coordinates, and this assembly law supplies no speed or spacetime coverage.
+Calibrated journeys now remain formed through actual encounters. Their two
+respective endpoints supply the two deliveries; finite measurement courses
+resume the returned coupling state, preserving origins and recorded effects.
+The relative readout is distinct from the interaction's raw difference.
+Existing encounter agreements and the full rich-reader contract consume these
+stored results; no point generation or new forgetting authorization follows.
+Later measured effects now refine descriptions of the old determination via
+the actual calibrated subdivision law. Exact restrictions and common windows
+keep the original encounter indexed; new measurements remain fresh events.
+Every finite precision course resumes its returned packet. These descriptive
+constraints still supply no physical raccord between different encounters.
+Their local grouping now checks the constituted anchor, numerator, origin and
+scale before constructing a common constrained description. Its two selected
+readers factor and restrictions return the projected sources exactly; actual
+continuation keeps those readers. Rich effects and source identities remain
+separate. This conservative occurrence-based check supplies no physical
+colocation law between distinct encounters or completeness of ideal locations.
 Permitted finite local influences are distinct from executed dependencies; their
 realizer produces a used path and exactly the existing runner's history. Stored
 signal productions reconstruct emission and relay provenance without replay.
@@ -246,6 +264,11 @@ be enlarged between courses; no physical locality follows from these laws.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Relativity.Production.Encounter.refinement_affine_reading
+#print axioms RelationalPerimeter.Relativity.Reconstruction.measured_description_run_returns_exactly
+#print axioms RelationalPerimeter.Relativity.Reconstruction.measured_description_bounds_every_request
+#print axioms RelationalPerimeter.Relativity.Reconstruction.common_measured_descriptions_return_both
+#print axioms RelationalPerimeter.Relativity.Continuation.Encounter.measured_description_futures_keep_distinctions
 #print axioms RelationalPerimeter.Relativity.Production.productive_family_head_horizon_independent
 #print axioms RelationalPerimeter.Relativity.Production.ProductiveFamilyCourse.allRequestedBounds
 #print axioms RelationalPerimeter.Relativity.Production.productive_family_retained_is_whole_continuous_course
@@ -455,4 +478,16 @@ be enlarged between courses; no physical locality follows from these laws.
 #print axioms RelationalPerimeter.Relativity.Production.Network.passage_keeps_distinct_occurrences
 #print axioms RelationalPerimeter.Relativity.Production.Network.course_resume_exact
 #print axioms RelationalPerimeter.Relativity.Reconstruction.network_keeps_both_effects
+#print axioms RelationalPerimeter.Relativity.Production.Encounter.measure
+#print axioms RelationalPerimeter.Relativity.Production.Encounter.refine
+#print axioms RelationalPerimeter.Relativity.Production.Encounter.measurement_head_independent
+#print axioms RelationalPerimeter.Relativity.Production.Encounter.measurement_chain_origin
+#print axioms RelationalPerimeter.Relativity.Production.Encounter.measurement_runs_append
+#print axioms RelationalPerimeter.Relativity.Reconstruction.measured_ratio_reads_consumed_effect
+#print axioms RelationalPerimeter.Relativity.Continuation.Encounter.measured_requests_preserve_path_distinctions
+#print axioms RelationalPerimeter.Relativity.Reconstruction.measured_grouping_decision_exact
+#print axioms RelationalPerimeter.Relativity.Reconstruction.grouped_measured_reader_factorization
+#print axioms RelationalPerimeter.Relativity.Reconstruction.grouped_measured_locations_return_both
+#print axioms RelationalPerimeter.Relativity.Reconstruction.measured_signature_readers_prolong
+#print axioms RelationalPerimeter.Relativity.Continuation.Encounter.grouped_measured_description_is_not_rich_equivalence
 /- AXIOM_AUDIT_END -/

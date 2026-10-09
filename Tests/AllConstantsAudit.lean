@@ -81,6 +81,9 @@ import Tests.Relativity.TransportedEncounterChecks
 import Tests.Relativity.LocatedEncounterChecks
 import Tests.Relativity.EncounterPrecisionChecks
 import Tests.Relativity.CouplingNetworkChecks
+import Tests.Relativity.MeasuredPathChecks
+import Tests.Relativity.MeasuredConstraintChecks
+import Tests.Relativity.MeasuredLocationGroupingChecks
 
 /-! Build-time tooling, not a mathematical hypothesis or a new production
 dependency. Scan every constant in every imported repository module, including
@@ -188,6 +191,13 @@ run_cmd do
   logInfo m!"ALL_CONSTANTS_OK constants={checked} modules={modules.size} generatedExceptions={generated} writtenExceptions=0"
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms Tests.Relativity.MeasuredConstraintChecks.every_requested_precision_is_met
+#print axioms Tests.Relativity.MeasuredConstraintChecks.all_finite_precision_requests_return_the_old_constraint
+#print axioms Tests.Relativity.MeasuredConstraintChecks.precisions_do_not_authorize_erasing_the_path_difference
+#print axioms Tests.Relativity.MeasuredPathChecks.upper_is_three_quarters
+#print axioms Tests.Relativity.MeasuredPathChecks.whole_course_keeps_emitted_origin
+#print axioms Tests.Relativity.MeasuredPathChecks.whole_course_keeps_old_effects
+#print axioms Tests.Relativity.MeasuredPathChecks.arbitrary_finite_futures_keep_the_path_difference
 #print axioms Tests.Relativity.ProductiveFamilyCourseChecks.every_requested_precision_survives
 #print axioms Tests.Relativity.ProductiveFamilyCourseChecks.retaining_is_the_whole_course
 #print axioms Tests.Relativity.ProductiveFamilyCourseChecks.three_returns_the_old_complete_endpoint

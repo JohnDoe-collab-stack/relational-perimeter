@@ -1,0 +1,9 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity.Production.Encounter
+open RelationalPerimeter.Relativity.Reconstruction
+example {source result coarse} (prior : @MeasuredDescriptionRun source result coarse)
+    (request : MeasuredPrecisionRequest) : MeasurementRun result.next :=
+  runMeasurements prior.realization.state [request.subdivision]
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Relativity.Reconstruction.measured_description_step_uses_produced_successor
+/- AXIOM_AUDIT_END -/

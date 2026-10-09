@@ -1,0 +1,11 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity.Production.Encounter
+open RelationalPerimeter.Relativity.Reconstruction
+example {source result coarse choice} (prior : @MeasuredDescriptionRun source result coarse)
+    (head : Refinement prior.realization.state choice)
+    (reading : MeasuredPathConstraint result prior.realization.chain.history prior.window) :
+    MeasuredPathConstraint head.measurement .root prior.window :=
+  reading
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Relativity.Reconstruction.measured_common_returns_both
+/- AXIOM_AUDIT_END -/

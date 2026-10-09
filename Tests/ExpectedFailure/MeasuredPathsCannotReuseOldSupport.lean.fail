@@ -1,0 +1,5 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity.Production.Encounter
+
+def oldSupport (source : RelativeState) : PairedPaths (measure source).next.coupling.cursor :=
+  source.reading

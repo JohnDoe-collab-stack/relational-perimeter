@@ -182,6 +182,163 @@ par le seul accord localisant. Le test négatif correspondant refuse cette
 substitution. Ces recouvrements restent des recouvrements de lectures, non
 des voisinages physiques ni une couverture du domaine relativiste.
 
+## Parcours mesurés et rencontres sur le même support
+
+Le raccord productif ne repart plus d'un curseur antérieur à la rencontre.
+[RecurringSignalJourneys](../../RelationalPerimeter/Relativity/Production/RecurringSignalJourneys.lean)
+reconstruit l'origine émise et les relais utilisés depuis la formation enrichie.
+Une comparaison ou une réception conserve cette ascendance ; un relais suivant
+la prolonge. Le témoin `RecurringUnitJourney` justifie séparément l'incrément
+de chaque relais. L'entrée depuis un curseur ancien consomme sa formation,
+sans rejouer ses producteurs. `RecurringRelativeReading` retrouve la lecture
+relative antérieure et conserve son origine et ses comptes par transport.
+
+[EncounterRelativePaths](../../RelationalPerimeter/Relativity/Production/EncounterRelativePaths.lean)
+porte les deux parcours sur l'état de couplage reçu. `measure` livre leurs deux
+signaux respectifs, forme la disponibilité puis produit la rencontre admise.
+Il ne substitue pas la livraison répétée d'un seul record à ces deux parcours.
+La lecture relative utilise la première arrivée, l'origine commune constituée
+et le nombre positif de relais du parcours d'échelle. La réponse brute de
+l'interaction reste la différence entre les deux arrivées : ces deux lectures
+ne sont pas confondues.
+
+`refine` poursuit les deux parcours depuis leurs propres extrémités, avec la
+calibration reçue. Pour les comptes `a` et `b`, la demande basse produit
+`a+a` et `b+b` ; la demande haute produit `a+a+1` et `b+b`. Les nouveaux
+relais sont exécutés, puis leurs deux arrivées sont livrées et consommées.
+`Measurement.next` conserve le successeur de cette rencontre entière,
+ports vidés inclus. `runMeasurements` reprend ce résultat pour toute liste
+finie de demandes ; `measurement_runs_append` raccorde les paquets entiers.
+La tête locale ne reçoit pas le suffixe futur. Ce programme est défini sur
+un couplage local ; le programme du réseau fini demeure inchangé.
+
+[MeasuredEncounterDescriptions](../../RelationalPerimeter/Relativity/Reconstruction/MeasuredEncounterDescriptions.lean)
+consomme les mêmes rencontres enregistrées dans `LocationAgreement` et les
+contraintes d'ancre existantes. La lecture relative est raccordée au premier
+effet effectivement enregistré. Les effets des deux parcours restent
+séparément accessibles après toute histoire locale.
+[MeasuredEncounterFutures](../../RelationalPerimeter/Relativity/Continuation/MeasuredEncounterFutures.lean)
+réemploie le contrat riche antérieur sans le restreindre : lorsque les records
+diffèrent, la même demande `attachedEffects` interdit leur regroupement riche,
+après toute liste finie de demandes du contrat principal, refus compris.
+
+Le [client public](../../Tests/Relativity/MeasuredPathChecks.lean) réalise
+les comptes un/deux, une lecture relative un demi et une réponse brute un.
+Une demande haute produit trois/quatre et la lecture trois quarts ; une
+reprise basse poursuit le successeur produit. Leurs origines et les effets
+de la première rencontre subsistent. Les évaluations sont des smoke checks
+d'exécutabilité, non des expériences physiques ou des mesures de complexité.
+Les contrôles négatifs refusent l'ancien support, l'admission consommée
+et le transfert abusif des effets entre participants.
+
+Les lois de calibration, de couplage et les demandes de subdivision sont
+déclarées, non découvertes par ce lot. Le raccord ferme P1-P2 pour ces parcours
+locaux calibrés ; il ne construit encore ni une localisation continue, ni
+un raccord physique entre rencontres distinctes, ni une couverture du domaine.
+Les anciennes contraintes d'ancre sont consommées, mais la génération des
+contraintes localisantes de P3-P5 reste à établir.
+
+## Contraintes de mesure et conservation de la détermination décrite
+
+Une nouvelle rencontre mesure de nouveaux parcours. Elle n'est pas un autre
+nom de la rencontre précédente. La demande haute change par exemple le rapport
+un demi en trois quarts. Utiliser directement cette nouvelle valeur comme une
+lecture plus précise de l'ancienne serait faux.
+
+[EncounterMeasurementLaws](../../RelationalPerimeter/Relativity/Production/EncounterMeasurementLaws.lean)
+prouve depuis les comptes effectivement produits que le rapport suivant est
+le rapport précédent plus `extra/(b+b)`, où `b` est le nombre de relais du
+parcours d'échelle reçu et `extra` est zéro ou un selon la demande. Cette loi
+est une conséquence de la calibration et de la subdivision déclarées. Pour
+toute chaîne finie, son changement cumulé est extrait des étapes enregistrées.
+Soustraire ce changement à la lecture finale retrouve exactement la lecture
+initiale. Les nouvelles occurrences de rencontre restent distinctes de toutes
+les références anciennes transportées.
+
+[MeasuredPathConstraints](../../RelationalPerimeter/Relativity/Reconstruction/MeasuredPathConstraints.lean)
+fixe la mesure d'origine dans le type de chaque contrainte. Son lecteur utilise
+l'effet attaché, l'origine transportée et l'échelle de cette mesure exacte.
+La certification d'une fenêtre reçue retourne un témoin ou un refus justifié.
+Une reprise produit une seule étape de mesure, lit son effet enregistré,
+soustrait le changement cumulé justifié et construit une fenêtre fine sur
+la **détermination ancienne**. Son intersection avec la fenêtre reçue rend
+exactement la contrainte antérieure, transportée sur le successeur réel.
+
+Toute liste finie de demandes préserve cette détermination et satisfait
+toutes les précisions demandées. La reprise reçoit le paquet retourné entier ;
+elle est égale à la course concaténée. Deux descriptions du même résultat de
+mesure ont une contrainte commune construite avec ses deux restrictions et
+ses deux bornes. Leurs histoires positives justifient qu'elles décrivent cette
+même détermination ; l'égalité des nombres de deux mesures étrangères ne suffit
+pas. Ce raccord descriptif n'assemble pas leurs futurs distincts : il garde
+le support courant de la première et y transporte la description de l'ancien
+résultat portée par la seconde.
+
+Dans le [client public](../../Tests/Relativity/MeasuredConstraintChecks.lean),
+les parcours finaux ont les comptes six/huit après deux demandes, mais la
+contrainte décrit toujours le rapport initial un demi. Les garanties sont
+prouvées pour toute liste finie, pas seulement pour ce smoke check. Le contrat
+riche entier continue à séparer les effets des deux participants après les
+mesures et après toutes les demandes ultérieures, refus compris.
+
+Ce lot ferme le raccord **descriptif local** de P3 : mesure, détermination
+suivie, précision, restrictions et reprise partagent leurs ressources exactes.
+La précision borne la fenêtre de description d'une lecture rationnelle déjà
+exacte ; elle ne mesure pas une incertitude physique ni une information inconnue
+que les nouvelles rencontres auraient découverte. Ce résultat fournit à P4
+des contraintes et l'accord sur la rencontre ancienne. Il ne justifie pas un
+accord de localisation entre rencontres différentes, ne fusionne aucune source
+et ne construit pas encore le domaine relativiste.
+
+## Regroupement vérifié des descriptions mesurées
+
+[MeasuredLocationGrouping](../../RelationalPerimeter/Relativity/Reconstruction/MeasuredLocationGrouping.lean)
+construit une description commune pour deux descriptions mesurées reçues sur
+le même support courant. Chacune porte sa mesure, son histoire positive, son
+participant et sa contrainte de P3. Le contrôleur lit les références exactes
+de la rencontre, du signal numérateur et de l'origine, ainsi que l'échelle
+positive issue du parcours mesuré. Il ne compare ni les valeurs numériques
+seules ni le recoupement des fenêtres. Les positions servent à reconnaître
+les références typées sur ce support ; elles ne sont pas des coordonnées.
+
+Les lecteurs préservés sont fixés avant le contrôle : la lecture d'interaction
+et la lecture relative commune aux parcours de la mesure. Une autorisation
+acceptée permet de construire la description commune, avec une preuve séparée
+de préservation. Son action consomme cette autorisation. La fenêtre commune
+est l'intersection des contraintes reçues ; ses restrictions rendent exactement
+les deux **descriptions projetées**, références comprises. Elles ne reconstruisent
+pas les participants ni leurs traces depuis la cible commune. Tous les lecteurs
+sélectionnés factorisent par celle-ci.
+
+Le consommateur des courses de P3 passe effectivement par ce contrôleur.
+Après toute liste finie de demandes de précision, la description regroupée
+conserve toutes les bornes demandées. Une histoire de continuation réelle
+transporte ses références et conserve ces lectures. Ce transport commute
+avec la restriction ; il ne peut pas rendre égales deux signatures auparavant
+distinctes. Ces demandes de lecture ne nécessitent aucune nouvelle disponibilité
+de ports et n'admettent pas une nouvelle rencontre à partir de l'ancienne.
+
+Le [client public](../../Tests/Relativity/MeasuredLocationGroupingChecks.lean)
+prouve deux cas complémentaires : les deux descriptions des participants
+d'une même mesure sont acceptées ; une nouvelle mesure des mêmes parcours
+a la même lecture relative mais une autre référence de rencontre et reste
+refusée. Le contrôle est donc plus exigeant que l'égalité des nombres.
+Il s'agit d'une règle **suffisante et conservatrice**, pas d'une caractérisation
+de toutes les descriptions physiquement équivalentes.
+
+La description commune ne remplace pas l'état vivant ni les records des
+participants. Ceux-ci restent des sources distinctes. Sous le contrat riche
+inchangé, la même demande `attachedEffects` peut encore distinguer leurs
+effets, même si leurs lecteurs sélectionnés factorisent. Aucun oubli de
+mémoire ni regroupement de ces futurs riches n'est revendiqué.
+
+Ce passage réalise un regroupement local relatif aux lois instrumentales
+et aux références constituées déjà disponibles. Il ne transforme pas la
+référence d'une rencontre en point idéal et ne décide pas si des rencontres
+distinctes occupent le même lieu physique. P4 reste ouvert sur cette loi
+localisante supplémentaire et sa réalisation ; P5-R7 ne sont pas fermés
+par cette reconnaissance d'occurrences.
+
 ## Précision des rencontres et portée de la couverture
 
 [EncounterPrecisionDescriptions](../../RelationalPerimeter/Relativity/Reconstruction/EncounterPrecisionDescriptions.lean)
@@ -235,6 +392,15 @@ de lecture ; un run fini n'a pas exécuté une infinité de mesures.
 | Contraintes consommées | [EncounterReadingConstraints](../../RelationalPerimeter/Relativity/Reconstruction/EncounterReadingConstraints.lean) : `transportConstraints`, `location_constraints_agree`, `selectCover`, `located_cover_uses_recorded_values`, `located_constraints_prolong` |
 | Clients du raccord complet | [TransportedEncounterChecks](../../Tests/Relativity/TransportedEncounterChecks.lean) et [LocatedEncounterChecks](../../Tests/Relativity/LocatedEncounterChecks.lean) : permutation non identitaire, contrat complet et course arbitraire |
 | Partage compilé | [check-encounter-codegen.py](../../scripts/check-encounter-codegen.py) : producteurs nommés, helpers, branchements et absence de réexécution dans les transports de description |
+| Ascendance sur le support enrichi | [RecurringSignalJourneys](../../RelationalPerimeter/Relativity/Production/RecurringSignalJourneys.lean) et [RecurringRelativeReadings](../../RelationalPerimeter/Relativity/Production/RecurringRelativeReadings.lean) : `recurringJourney`, `RecurringUnitJourney.reading_exact`, `RecurringJourney.transport_origin`, `recurring_lift_reads_same_ratio` |
+| Mesures et reprises partagées | [EncounterRelativePaths](../../RelationalPerimeter/Relativity/Production/EncounterRelativePaths.lean) : `measure`, `refine`, `measurement_raw_output`, `refinement_counts`, `measurement_runs_append`, `measurement_chain_keeps_sources` |
+| Consommateurs des records mesurés | [MeasuredEncounterDescriptions](../../RelationalPerimeter/Relativity/Reconstruction/MeasuredEncounterDescriptions.lean) et [MeasuredEncounterFutures](../../RelationalPerimeter/Relativity/Continuation/MeasuredEncounterFutures.lean) : `measured_ratio_reads_consumed_effect`, `measured_encounter_keeps_effects`, `measured_requests_preserve_path_distinctions` |
+| Client des reprises | [MeasuredPathChecks](../../Tests/Relativity/MeasuredPathChecks.lean) : lectures différentes, reprise sur le successeur, composition et contrat riche |
+| Changement de lecture justifié | [EncounterMeasurementLaws](../../RelationalPerimeter/Relativity/Production/EncounterMeasurementLaws.lean) : `refinement_affine_reading`, `measurement_chain_returns_original_reading`, `refined_encounter_is_not_an_old_occurrence` |
+| Contraintes de la détermination suivie | [MeasuredPathConstraints](../../RelationalPerimeter/Relativity/Reconstruction/MeasuredPathConstraints.lean) : `measured_path_value_persists`, `corrected_refinement_reads_old_determination`, `measured_description_run_returns_exactly`, `measured_description_bounds_every_request`, `common_measured_descriptions_return_both` |
+| Client des contraintes et futurs | [MeasuredConstraintChecks](../../Tests/Relativity/MeasuredConstraintChecks.lean) et [MeasuredEncounterFutures](../../RelationalPerimeter/Relativity/Continuation/MeasuredEncounterFutures.lean) : `every_requested_precision_is_met`, `measured_description_futures_keep_distinctions` |
+| Autorisation et description commune locales | [MeasuredLocationGrouping](../../RelationalPerimeter/Relativity/Reconstruction/MeasuredLocationGrouping.lean) : `measured_grouping_decision_exact`, `grouped_measured_reader_factorization`, `grouped_measured_locations_return_both`, `measured_signature_readers_prolong`, `grouped_measured_description_every_precision` |
+| Égalité numérique insuffisante et contrat riche inchangé | [MeasuredLocationGroupingChecks](../../Tests/Relativity/MeasuredLocationGroupingChecks.lean) : `repeated_measurement_has_same_relative_value`, `repeated_measurement_still_refuses_grouping` ; [MeasuredEncounterFutures](../../RelationalPerimeter/Relativity/Continuation/MeasuredEncounterFutures.lean) : `grouped_measured_description_is_not_rich_equivalence` |
 
 Le contrôle compilé borne les appels aux producteurs nommés sur les chemins
 locaux annoncés. Il ne mesure ni leur travail interne, ni le tas total, ni
@@ -253,6 +419,21 @@ producteur accessible dans les graphes statiques des raffinements, reprises,
 transports, intersections et sélections. Les cibles de fermetures statiquement
 connues sont suivies. Ce n'est pas une preuve sur des callbacks arbitraires,
 un coût total ou une topologie physique.
+
+[check-measured-encounter-codegen.py](../../scripts/check-measured-encounter-codegen.py)
+contrôle les sites d'appel nommés du raccord mesuré : deux livraisons et une
+interaction par tête, deux courses de relais puis une mesure par raffinement,
+une reprise par nœud et la boucle sur l'état retourné. Il vérifie séparément
+le graphe statique sans producteurs des consommateurs. Pour les contraintes,
+il vérifie un appel au raffinement par étape, la consommation de son effet
+enregistré et la reprise du paquet retourné ; la description et le changement
+cumulé ne rappellent pas les producteurs nommés. Comme le contrôle du
+réseau, il ne borne pas la multiplicité à travers des callbacks arbitraires,
+le travail interne d'une course de relais, le coût total ou la géométrie.
+Il vérifie aussi un site de reconnaissance et un site de construction de la
+description commune dans le contrôleur, un appel de ce contrôleur par le
+consommateur des courses, et l'absence de producteurs nommés dans leurs
+graphes statiques. Cela ne remplace pas les preuves de préservation des lecteurs.
 
 ## Ce qui reste ouvert
 

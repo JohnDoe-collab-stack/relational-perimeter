@@ -1,0 +1,6 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity.Reconstruction
+example {current} (source : MeasuredLocationSource current)
+    (common : ConstrainedMeasuredLocation current source.window) :
+    MeasuredLocationSource current :=
+  common

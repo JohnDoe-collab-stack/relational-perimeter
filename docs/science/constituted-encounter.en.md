@@ -169,6 +169,155 @@ continuation history, not the localizing agreement alone between participants.
 The corresponding expected-failure fixture rejects that substitution. These
 remain reading covers, not physical neighborhoods or relativistic coverage.
 
+## Measured paths and encounters on the same support
+
+The productive bridge no longer restarts a pre-encounter cursor.
+[RecurringSignalJourneys](../../RelationalPerimeter/Relativity/Production/RecurringSignalJourneys.lean)
+reconstructs the emitted origin and used relays from the enriched formation.
+A comparison or reception preserves this ancestry; a later relay extends it.
+`RecurringUnitJourney` separately witnesses the increment at every relay.
+Entry from an earlier cursor consumes its formation without replaying its
+producers. `RecurringRelativeReading` recovers the earlier relative reading
+and preserves its origin and counts under transport.
+
+[EncounterRelativePaths](../../RelationalPerimeter/Relativity/Production/EncounterRelativePaths.lean)
+carries both paths on the received coupling state. `measure` delivers their
+respective signals, forms availability and produces the admitted encounter.
+It does not substitute repeated delivery of one record for these two paths.
+The relative reading consumes the first arrival, the constituted common origin
+and the scale path's positive relay count. The raw interaction response remains
+the difference between the two arrivals: these two readouts are not identified.
+
+`refine` extends both paths from their own endpoints, using the received
+calibration. For counts `a` and `b`, the lower request produces `a+a` and
+`b+b`; the upper request produces `a+a+1` and `b+b`. The new relays execute,
+then their two arrivals are delivered and consumed. `Measurement.next`
+retains the successor of this whole encounter, including cleared ports.
+`runMeasurements` resumes that result for any finite request list;
+`measurement_runs_append` connects whole returned packets. The local head
+receives no future suffix. This program runs on one local coupling; the finite
+network program is unchanged.
+
+[MeasuredEncounterDescriptions](../../RelationalPerimeter/Relativity/Reconstruction/MeasuredEncounterDescriptions.lean)
+consumes the same stored encounters in `LocationAgreement` and existing anchor
+constraints. The relative reading is connected to the first actually recorded
+effect. Both paths' effects remain separately accessible after any local history.
+[MeasuredEncounterFutures](../../RelationalPerimeter/Relativity/Continuation/MeasuredEncounterFutures.lean)
+reuses the earlier rich contract without narrowing it: when the records differ,
+the same `attachedEffects` request rules out rich grouping after any finite
+principal-contract request list, including refusals.
+
+The [public client](../../Tests/Relativity/MeasuredPathChecks.lean) realizes
+counts one/two, relative reading one half and raw response one. An upper request
+produces three/four and reading three quarters; a lower resumption follows the
+produced successor. The origin and the first encounter's effects persist.
+Evaluations are executability smoke checks, not physical experiments or
+complexity measurements. Negative checks reject the old support, consumed
+admission and unwarranted effect transfer between participants.
+
+Calibration and coupling laws and subdivision requests are declared inputs,
+not discoveries of this lot. The bridge closes P1-P2 for these calibrated local
+paths; it does not yet build a continuous localization, a physical raccord
+between distinct encounters or domain coverage. Existing anchor constraints
+are consumed, but generating the localizing constraints of P3-P5 remains open.
+
+## Measurement constraints and persistence of the described determination
+
+A new encounter measures new paths. It is not another name for the previous
+encounter. For instance, an upper request changes the ratio from one half to
+three quarters. Directly treating this new value as a more precise reading
+of the old one would be false.
+
+[EncounterMeasurementLaws](../../RelationalPerimeter/Relativity/Production/EncounterMeasurementLaws.lean)
+derives from the actual produced counts that the next ratio is the old ratio
+plus `extra/(b+b)`, where `b` is the received scale path's relay count and
+`extra` is zero or one according to the request. This law follows from the
+declared calibration and subdivision. Every finite stored chain supplies its
+cumulative change by elimination of its steps. Subtracting that change from
+the final reading returns the original reading exactly. New encounter
+occurrences remain distinct from every transported old reference.
+
+[MeasuredPathConstraints](../../RelationalPerimeter/Relativity/Reconstruction/MeasuredPathConstraints.lean)
+fixes the original measurement in each constraint's type. Its reader consumes
+the attached effect, transported origin and that exact measurement's scale.
+Certification of a received window returns a witness or a justified refusal.
+A resumption produces one measurement step, reads its recorded effect,
+subtracts the justified cumulative change and builds a finer window on the
+**old determination**. Intersecting with the received window returns exactly
+the previous constraint, transported to the actual successor.
+
+Every finite request list preserves this determination and meets every
+requested precision. Resumption consumes the whole returned packet and equals
+the concatenated course. Two descriptions of the same measurement result
+have a constructed common constraint with both restrictions and bounds.
+Their positive histories justify that they describe this same determination;
+numerical coincidence between foreign measurements is insufficient. This
+descriptive raccord does not join their distinct futures: it retains the
+first description's current support and transports the second description
+of the old result to it.
+
+In the [public client](../../Tests/Relativity/MeasuredConstraintChecks.lean),
+the final paths have counts six/eight after two requests, but the constraint
+still describes the original ratio one half. The guarantees are proved for
+every finite list, not just this smoke check. The complete rich contract still
+separates both participants' effects after the measurements and every later
+request list, including refusals.
+
+This closes P3's **local descriptive** bridge: measurement, tracked
+determination, precision, restrictions and resumption share their exact
+resources. Precision bounds a descriptive window around an already exact
+rational reading; it does not measure physical uncertainty or unknown
+information discovered by the new encounters. This supplies P4 with
+constraints and agreement on the old encounter. It does not justify a
+localization agreement between different encounters, merge any source or
+yet construct the relativistic domain.
+
+## Checked grouping of measured descriptions
+
+[MeasuredLocationGrouping](../../RelationalPerimeter/Relativity/Reconstruction/MeasuredLocationGrouping.lean)
+constructs a common description from two received measured descriptions on
+the same current support. Each carries its measurement, positive history,
+participant and P3 constraint. The checker reads the exact references of the
+encounter, numerator signal and origin, together with the positive scale
+derived from the measured path. It compares neither numbers alone nor overlap
+of windows. Positions recognize typed references on that support; they are
+not coordinates.
+
+The preserved readers are fixed before checking: the interaction reading
+and the joint relative reading of the measured paths. An accepted authorization
+permits the common description to be constructed, with a separate preservation
+proof. The action consumes that authorization. The common window intersects
+the received constraints; restriction returns the two **projected descriptions**
+exactly, including their references. It does not reconstruct participants or
+their traces from the common target. Every selected reader factors through it.
+
+The P3-course consumer actually passes through this checker. After any finite
+precision-request list, the grouped description keeps every requested bound.
+An actual continuation history transports its references and preserves these
+readings. Transport commutes with restriction and cannot identify previously
+distinct signatures. These reading requests require no renewed port
+availability and cannot admit a new encounter from the old admission.
+
+The [public client](../../Tests/Relativity/MeasuredLocationGroupingChecks.lean)
+proves complementary cases: the two participant descriptions of one
+measurement are accepted; a new measurement of the same paths has the same
+relative reading but another encounter reference and remains refused.
+The check is therefore stronger than numerical equality. It is a **sufficient,
+conservative** rule, not a characterization of all physically equivalent
+descriptions.
+
+The common description replaces neither the live state nor participant
+records. Its sources remain distinct. Under the unchanged rich contract,
+the same `attachedEffects` request can still distinguish their effects even
+when their selected readers factor. No memory forgetting or grouping of
+these rich futures is claimed.
+
+This realizes local grouping relative to the existing instrumental laws and
+constituted references. It does not turn an encounter reference into an ideal
+point or decide whether distinct encounters occupy the same physical location.
+P4 remains open for that additional localizing law and its realization;
+occurrence recognition does not close P5-R7.
+
 ## Encounter precision and the coverage boundary
 
 [EncounterPrecisionDescriptions](../../RelationalPerimeter/Relativity/Reconstruction/EncounterPrecisionDescriptions.lean)
@@ -233,6 +382,21 @@ recursion and their composition in the runner, with no producer accessible
 from the static graphs of refinement, resumption, transport, intersection
 and selection. Statically known closure targets are followed. This is not a
 proof about arbitrary callbacks, total cost or physical topology.
+
+[check-measured-encounter-codegen.py](../../scripts/check-measured-encounter-codegen.py)
+checks named call sites in the measured bridge: two deliveries and one
+interaction per head, two relay runs then one measurement per refinement,
+one resumption per node and the loop on the returned state. It separately
+checks the static producer-free graph of consumers. For constraints, it checks
+one refinement call per step, consumption of its recorded effect and
+resumption of the returned packet; description and cumulative change call
+no named producer again. Like the network check,
+it does not bound multiplicity through arbitrary callbacks, a relay run's
+internal work, total cost or geometry.
+It also checks one recognition site and one common-description construction
+site in the checker, one checker call from the course consumer, and no named
+producer in their static graphs. This does not replace reader-preservation
+proofs.
 
 ## Open obligations
 
