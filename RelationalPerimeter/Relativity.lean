@@ -20,6 +20,8 @@ import RelationalPerimeter.Relativity.Production.ConstitutedDescriptions
 import RelationalPerimeter.Relativity.Production.InteractionAttachments
 import RelationalPerimeter.Relativity.Production.InteractionDescriptionAgreement
 import RelationalPerimeter.Relativity.Continuation.EncounterFutures
+import RelationalPerimeter.Relativity.Continuation.TransportedEncounterFutures
+import RelationalPerimeter.Relativity.Reconstruction.LinkedEncounterLocations
 import RelationalPerimeter.Relativity.Production.ContinuedInteractionDescriptions
 import RelationalPerimeter.Relativity.Production.NumericDescriptionWindows
 import RelationalPerimeter.Relativity.Production.ConstitutedReadingConstraints
@@ -52,6 +54,13 @@ Independent old-port instructions can be exchanged with exact occurrence and
 used-dependency transports, extended to arbitrary finite typed programs. The
 complete local addressed request contract is preserved through the current
 occurrence transport, including admissions, refusals and full path-record reads.
+The later coupling model also transports present occupancy and the instrument,
+so all of its requests and refusals follow the evolving paired state raccord.
+Actual used signal passages now connect admitted encounters for arbitrary
+finite courses, with distinct interaction anchors and retained rich effects.
+Encounter agreement consumes its recorded anchor reading in existing finite
+constraints and covers; these remain instrumental reading covers, not physical
+neighborhoods or spacetime coverage. No propagation geometry is supplied.
 Permitted finite local influences are distinct from executed dependencies; their
 realizer produces a used path and exactly the existing runner's history. Stored
 signal productions reconstruct emission and relay provenance without replay.
@@ -422,4 +431,8 @@ be enlarged between courses; no physical locality follows from these laws.
 #print axioms RelationalPerimeter.Relativity.Reconstruction.continuedLocationAgreement
 #print axioms RelationalPerimeter.Relativity.Continuation.Encounter.all_futures_exact
 #print axioms RelationalPerimeter.Relativity.Continuation.Encounter.Example.every_suffix_reveals_the_difference
+#print axioms RelationalPerimeter.Relativity.Continuation.Encounter.transported_all_futures
+#print axioms RelationalPerimeter.Relativity.Reconstruction.located_cover_uses_recorded_values
+#print axioms RelationalPerimeter.Relativity.Production.Encounter.produceLinkedEncounter
+#print axioms RelationalPerimeter.Relativity.Reconstruction.nonempty_course_keeps_distinct_locations
 /- AXIOM_AUDIT_END -/

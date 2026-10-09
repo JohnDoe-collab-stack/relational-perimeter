@@ -1,0 +1,4 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity.Production.Encounter
+open RelationalPerimeter.Relativity.Continuation.Encounter
+def discarded : State := ⟨Example.ready.cursor, .empty, Example.ready.formation⟩

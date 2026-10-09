@@ -27,3 +27,5 @@ Tests/ExpectedFailure/AcceptedTargetCannotReplaceProducedOutput.lean.fail	depend
 Tests/ExpectedFailure/EncounterCannotUseArchiveAdmission.lean.fail	dependent-type	4	51	EncounterAdmission Example.initial
 Tests/ExpectedFailure/EncounterCannotReuseConsumedAdmission.lean.fail	dependent-type	4	57	EncounterAdmission Example.produced.next
 Tests/ExpectedFailure/EncounterCannotReplaceAnotherPresentation.lean.fail	dependent-type	5	2	LocalizedPresentation Example.produced Example.again.head.successor
+Tests/ExpectedFailure/CouplingCannotDiscardOccupiedFormation.lean.fail	dependent-type	4	56	CouplingFormation Example.ready.cursor Phase.empty
+Tests/ExpectedFailure/LocationAgreementCannotTransferArrivalConstraints.lean.fail	dependent-type	12	50	(locationClauses [window])

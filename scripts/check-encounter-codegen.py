@@ -16,6 +16,20 @@ checks = runpy.run_path(str(ROOT / "scripts/check-variable-master-codegen.py"))
 agent, shared = checks["agent"], checks["shared"]
 
 
+class EncounterAnalysis(agent["AgentAnalysis"]):
+    def global_value(self, name):
+        body = self.functions.get(name, '')
+        fields = re.search(r'\.m_objs\s*=\s*\{(.*?)\}', body, re.S)
+        # Lean's empty-port witness has zero object-pointer fields and eight
+        # scalar bytes. The pinned lean.h macro encodes those bytes, not a
+        # closure. Recognize only this complete shape; other macros fail closed.
+        if (fields and re.fullmatch(r'\s*LEAN_SCALAR_PTR_LITERAL\(\s*0(?:\s*,\s*0){7}\s*\)\s*', fields[1])
+                and re.search(r'\.m_cs_sz\s*=\s*sizeof\(lean_ctor_object\)\s*\+\s*sizeof\(void\*\)\s*\*\s*0\s*\+\s*8', body)
+                and '.m_fun' not in body):
+            return agent["Value"]()
+        return super().global_value(name)
+
+
 def switches_as_branches(body):
     """Exact translation of pinned tag switches WITHOUT fallthrough.
 
@@ -124,10 +138,31 @@ def switch_self_test():
     print("ENCOUNTER_SWITCH_SELFTEST_OK: all branches, nested helpers, duplicate work, no fallthrough")
 
 
+def scalar_self_test():
+    empty = ('.m_header = {.m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*0 + 8}, '
+             '.m_objs = {LEAN_SCALAR_PTR_LITERAL(0, 0, 0, 0, 0, 0, 0, 0)}')
+    functions = {'l_empty': empty, 'l_bad': empty.replace('sizeof(void*)*0', 'sizeof(void*)*1'),
+                 'l_entry': '{lean_object* held; held = l_empty; return l_produce(held);}',
+                 'l_produce': '{return x;}'}
+    params = {'l_entry': [], 'l_produce': ['x']}
+    analysis = EncounterAnalysis(functions, params, shared['reachable'], target='l_produce')
+    _, low, high = analysis.run('l_entry', [])
+    if (low, high) != (1, 1):
+        raise ValueError('ENCOUNTER_SCALAR: lost producer application')
+    try:
+        analysis.global_value('l_bad')
+    except ValueError:
+        pass
+    else:
+        raise ValueError('ENCOUNTER_SCALAR: accepted object-pointer payload as scalar bytes')
+    print('ENCOUNTER_SCALAR_SELFTEST_OK: exact zero-pointer shape only, producer work retained')
+
+
 def main():
     agent["self_test"]()
     checks["erased_application_self_test"]()
     switch_self_test()
+    scalar_self_test()
     functions, texts, owners = {}, [], {}
     for path in sorted((ROOT / ".lake/build/ir").rglob("*.c")):
         text = path.read_text(encoding="utf-8")
@@ -151,13 +186,18 @@ def main():
     head = symbol("Continuation.Encounter.encounterThen", "Continuation/EncounterFutures")
     runner = symbol("Continuation.Encounter.run", "Continuation/EncounterFutures")
     responder = symbol("Continuation.Encounter.respond", "Continuation/EncounterFutures")
+    paired_head = symbol("Continuation.Encounter.sharedCouplingRequest", "Continuation/TransportedEncounterFutures")
+    paired_runner = symbol("Continuation.Encounter.runSharedCoupling", "Continuation/TransportedEncounterFutures")
+    passage = symbol("Production.Encounter.producePassageHeads", "Production/EncounterPassages")
+    linked = symbol("Production.Encounter.produceLinkedEncounter", "Production/EncounterPassages")
     normalized = {name: re.sub(r"\(\(lean_object\*\)\(((?:l|lp)_\w+)\)\)", r"\1", body)
                   for name, body in functions.items()}
     # Translate only sensitive functions actually reached by this lot. Other
     # generated bodies stay untouched, including their unsupported controls.
-    relevant = shared["reachable"](functions, responder) | shared["reachable"](functions, runner)
+    relevant = (shared["reachable"](functions, responder) | shared["reachable"](functions, runner)
+                | shared["reachable"](functions, paired_head) | shared["reachable"](functions, passage))
     for name in relevant:
-        if primitive in shared["reachable"](functions, name) or name == responder:
+        if primitive in shared["reachable"](functions, name) or name in (responder, paired_head):
             normalized[name] = switches_as_branches(normalized[name])
     for entry, target, boundaries in ((perform, primitive, ()), (delivery, primitive, ()),
                                       (signal, primitive, ()), (head, perform, (runner,))):
@@ -170,6 +210,24 @@ def main():
     agent["applications"](functions, params, runner, responder, 1, unfolds=(runner,))
     agent["applications"](normalized, params, responder, primitive, 1)
     agent["recursive_tail_applications"](functions, params, runner)
+    agent["applications"](functions, params, paired_runner, paired_head, 1, unfolds=(paired_runner,))
+    agent["recursive_tail_applications"](functions, params, paired_runner)
+    def counted(entry, target, expected, exact=False):
+        analysis = EncounterAnalysis(normalized, params, shared["reachable"], target=target)
+        _, low, high = analysis.run(entry, [agent["Value"]() for _ in params[entry]])
+        if high != expected or (exact and low != expected):
+            raise ValueError(f"ENCOUNTER_MULTIPLICITY: {entry} -> {target}=[{low},{high}]")
+        print(f"ENCOUNTER_SHARING_OK {entry}: {target}=[{low},{high}]")
+
+    for target, expected in ((signal, 1), (delivery, 2), (perform, 1)):
+        counted(passage, target, expected, exact=True)
+    # The path consumer binds that one four-head packet. Outside this already
+    # counted boundary, every statically reachable helper is description-only.
+    shared["calls"](functions, linked, passage, 1)
+    pure_consumers = dict(functions)
+    pure_consumers[passage] = '{return lean_box(0);}'
+    shared["absent"](pure_consumers, linked, ["_perform", "_execute", "FutureContract_outcome"])
+    shared["absent"](functions, paired_runner, ["FutureContract_outcome", "Encounter_contract"])
     shared["absent"](functions, runner, ["FutureContract_outcome", "Encounter_contract"])
     reader = symbol("Continuation.Encounter.readerRespond", "Continuation/EncounterFutures")
     agent["applications"](functions, params, reader, responder, 1)
@@ -178,6 +236,10 @@ def main():
         ("Reconstruction.continuedLocationAgreement", "Reconstruction/LocationAgreement", "___redArg")):
         entry = symbol(declaration, module, variant)
         shared["absent"](functions, entry, ["_perform", "_execute", "FutureContract_outcome"])
+    for declaration in ("transportSignal", "transportDelivery", "transportEncounter"):
+        entry = symbol("Continuation.Encounter." + declaration, "Continuation/TransportedEncounterFutures")
+        shared["absent"](functions, entry, ["_perform", "_execute", "FutureContract_outcome"])
+    counted(paired_head, primitive, 1)
     print("ENCOUNTER_CODEGEN_OK: named sharing and description-only transport boundaries")
 
 

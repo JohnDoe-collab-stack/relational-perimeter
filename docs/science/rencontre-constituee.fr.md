@@ -79,10 +79,16 @@ les reprises et leurs références.
 
 Les inspections anciennes sont traduites par les références du prolongement,
 avec `transported_inspection_exact`. Leur numéro local peut changer : il
-n'est pas une coordonnée. La traduction de toutes les demandes entre deux
-**états de couplage réexprimés différents** n'est pas encore construite ; le
-raccord des descriptions de ressources ne suffit pas à transporter leur
-disponibilité. Ne pas lire le contrat comme cette équivalence supplémentaire.
+n'est pas une coordonnée. `StateRaccord` porte aussi l'instrument et la phase
+d'occupation exacte, sur deux états déjà positivement formés. Il traduit
+toute la grammaire entre ces descriptions : actions locales, livraisons,
+interactions et inspections. Les admissions et les refus sont préservés.
+Après une production, le raccord évolue avec les deux successeurs réels.
+`runSharedCoupling` produit une réponse du côté source puis transporte son
+rôle et sa sortie stockés vers l'autre présentation. `transported_all_futures`
+prouve l'exactitude pour toute liste finie, sans filtrer les refus. Le client
+fermé échange deux déterminations déjà produites, sans les exécuter à nouveau,
+puis montre que figer la permutation d'adresses initiale briserait le contrat.
 
 `readerContract` fixe séparément les lectures d'une description riche.
 La demande `attachedEffects` est identique pour les deux participants ; son
@@ -97,6 +103,39 @@ Ces contrats sont locaux. Ils ne remplacent ni le contrat du maître ni le
 contrat physique complet à construire. Aucun oubli mémoire n'est autorisé
 par le seul accord localisant.
 
+## Passages entre rencontres et contraintes
+
+Une rencontre suivante n'est pas reliée causalement à la précédente par sa
+seule position dans une histoire. `producePassageHeads` lie une émission
+depuis la sortie de la rencontre précédente, deux nouvelles livraisons du
+record émis, puis leur interaction admise. `produceLinkedEncounter` consomme
+ce paquet stocké et construit un chemin positif de ports utilisés jusqu'à
+la nouvelle occurrence. Les deux réceptions sont distinctes, même lorsqu'elles
+lisent le même record. `PassageCourse` compose ces liens et leurs histoires
+sur les successeurs effectivement produits. Son prolongement exécutable
+accepte toute longueur finie ; aucun horizon futur n'est reçu par le producteur
+d'un lien. `PassageCourse.used` fournit la dépendance positive des extrémités
+pour toute course non vide.
+
+Le chemin utilisé prouve que ces occurrences sont distinctes. Chaque rencontre
+possède son propre accord local entre ses participants. L'accord de l'ancienne
+rencontre est transporté, avec les effets attachés, mais n'est pas étendu en
+un accord identifiant les deux extrémités du passage. Dans le cas fermé,
+leurs valeurs numériques sont pourtant égales. Il s'agit d'une course causale
+sur un instrument constitué, pas encore d'un réseau de plusieurs instruments
+physiques, d'une distance ou d'une loi de propagation.
+
+`EncounterReadingConstraints` raccorde maintenant ces présentations aux
+contraintes et recouvrements finis existants. Un accord de rencontre transporte
+les clauses portant sur sa lecture d'interaction effective, puis un recouvrement
+sélectionne ses feuilles depuis les certificats transportés. Les restrictions
+rendent les lectures d'entrée, et le raffinement ne supprime aucun effet
+attaché. Les clauses riches suivent une réexpression exacte du même participant
+ou l'histoire de continuation ; elles ne passent pas d'un participant à l'autre
+par le seul accord localisant. Le test négatif correspondant refuse cette
+substitution. Ces recouvrements restent des recouvrements de lectures, non
+des voisinages physiques ni une couverture du domaine relativiste.
+
 ## Preuves et contrôles
 
 | Passage | Source et déclarations |
@@ -107,19 +146,30 @@ par le seul accord localisant.
 | Accord consommé | [LocationAgreement](../../RelationalPerimeter/Relativity/Reconstruction/LocationAgreement.lean) : `producedLocationAgreement`, `LocationAgreement.site`, `continuedLocationAgreement` |
 | Contrats et témoin fermé | [EncounterFutures](../../RelationalPerimeter/Relativity/Continuation/EncounterFutures.lean) : `all_futures_exact`, `head_independent`, `rich_futures_require_effects`, `Example.equal_archive_cannot_admit`, `Example.same_request_forbids_rich_grouping`, `Example.same_output_not_same_occurrence` |
 | Client public | [EncounterChecks](../../Tests/Relativity/EncounterChecks.lean) : import de la seule racine publique |
+| Contrat entièrement traduit | [CouplingDescriptions](../../RelationalPerimeter/Relativity/Production/CouplingDescriptions.lean) et [TransportedEncounterFutures](../../RelationalPerimeter/Relativity/Continuation/TransportedEncounterFutures.lean) : `StateRaccord`, `transported_admission_exact`, `shared_run_source_exact`, `shared_run_target_exact`, `transported_all_futures`, `continued_full_contract_exact` |
+| Passages utilisés et accords distincts | [EncounterPassages](../../RelationalPerimeter/Relativity/Production/EncounterPassages.lean) et [LinkedEncounterLocations](../../RelationalPerimeter/Relativity/Reconstruction/LinkedEncounterLocations.lean) : `producePassageHeads`, `produceLinkedEncounter`, `PassageCourse.used`, `passage_does_not_identify_locations`, `nonempty_course_keeps_distinct_locations` |
+| Contraintes consommées | [EncounterReadingConstraints](../../RelationalPerimeter/Relativity/Reconstruction/EncounterReadingConstraints.lean) : `transportConstraints`, `location_constraints_agree`, `selectCover`, `located_cover_uses_recorded_values`, `located_constraints_prolong` |
+| Clients du raccord complet | [TransportedEncounterChecks](../../Tests/Relativity/TransportedEncounterChecks.lean) et [LocatedEncounterChecks](../../Tests/Relativity/LocatedEncounterChecks.lean) : permutation non identitaire, contrat complet et course arbitraire |
 | Partage compilé | [check-encounter-codegen.py](../../scripts/check-encounter-codegen.py) : producteurs nommés, helpers, branchements et absence de réexécution dans les transports de description |
 
 Le contrôle compilé borne les appels aux producteurs nommés sur les chemins
 locaux annoncés. Il ne mesure ni leur travail interne, ni le tas total, ni
 un coût physique. Le runner partagé est `run`/`encounterThen` ; l'évaluateur
 générique des contrats est une spécification à projections séparées.
+Le contrôle inclut la réponse partagée entre présentations et les quatre
+producteurs du paquet de passage : une émission, deux livraisons et une
+interaction. Il distingue ce paquet de son consommateur descriptif et vérifie
+l'absence de producteur statiquement accessible hors de cette frontière.
+Il ne mesure pas le coût des témoins de formation ni celui des transports.
 
 ## Ce qui reste ouvert
 
 Cette construction fournit un premier accord **relatif à la loi de couplage
 déclarée**. Elle ne clôt pas le lot physique complet : traductions de toutes
-les demandes entre états de couplage réexprimés, réseau physique des passages
-et raccord aux contraintes de reconstruction restent à construire.
+les demandes du contrat local et raccord aux contraintes de lectures sont
+maintenant construits, ainsi qu'une course causale de rencontres. Restent
+à établir les lois d'un réseau physique, les consommateurs localisants et
+la justification physique des recouvrements de reconstruction.
 La complétude des lecteurs localisants, la couverture continue, la dimension,
 les cartes, la métrique, la courbure et les lois dynamiques R4-R7 restent
 ouvertes. La cible finale n'est pas remplacée par ce modèle fini.

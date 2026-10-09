@@ -1,0 +1,12 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity
+open RelationalPerimeter.Relativity.Production
+open RelationalPerimeter.Relativity.Reconstruction
+open RelationalPerimeter.Relativity.Continuation.Encounter
+def window : ReadingWindow := ⟨Rational.neg Rational.one, Rational.ofNat 4⟩
+def clauses : List AttachedReadingConstraint := [⟨.arrival, window⟩]
+def first := localizeParticipant Example.produced .left
+def second := localizeParticipant Example.produced .right
+def certificate := certifiedReadingConstraintsOfAdmitted first.attachment clauses (by rfl)
+def transferred : CertifiedReadingConstraints second.attachment clauses :=
+  Example.agreement.transportConstraints [window] certificate

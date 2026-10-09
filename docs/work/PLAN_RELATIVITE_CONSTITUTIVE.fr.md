@@ -8036,7 +8036,7 @@ Destination proposée, après autorisation d'implémenter :
 | `Reconstruction/LocationAgreement.lean` | Accord dérivé de la rencontre, consommateur localisant et lois de changements de description |
 | `Continuation/EncounterFutures.lean` | Contrat local, reprises, transport de l'accord et séparateur effectif de parcours |
 
-Ces fichiers ne sont pas annoncés comme présents. Ne déplacer ni les modules
+Cette destination est réalisée dans le bilan 58.8. Ne déplacer ni les modules
 instrumentaux ni leurs clients pour réaliser ce lot. Une généralisation
 d'interface n'est autorisée que si son blocage concret est identifié et que
 le consommateur existant garde ses définitions, garanties et calculabilité.
@@ -8141,12 +8141,13 @@ description. Il n'est ni une mesure physique ni une borne du travail interne.
 Les textes [français](../science/rencontre-constituee.fr.md) et
 [anglais](../science/constituted-encounter.en.md) délimitent la réalisation.
 
-**Restent à fermer pour le lot 58 complet :** transporter toute la grammaire
-de demandes entre deux états de couplage réexprimés, avec leur disponibilité
-et leurs successeurs, pas seulement les inspections historiques ; raccorder
-la loi candidate à un réseau physique de passages et aux contraintes de la
-reconstruction. La validité physique ne résulte pas des preuves du protocole
-de couplage. La portée présente est exactement celle de cette loi déclarée.
+**Suite réalisée en section 59 :** toute la grammaire du contrat local est
+transportée entre états réexprimés, avec disponibilité, admissions, refus et
+successeurs. Les contraintes de lectures consomment l'accord de rencontre,
+et des courses causales utilisent les sorties d'interaction. Un réseau physique
+de plusieurs instruments et des recouvrements physiquement justifiés restent
+ouverts. La validité physique ne résulte pas des preuves du protocole de
+couplage. La portée présente est exactement celle de cette loi déclarée.
 La complétude et la couverture R4, puis R5-R7, restent les obligations
 suivantes. Aucun de ces manques n'est renommé comme un résultat déjà acquis.
 
@@ -8154,3 +8155,93 @@ L'évidence du nouveau lot n'est pas figée au registre avant une révision
 de référence autorisée. Les statuts existants ne sont pas rafraîchis pour
 obtenir une validation. Le bilan des commandes est celui de l'arbre local,
 pas un verdict d'audit extérieur.
+
+## 59. Contrat complet, passages utilisés et contraintes sur la rencontre
+
+Ce lot suit la jonction annoncée en 58.7, sans prolonger la seule généralité
+numérique ni remplacer la cible de la section 1. Il ne clôt pas R4-R7.
+
+### 59.1 Raccord d'états et contrat entier
+
+`Production/CouplingDescriptions.lean` ajoute `StateRaccord`. Il consomme
+deux états déjà positivement formés, un raccord exact de leurs ressources,
+l'égalité transportée de leurs phases et celle de leurs instruments. La
+phase porte les références de réception et leurs témoins ; une archive
+n'est pas convertie en disponibilité par un accord de valeurs.
+
+`Continuation/TransportedEncounterFutures.lean` traduit émissions, relais,
+réceptions, inspections, livraisons et interactions. Les admissions ont un
+transport positif et un retour ; les refus suivent également. Chaque réponse
+exécute au plus une production du côté source et transporte son rôle et son
+résultat stockés vers l'autre présentation. Le runner reprend sur les deux
+successeurs et leur nouveau raccord. Les deux exécutions correspondent aux
+runners existants, pour toute liste finie de demandes, dans les deux directions.
+Les reprises consomment le raccord final enregistré, pas une permutation figée.
+
+Le client public fermé utilise un échange non identitaire des mêmes
+déterminations déjà produites. Il ferme les admissions et refus sur toutes
+les sortes de demandes et démontre qu'une traduction par les seules adresses
+initiales ne conserverait pas le contrat. L'exactitude ne vient donc pas
+d'une réalisation de l'interface limitée à son raccord identitaire.
+
+### 59.2 Chemin causal effectif entre rencontres
+
+`Production/EncounterPassages.lean` sépare les producteurs de leurs
+consommateurs. `producePassageHeads` lie quatre productions effectives :
+émission depuis la sortie de la rencontre précédente, deux nouvelles
+livraisons du record, puis interaction admise. Ce paquet est stocké une fois.
+`produceLinkedEncounter` assemble son histoire et son chemin de dépendances
+en consommant les ports des rôles stockés. Une succession seule ne fournit
+pas ce chemin. Les témoins de ports ne réexécutent pas les actions.
+
+`PassageCourse` est une formation positive de liens, indexée par leurs
+productions, leurs histoires composées et leur nombre. `EncounterCourse.extend`
+la réalise pour toute longueur finie. `PassageCourse.used` construit le chemin
+entre les extrémités d'une course non vide ; la décroissance stricte des
+positions sur un chemin utilisé démontre leur distinction. Cette position
+est un indice d'occurrence constitué, pas une coordonnée spatiale.
+
+`Reconstruction/LinkedEncounterLocations.lean` prolonge l'ancien accord et
+construit celui de la nouvelle rencontre depuis sa propre production. Les
+anciens effets sont conservés. Le lien causal n'identifie pas les lieux de
+ses deux rencontres ; le client fermé conserve cette distinction malgré
+l'égalité de leurs sorties numériques.
+
+La réalisation est une course sur le même instrument constitué avec la loi
+de records réutilisables déclarée en 58.8. Elle ne réalise pas encore un
+réseau de plusieurs instruments ni des lois de vitesse, de distance ou de
+propagation physique. Ce manque reste visible ; les occurrences ne sont pas
+renommées comme les points du continuum visé.
+
+### 59.3 Consommation par les contraintes existantes
+
+`Reconstruction/EncounterReadingConstraints.lean` consomme `LocationAgreement`
+pour transporter des clauses sur la lecture de son interaction. Les
+recouvrements existants sélectionnent leurs feuilles depuis ces certificats,
+rendent les valeurs d'entrée et gardent les effets attachés. Les contraintes
+riches suivent séparément une réexpression exacte du même participant ou une
+continuation effective. L'accord localisant seul ne transporte pas une clause
+sur l'arrivée d'un participant vers celle de l'autre.
+
+Cette jonction ferme le raccord aux contraintes de lectures. Elle ne justifie
+pas physiquement leurs fenêtres comme voisinages ni leurs recouvrements
+comme couverture de localisations. La prochaine jonction R4 reste celle de
+générateurs localisants compatibles issus des passages, puis de leur couverture,
+non celle d'une nouvelle généralisation du nombre de lecteurs instrumentaux.
+
+### 59.4 Vérification et limites conservées
+
+Les clients importent uniquement `RelationalPerimeter`. Les nouveaux échecs
+attendus portent sur la suppression de la formation d'occupation et le
+transport abusif de contraintes d'arrivée. Le contrôle C garde ses anciens
+consommateurs et ajoute le runner partagé, les transports sans producteurs
+et le paquet des quatre productions. La frontière de ce paquet est explicite ;
+la consommation descriptive est contrôlée par son graphe statique séparé.
+Ces contrôles ne sont ni un coût total ni une validation physique.
+
+Les cinq modules de ce lot sont classés dans l'inventaire de stratification.
+Production n'importe ni Reconstruction ni Continuation ; Reconstruction
+n'importe pas Continuation. Les fondations, le maître, la machine et les
+contrats antérieurs sont conservés. Les textes scientifiques FR/EN décrivent
+la portée exacte. Une évidence de registre figée attend une révision de
+référence autorisée ; aucun statut historique n'est actualisé automatiquement.
