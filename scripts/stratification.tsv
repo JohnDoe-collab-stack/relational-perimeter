@@ -82,7 +82,12 @@ RelationalPerimeter.Relativity.Production.ContinuedReadingCovers	H21	enforced	Fi
 RelationalPerimeter.Relativity.Production.RestrictedReadingCovers	H22	enforced	Realized intersections of recorded cover choices with finer certificates return complete stored paths and commute with cover resumption and shared continuation
 RelationalPerimeter.Relativity.Production.ProductivePrecisionCourses	H23	enforced	Successive positive precision requests consume actual returned prefixes with nested realized windows and head horizon independence without physical localization
 RelationalPerimeter.Relativity.Production.AgreedPrecisionCourses	H24	enforced	Matching finite precision courses consume actual returned certificates under positive numerical agreement without replaying source heads or identifying histories
-RelationalPerimeter.Relativity	H25	enforced	Public numerical utilities and local candidate without relativistic certificate
+RelationalPerimeter.Relativity.Production.ComposedAgreementCourses	H25	enforced	Composition consumes recorded intermediate certificates and actual third prefixes with exact windows and three-endpoint resumption without replay or physical identification
+RelationalPerimeter.Relativity.Production.ResumedAgreementCourses	H26	enforced	Record-only appends and exact composition squares retain shared three-family suffix productions without replay or physical localization
+RelationalPerimeter.Relativity.Production.SharedProductiveCovers	H27	enforced	One recorded cover leaf shared through actual intermediate certificates and finite three-prefix continuations without reselecting physical locations
+RelationalPerimeter.Relativity.Production.RetainedProductiveCovers	H28	enforced	Full recorded cover courses retained from actual three-certificate endpoints with exact continuous-course law and no replay of previous producers
+RelationalPerimeter.Relativity.Production.InterleavedProductiveWindows	H29	enforced	Finite interleaved precision and cover requests on actual shared three-prefix endpoints retaining all produced bounds and complete courses without physical localization
+RelationalPerimeter.Relativity	H30	enforced	Public numerical utilities and local candidate without relativistic certificate
 RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement
 RelationalPerimeter.Agents.Constitutive.ProducedEvidence	A11	enforced	Constitutive agent ProducedEvidence
 RelationalPerimeter.Agents.Constitutive.State	A12	enforced	Constitutive agent State

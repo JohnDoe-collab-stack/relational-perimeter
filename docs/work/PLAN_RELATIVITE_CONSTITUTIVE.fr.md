@@ -6731,3 +6731,655 @@ Le lot 49 fournit le raccord instrumental annoncé, pas les localisations
 physiques du second volet de R4.2. Leurs lois de propagation et de rencontre,
 puis la reconstruction du domaine et des structures R4-R7 restent à construire.
 Ce raccord ne remplace ni ne modifie aucune de ces obligations.
+
+## 50. Composition consommant les certificats intermédiaires produits
+
+### 50.1. Obligation fixée avant implémentation
+
+Poursuivre les lois de composition des raccords de R4.2 dans la portée
+instrumentale déjà construite. Le lot 49 produit une course sur une seconde
+famille en réponse aux fenêtres enregistrées de la première. Pour une troisième
+famille en accord avec la seconde, chaque certificat intermédiaire réellement
+retourné doit maintenant fournir les marges et la fenêtre de la réponse suivante.
+La composition des seuls accords numériques ne remplace pas cette consommation.
+
+Construire une tête qui reçoit la production intermédiaire enregistrée et le
+préfixe réel de la troisième famille. Son budget dépend des marges de ce
+certificat intermédiaire et du module de l'accord reçu. Elle retourne son
+prolongement réel dans exactement la même fenêtre. La composition parcourt
+les records reçus ; elle ne rejoue ni la première ni la seconde course.
+Sa queue reçoit le certificat entier que la tête vient de produire.
+
+Prouver la profondeur et le prolongement accumulés, le maintien des lectures
+ultérieures dans la contrainte initiale, la tête indépendante des queues et
+la possibilité de poursuivre à partir des trois endpoints réellement retournés.
+Fermer ces obligations sur les subdivisions voisines existantes et sur une
+troisième présentation issue d'un préfixe effectivement prolongé. La course
+vide garde le certificat reçu ; les références et enregistrements sources
+restent disponibles, sans permission d'oubli.
+
+Les sorties numériques compatibles ne rendent ni les budgets, ni les courses,
+ni les histoires des compositions égales. Aucune associativité des exécutions
+riches, localisation physique, borne de coût total ou reconstruction R4-R7
+n'est annoncée. La cible de la section 1, les fondations, les anciens
+producteurs, les contrats, le maître, la machine, le registre et les figures
+restent inchangés. Aucun commit, push, changement de branche ou audit extérieur
+n'est autorisé par ce lot.
+
+### 50.2. Composition des productions, et non seulement des accords
+
+[ComposedAgreementCourses.lean](../../RelationalPerimeter/Relativity/Production/ComposedAgreementCourses.lean)
+importe le lot 49. `receivedCertificate` réindexe à zéro le préfixe réellement
+reçu, sans ajouter d'événement. La tête `viaIntermediate` lit le certificat
+enregistré de la seconde famille et appelle une fois `certifyAgreed` sur le
+préfixe local de la troisième. Le résultat réel revient dans la fenêtre de
+la première tête. Le budget de subdivisions lit les marges du certificat
+intermédiaire ; ce n'est ni une borne de temps ni une borne de mémoire.
+
+`composeAgreed` parcourt la course première/seconde déjà produite. Chaque
+tête consomme sa production intermédiaire, puis transmet son propre certificat
+entier à la queue. La première course demeure littéralement l'indice du type
+de la course première/troisième ; aucune course source n'est reconstruite pour
+la raccorder. La tête locale ne reçoit pas la queue. Les preuves couvrent toute
+liste finie, la profondeur accumulée et le prolongement réellement effectué.
+
+`continueComposed` reçoit également la course première/troisième déjà stockée.
+Il prolonge la paire première/seconde depuis ses deux endpoints, puis compose
+ce nouveau suffixe depuis l'endpoint réel de la troisième. Il ne rappelle pas
+`composeAgreed` sur l'ancienne paire pour recréer cet endpoint. Les lectures
+de records restent présentes ; aucun coût total ou effacement n'est annoncé.
+
+### 50.3. Clients positifs fermés et portée
+
+[ComposedAgreementCourseChecks.lean](../../Tests/Relativity/ComposedAgreementCourseChecks.lean)
+importe seulement la racine publique. Les deux premières familles sont les
+subdivisions voisines déjà réalisées ; la troisième présentation provient
+d'un préfixe effectivement prolongé de la première, réindexé sans événement
+nouveau. L'accord seconde/troisième est construit depuis l'accord voisin et
+ce préfixe réel. Pour un prolongement initial d'une étape, la lecture initiale
+de la troisième diffère de celle de la première.
+
+Les clients quantifient sur toute liste finie de demandes et tout prolongement
+initial. Ils vérifient le budget lu depuis les marges intermédiaires, la même
+fenêtre pour toutes les lectures ultérieures des trois familles, les contraintes
+initiales, l'indépendance de tête envers les deux queues, les trois reprises
+depuis leurs endpoints et la conservation des sources distinctes et de leurs
+enregistrements. Le rapprochement première/troisième à une précision demandée
+est fermé via le diamètre de cette fenêtre réellement produite.
+
+La seule évaluation est un smoke test de la course vide : il retourne zéro
+et ne mesure pas les courses non vides. La composition ne prouve ni l'égalité
+des courses obtenues dans différents ordres, ni une associativité des histoires
+riches. Les lois de localisation physique, de propagation et de rencontre,
+puis la reconstruction R4-R7 restent ouvertes. Ces obligations ne sont pas
+remplacées par les accords numériques de ce lot.
+
+### 50.4. Vérifications finales et conservation
+
+Le module compile avec 61 jobs, les clients avec 263 et la racine publique
+avec 262. Les deux gates complètes, Bash et PowerShell natif Windows, passent
+sur les mêmes 332 fichiers Lean et 334 jobs, sans avertissement Lean. Le
+balayage couvre 27 895 constantes de 331 modules, y compris les déclarations
+privées : 364 exceptions générées, aucune dépendance axiomatique écrite à la
+main. Les 261 modules de production sont accessibles et contraints, sans
+orphelin. Les contrôleurs existants et les 23 fixtures rejetées pour leurs
+diagnostics et sites attendus passent.
+
+Le nouveau module est H25 et la racine H26. Les contrôleurs acceptent ce rang
+supplémentaire sans modifier la règle d'import strictement décroissante ou
+ses frontières. La nouvelle preuve cliente du budget a d'abord échoué à
+réécrire une définition locale non dépliée ; `dsimp only [composedCourse]`
+répare ce raccord sans changer l'énoncé ni les données. Le log de cet échec
+est conservé hors du dépôt, et n'est pas présenté comme une vérification passée.
+
+Le contrôle du C généré vérifie quatre corps propriétaires nommés : réindexage
+du préfixe, tête intermédiaire, composition et reprise. Il contrôle les
+arguments effectifs et les branches d'allocation. La tête appelle un seul
+producteur depuis le certificat intermédiaire réel ; le certificat troisième
+retourné alimente la queue. La reprise reçoit la course troisième déjà stockée,
+lit son endpoint, prolonge la paire une fois et compose seulement ce suffixe.
+Les contrôles locaux inchangés des lots 48 et 49 passent également.
+
+Ce contrôle ne borne ni les callbacks internes des modules d'accord, ni le
+tas, ni le coût total. Le script a été figé et haché avant son premier run,
+puis réexécuté inchangé ; SHA-256 :
+`501CB05C0B03DC9BFDBB954B6CB6FF8BCFAC108F2DBA6488475531ED981D8CF1`.
+Les commandes, sources, empreintes et logs sont conservés hors du dépôt.
+
+La comparaison avec le début du lot compte deux ajouts, six modifications,
+420 fichiers inchangés et aucune suppression. Les fondations, les anciens
+producteurs, les huit fichiers ajoutés dans les lots 46-49, le maître, les
+contrats, la machine, la toolchain, le manifeste, le registre et les figures
+sont identiques octet pour octet. La cible de la section 1 ne change pas.
+Les 104 liens locaux du plan sont valides ; les cinq références extérieures
+ne sont pas revérifiées. Le diff et les nouveaux fichiers sont propres.
+
+La synthèse de vérification est ajoutée au plan après les gates, sans changer
+les sources Lean ou les contrôleurs ; le contrôle documentaire est ensuite
+réexécuté. Aucun commit, push, changement de branche ou audit extérieur.
+La composition instrumentale est construite ; la localisation physique et
+les lois de propagation et de rencontre de R4.2, puis R4-R7, restent ouvertes.
+
+## 51. Reprises conservant les courses et leurs compositions produites
+
+### 51.1. Obligation fixée avant implémentation
+
+Le lot 50 reprend depuis les trois endpoints mais retourne des suffixes.
+Raccorder maintenant ces suffixes aux records déjà produits : la course
+première/seconde et la course première/troisième doivent conserver leurs
+têtes anciennes et recevoir les nouvelles productions, sur la même course
+source prolongée. L'ajout de records ne doit appeler aucun producteur.
+
+Construire l'ajout d'une course raccordée depuis son endpoint réel, prouver
+le retour complet de l'endpoint du suffixe, l'addition des subdivisions et
+la conservation de la tête ancienne. Prouver que composer après cet ajout
+donne exactement les mêmes productions que composer l'ancien préfixe puis
+son suffixe depuis l'endpoint troisième effectivement retourné. Cette loi
+porte sur le même ordre de productions ; elle ne prétend pas permuter les
+accords ni rendre leurs histoires associatives.
+
+Construire une reprise commune qui produit une seule fois le suffixe source,
+une seule fois sa réponse seconde, puis une seule fois sa composition troisième,
+et conserve les deux courses complètes. Fermer les clients sur les familles
+voisines existantes et le troisième préfixe réel du lot 50. Conserver les
+sources, leurs effets et toutes les lectures futures dans les fenêtres admises.
+
+Les parcours des records et leur copie éventuelle ne sont pas déclarés gratuits.
+Les budgets de subdivisions ne sont pas des bornes du coût total. Ce lot ferme
+une loi instrumentale de composition des reprises ; il ne remplace pas les
+localisations physiques, la propagation, la rencontre ou la reconstruction
+R4-R7. La cible, les fondations, les producteurs anciens, les contrats, le
+maître, la machine, le registre et les figures restent inchangés. Aucun commit,
+push, changement de branche ou audit extérieur n'est autorisé.
+
+### 51.2. Construction positive et loi du raccord
+
+[ResumedAgreementCourses.lean](../../RelationalPerimeter/Relativity/Production/ResumedAgreementCourses.lean)
+importe le lot 50. `append` élimine structurellement les records de la course
+reçue. Le cas vide retourne le suffixe entier ; chaque pas conserve le head
+source et la production seconde déjà enregistrés, puis ajoute seulement les
+records suivants. Son calcul parcourt aussi les records source et les listes
+de demandes. Il ne rejoue aucun producteur, mais ces parcours ne sont pas
+une réduction de mémoire ni une preuve de coût linéaire.
+
+`endpointView` associe la fenêtre effectivement produite à son certificat
+entier. La loi de retour compare ce paquet complet à celui du suffixe, pas
+uniquement sa lecture numérique. Les subdivisions s'additionnent ; une tête
+déjà constituée reste exactement la même production. Le carré de composition
+prouve une égalité des courses complètes, sur le même indice source prolongé,
+entre la composition de tous les records et l'ajout des deux compositions
+successives. Il ne change pas l'ordre des accords ou des événements.
+
+`resumeComposedRetaining` reçoit les deux courses stockées. Il lit l'endpoint
+source, produit une fois son suffixe, raccorde une fois le suffixe seconde
+depuis son endpoint réel, puis compose une fois le suffixe troisième depuis
+son endpoint réel. Les deux ajouts reçoivent ces mêmes productions partagées.
+Les deux courses complètes retournées ont littéralement le même indice de
+course source prolongée, sans transport ou cast entre elles.
+
+L'élimination par un récursif logique initial n'était pas compilable ; elle
+n'a pas été livrée. L'écriture finale utilise des équations à indices explicites
+et une récursion structurelle acceptée par le générateur de code. Le carré
+conserve son énoncé exact ; ses indices de queue sont explicités par `change`.
+Les diagnostics de développement restent hors du dépôt. Aucun construct
+interdit ni changement de limite du module de production n'est ajouté.
+
+### 51.3. Clients fermés et limite de portée
+
+[ResumedAgreementCourseChecks.lean](../../Tests/Relativity/ResumedAgreementCourseChecks.lean)
+importe seulement la racine publique. Les clients reprennent les subdivisions
+voisines effectivement réalisées et le troisième préfixe réel, sur toute
+liste finie de demandes anciennes et nouvelles. Ils ferment le carré de
+composition sur ces données, les retours complets des deux suffixes, l'addition
+des subdivisions anciennes et nouvelles, le prolongement depuis les préfixes
+reçus à l'origine, la conservation exacte des deux têtes, les fenêtres futures
+et les distinctions et lectures des sources.
+
+L'unique évaluation porte sur deux courses vides et retourne zéro ; elle
+n'est pas un run non vide ni une mesure de temps ou de mémoire. Ce lot établit
+le raccord des records des reprises instrumentales. Il n'établit ni une
+associativité des histoires physiques, ni une permission d'oubli, ni les lois
+de localisation, propagation et rencontre ou la reconstruction R4-R7.
+
+### 51.4. Vérifications finales et conservation
+
+Le module compile avec 62 jobs, les clients avec 264 et la racine avec 263.
+Les gates complètes Bash et PowerShell 7.6.5 natif Windows passent sur les
+mêmes 334 fichiers Lean et 336 jobs, sans avertissement Lean. Le balayage
+couvre 27 943 constantes de 333 modules : 364 exceptions générées, aucune
+dépendance axiomatique écrite à la main. Les 262 modules de production sont
+accessibles et contraints, sans orphelin. Les contrôleurs existants et les
+23 fixtures rejetées pour leurs diagnostics et sites attendus passent.
+Le module est H26 et la racine H27 ; les frontières et la règle des imports
+strictement décroissants restent inchangées.
+
+Le contrôle du C généré porte sur deux corps propriétaires nommés. L'ajout
+conserve les champs effectifs des productions anciennes et ne rappelle
+aucun producteur. La reprise produit un seul suffixe source, une seule
+réponse seconde et une seule composition troisième, puis les transmet aux
+deux ajouts. Les arguments, l'ordre des appels et les deux branches
+d'allocation sont contrôlés. Le contrôle inchangé du lot 50 passe aussi.
+Ces contrôles ne bornent ni les callbacks internes, ni le tas, ni le coût
+total ; les parcours et copies de records ne sont pas déclarés gratuits.
+Le script a été figé avant son premier run et réexécuté inchangé ; SHA-256 :
+`413EFC11AA541C5BCF0C133E5CBEF8A8F537ACF0DA08A46CDB1FB0767443C456`.
+Les commandes, empreintes et logs, y compris les diagnostics de développement
+échoués, sont conservés hors du dépôt.
+
+La comparaison avec le début du lot compte deux ajouts, six modifications,
+422 fichiers inchangés et aucune suppression. Les fondations, les anciens
+producteurs, les dix fichiers ajoutés aux lots 46-50, le maître, les contrats,
+la machine, la toolchain, le manifeste, le registre et les figures restent
+identiques octet pour octet. La cible de la section 1 ne change pas. Les
+106 liens locaux du plan sont valides ; les cinq références extérieures ne
+sont pas revérifiées. Le diff et les nouveaux fichiers sont propres.
+
+Cette synthèse est ajoutée après les gates sans modifier les sources Lean
+ou les contrôleurs ; le contrôle documentaire est ensuite réexécuté.
+Aucun commit, push, changement de branche ou audit extérieur. La localisation
+physique, la propagation, la rencontre et la reconstruction R4-R7 restent
+ouvertes ; les accords numériques de ces courses ne s'y substituent pas.
+
+## 52. Feuilles de recouvrement partagées depuis les endpoints reçus
+
+### 52.1. Obligation fixée avant implémentation
+
+Raccorder les reprises des lots 49-51 aux choix de recouvrement du lot 45.
+Une tête reçoit trois certificats sur la même fenêtre et un recouvrement
+instrumental justifié. Elle choisit une seule feuille depuis le préfixe
+réel de la première famille, puis certifie cette feuille sur la seconde
+depuis son endpoint reçu, et sur la troisième depuis son endpoint reçu
+en consommant le certificat seconde effectivement produit. Ne pas rappeler
+le sélecteur sur les deux autres familles pour choisir une autre feuille.
+
+Construire une course sur toute liste finie de demandes de recouvrement.
+Chaque demande reçoit seulement le paquet courant : elle fournit un arbre
+de recouvrement autorisé, pas une feuille ni une queue exécutée. La tête
+doit être produite avant sa queue, lui transmettre ses trois certificats
+entiers, et rester indépendante de la longueur ou des données de cette queue.
+Conserver les choix et les productions de chaque tête. Les reprises partent
+du paquet effectivement retourné, sans rejouer l'ancienne course.
+
+Fermer les raffinements de fenêtres, les prolongements des trois préfixes
+reçus, les retours des reprises et les lectures futures. Raccorder aussi
+ces demandes aux endpoints effectivement retournés par les courses du lot 51.
+Construire les clients sur les familles voisines déjà réalisées et le
+troisième préfixe réel, en conservant les sources et leurs enregistrements.
+
+Ce raccord respecte des recouvrements instrumentaux ; il n'autorise pas un
+regroupement physique ni un oubli. Les demandes, leurs arbres et les accords
+numériques sont des entrées déclarées. Les générateurs de recouvrement ne
+sont pas présentés comme une découverte de lois physiques. La cible de la
+section 1, R4-R7, les fondations, les anciens producteurs, les contrats, le
+maître, la machine, le registre et les figures restent inchangés. Aucun
+commit, push, changement de branche ou audit extérieur n'est autorisé.
+
+### 52.2. Sélection partagée et prolongement effectif
+
+[SharedProductiveCovers.lean](../../RelationalPerimeter/Relativity/Production/SharedProductiveCovers.lean)
+importe le lot 51. Le paquet courant garde la fenêtre et les trois certificats
+complets. `matchFromReceived` consomme la marge du certificat source, l'accord
+positif fourni et la présentation issue du préfixe cible reçu. Le résultat
+garde les subdivisions exécutées et la réalisation entière ; ses deux lois
+relient sa profondeur et son run au préfixe effectivement reçu.
+
+`selectSharedCover` appelle une fois le sélecteur de la première famille.
+Sa feuille et son certificat sont transmis à la réponse seconde ; le certificat
+seconde effectivement produit est transmis à la réponse troisième. Le budget
+de cette dernière lit donc les marges de cette production intermédiaire,
+pas celles d'un certificat recalculé ou du préfixe initial. Les trois résultats
+portent la même fenêtre choisie, tout en conservant leurs histoires sources.
+
+`runCovers` est une récursion structurelle sur une liste finie arbitraire.
+La demande courante reçoit seulement le paquet courant. Une tête complète
+est enregistrée avant la queue, dont le départ est littéralement son endpoint.
+Le théorème d'indépendance de la tête compare toutes les queues possibles sur
+ce même paquet et cette même demande. Le raccord et le raffinement composent
+les prolongements effectifs, sans remplacer leurs runs par des lectures.
+`resume` exécute seulement les nouvelles demandes depuis les trois certificats
+retournés. Il retourne un suffixe ; il ne prétend pas conserver les anciens
+records dans une seule course concaténée. Les parcours des endpoints restent
+des calculs, pas des opérations gratuites ni une permission d'oubli.
+
+`coverEndpoint` raccorde les deux courses de précision partageant la même
+course source. Il consomme les trois certificats déjà enregistrés dans leurs
+endpoints, sans exécuter une nouvelle course ou une nouvelle certification.
+Les lois de confinement portent sur toute reprise finie ultérieure des trois
+familles. Ce sont des lois instrumentales, pas des lois de propagation physique.
+
+### 52.3. Clients fermés et portée
+
+[SharedProductiveCoverChecks.lean](../../Tests/Relativity/SharedProductiveCoverChecks.lean)
+importe seulement la racine publique. Les clients utilisent les deux
+subdivisions voisines réellement constituées et un troisième préfixe reçu de
+longueur arbitraire. Deux demandes fermées conduisent respectivement à une
+feuille gauche et une feuille droite. Leur choix est prouvé depuis les bornes
+des brackets produits ; il n'est pas posé dans la demande.
+
+Les clients ferment le prolongement des trois runs, le confinement de leurs
+lectures futures, l'indépendance de la tête, le retour du paquet vide, les
+reprises successives et le raccord depuis les courses de précision retenues
+du lot 51. Les occurrences sources restent distinctes et leurs enregistrements
+restent lisibles après transport. L'unique smoke évalué est une course vide,
+qui retourne zéro ; ce n'est ni une exécution non vide mesurée, ni une expérience
+confirmatoire de coût.
+
+Les arbres, les contrôles des demandes et les accords numériques sont donnés
+explicitement. Une feuille choisie sur la première famille n'est pas choisie
+à nouveau sur les autres. Ni cet accord ni le choix de fenêtre n'identifie les
+sources, n'autorise leur regroupement physique ou leur effacement, ni ne ferme
+la localisation, la propagation, la rencontre et la reconstruction R4-R7.
+
+### 52.4. Vérifications finales et conservation
+
+Le module compile avec 63 jobs et ses clients avec 265. Les gates complètes
+Bash et PowerShell 7.6.5 natif Windows passent sur les mêmes 336 fichiers
+Lean et 338 jobs, sans avertissement Lean. Ces builds sont incrémentaux, pas
+des builds depuis `lake clean`. Le balayage couvre 28 106 constantes de 335
+modules : 364 exceptions générées, aucune dépendance axiomatique écrite à la
+main. Les 263 modules de production sont accessibles et contraints, sans
+orphelin. Les 23 fixtures échouent avec leurs diagnostics et sites attendus ;
+tous les contrôleurs existants passent. Le module est H27 et la racine H28,
+avec les mêmes frontières et les imports strictement décroissants.
+
+Le contrôle du C compilé porte sur cinq corps propriétaires nommés : la
+certification depuis le préfixe reçu, la sélection partagée, la course,
+sa reprise et le raccord aux endpoints de précision. Il contrôle les appels,
+leurs arguments, leur ordre et le stockage des productions effectives.
+Le sélecteur source est appelé une fois, les deux certifications successives
+une fois chacune ; la troisième reçoit le résultat réel de la seconde.
+La queue reçoit le paquet de tête effectivement retourné. Le raccord lit
+les records stockés sans rappeler les producteurs ou les certificateurs.
+Les callbacks internes, le tas et le coût total ne sont pas couverts par
+ces contrôles locaux. Le contrôleur inchangé du lot 51 passe également.
+
+La première version du contrôleur a rejeté à tort les deux stockages du
+paquet reçu, l'un dans le cas vide et l'autre dans le cas non vide. Son script
+et son log restent conservés. La version 2 a été créée et figée avant son
+premier run ; elle exige explicitement ces deux records, leurs tags, leurs
+champs et leurs retours. Ses deux runs passent sans modification du script ;
+SHA-256 : `F71B07D7729702504077DC2D242A3A8B0EFF3B8DCAF6292F90009CB8B35673CF`.
+Les diagnostics de compilation échoués restent aussi conservés. Les deux
+cas concrets de feuilles sont finalement fermés par les lois de brackets,
+sans augmenter les limites de calcul des preuves ou de la production.
+
+Les gates n'ont modifié aucun des 432 fichiers contrôlés. La comparaison
+avec le début du lot compte deux ajouts, six modifications, 424 fichiers
+inchangés et aucune suppression. Les fondations, les anciens producteurs,
+les douze fichiers ajoutés aux lots 46-51, le maître, la machine, les contrats,
+la toolchain, le manifeste, le registre et les figures restent identiques
+octet pour octet. La cible de la section 1 ne change pas. Les 108 liens locaux
+du plan sont valides ; les cinq références extérieures ne sont pas revérifiées.
+Le diff et les nouveaux fichiers sont propres. L'avertissement Git de
+conversion LF/CRLF du TSV n'est pas un avertissement Lean.
+
+Cette synthèse est ajoutée après les gates, sans modifier les sources Lean
+ou les contrôleurs ; le contrôle documentaire est ensuite réexécuté. Les
+scripts figés, commandes, empreintes et logs sont conservés hors du dépôt.
+Aucun commit, push, changement de branche ou audit extérieur. Le raccord
+instrumental est fermé ; les obligations physiques R4-R7 restent ouvertes.
+
+## 53. Courses de recouvrement conservées lors des reprises
+
+### 53.1. Obligation et périmètre fixés avant l'implémentation
+
+Le lot 52 retourne le suffixe des nouvelles demandes. Le raccord suivant
+doit conserver la course reçue entière et lui adjoindre ce suffixe, sans
+resélectionner ses feuilles ou refaire ses certifications. Le suffixe doit
+commencer littéralement aux trois certificats de l'endpoint enregistré,
+pas à des lectures égales ou à des réalisations reconstruites.
+
+Construire un append structurel des records, puis une reprise qui produit
+uniquement les nouvelles demandes avant cet append. Prouver l'égalité des
+courses complètes entre cette reprise et une course continue sur les mêmes
+demandes concaténées, y compris lorsque chaque demande lit le paquet courant.
+Prouver aussi le retour de l'endpoint complet, le maintien de l'ancienne tête,
+l'ordre des feuilles et des budgets enregistrés, et la conservation des trois
+prolongements et des lectures futures. La preuve de l'égalité des courses ne
+doit pas se réduire à une égalité de nombres ou de fenêtres.
+
+Réutiliser les fixtures du lot 52 dans les tests, sans nouvelle instance maître
+ni import de tests dans la production. Vérifier le C des corps locaux ajoutés :
+l'append ne rappelle aucun producteur ; la reprise appelle une fois le runner
+du suffixe depuis le paquet enregistré. Ce contrôle local ne constitue pas
+une borne de coût, de tas, de callback ou de routage physique. Copier ou
+parcourir les records reste du travail.
+
+Les accords positifs et les arbres autorisés restent des entrées déclarées.
+Le lot n'établit ni localisation physique, ni regroupement physique, ni oubli
+des histoires sources. Il ne ferme pas R4-R7. La cible de la section 1, les
+fondations, les modules existants de production, les contrats, le maître,
+la machine, le registre et les figures restent inchangés. Aucun commit,
+push, changement de branche ou audit extérieur n'est autorisé.
+
+### 53.2. Raccord des productions complètes
+
+[RetainedProductiveCovers.lean](../../RelationalPerimeter/Relativity/Production/RetainedProductiveCovers.lean)
+importe uniquement le module du lot 52. `ProductiveCoverCourse.append`
+élimine structurellement la course reçue : le cas vide retourne le suffixe,
+le cas non vide garde sa tête complète et raccorde sa queue au même suffixe.
+L'indice impose le paquet effectivement retourné, avec ses trois certificats
+et leurs histoires, comme départ du suffixe. Aucun accord numérique n'est
+nécessaire pour cet append de records déjà construits.
+
+Le théorème `productive_cover_run_append_exact` compare les deux courses
+complètes, pas leur seule fenêtre ou leur endpoint. L'induction consomme
+les mêmes demandes et transmet littéralement le même paquet de tête au
+cas suivant. Les demandes peuvent donc lire leurs certificats reçus : la
+preuve ne les suppose pas constantes ou déterminées par la longueur.
+
+`resumeRetaining` lit l'endpoint enregistré, produit une course sur les
+seules nouvelles demandes, puis raccorde les records. Les lois ferment
+l'égalité avec la course continue, le retour de l'endpoint complet, le maintien
+de l'ancienne tête et l'ordre des feuilles et des budgets seconde/troisième.
+Les reprises répétées ont le même endpoint que les demandes concaténées.
+Le réassociement porte seulement sur les listes de demandes ; il ne permute
+ni les productions ni leurs histoires. Les prolongements des trois préfixes
+et le confinement de toutes leurs lectures ultérieures sont conservés.
+
+### 53.3. Clients, réemploi et frontière scientifique
+
+[RetainedProductiveCoverChecks.lean](../../Tests/Relativity/RetainedProductiveCoverChecks.lean)
+importe la racine publique et le client du lot 52 pour réutiliser ses fixtures
+fermées, plutôt que reconstruire une autre entrée de production. Aucun module
+de production n'importe ces tests. Les clients ferment les lois de courses
+entières pour toutes les listes finies de demandes sur ces préfixes, les
+deux feuilles gauche/droite déjà prouvées, la conservation de leur ancienne
+tête, les reprises répétées et le raccord aux endpoints de précision du lot 51.
+Ils conservent les trois paires d'occurrences sources distinctes et la lecture
+de l'ancien enregistrement de la troisième source après transport.
+Le smoke évalué concerne seulement la reprise vide, pas un coût mesuré.
+
+Un premier build client a signalé un dépassement de calcul pendant
+l'inférence d'une application et une dépendance interdite venant du lemme
+standard de réassociation des listes. La correction donne explicitement
+les arguments du confinement et construit la réassociation par induction
+et congruence. Elle n'augmente aucune limite de calcul et ne modifie ni les
+énoncés ni les anciens modules. Le log initial reste conservé hors du dépôt.
+
+Ces raccords instrumentaux gardent les contraintes, les productions et les
+sources reçues dans leur ordre. Ils ne transforment pas l'accord numérique
+en identité des histoires, en autorisation d'oubli ou en localisation physique.
+La couverture physique, les localisations, la propagation, les rencontres
+et la reconstruction relativiste R4-R7 restent à construire. Le registre
+scientifique et les verdicts d'audit antérieurs ne sont pas actualisés par
+ces tests locaux.
+
+### 53.4. Vérifications finales et conservation
+
+Le premier build du module passe avec 64 jobs. Le build client corrigé passe
+avec 267 jobs. Les deux gates complètes Bash et PowerShell natif Windows
+passent sur les mêmes 338 fichiers Lean et 340 jobs, sans avertissement Lean.
+Ce sont des builds incrémentaux, pas des builds depuis `lake clean`.
+Le balayage exhaustif contrôle 28 151 constantes de 337 modules : 364
+exceptions générées, aucune dépendance axiomatique écrite à la main.
+Les 264 modules de production sont accessibles, contraints et sans orphelin.
+Le nouveau module est H28 et la racine H29 ; les imports restent strictement
+décroissants. Les 23 fixtures échouent avec leurs diagnostics et sites attendus.
+Tous les contrôleurs existants, y compris ceux du maître et de la machine,
+passent. Un client supplémentaire hors du dépôt importe seulement la racine
+publique et ferme les lois de course entière et de maintien de la tête,
+sans aucun axiome.
+
+Le contrôle figé du C porte sur quatre corps propriétaires : append,
+reprise conservant la course, lecture des choix et lecture des budgets.
+L'append ne rappelle ni sélection ni certification. Il garde l'ancienne
+tête, dans le chemin de réemploi exclusif comme dans le chemin d'allocation.
+La reprise appelle une fois la lecture de l'endpoint, une fois le runner des
+nouvelles demandes depuis ce résultat et une fois l'append de records,
+dans cet ordre. Les lecteurs consomment les feuilles et budgets enregistrés,
+sans refaire leurs productions. Le contrôle ne couvre pas les callbacks
+transitifs, le tas, le coût total ou une incarnation physique. Son script
+version 1 est figé avant son premier run ; SHA-256 :
+`8492774BFB9DB4A07124A702E3CBEE67906F08945A6F5FE0E9C693A7C5C9ACBD`.
+Le contrôle inchangé du lot 52 passe également sur son C identique.
+
+Les gates ne changent aucun des 434 fichiers contrôlés. Par rapport au début
+du lot, il y a deux ajouts, six raccords modifiés, 426 fichiers inchangés et
+aucune suppression. Les fondations, tous les anciens producteurs, les lots
+46-52 (leurs modules et clients), le maître, la machine, les contrats, la toolchain, le manifeste, le
+registre et les figures sont conservés octet pour octet. Le préfixe du plan
+allant de la section 1 à la fin de la section 52 est lui aussi inchangé.
+Les 110 liens locaux du plan sont valides ; les cinq références extérieures
+ne sont pas revérifiées. Le diff et les nouveaux fichiers sont propres ;
+l'avertissement Git de conversion LF/CRLF du TSV n'est pas un avertissement Lean.
+
+Cette synthèse est ajoutée après les gates, sans changer les sources Lean
+ni les contrôleurs. Le contrôle documentaire est alors relancé. Les scripts
+figés, leurs empreintes, commandes, entrées et logs restent hors du dépôt.
+Aucun commit, push, changement de branche ni audit extérieur. Le raccord
+des courses instrumentales est fermé, pas les obligations physiques R4-R7.
+
+## 54. Entrelacements de précision et de recouvrement sur les mêmes préfixes
+
+### 54.1. Obligation et périmètre fixés avant l'implémentation
+
+Construire une seule course de demandes finies mêlant précision positive et
+recouvrement instrumental. Chaque demande reçoit le paquet courant entier,
+pas une trajectoire future. Une précision produit d'abord son premier préfixe,
+puis la seconde certification consomme ce résultat, puis la troisième consomme
+la seconde. Une demande de recouvrement réutilise le producteur du lot 52.
+Dans les deux cas, la queue commence littéralement au paquet de tête produit.
+
+Prouver le prolongement des trois histoires et le raffinement des fenêtres.
+Toute précision effectivement demandée doit encore borner la fenêtre finale,
+même après une précision plus grossière ou une sélection de recouvrement.
+Raccorder les records déjà produits et exécuter seulement le nouveau suffixe ;
+prouver l'égalité des courses complètes avec l'exécution continue. Convertir
+une ancienne course de recouvrement en course mixte sans refaire sa sélection
+ou ses certifications, et fermer la spécialisation du runner sur ces demandes.
+
+Les clients doivent réutiliser les trois sources du lot 52 et les endpoints
+conservés du lot 53, sans autre maître. Contrôler les appels locaux du C :
+une production de précision, deux certifications dans leur ordre, une seule
+production de tête par demande et aucune production lors de la conversion
+ou de l'append. Ce contrôle ne borne ni les callbacks ni le tas ou le coût
+total. Les accords et arbres restent des entrées déclarées. Les histoires
+riches restent distinctes ; aucun oubli ou regroupement physique n'est autorisé.
+
+La cible de la section 1, les fondations, les anciens producteurs, le maître,
+la machine, les contrats, le manifeste, le registre et les figures restent
+inchangés. Ce raccord de R4.1-R4.2 ne ferme ni la couverture physique ni R4-R7.
+Aucun commit, push, changement de branche ou audit extérieur.
+
+### 54.2. Un seul runner et des productions complètes conservées
+
+[InterleavedProductiveWindows.lean](../../RelationalPerimeter/Relativity/Production/InterleavedProductiveWindows.lean)
+réutilise les producteurs des lots précédents. La tête de précision stocke
+sa première continuation et les deux certifications successives ; chacune
+prolonge son préfixe reçu. Le type de la troisième certification est indexé
+par la seconde réellement produite. La tête de recouvrement réutilise la
+sélection partagée du lot 52, sans deuxième sélection.
+
+La tête mixte conserve cette production complète en `Type`, ainsi que son
+endpoint et ses lectures enregistrées, avec des égalités exactes. L'opération
+est un indice, pas une instruction à recalculer lors de la conversion des
+records. La course reçoit seulement le paquet courant, produit la tête, puis
+exécute sa queue sur l'endpoint conservé. L'indépendance de la tête envers
+l'horizon futur est prouvée pour toutes les demandes et toutes les queues.
+
+La course entière prolonge les trois histoires et raffine sa fenêtre reçue.
+`allRequestedBounds` lit les précisions des têtes enregistrées et prouve que
+chacune borne encore la fenêtre finale. La preuve consomme le diamètre de
+la production correspondante et le raffinement de la queue, pas une fenêtre
+finale choisie indépendamment. Les lectures ultérieures des trois préfixes
+restent dans la fenêtre initiale. Aucune précision future n'est requise pour
+construire une tête présente.
+
+L'append garde les records déjà produits. La reprise exécute le seul suffixe
+depuis l'endpoint enregistré ; le résultat complet égale la course continue
+sur les demandes concaténées. La conversion des anciennes courses garde
+leurs productions et leurs feuilles enregistrées. Sur des demandes uniquement
+de recouvrement, les deux runners donnent la même course complète après cette
+conversion, et non seulement la même valeur de lecture.
+
+### 54.3. Clients fermés et périmètre des contrôles
+
+[InterleavedProductiveWindowChecks.lean](../../Tests/Relativity/InterleavedProductiveWindowChecks.lean)
+réutilise les trois sources et les endpoints de précision conservés du lot 52.
+Il ferme les entrelacements précision-recouvrement-précision, les feuilles
+gauche et droite lors de la conversion, les reprises de courses entières et
+le maintien des trois distinctions sources et de l'ancien signal lisible.
+Les énoncés généraux portent sur toutes les listes finies de demandes qui
+peuvent consulter leur paquet reçu. Le smoke évalué est vide ; il ne mesure
+ni coût ni comportement physique.
+
+La première représentation de la tête conservait son arbre comme donnée :
+le C de conversion rappelait alors l'ancienne demande pour reconstruire cet
+arbre, bien qu'il ne refît pas la sélection. Cette représentation a été corrigée
+avant validation : la production complète reste stockée et ses readouts sont
+conservés avec leurs lois de retour, sans requête rejouée par la conversion.
+Les premiers diagnostics restent conservés hors du dépôt. Un lemme standard
+d'appartenance à une liste concaténée introduisait une dépendance interdite ;
+il a été remplacé par une induction constructive, sans augmenter les limites
+de calcul ni affaiblir l'énoncé.
+
+Les accords et les arbres autorisés sont toujours reçus. Le raccord ne
+construit pas des positions physiques à partir de valeurs, n'identifie pas
+les histoires et ne fournit aucune autorisation d'oubli. R4-R7 restent ouverts.
+Le registre et les verdicts indépendants ne sont pas actualisés par ce lot.
+
+### 54.4. Vérifications finales et conservation
+
+Le module initial compile avec 65 jobs ; le client final avec 268 jobs.
+Les deux gates complètes Bash et PowerShell natif Windows passent sur les
+mêmes 340 fichiers Lean et 342 jobs, sans avertissement Lean. Il s'agit de
+builds incrémentaux, pas de builds depuis `lake clean`. Le balayage exhaustif
+contrôle 28 318 constantes de 339 modules : 364 exceptions générées et aucune
+dépendance axiomatique écrite à la main. Les 265 modules de production sont
+accessibles, contraints et sans orphelin ; le nouveau module est H29 et la
+racine H30, avec imports strictement décroissants. Les 23 fixtures échouent
+avec leurs diagnostics et sites attendus. Tous les contrôleurs existants du
+maître et de la machine passent. Le client extérieur important uniquement
+la racine publique ferme les bornes de précision et l'égalité de la course
+complète spécialisée aux recouvrements, sans aucun axiome.
+
+Le contrôleur C version 1 est figé avant son premier run ; ses deux runs
+passent sans changement. SHA-256 :
+`416945C25DC3329B746E29C3EA5E454D09037FB4985FA13DB9BBC5FBDC6AD59F`.
+Il contrôle huit corps propriétaires et le helper de conversion des métadonnées
+de demandes. La précision appelle une fois la continuation source puis les
+deux certifications dans l'ordre de leurs résultats réels. Le runner appelle
+une fois la demande, une fois sa production et transmet l'endpoint conservé
+à la queue. L'append conserve la tête complète dans ses deux chemins de
+stockage ; la reprise ne produit que le suffixe. La conversion ne rappelle
+ni l'ancienne demande ni un producteur, et transmet l'endpoint effectivement
+conservé par sa tête. Le contrôle ne couvre pas les callbacks transitifs, le
+tas, le coût total ou l'incarnation physique. Les contrôleurs figés des lots
+52 et 53 passent eux aussi, avec leurs artefacts C inchangés.
+
+Les gates ne changent aucun des 436 fichiers contrôlés. Par rapport au début
+du lot, deux fichiers sont ajoutés, six raccords sont modifiés, 428 fichiers
+sont inchangés et aucun n'est supprimé. Les fondations, tous les anciens
+producteurs et clients, le maître, la machine, les contrats, la toolchain,
+le manifeste, le registre et les figures restent identiques octet pour octet.
+Les sections 1-53 du plan sont conservées. Les 112 liens locaux du plan sont
+valides ; les cinq références extérieures ne sont pas revérifiées. Le diff
+et les nouveaux fichiers sont propres. L'avertissement Git LF/CRLF du TSV
+n'est pas un avertissement Lean.
+
+Cette synthèse est ajoutée après les gates, sans modifier les sources Lean
+ou les contrôleurs ; les contrôles documentaires sont ensuite relancés.
+Les scripts figés, leurs empreintes, commandes, entrées, diagnostics initiaux
+et logs restent hors du dépôt. Aucun commit, push, changement de branche
+ou audit extérieur. Le raccord instrumental est fermé ; R4-R7 restent ouverts.

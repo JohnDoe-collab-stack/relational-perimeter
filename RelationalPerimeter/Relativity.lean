@@ -30,6 +30,11 @@ import RelationalPerimeter.Relativity.Production.ProductiveWindowAgreements
 import RelationalPerimeter.Relativity.Production.ProductiveWindowCompleteness
 import RelationalPerimeter.Relativity.Production.ProductivePrecisionCourses
 import RelationalPerimeter.Relativity.Production.AgreedPrecisionCourses
+import RelationalPerimeter.Relativity.Production.ComposedAgreementCourses
+import RelationalPerimeter.Relativity.Production.ResumedAgreementCourses
+import RelationalPerimeter.Relativity.Production.SharedProductiveCovers
+import RelationalPerimeter.Relativity.Production.RetainedProductiveCovers
+import RelationalPerimeter.Relativity.Production.InterleavedProductiveWindows
 import RelationalPerimeter.Relativity.Production.ReadingCompatibility
 import RelationalPerimeter.Relativity.Production.ContinuedReadingCovers
 import RelationalPerimeter.Relativity.Production.RestrictedReadingCovers
@@ -169,9 +174,53 @@ Each second-family response extends its actually received prefix and certifies
 exactly the first head's window. Both returned endpoints can then be continued
 without replaying the old courses. This numerical raccord neither equates
 source histories nor licenses physical grouping or erasure.
+Numerical course composition now consumes each actually returned intermediate
+certificate. Its margins set the third-family precision request, and the
+returned third certificate feeds the next head. Resumption receives all three
+stored endpoints; rich runs and their budgets need not agree with direct
+certificate transfer. No physical localization or history identification follows.
+Already-produced matching courses can also retain their new suffixes as full
+courses. Composition commutes with this record append in the same production
+order. The common resumption shares one source suffix and the two responses;
+record copying and traversal are not asserted free.
+Finite cover requests now receive the three actual endpoint certificates.
+One first-family selection supplies a recorded leaf; successive second and
+third certifications keep that leaf and consume their received prefixes and
+the actual intermediate certificate. Each recorded head precedes its suffix.
+Resumption consumes the returned triple, including triples read directly from
+the stored precision courses. These are instrumental cover agreements, not
+physical localization, physical grouping or permission to forget sources.
+The same cover courses can now retain all recorded heads across resumption.
+Record append starts the suffix at the actual three-certificate endpoint;
+the retained result equals the whole continuous course on concatenated
+requests, including requests that inspect their received endpoint. Recorded
+choices and budgets keep their order, with no reselection of earlier heads.
+Endpoint traversal and record copying remain work, not a total cost bound.
+Precision and cover requests can now interleave on one returned triple.
+Every recorded precision still bounds the final common window after later
+requests. Shared precision production consumes the actual first, second and
+third prefixes in order. Cover-only courses convert by their stored records,
+and retained mixed resumption equals the whole continuous course. This does
+not supply the remaining physical coverage, localization or geometry.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Relativity.Production.ProductiveWindowCourse.allRequestedBounds
+#print axioms RelationalPerimeter.Relativity.Production.productive_retained_windows_are_whole_continuous_course
+#print axioms RelationalPerimeter.Relativity.Production.productive_cover_only_is_same_whole_course
+#print axioms RelationalPerimeter.Relativity.Production.productive_window_head_horizon_independent
+#print axioms RelationalPerimeter.Relativity.Production.productive_cover_run_append_exact
+#print axioms RelationalPerimeter.Relativity.Production.productive_retained_cover_keeps_whole_head
+#print axioms RelationalPerimeter.Relativity.Production.productive_retained_cover_all_later_readings
+#print axioms RelationalPerimeter.Relativity.Production.ProductiveCoverCourse.extendsReceived
+#print axioms RelationalPerimeter.Relativity.Production.productive_cover_course_head_horizon_independent
+#print axioms RelationalPerimeter.Relativity.Production.productive_shared_cover_third_consumes_actual_second
+#print axioms RelationalPerimeter.Relativity.Production.productive_cover_endpoint_keeps_three_actual_certificates
+#print axioms RelationalPerimeter.Relativity.Production.productive_composition_append_square
+#print axioms RelationalPerimeter.Relativity.Production.productive_resumed_third_endpoint_exact
+#print axioms RelationalPerimeter.Relativity.Production.productive_composition_uses_intermediate_certificate
+#print axioms RelationalPerimeter.Relativity.Production.productive_composed_course_head_horizon_independent
+#print axioms RelationalPerimeter.Relativity.Production.productive_composed_continued_run_exact
 #print axioms RelationalPerimeter.Relativity.Production.ProductiveAgreedPrecisionCourse.runExact
 #print axioms RelationalPerimeter.Relativity.Production.productive_agreed_course_head_horizon_independent
 #print axioms RelationalPerimeter.Relativity.Production.productive_agreed_continued_run_exact
