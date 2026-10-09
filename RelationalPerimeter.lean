@@ -2,6 +2,7 @@ import SegmentedResidualRole
 import AbstractSegmentedTurning
 import ExactTypeTransport
 import StrongPerimetralTurning
+import RelationalPerimeter.Constitution
 import RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 
 /-!

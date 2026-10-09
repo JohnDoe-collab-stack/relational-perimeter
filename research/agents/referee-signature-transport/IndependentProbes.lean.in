@@ -1,0 +1,406 @@
+import RelationalPerimeter.Constitution.ClosingTransport
+
+namespace SignatureTransportReferee
+open RelationalPerimeter.Constitution
+open StrongPerimetralTurning
+
+def flip : ExactTypeTransport Bool Bool where
+  forward := Bool.not
+  backward := Bool.not
+  forwardBackward := fun value => by cases value <;> rfl
+  backwardForward := fun value => by cases value <;> rfl
+
+-- Four different compatibility fibres; inversion cannot ignore index transport.
+def mixedCompatibility (implicitValue explicitValue : Bool) : Type :=
+  Bool.rec (motive := fun _ => Type)
+    (Bool.rec (motive := fun _ => Type) Unit Empty explicitValue)
+    (Bool.rec (motive := fun _ => Type) Empty Bool explicitValue)
+    implicitValue
+
+def mixedSignature : ConstitutiveSignature where
+  Explicit := Bool
+  Implicit := Bool
+  Compatible := mixedCompatibility
+  Difference := Bool
+  Provenance := fun value => Bool.rec (motive := fun _ => Type) Unit Bool value
+
+def reversedIndicesSignature : ConstitutiveSignature where
+  Explicit := Bool
+  Implicit := Bool
+  Compatible := fun implicitValue explicitValue => mixedCompatibility (!implicitValue) (!explicitValue)
+  Difference := Bool
+  Provenance := fun value => mixedSignature.Provenance (!value)
+
+def mixedMap : ConstitutiveSignatureTransport mixedSignature reversedIndicesSignature where
+  explicit := flip
+  implicit := flip
+  difference := flip
+  compatibility := fun implicitValue explicitValue => by
+    cases implicitValue <;> cases explicitValue <;> exact .reflexive _
+  provenance := fun value => by cases value <;> exact .reflexive _
+
+theorem mixedInverseReturnsUnit :
+    (mixedMap.reverse.compatibility true true).forward
+      ((mixedMap.compatibility false false).forward ()) = () := rfl
+
+theorem mixedInverseReturnsBool :
+    (mixedMap.reverse.compatibility false false).forward
+      ((mixedMap.compatibility true true).forward false) = false := rfl
+
+theorem mixedInverseReturnsProvenance :
+    (mixedMap.reverse.provenance false).forward
+      ((mixedMap.provenance true).forward true) = true := rfl
+
+theorem mixedCompositionChecksFibre :
+    ((mixedMap.compose mixedMap.reverse).compatibility true true).forward false = false := rfl
+
+def nodeTrue : mixedSignature.Node where
+  explicit := true
+  implicit := true
+  difference := true
+  provenance := false
+  internallyCompatible := true
+
+theorem mappedNodeReturns : mixedMap.reverse.mapNode (mixedMap.mapNode nodeTrue) = nodeTrue := rfl
+
+def allEmptySignature : ConstitutiveSignature where
+  Explicit := Bool
+  Implicit := Bool
+  Compatible := fun _ _ => Empty
+  Difference := Bool
+  Provenance := mixedSignature.Provenance
+
+-- This failure holds for ANY supplied carrier maps, not merely identity maps.
+theorem sameSortsCannotSupplyAllFibres :
+    ConstitutiveSignatureTransport mixedSignature allEmptySignature → False := by
+  intro map
+  have empty := (map.compatibility false false).forward ()
+  cases empty
+
+def markedBoundary : ConstitutiveBoundary where
+  Explicit := Bool
+  Implicit := Bool
+  Compatible := fun _ _ => Bool
+  source := false
+  target := true
+  junction := false
+  Difference := Bool
+  Provenance := fun _ => Bool
+  difference := true
+  provenance := false
+
+def closingFamilySwap : ConstitutiveSignatureTransport markedBoundary.signature markedBoundary.signature where
+  explicit := .reflexive _
+  implicit := .reflexive _
+  difference := .reflexive _
+  compatibility := fun _ _ => flip
+  provenance := fun _ => .reflexive _
+
+def provenanceFamilySwap : ConstitutiveSignatureTransport markedBoundary.signature markedBoundary.signature where
+  explicit := .reflexive _
+  implicit := .reflexive _
+  difference := .reflexive _
+  compatibility := fun _ _ => .reflexive _
+  provenance := fun _ => flip
+
+theorem closingSwapFailsChosenAgreement :
+    (closingFamilySwap.compatibilityAt (i := markedBoundary.source) (e := markedBoundary.target)
+      (j := markedBoundary.source) (f := markedBoundary.target) rfl rfl).forward markedBoundary.junction ≠
+      markedBoundary.junction := by
+  intro equality
+  exact Bool.noConfusion equality
+
+theorem provenanceSwapFailsChosenAgreement :
+    (provenanceFamilySwap.provenanceAt (d := markedBoundary.difference)
+      (c := markedBoundary.difference) rfl).forward markedBoundary.provenance ≠
+      markedBoundary.provenance := by
+  intro equality
+  exact Bool.noConfusion equality
+
+theorem fullClosingSwapCannotRestrict
+    (rich : BoundaryTransport markedBoundary markedBoundary)
+    (mapsExact : rich.toBoundaryCarrierTransport = closingFamilySwap.restrictCarriers rfl rfl rfl) :
+    False := by
+  have preservation := rich.junctionExact
+  change rich.toBoundaryCarrierTransport.junction.forward markedBoundary.junction =
+    markedBoundary.junction at preservation
+  rw [mapsExact] at preservation
+  exact closingSwapFailsChosenAgreement preservation
+
+theorem fullProvenanceSwapCannotRestrict
+    (rich : BoundaryTransport markedBoundary markedBoundary)
+    (mapsExact : rich.toBoundaryCarrierTransport = provenanceFamilySwap.restrictCarriers rfl rfl rfl) :
+    False := by
+  have preservation := rich.provenanceExact
+  change rich.toBoundaryCarrierTransport.provenance.forward markedBoundary.provenance =
+    markedBoundary.provenance at preservation
+  rw [mapsExact] at preservation
+  exact provenanceSwapFailsChosenAgreement preservation
+
+def repeatedSpine : PerimeterSpine mixedSignature.Compatible nodeTrue :=
+  .advance (nextNode := nodeTrue) false
+    (.advance (nextNode := nodeTrue) true (.boundary nodeTrue))
+
+def firstPosition : NonClosingPosition repeatedSpine := .here
+def secondPosition : NonClosingPosition repeatedSpine := .later .here
+
+theorem secondPositionReturns :
+    mixedMap.restorePosition repeatedSpine (mixedMap.mapPosition repeatedSpine secondPosition) =
+      secondPosition := rfl
+
+theorem firstLinkWitness :
+    ((mixedMap.mapSpine repeatedSpine).linkAt
+      (mixedMap.mapPosition repeatedSpine firstPosition)).compatibility = false := rfl
+
+theorem secondLinkWitness :
+    ((mixedMap.mapSpine repeatedSpine).linkAt
+      (mixedMap.mapPosition repeatedSpine secondPosition)).compatibility = true := rfl
+
+theorem firstPrecedesSecond :
+    NonClosingPrecedes repeatedSpine firstPosition secondPosition := .here_later .here
+
+theorem firstNextSecond :
+    NonClosingNext repeatedSpine firstPosition secondPosition := .here_next
+
+theorem precedencePreservedAndReflected :
+    NonClosingPrecedes (mixedMap.mapSpine repeatedSpine)
+      (mixedMap.mapPosition repeatedSpine firstPosition)
+      (mixedMap.mapPosition repeatedSpine secondPosition) ↔
+    NonClosingPrecedes repeatedSpine firstPosition secondPosition :=
+  mixedMap.precedes_iff repeatedSpine firstPosition secondPosition
+
+theorem nextPreservedAndReflected :
+    NonClosingNext (mixedMap.mapSpine repeatedSpine)
+      (mixedMap.mapPosition repeatedSpine firstPosition)
+      (mixedMap.mapPosition repeatedSpine secondPosition) ↔
+    NonClosingNext repeatedSpine firstPosition secondPosition :=
+  mixedMap.next_iff repeatedSpine firstPosition secondPosition
+
+-- Two unequal states read the same witnessed node; full Step carries an extra bit.
+def payloadFormation : PositiveFormation where
+  Explicit := mixedSignature.Explicit
+  Implicit := mixedSignature.Implicit
+  Compatible := mixedSignature.Compatible
+  Difference := mixedSignature.Difference
+  Provenance := mixedSignature.Provenance
+  State := Bool
+  node := fun _ => nodeTrue
+  Step := fun _ _ => Bool × Bool
+  compatibility := fun step => step.1
+
+def payloadMap : ConstitutiveSignatureTransport payloadFormation.signature reversedIndicesSignature :=
+  mixedMap
+
+def payloadHistory : PositiveHistory payloadFormation false false :=
+  .cons (middle := true) (false, true)
+    (.cons (middle := false) (true, false) .nil)
+
+def alternatePayload : PositiveHistory payloadFormation false false :=
+  .cons (middle := true) (false, false)
+    (.cons (middle := false) (true, false) .nil)
+
+def headPayload {source terminal : Bool} :
+    PositiveHistory payloadFormation source terminal → Option (Bool × Bool)
+  | .nil => none
+  | .cons step _ => some step
+
+theorem payloadHistoriesDistinct : payloadHistory ≠ alternatePayload := by
+  intro equality
+  have projected := congrArg headPayload equality
+  cases projected
+
+theorem payloadDeploymentForgetsExtraBit : payloadHistory.deploy = alternatePayload.deploy := rfl
+
+theorem payloadHistoryReturns :
+    PositiveHistory.restoreSignature payloadMap (payloadHistory.transportSignature payloadMap) =
+      payloadHistory := payloadHistory.transport_restore payloadMap
+
+theorem restoredMetadataExact :
+    headPayload (PositiveHistory.restoreSignature payloadMap
+      (payloadHistory.transportSignature payloadMap)) = some (false, true) := rfl
+
+theorem transportedHistoryDistinct :
+    payloadHistory.transportSignature payloadMap ≠ alternatePayload.transportSignature payloadMap := by
+  intro equality
+  have restored := congrArg (PositiveHistory.restoreSignature payloadMap) equality
+  exact payloadHistoriesDistinct restored
+
+theorem sameNodeDifferentStates : payloadFormation.node false = payloadFormation.node true := rfl
+
+theorem stateDifferenceRetained :
+    (payloadFormation.transport payloadMap).State = Bool := rfl
+
+theorem transportedDeploymentExact :
+    (payloadHistory.transportSignature payloadMap).deploy = payloadMap.mapSpine payloadHistory.deploy :=
+  payloadHistory.transport_deploy payloadMap
+
+def secondOccurrence : PositiveHistory.Occurrence payloadHistory := .later .here
+
+theorem secondOccurrenceReturns :
+    payloadHistory.restoreOccurrence payloadMap
+      (payloadHistory.transportOccurrence payloadMap secondOccurrence) = secondOccurrence := rfl
+
+theorem occurrencePositionSquare :
+    payloadHistory.transport_deploy payloadMap ▸
+      (payloadHistory.transportSignature payloadMap).toPosition
+        (payloadHistory.transportOccurrence payloadMap secondOccurrence) =
+      payloadMap.mapPosition payloadHistory.deploy (payloadHistory.toPosition secondOccurrence) :=
+  payloadHistory.transport_position payloadMap secondOccurrence
+
+theorem appendDeploymentSquare :
+    payloadMap.mapSpine (payloadHistory.deploy.append alternatePayload.deploy) =
+      (payloadMap.mapSpine payloadHistory.deploy).appendAlong
+        (payloadMap.mapSpine_final payloadHistory.deploy)
+        (payloadMap.mapSpine alternatePayload.deploy) :=
+  payloadMap.mapSpine_append payloadHistory.deploy alternatePayload.deploy
+
+theorem historyAppendSquare :
+    (payloadHistory.append alternatePayload).transportSignature payloadMap =
+      (payloadHistory.transportSignature payloadMap).append
+        (alternatePayload.transportSignature payloadMap) :=
+  payloadHistory.transport_append payloadMap alternatePayload
+
+def junctionMoveMap : ConstitutiveSignatureTransport payloadFormation.signature reversedIndicesSignature :=
+  { mixedMap with
+    compatibility := fun i e => by
+      cases i <;> cases e
+      · exact .reflexive _
+      · exact .reflexive _
+      · exact .reflexive _
+      · exact flip }
+
+theorem closingIndicesMoved :
+    (payloadHistory.transportSignature junctionMoveMap).boundaryShape.source = false ∧
+      (payloadHistory.transportSignature junctionMoveMap).boundaryShape.target = false := ⟨rfl, rfl⟩
+
+theorem closingWitnessMoved :
+    (payloadHistory.closingSignatureTransport junctionMoveMap).forward false = true := rfl
+
+theorem closingWitnessReturns :
+    (payloadHistory.closingSignatureTransport junctionMoveMap).backward
+      ((payloadHistory.closingSignatureTransport junctionMoveMap).forward false) = false :=
+  payloadHistory.transport_closing_return junctionMoveMap false
+
+theorem circularSelectedJunctionMoved :
+    (payloadHistory.transportedCircular junctionMoveMap secondOccurrence false).finalJunction = true := rfl
+
+theorem circularRichRestrictionExact :
+    (payloadHistory.circularBoundaryTransport junctionMoveMap secondOccurrence false).junction.forward false =
+      (payloadHistory.transportedCircular junctionMoveMap secondOccurrence false).finalJunction :=
+  payloadHistory.circular_junction_preserved junctionMoveMap secondOccurrence false
+
+-- A genuine one-way generated history with an empty reverse/closing fibre.
+def directedCompatibility (i e : Bool) : Type :=
+  Bool.rec (motive := fun _ => Type) Unit
+    (Bool.rec (motive := fun _ => Type) Empty Unit e) i
+
+def directedNode (state : Bool) : LocalNode Bool Bool directedCompatibility Unit (fun _ => Unit) :=
+  { explicit := state
+    implicit := state
+    difference := ()
+    provenance := ()
+    internallyCompatible := by cases state <;> exact () }
+
+def directedFormation : PositiveFormation where
+  Explicit := Bool
+  Implicit := Bool
+  Compatible := directedCompatibility
+  Difference := Unit
+  Provenance := fun _ => Unit
+  State := Bool
+  node := directedNode
+  Step := directedCompatibility
+  compatibility := fun step => step
+
+def directedTargetSignature : ConstitutiveSignature where
+  Explicit := Bool
+  Implicit := Bool
+  Compatible := fun i e => directedCompatibility (!i) (!e)
+  Difference := Unit
+  Provenance := fun _ => Unit
+
+def directedMap : ConstitutiveSignatureTransport directedFormation.signature directedTargetSignature where
+  explicit := flip
+  implicit := flip
+  difference := .reflexive _
+  compatibility := fun i e => by cases i <;> cases e <;> exact .reflexive _
+  provenance := fun _ => .reflexive _
+
+def directedHistory : PositiveHistory directedFormation false true :=
+  .cons (middle := true) () .nil
+
+theorem directedSourceNoClosing : ClosingWitness directedHistory.boundaryShape → False := by
+  intro witness
+  cases witness
+
+theorem directedTargetNoClosing :
+    ClosingWitness (directedHistory.transportSignature directedMap).boundaryShape → False := by
+  intro witness
+  exact directedSourceNoClosing ((directedHistory.closingSignatureTransport directedMap).backward witness)
+
+end SignatureTransportReferee
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms SignatureTransportReferee.flip
+#print axioms SignatureTransportReferee.mixedCompatibility
+#print axioms SignatureTransportReferee.mixedSignature
+#print axioms SignatureTransportReferee.reversedIndicesSignature
+#print axioms SignatureTransportReferee.mixedMap
+#print axioms SignatureTransportReferee.mixedInverseReturnsUnit
+#print axioms SignatureTransportReferee.mixedInverseReturnsBool
+#print axioms SignatureTransportReferee.mixedInverseReturnsProvenance
+#print axioms SignatureTransportReferee.mixedCompositionChecksFibre
+#print axioms SignatureTransportReferee.nodeTrue
+#print axioms SignatureTransportReferee.mappedNodeReturns
+#print axioms SignatureTransportReferee.allEmptySignature
+#print axioms SignatureTransportReferee.sameSortsCannotSupplyAllFibres
+#print axioms SignatureTransportReferee.markedBoundary
+#print axioms SignatureTransportReferee.closingFamilySwap
+#print axioms SignatureTransportReferee.provenanceFamilySwap
+#print axioms SignatureTransportReferee.closingSwapFailsChosenAgreement
+#print axioms SignatureTransportReferee.provenanceSwapFailsChosenAgreement
+#print axioms SignatureTransportReferee.fullClosingSwapCannotRestrict
+#print axioms SignatureTransportReferee.fullProvenanceSwapCannotRestrict
+#print axioms SignatureTransportReferee.repeatedSpine
+#print axioms SignatureTransportReferee.firstPosition
+#print axioms SignatureTransportReferee.secondPosition
+#print axioms SignatureTransportReferee.secondPositionReturns
+#print axioms SignatureTransportReferee.firstLinkWitness
+#print axioms SignatureTransportReferee.secondLinkWitness
+#print axioms SignatureTransportReferee.firstPrecedesSecond
+#print axioms SignatureTransportReferee.firstNextSecond
+#print axioms SignatureTransportReferee.precedencePreservedAndReflected
+#print axioms SignatureTransportReferee.nextPreservedAndReflected
+#print axioms SignatureTransportReferee.payloadFormation
+#print axioms SignatureTransportReferee.payloadMap
+#print axioms SignatureTransportReferee.payloadHistory
+#print axioms SignatureTransportReferee.alternatePayload
+#print axioms SignatureTransportReferee.headPayload
+#print axioms SignatureTransportReferee.payloadHistoriesDistinct
+#print axioms SignatureTransportReferee.payloadDeploymentForgetsExtraBit
+#print axioms SignatureTransportReferee.payloadHistoryReturns
+#print axioms SignatureTransportReferee.restoredMetadataExact
+#print axioms SignatureTransportReferee.transportedHistoryDistinct
+#print axioms SignatureTransportReferee.sameNodeDifferentStates
+#print axioms SignatureTransportReferee.stateDifferenceRetained
+#print axioms SignatureTransportReferee.transportedDeploymentExact
+#print axioms SignatureTransportReferee.secondOccurrence
+#print axioms SignatureTransportReferee.secondOccurrenceReturns
+#print axioms SignatureTransportReferee.occurrencePositionSquare
+#print axioms SignatureTransportReferee.appendDeploymentSquare
+#print axioms SignatureTransportReferee.historyAppendSquare
+#print axioms SignatureTransportReferee.junctionMoveMap
+#print axioms SignatureTransportReferee.closingIndicesMoved
+#print axioms SignatureTransportReferee.closingWitnessMoved
+#print axioms SignatureTransportReferee.closingWitnessReturns
+#print axioms SignatureTransportReferee.circularSelectedJunctionMoved
+#print axioms SignatureTransportReferee.circularRichRestrictionExact
+#print axioms SignatureTransportReferee.directedCompatibility
+#print axioms SignatureTransportReferee.directedNode
+#print axioms SignatureTransportReferee.directedFormation
+#print axioms SignatureTransportReferee.directedTargetSignature
+#print axioms SignatureTransportReferee.directedMap
+#print axioms SignatureTransportReferee.directedHistory
+#print axioms SignatureTransportReferee.directedSourceNoClosing
+#print axioms SignatureTransportReferee.directedTargetNoClosing
+/- AXIOM_AUDIT_END -/

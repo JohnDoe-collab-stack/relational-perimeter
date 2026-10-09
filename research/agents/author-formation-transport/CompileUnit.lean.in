@@ -1,0 +1,234 @@
+import RelationalPerimeter.Constitution.SignatureTransport
+import RelationalPerimeter.Constitution.PositiveGeneration
+namespace RelationalPerimeter.Constitution.ConstitutiveSignatureTransport
+open StrongPerimetralTurning
+def mapSpine {S T : ConstitutiveSignature} (change : ConstitutiveSignatureTransport S T)
+    {node : S.Node} : PerimeterSpine S.Compatible node → PerimeterSpine T.Compatible (change.mapNode node)
+  | .boundary node => .boundary (change.mapNode node)
+  | .advance witness tail => .advance (nextNode := change.mapNode _) ((change.compatibility _ _).forward witness) (mapSpine change tail)
+end RelationalPerimeter.Constitution.ConstitutiveSignatureTransport
+
+
+set_option linter.checkUnivs false
+
+/-!
+# Reconstruction of a positive formation along its primitive signature
+
+The state and full step data are retained. Nodes and step compatibility readouts
+are transported using the exact maps of every primitive fibre. This construction
+does not provide an inverse for an arbitrary map between pre-existing step types.
+-/
+
+namespace RelationalPerimeter.Constitution
+
+open StrongPerimetralTurning
+
+universe uE uI uK uD uP uS uStep vE vI vK vD vP
+
+namespace PositiveFormation
+
+def signature (F : PositiveFormation) : ConstitutiveSignature :=
+  { Explicit := F.Explicit
+    Implicit := F.Implicit
+    Compatible := F.Compatible
+    Difference := F.Difference
+    Provenance := F.Provenance }
+
+abbrev transport (F : PositiveFormation) {target : ConstitutiveSignature}
+    (change : ConstitutiveSignatureTransport F.signature target) : PositiveFormation :=
+  { Explicit := target.Explicit
+    Implicit := target.Implicit
+    Compatible := target.Compatible
+    Difference := target.Difference
+    Provenance := target.Provenance
+    State := F.State
+    node := fun state => change.mapNode (F.node state)
+    Step := F.Step
+    compatibility := fun {source target} step =>
+      (change.compatibility (F.node source).implicit (F.node target).explicit).forward
+        (F.compatibility step) }
+
+theorem transport_node (F : PositiveFormation) {target : ConstitutiveSignature}
+    (change : ConstitutiveSignatureTransport F.signature target) (state : F.State) :
+    (F.transport change).node state = change.mapNode (F.node state) := rfl
+
+theorem transport_step_readout (F : PositiveFormation) {target : ConstitutiveSignature}
+    (change : ConstitutiveSignatureTransport F.signature target)
+    {source terminal : F.State} (step : F.Step source terminal) :
+    (F.transport change).compatibility step =
+      (change.compatibility (F.node source).implicit (F.node terminal).explicit).forward
+        (F.compatibility step) := rfl
+
+end PositiveFormation
+
+namespace PositiveHistory
+
+variable {F : PositiveFormation} {target : ConstitutiveSignature}
+
+def transportSignature (change : ConstitutiveSignatureTransport F.signature target)
+    {source terminal : F.State} : PositiveHistory F source terminal →
+      PositiveHistory (F.transport change) source terminal
+  | .nil => .nil
+  | .cons step tail => .cons step (tail.transportSignature change)
+
+def restoreSignature (change : ConstitutiveSignatureTransport F.signature target)
+    {source terminal : F.State} : PositiveHistory (F.transport change) source terminal →
+      PositiveHistory F source terminal
+  | .nil => .nil
+  | .cons step tail => .cons step (restoreSignature change tail)
+
+theorem transport_restore (change : ConstitutiveSignatureTransport F.signature target)
+    {source terminal : F.State} (history : PositiveHistory F source terminal) :
+    restoreSignature change (history.transportSignature change) = history := by
+  induction history with
+  | nil => rfl
+  | cons step tail inductionHypothesis =>
+      exact congrArg (PositiveHistory.cons step) inductionHypothesis
+
+theorem restore_transport (change : ConstitutiveSignatureTransport F.signature target)
+    {source terminal : F.State}
+    (history : PositiveHistory (F.transport change) source terminal) :
+    (restoreSignature change history).transportSignature change = history := by
+  induction history with
+  | nil => rfl
+  | cons step tail inductionHypothesis =>
+      exact congrArg (PositiveHistory.cons step) inductionHypothesis
+
+def signatureTransport (change : ConstitutiveSignatureTransport F.signature target)
+    (source terminal : F.State) :
+    ExactTypeTransport (PositiveHistory F source terminal)
+      (PositiveHistory (F.transport change) source terminal) :=
+  { forward := transportSignature change
+    backward := restoreSignature change
+    forwardBackward := transport_restore change
+    backwardForward := restore_transport change }
+
+theorem transport_append (change : ConstitutiveSignatureTransport F.signature target)
+    {source middle terminal : F.State} (first : PositiveHistory F source middle)
+    (second : PositiveHistory F middle terminal) :
+    (first.append second).transportSignature change =
+      (first.transportSignature change).append (second.transportSignature change) := by
+  induction first with
+  | nil => rfl
+  | cons step tail inductionHypothesis =>
+      exact congrArg (PositiveHistory.cons (F := F.transport change) step)
+        (inductionHypothesis second)
+
+theorem transport_deploy (change : ConstitutiveSignatureTransport F.signature target)
+    {source terminal : F.State} (history : PositiveHistory F source terminal) :
+    (history.transportSignature change).deploy = change.mapSpine history.deploy := by
+  induction history with
+  | nil => rfl
+  | cons step tail inductionHypothesis =>
+      exact congrArg (PerimeterSpine.advance
+        (node := (F.transport change).node _)
+        ((change.compatibility (F.node _).implicit (F.node _).explicit).forward
+          (F.compatibility step))) inductionHypothesis
+
+def transportOccurrence (change : ConstitutiveSignatureTransport F.signature target)
+    {source terminal : F.State} : (history : PositiveHistory F source terminal) →
+      Occurrence history → Occurrence (history.transportSignature change)
+  | .nil, occurrence => nomatch occurrence
+  | .cons _ _, .here => .here
+  | .cons _ tail, .later occurrence => .later (tail.transportOccurrence change occurrence)
+
+def restoreOccurrence (change : ConstitutiveSignatureTransport F.signature target)
+    {source terminal : F.State} : (history : PositiveHistory F source terminal) →
+      Occurrence (history.transportSignature change) → Occurrence history
+  | .nil => fun occurrence => nomatch occurrence
+  | .cons step tail => fun occurrence =>
+      match occurrence with
+      | .here => Occurrence.here (step := step) (tail := tail)
+      | .later occurrence => Occurrence.later (step := step) (tail.restoreOccurrence change occurrence)
+
+theorem transport_restore_occurrence
+    (change : ConstitutiveSignatureTransport F.signature target)
+    {source terminal : F.State} (history : PositiveHistory F source terminal)
+    (occurrence : Occurrence history) :
+    history.restoreOccurrence change (history.transportOccurrence change occurrence) =
+      occurrence := by
+  induction occurrence with
+  | here => rfl
+  | later occurrence inductionHypothesis =>
+      exact congrArg Occurrence.later inductionHypothesis
+
+theorem restore_transport_occurrence
+    (change : ConstitutiveSignatureTransport F.signature target)
+    {source terminal : F.State} (history : PositiveHistory F source terminal)
+    (occurrence : Occurrence (history.transportSignature change)) :
+    history.transportOccurrence change (history.restoreOccurrence change occurrence) =
+      occurrence := by
+  induction history with
+  | nil => cases occurrence
+  | cons step tail inductionHypothesis =>
+      cases occurrence with
+      | here => rfl
+      | later occurrence => exact congrArg Occurrence.later (inductionHypothesis occurrence)
+
+def occurrenceSignatureTransport
+    (change : ConstitutiveSignatureTransport F.signature target)
+    {source terminal : F.State} (history : PositiveHistory F source terminal) :
+    ExactTypeTransport (Occurrence history) (Occurrence (history.transportSignature change)) :=
+  { forward := history.transportOccurrence change
+    backward := history.restoreOccurrence change
+    forwardBackward := history.transport_restore_occurrence change
+    backwardForward := history.restore_transport_occurrence change }
+
+end PositiveHistory
+
+namespace ChosenPositiveContinuation
+
+def transportSignature {F : PositiveFormation} {target : ConstitutiveSignature}
+    (change : ConstitutiveSignatureTransport F.signature target)
+    (choice : ChosenPositiveContinuation F) : ChosenPositiveContinuation (F.transport change) :=
+  { successor := choice.successor
+    step := choice.step }
+
+theorem transport_successor {F : PositiveFormation} {target : ConstitutiveSignature}
+    (change : ConstitutiveSignatureTransport F.signature target)
+    (choice : ChosenPositiveContinuation F) (state : F.State) :
+    (choice.transportSignature change).successor state = choice.successor state := rfl
+
+theorem transport_selected_step {F : PositiveFormation} {target : ConstitutiveSignature}
+    (change : ConstitutiveSignatureTransport F.signature target)
+    (choice : ChosenPositiveContinuation F) (state : F.State) :
+    (choice.transportSignature change).step state = choice.step state := rfl
+
+theorem transport_walk {F : PositiveFormation} {target : ConstitutiveSignature}
+    (change : ConstitutiveSignatureTransport F.signature target)
+    (choice : ChosenPositiveContinuation F) (source : F.State) (count : Nat) :
+    (choice.transportSignature change).walk source count =
+      let original := choice.walk source count
+      ⟨original.1, original.2.transportSignature change⟩ := by
+  induction count generalizing source with
+  | zero => rfl
+  | succ count inductionHypothesis =>
+      simp only [walk]
+      rw [inductionHypothesis]
+      rfl
+
+end ChosenPositiveContinuation
+end RelationalPerimeter.Constitution
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Constitution.PositiveFormation.signature
+#print axioms RelationalPerimeter.Constitution.PositiveFormation.transport
+#print axioms RelationalPerimeter.Constitution.PositiveFormation.transport_node
+#print axioms RelationalPerimeter.Constitution.PositiveFormation.transport_step_readout
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.transportSignature
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.restoreSignature
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.transport_restore
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.restore_transport
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.signatureTransport
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.transport_append
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.transport_deploy
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.transportOccurrence
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.restoreOccurrence
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.transport_restore_occurrence
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.restore_transport_occurrence
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.occurrenceSignatureTransport
+#print axioms RelationalPerimeter.Constitution.ChosenPositiveContinuation.transportSignature
+#print axioms RelationalPerimeter.Constitution.ChosenPositiveContinuation.transport_successor
+#print axioms RelationalPerimeter.Constitution.ChosenPositiveContinuation.transport_selected_step
+#print axioms RelationalPerimeter.Constitution.ChosenPositiveContinuation.transport_walk
+/- AXIOM_AUDIT_END -/

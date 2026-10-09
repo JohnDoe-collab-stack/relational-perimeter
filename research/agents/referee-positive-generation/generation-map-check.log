@@ -1,0 +1,10 @@
+th.positive-formation-deployment : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.positive-history-composition : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.positive-occurrence-positions : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.positive-explicit-closing : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.positive-generated-historical-bridge : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.positive-successor-choice : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.separator-generated-unclosed : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.separator-repeated-positive-occurrences : source anchors, T2 review, evidence, SOTA text and link targets valid
+8 generation T2 nodes and 32 source references checked. Semantic dependency review is manual.
+Positive-generation question statement agrees with its SOTA row; relative-signature scope checked manually.

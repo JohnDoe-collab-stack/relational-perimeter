@@ -1,0 +1,131 @@
+import RelationalPerimeter.Constitution.ClosingBoundary
+
+namespace ClosingBoundaryReferee
+open RelationalPerimeter.Constitution
+
+-- Independent family: the selected off-diagonal fibre varies, other fibres are Unit.
+def selectedFamily (Witness : Type) (source target : Bool) : Type :=
+  Bool.rec (motive := fun _ => Type)
+    (Bool.rec (motive := fun _ => Type) Unit Witness target)
+    Unit source
+
+def selectedShape (Witness : Type) : ClosingBoundaryShape where
+  Explicit := Bool
+  Implicit := Bool
+  Compatible := selectedFamily Witness
+  source := false
+  target := true
+  Difference := Option Bool
+  Provenance := fun _ => Bool
+  difference := some false
+  provenance := false
+
+theorem emptySelectedFibre :
+    PointedClosingBoundary (selectedShape Empty) → False := by
+  intro pointed
+  have witness := pointed.junction
+  change Empty at witness
+  cases witness
+
+theorem emptySelectedHasNoPropositionalPoint :
+    Nonempty (PointedClosingBoundary (selectedShape Empty)) → False := by
+  intro inhabited
+  cases inhabited with
+  | intro pointed => exact emptySelectedFibre pointed
+
+-- A different fibre of this SAME signature remains inhabited.
+def otherFibreStillInhabited : (selectedShape Empty).Compatible true false := ()
+
+theorem emptyShapeCannotBeForgotten
+    (boundary : ConstitutiveBoundary.{0, 0, 0, 0, 0})
+    (shapeEquality : boundary.toClosingBoundaryShape = selectedShape Empty) : False := by
+  have inhabited : Nonempty (ClosingWitness boundary.toClosingBoundaryShape) :=
+    ⟨boundary.junction⟩
+  rw [shapeEquality] at inhabited
+  cases inhabited with
+  | intro witness => cases witness
+
+def unitPoint : PointedClosingBoundary (selectedShape Unit) := ⟨()⟩
+
+theorem unitPointReturnsData :
+    unitPoint.toConstitutiveBoundary.source = false ∧
+    unitPoint.toConstitutiveBoundary.target = true ∧
+    unitPoint.toConstitutiveBoundary.difference = some false ∧
+    unitPoint.toConstitutiveBoundary.provenance = false :=
+  ⟨rfl, rfl, rfl, rfl⟩
+
+theorem witnessPointingHabitation (shape : ClosingBoundaryShape) :
+    Nonempty (ClosingWitness shape) ↔ Nonempty (PointedClosingBoundary shape) := by
+  constructor
+  · intro inhabited
+    cases inhabited with
+    | intro witness => exact ⟨⟨witness⟩⟩
+  · intro inhabited
+    cases inhabited with
+    | intro pointed => exact ⟨pointed.junction⟩
+
+theorem directShapeReturn {shape : ClosingBoundaryShape}
+    (pointed : PointedClosingBoundary shape) :
+    pointed.toConstitutiveBoundary.toClosingBoundaryShape = shape := rfl
+
+theorem directPointingReturn {shape : ClosingBoundaryShape}
+    (pointed : PointedClosingBoundary shape) :
+    pointed.toConstitutiveBoundary.toPointedClosingBoundary = pointed := by
+  cases pointed
+  rfl
+
+theorem directOldBoundaryReturn (boundary : ConstitutiveBoundary) :
+    boundary.toPointedClosingBoundary.toConstitutiveBoundary = boundary := rfl
+
+theorem roleIsUniqueForFixedChoice {shape : ClosingBoundaryShape}
+    (pointed : PointedClosingBoundary shape) (first second : pointed.FinalRole) :
+    first = second := by
+  apply EquippedFinalRole.ext
+  exact first.witnessExact.trans second.witnessExact.symm
+
+def chosenFalse : PointedClosingBoundary (selectedShape Bool) := ⟨false⟩
+def chosenTrue : PointedClosingBoundary (selectedShape Bool) := ⟨true⟩
+
+theorem choicesRemainDistinct : chosenFalse ≠ chosenTrue := by
+  intro equality
+  have witnesses := congrArg PointedClosingBoundary.junction equality
+  exact Bool.noConfusion witnesses
+
+def totalFalse : Σ pointed : PointedClosingBoundary (selectedShape Bool), pointed.FinalRole :=
+  ⟨chosenFalse, chosenFalse.finalRole⟩
+def totalTrue : Σ pointed : PointedClosingBoundary (selectedShape Bool), pointed.FinalRole :=
+  ⟨chosenTrue, chosenTrue.finalRole⟩
+
+theorem equippedTotalRemainsDistinct : totalFalse ≠ totalTrue := by
+  intro equality
+  exact choicesRemainDistinct (congrArg Sigma.fst equality)
+
+theorem roleUniquenessDoesNotImplyWitnessUniqueness :
+    (∀ first second : ClosingWitness (selectedShape Bool), first = second) → False := by
+  intro unique
+  exact Bool.noConfusion (unique false true)
+
+end ClosingBoundaryReferee
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ClosingBoundaryReferee.selectedFamily
+#print axioms ClosingBoundaryReferee.selectedShape
+#print axioms ClosingBoundaryReferee.emptySelectedFibre
+#print axioms ClosingBoundaryReferee.emptySelectedHasNoPropositionalPoint
+#print axioms ClosingBoundaryReferee.otherFibreStillInhabited
+#print axioms ClosingBoundaryReferee.emptyShapeCannotBeForgotten
+#print axioms ClosingBoundaryReferee.unitPoint
+#print axioms ClosingBoundaryReferee.unitPointReturnsData
+#print axioms ClosingBoundaryReferee.witnessPointingHabitation
+#print axioms ClosingBoundaryReferee.directShapeReturn
+#print axioms ClosingBoundaryReferee.directPointingReturn
+#print axioms ClosingBoundaryReferee.directOldBoundaryReturn
+#print axioms ClosingBoundaryReferee.roleIsUniqueForFixedChoice
+#print axioms ClosingBoundaryReferee.chosenFalse
+#print axioms ClosingBoundaryReferee.chosenTrue
+#print axioms ClosingBoundaryReferee.choicesRemainDistinct
+#print axioms ClosingBoundaryReferee.totalFalse
+#print axioms ClosingBoundaryReferee.totalTrue
+#print axioms ClosingBoundaryReferee.equippedTotalRemainsDistinct
+#print axioms ClosingBoundaryReferee.roleUniquenessDoesNotImplyWitnessUniqueness
+/- AXIOM_AUDIT_END -/

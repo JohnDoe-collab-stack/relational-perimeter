@@ -1,0 +1,110 @@
+import SegmentedResidualRole
+import ExactTypeTransport
+import StrongPerimetralTurning
+
+/-!
+Two countermodels for stronger foundational claims, and one carrier diagnostic.
+These probes preserve the production files and use the pinned project toolchain.
+-/
+namespace FoundationalSeparators
+
+def constantResidualLabel (_ : Bool) : Empty ⊕ Unit := .inr ()
+
+def residualRole : SegmentedResidualRole.ContractibleRole Unit :=
+  { center := (), contracts := fun role => by cases role; rfl }
+
+theorem labels_are_residual (occurrence : Bool) :
+    constantResidualLabel occurrence = .inr residualRole.center := rfl
+
+theorem no_internal_reuse (occurrence : Bool) (internal : Empty) :
+    constantResidualLabel occurrence ≠ .inl internal := by
+  cases internal
+
+theorem new_occurrences_distinct : (false : Bool) ≠ true := by
+  intro equality
+  cases equality
+
+theorem residual_label_not_injective :
+    ¬ Function.Injective constantResidualLabel := by
+  intro injective
+  exact new_occurrences_distinct (@injective false true rfl)
+
+/- Contractibility and exclusion of internal labels do not replace injectivity. -/
+theorem weakened_core_does_not_force_uniqueness :
+    ¬ ((first second : Bool) → first = second) := by
+  intro unique
+  exact new_occurrences_distinct (unique false true)
+
+/- Independent spot check of the referee's old-carrier counterexample.
+   This variant uses Option Unit as its extended carrier and places the role at true. -/
+def collapsedOldOptionKernel :
+    SegmentedResidualRole.ResidualUniquenessKernel
+      Unit Unit Bool Unit (Option Unit) residualRole :=
+  { roleToOccurrence := fun _ => true
+    embedOld := fun _ => .none
+    embedNew := fun _ => .some ()
+    oldNewDisjoint := fun _ _ equality => by cases equality
+    embedNewInjective := by intro first second _; cases first; cases second; rfl
+    label := fun point => match point with
+      | .none => .inl ()
+      | .some _ => .inr ()
+    preservesInternal := fun _ => rfl
+    labelFaithful := by
+      intro first second equality
+      cases first with
+      | none => cases second with
+        | none => rfl
+        | some pointValue => cases equality
+      | some pointValue => cases second with
+        | none => cases equality
+        | some other => cases pointValue; cases other; rfl }
+
+def collapsedOldOptionPositive : SegmentedResidualRole.PositiveNewPart Unit :=
+  { occurrence := () }
+
+theorem positive_kernel_does_not_force_internal_completion :
+    SegmentedResidualRole.ExactInternalCompletion collapsedOldOptionKernel → False := by
+  intro completion
+  have impossible : (true : Bool) = false := completion.occurrenceRoundTrip false
+  cases impossible
+
+inductive Before : Bool → Bool → Prop
+  | step : Before false true
+
+def swapTransport : ExactTypeTransport Bool Bool :=
+  { forward := fun value => !value
+    backward := fun value => !value
+    forwardBackward := fun value => by cases value <;> rfl
+    backwardForward := fun value => by cases value <;> rfl }
+
+theorem swap_does_not_preserve_order :
+    ¬ Before (swapTransport.forward false) (swapTransport.forward true) := by
+  intro reversed
+  cases reversed
+
+/- A presentation index does not by itself give the bare final role extra data. -/
+def finalRoleUnitTransport (P : StrongPerimetralTurning.CircularPresentation) :
+    ExactTypeTransport (StrongPerimetralTurning.FinalRequirement P) Unit :=
+  { forward := fun _ => ()
+    backward := fun _ => .distinguished
+    forwardBackward := fun role => by cases role; rfl
+    backwardForward := fun point => by cases point; rfl }
+
+end FoundationalSeparators
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms FoundationalSeparators.constantResidualLabel
+#print axioms FoundationalSeparators.residualRole
+#print axioms FoundationalSeparators.labels_are_residual
+#print axioms FoundationalSeparators.no_internal_reuse
+#print axioms FoundationalSeparators.new_occurrences_distinct
+#print axioms FoundationalSeparators.residual_label_not_injective
+#print axioms FoundationalSeparators.weakened_core_does_not_force_uniqueness
+#print axioms FoundationalSeparators.collapsedOldOptionKernel
+#print axioms FoundationalSeparators.collapsedOldOptionPositive
+#print axioms FoundationalSeparators.positive_kernel_does_not_force_internal_completion
+#print axioms FoundationalSeparators.Before
+#print axioms FoundationalSeparators.swapTransport
+#print axioms FoundationalSeparators.swap_does_not_preserve_order
+#print axioms FoundationalSeparators.finalRoleUnitTransport
+/- AXIOM_AUDIT_END -/

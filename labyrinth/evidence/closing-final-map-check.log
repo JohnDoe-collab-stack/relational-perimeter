@@ -1,0 +1,22 @@
+Source snapshot verified: 26 unchanged files.
+Provenance OK: 61 unique nodes, 85 audited declaration anchors, 26 unchanged sources.
+This validates provenance and metadata, not proof semantics or scientific adequacy.
+ok
+{
+ "by_tier": {
+  "T1": 0,
+  "T2": 34,
+  "T3": 0,
+  "T4": 0,
+  "T5": 0,
+  "T6": 2
+ },
+ "conjectures_open": 0,
+ "conjectures_modified": 0,
+ "deadends": 9,
+ "questions_open": 8,
+ "hunches_live": 1,
+ "under_review": 0,
+ "resolved_by_size": {}
+}
+Generated labyrinth/FONDATIONS.fr.md from canonical data.

@@ -1,0 +1,265 @@
+import RelationalPerimeter.Constitution.CircularRoleTransport
+import RelationalPerimeter.Constitution.HistoricalRoleBridge
+
+namespace CircularRolesReferee
+open RelationalPerimeter.Constitution
+open StrongPerimetralTurning
+
+def node : LocalNode Unit Unit (fun _ _ => Bool) Bool (fun _ => Bool) :=
+  { explicit := ()
+    implicit := ()
+    difference := true
+    provenance := false
+    internallyCompatible := true }
+
+def formation : PositiveFormation where
+  Explicit := Unit
+  Implicit := Unit
+  Compatible := fun _ _ => Bool
+  Difference := Bool
+  Provenance := fun _ => Bool
+  State := Bool
+  node := fun _ => node
+  Step := fun _ _ => Bool × Bool
+  compatibility := fun step => step.1
+
+def history : PositiveHistory formation false false :=
+  .cons (middle := true) (false, true)
+    (.cons (middle := false) (true, false) .nil)
+
+def firstOccurrence : PositiveHistory.Occurrence history := .here
+def secondOccurrence : PositiveHistory.Occurrence history := .later .here
+
+def presentation (junction : Bool) : PositiveCircularPresentation :=
+  history.toCircular firstOccurrence junction
+
+theorem chosenPresentationsHaveSameSpine :
+    (presentation false).perimeter = (presentation true).perimeter := rfl
+
+theorem chosenJunctionsDistinct :
+    (presentation false).finalJunction ≠ (presentation true).finalJunction := by
+  intro equality
+  cases equality
+
+def emptyShape : ClosingBoundaryShape where
+  Explicit := Unit
+  Implicit := Unit
+  Compatible := fun _ _ => Empty
+  source := ()
+  target := ()
+  Difference := Bool
+  Provenance := fun _ => Bool
+  difference := true
+  provenance := false
+
+theorem emptyHasNoPointedFinalRole :
+    (∃ pointed : PointedClosingBoundary emptyShape, Nonempty pointed.FinalRole) → False :=
+  emptyShape.noFinalRoleOfEmpty (fun witness => nomatch witness)
+
+def flip : ExactTypeTransport Bool Bool where
+  forward := Bool.not
+  backward := Bool.not
+  forwardBackward := fun value => by cases value <;> rfl
+  backwardForward := fun value => by cases value <;> rfl
+
+def primitiveChange : ConstitutiveSignatureTransport formation.signature formation.signature where
+  explicit := .reflexive _
+  implicit := .reflexive _
+  difference := flip
+  compatibility := fun _ _ => flip
+  provenance := fun _ => flip
+
+def firstInterior : EquippedInteriorRole (presentation false) :=
+  EquippedInteriorRole.ofOccurrence history firstOccurrence false firstOccurrence
+
+def secondInterior : EquippedInteriorRole (presentation false) :=
+  EquippedInteriorRole.ofOccurrence history firstOccurrence false secondOccurrence
+
+theorem firstInteriorReadsFalse : firstInterior.link.compatibility = false := rfl
+theorem secondInteriorReadsTrue : secondInterior.link.compatibility = true := rfl
+
+theorem repeatedNodeReads : firstInterior.link.source = secondInterior.link.source := rfl
+
+theorem interiorRolesDistinct : firstInterior ≠ secondInterior := by
+  intro equality
+  have positionEquality := congrArg EquippedInteriorRole.position equality
+  cases positionEquality
+
+def firstRole : CircularRole (presentation false) := .interior firstInterior
+def finalRoleFalse : CircularRole (presentation false) :=
+  .final (EquippedFinalRole.canonical _)
+
+theorem firstClassifies : CircularRole.classify firstRole = .inl firstInterior.position := rfl
+theorem finalClassifies : CircularRole.classify finalRoleFalse = .inr () := rfl
+
+theorem firstClassificationReturns :
+    CircularRole.assemble (presentation false) (CircularRole.classify firstRole) = firstRole :=
+  CircularRole.assemble_classify firstRole
+
+theorem finalClassificationReturns :
+    CircularRole.assemble (presentation false) (CircularRole.classify finalRoleFalse) = finalRoleFalse :=
+  CircularRole.assemble_classify finalRoleFalse
+
+theorem finalHasNoGeneratedPosition : CircularRole.generatedPosition finalRoleFalse = .none := rfl
+
+theorem interiorFinalDisjoint : firstRole ≠ finalRoleFalse :=
+  CircularRole.branches_distinct firstInterior (EquippedFinalRole.canonical _)
+
+theorem falseChoiceRoleUnique (first second : EquippedFinalRole (closingBoundary (presentation false))) :
+    first = second := EquippedFinalRole.unique first second
+
+theorem trueChoiceRoleUnique (first second : EquippedFinalRole (closingBoundary (presentation true))) :
+    first = second := EquippedFinalRole.unique first second
+
+theorem chosenRoleWitnessesRemainDistinct :
+    (EquippedFinalRole.canonical (closingBoundary (presentation false))).witness ≠
+      (EquippedFinalRole.canonical (closingBoundary (presentation true))).witness := by
+  intro equality
+  cases equality
+
+abbrev ExtendedRole := CircularRole (presentation false) ⊕ Bool
+
+def exterior : ExtendedRole := .inr true
+
+theorem exteriorOutsideGrammar (role : CircularRole (presentation false)) :
+    (Sum.inl role : ExtendedRole) ≠ exterior := by
+  intro equality
+  cases equality
+
+theorem declaredGrammarStillExhaustive (role : CircularRole (presentation false)) :
+    (∃ position, role = .interior (EquippedInteriorRole.canonical (presentation false) position)) ∨
+      role = .final (EquippedFinalRole.canonical (closingBoundary (presentation false))) :=
+  CircularRole.exhaustive role
+
+theorem interiorWitnessTransported :
+    ((history.interiorRoleTransport primitiveChange firstOccurrence false).forward firstInterior).link.compatibility =
+      true := rfl
+
+theorem interiorProvenanceTransported :
+    ((history.interiorRoleTransport primitiveChange firstOccurrence false).forward firstInterior).link.source.provenance =
+      true := rfl
+
+theorem interiorDifferenceTransported :
+    ((history.interiorRoleTransport primitiveChange firstOccurrence false).forward firstInterior).link.source.difference =
+      false := rfl
+
+theorem interiorRoleReturns :
+    (history.interiorRoleTransport primitiveChange firstOccurrence false).backward
+      ((history.interiorRoleTransport primitiveChange firstOccurrence false).forward firstInterior) = firstInterior :=
+  history.interior_return primitiveChange firstOccurrence false firstInterior
+
+theorem finalWitnessTransported :
+    ((history.finalRoleTransport primitiveChange firstOccurrence false).forward
+      (EquippedFinalRole.canonical (closingBoundary (presentation false)))).witness = true := rfl
+
+theorem finalProvenanceTransported :
+    ((history.finalRoleTransport primitiveChange firstOccurrence false).forward
+      (EquippedFinalRole.canonical (closingBoundary (presentation false)))).provenance = true := rfl
+
+theorem circularInteriorReturns :
+    (history.circularRoleTransport primitiveChange firstOccurrence false).backward
+      ((history.circularRoleTransport primitiveChange firstOccurrence false).forward firstRole) = firstRole :=
+  history.circular_return primitiveChange firstOccurrence false firstRole
+
+theorem circularFinalReturns :
+    (history.circularRoleTransport primitiveChange firstOccurrence false).backward
+      ((history.circularRoleTransport primitiveChange firstOccurrence false).forward finalRoleFalse) = finalRoleFalse :=
+  history.circular_return primitiveChange firstOccurrence false finalRoleFalse
+
+def historical : CircularPresentation where
+  toPositiveCircularPresentation := presentation false
+  Endpoint := Bool
+  leftEndpoint := false
+  rightEndpoint := true
+  leftPole := fun _ => false
+  rightPole := fun _ => true
+  initialLeftPole := rfl
+  initialRightPole := rfl
+  TotalLoop := Empty
+  closeFromIdentification := fun equality => by cases equality
+  loopContractsInitialDifference := fun loop => nomatch loop
+  rejectInitialContraction := fun _ equality => by cases equality
+
+theorem historicalMarkerReturns :
+    (HistoricalRoleBridge.finalRequirementTransport historical).backward
+      ((HistoricalRoleBridge.finalRequirementTransport historical).forward .distinguished) = .distinguished :=
+  (HistoricalRoleBridge.finalRequirementTransport historical).forwardBackward .distinguished
+
+theorem historicalMarkerReadsSelectedFalse :
+    ((HistoricalRoleBridge.finalRequirementTransport historical).forward .distinguished).witness = false := rfl
+
+def historicalRealization : ExactNonClosingRealization historical (perimeterDeployment historical) where
+  realize := requirementToOccurrence historical
+  agreement := canonicalRequirementAgreement historical
+
+def historicalReadout : RequirementOccurrenceAgreement historical (perimeterDeployment historical)
+    firstInterior.position (HistoricalRoleBridge.realizeInterior historicalRealization firstInterior) :=
+  HistoricalRoleBridge.realization_readout historicalRealization firstInterior
+
+theorem historicalSourceCursorExact :
+    (HistoricalRoleBridge.realizeInterior historicalRealization firstInterior).locatedStep.source.1 =
+      (perimeterPositionSource historical firstInterior.position).1 :=
+  historicalReadout.sourceCursorExact
+
+theorem historicalInteriorDistinct :
+    HistoricalRoleBridge.realizeInterior historicalRealization firstInterior ≠
+      HistoricalRoleBridge.realizeInterior historicalRealization secondInterior := by
+  intro equality
+  exact interiorRolesDistinct (HistoricalRoleBridge.realization_injective historicalRealization equality)
+
+theorem historicalFinalAddsNoOccurrence :
+    HistoricalRoleBridge.realizeRole historicalRealization finalRoleFalse = .none := rfl
+
+end CircularRolesReferee
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms CircularRolesReferee.node
+#print axioms CircularRolesReferee.formation
+#print axioms CircularRolesReferee.history
+#print axioms CircularRolesReferee.firstOccurrence
+#print axioms CircularRolesReferee.secondOccurrence
+#print axioms CircularRolesReferee.presentation
+#print axioms CircularRolesReferee.chosenPresentationsHaveSameSpine
+#print axioms CircularRolesReferee.chosenJunctionsDistinct
+#print axioms CircularRolesReferee.emptyShape
+#print axioms CircularRolesReferee.emptyHasNoPointedFinalRole
+#print axioms CircularRolesReferee.flip
+#print axioms CircularRolesReferee.primitiveChange
+#print axioms CircularRolesReferee.firstInterior
+#print axioms CircularRolesReferee.secondInterior
+#print axioms CircularRolesReferee.firstInteriorReadsFalse
+#print axioms CircularRolesReferee.secondInteriorReadsTrue
+#print axioms CircularRolesReferee.repeatedNodeReads
+#print axioms CircularRolesReferee.interiorRolesDistinct
+#print axioms CircularRolesReferee.firstRole
+#print axioms CircularRolesReferee.finalRoleFalse
+#print axioms CircularRolesReferee.firstClassifies
+#print axioms CircularRolesReferee.finalClassifies
+#print axioms CircularRolesReferee.firstClassificationReturns
+#print axioms CircularRolesReferee.finalClassificationReturns
+#print axioms CircularRolesReferee.finalHasNoGeneratedPosition
+#print axioms CircularRolesReferee.interiorFinalDisjoint
+#print axioms CircularRolesReferee.falseChoiceRoleUnique
+#print axioms CircularRolesReferee.trueChoiceRoleUnique
+#print axioms CircularRolesReferee.chosenRoleWitnessesRemainDistinct
+#print axioms CircularRolesReferee.ExtendedRole
+#print axioms CircularRolesReferee.exterior
+#print axioms CircularRolesReferee.exteriorOutsideGrammar
+#print axioms CircularRolesReferee.declaredGrammarStillExhaustive
+#print axioms CircularRolesReferee.interiorWitnessTransported
+#print axioms CircularRolesReferee.interiorProvenanceTransported
+#print axioms CircularRolesReferee.interiorDifferenceTransported
+#print axioms CircularRolesReferee.interiorRoleReturns
+#print axioms CircularRolesReferee.finalWitnessTransported
+#print axioms CircularRolesReferee.finalProvenanceTransported
+#print axioms CircularRolesReferee.circularInteriorReturns
+#print axioms CircularRolesReferee.circularFinalReturns
+#print axioms CircularRolesReferee.historical
+#print axioms CircularRolesReferee.historicalMarkerReturns
+#print axioms CircularRolesReferee.historicalMarkerReadsSelectedFalse
+#print axioms CircularRolesReferee.historicalRealization
+#print axioms CircularRolesReferee.historicalReadout
+#print axioms CircularRolesReferee.historicalSourceCursorExact
+#print axioms CircularRolesReferee.historicalInteriorDistinct
+#print axioms CircularRolesReferee.historicalFinalAddsNoOccurrence
+/- AXIOM_AUDIT_END -/

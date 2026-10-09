@@ -1,0 +1,3 @@
+Map nodes: 41; T2 nodes: 21; exact source anchors: 33; SOTA rows: 29.
+This script checks source anchors, link targets and SOTA wording only; it does not prove semantic dependency or resolve namespace identity.
+All structural spot checks passed.

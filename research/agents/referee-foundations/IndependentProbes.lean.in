@@ -1,0 +1,96 @@
+import SegmentedResidualRole
+import ExactTypeTransport
+import StrongPerimetralTurning
+
+namespace FoundationReferee
+open SegmentedResidualRole
+
+def singletonResidual : ContractibleRole Unit :=
+  { center := (), contracts := fun value => by cases value; rfl }
+
+-- Positivity alone does not restore the collapsed old carrier.
+def collapsedOldKernel :
+    ResidualUniquenessKernel Unit Unit Bool Unit Bool singletonResidual where
+  roleToOccurrence := fun _ => false
+  embedOld := fun _ => false
+  embedNew := fun _ => true
+  oldNewDisjoint := fun _ _ equality => Bool.noConfusion equality
+  embedNewInjective := by intro a b _; cases a; cases b; rfl
+  label := fun b => if b then .inr () else .inl ()
+  preservesInternal := fun _ => rfl
+  labelFaithful := by
+    intro a b equality
+    cases a <;> cases b
+    · rfl
+    · cases equality
+    · cases equality
+    · rfl
+
+def collapsedOldPositive : PositiveNewPart Unit := ⟨()⟩
+
+theorem collapsedOld_has_unique_residual :
+    (a b : Unit) → a = b :=
+  collapsedOldKernel.newOccurrences_unique
+
+theorem collapsedOld_no_exact_completion :
+    ExactInternalCompletion collapsedOldKernel → False := by
+  intro completion
+  have impossible := completion.occurrenceRoundTrip true
+  exact Bool.noConfusion impossible
+
+-- Removing label injectivity permits two distinct new occurrences.
+def constantResidualLabel (_ : Bool) : Empty ⊕ Unit := .inr ()
+
+theorem constantResidualLabel_excludes_internal
+    (occurrence : Bool) (role : Empty) :
+    constantResidualLabel occurrence ≠ .inl role := by cases role
+
+theorem constantResidualLabel_not_injective :
+    Function.Injective constantResidualLabel → False := by
+  intro injective
+  have impossible : false = true :=
+    injective (show constantResidualLabel false = constantResidualLabel true from rfl)
+  exact Bool.noConfusion impossible
+
+-- Bare exact transport preserves the carrier, not a chosen relation.
+def flipTransport : ExactTypeTransport Bool Bool where
+  forward := Bool.not
+  backward := Bool.not
+  forwardBackward := fun value => by cases value <;> rfl
+  backwardForward := fun value => by cases value <;> rfl
+
+def marked (value : Bool) : Prop := value = false
+
+theorem flipTransport_not_preserves_marked :
+    ((value : Bool) → marked value → marked (flipTransport.forward value)) →
+      False := by
+  intro preserves
+  exact Bool.noConfusion (preserves false rfl)
+
+-- The final requirement index alone is uniformly singleton-valued.
+def finalRequirementTransport
+    (P Q : StrongPerimetralTurning.CircularPresentation) :
+    ExactTypeTransport
+      (StrongPerimetralTurning.FinalRequirement P)
+      (StrongPerimetralTurning.FinalRequirement Q) where
+  forward := fun _ => .distinguished
+  backward := fun _ => .distinguished
+  forwardBackward := fun value => by cases value; rfl
+  backwardForward := fun value => by cases value; rfl
+
+end FoundationReferee
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms FoundationReferee.singletonResidual
+#print axioms FoundationReferee.collapsedOldKernel
+#print axioms FoundationReferee.collapsedOldPositive
+#print axioms FoundationReferee.collapsedOld_has_unique_residual
+#print axioms FoundationReferee.collapsedOld_no_exact_completion
+#print axioms FoundationReferee.constantResidualLabel
+#print axioms FoundationReferee.constantResidualLabel_excludes_internal
+#print axioms FoundationReferee.constantResidualLabel_not_injective
+#print axioms FoundationReferee.flipTransport
+#print axioms FoundationReferee.marked
+#print axioms FoundationReferee.flipTransport_not_preserves_marked
+#print axioms FoundationReferee.finalRequirementTransport
+/- AXIOM_AUDIT_END -/

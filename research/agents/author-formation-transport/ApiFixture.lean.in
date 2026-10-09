@@ -1,0 +1,9 @@
+import RelationalPerimeter.Constitution.SignatureTransport
+import RelationalPerimeter.Constitution.PositiveGeneration
+namespace RelationalPerimeter.Constitution.ConstitutiveSignatureTransport
+open StrongPerimetralTurning
+def mapSpine {S T : ConstitutiveSignature} (change : ConstitutiveSignatureTransport S T)
+    {node : S.Node} : PerimeterSpine S.Compatible node → PerimeterSpine T.Compatible (change.mapNode node)
+  | .boundary node => .boundary (change.mapNode node)
+  | .advance witness tail => .advance (nextNode := change.mapNode _) ((change.compatibility _ _).forward witness) (mapSpine change tail)
+end RelationalPerimeter.Constitution.ConstitutiveSignatureTransport

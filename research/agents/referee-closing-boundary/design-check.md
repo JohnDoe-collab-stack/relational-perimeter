@@ -1,0 +1,15 @@
+# Independent design check: closing boundary before junction choice
+
+Referee `/root/positive_foundation_referee` acting on lot 1, 2026-10-09. New archive `research/agents/referee-closing-boundary/`; prior reports preserved. Read `docs/plan-suite-fondations-positives.fr.md` in full, especially §4, and the current selected boundary and equipped role interfaces. Labyrinth method previously read remains applicable. No canonical edit, build, commit or delegation by this referee.
+
+Proposed design is mathematically adequate for lot 1. `ClosingBoundaryShape` retains the sorts, compatibility/provenance families, selected source and target, and selected initial difference and provenance. Only the closing witness is omitted. Thus “without a chosen junction” must not be abbreviated to “without any selected data”. `ClosingWitness B` is the selected compatibility fibre; it may be empty even though the source/target/difference/provenance data are present.
+
+An indexed `PointedClosingBoundary B` supplies a concrete witness in `Type`. Projection to the historical `ConstitutiveBoundary` should read the same shape data and this witness. Forgetting the old junction and then reconstructing with that exact junction should return the old boundary. Reconstruction followed by forgetting should return the shape, and its junction should return the supplied witness. An exact indexed or sigma bridge may be provided but does not need a choice principle.
+
+`Nonempty (ClosingWitness B) ↔ Nonempty (PointedClosingBoundary B)` lives in `Prop`: its directions eliminate proposition-valued existence into proposition-valued existence. This does not by itself provide a function choosing a pointed boundary from a proof of `Nonempty`. By contrast, a concrete `ClosingWitness B` directly constructs its pointed enrichment. The code must keep these routes distinct.
+
+The empty model must be a shape built directly with an empty selected fibre. Forgetting a preexisting `ConstitutiveBoundary` can never provide such a model: its original junction remains a witness to the forgotten fibre. A useful independent probe will show this impossibility explicitly.
+
+For each fixed point/choice, the adapted final role is inhabited and unique by exact agreement to that choice. A Bool closing fibre admits two distinct pointed choices on the same shape, each with its own unique role. Neither point uniqueness nor fibre-wide witness uniqueness follows from role uniqueness. A total object retaining the choice and its role can have two distinct inhabitants.
+
+Pending implementation checks: complete reconstruction/forgetting returns; constructive habitation equivalence; empty/Unit/Bool models; separate source/target/provenance views; legacy interface stability; comments and any map status restricted to lot 1. General role classification, positive generation, signature transport, and universal minimality remain outside this review. Formal source checks and independent small `.lean.in` compilation await the coordinator's readiness signal.

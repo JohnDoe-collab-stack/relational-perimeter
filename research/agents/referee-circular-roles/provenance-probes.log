@@ -1,0 +1,18 @@
+PASS: CRLF and LF give the same explicitly normalized fingerprint
+PASS: standalone CR is covered, not silently normalized
+PASS: whitespace changes other than CRLF are detected
+PASS: changed source token is detected
+PASS: UTF-8 BOM is covered
+PASS: hash algorithm is SHA256 of exactly CRLF-replaced bytes
+PASS: branch change rejected
+PASS: hash mode change rejected
+PASS: different commit without explicit frozen-source mode rejected
+PASS: non-descendant revision rejected
+PASS: descendant mode checks the reviewed base against current full commit
+PASS: unchanged base still requires matching branch and hash mode
+PASS: tree verification reads the resolved committed blob and accepts only newline normalization
+PASS: ancestor and same branch do not bypass changed committed source hash
+PASS: CLI rejects a frozen baseline file removed from current FILES
+PASS: CLI rejects an added file outside the frozen baseline
+PASS: CLI accepts exactly the same full frozen path/hash dictionary
+17 independent provenance diagnostics passed; ancestry and tree content were simulated without Git mutation.

@@ -1,0 +1,20 @@
+'ClosingBoundaryReferee.selectedFamily' depends on axioms: [propext]
+'ClosingBoundaryReferee.selectedShape' depends on axioms: [propext]
+'ClosingBoundaryReferee.emptySelectedFibre' depends on axioms: [propext]
+'ClosingBoundaryReferee.emptySelectedHasNoPropositionalPoint' depends on axioms: [propext]
+'ClosingBoundaryReferee.otherFibreStillInhabited' depends on axioms: [propext]
+'ClosingBoundaryReferee.emptyShapeCannotBeForgotten' depends on axioms: [propext]
+'ClosingBoundaryReferee.unitPoint' depends on axioms: [propext]
+'ClosingBoundaryReferee.unitPointReturnsData' depends on axioms: [propext]
+'ClosingBoundaryReferee.witnessPointingHabitation' does not depend on any axioms
+'ClosingBoundaryReferee.directShapeReturn' does not depend on any axioms
+'ClosingBoundaryReferee.directPointingReturn' does not depend on any axioms
+'ClosingBoundaryReferee.directOldBoundaryReturn' does not depend on any axioms
+'ClosingBoundaryReferee.roleIsUniqueForFixedChoice' does not depend on any axioms
+'ClosingBoundaryReferee.chosenFalse' depends on axioms: [propext]
+'ClosingBoundaryReferee.chosenTrue' depends on axioms: [propext]
+'ClosingBoundaryReferee.choicesRemainDistinct' depends on axioms: [propext]
+'ClosingBoundaryReferee.totalFalse' depends on axioms: [propext]
+'ClosingBoundaryReferee.totalTrue' depends on axioms: [propext]
+'ClosingBoundaryReferee.equippedTotalRemainsDistinct' depends on axioms: [propext]
+'ClosingBoundaryReferee.roleUniquenessDoesNotImplyWitnessUniqueness' depends on axioms: [propext]

@@ -1,0 +1,36 @@
+research/agents/author-formation-transport/CompileUnit.lean.in:92:12: error: Internal error in mkElimApp: Expected first 3 arguments of motive in conclusion to be one of the targets:
+  ?m.19 source terminal history
+research/agents/author-formation-transport/CompileUnit.lean.in:125:8: error: Application type mismatch: The argument
+  (change.compatibility (F.node source✝).implicit (F.node middle✝).explicit).forward (F.compatibility step)
+has type
+  target.Compatible (change.implicit.forward (F.node source✝).implicit)
+    (change.explicit.forward (F.node middle✝).explicit)
+but is expected to have type
+  (F.transport change).Compatible ((F.transport change).node ?m.42).implicit (LocalNode.explicit ?m.43)
+in the application
+  PerimeterSpine.advance
+    ((change.compatibility (F.node source✝).implicit (F.node middle✝).explicit).forward (F.compatibility step))
+research/agents/author-formation-transport/CompileUnit.lean.in:162:17: error: Internal error in mkElimApp: Expected first 4 arguments of motive in conclusion to be one of the targets:
+  ?m.42 (transportSignature change nil) occurrence
+research/agents/author-formation-transport/CompileUnit.lean.in:164:12: error: Internal error in mkElimApp: Expected first 4 arguments of motive in conclusion to be one of the targets:
+  ?m.60 (transportSignature change (cons step tail)) occurrence
+'RelationalPerimeter.Constitution.PositiveFormation.signature' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveFormation.transport' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveFormation.transport_node' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveFormation.transport_step_readout' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.transportSignature' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.restoreSignature' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.transport_restore' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.restore_transport' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.PositiveHistory.signatureTransport' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.PositiveHistory.transport_append' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.transport_deploy' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.PositiveHistory.transportOccurrence' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.restoreOccurrence' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.transport_restore_occurrence' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.restore_transport_occurrence' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.PositiveHistory.occurrenceSignatureTransport' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.ChosenPositiveContinuation.transportSignature' does not depend on any axioms
+'RelationalPerimeter.Constitution.ChosenPositiveContinuation.transport_successor' does not depend on any axioms
+'RelationalPerimeter.Constitution.ChosenPositiveContinuation.transport_selected_step' does not depend on any axioms
+'RelationalPerimeter.Constitution.ChosenPositiveContinuation.transport_walk' does not depend on any axioms

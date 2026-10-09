@@ -1,0 +1,224 @@
+import RelationalPerimeter.Constitution.PositiveGeneration
+import RelationalPerimeter.Constitution.PositiveGenerationBridge
+
+namespace PositiveGenerationReferee
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution
+
+def boolNode (state : Bool) : LocalNode Bool Bool (fun _ _ => Bool) Bool (fun _ => Bool) where
+  explicit := state
+  implicit := state
+  difference := state
+  provenance := false
+  internallyCompatible := true
+
+-- The first payload component is constitutive compatibility; the second is extra data.
+def redundantFormation : PositiveFormation where
+  Explicit := Bool
+  Implicit := Bool
+  Compatible := fun _ _ => Bool
+  Difference := Bool
+  Provenance := fun _ => Bool
+  State := Bool
+  node := boolNode
+  Step := fun _ _ => Bool × Bool
+  compatibility := fun step => step.1
+
+def payloadFalse : PositiveHistory redundantFormation false true :=
+  .cons (true, false) (.nil : PositiveHistory redundantFormation true true)
+
+def payloadTrue : PositiveHistory redundantFormation false true :=
+  .cons (true, true) (.nil : PositiveHistory redundantFormation true true)
+
+def rawReturn : PositiveHistory redundantFormation false false :=
+  .cons (true, false)
+    (.cons (false, true) (.nil : PositiveHistory redundantFormation false false) :
+      PositiveHistory redundantFormation true false)
+
+def extraHeadPayload : {source target : Bool} →
+    PositiveHistory redundantFormation source target → Option Bool
+  | _, _, .nil => none
+  | _, _, .cons step _ => some step.2
+
+theorem differentFullHistories : payloadFalse ≠ payloadTrue := by
+  intro equality
+  have payloads := congrArg
+    (fun history : PositiveHistory redundantFormation false true => extraHeadPayload history)
+    equality
+  exact Bool.noConfusion (Option.some.inj payloads)
+
+theorem equalDeploymentDespiteDifferentPayload : payloadFalse.deploy = payloadTrue.deploy := rfl
+
+theorem actualHeadLink :
+    (payloadFalse.deploy.linkAt (payloadFalse.toPosition .here)).source.explicit = false ∧
+    (payloadFalse.deploy.linkAt (payloadFalse.toPosition .here)).target.explicit = true ∧
+    (payloadFalse.deploy.linkAt (payloadFalse.toPosition .here)).compatibility = true :=
+  ⟨rfl, rfl, rfl⟩
+
+theorem actualTwoLinkWitnesses :
+    (rawReturn.deploy.linkAt (rawReturn.toPosition .here)).compatibility = true ∧
+    (rawReturn.deploy.linkAt (rawReturn.toPosition (.later .here))).compatibility = false :=
+  ⟨rfl, rfl⟩
+
+theorem rawNodesReturn : rawReturn.deploy.finalNode = rawReturn.deploy.startNode := rfl
+
+theorem twoOccurrencesRemainDistinct :
+    (PositiveHistory.Occurrence.here : PositiveHistory.Occurrence rawReturn) ≠ .later .here := by
+  intro equality
+  cases equality
+
+theorem twoPositionsRemainDistinct :
+    rawReturn.toPosition .here ≠ rawReturn.toPosition (.later .here) := by
+  intro equality
+  cases equality
+
+theorem secondOccurrenceReturn :
+    rawReturn.fromPosition (rawReturn.toPosition (.later .here)) = .later .here := rfl
+
+theorem secondPositionReturn :
+    rawReturn.toPosition (rawReturn.fromPosition (.later .here)) = .later .here := rfl
+
+theorem nilHasNoPosition :
+    NonClosingPosition
+      (PositiveHistory.nil : PositiveHistory redundantFormation false false).deploy → False := by
+  intro position
+  cases position
+
+def appended : PositiveHistory redundantFormation false true := rawReturn.append payloadFalse
+
+theorem appendedTerminal : appended.deploy.finalNode.explicit = true := rfl
+
+theorem appendedPreservesAllThreeWitnesses :
+    (appended.deploy.linkAt (appended.toPosition .here)).compatibility = true ∧
+    (appended.deploy.linkAt (appended.toPosition (.later .here))).compatibility = false ∧
+    (appended.deploy.linkAt (appended.toPosition (.later (.later .here)))).compatibility = true :=
+  ⟨rfl, rfl, rfl⟩
+
+theorem concreteIndexedAppend :
+    appended.deploy = rawReturn.deploy.appendAlong rawReturn.deploy_final payloadFalse.deploy := rfl
+
+def alternateTarget : PositiveHistory redundantFormation false false :=
+  .cons (true, false) (.nil : PositiveHistory redundantFormation false false)
+
+theorem distinctSuccessors :
+    payloadFalse.deploy.finalNode.explicit ≠ alternateTarget.deploy.finalNode.explicit := by
+  intro equality
+  exact Bool.noConfusion equality
+
+def closedPresentation : PositiveCircularPresentation := rawReturn.toCircular .here false
+
+theorem circularCarriesChosenWitness : closedPresentation.finalJunction = false := rfl
+
+theorem circularKeepsSelectedProvenance : closedPresentation.initialNode.provenance = false := rfl
+
+def endpoints : EndpointBoundary closedPresentation where
+  Endpoint := Bool
+  leftEndpoint := false
+  rightEndpoint := true
+  leftPole := fun _ => false
+  rightPole := fun _ => true
+  initialLeftPole := rfl
+  initialRightPole := rfl
+
+def obstruction : CircularClosureObstruction closedPresentation endpoints where
+  TotalLoop := PLift (false = true)
+  closeFromIdentification := fun equality => ⟨equality⟩
+  loopContractsInitialDifference := fun loop => loop.down
+  rejectInitialContraction := fun _ equality => Bool.noConfusion equality
+
+def historical : CircularPresentation := rawReturn.toHistorical .here false endpoints obstruction
+
+theorem historicalKeepsExactLayers :
+    historical.toPositiveCircularPresentation = closedPresentation ∧
+    historical.endpointBoundary = endpoints ∧
+    historical.closureObstruction = obstruction := ⟨rfl, rfl, rfl⟩
+
+-- Heterogeneous node interfaces and a step carrying extra forward payload.
+def openCompatibility (implicitValue : Bool) (explicitValue : Option Bool) : Type :=
+  Bool.rec (motive := fun _ => Type) Unit
+    (Option.rec (motive := fun _ => Type) Unit
+      (fun value => Bool.rec (motive := fun _ => Type) Empty Unit value) explicitValue)
+    implicitValue
+
+def openNode (state : Bool) :
+    LocalNode (Option Bool) Bool openCompatibility Bool (fun _ => Unit) where
+  explicit := some state
+  implicit := state
+  difference := state
+  provenance := ()
+  internallyCompatible := by cases state <;> exact ()
+
+inductive ForwardPayload : Bool → Bool → Type
+  | go (payload : Bool) : ForwardPayload false true
+
+def openFormation : PositiveFormation where
+  Explicit := Option Bool
+  Implicit := Bool
+  Compatible := openCompatibility
+  Difference := Bool
+  Provenance := fun _ => Unit
+  State := Bool
+  node := openNode
+  Step := ForwardPayload
+  compatibility := fun step => by cases step; exact ()
+
+def openHistory : PositiveHistory openFormation false true := .cons (.go true) .nil
+
+def openPositive : PositiveHistory.Occurrence openHistory := .here
+
+theorem openCannotClose : ClosingWitness openHistory.boundaryShape → False := by
+  intro closing
+  cases closing
+
+theorem openCannotPoint : Nonempty (PointedClosingBoundary openHistory.boundaryShape) → False := by
+  intro inhabited
+  cases inhabited with
+  | intro pointed => exact openCannotClose pointed.junction
+
+theorem openHasNoGlobalChosenContinuation : ChosenPositiveContinuation openFormation → False := by
+  intro choice
+  have step := choice.step true
+  cases step
+
+end PositiveGenerationReferee
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms PositiveGenerationReferee.boolNode
+#print axioms PositiveGenerationReferee.redundantFormation
+#print axioms PositiveGenerationReferee.payloadFalse
+#print axioms PositiveGenerationReferee.payloadTrue
+#print axioms PositiveGenerationReferee.rawReturn
+#print axioms PositiveGenerationReferee.extraHeadPayload
+#print axioms PositiveGenerationReferee.differentFullHistories
+#print axioms PositiveGenerationReferee.equalDeploymentDespiteDifferentPayload
+#print axioms PositiveGenerationReferee.actualHeadLink
+#print axioms PositiveGenerationReferee.actualTwoLinkWitnesses
+#print axioms PositiveGenerationReferee.rawNodesReturn
+#print axioms PositiveGenerationReferee.twoOccurrencesRemainDistinct
+#print axioms PositiveGenerationReferee.twoPositionsRemainDistinct
+#print axioms PositiveGenerationReferee.secondOccurrenceReturn
+#print axioms PositiveGenerationReferee.secondPositionReturn
+#print axioms PositiveGenerationReferee.nilHasNoPosition
+#print axioms PositiveGenerationReferee.appended
+#print axioms PositiveGenerationReferee.appendedTerminal
+#print axioms PositiveGenerationReferee.appendedPreservesAllThreeWitnesses
+#print axioms PositiveGenerationReferee.concreteIndexedAppend
+#print axioms PositiveGenerationReferee.alternateTarget
+#print axioms PositiveGenerationReferee.distinctSuccessors
+#print axioms PositiveGenerationReferee.closedPresentation
+#print axioms PositiveGenerationReferee.circularCarriesChosenWitness
+#print axioms PositiveGenerationReferee.circularKeepsSelectedProvenance
+#print axioms PositiveGenerationReferee.endpoints
+#print axioms PositiveGenerationReferee.obstruction
+#print axioms PositiveGenerationReferee.historical
+#print axioms PositiveGenerationReferee.historicalKeepsExactLayers
+#print axioms PositiveGenerationReferee.openCompatibility
+#print axioms PositiveGenerationReferee.openNode
+#print axioms PositiveGenerationReferee.ForwardPayload
+#print axioms PositiveGenerationReferee.openFormation
+#print axioms PositiveGenerationReferee.openHistory
+#print axioms PositiveGenerationReferee.openPositive
+#print axioms PositiveGenerationReferee.openCannotClose
+#print axioms PositiveGenerationReferee.openCannotPoint
+#print axioms PositiveGenerationReferee.openHasNoGlobalChosenContinuation
+/- AXIOM_AUDIT_END -/

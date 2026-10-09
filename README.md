@@ -123,6 +123,13 @@ below.
 - [Présentation française](docs/relations-primitives-constitution-perimetre.fr.md)
 - [Positioning and scope](docs/positioning-and-scope.en.md)
 - [Positionnement et portée](docs/positionnement-et-portee.fr.md)
+- [Positive circularity and boundary transports](docs/positive-circularity-and-boundary-transports.en.md)
+- [Circularité positive et transports de frontière](docs/circularite-positive-et-transports-frontiere.fr.md)
+- [Frontière avant le choix de la jonction](docs/frontiere-sans-jonction-choisie.fr.md)
+- [Formation et génération positives](docs/formation-et-generation-positives.fr.md)
+- [Transports de signature et de formation](docs/transports-signature-et-formation.fr.md)
+- [Classification relative des rôles équipés](docs/classification-roles-equipes.fr.md)
+- [Plan de poursuite des fondations positives](docs/plan-suite-fondations-positives.fr.md)
 - [Endogenous operational decomposition](docs/endogenous-operational-decomposition.en.md)
 - [Décomposition opérationnelle endogène](docs/decomposition-operationnelle-endogene.fr.md)
 - [Conceptual authorship and AI-generation disclosure](AI_AUTHORSHIP.md)
@@ -135,6 +142,39 @@ below.
 - `ExactTypeTransport.lean`: constructive two-sided transport between types;
 - `StrongPerimetralTurning.lean`: the constructive circular presentation and
   its perimetral instance.
+
+`RelationalPerimeter/Constitution/PositivePresentation.lean` separates the
+positive successive chain and closing witness from endpoint readings and the
+obstruction. The historical `CircularPresentation` extends this positive
+parent and is exactly reconstructed by the adapters in
+`CircularPresentationBridge.lean`. `BoundaryTransport.lean` preserves the
+selected closing source, target, difference, junction and provenance with
+explicit agreements and pointwise inverse/composition laws. Its scope is this
+boundary signature; the complete transports below are separate interfaces.
+
+`ClosingBoundary.lean` separates the boundary shape from a selected closing
+witness, with exact reconstruction of the current boundary. Its empty, `Unit`
+and `Bool` models distinguish witness existence, witness choice and role
+uniqueness over each fixed choice.
+
+`PositiveGeneration.lean` constructs finite composable histories and their
+deployment from a supplied state-node/step compatibility interface. Positions
+and selected compatibility witnesses are preserved exactly. Closure receives
+a separate junction; `PositiveGenerationBridge.lean` adds the historical
+endpoint readings and obstruction after this positive construction.
+
+`SignatureTransport.lean` transports every compatibility and provenance fibre
+with dependent reindexing, pointwise inverse and composition laws, and an
+equipped boundary restriction. `SpineTransport.lean` transports full spines,
+their positions and structural order. `FormationTransport.lean` reconstructs
+a formation retaining the same states and complete step types; its exact
+history transport commutes with composition and deployment.
+`ClosingTransport.lean` transports an available closing witness and the
+equipped boundary. `CircularRoles.lean` classifies equipped interior/final roles
+in an explicit grammar, `HistoricalRoleBridge.lean` preserves historical markers
+and realization agreements, and `CircularRoleTransport.lean` preserves role data
+and classification under signature reconstruction. Arbitrary target formations,
+pole functions, obstruction transport and universal role rigidity remain open.
 
 ## Computational construction
 

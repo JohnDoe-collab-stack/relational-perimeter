@@ -1,0 +1,596 @@
+{
+  "about": "État local de l’arbre de travail codex/positive-circular-foundations, basé sur 8a5e494. Ajouts non committés ; les lignes ne constituent pas une revue de littérature.",
+  "groups": [
+    "Noyaux et transport",
+    "Constitution du périmètre",
+    "Régime et interprétation",
+    "Modèles séparateurs",
+    "Recherche ouverte"
+  ],
+  "entries": [
+    {
+      "id": "th.residual",
+      "group": "Noyaux et transport",
+      "cls": "Unicité résiduelle du noyau",
+      "result": "Toute occurrence nouvelle porte le centre résiduel ; deux nouvelles occurrences coïncident. Une partie nouvelle positive fournit une occurrence distinguée unique.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "SegmentedResidualRole.lean:136",
+        "SegmentedResidualRole.lean:167"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.internal-reconstruction",
+      "group": "Noyaux et transport",
+      "cls": "Reconstruction interne sous conditions supplémentaires",
+      "result": "Un noyau résiduel positif reconstruit ExactInternalCompletion si embedOld est injectif ; la positivité permet de retrouver des étiquettes anciennes internes.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "SegmentedResidualRole.lean:595"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.abstract-exit",
+      "group": "Noyaux et transport",
+      "cls": "Classification et sortie du régime abstrait",
+      "result": "Un régime dont chaque candidat est canonique ou produit une tentative rejetée classe exactement la frontière ; la continuation stricte n’est pas admise.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "AbstractSegmentedTurning.lean:352",
+        "AbstractSegmentedTurning.lean:370"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.transport-backward",
+      "group": "Noyaux et transport",
+      "cls": "Accord des applications directes et unicité de l’inverse",
+      "result": "Deux ExactTypeTransport dont les fonctions directes coïncident point par point ont des fonctions inverses qui coïncident point par point.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "ExactTypeTransport.lean:101"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.perimeter-exact",
+      "group": "Constitution du périmètre",
+      "cls": "Correspondance exacte positions–occurrences",
+      "result": "Les positions non fermantes et les occurrences du déploiement canonique se correspondent avec deux lois de retour.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:3197",
+        "StrongPerimetralTurning.lean:3205"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.rooted-structure",
+      "group": "Constitution du périmètre",
+      "cls": "Injectivité, ordre et adjacence dans une histoire réelle",
+      "result": "Toute ExactNonClosingRealization dans une RootedGeneratedHistory est injective, conserve la précédence et la succession immédiate.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:4040",
+        "StrongPerimetralTurning.lean:4084",
+        "StrongPerimetralTurning.lean:4115"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.factorization",
+      "group": "Constitution du périmètre",
+      "cls": "Factorisation constructive par le périmètre",
+      "result": "Une ExactNonClosingRealization dans une histoire enracinée reconstruit une continuation et la recomposition de cette histoire depuis le périmètre canonique.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:4654"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.positive-continuation",
+      "group": "Constitution du périmètre",
+      "cls": "Continuation positivement engendrée et stricte",
+      "result": "oneStepAfterPerimeter construit un pas après le périmètre et une extension stricte, distincte du déploiement canonique.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:2705",
+        "StrongPerimetralTurning.lean:2715"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.no-return",
+      "group": "Constitution du périmètre",
+      "cls": "Absence de retour dans une histoire générée positive",
+      "result": "Une histoire GeneratedHistory positive possède une source distincte de sa cible.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:2556"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.labelled-residual",
+      "group": "Régime et interprétation",
+      "cls": "Toute continuation positive fidèlement classée a un résidu unique",
+      "result": "Dans une FaithfullyLabelledPerimeterExtension positive, toute nouvelle occurrence porte FinalRequirement et les occurrences de la continuation sont uniques.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:5211",
+        "StrongPerimetralTurning.lean:5221"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.circular-classification",
+      "group": "Régime et interprétation",
+      "cls": "Maximalité relative au régime circulaire",
+      "result": "CircularRefinement P history équivaut constructivement à history = perimeterDeployment P ; le premier pas supplémentaire n’est pas admis.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:6853",
+        "StrongPerimetralTurning.lean:6864"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.specification",
+      "group": "Régime et interprétation",
+      "cls": "Admission et satisfaction : adéquation démontrée",
+      "result": "CircularRefinement fournit CircularSpecificationSatisfaction ; réciproquement la satisfaction fournit le raffinement, avec des témoins et interfaces distincts.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:6906",
+        "StrongPerimetralTurning.lean:6086"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.turning",
+      "group": "Régime et interprétation",
+      "cls": "Certificat du tournant périmétral affirmatif",
+      "result": "strongPerimetralTurning rassemble génération positive, réalisation exacte, absorption des parties admissibles, refus des totalisations et continuation au-delà du périmètre.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:7001"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.numeric-readout",
+      "group": "Régime et interprétation",
+      "cls": "Lecture numérique dérivée des histoires",
+      "result": "Une histoire perimétralement admissible a une longueur inférieure ou égale à celle du déploiement canonique.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:7138"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.concrete-interpretation",
+      "group": "Régime et interprétation",
+      "cls": "Interprétation exacte des occurrences concrètes",
+      "result": "Toute ConcreteContinuationAlgebra fournit une ExactHistoryInterpretation de chaque histoire libre, avec deux retours des occurrences.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:7607"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.separator-order",
+      "group": "Modèles séparateurs",
+      "cls": "Séparateur existant : exactitude locale sans ordre",
+      "result": "La réalisation sémantique permutée de l’exemple à quatre nœuds est localement exacte et injective, mais ne conserve pas la précédence.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:8161"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.separator-bridge",
+      "group": "Modèles séparateurs",
+      "cls": "Séparateur existant : ordre sans pont composable",
+      "result": "La trace intercalée de l’exemple conserve la précédence mais n’a pas de pont constitutif effectif entre les première et deuxième positions adjacentes.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "StrongPerimetralTurning.lean:8284",
+        "StrongPerimetralTurning.lean:8356"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.separator-injectivity",
+      "group": "Modèles séparateurs",
+      "cls": "Nouveau contre-modèle : retirer la fidélité détruit l’unicité",
+      "result": "Deux nouvelles occurrences Bool ont le même label dans un résidu Unit contractile, sans aucun label interne Empty, et restent distinctes.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "labyrinth/probes/FoundationalSeparators.lean.in:33",
+        "labyrinth/probes/FoundationalSeparators.lean.in:27"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.separator-transport",
+      "group": "Modèles séparateurs",
+      "cls": "Nouveau contre-modèle : transport exact sans conservation de l’ordre",
+      "result": "L’involution Bool.not est un ExactTypeTransport Bool Bool qui inverse une relation Before false true et ne la préserve pas.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "labyrinth/probes/FoundationalSeparators.lean.in:80"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.final-role-carrier",
+      "group": "Modèles séparateurs",
+      "cls": "Diagnostic : le rôle final nu est uniformément ponctuel",
+      "result": "Pour toute présentation P, FinalRequirement P possède un transport exact explicite vers Unit.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-foundations) ; vérification humaine en attente",
+      "refs": [
+        "labyrinth/probes/FoundationalSeparators.lean.in:86"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "q.positive-circle",
+      "group": "Recherche ouverte",
+      "cls": "Circularité positive autonome",
+      "result": "La séparation de la présentation positive et de l’obstruction, ainsi que le retour exact à la présentation historique, sont réalisés. La génération positive générale reste une question distincte.",
+      "status": "Données et pont réalisés T2 ; génération générale ouverte",
+      "refs": [
+        "docs/plan-reconstruction-fondations-relationnelles.fr.md"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "partial",
+      "previous": [
+        {
+          "date": "2026-10-09",
+          "was": "Peut-on séparer une présentation circulaire positive de l’obstruction initiale, puis retrouver l’instance existante par ajout de cette couche ?",
+          "status": "Question ouverte ; interface non acquise"
+        }
+      ]
+    },
+    {
+      "id": "q.equipped-final-role",
+      "group": "Recherche ouverte",
+      "cls": "Rôle final équipé de sa frontière",
+      "result": "Un rôle équipé de la frontière de clôture et de sa jonction est implémenté avec conservation par morphismes riches. La minimalité de la signature et la grammaire circulaire complète restent ouvertes.",
+      "status": "Réponse partielle T2 ; extension générale ouverte",
+      "refs": [
+        "docs/plan-reconstruction-fondations-relationnelles.fr.md"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "partial",
+      "previous": [
+        {
+          "date": "2026-10-09",
+          "was": "Quelle structure minimale relie le rôle final, sa frontière et la jonction distinguée, avec des morphismes qui préservent cette origine ?",
+          "status": "Question ouverte ; interface non acquise"
+        }
+      ]
+    },
+    {
+      "id": "q.rich-transport",
+      "group": "Recherche ouverte",
+      "cls": "Transport de la constitution relationnelle",
+      "result": "Identité, inversion et composition sont réalisées pour la frontière sélectionnée, avec accords source/cible/différence et témoins de jonction/provenance. Le transport des familles complètes reste ouvert.",
+      "status": "Réponse partielle T2 ; extension générale ouverte",
+      "refs": [
+        "docs/plan-reconstruction-fondations-relationnelles.fr.md"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "partial",
+      "previous": [
+        {
+          "date": "2026-10-09",
+          "was": "Quels accords source/cible, compatibilité et provenance doivent accompagner un transport exact, et quelles lois de composition restent constructives ?",
+          "status": "Question ouverte ; interface non acquise"
+        }
+      ]
+    },
+    {
+      "id": "q.rigidity",
+      "group": "Recherche ouverte",
+      "cls": "Réalisation choisie et rigidité",
+      "result": "Comment séparer une réalisation exacte distinguée de la propriété selon laquelle toute réalisation admissible impose la même classification ?",
+      "status": "Question ouverte ; interface non acquise",
+      "refs": [
+        "docs/plan-reconstruction-fondations-relationnelles.fr.md"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "partial",
+      "previous": []
+    },
+    {
+      "id": "q.multiple-generation",
+      "group": "Recherche ouverte",
+      "cls": "Plusieurs témoins ou successeurs",
+      "result": "Le mécanisme du tournant peut-il être formulé sur une génération générale à plusieurs successeurs tout en conservant la continuation choisie ?",
+      "status": "Question ouverte ; interface non acquise",
+      "refs": [
+        "docs/plan-reconstruction-fondations-relationnelles.fr.md"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "partial",
+      "previous": []
+    },
+    {
+      "id": "q.quantity",
+      "group": "Recherche ouverte",
+      "cls": "Quantité structurelle générale",
+      "result": "Quelle signature et quel critère d’équivalence constituent une quantité structurelle au-delà de la seule correspondance de porteurs ?",
+      "status": "Question ouverte ; interface non acquise",
+      "refs": [
+        "docs/plan-reconstruction-fondations-relationnelles.fr.md"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "partial",
+      "previous": []
+    },
+    {
+      "id": "q.converse-traces",
+      "group": "Recherche ouverte",
+      "cls": "Converse d’une reconstruction de trace",
+      "result": "Sous quelles hypothèses supplémentaires une trace localement exacte, ordonnée et contiguë se reconstruit-elle en histoire enracinée composable ?",
+      "status": "Question ouverte ; interface non acquise",
+      "refs": [
+        "docs/plan-reconstruction-fondations-relationnelles.fr.md"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "partial",
+      "previous": []
+    },
+    {
+      "id": "q.concrete-faithfulness",
+      "group": "Recherche ouverte",
+      "cls": "Fidélité des cibles sous interprétation",
+      "result": "Quelles hypothèses sur ConcreteContinuationAlgebra préservent la distinction de la cible fermante et de la continuation libre ?",
+      "status": "Question ouverte ; interface non acquise",
+      "refs": [
+        "docs/plan-reconstruction-fondations-relationnelles.fr.md"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "partial",
+      "previous": []
+    },
+    {
+      "id": "th.separator-old-completion",
+      "group": "Modèles séparateurs",
+      "cls": "Nouveau contre-modèle : positivité sans reconstruction intérieure",
+      "result": "Un ResidualUniquenessKernel peut avoir une partie nouvelle positive et un résidu unique sans admettre aucune ExactInternalCompletion : les anciennes occurrences peuvent être fusionnées par embedOld.",
+      "status": "T2 · deux constructions Lean ; referee IA et contrôle du coordinateur ; vérification humaine en attente",
+      "refs": [
+        "research/agents/referee-foundations/IndependentProbes.lean.in:35",
+        "labyrinth/probes/FoundationalSeparators.lean.in:65"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.positive-split",
+      "group": "Constitution du périmètre",
+      "cls": "Présentation positive et obstruction séparées",
+      "result": "Les données circulaires positives sont définies sans rejet de contraction. Une même chaîne reçoit des lectures de pôles identifiés ou séparés ; seule la seconde reçoit l’obstruction de l’exemple.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-positive-foundations) ; vérification humaine en attente",
+      "refs": [
+        "RelationalPerimeter/Constitution/PositivePresentation.lean:18",
+        "RelationalPerimeter/Constitution/PositivePresentation.lean:62",
+        "RelationalPerimeter/Constitution/Examples.lean:46",
+        "RelationalPerimeter/Constitution/Examples.lean:68"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.circular-bridge",
+      "group": "Constitution du périmètre",
+      "cls": "Reconstruction exacte de la présentation historique",
+      "result": "Extraire la présentation positive, la frontière de pôles et l’obstruction puis les réassembler reconstruit exactement CircularPresentation ; les trois couches ont aussi leurs lois de retour.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-positive-foundations) ; vérification humaine en attente",
+      "refs": [
+        "RelationalPerimeter/Constitution/CircularPresentationBridge.lean:48",
+        "RelationalPerimeter/Constitution/CircularPresentationBridge.lean:55",
+        "RelationalPerimeter/Constitution/CircularPresentationBridge.lean:63",
+        "RelationalPerimeter/Constitution/CircularPresentationBridge.lean:72"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.boundary-extraction",
+      "group": "Constitution du périmètre",
+      "cls": "Extraction autoritative de la frontière de clôture",
+      "result": "closingBoundary extrait la source implicite terminale, la cible explicite initiale, la jonction fermante distinguée et la différence/provenance initiales.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-positive-foundations) ; vérification humaine en attente",
+      "refs": [
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:31",
+        "research/agents/referee-positive-foundations/IndependentProbes.lean.in:145"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.boundary-calculus",
+      "group": "Constitution du périmètre",
+      "cls": "Calcul constructif des transports équipés de frontière",
+      "result": "Les transports exacts des cinq porteurs conservant trois indices et deux témoins sont fermés par identité, inversion et composition. Unités, associativité et inverses valent point par point ; l’accord inverse se déduit de l’accord direct.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-positive-foundations) ; vérification humaine en attente",
+      "refs": [
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:79",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:102",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:133",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:138",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:143",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:150",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:157",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:185"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.equipped-role",
+      "group": "Constitution du périmètre",
+      "cls": "Rôle final équipé et ses retours exacts",
+      "result": "Le rôle équipé d’une frontière est habité et unique. Un transport riche conserve ses vues de source, cible et provenance et induit un transport exact du rôle, compatible à l’identité et à la composition.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-positive-foundations) ; vérification humaine en attente",
+      "refs": [
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:232",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:228",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:246",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:250",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:254",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:258",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:263",
+        "RelationalPerimeter/Constitution/BoundaryTransport.lean:280"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.separator-closing-witness",
+      "group": "Modèles séparateurs",
+      "cls": "Une bijection de fibre peut perdre la jonction choisie",
+      "result": "Un transport exact de tous les porteurs conserve les trois indices mais échange les témoins Bool de clôture ; ce transport spécifié ne peut s’enrichir en BoundaryTransport.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-positive-foundations) ; vérification humaine en attente",
+      "refs": [
+        "RelationalPerimeter/Constitution/Examples.lean:89",
+        "RelationalPerimeter/Constitution/Examples.lean:100"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.separator-provenance-witness",
+      "group": "Modèles séparateurs",
+      "cls": "L’accord de jonction ne conserve pas la provenance",
+      "result": "Un transport exact conserve les trois indices et la jonction mais échange uniquement les témoins Bool de provenance ; il ne peut s’enrichir avec ces mêmes applications.",
+      "status": "T2 · modèle du referee, relecture indépendante par le coordinateur ; Lean compilé ; vérification humaine en attente",
+      "refs": [
+        "research/agents/referee-positive-foundations/IndependentProbes.lean.in:115",
+        "research/agents/referee-positive-foundations/IndependentProbes.lean.in:130"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "th.separator-positive-recurrence",
+      "group": "Modèles séparateurs",
+      "cls": "La présentation positive autorise un retour du nœud brut",
+      "result": "Une présentation positive non vide peut avoir son nœud terminal égal au nœud initial. Cette égalité ne produit pas un retour de curseur ni une occurrence historique cyclique.",
+      "status": "T2 · Lean compilé ; referee IA indépendant (referee-positive-foundations) ; vérification humaine en attente",
+      "refs": [
+        "RelationalPerimeter/Constitution/Examples.lean:72",
+        "research/agents/referee-positive-foundations/IndependentProbes.lean.in:47"
+      ],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "proved",
+      "previous": []
+    },
+    {
+      "id": "q.positive-generation",
+      "group": "Recherche ouverte",
+      "cls": "Algèbre de génération positive générale",
+      "result": "Comment engendrer une chaîne positive et sa jonction depuis une algèbre constructive indépendante de l’obstruction ?",
+      "status": "Ouvert · interface proposée",
+      "refs": [],
+      "lit": [],
+      "updated": "2026-10-09",
+      "kind": "partial",
+      "previous": []
+    }
+  ]
+}

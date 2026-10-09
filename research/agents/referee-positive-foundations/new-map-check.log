@@ -1,0 +1,9 @@
+th.positive-split : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.circular-bridge : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.boundary-extraction : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.boundary-calculus : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.equipped-role : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.separator-closing-witness : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.separator-provenance-witness : source anchors, T2 review, evidence, SOTA text and link targets valid
+th.separator-positive-recurrence : source anchors, T2 review, evidence, SOTA text and link targets valid
+8 new T2 nodes and 32 source references checked. Semantic dependency review is manual.

@@ -105,6 +105,13 @@ une même famille relationnelle typée
 
 ## Positionnement et portée
 
+Une nouvelle couche distingue les données positives de la circularité et
+l’obstruction historique : `PositiveCircularPresentation`, `EndpointBoundary`
+et `CircularClosureObstruction`. `CircularPresentation` conserve l’interface
+enrichie utilisée ci-dessous, avec des raccords exacts aux couches séparées.
+Les transports de la frontière fermante équipée et leurs limites sont décrits
+dans [Circularité positive et transports de frontière](circularite-positive-et-transports-frontiere.fr.md).
+
 Cette construction est une architecture relationnelle formalisée dans Lean,
 non une fondation logique concurrente. Sa proof-relevance, la séparation de ses
 interfaces et les limites exactes de ses rapprochements avec les systèmes de

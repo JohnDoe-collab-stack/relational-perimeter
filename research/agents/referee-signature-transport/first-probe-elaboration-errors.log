@@ -1,0 +1,172 @@
+research/agents/referee-signature-transport/IndependentProbes.lean.in:107:4: error: don't know how to synthesize implicit argument `α`
+  @Ne
+    (markedBoundary.signature.Compatible (closingFamilySwap.implicit.forward ?m.3)
+      (closingFamilySwap.explicit.forward ?m.4))
+    ((closingFamilySwap.compatibilityAt ⋯ ⋯).forward markedBoundary.junction) markedBoundary.junction
+context:
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:107:4: error: don't know how to synthesize implicit argument `Target`
+  @ExactTypeTransport.forward (markedBoundary.signature.Compatible ?m.3 ?m.4)
+    (markedBoundary.signature.Compatible (closingFamilySwap.implicit.forward ?m.3)
+      (closingFamilySwap.explicit.forward ?m.4))
+    (closingFamilySwap.compatibilityAt ⋯ ⋯) markedBoundary.junction
+context:
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:107:4: error: don't know how to synthesize implicit argument `Source`
+  @ExactTypeTransport.forward (markedBoundary.signature.Compatible ?m.3 ?m.4)
+    (markedBoundary.signature.Compatible (closingFamilySwap.implicit.forward ?m.3)
+      (closingFamilySwap.explicit.forward ?m.4))
+    (closingFamilySwap.compatibilityAt ⋯ ⋯) markedBoundary.junction
+context:
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:107:5: error: don't know how to synthesize implicit argument `f`
+  @ConstitutiveSignatureTransport.compatibilityAt markedBoundary.signature markedBoundary.signature closingFamilySwap
+    ?m.3 ?m.4 (closingFamilySwap.implicit.forward ?m.3) (closingFamilySwap.explicit.forward ?m.4) ⋯ ⋯
+context:
+⊢ markedBoundary.signature.Explicit
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:107:5: error: don't know how to synthesize implicit argument `j`
+  @ConstitutiveSignatureTransport.compatibilityAt markedBoundary.signature markedBoundary.signature closingFamilySwap
+    ?m.3 ?m.4 (closingFamilySwap.implicit.forward ?m.3) (closingFamilySwap.explicit.forward ?m.4) ⋯ ⋯
+context:
+⊢ markedBoundary.signature.Implicit
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:107:5: error: don't know how to synthesize implicit argument `e`
+  @ConstitutiveSignatureTransport.compatibilityAt markedBoundary.signature markedBoundary.signature closingFamilySwap
+    ?m.3 ?m.4 (closingFamilySwap.implicit.forward ?m.3) (closingFamilySwap.explicit.forward ?m.4) ⋯ ⋯
+context:
+⊢ markedBoundary.signature.Explicit
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:107:5: error: don't know how to synthesize implicit argument `i`
+  @ConstitutiveSignatureTransport.compatibilityAt markedBoundary.signature markedBoundary.signature closingFamilySwap
+    ?m.3 ?m.4 (closingFamilySwap.implicit.forward ?m.3) (closingFamilySwap.explicit.forward ?m.4) ⋯ ⋯
+context:
+⊢ markedBoundary.signature.Implicit
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:107:43: error: don't know how to synthesize implicit argument `a`
+  @rfl markedBoundary.signature.Explicit (closingFamilySwap.explicit.forward ?m.4)
+context:
+⊢ markedBoundary.signature.Explicit
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:107:39: error: don't know how to synthesize implicit argument `a`
+  @rfl markedBoundary.signature.Implicit (closingFamilySwap.implicit.forward ?m.3)
+context:
+⊢ markedBoundary.signature.Implicit
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:110:2: error: Type mismatch
+  Bool.noConfusion equality
+has type
+  Bool.noConfusionType ?m.17 ((closingFamilySwap.compatibilityAt ⋯ ⋯).forward markedBoundary.junction)
+    markedBoundary.junction
+but is expected to have type
+  False
+research/agents/referee-signature-transport/IndependentProbes.lean.in:113:4: error: don't know how to synthesize implicit argument `α`
+  @Ne (markedBoundary.signature.Provenance (provenanceFamilySwap.difference.forward ?m.3))
+    ((provenanceFamilySwap.provenanceAt ⋯).forward markedBoundary.provenance) markedBoundary.provenance
+context:
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:113:4: error: don't know how to synthesize implicit argument `Target`
+  @ExactTypeTransport.forward (markedBoundary.signature.Provenance ?m.3)
+    (markedBoundary.signature.Provenance (provenanceFamilySwap.difference.forward ?m.3))
+    (provenanceFamilySwap.provenanceAt ⋯) markedBoundary.provenance
+context:
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:113:4: error: don't know how to synthesize implicit argument `Source`
+  @ExactTypeTransport.forward (markedBoundary.signature.Provenance ?m.3)
+    (markedBoundary.signature.Provenance (provenanceFamilySwap.difference.forward ?m.3))
+    (provenanceFamilySwap.provenanceAt ⋯) markedBoundary.provenance
+context:
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:113:5: error: don't know how to synthesize implicit argument `c`
+  @ConstitutiveSignatureTransport.provenanceAt markedBoundary.signature markedBoundary.signature provenanceFamilySwap
+    ?m.3 (provenanceFamilySwap.difference.forward ?m.3) ⋯
+context:
+⊢ markedBoundary.signature.Difference
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:113:5: error: don't know how to synthesize implicit argument `d`
+  @ConstitutiveSignatureTransport.provenanceAt markedBoundary.signature markedBoundary.signature provenanceFamilySwap
+    ?m.3 (provenanceFamilySwap.difference.forward ?m.3) ⋯
+context:
+⊢ markedBoundary.signature.Difference
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:113:39: error: don't know how to synthesize implicit argument `a`
+  @rfl markedBoundary.signature.Difference (provenanceFamilySwap.difference.forward ?m.3)
+context:
+⊢ markedBoundary.signature.Difference
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+research/agents/referee-signature-transport/IndependentProbes.lean.in:116:2: error: Type mismatch
+  Bool.noConfusion equality
+has type
+  Bool.noConfusionType ?m.13 ((provenanceFamilySwap.provenanceAt ⋯).forward markedBoundary.provenance)
+    markedBoundary.provenance
+but is expected to have type
+  False
+'SignatureTransportReferee.flip' does not depend on any axioms
+'SignatureTransportReferee.mixedCompatibility' does not depend on any axioms
+'SignatureTransportReferee.mixedSignature' does not depend on any axioms
+'SignatureTransportReferee.reversedIndicesSignature' does not depend on any axioms
+'SignatureTransportReferee.mixedMap' does not depend on any axioms
+'SignatureTransportReferee.mixedInverseReturnsUnit' does not depend on any axioms
+'SignatureTransportReferee.mixedInverseReturnsBool' does not depend on any axioms
+'SignatureTransportReferee.mixedInverseReturnsProvenance' does not depend on any axioms
+'SignatureTransportReferee.mixedCompositionChecksFibre' does not depend on any axioms
+'SignatureTransportReferee.nodeTrue' does not depend on any axioms
+'SignatureTransportReferee.mappedNodeReturns' does not depend on any axioms
+'SignatureTransportReferee.allEmptySignature' does not depend on any axioms
+'SignatureTransportReferee.sameSortsCannotSupplyAllFibres' does not depend on any axioms
+'SignatureTransportReferee.markedBoundary' does not depend on any axioms
+'SignatureTransportReferee.closingFamilySwap' does not depend on any axioms
+'SignatureTransportReferee.provenanceFamilySwap' does not depend on any axioms
+'SignatureTransportReferee.closingSwapFailsChosenAgreement' depends on axioms: [sorryAx]
+'SignatureTransportReferee.provenanceSwapFailsChosenAgreement' depends on axioms: [sorryAx]
+'SignatureTransportReferee.fullClosingSwapCannotRestrict' depends on axioms: [sorryAx]
+'SignatureTransportReferee.fullProvenanceSwapCannotRestrict' depends on axioms: [sorryAx]
+'SignatureTransportReferee.repeatedSpine' does not depend on any axioms
+'SignatureTransportReferee.firstPosition' does not depend on any axioms
+'SignatureTransportReferee.secondPosition' does not depend on any axioms
+'SignatureTransportReferee.secondPositionReturns' does not depend on any axioms
+'SignatureTransportReferee.firstLinkWitness' does not depend on any axioms
+'SignatureTransportReferee.secondLinkWitness' does not depend on any axioms
+'SignatureTransportReferee.firstPrecedesSecond' does not depend on any axioms
+'SignatureTransportReferee.firstNextSecond' does not depend on any axioms
+'SignatureTransportReferee.precedencePreservedAndReflected' does not depend on any axioms
+'SignatureTransportReferee.nextPreservedAndReflected' does not depend on any axioms
+'SignatureTransportReferee.payloadFormation' does not depend on any axioms
+'SignatureTransportReferee.payloadMap' does not depend on any axioms
+'SignatureTransportReferee.payloadHistory' does not depend on any axioms
+'SignatureTransportReferee.alternatePayload' does not depend on any axioms
+'SignatureTransportReferee.headPayload' does not depend on any axioms
+'SignatureTransportReferee.payloadHistoriesDistinct' does not depend on any axioms
+'SignatureTransportReferee.payloadDeploymentForgetsExtraBit' does not depend on any axioms
+'SignatureTransportReferee.payloadHistoryReturns' does not depend on any axioms
+'SignatureTransportReferee.restoredMetadataExact' does not depend on any axioms
+'SignatureTransportReferee.transportedHistoryDistinct' does not depend on any axioms
+'SignatureTransportReferee.sameNodeDifferentStates' does not depend on any axioms
+'SignatureTransportReferee.stateDifferenceRetained' does not depend on any axioms
+'SignatureTransportReferee.transportedDeploymentExact' does not depend on any axioms
+'SignatureTransportReferee.secondOccurrence' does not depend on any axioms
+'SignatureTransportReferee.secondOccurrenceReturns' does not depend on any axioms
+'SignatureTransportReferee.occurrencePositionSquare' does not depend on any axioms
+'SignatureTransportReferee.appendDeploymentSquare' does not depend on any axioms
+'SignatureTransportReferee.historyAppendSquare' does not depend on any axioms

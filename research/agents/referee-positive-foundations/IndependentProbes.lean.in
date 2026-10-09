@@ -1,0 +1,193 @@
+import RelationalPerimeter.Constitution.PositivePresentation
+import ExactTypeTransport
+import RelationalPerimeter.Constitution.BoundaryTransport
+import RelationalPerimeter.Constitution.CircularPresentationBridge
+
+namespace PositiveFoundationReferee
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution
+
+-- Independently chosen data: repeated raw node, proof-relevant Bool witnesses.
+def node : LocalNode Unit Unit (fun _ _ => Bool) Bool (fun _ => Bool) where
+  explicit := ()
+  implicit := ()
+  difference := false
+  provenance := false
+  internallyCompatible := false
+
+def circle : PositiveCircularPresentation where
+  Explicit := Unit
+  Implicit := Unit
+  Compatible := fun _ _ => Bool
+  Difference := Bool
+  Provenance := fun _ => Bool
+  initialNode := node
+  perimeter := .advance false (.boundary node)
+  perimeterPositive := .here
+  finalJunction := false
+
+def collapsedEndpoints : EndpointBoundary circle where
+  Endpoint := Unit
+  leftEndpoint := ()
+  rightEndpoint := ()
+  leftPole := fun _ => ()
+  rightPole := fun _ => ()
+  initialLeftPole := rfl
+  initialRightPole := rfl
+
+theorem identifiedEndpoints :
+    collapsedEndpoints.leftEndpoint = collapsedEndpoints.rightEndpoint := rfl
+
+-- This proof inspects the rejection field directly, independently of its API theorem.
+theorem noRejectionOnCollapsedEndpoints :
+    CircularClosureObstruction circle collapsedEndpoints → False := by
+  intro obstruction
+  exact obstruction.rejectInitialContraction false rfl
+
+theorem repeatedRawNode : circle.perimeter.finalNode = circle.initialNode := rfl
+
+def flip : ExactTypeTransport Bool Bool where
+  forward := Bool.not
+  backward := Bool.not
+  forwardBackward := fun value => by cases value <;> rfl
+  backwardForward := fun value => by cases value <;> rfl
+
+theorem flipChangesChosenWitness : flip.forward false ≠ false := by
+  intro equality
+  exact Bool.noConfusion equality
+
+def boolBoundary (chosen : Bool) : ConstitutiveBoundary where
+  Explicit := Bool
+  Implicit := Bool
+  Compatible := fun _ _ => Bool
+  source := chosen
+  target := chosen
+  junction := chosen
+  Difference := Bool
+  Provenance := fun _ => Bool
+  difference := chosen
+  provenance := chosen
+
+def flipAll : BoundaryTransport (boolBoundary false) (boolBoundary true) where
+  explicit := flip
+  implicit := flip
+  difference := flip
+  junction := flip
+  provenance := flip
+  sourceExact := rfl
+  targetExact := rfl
+  differenceExact := rfl
+  junctionExact := rfl
+  provenanceExact := rfl
+
+-- Every endpoint and selected fibre is tested on a nonidentity transport.
+theorem inverseAllIndices :
+    flipAll.reverse.implicit.forward true = false ∧
+    flipAll.reverse.explicit.forward true = false ∧
+    flipAll.reverse.difference.forward true = false ∧
+    flipAll.reverse.junction.forward true = false ∧
+    flipAll.reverse.provenance.forward true = false := by
+  exact ⟨rfl, rfl, rfl, rfl, rfl⟩
+
+theorem compositeSelectedWitnesses :
+    (flipAll.compose flipAll.reverse).junction.forward false = false ∧
+    (flipAll.compose flipAll.reverse).provenance.forward false = false := by
+  exact ⟨rfl, rfl⟩
+
+theorem inverseRole :
+    ((EquippedFinalRole.canonical (boolBoundary false)).transport flipAll).transport
+      flipAll.reverse = EquippedFinalRole.canonical (boolBoundary false) := by
+  apply EquippedFinalRole.ext
+  rfl
+
+theorem roleProvenanceIsMapped :
+    flipAll.provenance.forward
+        (EquippedFinalRole.canonical (boolBoundary false)).provenance =
+      ((EquippedFinalRole.canonical (boolBoundary false)).transport flipAll).provenance := rfl
+
+def swapClosingOnly : BoundaryCarrierTransport (boolBoundary false) (boolBoundary false) where
+  explicit := ExactTypeTransport.reflexive _
+  implicit := ExactTypeTransport.reflexive _
+  difference := ExactTypeTransport.reflexive _
+  junction := flip
+  provenance := ExactTypeTransport.reflexive _
+
+def swapProvenanceOnly : BoundaryCarrierTransport (boolBoundary false) (boolBoundary false) where
+  explicit := ExactTypeTransport.reflexive _
+  implicit := ExactTypeTransport.reflexive _
+  difference := ExactTypeTransport.reflexive _
+  junction := ExactTypeTransport.reflexive _
+  provenance := flip
+
+theorem closingSwapCannotEnrich
+    (rich : BoundaryTransport (boolBoundary false) (boolBoundary false))
+    (givenMap : rich.toBoundaryCarrierTransport = swapClosingOnly) : False := by
+  have preservation := rich.junctionExact
+  change rich.toBoundaryCarrierTransport.junction.forward false = false at preservation
+  rw [givenMap] at preservation
+  exact Bool.noConfusion preservation
+
+theorem provenanceSwapCannotEnrich
+    (rich : BoundaryTransport (boolBoundary false) (boolBoundary false))
+    (givenMap : rich.toBoundaryCarrierTransport = swapProvenanceOnly) : False := by
+  have preservation := rich.provenanceExact
+  change rich.toBoundaryCarrierTransport.provenance.forward false = false at preservation
+  rw [givenMap] at preservation
+  exact Bool.noConfusion preservation
+
+-- A generic direct reconstruction check, independent of the author's roundTrip theorem.
+theorem legacyReconstructs (P : CircularPresentation) :
+    CircularPresentation.ofPositive P.toPositiveCircularPresentation
+      P.endpointBoundary P.closureObstruction = P := by
+  cases P
+  rfl
+
+theorem extractedBoundaryReadsExactData (P : PositiveCircularPresentation) :
+    (closingBoundary P).junction = P.finalJunction ∧
+    (closingBoundary P).provenance = P.initialNode.provenance := ⟨rfl, rfl⟩
+
+-- Contractibility does not prevent the exact transport of fibres across boundaries.
+def bareRoleAcrossBoundaries :
+    ExactTypeTransport (EquippedFinalRole (boolBoundary false))
+      (EquippedFinalRole (boolBoundary true)) where
+  forward := fun _ => EquippedFinalRole.canonical _
+  backward := fun _ => EquippedFinalRole.canonical _
+  forwardBackward := fun role => by
+    apply EquippedFinalRole.ext
+    exact role.witnessExact.symm
+  backwardForward := fun role => by
+    apply EquippedFinalRole.ext
+    exact role.witnessExact.symm
+
+theorem bareRoleDoesNotSupplyClosingPreservation :
+    (ExactTypeTransport.reflexive Bool).forward (boolBoundary false).junction ≠
+      (boolBoundary true).junction := by
+  intro equality
+  exact Bool.noConfusion equality
+
+end PositiveFoundationReferee
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms PositiveFoundationReferee.node
+#print axioms PositiveFoundationReferee.circle
+#print axioms PositiveFoundationReferee.collapsedEndpoints
+#print axioms PositiveFoundationReferee.identifiedEndpoints
+#print axioms PositiveFoundationReferee.noRejectionOnCollapsedEndpoints
+#print axioms PositiveFoundationReferee.repeatedRawNode
+#print axioms PositiveFoundationReferee.flip
+#print axioms PositiveFoundationReferee.flipChangesChosenWitness
+#print axioms PositiveFoundationReferee.boolBoundary
+#print axioms PositiveFoundationReferee.flipAll
+#print axioms PositiveFoundationReferee.inverseAllIndices
+#print axioms PositiveFoundationReferee.compositeSelectedWitnesses
+#print axioms PositiveFoundationReferee.inverseRole
+#print axioms PositiveFoundationReferee.roleProvenanceIsMapped
+#print axioms PositiveFoundationReferee.swapClosingOnly
+#print axioms PositiveFoundationReferee.swapProvenanceOnly
+#print axioms PositiveFoundationReferee.closingSwapCannotEnrich
+#print axioms PositiveFoundationReferee.provenanceSwapCannotEnrich
+#print axioms PositiveFoundationReferee.legacyReconstructs
+#print axioms PositiveFoundationReferee.extractedBoundaryReadsExactData
+#print axioms PositiveFoundationReferee.bareRoleAcrossBoundaries
+#print axioms PositiveFoundationReferee.bareRoleDoesNotSupplyClosingPreservation
+/- AXIOM_AUDIT_END -/

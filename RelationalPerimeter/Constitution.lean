@@ -1,0 +1,45 @@
+import RelationalPerimeter.Constitution.PositivePresentation
+import RelationalPerimeter.Constitution.BoundaryTransport
+import RelationalPerimeter.Constitution.ClosingBoundary
+import RelationalPerimeter.Constitution.ClosingBoundaryExamples
+import RelationalPerimeter.Constitution.PositiveGeneration
+import RelationalPerimeter.Constitution.PositiveGenerationBridge
+import RelationalPerimeter.Constitution.PositiveGenerationExamples
+import RelationalPerimeter.Constitution.SignatureTransport
+import RelationalPerimeter.Constitution.SpineTransport
+import RelationalPerimeter.Constitution.FormationTransport
+import RelationalPerimeter.Constitution.ClosingTransport
+import RelationalPerimeter.Constitution.SignatureTransportExamples
+import RelationalPerimeter.Constitution.FormationTransportExamples
+import RelationalPerimeter.Constitution.ClosingTransportExamples
+import RelationalPerimeter.Constitution.CircularRoles
+import RelationalPerimeter.Constitution.HistoricalRoleBridge
+import RelationalPerimeter.Constitution.CircularRoleTransport
+import RelationalPerimeter.Constitution.CircularRolesExamples
+import RelationalPerimeter.Constitution.CircularRoleTransportExamples
+import RelationalPerimeter.Constitution.CircularPresentationBridge
+import RelationalPerimeter.Constitution.Examples
+
+/-!
+# Constitutive foundation facade
+
+The positive submodule is independently importable. This complete facade also
+exports the exact historical bridge and the separating models. Signature
+transports cover every primitive fibre, spines and reconstructed formations.
+State and full Step data are retained in that formation reconstruction.
+-/
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms StrongPerimetralTurning.PositiveCircularPresentation
+#print axioms RelationalPerimeter.Constitution.BoundaryTransport
+#print axioms RelationalPerimeter.Constitution.ClosingBoundaryShape
+#print axioms RelationalPerimeter.Constitution.ClosingWitness
+#print axioms RelationalPerimeter.Constitution.PointedClosingBoundary
+#print axioms RelationalPerimeter.Constitution.PositiveFormation
+#print axioms RelationalPerimeter.Constitution.PositiveHistory
+#print axioms RelationalPerimeter.Constitution.ConstitutiveSignatureTransport
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.signatureTransport
+#print axioms RelationalPerimeter.Constitution.CircularRole.classificationTransport
+#print axioms RelationalPerimeter.Constitution.PositiveHistory.circularRoleTransport
+#print axioms StrongPerimetralTurning.CircularPresentation.historical_roundTrip
+/- AXIOM_AUDIT_END -/

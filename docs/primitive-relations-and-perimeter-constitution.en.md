@@ -101,6 +101,13 @@ one typed relational family
 
 ## Positioning and scope
 
+The new positive layer separates `PositiveCircularPresentation`,
+`EndpointBoundary` and `CircularClosureObstruction`. The historical
+`CircularPresentation` retains the enriched interface used below, with exact
+adapters to these layers. Witness-preserving transports of the selected closing
+boundary and their scope are described in
+[Positive circularity and boundary transports](positive-circularity-and-boundary-transports.en.md).
+
 This construction is a relational architecture formalized in Lean, not a
 competing logical foundation. Its proof relevance, the separation of its
 interfaces, and the exact limits of its affinities with transition systems,

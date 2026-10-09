@@ -1,0 +1,44 @@
+research/agents/author-circular-role-transport/CircularRoleTransportExamples.lean.in:83:2: error: Type mismatch
+  PositiveHistory.circular_classification_commutes ?m.20 threeSteps firstOccurrence true role
+has type
+  ((PositiveHistory.circularRoleTransport ?m.20 threeSteps firstOccurrence true).forward role).classify =
+    Sum.map (PositiveHistory.circularPositionTransport ?m.20 threeSteps).forward id role.classify
+but is expected to have type
+  (roleMap.forward role).classify =
+    Sum.map (PositiveHistory.circularPositionTransport witnessFlip threeSteps).forward id role.classify
+research/agents/author-circular-role-transport/CircularRoleTransportExamples.lean.in:89:2: error: Type mismatch
+  PositiveHistory.circular_generated_position_commutes ?m.17 threeSteps firstOccurrence true role
+has type
+  ((PositiveHistory.circularRoleTransport ?m.17 threeSteps firstOccurrence true).forward role).generatedPosition =
+    Option.map (PositiveHistory.circularPositionTransport ?m.17 threeSteps).forward role.generatedPosition
+but is expected to have type
+  (roleMap.forward role).generatedPosition =
+    Option.map (PositiveHistory.circularPositionTransport witnessFlip threeSteps).forward role.generatedPosition
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.circular' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.movedCircular' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.firstInterior' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.thirdInterior' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.repeated_complete_links' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.distinct_equipped_interiors' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.interiorMap' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.movedFirstInterior' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.movedThirdInterior' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.moved_interiors_distinct' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.compatibility_flipped' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.source_internal_compatibility_flipped' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.source_provenance_flipped' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.target_provenance_flipped' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.first_interior_source_return' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.third_interior_target_return' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.roleMap' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.finalRole' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.finalMap' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.final_junction_flipped' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.final_provenance_flipped' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.interior_branch_retained' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.final_branch_retained' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.moved_final_no_position' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.moved_classification_commutes' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.moved_generation_readout_commutes' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.interior_role_source_return' does not depend on any axioms
+'RelationalPerimeter.Constitution.CircularRoleTransportExamples.final_role_target_return' does not depend on any axioms

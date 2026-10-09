@@ -1,0 +1,46 @@
+research/agents/author-circular-role-transport/CircularRoleTransport.lean.in:92:4: error: invalid 'calc' step, failed to synthesize `Trans` instance
+  Trans Eq Eq ?m.80
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+research/agents/author-circular-role-transport/CircularRoleTransport.lean.in:193:61: error: unexpected token '('; expected '}'
+research/agents/author-circular-role-transport/CircularRoleTransport.lean.in:193:25: error: Type mismatch
+  congrArg CircularRole.interior
+has type
+  ?m.107 = ?m.108 → CircularRole.interior ?m.107 = CircularRole.interior ?m.108
+but is expected to have type
+  (match
+      match CircularRole.interior role with
+      | CircularRole.interior role =>
+        CircularRole.interior ((interiorRoleTransport map history positive junction).forward role)
+      | CircularRole.final role =>
+        CircularRole.final ((finalRoleTransport map history positive junction).forward role) with
+    | CircularRole.interior role =>
+      CircularRole.interior ((interiorRoleTransport map history positive junction).backward role)
+    | CircularRole.final role =>
+      CircularRole.final ((finalRoleTransport map history positive junction).backward role)) =
+    CircularRole.interior role
+research/agents/author-circular-role-transport/CircularRoleTransport.lean.in:192:6: error: Alternative `final` has not been provided
+'RelationalPerimeter.Constitution.PositionReindex.exactTransport' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositionReindex.forward_exact' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositionReindex.reverse_forward_exact' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositionReindex.link_cast' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.circularPositionTransport' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.circular_position_preserved' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.interiorRoleTransport' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.interior_position_preserved' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.interior_link_preserved' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.PositiveHistory.interior_source_preserved' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.PositiveHistory.interior_target_preserved' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.PositiveHistory.interior_return' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.interior_return_target' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.finalRoleTransport' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.final_witness_preserved' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.final_source_preserved' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.final_target_preserved' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.final_difference_preserved' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.final_provenance_preserved' does not depend on any axioms
+'RelationalPerimeter.Constitution.PositiveHistory.circularRoleTransport' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.PositiveHistory.circular_interior_preserved' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.PositiveHistory.circular_final_preserved' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.PositiveHistory.circular_return' depends on axioms: [sorryAx]
+'RelationalPerimeter.Constitution.PositiveHistory.circular_return_target' depends on axioms: [sorryAx]
