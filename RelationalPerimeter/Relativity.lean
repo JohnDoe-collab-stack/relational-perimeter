@@ -35,6 +35,9 @@ import RelationalPerimeter.Relativity.Production.ResumedAgreementCourses
 import RelationalPerimeter.Relativity.Production.SharedProductiveCovers
 import RelationalPerimeter.Relativity.Production.RetainedProductiveCovers
 import RelationalPerimeter.Relativity.Production.InterleavedProductiveWindows
+import RelationalPerimeter.Relativity.Production.FiniteProductiveParticipants
+import RelationalPerimeter.Relativity.Production.EnlargedProductiveParticipants
+import RelationalPerimeter.Relativity.Production.ProductiveFamilyCourses
 import RelationalPerimeter.Relativity.Production.ReadingCompatibility
 import RelationalPerimeter.Relativity.Production.ContinuedReadingCovers
 import RelationalPerimeter.Relativity.Production.RestrictedReadingCovers
@@ -202,9 +205,36 @@ requests. Shared precision production consumes the actual first, second and
 third prefixes in order. Cover-only courses convert by their stored records,
 and retained mixed resumption equals the whole continuous course. This does
 not supply the remaining physical coverage, localization or geometry.
+Shared precision and cover production now certifies an arbitrary finite ordered
+family of constituted participants. Each response extends its own received
+prefix and feeds its actual certificate to the next response. Returned bundles
+support further precision and cover requests while preserving source distinctions.
+The three-participant specialization returns the same complete certificates.
+Positive agreements remain inputs; no physical location or erasure is licensed.
+Already produced families can now receive more participants from their actual
+last retained certificate. Only the suffix is produced; restriction returns
+the whole old responses and certificates. Enlarging precision or cover heads
+keeps the first production and equals the canonical whole family production.
+Every fixed finite family now retains mixed adaptive requests as a complete
+course. Each head precedes its continuation, all earlier precision bounds
+persist, and resumption executes only new requests before joining their records
+to the retained course.
+The three-participant runner returns the same whole endpoint. Families may
+be enlarged between courses; no physical locality follows from these laws.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Relativity.Production.productive_family_head_horizon_independent
+#print axioms RelationalPerimeter.Relativity.Production.ProductiveFamilyCourse.allRequestedBounds
+#print axioms RelationalPerimeter.Relativity.Production.productive_family_retained_is_whole_continuous_course
+#print axioms RelationalPerimeter.Relativity.Production.productive_three_mixed_course_returns_whole_endpoint
+#print axioms RelationalPerimeter.Relativity.Production.participant_extension_keeps_the_whole_prefix
+#print axioms RelationalPerimeter.Relativity.Production.productive_precision_enlargement_is_the_whole_production
+#print axioms RelationalPerimeter.Relativity.Production.productive_cover_enlargement_returns_the_old_certificates
+#print axioms RelationalPerimeter.Relativity.Production.participant_responses_extend_every_received_prefix
+#print axioms RelationalPerimeter.Relativity.Production.participant_bundle_keeps_every_source_distinction
+#print axioms RelationalPerimeter.Relativity.Production.productive_three_cover_certificates_are_the_same
+#print axioms RelationalPerimeter.Relativity.Production.productive_family_cover_precision_extends_every_original_prefix
 #print axioms RelationalPerimeter.Relativity.Production.ProductiveWindowCourse.allRequestedBounds
 #print axioms RelationalPerimeter.Relativity.Production.productive_retained_windows_are_whole_continuous_course
 #print axioms RelationalPerimeter.Relativity.Production.productive_cover_only_is_same_whole_course

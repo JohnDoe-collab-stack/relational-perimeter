@@ -87,7 +87,10 @@ RelationalPerimeter.Relativity.Production.ResumedAgreementCourses	H26	enforced	R
 RelationalPerimeter.Relativity.Production.SharedProductiveCovers	H27	enforced	One recorded cover leaf shared through actual intermediate certificates and finite three-prefix continuations without reselecting physical locations
 RelationalPerimeter.Relativity.Production.RetainedProductiveCovers	H28	enforced	Full recorded cover courses retained from actual three-certificate endpoints with exact continuous-course law and no replay of previous producers
 RelationalPerimeter.Relativity.Production.InterleavedProductiveWindows	H29	enforced	Finite interleaved precision and cover requests on actual shared three-prefix endpoints retaining all produced bounds and complete courses without physical localization
-RelationalPerimeter.Relativity	H30	enforced	Public numerical utilities and local candidate without relativistic certificate
+RelationalPerimeter.Relativity.Production.FiniteProductiveParticipants	H30	enforced	One actual precision or cover production shared through arbitrary finite constituted participants with received-prefix responses and preserved source distinctions
+RelationalPerimeter.Relativity.Production.EnlargedProductiveParticipants	H31	enforced	Enlarge retained finite participant responses from their actual last certificate with exact whole-prefix restrictions and no replay of the first production
+RelationalPerimeter.Relativity.Production.ProductiveFamilyCourses	H31	enforced	Retain mixed adaptive precision and cover courses on arbitrary finite constituted families with actual endpoint continuation and no replay on append
+RelationalPerimeter.Relativity	H32	enforced	Public numerical utilities and local candidate without relativistic certificate
 RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement
 RelationalPerimeter.Agents.Constitutive.ProducedEvidence	A11	enforced	Constitutive agent ProducedEvidence
 RelationalPerimeter.Agents.Constitutive.State	A12	enforced	Constitutive agent State
