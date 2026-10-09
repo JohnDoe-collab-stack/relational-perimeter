@@ -19,6 +19,7 @@ import RelationalPerimeter.Relativity.Production.GroupedRecurringContinuation
 import RelationalPerimeter.Relativity.Production.ConstitutedDescriptions
 import RelationalPerimeter.Relativity.Production.InteractionAttachments
 import RelationalPerimeter.Relativity.Production.InteractionDescriptionAgreement
+import RelationalPerimeter.Relativity.Continuation.EncounterFutures
 import RelationalPerimeter.Relativity.Production.ContinuedInteractionDescriptions
 import RelationalPerimeter.Relativity.Production.NumericDescriptionWindows
 import RelationalPerimeter.Relativity.Production.ConstitutedReadingConstraints
@@ -416,4 +417,9 @@ be enlarged between courses; no physical locality follows from these laws.
 #print axioms RelationalPerimeter.Relativity.Production.ReadingGeneration.integral
 #print axioms RelationalPerimeter.Relativity.Production.generated_unit_reading_gap
 #print axioms RelationalPerimeter.Relativity.Production.recurring_unit_history_ne_half
+#print axioms RelationalPerimeter.Relativity.Production.Encounter.encounter_consumes_occupancy
+#print axioms RelationalPerimeter.Relativity.Reconstruction.producedLocationAgreement
+#print axioms RelationalPerimeter.Relativity.Reconstruction.continuedLocationAgreement
+#print axioms RelationalPerimeter.Relativity.Continuation.Encounter.all_futures_exact
+#print axioms RelationalPerimeter.Relativity.Continuation.Encounter.Example.every_suffix_reveals_the_difference
 /- AXIOM_AUDIT_END -/

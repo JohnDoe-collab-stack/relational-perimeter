@@ -1,0 +1,5 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity.Reconstruction
+open RelationalPerimeter.Relativity.Continuation.Encounter
+def substituted : LocalizedPresentation Example.produced Example.again.head.successor :=
+  localizeParticipant Example.again .left

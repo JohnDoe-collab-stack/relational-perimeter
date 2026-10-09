@@ -68,7 +68,9 @@ foreach ($line in Get-Content -LiteralPath $manifestPath) {
     throw "$manifestPath`:${lineNumber}: numerical strata and numerical modules must match"
   }
   $isLocalProduction = $module -eq 'RelationalPerimeter.Relativity' -or
-    $module.StartsWith('RelationalPerimeter.Relativity.Production.')
+    $module.StartsWith('RelationalPerimeter.Relativity.Production.') -or
+    $module.StartsWith('RelationalPerimeter.Relativity.Reconstruction.') -or
+    $module.StartsWith('RelationalPerimeter.Relativity.Continuation.')
   if (($stratum -match '^H([0-9]|1[0-9]|2[0-9]|3[0-2])$') -ne $isLocalProduction) {
     throw "$manifestPath`:${lineNumber}: local-production strata and modules must match"
   }
@@ -95,6 +97,13 @@ foreach ($relative in $relativeFiles) {
   $source = Get-Content -LiteralPath (Join-Path $repoRoot $relative) -Raw
   $imports[$module] = @(Get-LeanImports -Source $source)
   foreach ($dependency in $imports[$module]) {
+    if (($module.StartsWith('RelationalPerimeter.Relativity.Production.') -and
+        ($dependency.StartsWith('RelationalPerimeter.Relativity.Reconstruction.') -or
+         $dependency.StartsWith('RelationalPerimeter.Relativity.Continuation.'))) -or
+        ($module.StartsWith('RelationalPerimeter.Relativity.Reconstruction.') -and
+         $dependency.StartsWith('RelationalPerimeter.Relativity.Continuation.'))) {
+      throw "reversed encounter layer: $module -> $dependency"
+    }
     if ($dependency -eq 'Tests' -or $dependency.StartsWith('Tests.')) {
       throw "production module imports a test: $module -> $dependency"
     }

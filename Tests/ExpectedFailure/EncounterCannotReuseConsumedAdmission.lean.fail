@@ -1,0 +1,4 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity.Production.Encounter
+open RelationalPerimeter.Relativity.Continuation.Encounter
+def reused : EncounterAdmission Example.produced.next := Example.admission

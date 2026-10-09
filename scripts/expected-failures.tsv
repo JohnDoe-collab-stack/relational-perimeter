@@ -24,3 +24,6 @@ Tests/ExpectedFailure/RootCannotReplaceProducedTail.lean.fail	dependent-type	9	4
 Tests/ExpectedFailure/MasterCannotUseUnexecutedHistory.lean.fail	semantic-type	16	19	replacement = MasterResources.execute
 Tests/ExpectedFailure/MasterCheckpointCannotPrescribeOutput.lean.fail	semantic-type	7	55	(master.checkpoint profile).output = prescribed
 Tests/ExpectedFailure/AcceptedTargetCannotReplaceProducedOutput.lean.fail	dependent-type	13	2	target = retainedExecutedOperationalTargetProfile reduction → List AnswerTarget
+Tests/ExpectedFailure/EncounterCannotUseArchiveAdmission.lean.fail	dependent-type	4	51	EncounterAdmission Example.initial
+Tests/ExpectedFailure/EncounterCannotReuseConsumedAdmission.lean.fail	dependent-type	4	57	EncounterAdmission Example.produced.next
+Tests/ExpectedFailure/EncounterCannotReplaceAnotherPresentation.lean.fail	dependent-type	5	2	LocalizedPresentation Example.produced Example.again.head.successor

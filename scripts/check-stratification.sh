@@ -58,8 +58,8 @@ while IFS=$'\t' read -r module layer migration role extra; do
     echo "$manifest:$line_number: unclassified numerical relativity module" >&2; exit 1
   fi
   if [[ "$layer" =~ ^H([0-9]|1[0-9]|2[0-9]|3[0-2])$ ]]; then
-    [[ "$module" == RelationalPerimeter.Relativity || "$module" == RelationalPerimeter.Relativity.Production.* ]] || { echo "$manifest:$line_number: local-production stratum outside its modules" >&2; exit 1; }
-  elif [[ "$module" == RelationalPerimeter.Relativity || "$module" == RelationalPerimeter.Relativity.Production.* ]]; then
+    [[ "$module" == RelationalPerimeter.Relativity || "$module" == RelationalPerimeter.Relativity.Production.* || "$module" == RelationalPerimeter.Relativity.Reconstruction.* || "$module" == RelationalPerimeter.Relativity.Continuation.* ]] || { echo "$manifest:$line_number: local-production stratum outside its modules" >&2; exit 1; }
+  elif [[ "$module" == RelationalPerimeter.Relativity || "$module" == RelationalPerimeter.Relativity.Production.* || "$module" == RelationalPerimeter.Relativity.Reconstruction.* || "$module" == RelationalPerimeter.Relativity.Continuation.* ]]; then
     echo "$manifest:$line_number: unclassified local-production module" >&2; exit 1
   fi
   stratum[$module]="$layer"; status[$module]="$migration"; responsibility[$module]="$role"
@@ -78,6 +78,11 @@ for relative in "${production_files[@]}"; do
   direct=()
   if [[ -n "$parsed" ]]; then mapfile -t direct <<< "$parsed"; fi
   for dependency in "${direct[@]}"; do
+    if [[ "$module" == RelationalPerimeter.Relativity.Production.* && ( "$dependency" == RelationalPerimeter.Relativity.Reconstruction.* || "$dependency" == RelationalPerimeter.Relativity.Continuation.* ) ]] ||
+        [[ "$module" == RelationalPerimeter.Relativity.Reconstruction.* && "$dependency" == RelationalPerimeter.Relativity.Continuation.* ]]; then
+      echo "reversed encounter layer: $module -> $dependency" >&2
+      exit 1
+    fi
     [[ "$dependency" != Tests && "$dependency" != Tests.* ]] || {
       echo "production module imports a test: $module -> $dependency" >&2
       exit 1

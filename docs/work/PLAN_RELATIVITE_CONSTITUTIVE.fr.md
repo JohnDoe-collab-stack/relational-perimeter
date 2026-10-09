@@ -80,6 +80,47 @@ Ce fichier est un document de chantier. Il devra être retiré de l'arbre
 intégré dans `main`. Les résultats scientifiques définitifs auront leurs
 documents canoniques et leurs entrées de registre propres.
 
+### 2.1 Priorité courante : fermer la rencontre, puis son accord de localisation
+
+Révision documentaire du 9 octobre 2026, depuis
+`fc6df4e994c75efe2f767c0d2f1e713e460406a8`, sur la même branche `relativite`.
+Les repères précédents décrivent le démarrage du chantier ; les sections
+18-57 enregistrent les lots déjà réalisés. Ils ne constituent pas une nouvelle
+liste de prérequis à réimplémenter.
+
+**La prochaine livraison est une rencontre constituée dont on dérive un
+premier `LocationAgreement`, avec des participants distincts et des effets
+de parcours encore révélables.** La cible finale de la section 1 reste
+inchangée. Ce premier accord est une étape vers sa reconstruction, pas un
+remplacement par un exemple fini.
+
+Les outils instrumentaux des lots 20-57 sont conservés et réemployés. Une
+nouvelle généralisation de leurs tailles, fenêtres, précisions ou courses
+n'est plus un lot prioritaire. Elle ne sera ajoutée que si un consommateur
+physique précis du chemin ci-dessous en démontre la nécessité.
+
+```text
+loi locale d'interaction declaree et realisee
+  -> propagation et reception sur des ressources constituees
+  -> disponibilite presente et admission de deux arrivees distinctes
+  -> une production de rencontre, partagee avec son successeur
+  -> presentations localisees de ses participants et effets attaches
+  -> premier LocationAgreement construit depuis cette production
+  -> prolongements, changements de description et separateurs de parcours
+  -> regroupements autorises, puis reconstruction R4-R7
+```
+
+Le sous-lot est détaillé en section 58. Le point de départ est identifié dans
+le code : `Arrived` et `RecurringArrival` prouvent une réception historique ;
+`InteractionAttachment` prouve une participation à une comparaison produite.
+**Aucun de ces objets ne prouve aujourd'hui l'admission d'une rencontre
+physique.** Cette admission doit être construite avant l'accord, et non
+ajoutée comme un commentaire à l'ancrage instrumental existant.
+
+Cette demande autorise la révision du plan uniquement. Aucun fichier Lean,
+contrat, registre de résultats ou diagramme n'est modifié ; aucun commit,
+push, changement de branche ou audit n'est autorisé par cette révision.
+
 ## 3. Invariants de méthode
 
 L'ordre de travail reste celui des [instructions du dépôt](../../AGENTS.md)
@@ -514,6 +555,13 @@ présentes, pas depuis la continuation achevée. Une égalité de coordonnées
 sera une conséquence à vérifier après reconstruction. Elle ne sert pas
 à définir l'admission amont. Une réalisation comparative recevant déjà
 des coordonnées doit être identifiée comme telle ; elle ne ferme pas la genèse.
+
+La présence de deux anciennes réceptions dans le même support ne suffit pas
+non plus. Le modèle doit justifier leur disponibilité pour cette interaction
+présente : leurs passages admis, leurs attachements aux instruments et l'état
+local qui permet de les consommer. La persistance d'une référence dans
+l'histoire ne garantit pas que sa ressource physique reste disponible.
+Le lot 58 doit fermer cette obligation avant de former `LocationAgreement`.
 
 **Obligations :** conserver les références sources et leurs témoins dans
 l'interaction, prouver leur distinction lorsque leurs parcours diffèrent,
@@ -1929,9 +1977,15 @@ de référence satisfait les équations de vide.
 | G14 / R7 | Comparaison complète, couverture, réciproques et hypothèses globales | Plongée seule, carte locale déclarée domaine entier |
 | G15 / R7 | Classe réalisée, certificat fermé et consommateurs publics | Interface sans instance, ancien maître affaibli, certificat comparatif déclaré genèse |
 
-**Ordre effectif :** commencer par G0, A1-A4 puis R1-R3. Fermer un premier
-consommateur intrinsèque et ses séparateurs avant d'étendre l'analyse.
-Développer les outils de B0 nécessaires à R4-R6, puis fermer R4-R7 dans
+**Ordre effectif au 9 octobre 2026 :** ne pas recommencer les lots
+instrumentaux déjà fermés. Construire le lot 58 : loi locale et admission
+physique manquantes de G0-G1, rencontre effectivement produite, puis premier
+accord de localisation de G8, avec ses effets de parcours et son contrat.
+Fermer ce consommateur avant toute nouvelle généralisation numérique.
+Les parties physiques encore ouvertes de G2-G7 restent des obligations
+distinctes ; un accord local ne les valide pas automatiquement.
+Développer seulement les outils de B0 nécessaires à un raccord identifié de
+R4-R6, puis fermer R4-R7 dans
 l'ordre de leurs dépendances : règles de recouvrement avant les présentations
 idéales, celles-ci avant les cartes et la métrique. Les contrôles A5-A8 et
 B1-B9 accompagnent les raccords déjà construits ; ils ne peuvent franchir
@@ -1942,21 +1996,16 @@ Une réussite plate, une courbure calculée ou un raccord à une métrique reçu
 ne valideront pas G8-G15. Une gate est réouverte si une loi, un contrat,
 une présentation ou un consommateur dont elle dépend change.
 
-**Premier livrable d'implémentation après autorisation :** une définition
-concrète des primitives candidates de A0, une exécution locale de A1-A4,
-une organisation regroupante et un séparateur de R1-R2, puis le premier
-raccord de présentation/raffinement de R3 : constructeurs fermés, transport
-de description et raffinement commun, distincts d'une nouvelle mesure.
-Inclure une variation non triviale des interactions et lectures admises,
-et la première règle de recouvrement justifiée par leurs lois. Conserver
-un témoin de rencontre commune avec des effets de parcours encore séparables.
-Inclure une reprise depuis un premier suffixe effectivement produit et les
-lois génériques de composition, de conservation des références et de raccord
-avec le raffinement. Les longueurs sont arbitraires ; les deux suffixes du
-consommateur concret illustrent ces lois et ne remplacent pas leur preuve.
-Ce livrable ne ferme pas le continuum ; il doit décider si le premier
-passage annoncé est réellement disponible. Il ne sera pas remplacé par
-un nouveau backend numérique ou un calcul de référence plus détaillé.
+**Prochain livrable après autorisation d'implémentation :** la réalisation
+fermée de la section 58, comprenant les admissions et refus locaux, les
+deux participations constituées, l'interaction partagée, son accord de
+localisation et un effet de parcours encore séparateur. Ajouter une reprise
+depuis son successeur réel, puis les lois pour tout prolongement admissible
+fini et leur composition. Aucun nouveau backend numérique ni résultat de
+référence ne peut se substituer à cette livraison.
+Le lot ne ferme pas le continuum ; il doit établir le passage physique local
+qui manque avant sa reconstruction. L'accord concerne la rencontre passée
+transportée dans les descriptions, pas les positions futures des participants.
 
 ## 15. Vérification proportionnée et non-régression
 
@@ -7785,3 +7834,323 @@ changement de branche ou audit extérieur n'est effectué. La conservation et
 la reprise des courses mixtes sur toute famille finie admissible sont fermées
 dans cette portée instrumentale. La cible de la section 1 et les obligations
 physiques R4-R7 restent inchangées et ouvertes.
+
+## 58. Prochain lot : rencontre constituée et premier accord de localisation
+
+### 58.1 Obligation à fermer, sans nouvelle généralisation instrumentale
+
+**Construire deux participations à une rencontre effectivement produite,
+en déduire leur accord de localisation, et conserver une différence de
+parcours qu'une continuation admissible révèle encore.** Les deux sources
+ne deviennent pas une même occurrence. Leur accord porte sur leur
+participation à cette rencontre, pas sur l'égalité de leurs histoires ni
+sur celle de leurs états complets.
+
+État constaté au commit de la section 2.1 :
+
+| Source existante | Construction réemployable | Obligation absente |
+| --- | --- | --- |
+| `Production/PhysicalPrimitives.lean` | Loi déclarée d'émission, relais calibré et réception | Propagation physique, état de disponibilité et admission de rencontre |
+| `Production/SignalJourneys.lean` et `ArrivalContexts.lean` | Origine, passages et réception réellement produits, sans rejouer les producteurs | Présence physique actuelle d'un participant à l'interaction |
+| `Production/RecurringInteractions.lean` et `InteractionAttachments.lean` | Productions partagées, participations distinctes et effets transportés | Une comparaison admise n'est pas encore une rencontre physique |
+| `Production/InteractionDescriptionAgreement.lean` | Accords instrumentaux positifs et transports de descriptions | `InteractionSiteAgreement` n'est pas `LocationAgreement` |
+| Lots 34-57 | Lectures, précisions, recouvrements et réponses conservées | Justification physique des localisations et du domaine R4 |
+
+Les chemins ci-dessus sont relatifs à `RelationalPerimeter/Relativity/`.
+Il n'existe pas encore de déclaration Lean `LocationAgreement`. Les noms
+nouveaux ci-dessous désignent des constructions à implémenter, pas des
+preuves déjà livrées.
+
+### 58.2 Première construction : loi locale, passages et admission présente
+
+La première réalisation candidate est une interaction locale recevant deux
+participants par des passages admis et consommant leurs réceptions encore
+disponibles dans l'état présent de l'instrument. Son admission ne dépend
+pas de la comparaison de leurs lectures. La loi de couplage et les règles
+de disponibilité sont déclarées comme primitives du modèle ; la rencontre
+particulière et son accord doivent être produits, non donnés par cette loi.
+
+Fixer cette loi concrète avant les types aval :
+
+- les ressources qui constituent l'instrument, ses ports et leurs raccords ;
+- les transitions locales qui autorisent un passage puis sa réception ;
+- les conditions présentes de compatibilité et de disponibilité ;
+- l'action qui consomme les deux admissions et produit l'interaction ainsi
+  que l'état suivant ;
+- les conditions de refus, notamment une réception manquante ou une
+  ressource devenue indisponible selon cette même loi.
+
+Ces règles doivent admettre une exécution positive et une exécution refusée
+construites dans le dépôt. Elles ne reçoivent ni point commun, ni coordonnées,
+ni distance, ni métrique, ni égalité des lieux, ni accord de localisation.
+Un instrument est une ressource constituée ; son identifiant n'est pas un
+point géométrique déguisé. Deux ports appartenant au même instrument ne
+suffisent pas sans leurs raccords et leur admission pour l'interaction.
+
+Les `Arrived` existants attestent qu'une réception a eu lieu. Ne pas leur
+faire signifier rétroactivement que son signal est toujours présent ou que
+son participant reste physiquement disponible. Construire le témoin de
+disponibilité depuis l'état et les transitions admises du modèle. Une
+référence historique conservée et une ressource utilisable maintenant sont
+deux choses différentes.
+
+Les données physiques supplémentaires doivent entrer dans la formation
+positive du même préfixe consommé par le producteur. Employer `Support`,
+`Formation`, les références typées et `History` du cadre. Raccorder chaque
+passage aux rôles réellement produits, pas seulement aux valeurs finales.
+Si les sortes fixes du candidat instrumental ne suffisent pas, spécialiser
+ces interfaces génériques aux ressources nécessaires et construire leur
+interprétation des productions instrumentales conservées. Ne pas modifier
+en masse `Kind`, fabriquer un support libre, reprendre depuis un nouveau
+root ou créer un second maître indépendant.
+
+Le témoin proposé `EncounterAdmission` est indexé par le préfixe, l'état
+local reçu, les deux références d'arrivée et l'instruction. Il contient
+positivement les passages admis, les réceptions, les attachements à
+l'instrument et leur disponibilité pour cette action. Il ne contient pas
+la conclusion `LocationAgreement`. Ses constructeurs viennent de la loi
+locale et des productions, pas d'une hypothèse libre « ces sources se
+rencontrent ». Le diagnostic reconstruit ce témoin ou la réfutation de
+l'admission dans l'état présent ; il ne tranche pas tous les futurs possibles.
+
+**Condition de sortie :** une loi exécutable fermée, des passages réellement
+produits et un diagnostic d'admission exact, avec un cas admissible et un
+refus effectif. Donner explicitement l'interprétation physique et la portée
+de la loi. Si seules des propriétés de protocole instrumental sont établies,
+le résultat reste instrumental : ce sous-lot physique n'est pas fermé.
+La validité empirique de la loi et sa suffisance pour reconstruire la
+relativité ne suivent pas de sa compilation.
+
+### 58.3 Produire la rencontre et ses deux participations une seule fois
+
+Construire `EncounterProduction` à partir de l'admission précédente. Son
+élimination fournit ensemble le rôle positif, l'effet de l'interaction,
+sa nouvelle occurrence et le successeur effectivement produit. Le runner
+lie cette production une fois ; la continuation et les deux descriptions
+reçoivent cette même valeur stockée.
+
+Le rôle consomme les deux références admises et leurs raccords présents.
+Une nouvelle occurrence commune de l'interaction ne remplace aucune
+occurrence d'arrivée. Construire les deux témoins de participation depuis
+les ports réellement consommés, puis prouver :
+
+1. chaque participant est rattaché à cette production précise, avec son
+   origine, son arrivée et les passages qui l'autorisent ;
+2. les deux références sources du cas témoin sont distinctes et le restent
+   dans le successeur ;
+3. l'effet et le successeur sont ceux de l'action exécutée ;
+4. la production complète de tête ne dépend d'aucune queue future ;
+5. la reprise part de ce successeur et n'appelle ni l'émission, ni le relais,
+   ni la réception, ni la rencontre déjà exécutés.
+
+La présence à la rencontre est alors une conséquence des admissions
+physiques consommées et du rôle d'interaction. Elle n'est ni une lecture
+numérique ni la seule égalité d'une étiquette d'ancrage. Réemployer les
+transports et le partage existants à leur niveau exact ; ne pas transformer
+les anciens `InteractionAttachment` en témoins physiques par renommage.
+
+### 58.4 Former les présentations, puis construire `LocationAgreement`
+
+Construire une présentation riche de chaque participation à partir de la
+production stockée : rôle d'interaction, référence du participant, raccord
+de présence et effets de son parcours. En dériver la partie
+`LocalizedPresentation` et conserver séparément `AttachedEffects`.
+Ni l'une ni l'autre n'accepte une valeur indépendante assortie après coup
+d'une trace. Leurs lectures sont celles des productions attachées.
+
+`LocationAgreement` relie deux présentations locales au moyen des passages
+physiquement admis et des transports de leurs déterminations. Son premier
+constructeur substantiel élimine la rencontre produite pour raccorder ses
+deux participations. Les présentations ne sont pas préindexées par un point
+géométrique commun reçu ; leur raccord est un résultat de cette production.
+Le partage d'une référence à l'interaction en est une conséquence nécessaire,
+pas la définition entière de la preuve physique.
+
+Construire un consommateur de l'accord : une description locale commune de
+la rencontre, dans laquelle les lecteurs localisants des deux participations
+se raccordent. Justifier ces lecteurs depuis la loi locale, les attachements
+et leurs transports. Des lecteurs constants qui ignorent la rencontre, ou
+une projection arbitraire supprimant les différences, ne ferment pas cette
+obligation. Ce premier objet décrit la localisation de l'événement constitué ;
+il n'est pas encore une carte, une coordonnée ni un point du continuum R4.
+
+L'accord doit conserver trois distinctions :
+
+- une même localisation de rencontre peut être décrite depuis deux sources
+  distinctes ;
+- l'accord des localisations ne donne pas l'égalité des présentations riches ;
+- il n'autorise ni l'égalité ni l'oubli des effets de parcours.
+
+Construire identité, inversion et composition des seuls changements de
+description exacts. Les deux lois de retour concernent ces transports ;
+elles ne sont pas des inverses d'un regroupement opérationnel. La composition
+de deux accords exige un raccord positif sur la détermination intermédiaire.
+Une chaîne de rencontres successives ne rend pas tous ses événements
+colocalisés. La complétude par tous les lecteurs localisants reste l'obligation
+R4.2 ; elle n'est pas déduite de ce seul premier constructeur.
+
+### 58.5 Contrat, prolongement et différence de parcours conservée
+
+Fixer avant le cas témoin le contrat local de cette réalisation : actions
+admises, inspections des effets effectivement attachés, observations,
+admissions, refus et successeurs. Les anciennes lectures instrumentales
+restent exactes sur les occurrences incorporées. Ce contrat local ne remplace
+ni le contrat acquis ni le futur contrat physique complet de A4.
+
+Pour tout prolongement admissible fini, transporter la rencontre déjà
+produite, ses participants, leurs admissions utilisées et leur accord de
+localisation. Prouver la composition de deux prolongements depuis leurs
+successeurs réels. Transporter un fait historique d'admission ne signifie
+pas réautoriser la consommation de la même ressource dans l'état suivant.
+
+Le fait transporté concerne la même rencontre passée. Les participants
+peuvent ensuite suivre des continuations différentes ; aucune preuve ne
+doit imposer qu'ils restent à la même localisation dans leur futur.
+Un raffinement de description ne réexécute pas la rencontre. Une nouvelle
+mesure est une nouvelle production et reçoit son propre raccord.
+
+Le client fermé doit produire deux parcours ayant des effets différents,
+former leur rencontre admise et en dériver `LocationAgreement`. Il doit
+ensuite exécuter une demande du contrat qui révèle la différence attachée.
+Les records existants fournissent un candidat de séparateur instrumental ;
+ils ne seront appelés ni temps propre, ni transport parallèle, ni effet de
+courbure sans les lois correspondantes. La distinction est prouvée dans les
+théorèmes publics, pas seulement observée dans un test.
+
+En conséquence, on peut partager une description localisante commune,
+mais pas quotienter ces présentations riches sous ce contrat. Toute
+autorisation de regroupement d'obligations sera un résultat séparé, relatif
+à ses demandes et à une action réellement produite. Si une relation doit
+être recherchée, sa recherche exécutée et sa préservation sont consommées
+avant cette autorisation ; la rencontre n'est pas un raccourci vers elle.
+
+### 58.6 Périmètre de code et preuves publiques attendues
+
+Destination proposée, après autorisation d'implémenter :
+
+| Fichier sous `Relativity/` | Contenu et dépendance principale |
+| --- | --- |
+| `Production/EncounterAdmissions.lean` | Loi locale déclarée, ressources physiques constituées, passages, disponibilité et admission positive ; interfaces de ressources existantes |
+| `Production/ConstitutedEncounters.lean` | Rôle, production partagée, participations, histoire et successeur ; admission précédente |
+| `Reconstruction/LocalizedPresentations.lean` | Présentations et effets attachés à ces productions ; références et transports constitués |
+| `Reconstruction/LocationAgreement.lean` | Accord dérivé de la rencontre, consommateur localisant et lois de changements de description |
+| `Continuation/EncounterFutures.lean` | Contrat local, reprises, transport de l'accord et séparateur effectif de parcours |
+
+Ces fichiers ne sont pas annoncés comme présents. Ne déplacer ni les modules
+instrumentaux ni leurs clients pour réaliser ce lot. Une généralisation
+d'interface n'est autorisée que si son blocage concret est identifié et que
+le consommateur existant garde ses définitions, garanties et calculabilité.
+La couche de production n'importe pas `Reconstruction`, une métrique, une
+géométrie de référence, la racine publique ou des tests.
+
+Pour chaque raccord, fermer les quatre lectures de dépendance :
+
+| Lecture | Obligation du lot |
+| --- | --- |
+| Formation | Les ressources physiques, arrivées et participations sont constituées par leurs rôles et passages positifs ; leurs valeurs ne fabriquent pas les occurrences |
+| Exécution | Le diagnostic et l'action lisent le préfixe présent, puis retournent une production partagée ; aucune queue future ou cible prescrite |
+| Preuve | Admission, sortie exacte, présence, distinction et séparation des effets sont utilisées par leurs consommateurs, pas seulement stockées |
+| Transport | Les références, rôles utilisés, descriptions et demandes suivent les passages exacts et leurs lois de composition |
+
+La surface publique doit contenir les faits suivants, sous les hypothèses
+locales déclarées et réalisées : diagnostic d'admission exact ; rencontre
+sur les références admises ; sortie et successeur exacts ; tête indépendante
+du futur ; accord local issu de la rencontre ; conservation des sources et
+des effets ; séparation future concrète ; transport de l'accord et
+composition des reprises. La dernière preuve se compose avec l'exactitude
+du contrat pour toute liste finie de demandes, y compris leurs refus, pas
+seulement avec deux suffixes d'exemple. Les demandes et leurs adresses sont
+traduites par le raccord de description effectivement construit ; comparer
+deux codes d'adresse inchangés sur des supports différents ne suffit pas.
+
+### 58.7 Critères de clôture et suite directe vers la cible finale
+
+Les preuves guident le lot. Les contrôles vérifient leurs consommateurs,
+sans remplacer la rencontre par une nouvelle campagne numérique.
+
+Le client public doit couvrir : une rencontre admise ; un refus au même
+niveau de loi ; deux participants distincts ; une description commune
+construite depuis la rencontre ; un effet de parcours encore révélable ;
+deux reprises et leurs transports. Un cas de lectures égales sans admission
+de rencontre doit rester insuffisant. Deux événements d'interaction
+distincts sur un même instrument ne deviennent pas une même localisation
+d'espace-temps du seul fait de leurs lectures ou de leur instrument commun.
+Ne pas transformer l'absence de preuve présente en impossibilité physique
+de tout raccord futur.
+
+La livraison échoue si l'on peut fournir l'accord en ignorant les admissions
+physiques ou la production, supprimer les effets encore séparables,
+réidentifier les sources, substituer un résultat prescrit, lire une queue
+future ou rejouer une production. Une implémentation extensionnellement
+équivalente qui conserve réellement les mêmes raccords n'est pas un échec
+du seul fait d'un changement syntaxique.
+
+Lancer les gates de la section 15 sur le lot effectivement réalisé,
+avec contrôle du client public, des imports, des audits axiomatiques et
+du partage compilé dans son périmètre annoncé. Conserver les fondations,
+le maître, la machine, les contrats et les résultats instrumentaux acquis.
+Mettre à jour le registre et les textes scientifiques seulement depuis les
+preuves livrées ; ne pas anticiper un verdict indépendant.
+
+Après cette clôture, poursuivre sans changer de cible :
+
+1. Raccorder les présentations localisantes et leurs effets aux contraintes
+   et raffinements existants ; justifier physiquement les recouvrements,
+   au lieu de prolonger leur seule combinatoire instrumentale.
+2. Fermer R4.2 : générateurs compatibles de localisations, réalisations et
+   accords pour une classe non réduite à une seule rencontre, puis couverture
+   et continuité R4.3. Une longueur de production finie mais arbitraire est
+   conservée ; une grille finie ne remplace pas le domaine continu visé.
+3. Fermer R5-R7 : dimension, cartes, causalité, métrique calibrée, action de
+   chemin, courbure et lois dynamiques sur la même construction, puis
+   comparaison relativiste exacte avec couverture et réciproques.
+
+Un premier `LocationAgreement` ne ferme pas à lui seul ces obligations.
+Il ferme leur raccord local manquant. Si la loi candidate ne permet pas
+de le construire, indiquer la prémisse ou le lemme qui manque ; ne pas
+renommer l'accord instrumental, ajouter une hypothèse égale à la conclusion,
+ou reprendre la généralisation numérique pour déclarer le problème résolu.
+
+**Statut : réalisation candidate locale implémentée ; clôture physique
+complète non acquise.** La demande suivante « Implemente le plan » autorise
+ce code et ses contrôles, sans commit, push, changement de branche ni audit.
+La cible de la section 1 et les bilans historiques des lots 18-57 sont conservés.
+
+### 58.8 Bilan d'implémentation, sans substitution de la cible
+
+Les cinq modules de la section 58.6 sont maintenant présents. Le modèle
+concret est un couplage local idéal à deux ports avec rétention de records,
+déclaré explicitement. Il n'est pas un modèle de particules non copiables.
+`CouplingFormation` distingue l'archive et la disponibilité produite par
+livraison ; la consommation conjointe vide les ports. Le cas fermé réemploie
+le préfixe effectivement constitué, ses réceptions et ses records.
+
+Sont construits : diagnostic positif ou refus, production partagée,
+successeur consommant les ports, deux participations distinctes, premier
+`LocationAgreement` relatif à cette loi, retour des changements exacts de
+description, transport de la rencontre passée, composition des transports,
+runner et exactitude pour toute liste finie du contrat local. Le cas fermé
+montre deux lectures égales sans admission depuis l'archive, puis une vraie
+admission après livraisons ; ses parcours différents restent révélables.
+`readerContract` utilise une même demande d'effets attachés pour les deux
+présentations. Leur séparation n'est donc pas fondée seulement sur deux
+requêtes aux numéros d'adresse différents.
+
+Le contrôle C couvre les producteurs nommés, le runner et les transports de
+description. Il n'est ni une mesure physique ni une borne du travail interne.
+Les textes [français](../science/rencontre-constituee.fr.md) et
+[anglais](../science/constituted-encounter.en.md) délimitent la réalisation.
+
+**Restent à fermer pour le lot 58 complet :** transporter toute la grammaire
+de demandes entre deux états de couplage réexprimés, avec leur disponibilité
+et leurs successeurs, pas seulement les inspections historiques ; raccorder
+la loi candidate à un réseau physique de passages et aux contraintes de la
+reconstruction. La validité physique ne résulte pas des preuves du protocole
+de couplage. La portée présente est exactement celle de cette loi déclarée.
+La complétude et la couverture R4, puis R5-R7, restent les obligations
+suivantes. Aucun de ces manques n'est renommé comme un résultat déjà acquis.
+
+L'évidence du nouveau lot n'est pas figée au registre avant une révision
+de référence autorisée. Les statuts existants ne sont pas rafraîchis pour
+obtenir une validation. Le bilan des commandes est celui de l'arbre local,
+pas un verdict d'audit extérieur.

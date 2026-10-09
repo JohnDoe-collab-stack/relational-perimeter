@@ -92,6 +92,7 @@ fi
 "${python_command[@]}" scripts/check-continuation-signature-codegen.py
 "${python_command[@]}" scripts/check-variable-master-codegen.py
 "${python_command[@]}" scripts/check-integrated-machine-codegen.py
+"${python_command[@]}" scripts/check-encounter-codegen.py
 
 bash scripts/check-expected-failures.sh
 
