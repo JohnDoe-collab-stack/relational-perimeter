@@ -136,6 +136,44 @@ par le seul accord localisant. Le test négatif correspondant refuse cette
 substitution. Ces recouvrements restent des recouvrements de lectures, non
 des voisinages physiques ni une couverture du domaine relativiste.
 
+## Précision des rencontres et portée de la couverture
+
+[EncounterPrecisionDescriptions](../../RelationalPerimeter/Relativity/Reconstruction/EncounterPrecisionDescriptions.lean)
+raffine les contraintes d'interaction d'une rencontre déjà constituée. Chaque
+étape consomme les valeurs certifiées reçues, calcule ses fenêtres fines et
+produit leurs restrictions positives. Pour toute liste finie de demandes,
+les fenêtres finales respectent toutes les précisions demandées, gardent
+les valeurs initiales et rendent exactement les certificats d'entrée.
+La reprise reçoit le résultat produit ; elle est prouvée égale à la course
+concaténée. Le transport par `LocationAgreement` commute avec une étape et
+avec la course entière. Deux courses ont un raffinement commun construit
+qui rend leurs deux certificats et conserve leurs deux bornes.
+Il ne transporte pas les effets d'arrivée entre
+participants. Cela réalise la partie descriptive de R4.2 sur les rencontres
+existantes, pas la génération de localisations au-delà des événements exécutés.
+
+[EncounterReadoutBasis](../../RelationalPerimeter/Relativity/Reconstruction/EncounterReadoutBasis.lean)
+interprète une base de fenêtres strictement ouvertes sur ces présentations.
+Toute présentation a un voisinage de lecture positivement réalisé à chaque
+précision. Deux réalisations produisent leur intersection finie ; un
+recouvrement positif sélectionne ses feuilles avec retour exact du certificat.
+Deux lectures différentes ont un séparateur positif. L'accord de **tous**
+les voisinages caractérise exactement l'égalité des lectures d'interaction.
+
+Le [client fermé](../../Tests/Relativity/EncounterPrecisionChecks.lean) fixe
+aussi la limite : deux rencontres reliées par un passage utilisé ont la même
+lecture, restent des occurrences distinctes, et ont pourtant les mêmes
+admissions pour tous ces voisinages. Un autre parcours produit une lecture
+différente effectivement séparée. La base n'est donc ni constante ni un
+reconnaisseur des occurrences. Elle ne décide pas si les rencontres occupent
+des localisations physiques identiques ou différentes.
+
+Les réalisations localisantes compatibles de R4.2.2, leurs raccords physiques,
+les séparateurs de localisation et la couverture par des points construits
+de R4.3 restent ouverts. Une base de lectures n'est pas une topologie physique
+reconstruite. Les fenêtres à précision arbitraire spécifient des possibilités
+de lecture ; un run fini n'a pas exécuté une infinité de mesures.
+
 ## Preuves et contrôles
 
 | Passage | Source et déclarations |
@@ -161,6 +199,14 @@ producteurs du paquet de passage : une émission, deux livraisons et une
 interaction. Il distingue ce paquet de son consommateur descriptif et vérifie
 l'absence de producteur statiquement accessible hors de cette frontière.
 Il ne mesure pas le coût des témoins de formation ni celui des transports.
+
+[check-encounter-descriptions-codegen.py](../../scripts/check-encounter-descriptions-codegen.py)
+contrôle séparément les nouveaux consommateurs : un site d'appel nommé
+pour la tête, la récursion et leur composition dans le runner, et aucun
+producteur accessible dans les graphes statiques des raffinements, reprises,
+transports, intersections et sélections. Les cibles de fermetures statiquement
+connues sont suivies. Ce n'est pas une preuve sur des callbacks arbitraires,
+un coût total ou une topologie physique.
 
 ## Ce qui reste ouvert
 

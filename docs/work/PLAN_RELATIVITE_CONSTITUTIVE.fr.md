@@ -8245,3 +8245,46 @@ n'importe pas Continuation. Les fondations, le maître, la machine et les
 contrats antérieurs sont conservés. Les textes scientifiques FR/EN décrivent
 la portée exacte. Une évidence de registre figée attend une révision de
 référence autorisée ; aucun statut historique n'est actualisé automatiquement.
+
+## 60. Précision des rencontres et base de lectures : portée R4 exacte
+
+`Reconstruction/EncounterPrecisionDescriptions.lean` réalise des descriptions
+à toute précision demandée sur une rencontre constituée. La tête consomme
+ses certificats reçus, sans paramètre de futur ; le suffixe consomme le résultat.
+Les retours, les bornes de toutes les demandes, la reprise par concaténation
+et le carré de transport de la course entière sont prouvés. Deux courses
+possèdent un raffinement commun positivement réalisé qui rend leurs deux
+certificats et conserve leurs deux bornes. Les clauses transportées portent
+seulement sur l'interaction ; les effets d'arrivée ne
+sont pas transférés entre participants. La partie descriptive de R4.2.1
+est ainsi raccordée aux rencontres existantes, sans nouvelle mesure implicite.
+
+`Reconstruction/EncounterReadoutBasis.lean` interprète les fenêtres ouvertes,
+la couverture à toute précision, les intersections finies et les sélections
+positives de recouvrement sur ces mêmes présentations. Les lectures différentes
+ont un séparateur positif. L'accord de toutes les fenêtres et de leurs
+conjonctions caractérise exactement l'égalité de la lecture d'interaction.
+
+Le client public ferme deux cas : un parcours réellement modifié dont la
+lecture est séparée, et un passage utilisé entre rencontres de lecture égale
+mais d'occurrences distinctes. Toutes les admissions de la base coïncident
+dans le second cas. Il n'en résulte ni une identification des événements
+ni une décision sur leur identité spatiale. L'identité d'occurrence ne définit
+pas la position physique. La complétude numérique n'est pas la complétude
+des lecteurs localisants exigée en R4.2 et R4.3.
+
+**R4.2 et R4.3 restent non clôturés.** Il reste à construire les générateurs
+localisants compatibles de R4.2.2, leurs raccords physiques, les lecteurs
+justifiés séparant les distinctions de localisation annoncées, puis leur
+couverture et leurs points. La loi présente déclare calibration et admission
+à deux ports, pas un reconnaisseur physique de localisation ni une loi de
+propagation. Ces données devront être constituées positivement et consommées
+en aval ; aucune coordonnée reçue ni étiquette d'occurrence ne remplace ce travail.
+
+Les deux nouveaux modules restent en Reconstruction, sans import de
+Continuation ni entrée dans les producteurs. Le client importe seulement
+la racine publique. Le contrôle C séparé suit les dépendances statiques et
+les sites d'appel nommés, pas des callbacks arbitraires ni un coût total.
+Les fondations, le maître, la machine et les résultats précédents sont
+préservés. Une évidence figée attend une révision de référence autorisée ;
+ce lot local ne change aucun statut d'audit extérieur.

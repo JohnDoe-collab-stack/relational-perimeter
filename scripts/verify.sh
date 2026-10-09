@@ -93,6 +93,7 @@ fi
 "${python_command[@]}" scripts/check-variable-master-codegen.py
 "${python_command[@]}" scripts/check-integrated-machine-codegen.py
 "${python_command[@]}" scripts/check-encounter-codegen.py
+"${python_command[@]}" scripts/check-encounter-descriptions-codegen.py
 
 bash scripts/check-expected-failures.sh
 

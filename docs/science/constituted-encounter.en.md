@@ -127,6 +127,41 @@ continuation history, not the localizing agreement alone between participants.
 The corresponding expected-failure fixture rejects that substitution. These
 remain reading covers, not physical neighborhoods or relativistic coverage.
 
+## Encounter precision and the coverage boundary
+
+[EncounterPrecisionDescriptions](../../RelationalPerimeter/Relativity/Reconstruction/EncounterPrecisionDescriptions.lean)
+refines interaction constraints on an already constituted encounter. Each
+step consumes the received certified values, computes its fine windows and
+produces their positive restrictions. For every finite request list, the
+final windows meet every requested precision, keep the initial values and
+return exactly the input certificates. Resumption receives the produced
+result and is proved equal to the concatenated course. `LocationAgreement`
+transport commutes with one step and the whole course. Two courses have a
+constructed common refinement returning both certificates and retaining
+both bounds, without transporting
+arrival effects between participants. This realizes the descriptive part
+of R4.2 on existing encounters, not location generation beyond executed events.
+
+[EncounterReadoutBasis](../../RelationalPerimeter/Relativity/Reconstruction/EncounterReadoutBasis.lean)
+interprets a basis of strictly open reading windows on these presentations.
+Every presentation has a positive reading-neighborhood realization at every
+precision. Two realizations produce their finite meet; positive cover selection
+returns the input certificate. Different readings have a positive separator.
+Agreement of **every** neighborhood characterizes exactly interaction-reading equality.
+
+The [closed client](../../Tests/Relativity/EncounterPrecisionChecks.lean) also
+fixes the boundary: two encounters connected by an actually used passage
+have equal readings, remain distinct occurrences, and nevertheless have
+identical admissions on every such neighborhood. Another path produces a
+different reading that is actually separated. The basis is therefore neither
+constant nor an occurrence recognizer. It does not decide whether the
+encounters occupy identical or different physical locations.
+
+R4.2.2 compatible localizing realizations, their physical raccords, localization
+separators and R4.3 coverage by constructed points remain open. A reading basis
+is not a reconstructed physical topology. Arbitrary-precision windows specify
+possible readings; a finite run has not performed infinitely many measurements.
+
 ## Evidence and checks
 
 The [French declaration table](rencontre-constituee.fr.md#preuves-et-contrôles)
@@ -149,6 +184,13 @@ packet's four producers: one emission, two deliveries and one interaction.
 It separates this counted packet boundary from its descriptive consumer and
 checks absence of statically reachable producers outside that boundary.
 It does not measure formation-witness or transport costs.
+
+[check-encounter-descriptions-codegen.py](../../scripts/check-encounter-descriptions-codegen.py)
+separately checks the new consumers: one named call site for the head,
+recursion and their composition in the runner, with no producer accessible
+from the static graphs of refinement, resumption, transport, intersection
+and selection. Statically known closure targets are followed. This is not a
+proof about arbitrary callbacks, total cost or physical topology.
 
 ## Open obligations
 
