@@ -14,6 +14,48 @@ after any finite continuation.
 
 ## Declared law and scope
 
+### Finite coupling assembly
+
+The network lot declares an assembly of couplings with separate holding ports
+on the same received constituted resource prefix. Each attachment selects an
+actually available calibration reference; two attachments may share that
+calibration. Independent occupancy is the explicitly added ideal assembly law,
+not a consequence of numerical readings or a proof of spatial separation.
+A cell index selects an attachment, never a coordinate.
+
+[CouplingNetworks](../../RelationalPerimeter/Relativity/Production/CouplingNetworks.lean)
+positively forms the assembly and every transition. Delivery requires a vacant
+port at the selected cell. Interaction consumes its two ports; the other cells
+carry their own receptions through the same resource production. Their already
+constituted admissions remain available. An archive supplies no current admission.
+
+[NetworkEncounterPassages](../../RelationalPerimeter/Relativity/Production/NetworkEncounterPassages.lean)
+binds four productions: emission from an encounter output, two deliveries into
+an actually empty cell, then an admitted interaction there. Used paths consume
+the ports of these stored productions. The first destination record is proved
+equal to the emission of the actually produced origin output and received payload.
+Finite resumption consumes the latest
+result, transported payload and preserved vacancy; concatenation returns the
+same complete course. Three closed local suffixes emit the output, receive the
+first record or relay it with the attached calibration. The entire head is
+identical across those actually executed suffixes; neither a callback nor a
+completed future is an input to the producer.
+
+[NetworkEncounterDescriptions](../../RelationalPerimeter/Relativity/Reconstruction/NetworkEncounterDescriptions.lean)
+consumes admitted network interactions in the existing attachment agreements
+and anchor constraints. Reception occurrences remain distinct, both effects
+remain readable, and a used passage does not identify its encounter occurrences.
+This assembly supplies no speed, distance, physical neighborhood or continuous
+point. R4.2.2 and the physical coverage of R4.3 remain open; these three suffixes
+and routing courses do not replace the earlier contracts.
+
+The [generated-C check](../../scripts/check-network-encounters-codegen.py) checks
+named sharing sites, compiled resumption and statically reachable producer
+absence in descriptive consumers. It proves neither total cost nor empirical
+validity of the assembly law.
+
+### Initial local coupling
+
 This is an **ideal local two-port coupling model with retention**. The
 instrument is attached to a calibration occurrence in the actual received
 constituted prefix. Delivery reads an available signal reference on that

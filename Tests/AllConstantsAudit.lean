@@ -80,6 +80,7 @@ import Tests.Relativity.EncounterChecks
 import Tests.Relativity.TransportedEncounterChecks
 import Tests.Relativity.LocatedEncounterChecks
 import Tests.Relativity.EncounterPrecisionChecks
+import Tests.Relativity.CouplingNetworkChecks
 
 /-! Build-time tooling, not a mathematical hypothesis or a new production
 dependency. Scan every constant in every imported repository module, including

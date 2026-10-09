@@ -29,3 +29,5 @@ Tests/ExpectedFailure/EncounterCannotReuseConsumedAdmission.lean.fail	dependent-
 Tests/ExpectedFailure/EncounterCannotReplaceAnotherPresentation.lean.fail	dependent-type	5	2	LocalizedPresentation Example.produced Example.again.head.successor
 Tests/ExpectedFailure/CouplingCannotDiscardOccupiedFormation.lean.fail	dependent-type	4	56	CouplingFormation Example.ready.cursor Phase.empty
 Tests/ExpectedFailure/LocationAgreementCannotTransferArrivalConstraints.lean.fail	dependent-type	12	50	(locationClauses [window])
+Tests/ExpectedFailure/NetworkCannotUseOtherCellAdmission.lean.fail	dependent-type	5	39	Admission source ⟨1,
+Tests/ExpectedFailure/NetworkCannotReuseConsumedAdmission.lean.fail	dependent-type	6	38	Admission production.next cell

@@ -1,0 +1,5 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity.Production.Network
+
+def wrongCell {source : State 2} (admitted : Admission source ⟨0, by decide⟩) :
+    Admission source ⟨1, by decide⟩ := admitted

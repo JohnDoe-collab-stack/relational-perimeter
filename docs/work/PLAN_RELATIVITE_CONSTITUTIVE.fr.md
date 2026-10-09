@@ -8288,3 +8288,83 @@ les sites d'appel nommés, pas des callbacks arbitraires ni un coût total.
 Les fondations, le maître, la machine et les résultats précédents sont
 préservés. Une évidence figée attend une révision de référence autorisée ;
 ce lot local ne change aucun statut d'audit extérieur.
+
+## 61. Assemblage fini de couplages et passages effectivement utilisés
+
+Ce lot poursuit le passage productif au-delà de l'instrument unique. Il
+conserve la cible de la section 1. Il ne remplace pas R4.2.2 ni R4.3 par
+une multiplication d'occurrences ou par une généralisation numérique.
+
+### 61.1 Loi d'assemblage déclarée et formation positive
+
+`Production/CouplingNetworks.lean` déclare un assemblage d'un nombre fini
+arbitraire de couplages, sur le même support de ressources constitué.
+Chaque attachement reçoit une référence de calibration déjà formée et
+possède sa propre disponibilité à deux ports. Deux attachements peuvent
+partager la même calibration : leur indice n'est pas une position spatiale.
+L'indépendance des ports est une loi de composition idéale explicitement
+déclarée, pas une conséquence de l'égalité ou de la différence des lectures.
+
+`Formation` relie chaque état à son attachement initial, à ses productions
+de signaux, à ses livraisons effectives et à ses interactions admises.
+Une livraison exige la vacance du port choisi. Une interaction consomme
+les deux arrivées présentes du seul couplage sélectionné. Les autres ports
+et leurs admissions se conservent par transport de leurs propres réceptions.
+L'ancienne admission ne peut pas être réutilisée après consommation ni
+substituée à celle d'un autre attachement.
+
+### 61.2 Passage causal partagé et reprise finie
+
+`Production/NetworkEncounterPassages.lean` construit quatre productions
+partagées : émission depuis la sortie de l'interaction précédente, deux
+livraisons dans un couplage effectivement vacant, puis nouvelle interaction.
+L'histoire et le chemin utilisé consomment les mêmes têtes enregistrées.
+Le record reçu à destination est prouvé égal à l'émission de la sortie
+effective d'origine et du payload reçu ; ce raccord ne résulte pas seulement
+d'une valeur fixe dans un exemple.
+
+`PassageChain` forme positivement les passages et leurs histoires.
+`Course.extend` accepte toute liste finie d'attachements, à partir d'un état
+dont tous les ports sont vides. Chaque passage rend de nouveau ces ports
+vides et transporte le payload vers la reprise. La concaténation est
+exacte sur le paquet entier, pas seulement sur le nombre de passages.
+Trois suffixes fermés consomment la production de tête : émission de sa
+sortie, réception ou relais de son premier record. La tête exécutée est
+indépendante de ce choix de suffixe. Aucun futur terminé n'est son entrée.
+
+Cette course ne constitue pas un nouveau contrat physique universel :
+les contrats antérieurs restent inchangés, et les suffixes déclarés ont
+exactement la portée de leur grammaire locale.
+
+### 61.3 Consommateurs descriptifs et portée physique
+
+`Reconstruction/NetworkEncounterDescriptions.lean` construit l'accord
+de site entre les deux participants de la même production stockée.
+Leurs références et leurs effets restent séparés et lisibles. Les clauses
+de lecture sur cette interaction sont transportées avec retour des valeurs.
+Un passage utilisé conserve distinctes ses occurrences d'origine et
+d'arrivée ; cette distinction n'est pas une séparation spatiale.
+
+Le contrôle du C couvre les sites de production nommés, la reprise
+compilée sur le successeur et le suffixe reçus, et le graphe statique des
+consommateurs descriptifs sans producteurs. Il ne prouve ni un coût total,
+ni une loi de propagation, ni une réalisation matérielle. Le client public
+ferme la consommation locale, la conservation d'une autre admission,
+un passage et des reprises ; les diagnostics négatifs protègent les
+indices de couplage et la disponibilité actuelle.
+
+**R4.2.2 et R4.3 restent ouverts.** L'assemblage fournit des rencontres
+composables, pas encore les générateurs physiques de localisations
+compatibles, leurs lecteurs séparateurs, leurs points ni leur couverture.
+La suite doit construire ces objets à partir des productions et passages
+déjà présents, en explicitant la loi physique supplémentaire si elle est
+nécessaire ; aucune coordonnée reçue, égalité de lectures ou étiquette de
+couplage ne remplace ce travail. Dimension, métrique et dynamique R5-R7
+ne sont pas déclarées acquises.
+
+Production reste indépendante de Reconstruction et Continuation ;
+Reconstruction reste indépendante de Continuation. Les fondations, le
+maître, la machine, les anciens contrats et résultats sont préservés.
+Les textes scientifiques FR/EN décrivent la même portée. Aucun statut
+d'audit extérieur ni évidence de registre figée n'est actualisé avant
+une révision de référence autorisée.

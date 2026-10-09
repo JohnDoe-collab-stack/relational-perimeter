@@ -14,6 +14,52 @@ attachés distingue encore leurs descriptions, après toute continuation finie.
 
 ## Loi déclarée et portée
 
+### Assemblage fini de couplages
+
+Le lot réseau déclare un assemblage de plusieurs couplages à ports propres,
+sur le même préfixe de ressources constitué reçu. Chaque attachement choisit
+une référence de calibration réellement disponible ; deux attachements peuvent
+partager cette calibration. Leur indépendance d'occupation est la loi idéale
+d'assemblage explicitement ajoutée, pas une conséquence des valeurs de leurs
+lectures ni une preuve de séparation spatiale. Un indice de cellule désigne
+l'attachement sélectionné, jamais une coordonnée.
+
+[CouplingNetworks](../../RelationalPerimeter/Relativity/Production/CouplingNetworks.lean)
+forme positivement l'assemblage et chacune de ses transitions. Une livraison
+exige un port vacant de la cellule choisie. Une interaction consomme ses deux
+ports ; les autres cellules transportent leurs propres réceptions à travers
+la même production de ressources. Leur admission déjà constituée reste
+disponible. Une archive ne fournit aucune admission actuelle.
+
+[NetworkEncounterPassages](../../RelationalPerimeter/Relativity/Production/NetworkEncounterPassages.lean)
+lie quatre productions : émission depuis la sortie d'une rencontre, deux
+livraisons dans une cellule effectivement vide, puis interaction admise dans
+cette cellule. Les chemins de dépendance utilisent les ports de ces productions
+stockées. Le premier record à destination est prouvé égal à l'émission de
+la sortie effectivement produite à l'origine et du payload reçu. Les
+reprises finies consomment le dernier résultat, le payload
+transporté et la vacance conservée ; leur concaténation retrouve exactement
+la même course. Les trois suffixes locaux fermés émettent la sortie, reçoivent
+le premier record ou le relaient avec la calibration attachée. La tête entière
+reste identique entre ces suffixes réellement exécutés ; aucun callback ou
+futur achevé n'entre dans le producteur.
+
+[NetworkEncounterDescriptions](../../RelationalPerimeter/Relativity/Reconstruction/NetworkEncounterDescriptions.lean)
+consomme les interactions admises du réseau dans les accords d'attachement
+et contraintes d'ancre existants. Les occurrences de réception restent
+distinctes, les deux effets restent lisibles, et le passage ne confond pas
+les occurrences de ses rencontres. Cet assemblage n'ajoute ni vitesse,
+distance, voisinage physique ni point continu. R4.2.2 et la couverture physique
+de R4.3 restent ouverts ; les anciens contrats ne sont pas remplacés par ces
+trois suffixes ou par les courses de routage.
+
+Le [contrôle du C généré](../../scripts/check-network-encounters-codegen.py)
+vérifie les sites nommés de partage, la reprise compilée et l'absence de
+producteurs statiquement accessibles depuis les consommateurs descriptifs.
+Il ne démontre ni coût total ni validation empirique de la loi d'assemblage.
+
+### Couplage local initial
+
 Il s'agit d'un **modèle idéal de couplage local à deux ports avec rétention**.
 L'instrument est attaché à une occurrence de calibration dans le préfixe
 constitué effectivement reçu. Une livraison lit une référence de signal

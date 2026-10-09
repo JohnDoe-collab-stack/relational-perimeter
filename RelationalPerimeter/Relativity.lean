@@ -23,6 +23,7 @@ import RelationalPerimeter.Relativity.Continuation.EncounterFutures
 import RelationalPerimeter.Relativity.Continuation.TransportedEncounterFutures
 import RelationalPerimeter.Relativity.Reconstruction.LinkedEncounterLocations
 import RelationalPerimeter.Relativity.Reconstruction.EncounterReadoutBasis
+import RelationalPerimeter.Relativity.Reconstruction.NetworkEncounterDescriptions
 import RelationalPerimeter.Relativity.Production.ContinuedInteractionDescriptions
 import RelationalPerimeter.Relativity.Production.NumericDescriptionWindows
 import RelationalPerimeter.Relativity.Production.ConstitutedReadingConstraints
@@ -67,6 +68,11 @@ and commute with its local agreement. A finite open reading basis covers these
 constituted descriptions and separates different readings. Its universal
 classification stops at reading equality: distinct used encounters may agree
 on every such neighborhood. Physical point generation and coverage remain open.
+An explicitly declared finite assembly now gives each coupling its own holding
+ports on the same received constituted support. Selected consumption preserves
+other actual admissions; shared used passages feed an interaction at another
+attachment and resume for any finite request list. Cell indices are not
+coordinates, and this assembly law supplies no speed or spacetime coverage.
 Permitted finite local influences are distinct from executed dependencies; their
 realizer produces a used path and exactly the existing runner's history. Stored
 signal productions reconstruct emission and relay provenance without replay.
@@ -445,4 +451,8 @@ be enlarged between courses; no physical locality follows from these laws.
 #print axioms RelationalPerimeter.Relativity.Reconstruction.location_precision_transport_square
 #print axioms RelationalPerimeter.Relativity.Reconstruction.encounter_readout_neighborhoods_determine_reading
 #print axioms RelationalPerimeter.Relativity.Reconstruction.passage_readouts_do_not_determine_occurrence
+#print axioms RelationalPerimeter.Relativity.Production.Network.Admission.afterOtherEncounter
+#print axioms RelationalPerimeter.Relativity.Production.Network.passage_keeps_distinct_occurrences
+#print axioms RelationalPerimeter.Relativity.Production.Network.course_resume_exact
+#print axioms RelationalPerimeter.Relativity.Reconstruction.network_keeps_both_effects
 /- AXIOM_AUDIT_END -/

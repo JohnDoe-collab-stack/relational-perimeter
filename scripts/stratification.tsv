@@ -103,6 +103,9 @@ RelationalPerimeter.Relativity.Production.EncounterPassages	H16	enforced	Positiv
 RelationalPerimeter.Relativity.Reconstruction.LinkedEncounterLocations	H20	enforced	Prior and new encounter agreements carried by actual finite causal passages with distinct anchors and preserved effects
 RelationalPerimeter.Relativity.Reconstruction.EncounterPrecisionDescriptions	H21	enforced	Positive anchor-only descriptions at arbitrary requested precisions exact restrictions and shared resumption transported by actual encounter agreement without physical point generation
 RelationalPerimeter.Relativity.Reconstruction.EncounterReadoutBasis	H22	enforced	Finite open reading basis on actual encounters positive coverage intersections and exact reading separation with explicit occurrence-nonseparation boundary no physical topology asserted
+RelationalPerimeter.Relativity.Production.CouplingNetworks	H17	enforced	Explicit finite assembly of local holding couplings with independently consumed ports and actual passive resource transports without supplied positions
+RelationalPerimeter.Relativity.Production.NetworkEncounterPassages	H18	enforced	Four shared productions route actual encounter outputs into other vacant couplings with used paths and arbitrary finite causal resumption no propagation metric
+RelationalPerimeter.Relativity.Reconstruction.NetworkEncounterDescriptions	H20	enforced	Actual admitted network interactions feed existing attachment agreements and anchor constraints while preserving sources and rich effects no continuous physical point coverage
 RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement
 RelationalPerimeter.Agents.Constitutive.ProducedEvidence	A11	enforced	Constitutive agent ProducedEvidence
 RelationalPerimeter.Agents.Constitutive.State	A12	enforced	Constitutive agent State

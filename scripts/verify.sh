@@ -94,6 +94,7 @@ fi
 "${python_command[@]}" scripts/check-integrated-machine-codegen.py
 "${python_command[@]}" scripts/check-encounter-codegen.py
 "${python_command[@]}" scripts/check-encounter-descriptions-codegen.py
+"${python_command[@]}" scripts/check-network-encounters-codegen.py
 
 bash scripts/check-expected-failures.sh
 

@@ -1,0 +1,6 @@
+import RelationalPerimeter
+open RelationalPerimeter.Relativity.Production.Network
+
+def reused {count source cell admitted}
+    (production : @EncounterProduction count source cell admitted) :
+    Admission production.next cell := admitted

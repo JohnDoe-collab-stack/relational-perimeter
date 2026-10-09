@@ -97,6 +97,8 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "compiled encounter sharing check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-encounter-descriptions-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled encounter description check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-network-encounters-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "network encounter codegen check failed" }
   & (Join-Path $PSScriptRoot "check-expected-failures.ps1")
   if ($LASTEXITCODE -ne 0) { throw "expected-failure check failed" }
 
