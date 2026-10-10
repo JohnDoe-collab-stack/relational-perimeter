@@ -151,6 +151,10 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "compiled documentary recovery sharing check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-recovery-smoke.py")
   if ($LASTEXITCODE -ne 0) { throw "documentary recovery smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-interpreter-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled documentary interpreter check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-interpreter-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary interpreter smoke failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-continuation-signature-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled signature dependency check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-variable-master-codegen.py")

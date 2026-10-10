@@ -16,6 +16,7 @@ import Tests.LocalAlignment.DocumentaryAssignmentCases
 import Tests.LocalAlignment.DocumentarySequentialCases
 import Tests.LocalAlignment.DocumentaryAssembledCases
 import Tests.LocalAlignment.DocumentaryRecoveryDataCases
+import Tests.LocalAlignment.DocumentaryControlInterpreterCases
 import Tests.AristotleCorrectionRegression
 import Tests.ComputationalPhenomenonRegression
 import Tests.ConstitutiveComplexityHierarchyRegression

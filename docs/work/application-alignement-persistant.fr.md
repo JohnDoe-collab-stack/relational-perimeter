@@ -199,7 +199,18 @@ Les contrôles documentaires, les tests d'exécution et de reprise, les contrôl
 du partage compilé et les 23 fixtures de refus ont passé. Les changements
 de code qualifiés sont identifiés par leurs empreintes dans le relevé.
 
-La prochaine étape est D2 : définir l'évaluation instrumentée du secours
-et démontrer sa correction, sa complétude et sa monotonie en carburant.
-Les bornes et enveloppes de D3 devront ensuite porter sur cette même
-évaluation avant de fermer le théorème de secours borné.
+Un [second incrément](controle-instrumente-documentaire.fr.md) commence D2 :
+l'évaluateur possède les preuves CTL-SOUND, CTL-COMPLETE et CTL-MONO ;
+la lecture des liaisons est payée et raccordée aux producteurs documentaires.
+Le paquet instrumenté est celui de l'étape reçue et son certificat consomme
+le résultat effectif. Les coûts internes des producteurs et assemblages
+restent à instrumenter avant de fermer D2 entier, puis les bornes et
+enveloppes de D3 et le secours borné de D4.
+
+Le [passage suivant de D2](controle-permissions-documentaires.fr.md) instrumente
+le calcul de position de la règle et la recherche de permission, avec une borne
+démontrée depuis leurs entrées. La permission trouvée détermine l'entrée dans
+la formation et reste dans la décision consommée par l'assemblage existant.
+Les doublons conservent la première identité trouvée ;
+le refus et la somme conservent leurs résultats et leurs témoins. Le coût interne
+de la formation, du maître et des assemblages reste la prochaine frontière.
