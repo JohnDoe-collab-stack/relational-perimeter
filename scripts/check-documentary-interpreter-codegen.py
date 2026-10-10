@@ -29,7 +29,7 @@ def main():
             "Deduction_formFromProducerReads___redArg", "Deduction_evaluate", "Deduction_producer___redArg",
             "ControlProducer_code___redArg", "ControlPermission_locatedLookup___redArg",
             "ControlResources_readCode___redArg", "ControlFormation_code___redArg", "ControlArithmetic_code",
-            "Deduction_execute___redArg", "Dossier_step",
+            "Deduction_execute___redArg", "Dossier_step", "ControlMaster_runCode",
             "Program_quotationStep___redArg", "Program_deductionStep___redArg", "ControlAssembly_code___redArg",
             "Program_step___redArg", "ControlPermission_equalCode",
             "ControlPermission_equalDecision", "ControlPermission_lookupCode",
@@ -48,7 +48,7 @@ def main():
             raise ValueError("Unexpected lowered callback count: " + prefix)
         return found
 
-    steps = callbacks("ControlStep_code___redArg", 7)
+    steps = callbacks("ControlStep_code___redArg", 8)
     deductions = callbacks("ControlDeduction_code___redArg", 7)
     resources = callbacks("ControlResources_readCode___redArg", 1)
     lookups = callbacks("ControlPermission_lookupCode", 5)
@@ -66,7 +66,8 @@ def main():
             raise ValueError("Missing or duplicated owner: " + target)
         return found[0]
 
-    quote = owner(steps, "Dossier_step")
+    quote = owner(steps, "Program_quotationStep___redArg")
+    quote_entry = owner(steps, "ControlMaster_runCode")
     assembly = owner(steps, "ControlAssembly_code___redArg")
     form = owner(deductions, "ControlFormation_code___redArg")
     form_step = owner(deductions, "ControlArithmetic_code")
@@ -130,10 +131,16 @@ def main():
         functions, select, agent["parameters"](texts))[0]
     assembly_check = runpy.run_path(str(ROOT / "scripts/check-documentary-assembly-codegen.py"))["make_check"](
         functions, select, agent["parameters"](texts))[0]
+    master_check = runpy.run_path(str(ROOT / "scripts/check-documentary-master-control-codegen.py"))["make_check"](
+        functions, select)[0]
+    completion_check = runpy.run_path(str(ROOT / "scripts/check-documentary-completion-codegen.py"))["make_check"](
+        functions, select)[0]
 
     def check(current):
         arithmetic_check(current)
         assembly_check(current)
+        master_check(current)
+        completion_check(current)
         body = current[names["Control_execute___redArg"]]
         applications = list(re.finditer(r"\blean_apply_1\s*\(", body))
         recursions = sites(body, "Control_execute___redArg")
@@ -158,13 +165,14 @@ def main():
                 raise ValueError("Lowered control replays an original search/step")
             if sites(current[name], "Deduction_formFromProducerReads___redArg"):
                 raise ValueError("Formation outside its paid callback")
-            if name != quote and sites(current[name], "Dossier_step"):
-                raise ValueError("Quotation outside its paid callback")
+            if sites(current[name], "Dossier_step"):
+                raise ValueError("Quotation replays the original whole master call")
 
         body = current[quote]
-        produced = assigned(body, "Dossier_step")
-        if produced not in call(body, "Program_quotationStep___redArg")[1].split(", "):
+        produced = call(body, "Program_quotationStep___redArg")[1].split(", ")[-1]
+        if not re.fullmatch(r"v_actual_\d+_", produced):
             raise ValueError("Quotation assembly substitutes its producer packet")
+        call(current[quote_entry], "ControlMaster_runCode")
         body = current[assembly]
         arguments = call(body, "ControlAssembly_code___redArg")[1].split(", ")
         if not re.fullmatch(r"v_actualDecision_\d+_", arguments[-1]):
@@ -310,7 +318,7 @@ def main():
                       (name, body.replace("lean_nat_sub", "lean_nat_add")),
                       (name, "lean_apply_1(x, y);" + re.sub(r"lean_apply_1\([^;]+;", "", body, count=1))))
     body = functions[quote]
-    produced = assigned(body, "Dossier_step")
+    produced = call(body, "Program_quotationStep___redArg")[1].split(", ")[-1]
     invoked = call(body, "Program_quotationStep___redArg")
     mutations.append((quote, body[:invoked.start()] + invoked[0].replace(produced, "v_other_packet") + body[invoked.end():]))
     for name, pattern in ((assembly, r"v_actualDecision_\d+_"), (choose, r"(?<=0, )v_val_\d+_"),
@@ -354,6 +362,8 @@ def main():
         functions, select, agent["parameters"](texts))
     runpy.run_path(str(ROOT / "scripts/check-documentary-assembly-codegen.py"))["verify"](
         functions, select, agent["parameters"](texts))
+    runpy.run_path(str(ROOT / "scripts/check-documentary-master-control-codegen.py"))["verify"](functions, select)
+    runpy.run_path(str(ROOT / "scripts/check-documentary-completion-codegen.py"))["verify"](functions, select)
     print("DOCUMENTARY_INTERPRETER_CODEGEN_OK: paid lazy evaluator, reference position and permission lookup, "
           "actual paid resource arguments and retained producer/position, retained legacy formation helper and instrumented arithmetic/formation/assembly path, shared decision, two consuming certificates; " +
           str(len(mutations)) + " mutations rejected; named direct-body/closure scope")

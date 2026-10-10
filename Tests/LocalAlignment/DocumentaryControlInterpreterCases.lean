@@ -136,6 +136,20 @@ theorem empty_permission_paid :
 
 theorem duplicate_bound_conservative : ControlPermission.lookupBound [1, 1] 1 = 9 := rfl
 
+/-- Normalization reverses an unresolved pair. The accepted right branch is
+therefore the first retained cell, although the frontier still has width two. -/
+theorem baseline_routing_reads_head :
+    ControlCompletion.assignmentBound
+      (MasterCases.factRun.1.preservation.forward.map (.head ⟨fun _ => true, True.intro⟩)) = 1 := rfl
+
+theorem grouped_routing_reads_head :
+    ControlCompletion.assignmentBound
+      (MasterCases.bothRun.1.preservation.forward.map (.head ⟨fun _ => false, True.intro⟩)) = 1 := rfl
+
+theorem revised_routing_reads_head :
+    ControlCompletion.assignmentBound
+      (MasterCases.revisedRun.1.preservation.forward.map (.head ⟨fun _ => true, True.intro⟩)) = 1 := rfl
+
 end ConstitutiveSearch.Agent.Local.Documentary.ControlInterpreterCases
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -178,4 +192,7 @@ end ConstitutiveSearch.Agent.Local.Documentary.ControlInterpreterCases
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlInterpreterCases.later_permission_labels
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlInterpreterCases.empty_permission_paid
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlInterpreterCases.duplicate_bound_conservative
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlInterpreterCases.baseline_routing_reads_head
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlInterpreterCases.grouped_routing_reads_head
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlInterpreterCases.revised_routing_reads_head
 /- AXIOM_AUDIT_END -/

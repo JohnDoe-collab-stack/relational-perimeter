@@ -52,7 +52,10 @@ def client_source():
              "referenceReturn resourceCell producerKindCell producerPortCell producerOutputKind producerAssembly "
              "integerNaturalCell integerNaturalReturn integerSign integerSignReturn integerOperation integerNegate "
              "formationValues formationWitness formationResources "
-             "assemblyKind assemblyKinds assemblyKnowledge assemblyStore assemblyExtension assemblyOutput assemblyFrame assemblyPacket").split()
+             "assemblyKind assemblyKinds assemblyKnowledge assemblyStore assemblyExtension assemblyOutput assemblyFrame assemblyPacket "
+             "citationOrigin citationCheckResult citationReadout citationHead citationFormula citationOpening citationReduction citationStage "
+             "citationSeed citationInput citationPreservation citationRouting citationContinuationCell citationAssignment citationCandidate "
+             "citationProducer citationAuthorize citationIncorporate citationCompletion citationDecision citationPacket").split()
     tags = "\n".join("  | ." + name + " => " + str(i) for i, name in enumerate(names))
     return """import Tests.LocalAlignment.DocumentaryControlArithmetic
 import Tests.LocalAlignment.DocumentaryCases

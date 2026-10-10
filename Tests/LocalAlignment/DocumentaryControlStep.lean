@@ -1,4 +1,5 @@
 import Tests.LocalAlignment.DocumentaryControlAssembly
+import Tests.LocalAlignment.DocumentaryControlMaster
 
 /-! Instrumented binding control feeds the same documentary producers and
 assembly target as Program.step. Deduction assembly has explicit paid stages;
@@ -19,9 +20,10 @@ abbrev Packet (before : FrameData sources contract rules slots)
 def code (before : FrameData sources contract rules slots)
     (instruction : Instruction context rules slots spec) : Code Label (Packet before instruction) :=
   .step .instruction (fun _ => match instruction with
-    | .quotation task => .step .quotationProducer (fun _ =>
-        let produced := Dossier.step before.dossier task
-        .done ⟨quotationStep before.restore task produced, rfl⟩)
+    | .quotation task => (ControlMaster.runCode before.dossier task).bind (fun actual =>
+        .step .assemblyPacket (fun _ =>
+          .done ⟨quotationStep before.restore task actual.1,
+            congrArg (quotationStep before.restore task) actual.2⟩))
     | .conclusion request leftSlot rightSlot demand =>
         (readCode before.bindings leftSlot).bind (fun leftRead =>
           match leftActual : leftRead.1 with
@@ -95,7 +97,10 @@ theorem finite (before : FrameData sources contract rules slots)
     Finite (code before instruction) := by
   apply finite_step
   cases instruction with
-  | quotation task => exact finite_step _ _ (finite_done _)
+  | quotation task =>
+      apply finite_bind (ControlMaster.run_finite before.dossier task)
+      intro actual
+      exact finite_step _ _ (finite_done _)
   | conclusion request leftSlot rightSlot demand =>
       apply finite_bind ⟨_, _, ⟨readTrace before.bindings leftSlot⟩⟩
       intro leftRead

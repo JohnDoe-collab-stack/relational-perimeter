@@ -286,3 +286,95 @@ constantes. Les deux smokes du contrôle produisent 6 659 verdicts ; les gardes
 C rejettent 256 mutations textuelles. Les empreintes Lean et des contrôles
 restent celles figées avant le run. Ces vérifications qualifient cet incrément
 et conservent les obligations ouvertes du tableau.
+
+## Première ouverture du maître de citation
+
+Le [raccord des contrôles de source](controle-maitre-citation.fr.md) ouvre
+la recherche documentaire du même maître. Ses contrôles gauche et droit
+emploient les positions payées, la première permission trouvée et les passages
+effectivement lus. Les comparaisons structurales portent sur le fait, la valeur
+et l'origine éventuellement imposée. Une source sans permission n'est pas lue.
+
+Les deux contrôles produits déterminent la formule réellement ouverte ; la
+tête, l'ouverture et la réduction effectivement produites sont conservées
+dans l'étape. Le chemin instrumenté ne relance pas `Dossier.step` pour fabriquer
+son paquet ou son certificat. Les égalités portent sur l'étape entière.
+
+| Passage du maître | État de cet incrément |
+| --- | --- |
+| Positions, permissions et lectures des deux sources | Instrumentés et bornés dans le catalogue déclaré |
+| Comparaisons du fait, de la valeur et de l'origine | Instrumentées, sans comparaison naturelle native cachée |
+| Transmission des contrôles à la formule et à l'étape | Raccordée aux productions effectives |
+| Production interne de tête, ouverture et normalisation | Appels complexes nommés ; calculs internes encore à ouvrir |
+| Complétion, extraction et formation de citation | Appel complexe nommé ; calculs internes encore à ouvrir |
+| Assemblage de citation, entrée manquante et administration | D2 reste ouvert, ainsi que les coûts différés et allocations |
+
+Les seuils du catalogue actuel sont 83 pour la citation de référence, 82 pour
+le refus avec origine interdite et 150 pour la citation révisée. Ces seuils
+incluent encore des appels complexes à une transition ; ils ne bornent pas
+le coût interne du maître ni le coût physique total. Leur hausse décrit
+l'ouverture des contrôles auparavant cachés, sans revendication de gain.
+
+Le [relevé de développement](controle-maitre-citation-verification.json)
+conserve la portée et les résultats de cet incrément. Les relevés précédents
+restent historiques. D2 entier, CONT-03 et P15 ne sont pas déclarés terminés ;
+D3 puis D4 suivent toujours la clôture complète de D2, et A précède B.
+
+La gate complète de cette ouverture a réussi : 312 fichiers Lean, 26 099
+constantes, aucune exception écrite, 7 459 verdicts d'exécution et 318 mutations
+textuelles rejetées. Les 189 audits explicites des quatorze modules de contrôle
+sont sans axiome. Ces résultats qualifient les contrôles et transmissions
+décrits, sans fermer les calculs internes encore nommés dans le tableau.
+
+## Décision et formation effectives de la citation
+
+Le [raccord de complétion](controle-completion-citation.fr.md) poursuit D2.
+La décision lit la continuation réellement retenue ; son assignation produit
+le bit qui choisit l'occurrence contrôlée. L'extraction consomme une lecture
+payée de cette occurrence et conserve le même producteur et la formation
+antérieure. Le readout formé, sa permission et son incorporation alimentent
+le paquet complet. L'égalité avec les producteurs d'origine inclut le témoin
+d'accomplissement en `Type` et le raccord à l'étape du programme.
+
+Un majorant conservateur de décision provient des deux références reçues.
+Il est démontré sans lancer la recherche du maître pour calculer son
+allocation : la normalisation ne fait pas croître la longueur de la frontière,
+l'ouverture reçue a deux branches et le candidat vient d'une des deux
+occurrences. Le coût du calcul de ce majorant reste une obligation de D3.
+
+| Passage de D2 | État courant après cet incrément |
+| --- | --- |
+| Contrôles des sources et transmission à la recherche | Instrumentés ; même tête, ouverture et réduction |
+| Lecture de continuation, sélection et extraction | Instrumentées depuis les données réellement retenues |
+| Formation, readout, admission et paquet de complétion | Raccordés aux productions originales, avec majorants du catalogue |
+| Découverte de tête, ouverture et normalisation | Calculs internes encore à ouvrir |
+| Préservation, routage et application des fonctions d'assignation | Frontières distinctes nommées ; calculs internes et appels différés ouverts |
+| Assemblage de citation et d'entrée manquante | À décomposer |
+| Restauration de frame, lectures différées, composition, traces et allocations | À instrumenter dans le modèle complet |
+
+Les seuils documentaires actuels sont 106 pour la citation de référence,
+84 pour le refus à origine interdite et 176 pour la citation révisée.
+Ils comptent encore les frontières complexes indiquées. Les gardes C et les
+matrices de carburant contrôlent la fidélité des productions et du compteur
+déclaré ; elles ne ferment pas le coût physique ou le contrôle de tous les
+successeurs.
+
+Le [relevé courant](controle-completion-citation-verification.json) qualifie
+cet incrément. Les relevés antérieurs restent historiques. D2 entier,
+CONT-03 et P15 restent ouverts ; D3 puis D4 suivent sa clôture complète,
+et A conserve la priorité sur B.
+
+La gate complète de cet incrément a réussi après correction des preuves
+arithmétiques des majorants : 314 fichiers Lean, 26 229 constantes, aucune
+exception pour une déclaration écrite, 224 audits explicites de contrôle
+sans axiome, 8 959 verdicts d'exécution et 427 mutations textuelles rejetées.
+La qualification conserve l'échec d'audit initial et la correction, sans
+changement des définitions exécutées ni des attentes de traces.
+
+La prochaine ouverture concrète concerne `VariableMaster.masterHead` :
+`discover`, `applyStage`, `decompose`, `assemble`, puis
+`continueWithReferences`. Chaque passage doit transmettre le support
+effectivement constitué au suivant et conserver l'égalité du paquet entier,
+dont la tête, le curseur suivant et les formations. L'ouverture de ces
+producteurs devra aussi couvrir leurs calculs internes ; leur seul
+séquençage ne fermerait pas D2.

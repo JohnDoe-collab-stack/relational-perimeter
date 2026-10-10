@@ -37,6 +37,48 @@ def search {context} (cursor : MasterResources.Cursor) (sources : Support Source
   let reduction := normalizeGeneratedStructuralFrontierByFlip formula (VariableMaster.selected head) opening.frontier
   ⟨head, rfl, leftCheck, rfl, rightCheck, rfl, opening, rfl, reduction, rfl⟩
 
+/-- Assemble the same stage from actual paid computations. Equalities specify
+the original API; they do not invoke its producers at runtime. -/
+def stageFromParts {context} (cursor : MasterResources.Cursor) (sources : Support SourceValue context)
+    (contract : Contract) (demand : Demand) (left right : Location context)
+    (head : VariableMaster.MasterHead cursor) (headExact : head = VariableMaster.masterHead cursor)
+    (leftCheck : Checked sources contract demand left)
+    (leftExact : leftCheck = check sources contract demand left)
+    (rightCheck : Checked sources contract demand right)
+    (rightExact : rightCheck = check sources contract demand right)
+    (opening : VariableMaster.Opening (choiceFormula (VariableMaster.selected head) leftCheck.flag rightCheck.flag)
+      [GeneratedStructuralBranchContext.root (choiceFormula (VariableMaster.selected head) leftCheck.flag rightCheck.flag)])
+    (openingExact : opening = VariableMaster.openFrontier _ (VariableMaster.selected head) _)
+    (reduction : VariableMaster.Reduction _ (VariableMaster.selected head) opening)
+    (reductionExact : reduction = normalizeGeneratedStructuralFrontierByFlip _
+      (VariableMaster.selected head) opening.frontier) : Stage cursor sources contract demand left right :=
+  ⟨head, headExact, leftCheck, leftExact, rightCheck, rightExact,
+    opening, openingExact, reduction, reductionExact⟩
+
+theorem stageFromParts_actual {context} (cursor : MasterResources.Cursor)
+    (sources : Support SourceValue context) (contract : Contract) (demand : Demand)
+    (left right : Location context) (head : VariableMaster.MasterHead cursor)
+    (headExact : head = VariableMaster.masterHead cursor)
+    (leftCheck : Checked sources contract demand left)
+    (leftExact : leftCheck = check sources contract demand left)
+    (rightCheck : Checked sources contract demand right)
+    (rightExact : rightCheck = check sources contract demand right)
+    (opening : VariableMaster.Opening (choiceFormula (VariableMaster.selected head) leftCheck.flag rightCheck.flag)
+      [GeneratedStructuralBranchContext.root (choiceFormula (VariableMaster.selected head) leftCheck.flag rightCheck.flag)])
+    (openingExact : opening = VariableMaster.openFrontier _ (VariableMaster.selected head) _)
+    (reduction : VariableMaster.Reduction _ (VariableMaster.selected head) opening)
+    (reductionExact : reduction = normalizeGeneratedStructuralFrontierByFlip _
+      (VariableMaster.selected head) opening.frontier) :
+    stageFromParts cursor sources contract demand left right head headExact
+      leftCheck leftExact rightCheck rightExact opening openingExact reduction reductionExact =
+      search cursor sources contract demand left right := by
+  cases headExact
+  cases leftExact
+  cases rightExact
+  cases openingExact
+  cases reductionExact
+  rfl
+
 def Stage.formula {context cursor sources contract demand left right}
     (stage : @Stage context cursor sources contract demand left right) : Cnf :=
   choiceFormula (VariableMaster.selected stage.head) stage.leftCheck.flag stage.rightCheck.flag
@@ -67,6 +109,31 @@ def Stage.candidate {context cursor sources contract demand left right}
     exact stage.leftCheck.candidate eligible
   · rw [value] at eligible
     exact stage.rightCheck.candidate eligible
+
+/-- The paid assignment bit selects the actual checked occurrence. -/
+def Stage.candidateFromBit {context cursor sources contract demand left right}
+    (stage : @Stage context cursor sources contract demand left right)
+    (assignment : Assignment) (accepted : Satisfies assignment stage.formula)
+    (bit : {bit : Bool // bit = assignment (VariableMaster.selected stage.head)}) :
+    Candidate sources contract demand := by
+  have eligible := (choiceFormula_exact (VariableMaster.selected stage.head) stage.leftCheck.flag
+    stage.rightCheck.flag assignment).1 accepted
+  rw [← bit.2] at eligible
+  cases value : bit.1
+  · rw [value] at eligible
+    exact stage.leftCheck.candidate eligible
+  · rw [value] at eligible
+    exact stage.rightCheck.candidate eligible
+
+theorem Stage.candidateFromBit_actual {context cursor sources contract demand left right}
+    (stage : @Stage context cursor sources contract demand left right)
+    (assignment : Assignment) (accepted : Satisfies assignment stage.formula)
+    (bit : {bit : Bool // bit = assignment (VariableMaster.selected stage.head)}) :
+    stage.candidateFromBit assignment accepted bit = stage.candidate assignment accepted := by
+  obtain ⟨bit, actual⟩ := bit
+  cases actual
+  unfold Stage.candidateFromBit Stage.candidate
+  dsimp only
 
 /-- The packet stores the actual retained continuation, produced action, authorized
 element and goal witness. Its construction shares these productions. The associated
@@ -109,6 +176,44 @@ def complete {context cursor sources contract demand left right}
     exact candidate.meets
   ⟨continuation, accepted, candidate, rfl, action, rfl, output, rfl, result, rfl,
     meets, .cons demand result.2 .here meets (.nil _)⟩
+
+/-- Assemble the completion from its actual controlled productions. -/
+def completionFromParts {context cursor sources contract demand left right}
+    (stage : @Stage context cursor sources contract demand left right) (memory : Memory sources contract)
+    (continuation : FrontierContinuation (generatedStructuralBranchSystem stage.formula) stage.reduction.retained)
+    (accepted : FrontierAccept (generatedStructuralBranchSystem stage.formula) stage.reduction.retained continuation)
+    (candidate : Candidate sources contract demand)
+    (candidateExact : candidate = stage.candidate (frontierAssignment continuation) (frontier_root_accept continuation accepted))
+    (action : Extraction sources candidate.origin) (actionExact : action = extract sources candidate.origin)
+    (output : Output sources contract) (outputExact : output = authorize contract action candidate.permission)
+    (result : Memory sources contract × Citation) (resultExact : result = incorporate memory output) :
+    Completion stage memory := by
+  have meets : Meets demand result.2 := by
+    rw [resultExact, outputExact]
+    change Meets demand action.citation
+    rw [action.citation_exact]
+    exact candidate.meets
+  have located : Ref result.1.items result.2 :=
+    resultExact.symm ▸ (Ref.here : Ref (incorporate memory output).1.items (incorporate memory output).2)
+  exact ⟨continuation, accepted, candidate, candidateExact, action, actionExact,
+    output, outputExact, result, resultExact, meets, .cons demand result.2 located meets (.nil _)⟩
+
+theorem completionFromParts_actual {context cursor sources contract demand left right}
+    (stage : @Stage context cursor sources contract demand left right) (memory : Memory sources contract)
+    (continuation : FrontierContinuation (generatedStructuralBranchSystem stage.formula) stage.reduction.retained)
+    (accepted : FrontierAccept (generatedStructuralBranchSystem stage.formula) stage.reduction.retained continuation)
+    (candidate : Candidate sources contract demand)
+    (candidateExact : candidate = stage.candidate (frontierAssignment continuation) (frontier_root_accept continuation accepted))
+    (action : Extraction sources candidate.origin) (actionExact : action = extract sources candidate.origin)
+    (output : Output sources contract) (outputExact : output = authorize contract action candidate.permission)
+    (result : Memory sources contract × Citation) (resultExact : result = incorporate memory output) :
+    completionFromParts stage memory continuation accepted candidate candidateExact action actionExact
+      output outputExact result resultExact = complete stage memory continuation accepted := by
+  cases candidateExact
+  cases actionExact
+  cases outputExact
+  cases resultExact
+  rfl
 
 inductive Decision {context cursor sources contract demand left right}
     (stage : @Stage context cursor sources contract demand left right)
@@ -230,13 +335,19 @@ end ConstitutiveSearch.Agent.Local.Documentary.Master
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.Stage
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.search
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.stageFromParts
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.stageFromParts_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.Stage.formula
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.Stage.preservation
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.Stage.next
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.Stage.next_exact
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.Stage.candidate
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.Stage.candidateFromBit
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.Stage.candidateFromBit_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.Completion
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.complete
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.completionFromParts
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.completionFromParts_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.Decision
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.decide
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Master.run

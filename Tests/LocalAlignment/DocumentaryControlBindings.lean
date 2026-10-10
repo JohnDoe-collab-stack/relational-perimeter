@@ -43,6 +43,27 @@ inductive Label where
   | assemblyOutput
   | assemblyFrame
   | assemblyPacket
+  | citationOrigin
+  | citationCheckResult
+  | citationReadout
+  | citationHead
+  | citationFormula
+  | citationOpening
+  | citationReduction
+  | citationStage
+  | citationSeed
+  | citationInput
+  | citationPreservation
+  | citationRouting
+  | citationContinuationCell
+  | citationAssignment
+  | citationCandidate
+  | citationProducer
+  | citationAuthorize
+  | citationIncorporate
+  | citationCompletion
+  | citationDecision
+  | citationPacket
 
 variable {context : List SourceKey} {sources : Support SourceValue context}
   {contract : Contract} {rules : Deduction.Policy} {store : Deduction.Store sources contract rules}

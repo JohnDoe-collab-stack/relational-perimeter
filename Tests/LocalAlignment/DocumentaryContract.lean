@@ -135,6 +135,19 @@ def extract {context} (sources : Support SourceValue context) (origin : Location
   let produced := sources.extend (extractionProducer origin.2)
   ⟨produced, rfl⟩
 
+/-- Retain an actual controlled formation, with erased alignment to the original API. -/
+def extractionFromSupport {context} (sources : Support SourceValue context) (origin : Location context)
+    (resources : Support SourceValue (origin.1 :: context))
+    (actual : resources = sources.extend (extractionProducer origin.2)) : Extraction sources origin :=
+  ⟨resources, actual⟩
+
+theorem extractionFromSupport_actual {context} (sources : Support SourceValue context)
+    (origin : Location context) (resources : Support SourceValue (origin.1 :: context))
+    (actual : resources = sources.extend (extractionProducer origin.2)) :
+    extractionFromSupport sources origin resources actual = extract sources origin := by
+  cases actual
+  rfl
+
 def Extraction.citation {context} {sources : Support SourceValue context} {origin}
     (action : Extraction sources origin) : Citation :=
   ⟨origin.1, origin.2.position, action.resources.read .here⟩
@@ -188,6 +201,24 @@ def authorize {context} {sources : Support SourceValue context} {origin}
     (contract : Contract) (action : Extraction sources origin)
     (permission : Ref contract.allowed origin.2.position) : Output sources contract :=
   ⟨action.citation, action.cited, permission⟩
+
+/-- Admission stores the readout actually computed from the formed resource. -/
+def authorizeFromCitation {context} {sources : Support SourceValue context} {origin}
+    (contract : Contract) (action : Extraction sources origin)
+    (permission : Ref contract.allowed origin.2.position)
+    (item : Citation) (actual : item = action.citation) : Output sources contract := by
+  have cited : Cited sources item := actual.symm ▸ action.cited
+  have permitted : Ref contract.allowed item.position :=
+    (congrArg Citation.position actual).symm ▸ permission
+  exact ⟨item, cited, permitted⟩
+
+theorem authorizeFromCitation_actual {context} {sources : Support SourceValue context} {origin}
+    (contract : Contract) (action : Extraction sources origin)
+    (permission : Ref contract.allowed origin.2.position)
+    (item : Citation) (actual : item = action.citation) :
+    authorizeFromCitation contract action permission item actual = authorize contract action permission := by
+  cases actual
+  rfl
 
 /-- Positive admissibility supplies a primitive location and permission,
 not an already completed dossier or a trace of its future execution. -/
@@ -341,6 +372,8 @@ end ConstitutiveSearch.Agent.Local.Documentary
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.extractionProducer
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Extraction
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.extract
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.extractionFromSupport
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.extractionFromSupport_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Extraction.citation
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Extraction.citation_exact
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Extraction.transport
@@ -351,6 +384,8 @@ end ConstitutiveSearch.Agent.Local.Documentary
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Conforms
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Output
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.authorize
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.authorizeFromCitation
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.authorizeFromCitation_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Candidate
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Admissible
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.fulfill
