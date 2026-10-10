@@ -28,9 +28,9 @@ def main():
             "ControlDeduction_code___redArg", "Deduction_form___redArg",
             "Deduction_formFromProducerReads___redArg", "Deduction_evaluate", "Deduction_producer___redArg",
             "ControlProducer_code___redArg", "ControlPermission_locatedLookup___redArg",
-            "ControlResources_readCode___redArg",
+            "ControlResources_readCode___redArg", "ControlFormation_code___redArg", "ControlArithmetic_code",
             "Deduction_execute___redArg", "Dossier_step",
-            "Program_quotationStep___redArg", "Program_deductionStep___redArg",
+            "Program_quotationStep___redArg", "Program_deductionStep___redArg", "ControlAssembly_code___redArg",
             "Program_step___redArg", "ControlPermission_equalCode",
             "ControlPermission_equalDecision", "ControlPermission_lookupCode",
             "ControlPermission_referencedLookup___redArg", "ControlReference_positionCode___redArg",
@@ -49,7 +49,7 @@ def main():
         return found
 
     steps = callbacks("ControlStep_code___redArg", 7)
-    deductions = callbacks("ControlDeduction_code___redArg", 6)
+    deductions = callbacks("ControlDeduction_code___redArg", 7)
     resources = callbacks("ControlResources_readCode___redArg", 1)
     lookups = callbacks("ControlPermission_lookupCode", 5)
     comparisons = callbacks("ControlPermission_equalCode", 2)
@@ -67,9 +67,9 @@ def main():
         return found[0]
 
     quote = owner(steps, "Dossier_step")
-    assembly = owner(steps, "Program_deductionStep___redArg")
-    form = owner(deductions, "Deduction_formFromProducerReads___redArg")
-    form_step = next(name for name in deductions if "lean_alloc_closure((void*)(" + form in functions[name])
+    assembly = owner(steps, "ControlAssembly_code___redArg")
+    form = owner(deductions, "ControlFormation_code___redArg")
+    form_step = owner(deductions, "ControlArithmetic_code")
     producer_entry = owner(deductions, "ControlProducer_code___redArg")
     choose = next(name for name in deductions if "lean_obj_tag" in functions[name])
     right_read = owner([name for name in deductions if name != choose], "ControlResources_readCode___redArg")
@@ -126,7 +126,14 @@ def main():
         names["ControlPermission_previous___redArg"], names["ControlPermission_referencedLookup___redArg"],
         names["ControlPermission_locatedLookup___redArg"]]
 
+    arithmetic_check = runpy.run_path(str(ROOT / "scripts/check-documentary-arithmetic-codegen.py"))["make_check"](
+        functions, select, agent["parameters"](texts))[0]
+    assembly_check = runpy.run_path(str(ROOT / "scripts/check-documentary-assembly-codegen.py"))["make_check"](
+        functions, select, agent["parameters"](texts))[0]
+
     def check(current):
+        arithmetic_check(current)
+        assembly_check(current)
         body = current[names["Control_execute___redArg"]]
         applications = list(re.finditer(r"\blean_apply_1\s*\(", body))
         recursions = sites(body, "Control_execute___redArg")
@@ -145,11 +152,11 @@ def main():
         for name in scope:
             if any(sites(current[name], target) for target in
                    ("resolvePermission", "ControlPermission_equalDecision", "Deduction_execute___redArg",
-                    "Program_step___redArg", "Ref_position", "Deduction_form___redArg",
+                    "Program_step___redArg", "Program_deductionStep___redArg", "Ref_position", "Deduction_form___redArg",
                     "read", "Ports_read", "Support_read", "Producer_arguments", "Support_extend",
                     "Deduction_producer___redArg")):
                 raise ValueError("Lowered control replays an original search/step")
-            if name != form and sites(current[name], "Deduction_formFromProducerReads___redArg"):
+            if sites(current[name], "Deduction_formFromProducerReads___redArg"):
                 raise ValueError("Formation outside its paid callback")
             if name != quote and sites(current[name], "Dossier_step"):
                 raise ValueError("Quotation outside its paid callback")
@@ -159,33 +166,18 @@ def main():
         if produced not in call(body, "Program_quotationStep___redArg")[1].split(", "):
             raise ValueError("Quotation assembly substitutes its producer packet")
         body = current[assembly]
-        arguments = call(body, "Program_deductionStep___redArg")[1].split(", ")
+        arguments = call(body, "ControlAssembly_code___redArg")[1].split(", ")
         if not re.fullmatch(r"v_actualDecision_\d+_", arguments[-1]):
             raise ValueError("Deduction assembly substitutes the received decision")
-        received = next(name for name in steps if assembly in current[name] and name != assembly)
-        step_closure(current[received], assembly, 9)
-        if not re.search(r"lean_closure_set\([^,]+, 4, v_actualDecision_\d+_\)", current[received]):
-            raise ValueError("Assembly closure drops the actual decision")
+        if len(arguments) != 5 or not re.fullmatch(r"v_request_\d+_", arguments[1]):
+            raise ValueError("Assembly substitutes the original request")
 
-        body = current[form]
-        action = assigned(body, "Deduction_formFromProducerReads___redArg")
-        if not re.search(r", v_producer_\d+_, v_leftRead_\d+_, v_rightRead_\d+_\);",
-                         call(body, "Deduction_formFromProducerReads___redArg")[0]):
-            raise ValueError("Formation substitutes its actual read arguments")
-        if not re.search(r"lean_ctor_set\((\w+), 0, " + re.escape(action) + r"\);\s*"
-                         r"lean_ctor_set\(\1, 1, v_val_\d+_\)", body):
-            raise ValueError("Accepted packet must pair actual action and received permission")
         body = current[choose]
-        step_closure(current[form_step], form, 3)
-        for slot, variable in ((2, "producer"), (3, "leftRead"), (4, "rightRead"), (5, "val")):
-            if not re.search(r"lean_closure_set\([^,]+, " + str(slot) + ", v_" + variable + r"_\d+_\)",
-                             current[form_step]):
-                raise ValueError("Paid formation drops a read or permission")
         permission = re.search(r"(\w+) = lean_ctor_get\(v_snd_\d+_, 0\)", body)
-        if permission is None or not re.search(r"lean_closure_set\([^,]+, 2, " +
+        if permission is None or not re.search(r"lean_closure_set\([^,]+, 0, " +
                                                re.escape(permission[1]) + r"\)", body):
             raise ValueError("Formation closure substitutes actual permission")
-        for slot, variable in ((2, "leftRead"), (3, "val")):
+        for slot, variable in ((3, "leftRead"),):
             if not re.search(r"lean_closure_set\([^,]+, " + str(slot) + ", v_" + variable + r"_\d+_\)",
                              current[right_read]):
                 raise ValueError("Right read drops the received left value or permission")
@@ -277,6 +269,8 @@ def main():
                      "ControlDeduction_code___redArg", "ControlPermission_lookupCode",
                      "Deduction_formFromProducerReads___redArg", "ControlResources_readCode___redArg",
                      "ControlProducer_code___redArg", "ControlPermission_locatedLookup___redArg",
+                     "ControlArithmetic_code", "ControlFormation_code___redArg",
+                     "ControlAssembly_code___redArg",
                      "ControlPermission_referencedLookup___redArg", "ControlReference_positionCode___redArg")
         for certificate in ("Control_Result_sound___redArg", "ControlStep_complete___redArg"):
             if any(sites(current[names[certificate]], target) for target in producers):
@@ -291,15 +285,17 @@ def main():
     def append(name, extra):
         mutations.append((name, functions[name] + extra))
 
-    for name, target in ((quote, "Dossier_step"), (form, "Deduction_formFromProducerReads___redArg"),
-                         (assembly, "Program_deductionStep___redArg"),
+    for name, target in ((quote, "Dossier_step"), (form, "ControlFormation_code___redArg"),
+                         (assembly, "ControlAssembly_code___redArg"),
                          (cell, "ControlPermission_equalCode"), (descend, "ControlPermission_lookupCode"),
                          (position, "ControlReference_positionCode___redArg")):
         append(name, names[target] + "();")
     for certificate in ("Control_Result_sound___redArg", "ControlStep_complete___redArg"):
         append(names[certificate], names["Control_execute___redArg"] + "();")
+        append(names[certificate], names["ControlArithmetic_code"] + "();")
+        append(names[certificate], names["ControlFormation_code___redArg"] + "();")
     for factory, target in (("ControlStep_code___redArg", "Dossier_step"),
-                            ("ControlDeduction_code___redArg", "Deduction_formFromProducerReads___redArg"),
+                            ("ControlDeduction_code___redArg", "ControlFormation_code___redArg"),
                             ("ControlPermission_equalCode", "ControlPermission_equalCode"),
                             ("ControlPermission_lookupCode", "ControlPermission_lookupCode"),
                             ("ControlReference_positionCode___redArg", "ControlReference_positionCode___redArg")):
@@ -317,7 +313,7 @@ def main():
     produced = assigned(body, "Dossier_step")
     invoked = call(body, "Program_quotationStep___redArg")
     mutations.append((quote, body[:invoked.start()] + invoked[0].replace(produced, "v_other_packet") + body[invoked.end():]))
-    for name, pattern in ((assembly, r"v_actualDecision_\d+_"), (choose, r"(?<=2, )v_val_\d+_"),
+    for name, pattern in ((assembly, r"v_actualDecision_\d+_"), (choose, r"(?<=0, )v_val_\d+_"),
                           (prior, r"v_actual_\d+_"), (lookup_at, r"v_actual_\d+_"),
                           (return_step, r"v_actual_\d+_")):
         mutations.append((name, re.sub(pattern, "v_other_packet", functions[name])))
@@ -331,11 +327,8 @@ def main():
                          (names["Deduction_formFromProducerReads___redArg"], "Deduction_evaluate"),
                          (names["Deduction_formFromProducerReads___redArg"], "Deduction_producer___redArg")):
         append(name, names[target] + "();")
-    for name, pattern in ((form, r"v_leftRead_\d+_"), (form, r"v_rightRead_\d+_"),
-                          (form_step, r"(?<=3, )v_leftRead_\d+_"),
-                          (form_step, r"(?<=4, )v_rightRead_\d+_"),
-                          (form_step, r"(?<=5, )v_val_\d+_"),
-                          (right_read, r"(?<=2, )v_leftRead_\d+_"),
+    for name, pattern in ((form_step, r"v_leftRead_\d+_"), (form_step, r"v_rightRead_\d+_"),
+                          (right_read, r"(?<=3, )v_leftRead_\d+_"),
                           (resource_cell, r"(?<=0, )v_fst_\d+_"),
                           (names["Deduction_formFromProducerReads___redArg"], r"v_leftValue_\d+_"),
                           (names["Deduction_formFromProducerReads___redArg"], r"(?<=2, )v_formation_\d+_"),
@@ -357,8 +350,12 @@ def main():
             raise ValueError("Bad control/producer mutation accepted: " + name)
     runpy.run_path(str(ROOT / "scripts/check-documentary-producer-codegen.py"))["verify"](
         functions, select, agent["parameters"](texts))
+    runpy.run_path(str(ROOT / "scripts/check-documentary-arithmetic-codegen.py"))["verify"](
+        functions, select, agent["parameters"](texts))
+    runpy.run_path(str(ROOT / "scripts/check-documentary-assembly-codegen.py"))["verify"](
+        functions, select, agent["parameters"](texts))
     print("DOCUMENTARY_INTERPRETER_CODEGEN_OK: paid lazy evaluator, reference position and permission lookup, "
-          "actual paid resource arguments and retained producer/position, positive formation, shared action/permission/decision, two consuming certificates; " +
+          "actual paid resource arguments and retained producer/position, retained legacy formation helper and instrumented arithmetic/formation/assembly path, shared decision, two consuming certificates; " +
           str(len(mutations)) + " mutations rejected; named direct-body/closure scope")
 
 

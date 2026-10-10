@@ -236,3 +236,53 @@ différence et 35 pour la somme ; le refus reste à 19.
 L'opération sur entiers, les autres constructions de formation, le maître,
 les assemblages et les coûts de composition, trace et allocation restent
 à instrumenter. D2 entier, D3 et D4 restent ouverts ; A précède toujours B.
+
+Le [calcul entier et la formation de déduction](controle-calcul-formation-documentaire.fr.md)
+consomment désormais le code d'opération conservé dans le paquet du producteur
+et les valeurs lues. Une interprétation constructive, valable pour tous les
+entiers reçus, produit le résultat sous carburant ; quatre étapes distinctes
+assemblent les valeurs, le témoin positif, le support et l'action. Le code
+compilé conserve ce résultat, le producteur effectif et la formation antérieure.
+La réalisation arithmétique est unaire, avec borne dépendant des valeurs.
+Les seuils des exemples passent à 74 pour la différence et 44 pour la somme.
+Le maître de citation, sa formation, les assemblages et les coûts de composition,
+de trace et d'allocation restent ouverts. Le transport d'extension dans
+l'assemblage de déduction reste aussi à raccorder. D2 entier, D3, D4, CONT-03
+et P15 ne sont pas déclarés clos.
+
+## Relecture du plan et assemblage de déduction
+
+La confrontation à CTRL-02 et à l'annexe D confirme l'ordre : finir le contrôle
+de D2, puis son bootstrap et ses enveloppes en D3, puis les tours en D4.
+Les lois générales de l'interprète existent ; leur raccord à toutes les opérations
+du secours reste la condition de clôture. A conserve la priorité sur B.
+
+Le [nouvel assemblage de déduction](controle-assemblage-deduction.fr.md) traite
+les références de positions, le type de sortie, la connaissance incorporée,
+le stockage, l'extension, la sortie, la frame et le paquet d'étape. Le transport
+emploie le type effectivement construit et le support de l'action conservée.
+Le certificat de progrès consomme la sortie et l'extension de ce même paquet.
+Le chemin instrumenté ne reconstruit plus le producteur pour ce transport.
+
+| Passage de D2 | État après cet incrément |
+| --- | --- |
+| Permission, références, prémisses, producteur | Instrumentés dans la portée documentaire reçue |
+| Calcul entier et formation de déduction | Instrumentés ; réalisation arithmétique unaire |
+| Construction de l'assemblage de déduction | Instrumentée depuis la frame reçue ; mêmes étape et progrès |
+| Maître de citation et formation des citations | À instrumenter en conservant le maître et ses productions |
+| Assemblages de citation et d'entrée manquante | À décomposer |
+| Restauration de frame et appels différés de liaisons/justification | Coûts encore à raccorder |
+| Composition, traces, paquets de l'interprète et allocations | Modèle complet encore à construire |
+
+Les seuils documentaires deviennent 87 pour la différence, 61 pour la somme
+et 23 pour le refus. Les lectures de position supplémentaires de l'assemblage
+sont réellement exécutées et comptées ; aucun gain de coût n'est revendiqué.
+Le relevé courant est celui du nouvel assemblage ; les relevés précédents
+restent attachés à leurs arbres vérifiés. D2 entier, D3, D4, CONT-03 et P15
+restent ouverts.
+
+La gate complète de cet incrément a réussi sur 310 fichiers Lean et 26 024
+constantes. Les deux smokes du contrôle produisent 6 659 verdicts ; les gardes
+C rejettent 256 mutations textuelles. Les empreintes Lean et des contrôles
+restent celles figées avant le run. Ces vérifications qualifient cet incrément
+et conservent les obligations ouvertes du tableau.

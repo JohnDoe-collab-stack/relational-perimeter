@@ -1,6 +1,7 @@
 import Tests.LocalAlignment.DocumentaryControlPermission
 import Tests.LocalAlignment.DocumentaryControlResources
 import Tests.LocalAlignment.DocumentaryControlProducer
+import Tests.LocalAlignment.DocumentaryControlFormation
 
 /-! The paid lookup result supplies the actual permission to the existing
 formation producer. Paid resource reads supply its actual arguments. The
@@ -36,11 +37,9 @@ def code (knowledge : Deduction.Knowledge sources contract rules kinds)
       (ControlResources.readCode knowledge.resources.values leftRef).bind (fun leftRead =>
       (ControlResources.readCode knowledge.resources.values rightRef).bind (fun rightRead =>
       (ControlProducer.code request leftRef rightRef actual.1).bind (fun producer =>
-      .step .deductionProducer (fun _ =>
+      (ControlArithmetic.code producer.operation leftRead.1 rightRead.1).bind (fun computed =>
+      (ControlFormation.code knowledge request leftRef rightRef producer leftRead rightRead computed).bind (fun action =>
         let present := actual.2.2.symm.trans found
-        let action := Deduction.formFromProducerReads knowledge request leftRef rightRef
-          producer.1 producer.2
-          leftRead.1 rightRead.1 leftRead.2 rightRead.2
         .done ⟨.accepted action permission, by
           unfold Deduction.execute
           split
@@ -50,8 +49,7 @@ def code (knowledge : Deduction.Knowledge sources contract rules kinds)
             have identical := Option.some.inj (present.symm.trans same)
             cases identical
             exact congrArg (fun formed => Deduction.Decision.accepted formed permission)
-              (Deduction.formFromProducerReads_actual knowledge request leftRef rightRef
-                producer.1 producer.2 leftRead.1 rightRead.1 leftRead.2 rightRead.2)⟩)))))
+              action.eq_form⟩))))))
 
 theorem finite (knowledge : Deduction.Knowledge sources contract rules kinds)
     (request : Deduction.Request rules) (leftRef : Ref kinds left) (rightRef : Ref kinds right) :
@@ -66,7 +64,13 @@ theorem finite (knowledge : Deduction.Knowledge sources contract rules kinds)
     intro rightRead
     apply finite_bind (ControlProducer.finite request leftRef rightRef actual.1)
     intro producer
-    exact finite_step _ _ (finite_done _)
+    apply finite_bind (ControlArithmetic.finite producer.operation leftRead.1 rightRead.1)
+    intro computed
+    obtain ⟨value, labels, trace, _⟩ :=
+      ControlFormation.bounded knowledge request leftRef rightRef producer leftRead rightRead computed
+    apply finite_bind ⟨value, labels, trace⟩
+    intro action
+    exact finite_done _
 
 theorem actual_decision (knowledge : Deduction.Knowledge sources contract rules kinds)
     (request : Deduction.Request rules) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
@@ -78,7 +82,9 @@ theorem bounded (knowledge : Deduction.Knowledge sources contract rules kinds)
     Within (code knowledge request leftRef rightRef)
       ((ControlReference.positionBound request.2 + lookupBound rules.allowed request.2.position) +
         ((leftRef.position + 1) + ((rightRef.position + 1) +
-          ((ControlReference.positionBound leftRef + (ControlReference.positionBound rightRef + 8)) + 1)))) := by
+          ((ControlReference.positionBound leftRef + (ControlReference.positionBound rightRef + 8)) +
+            (ControlArithmetic.bound request.1.operation (knowledge.resources.read leftRef)
+              (knowledge.resources.read rightRef) + (4 + 0)))))) := by
   apply within_bind (located_bounded rules.allowed request.2)
   intro actual
   split
@@ -90,7 +96,19 @@ theorem bounded (knowledge : Deduction.Knowledge sources contract rules kinds)
     intro rightRead
     apply within_bind (ControlProducer.bounded request leftRef rightRef actual.1)
     intro producer
-    exact within_step _ _ (within_done _)
+    obtain ⟨formed, formedActual, operation, operationActual⟩ := producer
+    obtain ⟨leftValue, leftActual⟩ := leftRead
+    obtain ⟨rightValue, rightActual⟩ := rightRead
+    cases operationActual
+    cases leftActual
+    cases rightActual
+    apply within_bind (ControlArithmetic.bounded _ _ _)
+    intro computed
+    apply within_bind (ControlFormation.bounded knowledge request leftRef rightRef
+      ⟨formed, formedActual, request.1.operation, rfl⟩
+      ⟨knowledge.resources.read leftRef, rfl⟩ ⟨knowledge.resources.read rightRef, rfl⟩ computed)
+    intro action
+    exact within_done _
 
 end ConstitutiveSearch.Agent.Local.Documentary.ControlDeduction
 

@@ -8,9 +8,23 @@ namespace ConstitutiveSearch.Agent.Local.Documentary.ControlProducer
 open Resources Control ControlBindings ControlReference
 variable {rules : Deduction.Policy} {kinds : List Deduction.Kind} {left right : Deduction.Kind}
 
-abbrev Packet (request : Deduction.Request rules)
-    (leftRef : Ref kinds left) (rightRef : Ref kinds right) :=
-  {formed : Producer Deduction.Value kinds // formed = Deduction.producer request leftRef rightRef}
+structure Packet (request : Deduction.Request rules)
+    (leftRef : Ref kinds left) (rightRef : Ref kinds right) where
+  formed : Producer Deduction.Value kinds
+  actual : formed = Deduction.producer request leftRef rightRef
+  operation : Deduction.Operation
+  operationActual : operation = request.1.operation
+
+theorem Packet.operation_agrees {request : Deduction.Request rules}
+    {leftRef : Ref kinds left} {rightRef : Ref kinds right}
+    (packet : Packet request leftRef rightRef) (leftValue rightValue : Int) :
+    packet.formed.operation
+        ((congrArg Producer.inputKinds packet.actual).symm ▸ (leftValue, rightValue, PUnit.unit)) =
+      Deduction.evaluate packet.operation leftValue rightValue := by
+  obtain ⟨formed, actual, operation, operationActual⟩ := packet
+  cases operationActual
+  cases actual
+  rfl
 
 def buildCode (request : Deduction.Request rules) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
     (rulePosition : Position request.2) (leftPosition : Position leftRef) (rightPosition : Position rightRef) :
@@ -41,14 +55,14 @@ def buildCode (request : Deduction.Request rules) (leftRef : Ref kinds left) (ri
                     cases ruleActual
                     cases leftActual
                     cases rightActual
-                    rfl⟩))))))))
+                    rfl, request.1.operation, rfl⟩))))))))
 
 def buildTrace (request : Deduction.Request rules) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
     (rulePosition : Position request.2) (leftPosition : Position leftRef) (rightPosition : Position rightRef) :
     Eval (buildCode request leftRef rightRef rulePosition leftPosition rightPosition)
       [.producerKindCell, .producerKindCell, .producerKindCell,
         .producerPortCell, .producerPortCell, .producerPortCell, .producerOutputKind, .producerAssembly]
-      ⟨Deduction.producer request leftRef rightRef, rfl⟩ := by
+      ⟨Deduction.producer request leftRef rightRef, rfl, request.1.operation, rfl⟩ := by
   obtain ⟨rulePosition, ruleActual⟩ := rulePosition
   obtain ⟨leftPosition, leftActual⟩ := leftPosition
   obtain ⟨rightPosition, rightActual⟩ := rightPosition
@@ -87,6 +101,7 @@ end ConstitutiveSearch.Agent.Local.Documentary.ControlProducer
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlProducer.Packet
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlProducer.Packet.operation_agrees
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlProducer.buildCode
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlProducer.buildTrace
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlProducer.build_bounded

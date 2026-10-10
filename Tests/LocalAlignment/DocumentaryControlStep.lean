@@ -1,8 +1,8 @@
-import Tests.LocalAlignment.DocumentaryControlDeduction
+import Tests.LocalAlignment.DocumentaryControlAssembly
 
 /-! Instrumented binding control feeds the same documentary producers and
-assembly functions as Program.step. Producer entry labels count invocations;
-their internal computation and assembly costs are separate open boundaries. -/
+assembly target as Program.step. Deduction assembly has explicit paid stages;
+the quotation master and interpreter administration remain open boundaries. -/
 set_option genInjectivity false
 set_option maxHeartbeats 3000000
 namespace ConstitutiveSearch.Agent.Local.Documentary.ControlStep
@@ -61,13 +61,12 @@ def code (before : FrameData sources contract rules slots)
                 | some rightOccurrence =>
                   (ControlDeduction.code before.store.2 request
                     leftOccurrence.2 rightOccurrence.2).bind (fun actualDecision =>
-                   .step .deductionAssembly (fun _ =>
                     let foundLeft := leftRead.2.trans leftActual
                     let foundRight := rightRead.2.trans rightActual
                     let decision := actualDecision.1
-                    let produced := deductionStep before.restore request leftSlot rightSlot demand
-                      leftOccurrence rightOccurrence foundLeft foundRight decision
-                    .done ⟨produced, by
+                    (ControlAssembly.code before.restore request leftSlot rightSlot demand
+                      leftOccurrence rightOccurrence foundLeft foundRight decision).bind (fun assembled =>
+                    .done ⟨assembled.1, by
                       dsimp only [Program.step]
                       split
                       · rename_i missing
@@ -81,9 +80,9 @@ def code (before : FrameData sources contract rules slots)
                         · rename_i occurrence found
                           have same := Option.some.inj (foundRight.symm.trans found)
                           cases same
-                          exact congrArg
+                          exact assembled.2.trans (congrArg
                             (fun decision => deductionStep before.restore request leftSlot rightSlot demand
-                              leftOccurrence rightOccurrence foundLeft foundRight decision) actualDecision.2⟩)))))
+                              leftOccurrence rightOccurrence foundLeft foundRight decision) actualDecision.2)⟩)))))
 
 def complete (before : FrameData sources contract rules slots)
     (instruction : Instruction context rules slots spec) (fuel : Nat)
@@ -108,7 +107,9 @@ theorem finite (before : FrameData sources contract rules slots)
         · exact finite_step _ _ (finite_done _)
         · apply finite_bind (ControlDeduction.finite _ _ _ _)
           intro decision
-          exact finite_step _ _ (finite_done _)
+          apply finite_bind (ControlAssembly.finite _ _ _ _ _ _ _ _ _ _)
+          intro assembled
+          exact finite_done _
 
 theorem sufficient_fuel (before : FrameData sources contract rules slots)
     (instruction : Instruction context rules slots spec) :

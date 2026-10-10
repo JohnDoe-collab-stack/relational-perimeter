@@ -30,7 +30,7 @@ def sumInstruction : Instruction Cases.context DeductionCases.policy
     [ProgramCases.baselineSpec, ProgramCases.deltaSpec, ProgramCases.revisedSpec, ProgramCases.baselineSpec]
     ProgramCases.sumSpec :=
   .conclusion DeductionCases.sumRequest (.prior .here) (.prior .here) DeductionCases.sumDemand
-def sumExecution := Control.execute 35 (ControlStep.code sumFrame sumInstruction)
+def sumExecution := Control.execute 61 (ControlStep.code sumFrame sumInstruction)
 def sumActual := sumExecution.get (by rfl)
 def sumInitial : Complete sumFrame.restore :=
   Snapshot.complete_forward _
@@ -40,7 +40,7 @@ def sumInitial : Complete sumFrame.restore :=
         (.cons ProgramCases.baselineReady (.cons ProgramCases.revisedReady
           (.cons ProgramCases.differenceCompatible .done))) ProgramCases.initiallyComplete))
 def sumComplete : Complete sumActual.value.1.next :=
-  ControlStep.complete sumFrame sumInstruction 35 sumActual ProgramCases.sumCompatible sumInitial
+  ControlStep.complete sumFrame sumInstruction 61 sumActual ProgramCases.sumCompatible sumInitial
 def terminal := sumComplete (.here : Ref _ ProgramCases.sumSpec)
 
 theorem terminal_value : sumActual.value.1.next.store.2.resources.read terminal.occurrence.2 = 2 :=
@@ -56,11 +56,18 @@ theorem sum_labels : sumActual.labels =
       .referencePosition, .referencePosition, .referenceReturn,
       .producerKindCell, .producerKindCell, .producerKindCell,
       .producerPortCell, .producerPortCell, .producerPortCell, .producerOutputKind, .producerAssembly,
-      .deductionProducer, .deductionAssembly] := rfl
-theorem sum_one_short : (Control.execute 34 (ControlStep.code sumFrame sumInstruction)).isSome = false := rfl
-theorem sum_surplus : runCtl 39 (ControlStep.code sumFrame sumInstruction) =
-    runCtl 35 (ControlStep.code sumFrame sumInstruction) :=
-  (ctl_mono 35 39 (code := ControlStep.code sumFrame sumInstruction)
+      .integerOperation, .integerSign, .integerNaturalCell, .integerNaturalCell,
+      .integerNaturalReturn, .integerSignReturn,
+      .formationValues, .formationWitness, .formationResources, .deductionProducer, .deductionAssembly,
+      .referencePosition, .referencePosition, .referenceReturn,
+      .referencePosition, .referencePosition, .referenceReturn,
+      .referencePosition, .referencePosition, .referenceReturn,
+      .assemblyKind, .assemblyKinds, .assemblyKnowledge, .assemblyStore, .assemblyExtension,
+      .assemblyOutput, .assemblyFrame, .assemblyPacket] := rfl
+theorem sum_one_short : (Control.execute 60 (ControlStep.code sumFrame sumInstruction)).isSome = false := rfl
+theorem sum_surplus : runCtl 66 (ControlStep.code sumFrame sumInstruction) =
+    runCtl 61 (ControlStep.code sumFrame sumInstruction) :=
+  (ctl_mono 61 66 (code := ControlStep.code sumFrame sumInstruction)
     (value := sumActual.value) (labels := sumActual.labels) rfl (by decide)).trans rfl
 
 def refusedFrame := Snapshot.frame (Program.step twoQuotes.1 forbiddenInstruction).next
@@ -72,7 +79,7 @@ def rightMissing : Instruction Cases.context DeductionCases.policy
     ProgramCases.sumSpec := .conclusion DeductionCases.sumRequest (.prior .here) .here DeductionCases.sumDemand
 
 theorem forbidden_refused :
-    ((Control.execute 19 (ControlStep.code twoFrame forbiddenInstruction)).get (by rfl)).value.1.event =
+    ((Control.execute 23 (ControlStep.code twoFrame forbiddenInstruction)).get (by rfl)).value.1.event =
       .refused := rfl
 theorem left_missing :
     ((Control.execute 3 (ControlStep.code refusedFrame leftMissing)).get (by rfl)).value.1.event =

@@ -106,7 +106,7 @@ def verify(functions, select, parameters):
             if match is None:
                 raise ValueError("Missing actual producer closure: " + key)
             closures[key] = match[1]
-        for slot, key in ((2, "kind"), (3, "operation")):
+        for slot, key in ((3, "kind"), (4, "operation")):
             if not re.search(r"lean_closure_set\(" + re.escape(closures["assembly"]) + ", " + str(slot) +
                              ", " + re.escape(closures[key]) + r"\)", body):
                 raise ValueError("Producer swaps its kind and operation captures")
@@ -115,10 +115,16 @@ def verify(functions, select, parameters):
         field(body, r"v_formed_\d+_", 1, "inputs")
         for slot in (2, 3):
             if not re.search(r"lean_ctor_set\(v_formed_\d+_, " + str(slot) + ", " +
-                             re.escape(parameters[build[2]][slot]) + r"\)", body):
+                             re.escape(parameters[build[2]][slot + 1]) + r"\)", body):
                 raise ValueError("Producer swaps its kind and operation fields")
         if not re.search(r"lean_ctor_set\([^,]+, 0, v_formed_\d+_\)", body):
             raise ValueError("Producer result drops its actual assembled value")
+        tag = re.search(r"(\w+) = lean_ctor_get_uint8\((v_fst_\d+_), sizeof\(void\*\)\*1\)", current[build[2]])
+        if tag is None or not re.search(r"lean_ctor_set_uint8\([^,]+, sizeof\(void\*\)\*1, " + re.escape(tag[1]) + r"\)", current[build[2]]):
+            raise ValueError("Catalogue tag is not retained from the actual rule")
+        rule = re.search(r"(v_fst_\d+_) = lean_ctor_get\(v_request_\d+_, 0\)", current[build[3]])
+        if rule is None or not re.search(r"lean_closure_set\(" + re.escape(closures["assembly"]) + r", 0, " + re.escape(rule[1]) + r"\)", current[build[3]]) or not re.search(r"lean_closure_set\(" + re.escape(closures["operation"]) + r", 0, " + re.escape(rule[1]) + r"\)", current[build[3]]):
+            raise ValueError("Operation and catalogue tag do not receive the same rule")
         body = current[build[0]]
         call(body, "Deduction_evaluate")
         if len(re.findall(r"lean_ctor_get\(v_arguments_\d+_, 0\)", body)) != 1 or \
@@ -137,6 +143,8 @@ def verify(functions, select, parameters):
 
     check(functions)
     mutations = []
+    mutations.append((build[2], re.sub(r"(?<=\*1, )v_operation_\d+_", "v_other_operation", functions[build[2]])))
+    mutations.append((build[3], re.sub(r"(?<=0, )v_fst_\d+_", "v_other_rule", functions[build[3]])))
     for key in ("Ref_position", "read", "Support_read", "Producer_arguments", "Deduction_producer___redArg"):
         for name in (names["ControlProducer_buildCode___redArg"], build[3]):
             mutations.append((name, functions[name] + names[key] + "();"))
@@ -159,8 +167,8 @@ def verify(functions, select, parameters):
         mutations.append((name, functions[name] + label[2] + " = 0;"))
     for slot, other in ((2, 3), (3, 2)):
         mutations.append((build[2], re.sub(r"(?<=" + str(slot) + ", )" +
-                         re.escape(parameters[build[2]][slot]), parameters[build[2]][other], functions[build[2]])))
-    for slot in (2, 3):
+                         re.escape(parameters[build[2]][slot + 1]), parameters[build[2]][other + 1], functions[build[2]])))
+    for slot in (3, 4):
         mutations.append((build[3], re.sub(r"(lean_closure_set\([^,]+, " + str(slot) +
                          r", )v___f_\d+_(\))", r"\1v_other_closure\2", functions[build[3]])))
     for name, changed in mutations:
@@ -172,7 +180,7 @@ def verify(functions, select, parameters):
             continue
         raise ValueError("Bad producer mutation accepted: " + name)
     print("DOCUMENTARY_PRODUCER_CODEGEN_OK: eight paid constructors, ordered original ports, three paid positions, "
-          "actual producer returned; " + str(len(mutations)) + " mutations rejected; named direct-body/closure scope")
+          "actual producer and same-rule catalogue tag returned; " + str(len(mutations)) + " mutations rejected; named direct-body/closure scope")
 
 
 def main():

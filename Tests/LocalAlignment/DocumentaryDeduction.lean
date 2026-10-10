@@ -284,6 +284,31 @@ theorem formFromProducerReads_actual {context sources contract policy kinds left
   cases rightActual
   rfl
 
+theorem FormationAction.eq_form {context sources contract policy kinds left right knowledge request leftRef rightRef}
+    (action : @FormationAction context sources contract policy kinds left right knowledge request leftRef rightRef) :
+    action = form knowledge request leftRef rightRef := by
+  obtain ⟨resources, actual⟩ := action
+  cases actual
+  rfl
+
+/-- Package the support actually assembled by the controlled formation. -/
+def formFromSupport {context sources contract policy kinds left right}
+    (knowledge : @Knowledge context sources contract policy kinds)
+    (request : Request policy) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
+    (resources : Support Value (derivedKind request leftRef rightRef :: kinds))
+    (actual : resources = knowledge.resources.extend (producer request leftRef rightRef)) :
+    FormationAction knowledge request leftRef rightRef := ⟨resources, actual⟩
+
+theorem formFromSupport_actual {context sources contract policy kinds left right}
+    (knowledge : @Knowledge context sources contract policy kinds)
+    (request : Request policy) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
+    (resources : Support Value (derivedKind request leftRef rightRef :: kinds))
+    (actual : resources = knowledge.resources.extend (producer request leftRef rightRef)) :
+    formFromSupport knowledge request leftRef rightRef resources actual =
+      form knowledge request leftRef rightRef := by
+  cases actual
+  rfl
+
 theorem FormationAction.value {context sources contract policy kinds left right knowledge request leftRef rightRef}
     (action : @FormationAction context sources contract policy kinds left right knowledge request leftRef rightRef) :
     action.resources.read .here =
@@ -469,6 +494,9 @@ theorem execute_after_context_erasure {context sources contract policy kinds lef
 
 end ConstitutiveSearch.Agent.Local.Documentary.Deduction
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.FormationAction.eq_form
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.formFromSupport
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.formFromSupport_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.formFromProducerReads
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.formFromProducerReads_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.formFromReads

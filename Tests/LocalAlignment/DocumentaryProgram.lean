@@ -268,6 +268,93 @@ def deductionStep {context sources contract policy slots left right}
         fun ready _ => False.elim
           (resolvePermission_none policy.allowed request.2.position absent ready.permission)⟩
 
+def decisionExtension {context sources contract policy kinds left right knowledge request leftRef rightRef}
+    (decision : @Deduction.Decision context sources contract policy kinds left right knowledge request leftRef rightRef) :
+    Support.Extension knowledge.resources decision.result.1.2.resources :=
+  match decision with
+  | .accepted action _ => action.transport
+  | .refused _ => Support.Extension.identity knowledge.resources
+
+def decisionOutput {context sources contract policy kinds left right knowledge request leftRef rightRef}
+    (decision : @Deduction.Decision context sources contract policy kinds left right knowledge request leftRef rightRef) :
+    Option (Occurrence decision.result.1) :=
+  match decision with
+  | .accepted _ _ => some ⟨_, .here⟩
+  | .refused _ => none
+
+/-- Package the actual assembled parts. Equalities align the dependent types;
+the stored frame and extension are not reconstructed by the certificate. -/
+def deductionStepFromParts {context sources contract policy slots left right}
+    (before : @Frame context sources contract policy slots) (request : Deduction.Request policy)
+    (leftSlot : Ref slots left) (rightSlot : Ref slots right) (demand : Deduction.Demand)
+    (leftOccurrence rightOccurrence : Occurrence before.store)
+    (leftActual : before.bindings leftSlot = some leftOccurrence)
+    (rightActual : before.bindings rightSlot = some rightOccurrence)
+    (decision : Deduction.Decision before.store.2 request leftOccurrence.2 rightOccurrence.2)
+    (after : Deduction.Store sources contract policy)
+    (afterActual : after = decision.result.1)
+    (extension : Support.Extension before.store.2.resources after.2.resources)
+    (extensionActual :
+      extension = (afterActual.symm ▸ decisionExtension decision))
+    (output : Option (Occurrence after))
+    (outputActual : output = (afterActual.symm ▸ decisionOutput decision))
+    (next : Frame sources contract policy (.conclusion demand :: slots))
+    (nextActual : next = assemble before before.dossier after extension output) :
+    Step before (.conclusion request leftSlot rightSlot demand) :=
+  let original := match decision with
+    | .accepted action permission => Event.derived
+    | .refused _ => Event.refused
+  ⟨next, nextActual.symm ▸ extension,
+    fun old => by cases nextActual; rfl,
+    by cases nextActual; exact (Nat.add_zero _).symm,
+    original, fun ready complete => by
+      cases decision with
+      | accepted action permission =>
+          let compatible := ready.law
+          have leftMeets := (complete leftSlot).meets
+          have leftSame := Option.some.inj ((complete leftSlot).actual.symm.trans leftActual)
+          have rightMeets := (complete rightSlot).meets
+          have rightSame := Option.some.inj ((complete rightSlot).actual.symm.trans rightActual)
+          let fresh : @Delivery context sources contract policy (.conclusion demand) after output :=
+            (fun (selected : Option (Occurrence after)) (found : output = selected) =>
+              match selected with
+              | none => False.elim (by
+                  cases afterActual
+                  have impossible := outputActual.symm.trans found
+                  cases impossible)
+              | some occurrence => ⟨occurrence, found, by
+                  cases afterActual
+                  have same := Option.some.inj (outputActual.symm.trans found)
+                  cases same
+                  exact action.value.symm ▸ compatible leftOccurrence.1 rightOccurrence.1
+                    leftOccurrence.2.position rightOccurrence.2.position
+                    (before.store.2.resources.read leftOccurrence.2) (before.store.2.resources.read rightOccurrence.2)
+                    (leftSame ▸ leftMeets) (rightSame ▸ rightMeets)⟩) output rfl
+          exact nextActual.symm ▸ (fun {spec} slot =>
+            assemble_complete (spec := .conclusion demand) before before.dossier after extension output complete fresh slot)
+      | refused absent =>
+          exact False.elim (resolvePermission_none policy.allowed request.2.position absent ready.permission)⟩
+
+theorem deductionStepFromParts_actual {context sources contract policy slots left right}
+    (before : @Frame context sources contract policy slots) (request : Deduction.Request policy)
+    (leftSlot : Ref slots left) (rightSlot : Ref slots right) (demand : Deduction.Demand)
+    (leftOccurrence rightOccurrence : Occurrence before.store)
+    (leftActual : before.bindings leftSlot = some leftOccurrence)
+    (rightActual : before.bindings rightSlot = some rightOccurrence)
+    (decision : Deduction.Decision before.store.2 request leftOccurrence.2 rightOccurrence.2)
+    (after : Deduction.Store sources contract policy) (afterActual : after = decision.result.1)
+    (extension : Support.Extension before.store.2.resources after.2.resources)
+    (extensionActual : extension = (afterActual.symm ▸ decisionExtension decision))
+    (output : Option (Occurrence after))
+    (outputActual : output = (afterActual.symm ▸ decisionOutput decision))
+    (next : Frame sources contract policy (.conclusion demand :: slots))
+    (nextActual : next = assemble before before.dossier after extension output) :
+    deductionStepFromParts before request leftSlot rightSlot demand leftOccurrence rightOccurrence
+      leftActual rightActual decision after afterActual extension extensionActual output outputActual next nextActual =
+      deductionStep before request leftSlot rightSlot demand leftOccurrence rightOccurrence leftActual rightActual decision := by
+  cases nextActual
+  cases decision <;> cases afterActual <;> cases extensionActual <;> cases outputActual <;> rfl
+
 def missingStep {context sources contract policy slots left right}
     (before : @Frame context sources contract policy slots) (request : Deduction.Request policy)
     (leftSlot : Ref slots left) (rightSlot : Ref slots right) (demand : Deduction.Demand)
@@ -428,6 +515,10 @@ end ConstitutiveSearch.Agent.Local.Documentary.Program
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Program.packet_output_meets
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Program.quotationStep
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Program.deductionStep
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Program.deductionStepFromParts
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Program.decisionExtension
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Program.decisionOutput
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Program.deductionStepFromParts_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Program.missingStep
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Program.step
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Program.Execution

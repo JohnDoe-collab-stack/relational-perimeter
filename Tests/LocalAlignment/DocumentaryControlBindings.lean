@@ -26,6 +26,23 @@ inductive Label where
   | producerPortCell
   | producerOutputKind
   | producerAssembly
+  | integerNaturalCell
+  | integerNaturalReturn
+  | integerSign
+  | integerSignReturn
+  | integerOperation
+  | integerNegate
+  | formationValues
+  | formationWitness
+  | formationResources
+  | assemblyKind
+  | assemblyKinds
+  | assemblyKnowledge
+  | assemblyStore
+  | assemblyExtension
+  | assemblyOutput
+  | assemblyFrame
+  | assemblyPacket
 
 variable {context : List SourceKey} {sources : Support SourceValue context}
   {contract : Contract} {rules : Deduction.Policy} {store : Deduction.Store sources contract rules}

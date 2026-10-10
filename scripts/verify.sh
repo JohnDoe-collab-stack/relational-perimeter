@@ -123,6 +123,7 @@ fi
 "${python_command[@]}" scripts/run-documentary-recovery-smoke.py
 "${python_command[@]}" scripts/check-documentary-interpreter-codegen.py
 "${python_command[@]}" scripts/run-documentary-interpreter-smoke.py
+"${python_command[@]}" scripts/run-documentary-arithmetic-smoke.py
 "${python_command[@]}" scripts/check-continuation-signature-codegen.py
 "${python_command[@]}" scripts/check-variable-master-codegen.py
 "${python_command[@]}" scripts/check-integrated-machine-codegen.py
