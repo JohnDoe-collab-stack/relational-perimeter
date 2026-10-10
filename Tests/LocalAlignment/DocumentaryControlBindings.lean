@@ -21,6 +21,11 @@ inductive Label where
   | deductionAssembly
   | referencePosition
   | referenceReturn
+  | resourceCell
+  | producerKindCell
+  | producerPortCell
+  | producerOutputKind
+  | producerAssembly
 
 variable {context : List SourceKey} {sources : Support SourceValue context}
   {contract : Contract} {rules : Deduction.Policy} {store : Deduction.Store sources contract rules}

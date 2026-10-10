@@ -1,5 +1,11 @@
 # Contrôle des permissions documentaires : parcours payé et résultat partagé
 
+Ce document conserve la portée et les comptes du passage consacré aux
+permissions. Le [passage suivant](controle-ressources-documentaires.fr.md)
+ouvre les lectures des prémisses et leur consommation par la formation.
+Les seuils et appels décrits ci-dessous se rapportent au passage historique ;
+son relevé de vérification reste conservé avec ses empreintes d'origine.
+
 Cet incrément poursuit D2 du [plan v0.3](RP_ALIGN_PERSIST_SPEC_v0_3.fr.md),
 sur `codex/align-persist-recovery`, depuis `e291dc0d2b45880078e9c4a3b85aa0ab175bdf71`.
 Il complète le [premier raccord instrumenté](controle-instrumente-documentaire.fr.md)

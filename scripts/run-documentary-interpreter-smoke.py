@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Fuel matrices over actual documentary packets, with literal expectations.
 
-Producer entry counts are abstract labels, not their internal resource bounds.
+Resource reads feed the existing producer. Integer operation entry counts are
+abstract labels, not their internal resource bounds.
 Control loading receives the existing dossier/store, as in the component codec.
 """
 import hashlib
@@ -35,6 +36,11 @@ def tag : Label → Nat
   | .deductionAssembly => 9
   | .referencePosition => 10
   | .referenceReturn => 11
+  | .resourceCell => 12
+  | .producerKindCell => 13
+  | .producerPortCell => 14
+  | .producerOutputKind => 15
+  | .producerAssembly => 16
 
 def traceTag {Value : Type u} {code : Code Label Value} {labels value} :
     Eval code labels value → Nat
@@ -74,11 +80,14 @@ def readCheck {spec}
       (ProgramCases.bindingValue ProgramCases.actual.1.store actual.value.1 == some 42)
 
 def matrices : List Bool :=
-  let fuels := List.range 24
+  let fuels := List.range 40
   (fuels.map (stepCheck quoteFrame quoteInstruction 2 [0, 2] .quoted (some 42) (some [1]) true)) ++
-  (fuels.map (stepCheck twoFrame differenceInstruction 10 [0, 1, 1, 1, 10, 6, 5, 7, 3, 9]
+  (fuels.map (stepCheck twoFrame differenceInstruction 25
+    [0, 1, 1, 1, 10, 6, 5, 7, 12, 12, 12, 10, 10, 11, 10, 13, 13, 13, 14, 14, 14, 15, 16, 3, 9]
     .derived (some 1) (some [1, 2]) true)) ++
-  (fuels.map (stepCheck sumFrame sumInstruction 17 [0, 1, 1, 1, 1, 10, 10, 11, 6, 5, 6, 5, 5, 7, 7, 3, 9]
+  (fuels.map (stepCheck sumFrame sumInstruction 35
+    [0, 1, 1, 1, 1, 10, 10, 11, 6, 5, 6, 5, 5, 7, 7, 12, 12, 12, 12,
+      10, 10, 11, 10, 10, 11, 13, 13, 13, 14, 14, 14, 15, 16, 3, 9]
     .derived (some 2) (some [1, 2, 1, 2]) true)) ++
   (fuels.map (stepCheck twoFrame forbiddenInstruction 19 [0, 1, 1, 1, 10, 10, 10, 11, 11, 6, 5, 6, 5, 5, 6, 7, 7, 8, 9]
     .refused none none false)) ++
@@ -88,7 +97,8 @@ def matrices : List Bool :=
     2 [0, 2] .refused none none false)) ++
   (fuels.map (stepCheck twoFrame
     (.conclusion DeductionCases.differenceRequest (.prior .here) .here ProgramCases.wrongDemand)
-    10 [0, 1, 1, 1, 10, 6, 5, 7, 3, 9] .derived (some 1) (some [1, 2]) false)) ++
+    25 [0, 1, 1, 1, 10, 6, 5, 7, 12, 12, 12, 10, 10, 11, 10, 13, 13, 13, 14, 14, 14, 15, 16, 3, 9]
+    .derived (some 1) (some [1, 2]) false)) ++
   (fuels.map (readCheck oldest 5 4)) ++ (fuels.map (readCheck repeated 2 1))
 
 def permissionCheck (scope : List Nat) (position cost : Nat) (found : Option Nat)
@@ -119,6 +129,24 @@ def positionMatrices : List Bool :=
   (fuels.map (positionCheck DeductionCases.differenceRequest.2 0 1 [10])) ++
   (fuels.map (positionCheck DeductionCases.sumRequest.2 1 3 [10, 10, 11])) ++
   (fuels.map (positionCheck DeductionCases.duplicateRequest.2 2 5 [10, 10, 10, 11, 11]))
+
+def resourceCheck {kinds : List Nat} {kind : Nat}
+    (values : Values (fun _ : Nat => Int) kinds) (ref : Ref kinds kind)
+    (value : Int) (cost : Nat) (fuel : Nat) : Bool :=
+  match Control.execute fuel (ControlResources.readCode values ref) with
+  | none => fuel < cost
+  | some actual => (cost ≤ fuel) && (actual.value.1 == value) &&
+      (actual.labels.map tag == List.replicate cost 12)
+
+def resourceMatrices : List Bool :=
+  let fuels := List.range 8
+  let values : Values (fun _ : Nat => Int) [7, 7, 7] := (99, -5, 99, PUnit.unit)
+  (fuels.map (resourceCheck values .here 99 1)) ++
+  (fuels.map (resourceCheck values (.prior .here) (-5) 2)) ++
+  (fuels.map (resourceCheck values (.prior (.prior .here)) 99 3)) ++
+  (fuels.map (resourceCheck (kinds := [7])
+    (170141183460469231731687303715884105727, PUnit.unit) .here
+    170141183460469231731687303715884105727 1))
 
 def fromScript {slots}
     (frame : FrameData Cases.sources Cases.contract DeductionCases.policy slots)
@@ -152,13 +180,13 @@ def verify (index : Nat) : List Bool → IO Unit
 
 def run : IO Unit := do
   let certified := sumActual.sound
-  verify 0 (matrices ++ permissionMatrices ++ positionMatrices ++ [fromPresent MemoryCases.retainedPrefix,
+  verify 0 (matrices ++ permissionMatrices ++ positionMatrices ++ resourceMatrices ++ [fromPresent MemoryCases.retainedPrefix,
     fromPresent (MemoryCases.retainedPrefix.reset (AdaptiveCases.policy 4)), loaded,
     stepCheck (Memory.project MemoryCases.leftProduced.1).session.frame
       (.quotation ProgramCases.revisedTask) 2 [0, 2] .quoted (some 43) (some [2]) true 2,
     stepCheck (Memory.project MemoryCases.rightProduced.1).session.frame
       (.quotation ProgramCases.revisedTask) 2 [0, 2] .quoted (some 43) (some [2]) true 2,
-    sumActual.labels.length == 17,
+    sumActual.labels.length == 35,
     sumActual.value.1.next.store.2.resources.read terminal.occurrence.2 == 2,
     terminal.occurrence.1.origins == [1, 2, 1, 2],
     traceTag certified.1 == 1])
@@ -177,6 +205,8 @@ def main : IO Unit := DocumentaryInterpreterSmoke.run
 #print axioms DocumentaryInterpreterSmoke.permissionMatrices
 #print axioms DocumentaryInterpreterSmoke.positionCheck
 #print axioms DocumentaryInterpreterSmoke.positionMatrices
+#print axioms DocumentaryInterpreterSmoke.resourceCheck
+#print axioms DocumentaryInterpreterSmoke.resourceMatrices
 #print axioms DocumentaryInterpreterSmoke.fromScript
 #print axioms DocumentaryInterpreterSmoke.fromPresent
 #print axioms DocumentaryInterpreterSmoke.loaded
@@ -198,13 +228,13 @@ def main():
         raise ValueError("Lean interpreter smoke failed: " +
                          (result.stdout + result.stderr).decode("utf-8", "replace"))
     expected = {("'DocumentaryInterpreterSmoke." + name + "' does not depend on any axioms").encode()
-                for name in ("tag", "traceTag", "eventTag", "stepCheck", "readCheck", "matrices", "permissionCheck", "permissionMatrices", "positionCheck", "positionMatrices", "fromScript", "fromPresent",
+                for name in ("tag", "traceTag", "eventTag", "stepCheck", "readCheck", "matrices", "permissionCheck", "permissionMatrices", "positionCheck", "positionMatrices", "resourceCheck", "resourceMatrices", "fromScript", "fromPresent",
                              "loaded", "verify", "run")}
     expected.update((b"'main' does not depend on any axioms", b"DOCUMENTARY_INTERPRETER_SMOKE_DONE"))
     if set(result.stdout.splitlines()) != expected or len(result.stdout.splitlines()) != len(expected):
         raise ValueError("Missing runtime audit or unexpected output: " + result.stdout.decode("utf-8", "replace"))
-    print("DOCUMENTARY_INTERPRETER_SMOKE_OK: 240 documentary, 234 permission and 72 position fuel checks, nine integration checks, "
-          "16 clean runtime audits; client_sha256=" + hashlib.sha256(source).hexdigest())
+    print("DOCUMENTARY_INTERPRETER_SMOKE_OK: 400 documentary, 234 permission, 72 position and 32 resource fuel checks, nine integration checks, "
+          "18 clean runtime audits; client_sha256=" + hashlib.sha256(source).hexdigest())
 
 
 if __name__ == "__main__":

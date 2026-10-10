@@ -133,6 +133,33 @@ def referencedLookup {Kind : Type u} {kinds : List Kind} {kind : Kind}
   (ControlReference.positionCode ref).bind (fun actual =>
     (lookupCode scope actual.1).bind (fun permission => .done (actual.2 ▸ permission)))
 
+abbrev LocatedLookup {Kind : Type u} {kinds : List Kind} {kind : Kind}
+    (scope : List Nat) (ref : Ref kinds kind) :=
+  ControlReference.Position ref × Lookup scope ref.position
+
+/-- Retain the paid position together with the permission for later formation. -/
+def locatedLookup {Kind : Type u} {kinds : List Kind} {kind : Kind}
+    (scope : List Nat) (ref : Ref kinds kind) : Code Label (LocatedLookup scope ref) :=
+  (ControlReference.positionCode ref).bind (fun actual =>
+    (lookupCode scope actual.1).bind (fun permission => .done (actual, actual.2 ▸ permission)))
+
+theorem located_bounded {Kind : Type u} {kinds : List Kind} {kind : Kind}
+    (scope : List Nat) (ref : Ref kinds kind) :
+    Within (locatedLookup scope ref)
+      (ControlReference.positionBound ref + lookupBound scope ref.position) := by
+  apply within_bind (ControlReference.position_bounded ref)
+  intro actual
+  obtain ⟨position, same⟩ := actual
+  cases same
+  apply within_bind (more := 0) (lookup_bounded scope ref.position)
+  intro permission
+  exact within_done _
+
+theorem located_finite {Kind : Type u} {kinds : List Kind} {kind : Kind}
+    (scope : List Nat) (ref : Ref kinds kind) : Finite (locatedLookup scope ref) := by
+  obtain ⟨value, labels, trace, _⟩ := located_bounded scope ref
+  exact ⟨value, labels, trace⟩
+
 theorem referenced_bounded {Kind : Type u} {kinds : List Kind} {kind : Kind}
     (scope : List Nat) (ref : Ref kinds kind) :
     Within (referencedLookup scope ref)
@@ -153,6 +180,10 @@ theorem referenced_finite {Kind : Type u} {kinds : List Kind} {kind : Kind}
 end ConstitutiveSearch.Agent.Local.Documentary.ControlPermission
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlPermission.LocatedLookup
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlPermission.locatedLookup
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlPermission.located_bounded
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlPermission.located_finite
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlPermission.successorDecision
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlPermission.equalDecision
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlPermission.equalCode

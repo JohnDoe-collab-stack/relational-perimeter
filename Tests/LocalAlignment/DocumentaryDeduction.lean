@@ -210,6 +210,80 @@ def form {context sources contract policy kinds left right}
   let produced := knowledge.resources.extend (producer request leftRef rightRef)
   ⟨produced, rfl⟩
 
+/-- Consume the values already read, keeping the existing producer and its
+positive formation. Equalities only align the indices of that formation. -/
+def formFromReads {context sources contract policy kinds left right}
+    (knowledge : @Knowledge context sources contract policy kinds)
+    (request : Request policy) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
+    (leftValue : Int) (rightValue : Int)
+    (leftActual : leftValue = knowledge.resources.read leftRef)
+    (rightActual : rightValue = knowledge.resources.read rightRef) :
+    FormationAction knowledge request leftRef rightRef :=
+  let output := evaluate request.1.operation leftValue rightValue
+  ⟨⟨(output, knowledge.resources.values), by
+      cases leftActual
+      cases rightActual
+      exact .produced knowledge.resources.formation (producer request leftRef rightRef)⟩,
+    by
+      cases leftActual
+      cases rightActual
+      rfl⟩
+
+theorem formFromReads_actual {context sources contract policy kinds left right}
+    (knowledge : @Knowledge context sources contract policy kinds)
+    (request : Request policy) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
+    (leftValue rightValue : Int)
+    (leftActual : leftValue = knowledge.resources.read leftRef)
+    (rightActual : rightValue = knowledge.resources.read rightRef) :
+    formFromReads knowledge request leftRef rightRef leftValue rightValue leftActual rightActual =
+      form knowledge request leftRef rightRef := by
+  cases leftActual
+  cases rightActual
+  rfl
+
+/-- Consume an already constituted producer and the already read arguments.
+The retained positive formation stores this producer itself. -/
+def formFromProducerReads {context sources contract policy kinds left right}
+    (knowledge : @Knowledge context sources contract policy kinds)
+    (request : Request policy) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
+    (formed : Producer Value kinds) (formedActual : formed = producer request leftRef rightRef)
+    (leftValue rightValue : Int)
+    (leftActual : leftValue = knowledge.resources.read leftRef)
+    (rightActual : rightValue = knowledge.resources.read rightRef) :
+    FormationAction knowledge request leftRef rightRef :=
+  let arguments : Values Value formed.inputKinds :=
+    (congrArg Producer.inputKinds formedActual).symm ▸ (leftValue, rightValue, PUnit.unit)
+  let output := formed.operation arguments
+  let positive := Formation.produced knowledge.resources.formation formed
+  let alignment :
+      Formation Value (context := formed.outputKind (formed.arguments knowledge.resources.values) :: kinds)
+        (formed.operation (formed.arguments knowledge.resources.values), knowledge.resources.values) =
+      Formation Value (context := derivedKind request leftRef rightRef :: kinds)
+        (output, knowledge.resources.values) := by
+      cases formedActual
+      cases leftActual
+      cases rightActual
+      rfl
+  ⟨⟨(output, knowledge.resources.values), alignment ▸ positive⟩, by
+    cases formedActual
+    cases leftActual
+    cases rightActual
+    rfl⟩
+
+theorem formFromProducerReads_actual {context sources contract policy kinds left right}
+    (knowledge : @Knowledge context sources contract policy kinds)
+    (request : Request policy) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
+    (formed : Producer Value kinds) (formedActual : formed = producer request leftRef rightRef)
+    (leftValue rightValue : Int)
+    (leftActual : leftValue = knowledge.resources.read leftRef)
+    (rightActual : rightValue = knowledge.resources.read rightRef) :
+    formFromProducerReads knowledge request leftRef rightRef formed formedActual
+      leftValue rightValue leftActual rightActual = form knowledge request leftRef rightRef := by
+  cases formedActual
+  cases leftActual
+  cases rightActual
+  rfl
+
 theorem FormationAction.value {context sources contract policy kinds left right knowledge request leftRef rightRef}
     (action : @FormationAction context sources contract policy kinds left right knowledge request leftRef rightRef) :
     action.resources.read .here =
@@ -395,6 +469,10 @@ theorem execute_after_context_erasure {context sources contract policy kinds lef
 
 end ConstitutiveSearch.Agent.Local.Documentary.Deduction
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.formFromProducerReads
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.formFromProducerReads_actual
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.formFromReads
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.formFromReads_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.Operation
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.evaluate
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Deduction.Rule

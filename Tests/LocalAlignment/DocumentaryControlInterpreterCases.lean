@@ -30,7 +30,7 @@ def sumInstruction : Instruction Cases.context DeductionCases.policy
     [ProgramCases.baselineSpec, ProgramCases.deltaSpec, ProgramCases.revisedSpec, ProgramCases.baselineSpec]
     ProgramCases.sumSpec :=
   .conclusion DeductionCases.sumRequest (.prior .here) (.prior .here) DeductionCases.sumDemand
-def sumExecution := Control.execute 17 (ControlStep.code sumFrame sumInstruction)
+def sumExecution := Control.execute 35 (ControlStep.code sumFrame sumInstruction)
 def sumActual := sumExecution.get (by rfl)
 def sumInitial : Complete sumFrame.restore :=
   Snapshot.complete_forward _
@@ -40,7 +40,7 @@ def sumInitial : Complete sumFrame.restore :=
         (.cons ProgramCases.baselineReady (.cons ProgramCases.revisedReady
           (.cons ProgramCases.differenceCompatible .done))) ProgramCases.initiallyComplete))
 def sumComplete : Complete sumActual.value.1.next :=
-  ControlStep.complete sumFrame sumInstruction 17 sumActual ProgramCases.sumCompatible sumInitial
+  ControlStep.complete sumFrame sumInstruction 35 sumActual ProgramCases.sumCompatible sumInitial
 def terminal := sumComplete (.here : Ref _ ProgramCases.sumSpec)
 
 theorem terminal_value : sumActual.value.1.next.store.2.resources.read terminal.occurrence.2 = 2 :=
@@ -50,11 +50,17 @@ theorem sum_labels : sumActual.labels =
     [.instruction, .binding, .binding, .binding, .binding,
       .referencePosition, .referencePosition, .referenceReturn,
       .permissionCell, .naturalComparison, .permissionCell, .naturalComparison, .naturalComparison,
-      .permissionReturn, .permissionReturn, .deductionProducer, .deductionAssembly] := rfl
-theorem sum_one_short : (Control.execute 16 (ControlStep.code sumFrame sumInstruction)).isSome = false := rfl
-theorem sum_surplus : runCtl 23 (ControlStep.code sumFrame sumInstruction) =
-    runCtl 17 (ControlStep.code sumFrame sumInstruction) :=
-  (ctl_mono 17 23 (code := ControlStep.code sumFrame sumInstruction)
+      .permissionReturn, .permissionReturn,
+      .resourceCell, .resourceCell, .resourceCell, .resourceCell,
+      .referencePosition, .referencePosition, .referenceReturn,
+      .referencePosition, .referencePosition, .referenceReturn,
+      .producerKindCell, .producerKindCell, .producerKindCell,
+      .producerPortCell, .producerPortCell, .producerPortCell, .producerOutputKind, .producerAssembly,
+      .deductionProducer, .deductionAssembly] := rfl
+theorem sum_one_short : (Control.execute 34 (ControlStep.code sumFrame sumInstruction)).isSome = false := rfl
+theorem sum_surplus : runCtl 39 (ControlStep.code sumFrame sumInstruction) =
+    runCtl 35 (ControlStep.code sumFrame sumInstruction) :=
+  (ctl_mono 35 39 (code := ControlStep.code sumFrame sumInstruction)
     (value := sumActual.value) (labels := sumActual.labels) rfl (by decide)).trans rfl
 
 def refusedFrame := Snapshot.frame (Program.step twoQuotes.1 forbiddenInstruction).next

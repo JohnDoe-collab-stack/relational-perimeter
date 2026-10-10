@@ -213,4 +213,26 @@ démontrée depuis leurs entrées. La permission trouvée détermine l'entrée d
 la formation et reste dans la décision consommée par l'assemblage existant.
 Les doublons conservent la première identité trouvée ;
 le refus et la somme conservent leurs résultats et leurs témoins. Le coût interne
-de la formation, du maître et des assemblages reste la prochaine frontière.
+de la formation, du maître et des assemblages reste ouvert dans ce passage.
+
+Le [raccord des lectures de ressources](controle-ressources-documentaires.fr.md)
+poursuit D2 : chaque cellule parcourue est payée, puis les deux valeurs lues
+alimentent une seule opération. La formation conserve le producteur existant
+et la formation antérieure ; son égalité avec l'action d'origine est démontrée.
+La différence coûte désormais 13 transitions et la somme 21 dans les cas du
+maître. Le refus à 19 transitions ne lit aucune ressource de prémisse.
+Les opérations sur entiers, la construction du producteur, le maître de
+citation et les assemblages restent à ouvrir, ainsi que les coûts de
+composition, de trace et d'allocation. D2 entier, D3 et D4 restent ouverts.
+
+Le [raccord du producteur](controle-producteur-documentaire.fr.md) poursuit
+D2 en conservant la position déjà calculée pour la permission, puis en payant
+les positions des deux prémisses et huit étapes de construction du producteur.
+Ses ports restent les références reçues dans leur ordre. La formation appelle
+l'opération de ce producteur sur les deux valeurs lues et conserve ce même
+producteur dans son témoin positif. L'égalité avec l'action d'origine porte
+sur l'action entière. Les seuils des cas du maître passent à 25 pour la
+différence et 35 pour la somme ; le refus reste à 19.
+L'opération sur entiers, les autres constructions de formation, le maître,
+les assemblages et les coûts de composition, trace et allocation restent
+à instrumenter. D2 entier, D3 et D4 restent ouverts ; A précède toujours B.
