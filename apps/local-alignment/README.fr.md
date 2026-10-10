@@ -353,3 +353,92 @@ lake build Tests.LocalAlignment.DocumentaryPortableControlCases
 python -B scripts/check-documentary-control-codegen.py
 python -B scripts/run-documentary-control-smoke.py
 ```
+
+## Recettes des producteurs maître
+
+Les [sept recettes maître](../../docs/work/recettes-producteurs-maitre.fr.md)
+reconstruisent les producteurs existants à partir de leurs ports et de leur
+environnement dépendant. La capture conserve les valeurs déjà produites ;
+les preuves restituent le support et le curseur entiers pour la classe formée,
+qui couvre les traces documentaires, adaptatives et mémoire finies déclarées.
+
+Les codes d'opération et positions de ports ont leur codec depuis des octets.
+Les valeurs et environnements maître restent à encoder : ces enregistrements
+ne sont pas le checkpoint maître. Le test runtime lit les ports de trois
+exécutions réelles et contrôle huit encodages et douze formats invalides.
+
+```text
+lake build Tests.LocalAlignment.DocumentaryMasterFormationCases
+python -B scripts/check-master-recipes-codegen.py
+python -B scripts/run-master-recipes-smoke.py
+```
+
+## Assignation et lecteur mesuré depuis des octets
+
+Le [codec de l’assignation et du lecteur](../../docs/work/assignation-lecteur-portables.fr.md)
+conserve leurs fonctions entières, avec les opérations de lecture mesurées.
+La capture lit les codes réellement retournés dans les têtes du support maître.
+Les lois couvrent les traces finies maître, documentaires, adaptatives et mémoire
+depuis un maître dont l’assignation est correctement représentée.
+
+Trois lecteurs produits par les programmes existants reprennent dans de nouveaux
+processus et retrouvent exactement leurs bits et compteurs. Quatre reprises de
+formes supplémentaires et quinze formats invalides sont vérifiés. Ce composant
+reste à réunir avec les autres valeurs et environnements du maître pour reprendre
+le présent entier.
+
+```text
+lake build Tests.LocalAlignment.DocumentaryAssignmentCases
+python -B scripts/check-assignment-codegen.py
+python -B scripts/run-assignment-restart-smoke.py
+```
+
+## Assignation séquentielle avec ses invariants
+
+Le [raccord dépendant](../../docs/work/assignation-sequentielle-portable.fr.md)
+restaure maintenant le SequentialAssignment entier dans une classe de recettes
+validée par un contrôle fini. Les invariants sur toutes les variables futures
+sont construits à partir des bornes des retournements. La fermeture couvre
+toutes les traces finies déclarées depuis un maître représenté dans cette classe.
+
+L’assignation chargée devient le champ exécutable de l’état maître conservé.
+Ce premier raccord reçoit les autres champs de cet état. Trois reprises physiques
+réelles et quatre formes supplémentaires exécutent ensuite une nouvelle étape ;
+21 entrées invalides sont refusées. L’encodage des autres valeurs maître,
+leur représentation complète en octets et la reprise du présent entier restent à réaliser.
+
+```text
+lake build Tests.LocalAlignment.DocumentarySequentialCases
+python -B scripts/check-sequential-codegen.py
+python -B scripts/run-sequential-restart-smoke.py
+```
+
+## État maître et checkpoint assemblé
+
+Le [nouveau raccord](../../docs/work/etat-maitre-et-checkpoint-assemble.fr.md)
+restitue maintenant l’état transmis entier depuis les octets : assignation
+avec lecteur, génération, graine de recherche, décisions ordonnées et provenance.
+Les constitutions et histoires enracinées ont aussi leurs codecs exacts.
+Les preuves couvrent les traces finies déclarées depuis un curseur représenté ;
+le chargeur de l’état ne reçoit pas l’ancien état.
+
+Trois reprises froides retrouvent les composants réels et exécutent une nouvelle
+étape sur l’état complet chargé. Trois sources supplémentaires et 18 refus
+vérifient les compteurs conservés, les décisions répétées et la validation.
+Le contrôle du C inspecte 29 chemins et rejette 104 injections interdites.
+
+Le checkpoint réunit source, stockage, mémoire et contrôle en sections d’octets
+avec les autres ressources maître dans un payload typé. Il restitue exactement
+le présent entier et conserve tous les futurs déclarés dans ce cadre. Après
+relecture du fichier avec ce payload conservé, la citation et la somme restantes
+s’achèvent au tour 5, avec une file vide.
+
+Les découvertes, applications, décompositions et environnements historiques
+du maître restent à représenter en octets. La reprise du présent entier dans
+un nouveau processus depuis un fichier seul reste ouverte.
+
+```text
+lake build Tests.LocalAlignment.DocumentaryAssembledCases
+python -B -X utf8 scripts/check-state-assembly-codegen.py
+python -B -X utf8 scripts/run-state-assembly-smoke.py
+```

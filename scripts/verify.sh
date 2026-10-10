@@ -111,6 +111,14 @@ fi
 "${python_command[@]}" scripts/run-restoration-components-smoke.py
 "${python_command[@]}" scripts/check-documentary-control-codegen.py
 "${python_command[@]}" scripts/run-documentary-control-smoke.py
+"${python_command[@]}" scripts/check-master-recipes-codegen.py
+"${python_command[@]}" scripts/run-master-recipes-smoke.py
+"${python_command[@]}" scripts/check-assignment-codegen.py
+"${python_command[@]}" scripts/run-assignment-restart-smoke.py
+"${python_command[@]}" scripts/check-sequential-codegen.py
+"${python_command[@]}" scripts/run-sequential-restart-smoke.py
+"${python_command[@]}" scripts/check-state-assembly-codegen.py
+"${python_command[@]}" scripts/run-state-assembly-smoke.py
 "${python_command[@]}" scripts/check-continuation-signature-codegen.py
 "${python_command[@]}" scripts/check-variable-master-codegen.py
 "${python_command[@]}" scripts/check-integrated-machine-codegen.py

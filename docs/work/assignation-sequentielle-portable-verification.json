@@ -1,0 +1,1169 @@
+{
+  "kind": "constructed_development_verification",
+  "confirmatory": false,
+  "status": "passed",
+  "branch": "codex/ai-alignment-under-contract",
+  "base_revision": "f30196e4a8ae2b77b0d061c1e03cccd236265013",
+  "extension_committed": false,
+  "verified_utc": "2026-10-10T09:43:16.199972+00:00",
+  "toolchain": "leanprover/lean4:v4.33.1",
+  "scope": "Complete dependent SequentialAssignment is decoded in the positive bounded recipe class; all actual finite master/program/adaptive/memory traces preserve membership from a Ready seed, closed at the existing public origin. The decoded executable field is installed in a received retained ThreadedConstitutiveState with exact equality of the whole coupled state. Other master environment fields and the entire present are not byte-loaded.",
+  "claim_candidate": {
+    "id": "DOCUMENTARY_SEQUENTIAL_ASSIGNMENT_BYTES",
+    "status": "development_uncommitted",
+    "evidence_revision": null,
+    "canonical_document": "docs/work/assignation-sequentielle-portable.fr.md",
+    "quantification": "Every finite raw depth/code has byte roundtrip. Every bounded positive recipe constructs all SequentialAssignment invariants for all relevant future depths. Every Formed dependent assignment has whole-object byte restoration and exact typed consumers. Every actual finite declared trace from a Ready seed preserves exactness and safe membership; the public origin closes the seed. State coupling receives exact captured bytes and the other typed retained fields. The safety decoder is sufficient for the declared class, not complete for arbitrary valid functions or all semantically cancelling recipes.",
+    "formal_references": [
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.limit"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.limit_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.limit_monotone"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.limit_positive"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.Safe"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.safeDecidable"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.safe_monotone"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.safe_zero"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.safe_above"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.selected_bound"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.assemble"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.assembled_bundle"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.sequential_injective"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.Formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.initial_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.assembled_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.reflect_safe"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.stage_safe"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.stage_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.Raw"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.Loaded"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.envelope"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.save"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.load"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.byte_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.validate"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.restore"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.validation_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.formed_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.all_loaded_consumers"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.restoreAt"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.restore_at_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialPortable.all_typed_consumers"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.Ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.initial_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.next_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.variable_next_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.executed_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.restore_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.stage_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.quotation_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.step_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.program_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.fallback_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.diverted_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.dispatch_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.turn_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.adaptive_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.memory_step_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.memory_ready"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.program_bytes_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.adaptive_bytes_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.memory_bytes_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.Coupled"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.incorporateState"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.coupled_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.restoreState"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.restored_state_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCapture.all_state_consumers"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.initial"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.actual_program"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.unsuitable_program"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.blocked_program"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.every_master_cursor"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.every_program_trace"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.every_adaptive_trace"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.every_memory_trace"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.every_typed_future"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.actual_retained_state"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.zero_rejected"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.cancelling_zero_rejected"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.next_variable_rejected"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.beyond_next_rejected"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.older_variable_admitted"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.visits_admitted"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.different_depth_rejected"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentarySequentialCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.SequentialCases.unknown_version_rejected"
+      }
+    ],
+    "dependencies": {
+      "formation": "Declared alternating primitive, exact measured reader and retained typed master formation; first-order commands preserve visits and flips. Bounds are proved readouts of the canonically constituted selected variable.",
+      "execution": "Capture reads the actual retained discovery labels and returned transport codes. Loader consumes first-order bytes and checks finite bounds without querying reader closures. incorporateState installs the decoded assignment and consumes the retained generation, seed, decisions and provenance. Physical resumes execute a new sequential stage; no old documentary trace is replayed.",
+      "proof": "safe_zero and safe_above construct the three dependent invariants. Equality of the entire Bundle plus kernel proof irrelevance yields whole SequentialAssignment equality without function extensionality. stage_safe consumes stage_variable_exact and sequentialStage_selected_exact. Trace induction uses actual shared transitions including blocked decisions and resets. State coupling consumes the exact captured-byte equation.",
+      "transport": "Depth, entire assignment/reader including measured work and dependent validity are preserved. Coupling preserves the whole typed state under supplied retained fields. Version/shape/zero/boundary failures are rejected. Valid altered recipes may denote another valid object; no authentication, full-master byte loading or full-present restart is claimed."
+    }
+  },
+  "verification": {
+    "selected_zero_axiom_audits": 78,
+    "target_build": {
+      "status": "passed",
+      "command": "lake build Tests.LocalAlignment.DocumentarySequentialCases",
+      "log_sha256": "2d0cf228b169d65842c140d8001ba9838995ec100901246a38777576635eb5c2"
+    },
+    "codegen": {
+      "status": "passed",
+      "direct_call_paths": [
+        1,
+        2,
+        5,
+        7,
+        7,
+        15,
+        16,
+        22,
+        2,
+        3
+      ],
+      "rejected_mutations": 21,
+      "scope": "Direct named-call graph only; first-order codec callbacks admitted, no indirect calls in finite validation and latent construction; future stage execution is separate.",
+      "log_sha256": "fda91b90fafb63592ff8606cdf4056ee648955e8a48b71c2fdc9af8bd4430a2c"
+    },
+    "physical_smoke": {
+      "status": "passed",
+      "command": "python -B -X utf8 scripts/run-sequential-restart-smoke.py",
+      "log_sha256": "62d312bcd75f343b94661d38e8ac0507229a01d346b7a2df00026dadbde6d8c9",
+      "receipts": {
+        "actual_comparisons": [
+          {
+            "after_sha256": "03d18616983b47c6d16727cc20573f8cc3cbac4cd2cd1c916a5ec0e393008042",
+            "before_sha256": "10b92c6d627fdd08e458218c8e183904a0681c98719452447736ee64e8b6af17",
+            "case": "complete",
+            "code": [
+              14,
+              12,
+              10
+            ],
+            "depth": 3,
+            "next_selected": 16
+          },
+          {
+            "after_sha256": "10b92c6d627fdd08e458218c8e183904a0681c98719452447736ee64e8b6af17",
+            "before_sha256": "04ecc80aae89d5828d8d261ebc82fff09f9162114bd4a9839e77c7fb503c09ad",
+            "case": "unsuitable",
+            "code": [
+              12,
+              10
+            ],
+            "depth": 2,
+            "next_selected": 14
+          },
+          {
+            "after_sha256": "10b92c6d627fdd08e458218c8e183904a0681c98719452447736ee64e8b6af17",
+            "before_sha256": "04ecc80aae89d5828d8d261ebc82fff09f9162114bd4a9839e77c7fb503c09ad",
+            "case": "blocked",
+            "code": [
+              12,
+              10
+            ],
+            "depth": 2,
+            "next_selected": 14
+          }
+        ],
+        "actual_reader_restarts": 3,
+        "component": "complete_dependent_SequentialAssignment",
+        "full_present_reloaded": false,
+        "invalid_inputs_rejected": 21,
+        "kind": "development_smoke",
+        "new_cold_stages_executed": 7,
+        "new_coupled_stages_executed": 3,
+        "processes": [
+          {
+            "client": "SequentialStart.lean",
+            "client_sha256": "4237ef21436e643aa7e3ebfa4caca8a42699748044333ce06af284be6b853d44",
+            "process_id": 32932,
+            "returncode": 0,
+            "runtime_audits": 7
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 33708,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 45912,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 7424,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 29396,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 20692,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 17328,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 48232,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialInvalid.lean",
+            "client_sha256": "500dea3591d3cad87f0051c24eb4f1cf6c773208484bd390b186e3236bd102a4",
+            "process_id": 17572,
+            "returncode": 0,
+            "runtime_audits": 3
+          }
+        ],
+        "queries": [
+          0,
+          1,
+          2,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "qwen_calls": 0,
+        "retained_master_environment_reloaded": false,
+        "retained_state_couplings_executed": 3,
+        "synthetic_restarts": 4
+      }
+    },
+    "complete_gate": {
+      "status": "passed",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1 with bundled RELATIONAL_PERIMETER_PYTHON",
+      "lean_files": 289,
+      "build_jobs": 291,
+      "constant_audit": {
+        "constants": 24904,
+        "modules": 288,
+        "generated_exceptions": 364,
+        "written_exceptions": 0
+      },
+      "expected_failure_fixtures": 23,
+      "log_sha256": "6230734702b8e4a441a3153d985c5e84b315bd82416b8b9457f895cc6d949770",
+      "prepared_tree_source_fingerprint": "c5c152a3e80b7e31d122fab36742b2300dd5db6a6052d00e3a83bde02b5fcb81",
+      "post_gate_changes": [
+        "Tests/LocalAlignment/DocumentarySequentialCases.lean",
+        "docs/work/assignation-sequentielle-portable.fr.md",
+        "docs/work/plan-alignement-agent-dossier.fr.md"
+      ],
+      "scope": "Full gate passed before final documentary status annotations and removal of one trailing blank line at Cases EOF. No mathematical term, executable body, input, runtime client or contract changed. The normalized source tree then passed the final target/exhaustive audit, compiled check, documentation and integrity checks."
+    },
+    "eof_normalization_after_gate": {
+      "paths": [
+        "Tests/LocalAlignment/DocumentarySequentialCases.lean"
+      ],
+      "change": "Trailing blank line removal only; no declaration, proof, executable body or runtime-client template changed. Final target build, compiled check and documentary checks follow."
+    },
+    "final_target_audit": {
+      "status": "passed",
+      "command": "lake build Tests.LocalAlignment.DocumentarySequentialCases Tests.AllConstantsAudit",
+      "build_jobs": 290,
+      "selected_zero_axiom_audits": 78,
+      "constant_audit": [
+        24904,
+        288,
+        364,
+        0
+      ],
+      "log_sha256": "1daa586a4b57a6bb9945db1709e428cef6242d3d14bcdafa6c982fd8b746ef66"
+    },
+    "final_codegen": {
+      "status": "passed",
+      "log_sha256": "fda91b90fafb63592ff8606cdf4056ee648955e8a48b71c2fdc9af8bd4430a2c",
+      "rejected_mutations": 21
+    },
+    "gate_physical_smoke": {
+      "status": "passed",
+      "receipts": {
+        "actual_comparisons": [
+          {
+            "after_sha256": "03d18616983b47c6d16727cc20573f8cc3cbac4cd2cd1c916a5ec0e393008042",
+            "before_sha256": "10b92c6d627fdd08e458218c8e183904a0681c98719452447736ee64e8b6af17",
+            "case": "complete",
+            "code": [
+              14,
+              12,
+              10
+            ],
+            "depth": 3,
+            "next_selected": 16
+          },
+          {
+            "after_sha256": "10b92c6d627fdd08e458218c8e183904a0681c98719452447736ee64e8b6af17",
+            "before_sha256": "04ecc80aae89d5828d8d261ebc82fff09f9162114bd4a9839e77c7fb503c09ad",
+            "case": "unsuitable",
+            "code": [
+              12,
+              10
+            ],
+            "depth": 2,
+            "next_selected": 14
+          },
+          {
+            "after_sha256": "10b92c6d627fdd08e458218c8e183904a0681c98719452447736ee64e8b6af17",
+            "before_sha256": "04ecc80aae89d5828d8d261ebc82fff09f9162114bd4a9839e77c7fb503c09ad",
+            "case": "blocked",
+            "code": [
+              12,
+              10
+            ],
+            "depth": 2,
+            "next_selected": 14
+          }
+        ],
+        "actual_reader_restarts": 3,
+        "component": "complete_dependent_SequentialAssignment",
+        "full_present_reloaded": false,
+        "invalid_inputs_rejected": 21,
+        "kind": "development_smoke",
+        "new_cold_stages_executed": 7,
+        "new_coupled_stages_executed": 3,
+        "processes": [
+          {
+            "client": "SequentialStart.lean",
+            "client_sha256": "4237ef21436e643aa7e3ebfa4caca8a42699748044333ce06af284be6b853d44",
+            "process_id": 47296,
+            "returncode": 0,
+            "runtime_audits": 7
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 23120,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 15336,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 38040,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 49432,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 46456,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 2928,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialRestart.lean",
+            "client_sha256": "498091ff7b7fceb40647a6c9c7f3de3c1621269c0698875e7cac6d340c4e779b",
+            "process_id": 16188,
+            "returncode": 0,
+            "runtime_audits": 6
+          },
+          {
+            "client": "SequentialInvalid.lean",
+            "client_sha256": "500dea3591d3cad87f0051c24eb4f1cf6c773208484bd390b186e3236bd102a4",
+            "process_id": 9276,
+            "returncode": 0,
+            "runtime_audits": 3
+          }
+        ],
+        "queries": [
+          0,
+          1,
+          2,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19
+        ],
+        "qwen_calls": 0,
+        "retained_master_environment_reloaded": false,
+        "retained_state_couplings_executed": 3,
+        "synthetic_restarts": 4
+      },
+      "scope": "Complete dependent assignment only; retained master environments and full present not cold-loaded."
+    },
+    "final_documentation": {
+      "status": "passed",
+      "command": "python -B -X utf8 scripts/check-scientific-docs.py --static",
+      "claims": 19,
+      "formal_declarations": 91,
+      "log_sha256": "adc279dd1a3ebbd090e70a69372e00da4fd106946d1c9c472821573c0f460380"
+    },
+    "final_integrity": {
+      "status": "passed",
+      "manifested_paths": 28,
+      "lean_source_snapshot_paths": 289,
+      "unchanged_prior_math_paths": 31,
+      "unchanged_prior_sources": 16,
+      "unchanged_previous_ledgers": 13,
+      "registry_unchanged": true,
+      "python_ast": true,
+      "eof_and_whitespace": true,
+      "git_diff_check": true
+    }
+  },
+  "review": {
+    "reader": {
+      "status": "pending"
+    },
+    "independent": {
+      "status": "not_recorded"
+    }
+  },
+  "language": "fr_only",
+  "prior_math_sha256_lf_unchanged": {
+    "Tests/LocalAlignment/DocumentaryAdaptive.lean": "fca18a29d12143e385468a063d6f9bb8162feb4083c45d40c09e9ef72541a177",
+    "Tests/LocalAlignment/DocumentaryAdaptiveCases.lean": "5c5ac466af887fbd72f61573cff47a09e63c0f10a425e640e5f5ce0c7b15ea20",
+    "Tests/LocalAlignment/DocumentaryCanonicalAdaptiveRestoration.lean": "30405ea9cc67475c89e29107546f49fb474e8ee0f6ca15ef6ec3853d90392a38",
+    "Tests/LocalAlignment/DocumentaryCanonicalRestoration.lean": "ee13bef3265aefbab92417c14c71cd0891036bb4affe1d67adbe657d0b95f1cf",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryControlCodec.lean": "2ab8bea4cebd8233944918e596d1c38883dfa3311c3fd57138d8b540108b366a",
+    "Tests/LocalAlignment/DocumentaryDeduction.lean": "e0c47edc703c3ab6afadbb5c11a92b9719efb22d84b1146929aeda08bee14017",
+    "Tests/LocalAlignment/DocumentaryDeductionCases.lean": "a04bb5065d81ad4942d6965e9863cfc7ab787d954da420b57799e86ef88e4bb2",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentaryMasterPayload.lean": "c2b9d7f2b7756e7596e58b465310cd8f9f8140c6e04bc3665787a851264c4031",
+    "Tests/LocalAlignment/DocumentaryMaterializedPresent.lean": "a73b8e8cb3a3a8072970910ffc62424e3b81565317ea13816e67dabaed7da452",
+    "Tests/LocalAlignment/DocumentaryMemory.lean": "066d92f60bab73b6963f8c26dc95a62b06390ca9164167eed6aebd0f7445eab7",
+    "Tests/LocalAlignment/DocumentaryMemoryCases.lean": "e077758f5a6fc518cc475a8ceccfeb82fd33c7588a6981312fc7eb20c7604112",
+    "Tests/LocalAlignment/DocumentaryPortable.lean": "72dba0634c69749256e16a5da9715230a25a1c600a3f90c236ce8cdb5301abf4",
+    "Tests/LocalAlignment/DocumentaryPortableCases.lean": "e700d01b277e09f25f4c73527e84237c5fe030dd5ff5850398aef69c3d8059b5",
+    "Tests/LocalAlignment/DocumentaryPortableCheckpoint.lean": "3f3091643a4e78448b12de35969ba579b88ab0e118ac5ea6e79d06bb0ba87f35",
+    "Tests/LocalAlignment/DocumentaryPortableControl.lean": "8b2714f77291fa526f15c030435821b34fe2c60321ae4366db341a64bf38cfcb",
+    "Tests/LocalAlignment/DocumentaryPortableControlCases.lean": "99c6bf3db0f24988671e5231041d535c2ada4bb4f7e5450456c0d83215502512",
+    "Tests/LocalAlignment/DocumentaryPortableMemory.lean": "5346236268ceea596da2274815843d8f17ee5d86b99f9a6dc052db2c03d177e7",
+    "Tests/LocalAlignment/DocumentaryPortableStart.lean": "4ae9f46299041e015479d513ced35eb15d1e6e469813a86f37a3245a06647e7d",
+    "Tests/LocalAlignment/DocumentaryPortableStore.lean": "4db61b65d5785059bb4e69558a0b79827d39b66935645c058115cb3cc22732fe",
+    "Tests/LocalAlignment/DocumentaryPortableStoreCases.lean": "fa3f984943a2b33750bc6bb5aba90a64ca6c5a224d58479ae67ea059b5caf7ad",
+    "Tests/LocalAlignment/DocumentaryProgram.lean": "decf0ead9a3bd1ebc6f90198fc863194b050bf1b4e4dcf6cdcf0c4bf0dd794cd",
+    "Tests/LocalAlignment/DocumentaryProgramCases.lean": "ff701ac289efa1ffdcd01bcdc0ad4ef8cb6e2c2429c89756238f22b4435ffe6b",
+    "Tests/LocalAlignment/DocumentaryRestorationComponentsCases.lean": "c45e41c590131bc903c1318215bc329c96fced934d4ea577d4bdc61414768e2a",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "Tests/LocalAlignment/DocumentarySnapshot.lean": "23a4e2ccb493d76936c7db0a84d8bd7595842e0ce809c5876b221ab4da311d46"
+  },
+  "prior_sources_sha256_lf_unchanged": {
+    "Tests/LocalAlignment/DocumentaryAssignmentCapture.lean": "b8d503ad994ecc7431944c7d361c9b89bc0f781fc33420c8cc8d66c5b7869415",
+    "Tests/LocalAlignment/DocumentaryAssignmentCases.lean": "813e78dac36a9974baef842f682e644ed7279c7009c8eeebe94d676f49e1fe2c",
+    "Tests/LocalAlignment/DocumentaryAssignmentCodec.lean": "d163c0066b13debd9a1d2477649ab43ec60c4020adc3666b1290a30e0d788288",
+    "Tests/LocalAlignment/DocumentaryMasterFormation.lean": "6d8c0d6f0890e4c8c49903fe71c7af0f81efb50a2d2877b81ef99bc6fb28f4a3",
+    "Tests/LocalAlignment/DocumentaryMasterFormationCases.lean": "4d873de1e2bdd8773084a6cce5596148c7d64e345b33393978c5605016b73e06",
+    "Tests/LocalAlignment/DocumentaryMasterFormationExecution.lean": "ce1c229c6c335cdb97b38e92bf286089b1c22b1dc35b937db39fe1804f75961e",
+    "Tests/LocalAlignment/DocumentaryMasterObservation.lean": "6e612ba0057a1bc8206a8ecff0d6da534ace175f1c86436faa9d842f6f9c4ee5",
+    "Tests/LocalAlignment/DocumentaryMasterOperations.lean": "a6c714cd09ec06a8e676edea9cad3239dd77cce8f7cdfe3004033f78e9759dd8",
+    "Tests/LocalAlignment/DocumentaryPortableAssignment.lean": "cb6a590b2046f258d4ba1ae08f144bc22e9adc7e4d63c289e8b6a07d654da7b2",
+    "docs/work/assignation-lecteur-portables.fr.md": "25589f923bfaaf045a5097a9000ad7fd84c55fe7482494c5cfd24807e4e8578a",
+    "docs/work/recettes-producteurs-maitre-verification.json": "8a3a6eca5194f5492d56b16a2859ea99353a6ac0ad542e1b248ec37ff0d82fc3",
+    "docs/work/recettes-producteurs-maitre.fr.md": "0ceeb4a184ba5393f0d8e54fbb4bc4e6eaf995cbbcd7d9443cc2c67f3b30973e",
+    "scripts/check-assignment-codegen.py": "2046eb9f60e58fb3bb1b33efba580e1abf49fc0bacfd8ac4b59ca7e50318d385",
+    "scripts/check-master-recipes-codegen.py": "6a3f62a3835e68f4bbc9242d5fbda115061a4d0a755ba7bad2be02716c399d0f",
+    "scripts/run-assignment-restart-smoke.py": "e0b1d8bdcd58dfba833f17f2ae4f6721b0d6da4f9305e49e14364cb218989168",
+    "scripts/run-master-recipes-smoke.py": "49bb5762931865e61e8006a88cf93808d4d450246c9fff117ac851c2ed15f1dc"
+  },
+  "historical_ledgers_sha256_lf_unchanged": {
+    "docs/work/checkpoint-documentaire-portable-verification.json": "984300f4fdd501bd9ccb5f984a0ebdc2adf85fe7556c0b29b934fff48bda82d0",
+    "docs/work/composition-dossier-maitre-verification.json": "d4f0d090591456abf63bec1ddd06c515cbe2386b5452aad4da634abc7a2fea0d",
+    "docs/work/continuation-documentaire-adaptative-verification.json": "38f3e4696098f3024e08aca019cd92eb061c02d9128ac61098081250cb77cd3e",
+    "docs/work/controle-documentaire-portable-verification.json": "770321f4f9b88cb132fe88d527089a1695df6d332ecf9c985dfb210b5c372892",
+    "docs/work/deductions-documentaires-verification.json": "de34f2a8a2183ac5adfefed4245f9e5880600083058dd2b3d72fdece5c271feb",
+    "docs/work/memoire-documentaire-verification.json": "8f4e3bc1d809cf2147c00fd0696396164db4a43c2e7781cf348b0df7e06002bc",
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/programmes-documentaires-verification.json": "3485d921605f5371d1a2dd0fe3a3c7f3302b4b3c06f888ac150fab9cb182cecb",
+    "docs/work/raccord-documentaire-maitre-verification.json": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1",
+    "docs/work/restauration-present-composants-verification.json": "40d501f09dc55566692e0199a172a56af1bd0877aa654c7f489b905e0e3aa7be",
+    "docs/work/restauration-stockage-documentaire-verification.json": "298e0bce7e6d9857ae8372f717ec237e7de9c9afe5a462b6c3cb32f4fbce830d",
+    "docs/work/recettes-producteurs-maitre-verification.json": "8a3a6eca5194f5492d56b16a2859ea99353a6ac0ad542e1b248ec37ff0d82fc3",
+    "docs/work/assignation-lecteur-portables-verification.json": "e01cb1cf4dd1bb1125e35a7185c70bdf24917e4f5e837d948ab8e8e6452b84d6"
+  },
+  "previous_assignment_snapshot": {
+    "path": "docs/work/assignation-lecteur-portables-verification.json",
+    "sha256_lf_unchanged": "e01cb1cf4dd1bb1125e35a7185c70bdf24917e4f5e837d948ab8e8e6452b84d6",
+    "recorded_source_fingerprint": "b30cad595f1e5fc97a9f26bc3eae87bc686b880c0d3e36300ef7d4c2465392dc",
+    "scope": "Earlier development snapshot preserved unchanged. Shared plan, README, gate scripts and exhaustive audit are extended here; the prior mathematical modules, runtime checks, reports and ledgers are unchanged. The prior snapshot is not refreshed."
+  },
+  "registry_sha256_lf_unchanged": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+  "open_obligations": [
+    "Encode and physically load the received state generation/history, decisions/provenance, operational prefixes, discovery/application/decomposition values and all dependent producer environments.",
+    "Resolve typed recipe ports from loaded master values and preserve the whole resource formation and cursor.",
+    "Assemble full-present bytes under identified received sources, contracts and rule catalogue.",
+    "Close all declared finite full-present futures and execute new master quotations/deductions after physical whole-present restart.",
+    "Documentary Qwen interface, environment effects and paired comparative lot 7."
+  ],
+  "commands": [
+    "lake build Tests.LocalAlignment.DocumentarySequentialPortable",
+    "lake build Tests.LocalAlignment.DocumentarySequentialCapture",
+    "lake build Tests.LocalAlignment.DocumentarySequentialCases",
+    "python -B -X utf8 scripts/check-sequential-codegen.py",
+    "python -B -X utf8 scripts/run-sequential-restart-smoke.py",
+    "lake build Tests.LocalAlignment.DocumentarySequentialCases Tests.AllConstantsAudit",
+    "scripts/verify.ps1 with bundled RELATIONAL_PERIMETER_PYTHON",
+    "python -B -X utf8 scripts/check-scientific-docs.py --static"
+  ],
+  "verification_attempts": [
+    {
+      "stage": "Arithmetic proof construction",
+      "result": "Initial broad arithmetic tactic attempt left goals and introduced dependencies unsuitable for constructivity. Replaced with explicit constructive natural-order lemmas; all final audits are zero-axiom."
+    },
+    {
+      "stage": "Dependent Option and state equality",
+      "result": "Dependent restoreAt reduction needed an explicit positive equality branch. State match cannot be rewritten across its dependent proof motive; direct case analysis and coupled_exact close both branches."
+    },
+    {
+      "stage": "Compiled mutation checker",
+      "result": "The initial call parser ignored lp_ symbols and accepted a producer injection; it now uses the existing l_/lp_ parser, detects all targets and rejects all 21 injections."
+    },
+    {
+      "stage": "Runtime client argument matching",
+      "result": "Overlapping catch-all list patterns introduced propext in the first start client. Exhaustive cons/arity patterns replace them; seven/six/three final runtime audits are zero-axiom."
+    },
+    {
+      "stage": "Premature compiled checks",
+      "result": "One check run started before the target build had finished; missing C/olean artifacts were failures. The build completed successfully, then both compiled check and physical smoke passed on final sources."
+    },
+    {
+      "stage": "First complete gate preparation",
+      "result": "The first gate stopped at a missing link to the not-yet-written development ledger. The ledger was then created and the complete gate is rerun on the prepared tree."
+    },
+    {
+      "stage": "Final complete gate and source normalization",
+      "result": "Passed with all mathematical sources and runtime bodies. Documentation finalized afterwards; one trailing blank Cases EOF line was removed. Final targeted build, exhaustive audit, codegen, links, preserved evidence and integrity checks passed on the final tree."
+    }
+  ],
+  "source_sha256_lf": {
+    "Tests/AllConstantsAudit.lean": "8dafad02592218bce025b75467782c20b2872aa5626a4512b98ed274b0b0815a",
+    "Tests/LocalAlignment/DocumentaryAssignmentCapture.lean": "b8d503ad994ecc7431944c7d361c9b89bc0f781fc33420c8cc8d66c5b7869415",
+    "Tests/LocalAlignment/DocumentaryAssignmentCases.lean": "813e78dac36a9974baef842f682e644ed7279c7009c8eeebe94d676f49e1fe2c",
+    "Tests/LocalAlignment/DocumentaryAssignmentCodec.lean": "d163c0066b13debd9a1d2477649ab43ec60c4020adc3666b1290a30e0d788288",
+    "Tests/LocalAlignment/DocumentaryMasterFormation.lean": "6d8c0d6f0890e4c8c49903fe71c7af0f81efb50a2d2877b81ef99bc6fb28f4a3",
+    "Tests/LocalAlignment/DocumentaryMasterFormationCases.lean": "4d873de1e2bdd8773084a6cce5596148c7d64e345b33393978c5605016b73e06",
+    "Tests/LocalAlignment/DocumentaryMasterFormationExecution.lean": "ce1c229c6c335cdb97b38e92bf286089b1c22b1dc35b937db39fe1804f75961e",
+    "Tests/LocalAlignment/DocumentaryMasterObservation.lean": "6e612ba0057a1bc8206a8ecff0d6da534ace175f1c86436faa9d842f6f9c4ee5",
+    "Tests/LocalAlignment/DocumentaryMasterOperations.lean": "a6c714cd09ec06a8e676edea9cad3239dd77cce8f7cdfe3004033f78e9759dd8",
+    "Tests/LocalAlignment/DocumentaryPortableAssignment.lean": "cb6a590b2046f258d4ba1ae08f144bc22e9adc7e4d63c289e8b6a07d654da7b2",
+    "Tests/LocalAlignment/DocumentarySequentialCapture.lean": "cbb56334d6a3be6a4ffa96e5db8a2ee7a1ee89ca3c348cc5dafa595171fcebca",
+    "Tests/LocalAlignment/DocumentarySequentialCases.lean": "558632c9370814989847ebab2ab131dd5543bd897eb13d58f652e6e675e0c820",
+    "Tests/LocalAlignment/DocumentarySequentialPortable.lean": "2058cebfb53d7db095aeb733716f72a769e920e1565f1e5a693260c04a652f3a",
+    "apps/local-alignment/README.fr.md": "35d76d498dc88e5bebfd5c13b8d8506de5d2151b2225d1e14eeedd7f1661b680",
+    "docs/work/assignation-lecteur-portables-verification.json": "e01cb1cf4dd1bb1125e35a7185c70bdf24917e4f5e837d948ab8e8e6452b84d6",
+    "docs/work/assignation-lecteur-portables.fr.md": "25589f923bfaaf045a5097a9000ad7fd84c55fe7482494c5cfd24807e4e8578a",
+    "docs/work/assignation-sequentielle-portable.fr.md": "9c9c0e2dc4d19f3e4cefb6dc58cdb8919477858f68def9cd9e53d9f9585dbb18",
+    "docs/work/plan-alignement-agent-dossier.fr.md": "4f019d2527518f263dfc6171f79d412aed81e466d65f12f7fde564eb36571ea0",
+    "docs/work/recettes-producteurs-maitre-verification.json": "8a3a6eca5194f5492d56b16a2859ea99353a6ac0ad542e1b248ec37ff0d82fc3",
+    "docs/work/recettes-producteurs-maitre.fr.md": "0ceeb4a184ba5393f0d8e54fbb4bc4e6eaf995cbbcd7d9443cc2c67f3b30973e",
+    "scripts/check-assignment-codegen.py": "2046eb9f60e58fb3bb1b33efba580e1abf49fc0bacfd8ac4b59ca7e50318d385",
+    "scripts/check-master-recipes-codegen.py": "6a3f62a3835e68f4bbc9242d5fbda115061a4d0a755ba7bad2be02716c399d0f",
+    "scripts/check-sequential-codegen.py": "78a2d4cd5e8e99abea89d7544d5c34e96662604f1c205c762b300874298c2c87",
+    "scripts/run-assignment-restart-smoke.py": "e0b1d8bdcd58dfba833f17f2ae4f6721b0d6da4f9305e49e14364cb218989168",
+    "scripts/run-master-recipes-smoke.py": "49bb5762931865e61e8006a88cf93808d4d450246c9fff117ac851c2ed15f1dc",
+    "scripts/run-sequential-restart-smoke.py": "6609a90b2886b9aab6b86771698f579b16434a739dc408e95caad85071a29f04",
+    "scripts/verify.ps1": "d9202766ca27e970436d6d747ed641df07aca842952a252defea801fbbe3e35e",
+    "scripts/verify.sh": "85cbc435b028b2fe3c1ce254b6f06638639dd5f576619cc4b3ae2d74ae532a4a"
+  },
+  "source_fingerprint": "bc21ed9210e71e3d0402e11751b4a5556b41bd085bd06c2480301b607052e5f9",
+  "lean_source_snapshot_sha256_lf": {
+    "AbstractSegmentedTurning.lean": "4f751df72732bff8438db58dd6d1529987c47a1bcebb1c8b2cf1c9ab651bb459",
+    "ExactTypeTransport.lean": "ddcac9e058f3c738efd92fd7951b5d88260cde25b7905080512bbebd4dadfca0",
+    "RelationalPerimeter.lean": "26d7b46247e59b62f220952d545e0c2f1efc4c7c5e7c0963bf098e44db9c2e5b",
+    "RelationalPerimeter/Agents/Constitutive/Agreement.lean": "89f2ea2e89b20ed70e85c24f2162050a39f0b5cd0134e1ecb51ae5ce07a34a27",
+    "RelationalPerimeter/Agents/Constitutive/Execution.lean": "650823345439c1df3c1ab259b14e2686c836676e3308c04865617acbf5b653ca",
+    "RelationalPerimeter/Agents/Constitutive/Persistence.lean": "50ca0b6273e5d3ad591bb4d68c1339cfce87fc475903db6720d8fb802cbf2bc4",
+    "RelationalPerimeter/Agents/Constitutive/ProducedEvidence.lean": "784cf5211f94924f6c9d75ccfcd5ff392e6feda31d9590e9a304fde468e9a00e",
+    "RelationalPerimeter/Agents/Constitutive/PublicInstance.lean": "aa439e585fcd272fdd07be8fb227dc62e7271135bc1c4ce44b5af706fc9a9a2e",
+    "RelationalPerimeter/Agents/Constitutive/Requirement.lean": "a88a446c76c2c0a54f43e8d7aed3386bdb03a108728cba268ee69b3df404aeb8",
+    "RelationalPerimeter/Agents/Constitutive/State.lean": "1d8ae1ff87448bd1edb2c3538b4eef37c541658754e1a35317336806c5bf40e3",
+    "RelationalPerimeter/Agents/ContinuationSignatures/ExistingAgent.lean": "adb507ec97d5fdca7d268c8d86cb5edcdcf43fbc3a0389f2181d9f1264e40b99",
+    "RelationalPerimeter/Agents/ContinuationSignatures/FusedExecution.lean": "936d08724dcd8c4088b6e290449d7f42c8527588d14d756465e283d5cd7b4d78",
+    "RelationalPerimeter/Agents/ContinuationSignatures/Production.lean": "14407ebbfcfab7ce0bbcfb6fef5f2e902045990d5d1dcea216a1e363d816fab4",
+    "RelationalPerimeter/Agents/ContinuationSignatures/PublicCertificate.lean": "26a78a70ed4b8e9d2caeb7c0c888b3dde95724fd54c3f250762761794f3980b6",
+    "RelationalPerimeter/Agents/ContinuationSignatures/ReachableAgent.lean": "63c5cecf36fc24f1b416156bc9984ec02f1f8a8215c9066d83470f7798d36c00",
+    "RelationalPerimeter/Agents/ContinuationSignatures/RoleComposition.lean": "52f0a265ccbe3149d3c80662a67642810706980aee000ad8403bcc2ffcca3123",
+    "RelationalPerimeter/Agents/ContinuationSignatures/RolePayloadFamily.lean": "c322c6797c26a967fdb21758d060851aa11f2c7d8773e8ca90c5307227f36712",
+    "RelationalPerimeter/Computation/ConstitutiveGeneration.lean": "f964101be25b6978609ff7ef52fb1845f0d4101d7415dfdbcd2a48019d2c89ca",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/AcceptedFrontier.lean": "6e3308e010d298607842901aebed1cc36795438c28dbb195c4e4c11dc15079ba",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/AcceptedFrontierNormalization.lean": "d937ae30b04bb5ad6435d985abfbd805b82800e9e2c4cc463aeebd24a81e28b0",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/AcceptedFrontierPreservation.lean": "47aed44d71b630b7d625b2248d76c68873c768b8384bde70101473532cdd4919",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/AcceptedRelationalTransport.lean": "05f32cd3a34f87c0c6eebdc3ec34386f88dace3d38e4df409d6f76c78554a9c0",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/AcceptedSplit.lean": "95145557ed2e06d5f4594c97b5042ff086ff1a505dcc17565d0d311970cb80df",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/AcceptingTransport.lean": "db99b79a3a6ca8508117ea81f822d4fb1bc9f7bbe624fee8fdef128d908dc66c",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ClosureSearch.lean": "a8ad5f909bb52d866dc13fde9fa0cdcdad0444e98a6f269bf488379c42c9b58c",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ComplexityInterface.lean": "9bc781921549950417624ea7b53154660cca545b48a9736ebd2bdfe9f380ed9e",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ConstitutedPrimitivePath.lean": "a7cb8164c30d19d3cf5451e69a67ba3f7d1faa3ac67ed37c0a957eb2458b0368",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ConstitutiveComplexityComposition.lean": "f4fcac57c38981c9831af45b4239aa7ec351af8b356a6ebded1c951c94c0c273",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ConstitutiveComplexityInputPolynomial.lean": "91f1ea06ec97f83fadfc2ab992bbb56907f37d1b1310c4e61163f99a1d9bc264",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ConstitutiveComplexityPolynomial.lean": "db30473c3de3deeb1b40aa0f8680dbd07ff71a3670c6b6b4f45ee363870acf70",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ConstitutiveComplexityProfile.lean": "ab82281634b4c5cafb66c2fe256944d1cb1d057c2b6ba41a719128dba63013e2",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ConstitutiveProjectionNonFactorization.lean": "de2a2d54db17f92ee937f2d025c8268198f3ca24d561545758ff28dde167e1e2",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ConstitutiveWidth.lean": "54943a47018ce05b5c767263060b2f8dbf19ce2a61eff27c90142287fea9d144",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ConstructivePrelude.lean": "6b3b45dba179cb289b88f0c4921968f9c91e3977ef3a7eed503b27ac20f9e5bb",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ContinuationTransport.lean": "78a97090ec26896bed809018d34e48cd71484f9fd1d4711bf2429e72316b186c",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/CausalConstitutiveExecution.lean": "2092aa16d1acf93a7fbee8b2c05f6eff0cec273fe7ed463d0feaca5dbd993eb9",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/CausalFoundationBridge.lean": "82e766fbe07f1717bb635812cb7624291a2a4e2f96750becc7a4eb21496607b9",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/CausalOperationalExecution.lean": "7c395d18aecfd81fbc451fd4ba6614d399efc47a8464418f3d38c847d462e840",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/CertifiedRoleGrouping.lean": "e104884d02bca3c29850e0a24aa319dfc5a5abaedfb95a985cf4d565b1d77c27",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ConstitutiveExtensiveSeparation.lean": "0e14361e8e04f11f744ac66e8454cc9d3a809e23ddea2aebbc41221036d4783d",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ConstitutiveFeedback.lean": "1a536ff784c793c409ceadc0b0e2488624f9cf9e835ca106912ea068efb44ad5",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ConstitutiveFullStep.lean": "fe61cca2968f8872574598c0f2e82cd3997b20489ab2c235404c82aad42a8440",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ConstitutiveInterface.lean": "6164b52491228d663161bc3d4360a57bcf6f97ca3a6e600c3bba947734fdb45d",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ConstitutiveNormalizerCore.lean": "a03f063c44554db8e45137dc81adafc3a9e91b284789bbe51d36a9096a26b3ae",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ConstitutiveNormalizerProgram.lean": "ec7ddc6adc53f933b24492f6d64da8b94ea0a4792fce9f3a18d092d962546681",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ConstitutiveNormalizerSuccinctness.lean": "3b53d00a59f337b743da44c2a80ae8a355c4433df3d28a17a867f681d9bd0a75",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ConstitutiveOperationalStage.lean": "fb94aebdf27dd2935c7867e46a7bf074f290d30bab917c428f6b212ec6c5322e",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ConstitutiveResolution.lean": "5d4ed8ce538313dac637ae10836ad8c86db1e24a4c2c000d498b1aeedb6b4012",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ConstitutiveRoleCycle.lean": "8d9165c929f737d76fc301d2af019ce8d247c786f0232bd7e056b7c72655e060",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/EndogenousDiscovery.lean": "762e90ba0754fcd76c28b08716ad5a0f65b08a13631cb2b9fc84bd66e03e261c",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/EndogenousOperationalStability.lean": "2758d62b401ba007396e62d348f302eb4af2c4ce98c3ed1216c9113365f11640",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExecutedCausalNormalization.lean": "9e68930d1d897fc467cb15b56a5e25ed00a877c67fc4692b6d160a1d7445b08a",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExecutedFeedbackBridge.lean": "93d595b8ac08c345834eb222a82a15c9fee7099d900551123f0b0afc9cbec1ed",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExecutedLocalSchedule.lean": "67d19099cf2bc54b11ba7874a10de62a87fc805e99507b3d545987bfa4eb7f6f",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExecutedOperationalReduction.lean": "972f3b0e016f205ff0aed1e05b0f3a5dff672f2cdd1b9eb82b11ff02acad38d8",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExecutedOperationalReductionHistory.lean": "82643f90fff3df4ceb1c4d47ad5e0dbc7b2c2ccf8a4cd69e20c10c1f7dd15d2a",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExecutedOutputObligations.lean": "b4efafaf6e0a823b244525de449d23203efc3e762c9cf27125c125505eadfc3d",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExecutedRoleIndexedReduction.lean": "c8b63558de873a9e38f3a69c1c5c2df34dc2fa8f484ae530a816261c45409a05",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ExtensionalOperationalStability.lean": "4152c2faf22454fc289a542dffc63eca5461fbcfd000e050f4cebe055f260aa5",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/GeneratedHistoryExecution.lean": "88e6c1caf0299d38c40a571c4f8857937ce6e0ce5c9e07db82269f9da13dafc2",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/GenericConcreteRefinement.lean": "f59b203ad5b277cc507adc6f1be1a62b8a3b43604ffc20422bd2a88cbc63c44e",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/GenericConstitutiveTraversal.lean": "7dfd0a449bfea84f9f40bafc2e12a578a5feeb21315207025ae660f2e07d5a86",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/HistoricalRoleGrouping.lean": "13b6bc507af3752440c6fe7d5d608affa1cd0fdec28969154fec326bc0fb10ee",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/IndependentProfileAddressing.lean": "3453fd892e45a649e76e2358348552b0e38cd052fcfb3d83c24724a6f3d94c7c",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/InstrumentedExecutionRealization.lean": "d838897fb4fc2f146e0e2ccfab54c6f0ff8bfa169545150af2609dfb46b7e13f",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/IntegratedProjection.lean": "b18d160a85937df2cce88c04c67b620e42cdb7137b462212cb36763d2adde1f2",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/LiveResourceContinuation.lean": "9502de593aad947dbe8f4b3f0b8ad4586e9e74aa3431d1730338db382de9c86d",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/LocalOperationalStatus.lean": "14024bc3741b02dfbaa0ab6929dc76a29b16264a6c636adc9841893dd91f9a0d",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MasterContinuationFeasibility.lean": "eed0f5e4fbe2a94be131437f7710cb8ad911af4ce30423e3fc0baae207d6cb21",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MasterResourceExecution.lean": "8da4f8ab1c6de60076b1e19e989397382f510ff4054a2db8b08194c761e17635",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MeasuredAccounting.lean": "f18993999836d8af848633cc5950701689fd9f7685916a2fda75eea4dbdeba9e",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MeasuredAssignment.lean": "be06be94a651fdfd2a8fbcfc2bea9513a8b742b26546fd1b44dc244e906f4551",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MeasuredAssignmentBounds.lean": "a0705a0b5be52357d833110dc71711c1a90db0296d58b8699edbeb93316a1a51",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MeasuredComparison.lean": "d0582e7214d631d6b895045088836b0f942364335604333a58a332640a98ad4f",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MeasuredComparisonBounds.lean": "35c6ef5ceb212f423fd5adbf36adc2c3a855abcb22b85315ef031c3a90cc1166",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MeasuredDiscovery.lean": "a58f07f280a0c4e64e0c32cc031b8f32b6cca379fbbbf89472ed34af41f209b5",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MeasuredDiscoveryBounds.lean": "c4b6905d8b8cdfaf51fd8b54332fe222a2b777ce45dca90ed439ebff4ac91608",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MeasuredGeneration.lean": "9c533e122ab4b32da7fc5ed0bc80508437d32e94e1c0697dd370f094360fff92",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MeasuredRealization.lean": "c151eea3f8267de9bbc1857816af1a5ed7e2036ffd27e8d098ec47857ac8e750",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MeasuredStateConstruction.lean": "d62c5207d8a3985686d92b07935b3cc01669099ccb4820947c363518a6e36eb2",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/MeasuredTransformation.lean": "e52944056de1978b946e6ce1b5ea2f3ac92f10f1e6cf724a7475649491b9ab23",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/OperationalProjection.lean": "5b068c1327130a2ad147abfa104723722a1fe4d503a7401f1d96e8cbad2504d2",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/PrefixLocalOperationalProduction.lean": "d0357d952eab6466d0265a6b6bf07238e59379141245c4d5212851e17a418fde",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/ProducedProfileContinuation.lean": "f4d355cc3bd237238a4cead07a36695fcd9c78278f095b98d041d862f223d517",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/PublicRelationalExtensiveFamily.lean": "13f31e82e0ea4f43213e12cdf14dd114294f58424effe18034bf624eaed123f1",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/PublicRolePolicySpectrum.lean": "2c0851918f51d9c89eeaff6114b9a5ee7844cf22276a4a727cbeb4eb6743870f",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/RelationalConstitutiveRoles.lean": "5feea558405d4a19a8183f9923d33b7d13bb21dce1d7d041174338c57a603302",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/RoleGroupingSemantics.lean": "ea96864f146bddb6de1870c20ddb78c14a062f0d5961504722c0bba7d3ab7da5",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/RoleIndexedProfiles.lean": "d0b56b79a31761becad451c28174d289d881f7bbeddba5ba914f9102a5a17b55",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/RoleIndexedProgram.lean": "19788628c45c70bfeaafb341b9a5bac92cc5d87acb80646b0dcdb06342b8e08f",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/RolePolicySpectrum.lean": "8e79e4a62587cd52f09283c29478f390a889b571e051a5e5b4217806d87581d5",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/RoleProfileArityTransport.lean": "2d6e99077ed914ab5dfc3b8f7cd3273dd8b7b3315e8de9a999b7cb164d343736",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/RoleProfileSemantics.lean": "8b2def00541b38517ab591e50cf25ed2ddefcff2d41e3cddbdcbb2fdd3f0ed1f",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/RolewiseObligationPolicy.lean": "31aa0f5ea86c6b6642d193216ef956baf4a2275db74eef5fc0a90e2370172a19",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/RolewiseObligationRegime.lean": "0020981e43e10c89b4831a910b25d08902d48205aab552c0d38b1d6507a05882",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/RolewiseOperationalStatus.lean": "5396f1ea4b8155d7317b68b4ac44ad38c1165b6cd4263d39ad22fe437fa8038e",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/SequentialHistory.lean": "2bce627baae6b96032dba115826d38d39d409637592866c5db954b2314811e7a",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/SequentialResolution.lean": "f10344ad5d800b007ad3e8e3b5dfad217c6c65edf1cbc9151c26a24d639cddc3",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/StoredLocalSchedule.lean": "c7e29bb904aaf635aca90434978d17e52d9f5f77d3057ecdf8818bed8a221601",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/UnifiedPublicCertificate.lean": "7f5219f9e669cecfdfe45edb346721dcae313ec04d95e1396e1922186afa3e1a",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/VariableMasterExecution.lean": "efcc1f03d7498795448f1a74183745e19754cfc7ddd53a6c7d870a4d4716f433",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/VariableMasterFutures.lean": "1b2a4e6e3fa418ab4fab131fa9b6b2d884bbafd716bad5dff1f4d83b85ad70cf",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/EndogenousDecomposition/VariableMasterInstance.lean": "d99f4588ba6a9b4f56abee50cbe96bdfff548bd61ca6dcc484d931e0ac0a41cd",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ExactOperationalImage.lean": "f8f9479f5f49e7953816c429b7f1bcd7c281bfe614cc5ea7c7354ba1d74fed65",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/FiniteExtensiveAddressing.lean": "8f05bcf5272cf9f186885da94e9b11152f5cb12d7ae651f54ccad2ad6df295b7",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/FrontierReduction.lean": "bb7cbd9c7fe75ba0d1a7a007f60fe3ac59e9f073d9f02b51b4300918d38321a6",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/IrreducibleFrontier.lean": "9b3f3f7964765974ed0f08bc8aace48f3ef07199d00bc67bb1ccf0944f304f1c",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/LocalSearchableCodeExecution.lean": "d6b71658030a3f3dbe25afe048bd1e6de1d847699492922b89681df35efa9991",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/MachineCostInterface.lean": "7c35a951fc2c8dfa1fb2fdeb55de0ee3b433a3c9f18e271fbcfd126258913d07",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/OperationalFrontierStatus.lean": "4a29a2b239087101738aabf4a88a8486e43b191679d25e1b7ad0ae10cfcf6719",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/PolynomialCostEnvelope.lean": "aea0fcc5831ab3171b9a5cf5bb1ac5edec775a23e015d123677934f202d9fe34",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/ProducedOutputImage.lean": "32a42b1a239860b269dc5124c1f5e1e81c6d0c010ee3ab4dc5a567cebe24bc10",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/RelationalProfileConstitution.lean": "b2ac7c3e49affb3ab324273b10085cf80d7ba9fd5d5e004075eacdcb8ac9000a",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/RelationalProfileFiniteCarrier.lean": "95e6b854a1cac188213b43252b9895169eb6ad0e6d74c9499f94a2b749a1491f",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/RelationalRoleExtensiveFamily.lean": "86ef92e6124e86b0f20ee0211d081135806750e5db182f3d0a3605a411d07f1b",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/RelationalTransport.lean": "7a9a721f4903ed652a588f248d63084873c970a82dbb773608c1a0d9d077f310",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/RepresentationCost.lean": "b386cc8ac8fad20ff03fa510982b5e81c40a3b7ac3eb6c48d233c3bf725b54f2",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/AcceptedBinaryBranch.lean": "964d247e6c1472ef090bb1062590bf63e6b66be3fee40affd3572be13054558f",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/AcceptedSAT.lean": "735586f0e8c5522b9dacab982992cb591d9f9c93b725cb3280877846419c1bcc",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/BinaryBranch.lean": "f06e52563610551b78cf548e93a3633d8ce92a2d6afdd33d1a595d67f1da6f85",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ConstraintTransport.lean": "14231a8ecca9ac034b2d60e6899685cc63198df3943ca89aed79360cfffdc3a4",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitFamilyBitComplexity.lean": "4e03df7249b69198843c4ac696e129daa3b6e49c404e1600c6c7ae14d216e125",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitFamilyBitCosts.lean": "6dccf4b42ac54d1c92f652cd90eb92c18d4f089ff6f902d74fb4888cebe60b2a",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitFamilyComplexity.lean": "b387d0cf606b468997d199441fda0a46d5ba4dded82680d40870f28557cdd964",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitFamilyCosts.lean": "8ecb0be3a177a009f47756434ff2f7e7fecbd43cf0bab8b76bde2fa0dfa9779f",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitFamilyEqualityCosts.lean": "a21d13f0b68e1fb6f0b97b718b5b9e1c522b9866a09ec4c421b3317be33f91ee",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitFamilyInputComplexity.lean": "cda770ec56141c1195452de3e585ed7522cd5881b7d9354956f60015b1f95dc3",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitFamilyNormalizationCosts.lean": "01c7f0a25080881832c7e1dd542cb211590928dcc94889369d5f62905985a74e",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitFamilyPolynomialCosts.lean": "37159265c46dfe6f640bf41576396e842243713517fe7b6d0d27b08110e7eb80",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitFamilyProvenance.lean": "a2523c4bf682bba63e4e97b3f52e61139d5fddda7aa878ce7fbf2e4e860ae074",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitFamilyRelationCosts.lean": "d65e554931bd0ef3f263174a6dfec17f5f10a1100eea828361a70783d482aba2",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitFamilyResources.lean": "8251254cc0f0283fbc2e705cdfc77eb3b758599d9ea20ec090b90a68ecb5dc6c",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitFamilyTransportCosts.lean": "0a02e9586cfd37cff7aeb756c84528ff64e4713d043e3c46c7f791ca1f6b6734",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ExplicitStackedSymmetricFamily.lean": "a74bb094e44d59e87c0a386061b82e542d67d04c7a633540c38dcbfa4bd6f3e9",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/GeneratedStructuralContext.lean": "3dca8bb406f8d8dafca0c922722575053809d0f112ba129b8386e5263d709ec4",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/GrowingDiscoveryBenchmark.lean": "8e73f5cf3f1149ac10c1ecc78deb19d1f939b1002eb5b596d225a6dc17192718",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/GrowingDiscoveryFamily.lean": "0a8420d488c26fc5a61712bc5d2889cbf9847cde22d02b2fee97ada353c8a0aa",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ParametricSymmetricFamily.lean": "4fd96389cf40fa66f9b3545c2c6337b0ef37d5e0606ff2588b48310eb68add0a",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ParametricSymmetricTrajectory.lean": "0fd634435f14160cc873cae2233e710e4364bb7ee058fd67560208850eee6014",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/ResidualFlipTransport.lean": "1aaee562bdc9df32d20b7a4ab6368af8ba73ba4809d4475773010956b3b83fc0",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/RestrictionTransport.lean": "d5222ee2995051e1d2a3024bda18207b596968628b38e4ddf6d98490d71a5e5c",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/SecondAuditCausalBenchmark.lean": "4d49aa7e132543cfcdd44824888476659a43ecda6b9a0adca93a60fd98e444ba",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/StructuralBranchContext.lean": "13d51cf6346a86debc3ae3d89f906bfb3126c07f60e5b10c1263e899ca3d399b",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/StructuralGlobalContextRelation.lean": "e258e9b5f8facb13a30f295146269222fa12096e6a6254320095c915f26938be",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/StructuralProgress.lean": "9abe926f5a7e36e00027456f4bbc70dbdec2cc65b3d706b187ed1724d489db94",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/TrajectoryConstitutedLocalSchedule.lean": "6adc994fdc89cd181279fa628305e019caf3bf4d2278377cfa8127467909bd1d",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/TrajectoryConstitutedLocalScheduleCore.lean": "88cfbc1548dbccd8d737a186d1e8cbe0aaa73a1fa7b70b2c777fc677a76d059d",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/TrajectoryDerivedClosure.lean": "1f17329886a4fb82a143d60e3467518cc07d191e284dba52f8f261e6be5f68fb",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SAT/TrajectoryDerivedClosureCore.lean": "92359a943c7ec5174aa80ac3d12a9e3647c350089f45a2b7f77e377a77c6aa61",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SearchSystem.lean": "588daffc2d16f68de28a88b01b8c830aa6313c6d7ad563ad3f98a42e49177894",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SearchableTransportCode.lean": "aecf3f258f6e2fd2c54de8ba96377d07492820b84c3c1eca8a82003b918a570f",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SearchableTransportCodeValidation.lean": "8dadf2c6a21a1ddd7df1ef112a9a01a0f5aacec4de42cedb4e27280b8d55dfd6",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SearchableTransportCodeValidationCore.lean": "9b90b4715c2048d6aa9ebe5c54fa058ea9747dfa0eb60f686fca2ed80af5bf39",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SemanticImage.lean": "b905902b7ab1a9b8751f16f04eb4a085fb957860ba5e8eb489987654082df98c",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/SequentialPrimitiveExecution.lean": "dc2513a9a2b56d3ccfd21a49910203d5248604d418770eb5dbc50c615a2db934",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/TransportClosure.lean": "71619d0c75935e80e800245ebbf1c5d5e905bfa7fecc815b95700465aba6a95a",
+    "RelationalPerimeter/Computation/ConstitutiveSearch/TransportCode.lean": "734703b267dd142a6de0db307012953d1e7f468587def1fb11806193c8593493",
+    "RelationalPerimeter/Computation/EndogenousOperationalDecomposition.lean": "e5d6ee37b501c3c4bcf0a5c7c0e8ab9ebf49e44b38e6c89d0b5835874cf16af8",
+    "RelationalPerimeter/Computation/Machine/CanonicalMemory.lean": "14f3a432126b962ddb171d5af6bb371e075dc07896a119f28f1d1cb7bc9de4b6",
+    "RelationalPerimeter/Computation/Machine/CausalDistinctions.lean": "3d0e67b0b155b4fbdacf6f349f9eb14bd54fc8dad280656a4c3be1683d5d1101",
+    "RelationalPerimeter/Computation/Machine/CausalRoot.lean": "d366e3498afdc7272c7903328c8c16e99d411650287f564962d108ad66ef18cf",
+    "RelationalPerimeter/Computation/Machine/Channel.lean": "f68d3ea4ffee1dcc107d9bf7cd2dae311fd0927e3a81fdc39d85e0e2f58f5283",
+    "RelationalPerimeter/Computation/Machine/ConnectionSearch.lean": "59a20445ff0b6474eee764e7c28e307880398dca395dfcadbe8b4e7c73f50a43",
+    "RelationalPerimeter/Computation/Machine/ConstitutiveDiscovery.lean": "ebd5b365ad0e3aa0ccd9fea2cae604a2639a18e049f356af8d737711032ae2a1",
+    "RelationalPerimeter/Computation/Machine/ConstitutiveLiveExecution.lean": "ba15937086a7078200929bb500cacc339ca5afbc8a16e7c84cd23aad5bfb93c8",
+    "RelationalPerimeter/Computation/Machine/Fabric.lean": "2e8b3438508d458d8fd7da6bfc9d84080787399dfdde0a410c4d9931e90dc77f",
+    "RelationalPerimeter/Computation/Machine/FrontierCircuit.lean": "a8feb9f2c9c795ba08b3422bec7f6fcb25ef9da18842aa439eb1c57fa04541d0",
+    "RelationalPerimeter/Computation/Machine/LiveRoot.lean": "48f1f8a93e2fe0418eef0661cdb8bf8a7606fcd2261e7a1831ffdc56ecc3d785",
+    "RelationalPerimeter/Computation/Machine/LiveSearchFrontier.lean": "aad8efa02067f09c0a8bc6843b00000fc9dc946c60886438b12b51301d93468f",
+    "RelationalPerimeter/Computation/Machine/MachineCertificate.lean": "54cbddfffdbbba3f108cc8ad2619316e9d7a2175c5f05fef26a47cef1d849c0c",
+    "RelationalPerimeter/Computation/Machine/MasterContract.lean": "8dcf5d8ef32b34f9e00b949efd65b936320b8e726359e31907c0f3ec02c7ae53",
+    "RelationalPerimeter/Computation/Machine/MasterRuntime.lean": "7bd7b8b889176bea8b7ea34958151805601e426177bfd63958986915b7efd962",
+    "RelationalPerimeter/Computation/Machine/MemoryInvariant.lean": "cea493e5e9c0f49bda1b6045ff80e4f061184e26d31aa97a3b4b357299005bad",
+    "RelationalPerimeter/Computation/Machine/ReconfigurableMachine.lean": "289d96be933c415cabc12e72d0e7974fba1d81a8423a2d65bf5621bf579ada5e",
+    "RelationalPerimeter/Computation/Machine/ReducedLiveContract.lean": "f5483deef765cad6842129ed82ff5bca9f50c5bf2800c2a9087dca78b072b0a0",
+    "RelationalPerimeter/Computation/Machine/ReducedLiveExecution.lean": "27fe490a0d053e38d52eeec8d3c3920a9382b0a14bf2b55010cd1f658a44ec27",
+    "RelationalPerimeter/Computation/Machine/ReducedLiveMinimality.lean": "15405319bf35f7497cedfcc9ba293467d124b984e882ecf678f09ed1ef72dbe9",
+    "RelationalPerimeter/Computation/Machine/ReducedLiveRunner.lean": "5c2a0d932fddfe947897e2c23e28cb419430a81f74a3f19f97f811eecccb473f",
+    "RelationalPerimeter/Computation/Machine/Root.lean": "e51b49afa5ee4b7ad1047c9c84f8cf83bd45732c4c87cea838c762e6be4b8eed",
+    "RelationalPerimeter/Computation/Machine/ScopedLiveAction.lean": "68d5f362871f4600f127afbc2b87b4ebdac5897e6af3693149a2da3caeb11313",
+    "RelationalPerimeter/Computation/Machine/ValidatedScheduleExecution.lean": "99eafcbf82f6bf940dcd4f3fef9213a73ef4273f21d7e0ee1c02800ec6dbdb26",
+    "RelationalPerimeter/Constitution/Continuation/Behavior.lean": "34524a6c69d118f8fd986a5cbe13a0ec35d8f13011e539699d01c8240000086f",
+    "RelationalPerimeter/Constitution/Continuation/Composition.lean": "45a31bf8fe52b5c6d06f641dfeba50e9960305b37f28eb2974ee88cee1dd7afd",
+    "RelationalPerimeter/Constitution/Continuation/CostModel.lean": "3818805aa2893801ee92f235d5b0560a08e9b8a188246ba434fe76a33665442a",
+    "RelationalPerimeter/Constitution/Continuation/FiniteBasis.lean": "2f74350c1827b68d942b46baf11d0b1549979e9d17680503605e1d77c0340c83",
+    "RelationalPerimeter/Constitution/Continuation/Minimality.lean": "412410798aa31739812db498fa4a3bb7672e69f582d0737d85615fb707757da7",
+    "RelationalPerimeter/Constitution/Continuation/Signature.lean": "71a652ceb9bc4c8d1320dc1c14eb4f5a12fc7996d518cf893a5b7ff1d4440602",
+    "RelationalPerimeter/Constitution/Grouping/BinaryReadout.lean": "f6969b68aaef3b7c60a2a593865e8ab00644f077d3f6ed303858d8a0c9dbd96f",
+    "RelationalPerimeter/Constitution/Grouping/ContinuationContract.lean": "aceb9e0e977d5b46784c37492c428d4ea734981237a08a8262a85eddc507dc61",
+    "RelationalPerimeter/Constitution/Grouping/ExactImage.lean": "d7268da337efeb18f816d97f52bbb974edbf636f183bdae3e14fac09a6a59946",
+    "RelationalPerimeter/Constitution/Grouping/HistoricalExtension.lean": "8a5595da0b8711e7e718423c3f338764eebf8b3808542aafef2d00a9c75e3d3b",
+    "RelationalPerimeter/Constitution/Grouping/Normalization.lean": "d648676edfd71ef70e1ae08a41e2f399194450a87f0cc88d52d86319dae1e370",
+    "RelationalPerimeter/Constitution/Grouping/Projections.lean": "19668321d03b5812aede69242aa350476affeefebe1b63d67465b57f2d9a97e4",
+    "RelationalPerimeter/Constitution/Grouping/Reindexing.lean": "9f331d2377ed0e99fd51d03a94eeb05345123cb14e97c261d8dab23f6cb41dfe",
+    "RelationalPerimeter/Constitution/Grouping/Rules.lean": "6bfdeb4357ff95d8d9ebf07224cc674d375f6a1a9465358ce9f1295bc9dbc585",
+    "RelationalPerimeter/Constitution/Grouping/Traces.lean": "f756fbeb1ca19dca58f2b1fa4abf175eb4757269b44df673192e925da776bc9f",
+    "RelationalPerimeter/Constitution/Resources/ConstructedSupport.lean": "58dc82a0640538500b13dbb8eea5e668eb79ec816c4583b68853c5d2a491548b",
+    "RelationalPerimeter/Constitution/Resources/TypedReferences.lean": "c0c03ddcbec1cbb9d9bbaa48923f526fa74b1acb4d5daf608c539d442a095af6",
+    "SegmentedResidualRole.lean": "c996d83b8b652a82993e13e2853d00b174e1a544ac571e441ffc48c097e11098",
+    "StrongPerimetralTurning.lean": "ad6a8625392f47756730a4fc16eb29cb373a4c313fcfbf9dde60df05019984bc",
+    "Tests/AllConstantsAudit.lean": "8dafad02592218bce025b75467782c20b2872aa5626a4512b98ed274b0b0815a",
+    "Tests/AristotleCorrectionRegression.lean": "6a3cfa5b9f025aba8cef6b0a4b39abe14ab412c7207343290ebf2747ed026933",
+    "Tests/ComputationalPhenomenonRegression.lean": "6006eddb6e41adb685da426c168ecd35f7ada84de112d746bd11a2af02fb4397",
+    "Tests/ConstitutiveAgentExecution.lean": "d7f3e6fc573d11b4eb4d468cf75fe6231e0174aef438f56e8ef9fb75f65b4676",
+    "Tests/ConstitutiveAgentPersistence.lean": "bcef6ec5cf5e6a2d0a60b4008db0d98cfa1404f70378ec00b610d845ce6e89ab",
+    "Tests/ConstitutiveAgentRequirements.lean": "81d0acd1b71ad36d4f064f3abca93da5c29e6fe22409aedca419ccb99164b7ad",
+    "Tests/ConstitutiveComplexityHierarchyRegression.lean": "507526c27d88863e78171424ac06b31580af00f829c7ef1d0e5fbf71eb5da9ff",
+    "Tests/ConstitutiveContinuityRegression.lean": "ae3942c3244dd3e45ebf194a0227b9c9e927155ed435fde2687b7807ec0059f6",
+    "Tests/ConstitutiveExecutionRegression.lean": "aa289ded33ed2367daeaa0dd4b7fdbaf7b1621efab887764d7881b31bc5b2c79",
+    "Tests/ConstitutiveNormalizerSuccinctnessRegression.lean": "d2976bd186594bd29e6cb0ce458fa3a3d53900ccca12a4cb84f37920149ba654",
+    "Tests/ConstitutiveObjectiveRegression.lean": "93a91e6fa2d9ecc97fcc9b3c35813243af76134e254d2622200bc28f35949a42",
+    "Tests/ContinuationSignatureAxiomCoverage.lean": "f7680542253411e123316a8ba46b646ad249e33211658b256dfc4acfe453436a",
+    "Tests/ContinuationSignatureBehavior.lean": "6ea6309f6da77031e05be811ec1c37c2d48e9e472efef5b67aa1b1754a2de351",
+    "Tests/ContinuationSignatureMinimality.lean": "59af6db28b4c69d4f4dc0c70ae750660268fcb47b9b17171ed4f286aba495997",
+    "Tests/ContinuationSignatureProduction.lean": "3a128040b772ac34fc544c4ea17836b11b6f2105e69e34b841aabf67731920bc",
+    "Tests/ContinuationSignatureReachableAgent.lean": "39a35a638a52a2c656dc9d327deb6d16805dd9cf12813037e9724c20bc1d09a6",
+    "Tests/DeepPreservationRegression.lean": "f072b1dc6acc6f1bd331e21ee7e51a7f5d834502b633747e57b5ae12f73be0e1",
+    "Tests/EndogenousOperationalStabilityRegression.lean": "9d9b3dfa38899f3b9d6f249da4bb00823ca817c2468a982698d2dd476435cbf0",
+    "Tests/EndogenousWidthBridgeRegression.lean": "54e52a89bc135381b301be75d821bf99392fd439bd51d20bb63aaf6379f27bf4",
+    "Tests/LocalAlignment/DocumentaryAdaptive.lean": "fca18a29d12143e385468a063d6f9bb8162feb4083c45d40c09e9ef72541a177",
+    "Tests/LocalAlignment/DocumentaryAdaptiveCases.lean": "5c5ac466af887fbd72f61573cff47a09e63c0f10a425e640e5f5ce0c7b15ea20",
+    "Tests/LocalAlignment/DocumentaryAssignmentCapture.lean": "b8d503ad994ecc7431944c7d361c9b89bc0f781fc33420c8cc8d66c5b7869415",
+    "Tests/LocalAlignment/DocumentaryAssignmentCases.lean": "813e78dac36a9974baef842f682e644ed7279c7009c8eeebe94d676f49e1fe2c",
+    "Tests/LocalAlignment/DocumentaryAssignmentCodec.lean": "d163c0066b13debd9a1d2477649ab43ec60c4020adc3666b1290a30e0d788288",
+    "Tests/LocalAlignment/DocumentaryCanonicalAdaptiveRestoration.lean": "30405ea9cc67475c89e29107546f49fb474e8ee0f6ca15ef6ec3853d90392a38",
+    "Tests/LocalAlignment/DocumentaryCanonicalRestoration.lean": "ee13bef3265aefbab92417c14c71cd0891036bb4affe1d67adbe657d0b95f1cf",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryControlCodec.lean": "2ab8bea4cebd8233944918e596d1c38883dfa3311c3fd57138d8b540108b366a",
+    "Tests/LocalAlignment/DocumentaryDeduction.lean": "e0c47edc703c3ab6afadbb5c11a92b9719efb22d84b1146929aeda08bee14017",
+    "Tests/LocalAlignment/DocumentaryDeductionCases.lean": "a04bb5065d81ad4942d6965e9863cfc7ab787d954da420b57799e86ef88e4bb2",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentaryMasterFormation.lean": "6d8c0d6f0890e4c8c49903fe71c7af0f81efb50a2d2877b81ef99bc6fb28f4a3",
+    "Tests/LocalAlignment/DocumentaryMasterFormationCases.lean": "4d873de1e2bdd8773084a6cce5596148c7d64e345b33393978c5605016b73e06",
+    "Tests/LocalAlignment/DocumentaryMasterFormationExecution.lean": "ce1c229c6c335cdb97b38e92bf286089b1c22b1dc35b937db39fe1804f75961e",
+    "Tests/LocalAlignment/DocumentaryMasterObservation.lean": "6e612ba0057a1bc8206a8ecff0d6da534ace175f1c86436faa9d842f6f9c4ee5",
+    "Tests/LocalAlignment/DocumentaryMasterOperations.lean": "a6c714cd09ec06a8e676edea9cad3239dd77cce8f7cdfe3004033f78e9759dd8",
+    "Tests/LocalAlignment/DocumentaryMasterPayload.lean": "c2b9d7f2b7756e7596e58b465310cd8f9f8140c6e04bc3665787a851264c4031",
+    "Tests/LocalAlignment/DocumentaryMaterializedPresent.lean": "a73b8e8cb3a3a8072970910ffc62424e3b81565317ea13816e67dabaed7da452",
+    "Tests/LocalAlignment/DocumentaryMemory.lean": "066d92f60bab73b6963f8c26dc95a62b06390ca9164167eed6aebd0f7445eab7",
+    "Tests/LocalAlignment/DocumentaryMemoryCases.lean": "e077758f5a6fc518cc475a8ceccfeb82fd33c7588a6981312fc7eb20c7604112",
+    "Tests/LocalAlignment/DocumentaryPortable.lean": "72dba0634c69749256e16a5da9715230a25a1c600a3f90c236ce8cdb5301abf4",
+    "Tests/LocalAlignment/DocumentaryPortableAssignment.lean": "cb6a590b2046f258d4ba1ae08f144bc22e9adc7e4d63c289e8b6a07d654da7b2",
+    "Tests/LocalAlignment/DocumentaryPortableCases.lean": "e700d01b277e09f25f4c73527e84237c5fe030dd5ff5850398aef69c3d8059b5",
+    "Tests/LocalAlignment/DocumentaryPortableCheckpoint.lean": "3f3091643a4e78448b12de35969ba579b88ab0e118ac5ea6e79d06bb0ba87f35",
+    "Tests/LocalAlignment/DocumentaryPortableControl.lean": "8b2714f77291fa526f15c030435821b34fe2c60321ae4366db341a64bf38cfcb",
+    "Tests/LocalAlignment/DocumentaryPortableControlCases.lean": "99c6bf3db0f24988671e5231041d535c2ada4bb4f7e5450456c0d83215502512",
+    "Tests/LocalAlignment/DocumentaryPortableMemory.lean": "5346236268ceea596da2274815843d8f17ee5d86b99f9a6dc052db2c03d177e7",
+    "Tests/LocalAlignment/DocumentaryPortableStart.lean": "4ae9f46299041e015479d513ced35eb15d1e6e469813a86f37a3245a06647e7d",
+    "Tests/LocalAlignment/DocumentaryPortableStore.lean": "4db61b65d5785059bb4e69558a0b79827d39b66935645c058115cb3cc22732fe",
+    "Tests/LocalAlignment/DocumentaryPortableStoreCases.lean": "fa3f984943a2b33750bc6bb5aba90a64ca6c5a224d58479ae67ea059b5caf7ad",
+    "Tests/LocalAlignment/DocumentaryProgram.lean": "decf0ead9a3bd1ebc6f90198fc863194b050bf1b4e4dcf6cdcf0c4bf0dd794cd",
+    "Tests/LocalAlignment/DocumentaryProgramCases.lean": "ff701ac289efa1ffdcd01bcdc0ad4ef8cb6e2c2429c89756238f22b4435ffe6b",
+    "Tests/LocalAlignment/DocumentaryRestorationComponentsCases.lean": "c45e41c590131bc903c1318215bc329c96fced934d4ea577d4bdc61414768e2a",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "Tests/LocalAlignment/DocumentarySequentialCapture.lean": "cbb56334d6a3be6a4ffa96e5db8a2ee7a1ee89ca3c348cc5dafa595171fcebca",
+    "Tests/LocalAlignment/DocumentarySequentialCases.lean": "558632c9370814989847ebab2ab131dd5543bd897eb13d58f652e6e675e0c820",
+    "Tests/LocalAlignment/DocumentarySequentialPortable.lean": "2058cebfb53d7db095aeb733716f72a769e920e1565f1e5a693260c04a652f3a",
+    "Tests/LocalAlignment/DocumentarySnapshot.lean": "23a4e2ccb493d76936c7db0a84d8bd7595842e0ce809c5876b221ab4da311d46",
+    "Tests/LocalAlignment/Kernel.lean": "269486ed9c534484da040bb782839fa39004d301f9a03eeedcf45fb2e42c3693",
+    "Tests/LocalAlignment/ModelLoop.lean": "c567480561963fa07f2870f7fcdb36959865c0a4f682a98085c0dc4fb738b55f",
+    "Tests/Machine/CausalChecks.lean": "6cc5b68695854df1a2151da59cfba7ed783c5b487394b7a3ec63b62c19c0128e",
+    "Tests/Machine/Checks.lean": "a0296f558c8dc495244904af2fe6c01b677ca2556aae3d1ac44860e2276a00a3",
+    "Tests/Machine/ConstitutiveLiveChecks.lean": "971308cc4a13c8e248700c64b2c0b4b9f116d18115dd4b50d71deba5186de578",
+    "Tests/Machine/DirectMachine.lean": "3b094f3a0db6eb8959a21a80b0cc1141e9a9fa586598afa0daae7808b7b9f6b6",
+    "Tests/Machine/LiveRunnerSmoke.lean": "3e48d418ddd9dfec82ecbc9579c6d951d9208c296257b079b1902eef520ef107",
+    "Tests/Machine/LiveSmoke.lean": "968a20a1dbcaaceabbd83daa2087452bdc8ed086f1c2abbd4db459da747a81e8",
+    "Tests/Machine/MasterIntegration.lean": "8a66ff291f1a927f3ecf98b0c50cf8f890013d5c443a24999c59a61bfbd660d9",
+    "Tests/Machine/R4ContractChecks.lean": "cb8faa1b8ef8331e21781cd387c3c01127a7c9ceda7d395aaf59dd1f14fb0868",
+    "Tests/Machine/R6StatementTypes.lean": "3e47e3fc43b01423bef80ebf3d0359aa5357e4e2808197a2000bde580d4d4018",
+    "Tests/Machine/R7StatementTypes.lean": "33df8add3fd69f43f51d96f436c2141810f1e4ed2bb6a542e74611a21b3bb0d6",
+    "Tests/Machine/ReducedLiveChecks.lean": "a3c981465ffbe2283fa726dae0e33591ec585b25490251e80a323d7449b8643d",
+    "Tests/Machine/ReducedLiveRunnerChecks.lean": "3f1921baa4e4e7a7beaf7f1a31f0686ce7294b9477ede9b663b3ba69a9270404",
+    "Tests/Machine/Run.lean": "671cd24f3d53339a18d24f93bcab192739b2d9b6df1396ff0ddc68682f84fa04",
+    "Tests/Machine/RunMachine.lean": "7772728f92dabab8afa25522d65cd4580dcfc688b66dab0489f14610aff2c4da",
+    "Tests/Machine/ValidAssignmentForgetting.lean": "b88e891a45d82e7f5ceb9f216fe616081217d857d07e28b1a0cf528ae1d738de",
+    "Tests/ProducedContinuation.lean": "f520599e45bb0ba046d4369654785ae48543b8eb0f96e98c629a3bb96111ad29",
+    "Tests/ProductionTimelineRegression.lean": "1326848bfef8e31c72ef7da86d053965cf8346093f483989ddb74b0a609e5d9c",
+    "Tests/PublicRootImport.lean": "6a153a32a6485a05cf793dd4eede5327a4be8566e0e4eb3389b070595b9688c8",
+    "Tests/RealizedConstitutionRegression.lean": "393ede748d4024ceadd06ca46c7d4608b5c0a7f9ed4e6ccc24dd64ee71c7cd55",
+    "Tests/RelationalExtensiveIffRegression.lean": "1b9d1eba60f12b25e7e99e770df8635d84d4a1047d8424fdfc00cc5673776dce",
+    "Tests/RolePolicySpectrum.lean": "3af4c2a47bc207c9f49eeaeb272385f2273031bccf1a92527b4502306c8cc40f",
+    "Tests/SemanticImageRegression.lean": "b89d7a1928ec47976f7f56cde10a458f0418b8674f46b131baa229e9a49093f4",
+    "Tests/UnifiedConstitution.lean": "b885a2f20f1d0f84e954f04b2b7aefdc85556bd26843938310f242c0a78c1210",
+    "Tests/UnifiedMasterInstance.lean": "5d6cbab89d83dfe3b57cb4d205900aadfdb5cb1497be9c701929a530072c74c4",
+    "Tests/VariableMasterExecution.lean": "0317607c5f3a2645a4c02edf0a921501b6845ffe850dc557c72b23532f128a30"
+  },
+  "configuration_sha256_lf": {
+    "lakefile.toml": "d71bbec998e305123a4ade63cf73f05c9e4199c1ee836f3250a62c81c2b77c24",
+    "lake-manifest.json": "558a6999b82d0fac6c385da1a5cabeb50a594d6ecc7996f0be33014cfb68afa8",
+    "lean-toolchain": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71"
+  },
+  "dependency_fingerprint": "f634a28dfb468ff807de19bc854ca0ebcf882b65cc0c2e91f2db2dcfca9d52f3",
+  "fingerprint_encoding": "SHA256 of compact sorted-key UTF-8 JSON; file hashes normalize CRLF to LF only. Source manifest covers all current modified/untracked paths except this ledger. Dependency snapshot conservatively covers the entire repository Lean tree and pinned Lake configuration.",
+  "git": {
+    "commit_or_push_performed": false,
+    "upstream": "f30196e4a8ae2b77b0d061c1e03cccd236265013"
+  },
+  "raw_attempt_logs_sha256": {
+    "rp-sequential-core-build.log": "0611e26296b21372826792c4477f2d9d3588a898e510bb9af01306b61113e7ad",
+    "rp-sequential-core-typed-build.log": "aef08606f359af429199ec248028cc97da87c03bad4879d3c06bfb23f0c7ea7e",
+    "rp-sequential-core-typed-final.log": "534075c77bf78284a7f152ea8a1526f4f2503fa3c42d17c05406d1566a14d7f9",
+    "rp-sequential-capture-build.log": "f47537ba9e0d769b02523535c543b0676e0508c1e4d99b4c97e6dc585f82ec80",
+    "rp-sequential-restart-smoke.log": "d2004e2aef4dafeec9db5e5a89108bb78175224b042d91e83ebd90432a876b96",
+    "rp-sequential-codegen-final.log": "bcda971491cc270cebc1e7adcf9547dfec24e65a948da053c0cf3d1500c1db75",
+    "rp-sequential-incorporation-smoke.log": "3627cebbea303adeeaed9dc71a4df99e43e91c45bce0a1ef7cf90501e85529ff",
+    "rp-sequential-full-verify-20261010.log": "e85dca777d535f30520a4770bce35d2c65e7f6b3bb5c96badf968cf73fcb261d"
+  }
+}

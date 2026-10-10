@@ -1,0 +1,543 @@
+{
+  "kind": "constructed_development_verification",
+  "confirmatory": false,
+  "status": "passed",
+  "branch": "codex/ai-alignment-under-contract",
+  "base_revision": "f30196e4a8ae2b77b0d061c1e03cccd236265013",
+  "extension_committed": false,
+  "verified_utc": "2026-10-10T08:34:22.734275+00:00",
+  "toolchain": "leanprover/lean4:v4.33.1",
+  "scope": "Seven typed recipes reconstruct the existing master producers. Exact whole-support and cursor restoration for the positive recipe-formed class, including every actual finite documentary, adaptive and memory execution from a formed initial master. Only opcode/port records have a byte codec. Master values and dependent environments remain higher-order typed data; complete master/present byte restart remains open.",
+  "claim_candidate": {
+    "id": "DOCUMENTARY_MASTER_RECIPES",
+    "status": "development_uncommitted",
+    "evidence_revision": null,
+    "canonical_document": "docs/work/recettes-producteurs-maitre.fr.md",
+    "quantification": "Every Formed support and its exact current retained values; every finite master continuation. Every received finite Program.Execution, Adaptive.Execution for any total declared policy, and Memory.Execution, given recipe formation of their actual initial master. No success or admissibility assumption for membership or restoration. Every first-order Record has exact byte roundtrip. No reconstruction of an indexed Operation or full master environment from Record bytes.",
+    "formal_references": [
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.Record"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.Record.fields"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.readSingle"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.readDouble"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.readRecord"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.record_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.recordCodec"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.saveRecord"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.loadRecord"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.record_byte_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.Operation"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.Operation.producer"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.Operation.record"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.portPositions"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.producer_ports"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterOperations",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterOperations.every_operation_record_bytes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.Formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.Tree"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.Tree.formation"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.captureFrom"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.captureTree"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.capture_formation"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.ResourceData"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.resources"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.ResourceData.restore"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.resources_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.Tree.records"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.Formed.records"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.capture_records"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.CursorData"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.cursor"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.CursorData.restore"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.cursor_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.all_cursor_consumers"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.future_heads"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.initial_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.head_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.continue_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.next_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormation.executed_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.stage_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.quotation_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.deduction_cursor"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.conclusion_cursor"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.step_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.program_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.fallback_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.diverted_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.dispatch_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.turn_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.adaptive_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.memory_step_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.memory_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.program_payload_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.adaptive_payload_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationExecution",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationExecution.memory_payload_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterObservation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterObservation.observedPorts"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterObservation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterObservation.map_append"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterObservation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterObservation.formed_ports"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterObservation",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterObservation.captured_ports"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.initial"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.every_master_cursor"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.actual_program"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.unsuitable_program"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.blocked_program"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.every_adaptive_policy"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.every_memory_future"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.any_record_bytes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.unknown_opcode"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.extra_single_port"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.missing_double_port"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.invalid_byte_alphabet"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.equal_ports_remain_ordered"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.every_program_trace"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.every_adaptive_trace"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterFormationCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterFormationCases.every_memory_trace"
+      }
+    ],
+    "dependencies": {
+      "formation": [
+        "Positive Formed given/produced constructors designate precisely the seven existing producer factories and their ordered typed ports.",
+        "Operation kinds and Tree still retain dependent depth, assignment, threaded state, operational prefix and stage data; arbitrary equal-valued producers are not canonicalized.",
+        "Given seeds remain received Values and are not claimed as generated outputs."
+      ],
+      "execution": [
+        "captureFrom consumes the retained support values and a supplied positive membership witness.",
+        "Tree.formation constructs the same latent producer closures without applying their historical operation in the seven checked direct call paths.",
+        "observedPorts reads the actual retained Formation directly; runtime executes three actual existing documentary scripts from the same received initial frame.",
+        "Logical membership proofs consume shared received steps and their equality to the existing executor; no post-hoc executable no-replay membership builder is claimed."
+      ],
+      "proof": [
+        "capture_formation, resources_exact and cursor_exact establish exact reconstruction of all material values, producers, formations, assignment and dependent references.",
+        "all_cursor_consumers and future_heads derive future equality from whole-cursor equality.",
+        "program_formed, adaptive_formed and memory_formed use the actual finite trace, initial recipe membership and the separate stage/dispatch/transition cases, including failed or unsuitable traces.",
+        "record_exact and ControlCodec exact word/byte laws establish opcode/position roundtrip and full byte consumption."
+      ],
+      "transport": [
+        "Typed recipe payload retains the constitution; exact restoration is restricted to the positive formed class.",
+        "Record reads only opcode and ordered natural port positions, preserving repetitions; this projection does not recover kind, values or environment.",
+        "The byte test is for these first-order records and observed port lists, not a master checkpoint, versioned complete configuration or physical restart."
+      ]
+    }
+  },
+  "checks": {
+    "selected_axiom_audits": 76,
+    "full_gate": {
+      "command": "scripts/verify.ps1 with RELATIONAL_PERIMETER_PYTHON set to bundled Python; no concurrent compilation",
+      "status": "passed",
+      "lean_files": 282,
+      "build_jobs": 284,
+      "constants": 24604,
+      "modules": 281,
+      "generated_exceptions": 364,
+      "written_exceptions": 0,
+      "expected_failure_fixtures": 23,
+      "raw_log_filename": "rp-master-recipes-full-verify-20261010.log",
+      "raw_log_sha256": "0ae459db067b60e1b09d8babba7607cb9455593fbc2c04b8884731cf1325704b"
+    },
+    "recipe_codegen": {
+      "status": "passed",
+      "roots": 7,
+      "reachable_direct_call_bodies": [
+        2,
+        2,
+        3,
+        4,
+        9,
+        11,
+        4
+      ],
+      "mutations_rejected": 14,
+      "mutation_kinds": [
+        "historical Support.extend call at each root",
+        "indirect lean_apply call at each root"
+      ],
+      "scope": "Direct named call graph and indirect application in those bodies; latent producer factories are retained. Excludes execution of latent closures, membership witness construction, whole-process initialization, byte restoration of master values and heap identity."
+    },
+    "recipe_smoke": {
+      "status": "passed",
+      "physical_processes": 1,
+      "actual_documentary_traces": 3,
+      "trace_labels": [
+        "complete",
+        "unsuitable",
+        "source-refused-and-dependent-missing"
+      ],
+      "executed_master_heads": [
+        3,
+        2,
+        2
+      ],
+      "initial_formation_ports": [],
+      "record_wires": 8,
+      "invalid_records_rejected": 12,
+      "runtime_axiom_audits": 8,
+      "oracle": "Independent literal ordered port lists and Python unary word-to-byte encoding.",
+      "master_byte_restart": false,
+      "full_present_byte_restart": false,
+      "qwen_calls": 0
+    },
+    "final_documentation": {
+      "status": "passed",
+      "command": "python -B -X utf8 scripts/check-scientific-docs.py --static",
+      "registered_claims_checked": 19,
+      "registered_declarations_checked": 91,
+      "scope": "Final Markdown links, historical scientific fingerprints and protected anchors; no historical review status updated."
+    },
+    "final_integrity": {
+      "status": "passed",
+      "manifested_paths": 13,
+      "unchanged_prior_math_modules": 31,
+      "unchanged_historical_ledgers": 11,
+      "unchanged_registry": true,
+      "python_ast": true,
+      "eof_and_whitespace": true,
+      "git_diff_check": true
+    }
+  },
+  "language": "fr_only",
+  "review": {
+    "reader": {
+      "status": "pending"
+    },
+    "independent": {
+      "status": "not_recorded"
+    }
+  },
+  "prior_math_sha256_lf_unchanged": {
+    "Tests/LocalAlignment/DocumentaryAdaptive.lean": "fca18a29d12143e385468a063d6f9bb8162feb4083c45d40c09e9ef72541a177",
+    "Tests/LocalAlignment/DocumentaryAdaptiveCases.lean": "5c5ac466af887fbd72f61573cff47a09e63c0f10a425e640e5f5ce0c7b15ea20",
+    "Tests/LocalAlignment/DocumentaryCanonicalAdaptiveRestoration.lean": "30405ea9cc67475c89e29107546f49fb474e8ee0f6ca15ef6ec3853d90392a38",
+    "Tests/LocalAlignment/DocumentaryCanonicalRestoration.lean": "ee13bef3265aefbab92417c14c71cd0891036bb4affe1d67adbe657d0b95f1cf",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryControlCodec.lean": "2ab8bea4cebd8233944918e596d1c38883dfa3311c3fd57138d8b540108b366a",
+    "Tests/LocalAlignment/DocumentaryDeduction.lean": "e0c47edc703c3ab6afadbb5c11a92b9719efb22d84b1146929aeda08bee14017",
+    "Tests/LocalAlignment/DocumentaryDeductionCases.lean": "a04bb5065d81ad4942d6965e9863cfc7ab787d954da420b57799e86ef88e4bb2",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentaryMasterPayload.lean": "c2b9d7f2b7756e7596e58b465310cd8f9f8140c6e04bc3665787a851264c4031",
+    "Tests/LocalAlignment/DocumentaryMaterializedPresent.lean": "a73b8e8cb3a3a8072970910ffc62424e3b81565317ea13816e67dabaed7da452",
+    "Tests/LocalAlignment/DocumentaryMemory.lean": "066d92f60bab73b6963f8c26dc95a62b06390ca9164167eed6aebd0f7445eab7",
+    "Tests/LocalAlignment/DocumentaryMemoryCases.lean": "e077758f5a6fc518cc475a8ceccfeb82fd33c7588a6981312fc7eb20c7604112",
+    "Tests/LocalAlignment/DocumentaryPortable.lean": "72dba0634c69749256e16a5da9715230a25a1c600a3f90c236ce8cdb5301abf4",
+    "Tests/LocalAlignment/DocumentaryPortableCases.lean": "e700d01b277e09f25f4c73527e84237c5fe030dd5ff5850398aef69c3d8059b5",
+    "Tests/LocalAlignment/DocumentaryPortableCheckpoint.lean": "3f3091643a4e78448b12de35969ba579b88ab0e118ac5ea6e79d06bb0ba87f35",
+    "Tests/LocalAlignment/DocumentaryPortableControl.lean": "8b2714f77291fa526f15c030435821b34fe2c60321ae4366db341a64bf38cfcb",
+    "Tests/LocalAlignment/DocumentaryPortableControlCases.lean": "99c6bf3db0f24988671e5231041d535c2ada4bb4f7e5450456c0d83215502512",
+    "Tests/LocalAlignment/DocumentaryPortableMemory.lean": "5346236268ceea596da2274815843d8f17ee5d86b99f9a6dc052db2c03d177e7",
+    "Tests/LocalAlignment/DocumentaryPortableStart.lean": "4ae9f46299041e015479d513ced35eb15d1e6e469813a86f37a3245a06647e7d",
+    "Tests/LocalAlignment/DocumentaryPortableStore.lean": "4db61b65d5785059bb4e69558a0b79827d39b66935645c058115cb3cc22732fe",
+    "Tests/LocalAlignment/DocumentaryPortableStoreCases.lean": "fa3f984943a2b33750bc6bb5aba90a64ca6c5a224d58479ae67ea059b5caf7ad",
+    "Tests/LocalAlignment/DocumentaryProgram.lean": "decf0ead9a3bd1ebc6f90198fc863194b050bf1b4e4dcf6cdcf0c4bf0dd794cd",
+    "Tests/LocalAlignment/DocumentaryProgramCases.lean": "ff701ac289efa1ffdcd01bcdc0ad4ef8cb6e2c2429c89756238f22b4435ffe6b",
+    "Tests/LocalAlignment/DocumentaryRestorationComponentsCases.lean": "c45e41c590131bc903c1318215bc329c96fced934d4ea577d4bdc61414768e2a",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "Tests/LocalAlignment/DocumentarySnapshot.lean": "23a4e2ccb493d76936c7db0a84d8bd7595842e0ce809c5876b221ab4da311d46"
+  },
+  "historical_ledgers_sha256_lf_unchanged": {
+    "docs/work/checkpoint-documentaire-portable-verification.json": "984300f4fdd501bd9ccb5f984a0ebdc2adf85fe7556c0b29b934fff48bda82d0",
+    "docs/work/composition-dossier-maitre-verification.json": "d4f0d090591456abf63bec1ddd06c515cbe2386b5452aad4da634abc7a2fea0d",
+    "docs/work/continuation-documentaire-adaptative-verification.json": "38f3e4696098f3024e08aca019cd92eb061c02d9128ac61098081250cb77cd3e",
+    "docs/work/controle-documentaire-portable-verification.json": "770321f4f9b88cb132fe88d527089a1695df6d332ecf9c985dfb210b5c372892",
+    "docs/work/deductions-documentaires-verification.json": "de34f2a8a2183ac5adfefed4245f9e5880600083058dd2b3d72fdece5c271feb",
+    "docs/work/memoire-documentaire-verification.json": "8f4e3bc1d809cf2147c00fd0696396164db4a43c2e7781cf348b0df7e06002bc",
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/programmes-documentaires-verification.json": "3485d921605f5371d1a2dd0fe3a3c7f3302b4b3c06f888ac150fab9cb182cecb",
+    "docs/work/raccord-documentaire-maitre-verification.json": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1",
+    "docs/work/restauration-present-composants-verification.json": "40d501f09dc55566692e0199a172a56af1bd0877aa654c7f489b905e0e3aa7be",
+    "docs/work/restauration-stockage-documentaire-verification.json": "298e0bce7e6d9857ae8372f717ec237e7de9c9afe5a462b6c3cb32f4fbce830d"
+  },
+  "registry_sha256_lf_unchanged": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+  "open_obligations": [
+    "First-order portable realization and exact codecs for actual retained master values and dependent recipe environments.",
+    "Typed indexed Operation reconstruction and dependent port resolution from those loaded master data.",
+    "Joint full-present byte loading with identified received sources, permissions and rule catalogue.",
+    "All declared finite futures and new master quotations/deductions after physical full-present restart.",
+    "Documentary local-model interface, declared environment effects and comparative lot 7."
+  ],
+  "commands": [
+    "lake build Tests.LocalAlignment.DocumentaryMasterOperations",
+    "lake build Tests.LocalAlignment.DocumentaryMasterFormation",
+    "lake build Tests.LocalAlignment.DocumentaryMasterFormationCases Tests.AllConstantsAudit",
+    "python -B -X utf8 scripts/check-master-recipes-codegen.py",
+    "python -B -X utf8 scripts/run-master-recipes-smoke.py",
+    "scripts/verify.ps1 with RELATIONAL_PERIMETER_PYTHON set to bundled Python",
+    "python -B -X utf8 scripts/check-scientific-docs.py --static"
+  ],
+  "verification_attempts": [
+    {
+      "stage": "Initial opcode/port codec",
+      "result": "Overlapping tag/list patterns and the standard list append theorem introduced axiom dependencies. Explicit tag matching, positive arity readers and the existing constructive append_empty law replaced them. Final selected and exhaustive audits are clean."
+    },
+    {
+      "stage": "Dependent execution membership",
+      "result": "Unfocused splits on indexed Formed endpoints caused excessive elaboration. Separate whole-cursor equality for conclusions and exact dispatch-effect equality case analysis replaced them without changing quantification or actual executors."
+    },
+    {
+      "stage": "Closed symbolic case normalization",
+      "result": "Redundant literal record and retained-prefix alias goals caused excessive kernel normalization. General whole-support/cursor and all-trace proofs remain; literal ports are checked against independent runtime oracles. Only identified Lean processes launched for these checks were stopped."
+    },
+    {
+      "stage": "Initial runtime client",
+      "result": "Standard string concatenation, numeral printing and IO.println carried axiom dependencies. Explicit received paths, binary byte writes, primitive recursive list checks and a literal UTF8 stdout write replace them. All eight final runtime declarations audit without axioms."
+    },
+    {
+      "stage": "Final full gate",
+      "result": "Passed on the final mathematical sources and runtime scripts. Documentation and the new development ledger finalized afterwards; historical evidence and scientific registry remain unchanged."
+    }
+  ],
+  "git": {
+    "upstream": "f30196e4a8ae2b77b0d061c1e03cccd236265013",
+    "ahead_behind": [
+      "0",
+      "0"
+    ],
+    "commit_or_push_performed": false
+  },
+  "source_sha256_lf": {
+    "Tests/AllConstantsAudit.lean": "1ceb827829dde73564efc02b94e915e68b35a5381d72bcc96210cea8aa10a295",
+    "Tests/LocalAlignment/DocumentaryMasterFormation.lean": "6d8c0d6f0890e4c8c49903fe71c7af0f81efb50a2d2877b81ef99bc6fb28f4a3",
+    "Tests/LocalAlignment/DocumentaryMasterFormationCases.lean": "4d873de1e2bdd8773084a6cce5596148c7d64e345b33393978c5605016b73e06",
+    "Tests/LocalAlignment/DocumentaryMasterFormationExecution.lean": "ce1c229c6c335cdb97b38e92bf286089b1c22b1dc35b937db39fe1804f75961e",
+    "Tests/LocalAlignment/DocumentaryMasterObservation.lean": "6e612ba0057a1bc8206a8ecff0d6da534ace175f1c86436faa9d842f6f9c4ee5",
+    "Tests/LocalAlignment/DocumentaryMasterOperations.lean": "a6c714cd09ec06a8e676edea9cad3239dd77cce8f7cdfe3004033f78e9759dd8",
+    "apps/local-alignment/README.fr.md": "f6317a39596a8cefac24f3f73f814c4a21b244f0e2bfb73df204e0148b423da5",
+    "docs/work/plan-alignement-agent-dossier.fr.md": "10cb24ef2001b33a7964240c650e01013fb98513dc956b8ca2e0bafb608c9faf",
+    "docs/work/recettes-producteurs-maitre.fr.md": "0ceeb4a184ba5393f0d8e54fbb4bc4e6eaf995cbbcd7d9443cc2c67f3b30973e",
+    "scripts/check-master-recipes-codegen.py": "6a3f62a3835e68f4bbc9242d5fbda115061a4d0a755ba7bad2be02716c399d0f",
+    "scripts/run-master-recipes-smoke.py": "49bb5762931865e61e8006a88cf93808d4d450246c9fff117ac851c2ed15f1dc",
+    "scripts/verify.ps1": "02dff880a2e2c4732f97262a419eb9b9be9bbbee8c116547bc1d938315e8dc0d",
+    "scripts/verify.sh": "ab42898a7b8c39fb3b74950b779e3edadca4580b4caa89a6a3f11cb00cbd1fa5"
+  },
+  "source_fingerprint": "e477ece62ee882da5a9958c212f8300e5ac85a96b72bf15a608934101cbc75bf",
+  "fingerprint_encoding": "SHA256 of UTF-8 compact JSON of source_sha256_lf with sorted keys; file digests normalize CRLF to LF only.",
+  "manifest_scope": "Every changed/untracked source or documentary path except this new development ledger, relative to the existing base commit. Earlier mathematical modules, all historical ledgers and registry remain unchanged. This is a development-tree manifest, not a newly registered scientific evidence revision."
+}

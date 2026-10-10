@@ -131,6 +131,22 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "documentary control compiled dependencies failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-control-smoke.py")
   if ($LASTEXITCODE -ne 0) { throw "documentary control component smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-master-recipes-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "master recipes compiled dependencies failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-master-recipes-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "master recipes smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-assignment-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "assignment compiled dependencies failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-assignment-restart-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "assignment component restart failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-sequential-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "dependent assignment compiled dependencies failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-sequential-restart-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "dependent assignment component restart failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-state-assembly-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "state and assembled checkpoint compiled dependencies failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-state-assembly-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "state and assembled checkpoint component restart failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-continuation-signature-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled signature dependency check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-variable-master-codegen.py")

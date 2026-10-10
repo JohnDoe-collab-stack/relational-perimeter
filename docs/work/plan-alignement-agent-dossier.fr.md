@@ -19,7 +19,7 @@ aux lois déjà prouvées.
 | 2 et 3 — Contrat et constitution | [Recherche maître](raccord-documentaire-maitre.fr.md), [composition du dossier](composition-dossier-maitre.fr.md), [déductions](deductions-documentaires.fr.md) et [programmes mixtes](programmes-documentaires-mixtes.fr.md) raccordés pour la classe reçue ; interface complète des effets à fermer au lot 6 |
 | 4 — Accomplissement | [Toute politique totale](continuation-documentaire-adaptative.fr.md) accomplit un programme admissible depuis un état complet, en n tours contrôlés et au plus 2n tentatives pour n obligations |
 | 5 — Présent et oubli | [Accord de tous les futurs finis déclarés](memoire-documentaire-et-futurs.fr.md), oubli d'anciennes propositions et checkpoint typé prouvés ; reprise durable complète à fermer avec le lot 6 |
-| 6 — Effets réels | Codecs du [stockage canonique](restauration-stockage-documentaire.fr.md), de la [mémoire des citations](restauration-present-composants.fr.md) et du [contrôle](controle-documentaire-portable.fr.md) réalisés ; encodage maître, reprise physique du présent complet et interface documentaire Qwen encore ouverts |
+| 6 — Effets réels | Codecs du [stockage canonique](restauration-stockage-documentaire.fr.md), de la [mémoire des citations](restauration-present-composants.fr.md) et du [contrôle](controle-documentaire-portable.fr.md) réalisés ; [recettes maître](recettes-producteurs-maitre.fr.md) et [assignation avec lecteur mesuré](assignation-lecteur-portables.fr.md) établies ; autres valeurs et environnements maître, reprise physique du présent complet et interface documentaire Qwen encore ouverts |
 | 7 — Comparaison et livraison | Versions avec/sans, évaluateur commun, expériences documentaires et livraison encore à réaliser |
 
 La fidélité des formations restaurées et finales est prouvée pour le préfixe
@@ -550,8 +550,26 @@ processus conservent les octets du stockage et du contrôle. L'accord de tous
 les futurs depuis les octets de contrôle est prouvé quand le même dossier
 maître et le même stockage sont fournis ; leur chargement conjoint reste ouvert.
 
-**Prochaine fermeture :** représenter et charger les ressources et formations
-maître, puis réunir les codecs de mémoire, de stockage et de contrôle dans le
+Les [recettes des producteurs maître](recettes-producteurs-maitre.fr.md)
+conservent désormais les sept opérations, leurs ports et leurs environnements
+dépendants, avec égalité du support et du curseur pour la classe formée.
+Cette classe couvre les traces documentaires, adaptatives et mémoire reçues,
+y compris les refus. Les enregistrements de code et de positions ont leur
+codec ; les valeurs et environnements maître restent des données typées de
+rang supérieur à encoder. Cette étape ne clôt pas leur chargement physique.
+
+Le premier composant de ces données de rang supérieur est maintenant fermé :
+l’[assignation avec son lecteur mesuré](assignation-lecteur-portables.fr.md)
+retrouve son égalité exacte depuis des octets. La capture lit les codes des
+têtes conservées dans les valeurs maître. La fidélité couvre toutes les traces
+finies déclarées depuis un maître initial correctement représenté ; trois
+lecteurs issus des exécutions réelles reprennent dans de nouveaux processus
+avec les mêmes bits et compteurs. Quinze formats invalides sont refusés.
+Les autres valeurs et les invariants dépendants restent à raccorder.
+
+**Prochaine fermeture :** donner une représentation portable aux valeurs et
+environnements des ressources et formations maître, puis réunir les codecs
+de mémoire, de stockage et de contrôle dans le
 présent complet prévu. Identifier aussi les sources, permissions et règles de
 la configuration reçue. La restauration doit établir sa fidélité constitutive
 pour les états de la classe portable déclarée, puis l'accord des admissions,
@@ -764,7 +782,7 @@ finie reçue. L'interface complète des effets reste une obligation des lots 2 e
 - [ ] Versions avec/sans et évaluateur commun fixés sur le même contrat, les mêmes tâches, ressources, budgets et oublis.
 - [ ] Rejeu de propositions identiques et interactions adaptatives comparés, avec verdicts séparés de conformité, d'accomplissement et de reprise.
 - [ ] Écarts attribués aux différences déclarées, avec conservation des résultats identiques ou défavorables.
-- [x] Contrôles de développement enregistrés : dernière gate complète sur 277 fichiers Lean, audits, liens et 23 fixtures historiques conformes.
+- [x] Contrôles de développement enregistrés : dernière gate complète sur 296 fichiers Lean, audits, liens et 23 fixtures historiques conformes.
 - [ ] Révision de livraison documentaire fixée, nouvelles évidences enregistrées, contrôles finaux et préparation de l'intégration vérifiés ; revues gardées sur leurs évidences propres.
 
 Le **lot 1** est enregistré sur la révision de livraison. Le premier raccord
@@ -794,6 +812,18 @@ local et l'expérience comparative du **lot 7** restent à réaliser.
 - [x] Mémoire du dossier restaurée depuis des octets pour les traces de programme, de politique adaptative et de requêtes mémoire ; 16 reprises de composant et 12 refus.
 - [x] Contrôle entier restauré depuis des octets, avec ses liaisons optionnelles et sa file typée exacte ; 18 reprises de composant et 20 refus.
 - [x] Accord de tous les futurs après chargement des octets de contrôle, sous fourniture du même dossier maître et du même stockage ; citation et somme exécutées dans ce cadre.
+- [x] Sept recettes de producteurs maître avec leurs ports, capture exacte du support et du curseur de la classe formée ; inclusion de toutes les traces finies déclarées.
+- [x] Enregistrements de codes et de ports depuis des octets, ports des formations réelles contrôlés, 12 formats invalides et 14 injections de rejeu ou d'application rejetés.
+- [x] Assignation et lecteur mesuré restaurés depuis des octets : toutes les traces finies déclarées depuis un maître correctement représenté ; trois reprises de lecteurs réels, quatre formes supplémentaires, 15 formats invalides et 18 injections de rejeu, génération ou lecture rejetés.
+- [x] Assignation séquentielle complète restaurée dans la classe positive validée, invariants futurs compris ; fermeture pour toutes les traces finies déclarées depuis un maître représenté dans cette classe.
+- [x] Assignation chargée incorporée comme champ exécuté de l’état maître, sous fourniture des autres champs conservés ; égalité de l’état couplé entier.
+- [x] Trois reprises physiques de composants réels et quatre formes supplémentaires, chacune suivie d’une nouvelle étape opérationnelle ; 21 entrées invalides et 21 injections de rejeu, génération ou lecture rejetées.
+- [ ] Représentation portable des valeurs et environnements dépendants maître, puis reconstruction des recettes typées depuis ces données chargées.
+- [x] Codecs exacts de la constitution libre, des histoires enracinées et des générations avec leurs quatre compteurs ; aucune génération historique au chargement.
+- [x] État transmis entier restauré depuis des octets : assignation avec lecteur, génération, graine, décisions ordonnées et provenance ; fermeture sur toutes les traces finies déclarées depuis un curseur représenté.
+- [x] Trois reprises froides réelles suivies d’une nouvelle étape consommant cet état complet ; trois sources supplémentaires, 18 entrées invalides et 104 injections de dépendance interdite vérifiées.
+- [x] Checkpoint assemblé avec source, stockage, mémoire et contrôle chargés depuis les octets, autres ressources maître conservées dans le payload typé ; égalité du présent entier et conservation de tous les futurs déclarés dans ce cadre.
+- [x] Relecture physique de ce checkpoint assemblé avec le maître typé conservé, puis accomplissement de la citation et de la somme restantes ; compteur 5 et file vide.
 - [ ] Encodage du présent adaptatif complet : ressources maître, mémoire documentaire, occurrences, liaisons, file, compteur, contexte et dernier résumé.
 - [ ] Fidélité de la restauration des formations et producteurs pour les états de la classe portable déclarée.
 - [ ] Accord de tous les futurs déclarés depuis les octets chargés, y compris de nouvelles citations.
@@ -808,6 +838,21 @@ ferme la restauration typée du maître et du présent entier,
 ainsi que le codec de la mémoire du dossier. Le [contrôle portable](controle-documentaire-portable.fr.md)
 ferme maintenant les données de contrôle depuis des octets. Le payload maître
 conserve encore des fonctions et des données typées qui n'ont pas de représentation
-portable fermée. Son encodage en octets et l'assemblage des composants,
-puis la reprise physique du présent complet avec de nouvelles citations
-maître, restent à réaliser. Les cases de clôture durable demeurent ouvertes.
+portable fermée. L’assemblage des composants est désormais réalisé avec ce
+payload conservé ; son remplacement par des octets et la reprise froide du
+présent complet avec de nouvelles citations maître restent à réaliser.
+Les cases de clôture durable demeurent ouvertes.
+
+Le [raccord de l’assignation séquentielle](assignation-sequentielle-portable.fr.md)
+ferme maintenant ses invariants dépendants et sa restauration entière dans
+la classe positive déclarée. L’assignation chargée est incorporée comme champ
+exécuté de l’état conservé ; une nouvelle étape s’exécute après reprise froide.
+Le [raccord de l’état maître et du checkpoint assemblé](etat-maitre-et-checkpoint-assemble.fr.md)
+ferme maintenant les codecs de la constitution, des générations, des histoires,
+des décisions et provenances, puis de l’état transmis entier. Le chargeur
+de cet état ne reçoit pas l’ancien état ni ses autres champs. Les préfixes
+opérationnels, les valeurs historiques de découverte, d’application et de
+décomposition, ainsi que les environnements des producteurs restent à encoder.
+Le checkpoint assemblé restitue exactement le présent avec ce payload maître
+typé conservé ; son fichier seul ne permet pas encore une reprise du présent
+entier. Le lot 6 conserve cette obligation.

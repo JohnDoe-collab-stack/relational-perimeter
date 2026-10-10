@@ -1,0 +1,671 @@
+{
+  "kind": "constructed_development_verification",
+  "confirmatory": false,
+  "status": "passed",
+  "branch": "codex/ai-alignment-under-contract",
+  "base_revision": "f30196e4a8ae2b77b0d061c1e03cccd236265013",
+  "extension_committed": false,
+  "verified_utc": "2026-10-10T09:07:52.725483+00:00",
+  "toolchain": "leanprover/lean4:v4.33.1",
+  "scope": "Versioned first-order recipe bytes restore the entire function-valued assignment and its measured reader, over the declared alternating primitive and finite visit/flip language. Actual retained master values supply the labels and returned transport-code structure. Exactness holds along every actual finite master, documentary, adaptive and memory trace from an initially correctly represented master. Complete SequentialAssignment, master and full-present restart remain open.",
+  "claim_candidate": {
+    "id": "DOCUMENTARY_ASSIGNMENT_READER_BYTES",
+    "status": "development_uncommitted",
+    "evidence_revision": null,
+    "canonical_document": "docs/work/assignation-lecteur-portables.fr.md",
+    "quantification": "Every finite Code has exact byte roundtrip. Every Formed Bundle is restored exactly, and every Bundle consumer or finite list of variable queries agrees including measured work. Reflection is exact for every transport code of GeneratedStructuralFlipAtRelation with the matching selected variable, and every received SequentialStageRun from a represented input. Actual cursor capture is exact for any initially Correct master and all declared finite executions. No arbitrary function codec or full SequentialAssignment validity decoder is claimed.",
+    "formal_references": [
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.Bundle"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.sequential"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.seed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.visit"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.flip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.Command"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.Code"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.interpret"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.Formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.initial_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.capture"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.capture_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.all_consumers"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.reflect"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.transported"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.reflect_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.transport_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.bundle_same"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.cast_bundle"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.stageInput"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.stage_input_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.stage_output_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.stage_variable_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.stage_recipe_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.stage_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.readQueries"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableAssignment",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableAssignment.restored_queries"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.fields"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.readCommand"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.command_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.command"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.codes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.envelope"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.save"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.load"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.byte_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.restore"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.formed_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.all_loaded_consumers"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCodec.all_loaded_queries"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.retained"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.cursor"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.Correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.initial_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.next_code"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.next_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.variable_next_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.executed_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.restore_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.stage_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.quotation_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.step_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.program_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.fallback_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.diverted_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.dispatch_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.turn_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.adaptive_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.memory_step_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.memory_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.program_bytes_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.adaptive_bytes_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCapture",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCapture.memory_bytes_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.initial"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.actual_program"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.unsuitable_program"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.blocked_program"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.every_master_cursor"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.every_program_trace"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.every_adaptive_trace"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.every_memory_trace"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.every_memory_query"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.identity_reflect"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.composition_reflect"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.same_bits_extra_visit"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.initial_read_work"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.extra_visit_read_work"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.same_bits_different_work"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.any_code_bytes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.unknown_command"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.missing_flip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.extra_visit_port"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAssignmentCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AssignmentCases.invalid_alphabet"
+      }
+    ],
+    "dependencies": {
+      "formation": [
+        "The declared primitive consists of alternatingAssignmentBit and readAlternatingAssignment together; finite commands retain visit and flip construction.",
+        "Formed relates a concrete Code positively to the exact dependent assignment/reader Bundle.",
+        "Correct relates the code read from actual retained head values to the current master assignment and reader; initial alternate-family cursors close this assumption."
+      ],
+      "execution": [
+        "retained reads the actual received resource kinds and material values, traverses prior values first and reflects each stored head's discovery variable and actual execution.code.",
+        "DiscoverySchedule.entry is not executed to retrieve the label. stage_variable_exact proves agreement while the compiled capture reads stage.discovery.var.",
+        "interpret builds the latent assignment and reader closures from finite syntax; capture and restoration do not query them or execute historical master producers.",
+        "Cold component clients take saved program bytes and perform new measured reads without invoking a historical master course in their resume function."
+      ],
+      "proof": [
+        "Structural induction on the actual returned transport code preserves assignment and measured reader together, including identity and composition visits.",
+        "Stage input, output, reader and selected-variable agreements establish the exact represented Bundle of the received next stage without function extensionality.",
+        "program_correct, adaptive_correct and memory_correct compose received actual execution equalities from a Correct initial cursor, without success or admissibility assumptions.",
+        "The exact versioned word/byte codec and entire-input consumption imply exact loaded Bundle and all its consumers."
+      ],
+      "transport": [
+        "The reader recipe preserves the Bundle's functions and their measured reads, including distinctions that preserve bits but change read work.",
+        "It does not encode every transport witness, source permission, resource formation, operational context or dependent master environment.",
+        "Loading any well-formed recipe constructs its corresponding Bundle; semantic modifications that remain syntactically valid are not authentication failures and are not compared to an external historical course.",
+        "Measured comparison work is preserved within its declared units; no physical cost, energy or constant-time result is claimed."
+      ]
+    }
+  },
+  "checks": {
+    "selected_axiom_audits": 84,
+    "full_gate": {
+      "command": "scripts/verify.ps1 with RELATIONAL_PERIMETER_PYTHON set to bundled Python; no concurrent compilation",
+      "status": "passed",
+      "lean_files": 286,
+      "build_jobs": 288,
+      "constants": 24772,
+      "modules": 285,
+      "generated_exceptions": 364,
+      "written_exceptions": 0,
+      "expected_failure_fixtures": 23,
+      "raw_log_filename": "rp-assignment-full-verify-20261010.log",
+      "raw_log_sha256": "eb84ce6fbdfed12fc84e7ac83d8eb3ae6ef9f41c755653988394613bed879d71"
+    },
+    "assignment_codegen": {
+      "status": "passed",
+      "roots": 8,
+      "reachable_direct_call_bodies": [
+        2,
+        3,
+        2,
+        3,
+        1,
+        3,
+        7,
+        11
+      ],
+      "mutations_rejected": 18,
+      "scope": "Direct named calls for capture, reflection, latent construction and loading. First six roots also reject indirect application. First-order codec callbacks are permitted in load/restore; reader query bodies and historical master/generation calls are rejected. Excludes latent future execution, whole-process initialization, heap identity and complete master loading."
+    },
+    "assignment_restart_smoke": {
+      "status": "passed",
+      "physical_processes": 9,
+      "actual_master_reader_restarts": 3,
+      "synthetic_reader_restarts": 4,
+      "invalid_programs_rejected": 15,
+      "queries_per_reader": 10,
+      "start_runtime_audits": 7,
+      "resume_runtime_audits": 6,
+      "invalid_runtime_audits": 3,
+      "same_actual_bits_and_measured_work": true,
+      "master_cursor_reloaded": false,
+      "full_present_reloaded": false,
+      "qwen_calls": 0,
+      "receipts": [
+        {
+          "client": "AssignmentStart.lean",
+          "process_id": 48040,
+          "runtime_audits": 7,
+          "client_sha256": "bfdd1b4a7344ffb172f90334c5c634db8100816953bbda20b1bcf05ab7125027",
+          "returncode": 0
+        },
+        {
+          "client": "AssignmentRestart.lean",
+          "process_id": 11584,
+          "runtime_audits": 6,
+          "client_sha256": "404751a1cad90356c7e5db814aa63f3ef84c307adf15598ee3bd4dfbae693b3d",
+          "returncode": 0
+        },
+        {
+          "client": "AssignmentRestart.lean",
+          "process_id": 50692,
+          "runtime_audits": 6,
+          "client_sha256": "404751a1cad90356c7e5db814aa63f3ef84c307adf15598ee3bd4dfbae693b3d",
+          "returncode": 0
+        },
+        {
+          "client": "AssignmentRestart.lean",
+          "process_id": 34560,
+          "runtime_audits": 6,
+          "client_sha256": "404751a1cad90356c7e5db814aa63f3ef84c307adf15598ee3bd4dfbae693b3d",
+          "returncode": 0
+        },
+        {
+          "client": "AssignmentRestart.lean",
+          "process_id": 19320,
+          "runtime_audits": 6,
+          "client_sha256": "404751a1cad90356c7e5db814aa63f3ef84c307adf15598ee3bd4dfbae693b3d",
+          "returncode": 0
+        },
+        {
+          "client": "AssignmentRestart.lean",
+          "process_id": 32340,
+          "runtime_audits": 6,
+          "client_sha256": "404751a1cad90356c7e5db814aa63f3ef84c307adf15598ee3bd4dfbae693b3d",
+          "returncode": 0
+        },
+        {
+          "client": "AssignmentRestart.lean",
+          "process_id": 37008,
+          "runtime_audits": 6,
+          "client_sha256": "404751a1cad90356c7e5db814aa63f3ef84c307adf15598ee3bd4dfbae693b3d",
+          "returncode": 0
+        },
+        {
+          "client": "AssignmentRestart.lean",
+          "process_id": 6552,
+          "runtime_audits": 6,
+          "client_sha256": "404751a1cad90356c7e5db814aa63f3ef84c307adf15598ee3bd4dfbae693b3d",
+          "returncode": 0
+        },
+        {
+          "client": "AssignmentInvalid.lean",
+          "process_id": 3824,
+          "runtime_audits": 3,
+          "client_sha256": "4791488ab79a133574c69a2740832c466314ff9a0fe9530ed630dcf212ad192e",
+          "returncode": 0
+        }
+      ]
+    },
+    "final_documentation": {
+      "status": "passed",
+      "command": "python -B -X utf8 scripts/check-scientific-docs.py --static",
+      "registered_claims_checked": 19,
+      "registered_declarations_checked": 91,
+      "scope": "Final Markdown links, historical scientific fingerprints and protected anchors. Historical review statuses remain unchanged."
+    },
+    "final_integrity": {
+      "status": "passed",
+      "manifested_paths": 21,
+      "unchanged_prior_math_modules": 31,
+      "unchanged_prior_recipe_paths": 8,
+      "unchanged_previous_ledgers": 12,
+      "unchanged_registry": true,
+      "python_ast": true,
+      "eof_and_whitespace": true,
+      "git_diff_check": true
+    }
+  },
+  "language": "fr_only",
+  "review": {
+    "reader": {
+      "status": "pending"
+    },
+    "independent": {
+      "status": "not_recorded"
+    }
+  },
+  "prior_math_sha256_lf_unchanged": {
+    "Tests/LocalAlignment/DocumentaryAdaptive.lean": "fca18a29d12143e385468a063d6f9bb8162feb4083c45d40c09e9ef72541a177",
+    "Tests/LocalAlignment/DocumentaryAdaptiveCases.lean": "5c5ac466af887fbd72f61573cff47a09e63c0f10a425e640e5f5ce0c7b15ea20",
+    "Tests/LocalAlignment/DocumentaryCanonicalAdaptiveRestoration.lean": "30405ea9cc67475c89e29107546f49fb474e8ee0f6ca15ef6ec3853d90392a38",
+    "Tests/LocalAlignment/DocumentaryCanonicalRestoration.lean": "ee13bef3265aefbab92417c14c71cd0891036bb4affe1d67adbe657d0b95f1cf",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryControlCodec.lean": "2ab8bea4cebd8233944918e596d1c38883dfa3311c3fd57138d8b540108b366a",
+    "Tests/LocalAlignment/DocumentaryDeduction.lean": "e0c47edc703c3ab6afadbb5c11a92b9719efb22d84b1146929aeda08bee14017",
+    "Tests/LocalAlignment/DocumentaryDeductionCases.lean": "a04bb5065d81ad4942d6965e9863cfc7ab787d954da420b57799e86ef88e4bb2",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentaryMasterPayload.lean": "c2b9d7f2b7756e7596e58b465310cd8f9f8140c6e04bc3665787a851264c4031",
+    "Tests/LocalAlignment/DocumentaryMaterializedPresent.lean": "a73b8e8cb3a3a8072970910ffc62424e3b81565317ea13816e67dabaed7da452",
+    "Tests/LocalAlignment/DocumentaryMemory.lean": "066d92f60bab73b6963f8c26dc95a62b06390ca9164167eed6aebd0f7445eab7",
+    "Tests/LocalAlignment/DocumentaryMemoryCases.lean": "e077758f5a6fc518cc475a8ceccfeb82fd33c7588a6981312fc7eb20c7604112",
+    "Tests/LocalAlignment/DocumentaryPortable.lean": "72dba0634c69749256e16a5da9715230a25a1c600a3f90c236ce8cdb5301abf4",
+    "Tests/LocalAlignment/DocumentaryPortableCases.lean": "e700d01b277e09f25f4c73527e84237c5fe030dd5ff5850398aef69c3d8059b5",
+    "Tests/LocalAlignment/DocumentaryPortableCheckpoint.lean": "3f3091643a4e78448b12de35969ba579b88ab0e118ac5ea6e79d06bb0ba87f35",
+    "Tests/LocalAlignment/DocumentaryPortableControl.lean": "8b2714f77291fa526f15c030435821b34fe2c60321ae4366db341a64bf38cfcb",
+    "Tests/LocalAlignment/DocumentaryPortableControlCases.lean": "99c6bf3db0f24988671e5231041d535c2ada4bb4f7e5450456c0d83215502512",
+    "Tests/LocalAlignment/DocumentaryPortableMemory.lean": "5346236268ceea596da2274815843d8f17ee5d86b99f9a6dc052db2c03d177e7",
+    "Tests/LocalAlignment/DocumentaryPortableStart.lean": "4ae9f46299041e015479d513ced35eb15d1e6e469813a86f37a3245a06647e7d",
+    "Tests/LocalAlignment/DocumentaryPortableStore.lean": "4db61b65d5785059bb4e69558a0b79827d39b66935645c058115cb3cc22732fe",
+    "Tests/LocalAlignment/DocumentaryPortableStoreCases.lean": "fa3f984943a2b33750bc6bb5aba90a64ca6c5a224d58479ae67ea059b5caf7ad",
+    "Tests/LocalAlignment/DocumentaryProgram.lean": "decf0ead9a3bd1ebc6f90198fc863194b050bf1b4e4dcf6cdcf0c4bf0dd794cd",
+    "Tests/LocalAlignment/DocumentaryProgramCases.lean": "ff701ac289efa1ffdcd01bcdc0ad4ef8cb6e2c2429c89756238f22b4435ffe6b",
+    "Tests/LocalAlignment/DocumentaryRestorationComponentsCases.lean": "c45e41c590131bc903c1318215bc329c96fced934d4ea577d4bdc61414768e2a",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "Tests/LocalAlignment/DocumentarySnapshot.lean": "23a4e2ccb493d76936c7db0a84d8bd7595842e0ce809c5876b221ab4da311d46"
+  },
+  "prior_recipe_sources_sha256_lf_unchanged": {
+    "Tests/LocalAlignment/DocumentaryMasterFormation.lean": "6d8c0d6f0890e4c8c49903fe71c7af0f81efb50a2d2877b81ef99bc6fb28f4a3",
+    "Tests/LocalAlignment/DocumentaryMasterFormationCases.lean": "4d873de1e2bdd8773084a6cce5596148c7d64e345b33393978c5605016b73e06",
+    "Tests/LocalAlignment/DocumentaryMasterFormationExecution.lean": "ce1c229c6c335cdb97b38e92bf286089b1c22b1dc35b937db39fe1804f75961e",
+    "Tests/LocalAlignment/DocumentaryMasterObservation.lean": "6e612ba0057a1bc8206a8ecff0d6da534ace175f1c86436faa9d842f6f9c4ee5",
+    "Tests/LocalAlignment/DocumentaryMasterOperations.lean": "a6c714cd09ec06a8e676edea9cad3239dd77cce8f7cdfe3004033f78e9759dd8",
+    "docs/work/recettes-producteurs-maitre.fr.md": "0ceeb4a184ba5393f0d8e54fbb4bc4e6eaf995cbbcd7d9443cc2c67f3b30973e",
+    "scripts/check-master-recipes-codegen.py": "6a3f62a3835e68f4bbc9242d5fbda115061a4d0a755ba7bad2be02716c399d0f",
+    "scripts/run-master-recipes-smoke.py": "49bb5762931865e61e8006a88cf93808d4d450246c9fff117ac851c2ed15f1dc"
+  },
+  "historical_ledgers_sha256_lf_unchanged": {
+    "docs/work/checkpoint-documentaire-portable-verification.json": "984300f4fdd501bd9ccb5f984a0ebdc2adf85fe7556c0b29b934fff48bda82d0",
+    "docs/work/composition-dossier-maitre-verification.json": "d4f0d090591456abf63bec1ddd06c515cbe2386b5452aad4da634abc7a2fea0d",
+    "docs/work/continuation-documentaire-adaptative-verification.json": "38f3e4696098f3024e08aca019cd92eb061c02d9128ac61098081250cb77cd3e",
+    "docs/work/controle-documentaire-portable-verification.json": "770321f4f9b88cb132fe88d527089a1695df6d332ecf9c985dfb210b5c372892",
+    "docs/work/deductions-documentaires-verification.json": "de34f2a8a2183ac5adfefed4245f9e5880600083058dd2b3d72fdece5c271feb",
+    "docs/work/memoire-documentaire-verification.json": "8f4e3bc1d809cf2147c00fd0696396164db4a43c2e7781cf348b0df7e06002bc",
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/programmes-documentaires-verification.json": "3485d921605f5371d1a2dd0fe3a3c7f3302b4b3c06f888ac150fab9cb182cecb",
+    "docs/work/raccord-documentaire-maitre-verification.json": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1",
+    "docs/work/restauration-present-composants-verification.json": "40d501f09dc55566692e0199a172a56af1bd0877aa654c7f489b905e0e3aa7be",
+    "docs/work/restauration-stockage-documentaire-verification.json": "298e0bce7e6d9857ae8372f717ec237e7de9c9afe5a462b6c3cb32f4fbce830d"
+  },
+  "prior_recipe_development_ledger": {
+    "path": "docs/work/recettes-producteurs-maitre-verification.json",
+    "sha256_lf_unchanged": "8a3a6eca5194f5492d56b16a2859ea99353a6ac0ad542e1b248ec37ff0d82fc3",
+    "recorded_source_fingerprint": "e477ece62ee882da5a9958c212f8300e5ac85a96b72bf15a608934101cbc75bf",
+    "scope": "Preserved earlier uncommitted development snapshot. Its shared plan, README, gate scripts and AllConstantsAudit are extended by this increment; its mathematical recipe modules, two runtime checks, canonical report and ledger remain unchanged. Earlier snapshot evidence is not refreshed."
+  },
+  "registry_sha256_lf_unchanged": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+  "open_obligations": [
+    "Close and load the dependent SequentialAssignment invariants and embed the restored assignment/reader in the same master constitution.",
+    "Faithful portable realization of actual generation states, decisions and provenance, operational prefixes, discovery/application/decomposition values and producer environments.",
+    "Reconstruct dependent typed operations and ports from those loaded values and preserve the entire resource formation.",
+    "Joint full-present byte loading with identified received sources, permissions and rule catalogue.",
+    "All declared finite futures and new master quotations/deductions after physical full-present restart.",
+    "Documentary local-model interface, declared environment effects and comparative lot 7."
+  ],
+  "commands": [
+    "lake build Tests.LocalAlignment.DocumentaryPortableAssignment",
+    "lake build Tests.LocalAlignment.DocumentaryAssignmentCodec",
+    "lake build Tests.LocalAlignment.DocumentaryAssignmentCapture",
+    "lake build Tests.LocalAlignment.DocumentaryAssignmentCases Tests.AllConstantsAudit",
+    "python -B -X utf8 scripts/check-assignment-codegen.py",
+    "python -B -X utf8 scripts/run-assignment-restart-smoke.py",
+    "scripts/verify.ps1 with RELATIONAL_PERIMETER_PYTHON set to bundled Python",
+    "python -B -X utf8 scripts/check-scientific-docs.py --static"
+  ],
+  "verification_attempts": [
+    {
+      "stage": "Initial codec proof",
+      "result": "Option.map required an explicit change to its reduced some form before rewriting the Bundle equality. Final codec audits are clean."
+    },
+    {
+      "stage": "Initial cursor-capture proof",
+      "result": "A Formed projection behind dependent equality transport did not definitionally expose the reflected code; stage_recipe_exact now proves the exact code-to-Bundle passage directly. Stage successor equality is made explicit. Scope and executors are unchanged."
+    },
+    {
+      "stage": "Compiled capture inspection",
+      "result": "The derived schedule-entry label reached constructStage and generation reconstruction (50 direct bodies). Capture now reads the stored discovery label; stage_variable_exact closes its agreement with the schedule. Final capture reaches only two direct bodies. Generation injections are checked and rejected."
+    },
+    {
+      "stage": "Codegen selector",
+      "result": "The generated stage_formed symbol escapes its underscore as stage__formed. The unique exact selector was corrected; no missing body is silently skipped."
+    },
+    {
+      "stage": "Identity-code instance",
+      "result": "After separating the runtime label from the implicit typed code index, the identity instance required an explicit selected index. Its quantification remains unchanged."
+    },
+    {
+      "stage": "Initial runtime client",
+      "result": "SAT.Var was not opened in the external client namespace. The client uses Nat, its exact alias; seven/six/three final runtime audits pass."
+    },
+    {
+      "stage": "Final complete gate",
+      "result": "Passed with the final mathematical sources and runtime checks. Documentation and this new development ledger finalized afterwards; previous evidence is retained."
+    }
+  ],
+  "raw_attempt_log_sha256": {
+    "rp-assignment-codec-build.log": "3fb7370023375d83ae7681db1d6980274c778228886edcb7d4f0bfade8784a71",
+    "rp-assignment-capture-build.log": "fe4ca2755887fd74801bcb5758bfa1d564ac1d84d773d2728daf03239676f95b",
+    "rp-assignment-direct-capture-build.log": "8ff57b34ecde5b1e6da80ff40fab658bc09d7f1e5b27e6053261a525dbf684a2",
+    "rp-assignment-restart-smoke-initial.log": "13799e5b5f1d6446b1822959852e0ccf923bd80633f503f81464957fda5d0550"
+  },
+  "git": {
+    "upstream": "f30196e4a8ae2b77b0d061c1e03cccd236265013",
+    "ahead_behind": [
+      "0",
+      "0"
+    ],
+    "commit_or_push_performed": false
+  },
+  "source_sha256_lf": {
+    "Tests/AllConstantsAudit.lean": "a8b8defd68d28fe0d4a484e37129a7885447978de8ff56ccaddd82fb3cfb819e",
+    "Tests/LocalAlignment/DocumentaryAssignmentCapture.lean": "b8d503ad994ecc7431944c7d361c9b89bc0f781fc33420c8cc8d66c5b7869415",
+    "Tests/LocalAlignment/DocumentaryAssignmentCases.lean": "813e78dac36a9974baef842f682e644ed7279c7009c8eeebe94d676f49e1fe2c",
+    "Tests/LocalAlignment/DocumentaryAssignmentCodec.lean": "d163c0066b13debd9a1d2477649ab43ec60c4020adc3666b1290a30e0d788288",
+    "Tests/LocalAlignment/DocumentaryMasterFormation.lean": "6d8c0d6f0890e4c8c49903fe71c7af0f81efb50a2d2877b81ef99bc6fb28f4a3",
+    "Tests/LocalAlignment/DocumentaryMasterFormationCases.lean": "4d873de1e2bdd8773084a6cce5596148c7d64e345b33393978c5605016b73e06",
+    "Tests/LocalAlignment/DocumentaryMasterFormationExecution.lean": "ce1c229c6c335cdb97b38e92bf286089b1c22b1dc35b937db39fe1804f75961e",
+    "Tests/LocalAlignment/DocumentaryMasterObservation.lean": "6e612ba0057a1bc8206a8ecff0d6da534ace175f1c86436faa9d842f6f9c4ee5",
+    "Tests/LocalAlignment/DocumentaryMasterOperations.lean": "a6c714cd09ec06a8e676edea9cad3239dd77cce8f7cdfe3004033f78e9759dd8",
+    "Tests/LocalAlignment/DocumentaryPortableAssignment.lean": "cb6a590b2046f258d4ba1ae08f144bc22e9adc7e4d63c289e8b6a07d654da7b2",
+    "apps/local-alignment/README.fr.md": "5db658259237ff0fd2eecf90e3b76d5dd328c9a7203d8818a7082e8c9ecb023b",
+    "docs/work/assignation-lecteur-portables.fr.md": "25589f923bfaaf045a5097a9000ad7fd84c55fe7482494c5cfd24807e4e8578a",
+    "docs/work/plan-alignement-agent-dossier.fr.md": "0e919e91bb3c2f732a37b43fa8d871f12ae5c1eda50eb30fb0bc9d8802704de0",
+    "docs/work/recettes-producteurs-maitre-verification.json": "8a3a6eca5194f5492d56b16a2859ea99353a6ac0ad542e1b248ec37ff0d82fc3",
+    "docs/work/recettes-producteurs-maitre.fr.md": "0ceeb4a184ba5393f0d8e54fbb4bc4e6eaf995cbbcd7d9443cc2c67f3b30973e",
+    "scripts/check-assignment-codegen.py": "2046eb9f60e58fb3bb1b33efba580e1abf49fc0bacfd8ac4b59ca7e50318d385",
+    "scripts/check-master-recipes-codegen.py": "6a3f62a3835e68f4bbc9242d5fbda115061a4d0a755ba7bad2be02716c399d0f",
+    "scripts/run-assignment-restart-smoke.py": "e0b1d8bdcd58dfba833f17f2ae4f6721b0d6da4f9305e49e14364cb218989168",
+    "scripts/run-master-recipes-smoke.py": "49bb5762931865e61e8006a88cf93808d4d450246c9fff117ac851c2ed15f1dc",
+    "scripts/verify.ps1": "68fce09b5089dad76fe1be5bd432077279c4b519c6fa5172efdf22f49d99dc1c",
+    "scripts/verify.sh": "c0b55c26c31e2aeba041465fd4d7e00b6bc11bee782826c697ba6bb2dd125a10"
+  },
+  "source_fingerprint": "b30cad595f1e5fc97a9f26bc3eae87bc686b880c0d3e36300ef7d4c2465392dc",
+  "fingerprint_encoding": "SHA256 of UTF-8 compact JSON of source_sha256_lf with sorted keys; file digests normalize CRLF to LF only.",
+  "manifest_scope": "All changed/untracked source and documentary paths except this new ledger, relative to the existing base commit; includes the inherited uncommitted master-recipe increment. This is a development-tree manifest, not a new registered scientific evidence revision."
+}
