@@ -322,12 +322,34 @@ recharge aussi la mémoire du dossier depuis des octets, avec son lecteur de
 justification exact. Les tests vérifient 16 reprises physiques de ce composant,
 12 refus et une continuation du présent typé avec citation maître et somme.
 
-Les fonctions et données maître ainsi que les données de contrôle du présent
-n'ont pas encore de codec portable complet. La reprise du présent entier
+Les fonctions et données maître n'ont pas encore de codec portable complet.
+Les données de contrôle ont désormais le codec décrit ci-dessous. La reprise du présent entier
 depuis un fichier reste donc ouverte ; les tests de composant ne la clôturent pas.
 
 ```text
 lake build Tests.LocalAlignment.DocumentaryRestorationComponentsCases
 python -B scripts/check-restoration-components-codegen.py
 python -B scripts/run-restoration-components-smoke.py
+```
+
+## Contrôle documentaire depuis des octets
+
+Le [codec du contrôle](../../docs/work/controle-documentaire-portable.fr.md)
+restitue exactement les slots, leurs liaisons optionnelles, la file typée
+restante, le contexte, le compteur et le dernier résumé. Il couvre aussi
+les liaisons absentes et les sorties permises qui manquent leur but.
+Les codecs de contexte `Nat` et `List Nat` sont construits ; un autre type
+de contexte doit fournir son propre codec exact.
+
+Les tests vérifient 18 reprises du contrôle et du stockage dans de nouveaux
+processus et 20 refus de fichiers invalides. La file chargée contient encore
+une citation et une somme dépendante. La continuation de ces tâches est
+également exécutée après chargement du contrôle, avec le même dossier maître
+et le même stockage encore fournis. Cette condition est explicite : le
+chargement physique du maître et du présent entier reste ouvert.
+
+```text
+lake build Tests.LocalAlignment.DocumentaryPortableControlCases
+python -B scripts/check-documentary-control-codegen.py
+python -B scripts/run-documentary-control-smoke.py
 ```

@@ -127,6 +127,10 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "restoration components compiled dependencies failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "run-restoration-components-smoke.py")
   if ($LASTEXITCODE -ne 0) { throw "restoration components smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-control-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary control compiled dependencies failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-control-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary control component smoke failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-continuation-signature-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled signature dependency check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-variable-master-codegen.py")

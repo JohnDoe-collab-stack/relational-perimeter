@@ -19,7 +19,7 @@ aux lois déjà prouvées.
 | 2 et 3 — Contrat et constitution | [Recherche maître](raccord-documentaire-maitre.fr.md), [composition du dossier](composition-dossier-maitre.fr.md), [déductions](deductions-documentaires.fr.md) et [programmes mixtes](programmes-documentaires-mixtes.fr.md) raccordés pour la classe reçue ; interface complète des effets à fermer au lot 6 |
 | 4 — Accomplissement | [Toute politique totale](continuation-documentaire-adaptative.fr.md) accomplit un programme admissible depuis un état complet, en n tours contrôlés et au plus 2n tentatives pour n obligations |
 | 5 — Présent et oubli | [Accord de tous les futurs finis déclarés](memoire-documentaire-et-futurs.fr.md), oubli d'anciennes propositions et checkpoint typé prouvés ; reprise durable complète à fermer avec le lot 6 |
-| 6 — Effets réels | [Reprise physique d'une dernière déduction](checkpoint-documentaire-portable.fr.md) et [restauration générale du stockage canonique](restauration-stockage-documentaire.fr.md) réalisées ; présent complet, ressources maître, nouvelles citations et interface documentaire Qwen encore ouverts |
+| 6 — Effets réels | Codecs du [stockage canonique](restauration-stockage-documentaire.fr.md), de la [mémoire des citations](restauration-present-composants.fr.md) et du [contrôle](controle-documentaire-portable.fr.md) réalisés ; encodage maître, reprise physique du présent complet et interface documentaire Qwen encore ouverts |
 | 7 — Comparaison et livraison | Versions avec/sans, évaluateur commun, expériences documentaires et livraison encore à réaliser |
 
 La fidélité des formations restaurées et finales est prouvée pour le préfixe
@@ -542,10 +542,17 @@ treize mutations sont refusées. Ce schéma de stockage seul ne sérialise pas
 le présent complet. Un contre-exemple Lean établit que des enregistrements et
 valeurs identiques ne déterminent pas des producteurs arbitraires.
 
-**Prochaine fermeture :** représenter et charger les ressources maître, la
-mémoire du dossier, les occurrences et leurs formations, les liaisons, la file
-restante, le compteur, le contexte de politique et le dernier résumé prévus
-par le présent typé. Identifier aussi les sources, permissions et règles de
+Le [codec du contrôle](controle-documentaire-portable.fr.md) ferme désormais
+le retour exact des slots, liaisons optionnelles, file typée restante,
+contexte, compteur et résumé. Il couvre tout contrôle typé, y compris les
+absences et sorties inadéquates. Dix-huit reprises de composant en nouveaux
+processus conservent les octets du stockage et du contrôle. L'accord de tous
+les futurs depuis les octets de contrôle est prouvé quand le même dossier
+maître et le même stockage sont fournis ; leur chargement conjoint reste ouvert.
+
+**Prochaine fermeture :** représenter et charger les ressources et formations
+maître, puis réunir les codecs de mémoire, de stockage et de contrôle dans le
+présent complet prévu. Identifier aussi les sources, permissions et règles de
 la configuration reçue. La restauration doit établir sa fidélité constitutive
 pour les états de la classe portable déclarée, puis l'accord des admissions,
 événements, lectures et accomplissement pour tous leurs futurs finis déclarés.
@@ -757,7 +764,7 @@ finie reçue. L'interface complète des effets reste une obligation des lots 2 e
 - [ ] Versions avec/sans et évaluateur commun fixés sur le même contrat, les mêmes tâches, ressources, budgets et oublis.
 - [ ] Rejeu de propositions identiques et interactions adaptatives comparés, avec verdicts séparés de conformité, d'accomplissement et de reprise.
 - [ ] Écarts attribués aux différences déclarées, avec conservation des résultats identiques ou défavorables.
-- [x] Contrôles de développement enregistrés : dernière gate complète sur 274 fichiers Lean, audits, liens et 23 fixtures historiques conformes.
+- [x] Contrôles de développement enregistrés : dernière gate complète sur 277 fichiers Lean, audits, liens et 23 fixtures historiques conformes.
 - [ ] Révision de livraison documentaire fixée, nouvelles évidences enregistrées, contrôles finaux et préparation de l'intégration vérifiés ; revues gardées sur leurs évidences propres.
 
 Le **lot 1** est enregistré sur la révision de livraison. Le premier raccord
@@ -785,6 +792,8 @@ local et l'expérience comparative du **lot 7** restent à réaliser.
 - [x] Capture et restauration du curseur maître entier depuis un payload typé matérialisé, formations et producteurs conservés sans rejeu.
 - [x] Raccord du présent typé entier à ce payload maître ; égalité exacte et accord de toutes les suites finies de requêtes déclarées.
 - [x] Mémoire du dossier restaurée depuis des octets pour les traces de programme, de politique adaptative et de requêtes mémoire ; 16 reprises de composant et 12 refus.
+- [x] Contrôle entier restauré depuis des octets, avec ses liaisons optionnelles et sa file typée exacte ; 18 reprises de composant et 20 refus.
+- [x] Accord de tous les futurs après chargement des octets de contrôle, sous fourniture du même dossier maître et du même stockage ; citation et somme exécutées dans ce cadre.
 - [ ] Encodage du présent adaptatif complet : ressources maître, mémoire documentaire, occurrences, liaisons, file, compteur, contexte et dernier résumé.
 - [ ] Fidélité de la restauration des formations et producteurs pour les états de la classe portable déclarée.
 - [ ] Accord de tous les futurs déclarés depuis les octets chargés, y compris de nouvelles citations.
@@ -795,9 +804,10 @@ quatre instructions produites, trois citations accomplies et une dernière somme
 Ce premier raccord ne clôt pas les critères complets des lots 5 et 6.
 
 Le [raccord des composants du présent](restauration-present-composants.fr.md)
-ferme maintenant la restauration typée du maître et du présent entier,
-ainsi que le codec de la mémoire du dossier. Le payload maître conserve
-encore des fonctions et des données typées qui n'ont pas de représentation
-portable fermée. Son encodage en octets et celui des données de contrôle,
+ferme la restauration typée du maître et du présent entier,
+ainsi que le codec de la mémoire du dossier. Le [contrôle portable](controle-documentaire-portable.fr.md)
+ferme maintenant les données de contrôle depuis des octets. Le payload maître
+conserve encore des fonctions et des données typées qui n'ont pas de représentation
+portable fermée. Son encodage en octets et l'assemblage des composants,
 puis la reprise physique du présent complet avec de nouvelles citations
 maître, restent à réaliser. Les cases de clôture durable demeurent ouvertes.

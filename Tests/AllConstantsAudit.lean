@@ -10,6 +10,7 @@ import Tests.LocalAlignment.DocumentaryMemoryCases
 import Tests.LocalAlignment.DocumentaryPortableCases
 import Tests.LocalAlignment.DocumentaryPortableStoreCases
 import Tests.LocalAlignment.DocumentaryRestorationComponentsCases
+import Tests.LocalAlignment.DocumentaryPortableControlCases
 import Tests.AristotleCorrectionRegression
 import Tests.ComputationalPhenomenonRegression
 import Tests.ConstitutiveComplexityHierarchyRegression

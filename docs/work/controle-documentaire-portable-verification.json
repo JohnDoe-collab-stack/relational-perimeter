@@ -1,0 +1,564 @@
+{
+  "kind": "constructed_development_verification",
+  "confirmatory": false,
+  "status": "passed",
+  "branch": "codex/ai-alignment-under-contract",
+  "base_revision": "6575de4a219301cb42c93c842de7814145b013ff",
+  "extension_committed": false,
+  "verified_utc": "2026-10-10T07:44:52.629840+00:00",
+  "toolchain": "leanprover/lean4:v4.33.1",
+  "scope": "Exact control-byte restoration for every typed control over the fixed supplied store and received source/rule configuration, with an exact Context codec. All finite declared Memory futures agree when the same actual dossier/master and store are supplied. Full-present/master byte restart remains open.",
+  "claim_candidate": {
+    "id": "DOCUMENTARY_CONTROL_BYTES",
+    "status": "development_uncommitted",
+    "evidence_revision": null,
+    "canonical_document": "docs/work/controle-documentaire-portable.fr.md",
+    "quantification": "Every PortableControl.Data and every Snapshot.PresentData for a Context with a supplied exact codec. No completeness or admissibility requirement for control roundtrip. Nat and List Nat codecs are realized. Every finite Memory request sequence after joining the loaded control with the same supplied actual dossier and store.",
+    "formal_references": [
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.Words"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.Codec"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.integer"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.natural"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.Codec.product"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.Codec.optional"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.writeList"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.readList"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.list_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.Codec.list"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.Codec.via"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.Codec.injective"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.Codec.equality"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.demand"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.deductionDemand"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.specification"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.route"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.event"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.readout"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.summary"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.Command"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.quotationFields"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.conclusionFields"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.command"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.Raw"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.raw"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.envelope"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.bytes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.fromBytes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.bytes_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.save"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.load"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryControlCodec",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ControlCodec.byte_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.binding"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.loadBinding"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.binding_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.bindings"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.loadBindings"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.bindings_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.instruction"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.loadInstruction"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.instruction_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.script"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.loadScript"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.script_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.Data"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.record"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.restore"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.record_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.save"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.load"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.byte_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.capture"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.Data.present"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.capture_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.loadPresent"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.present_byte_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.loaded_all_futures"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControl",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControl.loaded_accomplishable"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.every_typed_present"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.actual_prefix"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.every_prefix_future"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.afterReset"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.reset_control"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.actual_boot"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.wrongRun"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.wrong"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.wrong_control"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.wrong_stays_wrong"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.blocked_control"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.prefixRaw"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.prefix_context"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.prefix_clock"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.prefix_queue"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.missing_source"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.missing_rule"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.missing_dependency"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.forbiddenPending"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.forbidden_pending_preserved"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.missing_binding_occurrence"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.missing_binding_entry"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.extra_binding_entry"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.emptyRaw"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.altered_final"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.wrongVersion"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.wrongSchema"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.extraWord"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.bad_version"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.bad_schema"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.trailing_word"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.bad_alphabet"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.listContext"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableControlCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableControlCases.list_context_realized"
+      }
+    ],
+    "dependencies": {
+      "formation": "Actual slot specifications, optional occurrence references and typed remaining instructions are captured from the retained present. Reference positions are downstream encodings of those positive ports.",
+      "execution": "Capture reads the actual control fields. Loading constructs references and typed control without executing tasks. Context decoding uses the explicitly received exact codec; Nat and List Nat have closed implementations.",
+      "proof": "Exact word parsing preserves unconsumed tails. locate_reference restores every actual port. Structural roundtrips yield whole-control equality; supplying the same actual dossier and store yields whole-present equality and HEq of every finite Memory execution and its positive trace.",
+      "transport": "Absent bindings and permitted unsuitable outputs are retained. The source/rule contexts, supplied store and actual dossier/master are fixed. Master resources and store formation are not serialized by this control codec."
+    }
+  },
+  "checks": {
+    "selected_axiom_audits": 93,
+    "full_gate": {
+      "command": "scripts/verify.ps1 with RELATIONAL_PERIMETER_PYTHON set to bundled Python; no concurrent compilation",
+      "status": "passed",
+      "lean_files": 277,
+      "build_jobs": 279,
+      "constants": 24301,
+      "modules": 276,
+      "generated_exceptions": 364,
+      "written_exceptions": 0,
+      "expected_failure_fixtures": 23,
+      "raw_log_filename": "rp-documentary-control-final-verify-20261010.log",
+      "raw_log_sha256": "10d7b410de266a37a7cf3eaf8041231860e77540337babbeffdf25231630e35a"
+    },
+    "control_codegen": {
+      "status": "passed",
+      "roots": 6,
+      "reachable_named_bodies": [
+        2,
+        7,
+        179,
+        75,
+        184,
+        186
+      ],
+      "mutations_rejected": 6,
+      "scope": "Named dependency bodies and statically named closures/objects. Received context-codec closure behavior and whole-process module initialization are explicit boundaries."
+    },
+    "control_smoke": {
+      "status": "passed",
+      "processes": 57,
+      "control_and_store_component_restarts": 18,
+      "invalid_controls_rejected": 20,
+      "post_prefix_context_resets": 2,
+      "proposal_regimes": 8,
+      "per_turn_context_reset_settings": 2,
+      "loaded_queue": "one pending master quotation and one dependent sum",
+      "in_process_future_with_supplied_actual_master_and_store": 1,
+      "failed_and_unsuitable_bindings_preserved": true,
+      "equal_valued_distinct_ports_preserved": true,
+      "full_present_byte_restart": false,
+      "qwen_calls": 0
+    }
+  },
+  "language": "fr_only",
+  "review": {
+    "reader": {
+      "status": "pending"
+    },
+    "independent": {
+      "status": "not_recorded"
+    }
+  },
+  "prior_math_sha256_lf_unchanged": {
+    "Tests/LocalAlignment/DocumentaryAdaptive.lean": "fca18a29d12143e385468a063d6f9bb8162feb4083c45d40c09e9ef72541a177",
+    "Tests/LocalAlignment/DocumentaryAdaptiveCases.lean": "5c5ac466af887fbd72f61573cff47a09e63c0f10a425e640e5f5ce0c7b15ea20",
+    "Tests/LocalAlignment/DocumentaryCanonicalAdaptiveRestoration.lean": "30405ea9cc67475c89e29107546f49fb474e8ee0f6ca15ef6ec3853d90392a38",
+    "Tests/LocalAlignment/DocumentaryCanonicalRestoration.lean": "ee13bef3265aefbab92417c14c71cd0891036bb4affe1d67adbe657d0b95f1cf",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryDeduction.lean": "e0c47edc703c3ab6afadbb5c11a92b9719efb22d84b1146929aeda08bee14017",
+    "Tests/LocalAlignment/DocumentaryDeductionCases.lean": "a04bb5065d81ad4942d6965e9863cfc7ab787d954da420b57799e86ef88e4bb2",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentaryMasterPayload.lean": "c2b9d7f2b7756e7596e58b465310cd8f9f8140c6e04bc3665787a851264c4031",
+    "Tests/LocalAlignment/DocumentaryMaterializedPresent.lean": "a73b8e8cb3a3a8072970910ffc62424e3b81565317ea13816e67dabaed7da452",
+    "Tests/LocalAlignment/DocumentaryMemory.lean": "066d92f60bab73b6963f8c26dc95a62b06390ca9164167eed6aebd0f7445eab7",
+    "Tests/LocalAlignment/DocumentaryMemoryCases.lean": "e077758f5a6fc518cc475a8ceccfeb82fd33c7588a6981312fc7eb20c7604112",
+    "Tests/LocalAlignment/DocumentaryPortable.lean": "72dba0634c69749256e16a5da9715230a25a1c600a3f90c236ce8cdb5301abf4",
+    "Tests/LocalAlignment/DocumentaryPortableCases.lean": "e700d01b277e09f25f4c73527e84237c5fe030dd5ff5850398aef69c3d8059b5",
+    "Tests/LocalAlignment/DocumentaryPortableCheckpoint.lean": "3f3091643a4e78448b12de35969ba579b88ab0e118ac5ea6e79d06bb0ba87f35",
+    "Tests/LocalAlignment/DocumentaryPortableMemory.lean": "5346236268ceea596da2274815843d8f17ee5d86b99f9a6dc052db2c03d177e7",
+    "Tests/LocalAlignment/DocumentaryPortableStart.lean": "4ae9f46299041e015479d513ced35eb15d1e6e469813a86f37a3245a06647e7d",
+    "Tests/LocalAlignment/DocumentaryPortableStore.lean": "4db61b65d5785059bb4e69558a0b79827d39b66935645c058115cb3cc22732fe",
+    "Tests/LocalAlignment/DocumentaryPortableStoreCases.lean": "fa3f984943a2b33750bc6bb5aba90a64ca6c5a224d58479ae67ea059b5caf7ad",
+    "Tests/LocalAlignment/DocumentaryProgram.lean": "decf0ead9a3bd1ebc6f90198fc863194b050bf1b4e4dcf6cdcf0c4bf0dd794cd",
+    "Tests/LocalAlignment/DocumentaryProgramCases.lean": "ff701ac289efa1ffdcd01bcdc0ad4ef8cb6e2c2429c89756238f22b4435ffe6b",
+    "Tests/LocalAlignment/DocumentaryRestorationComponentsCases.lean": "c45e41c590131bc903c1318215bc329c96fced934d4ea577d4bdc61414768e2a",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "Tests/LocalAlignment/DocumentarySnapshot.lean": "23a4e2ccb493d76936c7db0a84d8bd7595842e0ce809c5876b221ab4da311d46"
+  },
+  "historical_ledgers_sha256_lf_unchanged": {
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/raccord-documentaire-maitre-verification.json": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1",
+    "docs/work/composition-dossier-maitre-verification.json": "d4f0d090591456abf63bec1ddd06c515cbe2386b5452aad4da634abc7a2fea0d",
+    "docs/work/deductions-documentaires-verification.json": "de34f2a8a2183ac5adfefed4245f9e5880600083058dd2b3d72fdece5c271feb",
+    "docs/work/programmes-documentaires-verification.json": "3485d921605f5371d1a2dd0fe3a3c7f3302b4b3c06f888ac150fab9cb182cecb",
+    "docs/work/continuation-documentaire-adaptative-verification.json": "38f3e4696098f3024e08aca019cd92eb061c02d9128ac61098081250cb77cd3e",
+    "docs/work/memoire-documentaire-verification.json": "8f4e3bc1d809cf2147c00fd0696396164db4a43c2e7781cf348b0df7e06002bc",
+    "docs/work/checkpoint-documentaire-portable-verification.json": "984300f4fdd501bd9ccb5f984a0ebdc2adf85fe7556c0b29b934fff48bda82d0",
+    "docs/work/restauration-stockage-documentaire-verification.json": "298e0bce7e6d9857ae8372f717ec237e7de9c9afe5a462b6c3cb32f4fbce830d",
+    "docs/work/restauration-present-composants-verification.json": "40d501f09dc55566692e0199a172a56af1bd0877aa654c7f489b905e0e3aa7be"
+  },
+  "registry_sha256_lf_unchanged": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+  "open_obligations": [
+    "Faithful first-order materialization and byte codec for retained master values, producer environments, formation and dependent ports.",
+    "Joint full-present byte loading with identified received sources, permissions and rule catalogue.",
+    "All declared finite futures and new master quotations after physical full-present restart.",
+    "Documentary local-model interface, declared environment effects and comparative lot 7."
+  ],
+  "commands": [
+    "lake build Tests.LocalAlignment.DocumentaryPortableControlCases",
+    "lake build Tests.LocalAlignment.DocumentaryPortableControlCases Tests.AllConstantsAudit",
+    "python -B -X utf8 scripts/check-documentary-control-codegen.py",
+    "python -B -X utf8 scripts/run-documentary-control-smoke.py",
+    "scripts/verify.ps1 with RELATIONAL_PERIMETER_PYTHON set to bundled Python"
+  ],
+  "verification_attempts": [
+    {
+      "stage": "Initial codec build",
+      "result": "Mixed integer numeral patterns generated axiom dependencies. Explicit Int/Nat constructor matches replaced them; selected and exhaustive audits are clean."
+    },
+    {
+      "stage": "Closed case build",
+      "result": "Literal actual-binding reductions were too expensive. Exact general control proofs remain unchanged; literal binding outcomes are checked by the executable independent-oracle smoke."
+    },
+    {
+      "stage": "Initial runtime clients",
+      "result": "Reserved prefix identifier and unconstrained dependent final-list placeholders were corrected before the passing source was fixed."
+    },
+    {
+      "stage": "Initial full gate",
+      "result": "Rejected because a concurrent targeted rebuild temporarily removed the imported control olean. Complete gate rerun without concurrent compilation.",
+      "raw_log_filename": "rp-documentary-control-full-verify-20261010.log",
+      "raw_log_sha256": "29b1c2fa0ab5b3eea46753d2164118cbb4b1360ab198617b1efa055be385b898"
+    },
+    {
+      "stage": "Final full gate",
+      "result": "Passed on the final mathematical sources and runtime scripts."
+    },
+    {
+      "stage": "Pre-commit staged diff check",
+      "result": "One excess final LF removed from check-documentary-control-codegen.py. Python AST before/after is identical; codegen check rerun passed. All Lean sources and runtime smoke script remain byte-identical to the verified increment. Full gate log is preserved.",
+      "file": "scripts/check-documentary-control-codegen.py",
+      "before_sha256_lf": "473d71b3e6be49e3f37a5a4b5378efde31a57506c507d2300b340a1ef5cde7be",
+      "after_sha256_lf": "705f4176e4db413e32d49660454eec7d96f79a96bdf502ad9391bcfa3bc942de",
+      "verified_utc": "2026-10-10T07:47:53.528899+00:00"
+    }
+  ],
+  "git": {
+    "upstream": "6575de4a219301cb42c93c842de7814145b013ff",
+    "ahead_behind": [
+      "0",
+      "0"
+    ],
+    "commit_or_push_performed": false
+  },
+  "source_sha256_lf": {
+    "Tests/AllConstantsAudit.lean": "32b2d616c4439dffa4bcdc781466649ea4c9a2bcc9d5ee4647df3f6218411bb0",
+    "Tests/LocalAlignment/DocumentaryControlCodec.lean": "2ab8bea4cebd8233944918e596d1c38883dfa3311c3fd57138d8b540108b366a",
+    "Tests/LocalAlignment/DocumentaryPortableControl.lean": "8b2714f77291fa526f15c030435821b34fe2c60321ae4366db341a64bf38cfcb",
+    "Tests/LocalAlignment/DocumentaryPortableControlCases.lean": "99c6bf3db0f24988671e5231041d535c2ada4bb4f7e5450456c0d83215502512",
+    "apps/local-alignment/README.fr.md": "a0ad754953047b803ce3e713cff7497ec97f6ca32702fb4c992b6d5f38e6a93c",
+    "docs/work/controle-documentaire-portable.fr.md": "112f158c350b071d88b0f191ac6fc69acaa05f442a6209cb992d684f265aa1ac",
+    "docs/work/plan-alignement-agent-dossier.fr.md": "0036b45332b750469c053bf21cc8a3c9316cf8dc2cf45af61e02fb8b3709d933",
+    "scripts/check-documentary-control-codegen.py": "705f4176e4db413e32d49660454eec7d96f79a96bdf502ad9391bcfa3bc942de",
+    "scripts/run-documentary-control-smoke.py": "9e4182fdd06e3e768ddbab9d04ebf17652a5a570368facfe25c1fe332e772faa",
+    "scripts/verify.ps1": "46a67919071877fd15cb3e8d3724c80e6a9311b7c15bc3ed9733b7b76d71cf00",
+    "scripts/verify.sh": "2f644479048fa30671e461a4903d123f351f5effb906f3a5077dbfd3bf201f7e"
+  },
+  "source_fingerprint": "cc4c0783a810dd65205ec7cccf58532675abdf18d774494ae6ad478191f320f7",
+  "fingerprint_encoding": "SHA256 of UTF-8 compact JSON of source_sha256_lf with sorted keys; file digests normalize CRLF to LF only.",
+  "manifest_scope": "Every changed/untracked source or documentary path except this ledger, relative to the existing base commit. Earlier mathematical modules, historical ledgers and registry remain unchanged."
+}

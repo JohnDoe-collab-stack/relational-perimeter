@@ -109,6 +109,8 @@ fi
 "${python_command[@]}" scripts/run-documentary-portable-store-smoke.py
 "${python_command[@]}" scripts/check-restoration-components-codegen.py
 "${python_command[@]}" scripts/run-restoration-components-smoke.py
+"${python_command[@]}" scripts/check-documentary-control-codegen.py
+"${python_command[@]}" scripts/run-documentary-control-smoke.py
 "${python_command[@]}" scripts/check-continuation-signature-codegen.py
 "${python_command[@]}" scripts/check-variable-master-codegen.py
 "${python_command[@]}" scripts/check-integrated-machine-codegen.py
