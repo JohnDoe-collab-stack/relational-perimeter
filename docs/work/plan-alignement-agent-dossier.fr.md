@@ -843,6 +843,15 @@ payload conservé ; son remplacement par des octets et la reprise froide du
 présent complet avec de nouvelles citations maître restent à réaliser.
 Les cases de clôture durable demeurent ouvertes.
 
+La [spécification persistante v0.3](RP_ALIGN_PERSIST_SPEC_v0_3.fr.md) et son
+[document d'application](application-alignement-persistant.fr.md) précisent
+maintenant la suite, avec A avant B. Le premier raccord expose le secours
+exécutable depuis la file reçue, sa validité primitive, son progrès et son
+accomplissement, y compris après oubli et chargement du contrôle dans la portée
+existante. Le contrôle instrumenté, les ressources réservées, le présent maître
+entièrement portable et les transactions restent à réaliser. Ce raccord ne
+clôt pas le lot 6.
+
 Le [raccord de l’assignation séquentielle](assignation-sequentielle-portable.fr.md)
 ferme maintenant ses invariants dépendants et sa restauration entière dans
 la classe positive déclarée. L’assignation chargée est incorporée comme champ

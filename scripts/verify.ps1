@@ -147,6 +147,10 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "state and assembled checkpoint compiled dependencies failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "run-state-assembly-smoke.py")
   if ($LASTEXITCODE -ne 0) { throw "state and assembled checkpoint component restart failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-recovery-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled documentary recovery sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-recovery-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary recovery smoke failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-continuation-signature-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled signature dependency check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-variable-master-codegen.py")

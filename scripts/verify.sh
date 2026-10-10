@@ -119,6 +119,8 @@ fi
 "${python_command[@]}" scripts/run-sequential-restart-smoke.py
 "${python_command[@]}" scripts/check-state-assembly-codegen.py
 "${python_command[@]}" scripts/run-state-assembly-smoke.py
+"${python_command[@]}" scripts/check-documentary-recovery-codegen.py
+"${python_command[@]}" scripts/run-documentary-recovery-smoke.py
 "${python_command[@]}" scripts/check-continuation-signature-codegen.py
 "${python_command[@]}" scripts/check-variable-master-codegen.py
 "${python_command[@]}" scripts/check-integrated-machine-codegen.py
