@@ -1,0 +1,253 @@
+{
+  "kind": "constructed_development_verification",
+  "confirmatory": false,
+  "status": "passed",
+  "created_utc": "2026-10-09T18:58:38.194237+00:00",
+  "branch": "codex/ai-alignment-under-contract",
+  "base_revision": "d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08",
+  "extension_committed": false,
+  "scope": "Actual master extraction packets deposited in a constructed support; two-port integer sum and signed difference over received annotations; rule occurrence permissions, derived goals with value/rule/source dependencies, transitive source certificates, preservation and continuation. Closed two-deduction instance; no complete mixed-task language, adaptive documentary model run, future-equivalent reduced checkpoint or with/without comparison.",
+  "toolchain": "leanprover/lean4:v4.33.1",
+  "checks": {
+    "selected_audits": {
+      "Tests/LocalAlignment/DocumentaryDeduction.lean": 53,
+      "Tests/LocalAlignment/DocumentaryDeductionCases.lean": 56
+    },
+    "new_selected_audits": 109,
+    "fixture_checks": 24,
+    "literal_oracle_cases": 864,
+    "runtime_audits": 5,
+    "compiled_sharing": "passed",
+    "bounded_codegen_application_checks": 9,
+    "codegen_mutations_rejected": 6,
+    "rendered_bytes_exact": true,
+    "temporary_type_rejections": [
+      {
+        "case": "future_conclusion_as_existing_premise",
+        "status": "expected_type_rejection",
+        "errors": 1,
+        "source_sha256_lf": "927de7ba5f118e57415208acdac5468ff14c9d95352ff0393d75c8533c7108ec",
+        "log_sha256": "77d2c114147a278a62c316ce87bc4e91a7c4b99d335aeb025c51ce632a73dcd6"
+      },
+      {
+        "case": "permission_from_equal_rule",
+        "status": "expected_type_rejection",
+        "errors": 1,
+        "source_sha256_lf": "fa8088f02aca3eb2ba82e5026ac24ce44c2506f7c7105b24f18858ead781e34d",
+        "log_sha256": "4d2990e4038c56a02b0b5b5c8a1defb813dd012846ecfc16488c7a85ca11f792"
+      },
+      {
+        "case": "derived_value_as_received_citation",
+        "status": "expected_type_rejection",
+        "errors": 1,
+        "source_sha256_lf": "cd6069cbb1ad042e1852e31fa6f35284afdb9709808fc8f24d44773eb898b810",
+        "log_sha256": "04ebd43be1b2537af7f865b612c039744dca6f1e3ee92fc2248a6fe38b79be45"
+      }
+    ],
+    "full_gate": "passed",
+    "full_gate_log_sha256": "185ca1fe38fed4e3d127f28550d082a2b6814395bcb8e14b9b395e4a77722548",
+    "lean_files": 255,
+    "constants": 22001,
+    "modules": 254,
+    "compiler_generated_exceptions": 364,
+    "written_exceptions": 0,
+    "expected_failure_fixtures": 23,
+    "registered_claims": 19,
+    "registered_declarations": 91,
+    "scientific_document_self_tests": 8,
+    "previous_registered_claims_unchanged": 18,
+    "old_target_unchanged": true,
+    "prior_documentary_mathematical_sources_unchanged": true,
+    "final_document_links": "passed",
+    "final_diff_check": "passed"
+  },
+  "commands": [
+    "lake env lean Tests/LocalAlignment/DocumentaryDeduction.lean",
+    "lake env lean Tests/LocalAlignment/DocumentaryDeductionCases.lean",
+    "lake build Tests.LocalAlignment.DocumentaryDeductionCases",
+    "python -B -X utf8 scripts/check-documentary-deduction-codegen.py",
+    "python -B -X utf8 scripts/run-documentary-deduction-smoke.py --output docs/work/dossier-fixture-deductions.fr.md",
+    "scripts/verify.ps1"
+  ],
+  "attempts": [
+    {
+      "check": "development Lean elaboration",
+      "status": "corrected",
+      "reasons": [
+        "Explicit kind binder and qualified request namespace required.",
+        "Admission now directly retains the actual formed support.",
+        "Constructive byte renderer avoids logical dependencies of string concatenation and overlapping patterns."
+      ]
+    },
+    {
+      "check": "development smoke",
+      "status": "corrected",
+      "reasons": [
+        "Client namespace opening added.",
+        "Nested option matches replace overlapping patterns to keep clean executable audits.",
+        "Rendered colon spacing corrected; actual bytes now equal the independent fixture."
+      ]
+    },
+    {
+      "check": "compiled certificate review",
+      "status": "corrected",
+      "reason": "Concrete accomplishment witness now consumes the actual stored trace; generic existence is a proof, and no quotation rerun occurs in its initializer."
+    },
+    {
+      "check": "scripts/verify.ps1",
+      "exit": 1,
+      "log_sha256": "a41a15653df4240d609206a29244934230cc7c728adf3f9d18dfbbdf3b4d9cf7",
+      "reason": "Function identifier collided with a forbidden Lean token; renamed to incorporateDerived."
+    },
+    {
+      "check": "scripts/verify.ps1",
+      "exit": 1,
+      "log_sha256": "6719a428f9f9fb3a584ce55c086bd1542589c97ba0f321e467faea587f30feac",
+      "reason": "Library list-map append proof used a forbidden dependency; replaced by sourcePositions_append, proved by structural recursion."
+    },
+    {
+      "check": "scripts/verify.ps1",
+      "exit": 0,
+      "log_sha256": "baec2e92656c3e2195b53eeb26c768b6a0405fbcc4eb487411dd5c3ad59da34c"
+    },
+    {
+      "check": "scripts/verify.ps1",
+      "exit": 0,
+      "log_sha256": "185ca1fe38fed4e3d127f28550d082a2b6814395bcb8e14b9b395e4a77722548",
+      "stage": "same-task permitted alternative added",
+      "scope": "Actual refusal and context reset followed by permitted execution, using one unchanged independent criterion."
+    },
+    {
+      "check": "scripts/check-scientific-docs.py --static and git diff --check",
+      "exit": 0,
+      "stage": "final documentation and evidence",
+      "scope": "Report and plan updated after the complete gate; mathematical sources and executable checks unchanged."
+    }
+  ],
+  "source_sha256_lf": {
+    "Tests/AllConstantsAudit.lean": "225de0732f6ce094f37767c7cb421493868a208adaf0d5b91d4b29bb590288b5",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryDeduction.lean": "e0c47edc703c3ab6afadbb5c11a92b9719efb22d84b1146929aeda08bee14017",
+    "Tests/LocalAlignment/DocumentaryDeductionCases.lean": "a04bb5065d81ad4942d6965e9863cfc7ab787d954da420b57799e86ef88e4bb2",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "apps/local-alignment/README.fr.md": "2baab07ad40798ceef8f3ebf358dca732c36c650b06d7162017398cc14502e52",
+    "docs/methode-de-travail-scientifique.fr.md": "04dd6b4187fccd20961491f24e2517c9d7f76c863c7520e8b3a3f55cca90b131",
+    "docs/scientific-claims.json": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+    "docs/work/alignement-ia-locale-resultats.fr.md": "3da613f33c4ef5e346283eb8e6bc5e7f91e94a723290560274bf508686d214f7",
+    "docs/work/composition-dossier-maitre-verification.json": "d4f0d090591456abf63bec1ddd06c515cbe2386b5452aad4da634abc7a2fea0d",
+    "docs/work/composition-dossier-maitre.fr.md": "f86e72693e506a7ac1e81d8d7d12a324f60c6fd06080da71b74293621535f438",
+    "docs/work/deductions-documentaires.fr.md": "df9e8e777e41e3adf300ad41946ad872bfe6f6f079cae9e1126f9bd7c8a3a263",
+    "docs/work/dossier-fixture-compose.fr.md": "ab253f60f15de40aacebb4b246082277b02167c6cbdabb453aa4fc197e3ca22f",
+    "docs/work/dossier-fixture-constitue.fr.md": "044188c9c4eba9ff5ba674fc8de6d6846f0d1b1432cff129d01214b63b421877",
+    "docs/work/dossier-fixture-deductions.fr.md": "f63109ed94d82afdc70dd3de37ad465a4d82eec26fb69bda3c2362e7ee35c678",
+    "docs/work/dossier-fixture-maitre.fr.md": "f03864523721f92bf463738fb6102d924987de71b3396f39e5a76883b824f923",
+    "docs/work/plan-alignement-agent-dossier.fr.md": "46f589a6e1ba00100690a34eb9a4832b839720e94eaf81433f49b5cc1dc33e9b",
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/premiere-couche-documentaire.fr.md": "1580a40b435b330b43bf2ff43b92a4bb314d09dafbd2e546ebd296ca1d6da465",
+    "docs/work/raccord-documentaire-maitre-verification.json": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1",
+    "docs/work/raccord-documentaire-maitre.fr.md": "4fbc1c1a36d5af6e3e13191876d2197100f0134ed7a2375ccdb8cfb3fc30f912",
+    "scripts/check-documentary-codegen.py": "871b2e39ec462335d51566e92160d2af119d48c2f0da2bad5e6ee311584dbf9b",
+    "scripts/check-documentary-deduction-codegen.py": "bfd3c25963f6a02501324c2ffbadd7d76b7b14e045c3a97bcdc4702238691bdf",
+    "scripts/check-documentary-dossier-codegen.py": "df244c155096804d787cfefd8ec309609a4a0580ace7ddf37a48023819988ce7",
+    "scripts/check-documentary-master-codegen.py": "6eacca67954c85da92ecc6bd4ada45966d12332e8f7e73e7c9ecb5eaf1b83f8e",
+    "scripts/check-scientific-docs.py": "2942ce4d3cf79b3805c76eb81fad468f0c409822f9ea5071de777417674a0615",
+    "scripts/run-documentary-deduction-smoke.py": "6793a59ddd9fbfaedc7e11a24d9c2560d6115527731a5990f85c72b300e1fb34",
+    "scripts/run-documentary-dossier-smoke.py": "e2179c7c3bfb3d3c532298f3b1b326172e10e8ac8e4cfe7782c4de85a4356e25",
+    "scripts/run-documentary-master-smoke.py": "19c6199e9ff1de3f0491246aa36334663d27eebcb19f57c93b3304cc0c94dec6",
+    "scripts/run-documentary-smoke.py": "4f28889323ce6d283cc051018cbe1cb97dd72457c32a8e01bd6e17e24b7167e5",
+    "scripts/verify.ps1": "198da6f4c95168737fc091b95b936c34b2527ae9ad78dffd09267138b6559aca",
+    "scripts/verify.sh": "51358254a33afd1a79d53b6783c71ce5290134ee98cf604e90aae9ee32f7b482"
+  },
+  "claim_candidate": {
+    "id": "DOCUMENTARY_EXECUTABLE_DEDUCTIONS",
+    "status": "development_uncommitted",
+    "evidence_revision": null,
+    "text": {
+      "file": "docs/work/deductions-documentaires.fr.md",
+      "heading": "Garanties générales et instance fermée"
+    },
+    "role": "experimental_test_extension",
+    "formal_references": [
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.quote_reads_actual_output"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.quoteAll_goal"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.quoteAll_occurrences"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.FormationAction.value"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.FormationAction.transport"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.incorporation_uses_actual_resources"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.incorporation_previous_evidence"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.incorporation_previous_goal"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.Justified.origins_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.execute_goal"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.execute_refused"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.forbidden_rule_incompatible"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeduction",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Deduction.execute_after_context_erasure"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeductionCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.DeductionCases.forbidden_formation_meets_common_task"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeductionCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.DeductionCases.alternative_completes_same_task"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDeductionCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.DeductionCases.forbidden_rule_goal_impossible"
+      }
+    ],
+    "dependencies": {
+      "formation": "Empty initial knowledge, actual authorized quotation deposits, earlier typed premise ports, received rule occurrence, and a produced support; Justified retains positive transitive permissions.",
+      "execution": "quoteAll shares each actual dossier packet, cursor and trace; producer reads two earlier resource ports; incorporateDerived retains the formed support and receipt reads it.",
+      "proof": "Source conformity, actual action equality, rule permission, arithmetic agreement and independent rule/source requirements; positive pair admissibility for documentary accomplishment.",
+      "transport": "Support.Extension preserves old values, positions and occurrence distinctions; old justifications and goals survive permitted incorporations; auxiliary-context reset retains policy and support."
+    },
+    "reviews": {
+      "reader": "pending",
+      "translation": "not_applicable_fr_only",
+      "independent": "not_recorded"
+    }
+  }
+}

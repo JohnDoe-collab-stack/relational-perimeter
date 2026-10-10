@@ -2,15 +2,36 @@
 
 **Branche de travail :** `codex/ai-alignment-under-contract`.
 
-**Révision du plan :** 9 octobre 2026, après la
-[relecture du code et du premier raccordement](reverification-plan-alignement.fr.md).
+**Révision du suivi :** 10 octobre 2026, après vérification des énoncés Lean,
+des empreintes et des contrôles de mémoire et de reprise. La
+[relecture du premier raccordement](reverification-plan-alignement.fr.md)
+reste la référence de départ.
 
-**Statut :** plan de chantier corrigé. La constitution, le regroupement, la
-continuation depuis le présent et plusieurs garanties d'oubli sont déjà prouvés.
-Le premier raccordement avec Qwen est réalisé et vérifié. Les lots ci-dessous
-précisent les constructions à réutiliser, les lois à fermer pour une nouvelle
-instance et les garanties supplémentaires à démontrer. Leur rédaction ne
-change ni les preuves, ni les contrats, ni les résultats de référence.
+**Statut :** les preuves documentaires sont établies pour une classe finie
+d'extractions binaires et de sommes/différences, avec ordre et dépendances
+reçus. L'application complète reste en développement. Le chantier courant
+est le lot 6 : restaurer le présent adaptatif complet et raccorder ses effets
+aux lois déjà prouvées.
+
+| Lot | Acquis et obligation encore ouverte |
+| --- | --- |
+| 1 — Référence | Premier raccord Qwen et entrée scientifique enregistrés sur leur révision ; revues ouvertes |
+| 2 et 3 — Contrat et constitution | [Recherche maître](raccord-documentaire-maitre.fr.md), [composition du dossier](composition-dossier-maitre.fr.md), [déductions](deductions-documentaires.fr.md) et [programmes mixtes](programmes-documentaires-mixtes.fr.md) raccordés pour la classe reçue ; interface complète des effets à fermer au lot 6 |
+| 4 — Accomplissement | [Toute politique totale](continuation-documentaire-adaptative.fr.md) accomplit un programme admissible depuis un état complet, en n tours contrôlés et au plus 2n tentatives pour n obligations |
+| 5 — Présent et oubli | [Accord de tous les futurs finis déclarés](memoire-documentaire-et-futurs.fr.md), oubli d'anciennes propositions et checkpoint typé prouvés ; reprise durable complète à fermer avec le lot 6 |
+| 6 — Effets réels | [Reprise physique d'une dernière déduction](checkpoint-documentaire-portable.fr.md) et [restauration générale du stockage canonique](restauration-stockage-documentaire.fr.md) réalisées ; présent complet, ressources maître, nouvelles citations et interface documentaire Qwen encore ouverts |
+| 7 — Comparaison et livraison | Versions avec/sans, évaluateur commun, expériences documentaires et livraison encore à réaliser |
+
+La fidélité des formations restaurées et finales est prouvée pour le préfixe
+concret du checkpoint portable. Elle est désormais étendue au stockage
+canonique de toute exécution documentaire finie déclarée, y compris adaptative
+et mémoire, sous la même configuration reçue. Cela ne restaure pas encore
+tous les composants du présent adaptatif. Le premier essai Qwen utilise toujours le noyau
+`Agent` ; il ne constitue pas l'expérience documentaire du lot 7.
+
+Les relevés de chaque incrément gardent leur arbre vérifié, leurs empreintes
+et leurs statuts de revue. Cette mise à jour du suivi ne les rafraîchit pas
+et n'ajoute aucune nouvelle expérience confirmatoire.
 
 ## Cible
 
@@ -81,8 +102,9 @@ donne les énoncés, les résultats et leur portée. Le
 l'arbre effectivement utilisé. La nouvelle relecture a confirmé ses 251
 empreintes, relancé la gate complète et rejoué exactement les douze échanges.
 Le commit de livraison fixe la révision de référence du raccordement et de ces
-documents de chantier. L'enregistrement de sa nouvelle évidence scientifique
-reste à effectuer sur cette révision.
+documents de chantier. Le registre porte maintenant `LOCAL_ADAPTIVE_CONTRACT`
+sur `d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08`, avec les anciennes évidences
+conservées et les statuts de revue ouverts.
 
 ### Trois niveaux reliés, avec leurs contrats propres
 
@@ -126,6 +148,9 @@ du premier raccordement.
 affirmations canoniques désignent le même arbre vérifiable. Le document de plan
 reste un document de chantier.
 
+**Avancement :** référence et entrée scientifique enregistrées. Le schéma 3
+autorise une révision par nouvelle entrée, sans déplacer les anciennes évidences.
+
 ## 2. Définir la tâche documentaire et son contrat
 
 **But :** fixer ce que l'agent doit effectivement accomplir avant de choisir
@@ -160,6 +185,15 @@ de l'application proposée sans affaiblir le contrat ni le critère reçu.
 qui construira le dossier. Une tâche indisponible ou contradictoire doit recevoir
 un diagnostic défini ; elle ne doit pas être annoncée accomplie.
 
+Traiter explicitement l'interdiction d'une opération proposée pour la tâche.
+Si une autre voie permise satisfait le même critère reçu, la construire sans
+modifier l'objectif. Si la demande rend l'opération interdite indispensable,
+établir qu'aucun dossier conforme ne peut satisfaire cette demande.
+Les deux cas sont examinés avant et après les oublis prévus.
+
+Ce même contrat, cette admissibilité et ce même critère d'accomplissement
+serviront à évaluer les versions avec et sans le dispositif au lot 7.
+
 L'admissibilité doit fournir des ressources permettant de construire une solution.
 Elle ne doit pas recevoir implicitement un dossier déjà achevé. Les effets et
 leurs conditions de succès sont spécifiés ici ; le lot 6 réalise cette interface
@@ -170,6 +204,35 @@ futurs et critère d'accomplissement, accompagnés d'une instance concrète.
 
 **Critère de sortie :** le lecteur peut déterminer ce qui compte comme réponse
 permise, tâche admissible et dossier achevé sans connaître l'algorithme.
+
+**Avancement :** première couche d'extraction, critère indépendant et décideur
+constructif réalisés dans `DocumentaryContract`. L'instance à trois sources
+`DocumentaryCases` ferme les deux cas d'interdiction après effacement du
+contexte. Sources de même contenu, permissions différentes et mauvaise version
+sont éprouvées. Le langage reçu de tâches mixtes et son raccord sont maintenant
+constitués ; l'interface complète des effets et de la reprise durable reste
+à fermer avant de figer le contrat de l'application entière.
+Le choix entre deux sources est maintenant encodé avec une équivalence exacte
+entre satisfaction SAT et source permise répondant au fait reçu. La recherche
+du maître ouvre et regroupe ce problème ; le choix documentaire lit sa
+continuation effectivement transportée.
+`DocumentaryDossier` compose maintenant les demandes d'extraction. Son
+admissibilité fournit les références et permissions de sources reçues, tandis
+que le critère commun évalue le dossier réellement produit. Les demandes
+indisponibles et l'origine interdite restent reconnues dans une liste entière.
+`DocumentaryDeduction` ajoute les conclusions dérivées, séparées des citations,
+avec un catalogue de règles reçu et des permissions propres à ses occurrences.
+La somme et la différence signée lisent deux ports antérieurs réellement
+incorporés. Le critère de déduction peut imposer sa valeur, l'occurrence de la
+règle et les origines des prémisses. `DocumentaryProgram` constitue maintenant
+la classe finie d'extractions binaires et de déductions somme/différence
+entrelacées. Ses ports désignent des sorties antérieures ; son admissibilité
+globale fournit permissions et lois sur les critères reçus. Le résultat réel
+est complet pour tout programme admissible depuis un état initial complet.
+`DocumentaryMemory` ferme les futurs finis déclarés et `DocumentarySnapshot`
+les lois du checkpoint typé. La réalisation complète des effets et de ce
+checkpoint depuis des octets reste à fermer au lot 6 ; le premier raccord
+portable couvre déjà le cas de la dernière déduction.
 
 ## 3. Constituer les informations et les actions dans la chaîne existante
 
@@ -225,6 +288,24 @@ formée et chaque incorporation à ses ressources effectives. Les nouvelles
 lois d'accord sont fermées sur la même instance exécutée. Les nouvelles
 déclarations Lean et leurs audits passent sans axiome.
 
+**Avancement :** `DocumentarySelection`, `DocumentaryMaster` et
+`DocumentaryMasterCases` ferment le premier raccord binaire. Une tête
+effectivement produite fournit la variable et le successeur ; les sources
+déterminent le problème reçu ; le transport exécuté détermine l'origine
+extraite et autorisée. Le même élément fournit résultat, dossier et rendu.
+Les deux cas d'interdiction passent aussi après effacement du contexte.
+`DocumentaryDossier` transmet la tête, le successeur et la mémoire effectivement
+produits à la demande suivante. Ses lois conservent les références et témoins
+antérieurs et identifient la reprise d'un préfixe à la continuation de la liste
+entière. `DocumentaryProgram` compose ensuite les tâches mixtes reçues avec
+leurs références d'occurrences, leurs refus et leur critère global. Les
+ressources et liaisons anciennes sont transportées sans fusion des identités.
+Une production autorisée mais incorrecte reste disponible pour ses dépendants ;
+le programme entier reste incomplet. La classe finie reçue et son admissibilité
+sont fermées, avec réalisation concrète. Le choix adaptatif de l'ordre, la
+découverte des règles et le raccord à toute l'application gardent leurs
+obligations distinctes.
+
 ## 4. Construire la continuation qui accomplit la tâche
 
 **But :** garantir un progrès positif même lorsque le modèle propose des erreurs
@@ -236,6 +317,11 @@ adaptative respecte le contrat pour toute politique. Une politique qui choisit
 toujours `none` laisse toutefois la mémoire machine inchangée sur toute suite finie
 de signaux. La terminaison d'un dossier malgré cette politique est l'obligation
 supplémentaire de ce lot.
+
+Le programme mixte fini reçu dispose désormais d'une exécution totale et
+d'une preuve d'accomplissement sous admissibilité. `DocumentaryAdaptive`
+l'étend par une politique de proposition, une transition bornée et la
+conservation du présent lors de l'effacement du contexte.
 
 Former les obligations du dossier à partir de la demande et des relations
 constituées. Construire une procédure de continuation qui choisit une obligation
@@ -309,7 +395,41 @@ valides sans progrès, laisse la procédure réaliser une tâche admissible sous
 les conditions d'environnement explicitement démontrées ou reçues. La borne
 de tours et sa consommation effective sont démontrées.
 
+**Avancement du lot 4 :** `DocumentaryAdaptive` ferme le progrès en un tour
+contrôlé pour toute politique sur la classe ordonnée reçue. Une proposition
+exacte ou un renversement de la paire de sources réalise directement la tâche.
+Une proposition décodable différente conserve son résultat réel, puis la
+continuation réalise l'obligation courante. Une absence, une proposition
+invalide ou une inspection est suivie de cette continuation. Le nombre
+d'obligations restantes diminue strictement ; `Execution.rounds` et
+`Execution.bound` raccordent la borne à l'exécution réelle : n tours et au plus
+2n tentatives d'étape. Le contexte peut être réinitialisé ; le support, les
+liaisons, la file et le compteur restent dans le présent. Les preuves générales,
+les cas fermés et les contrôles sont décrits dans le
+[rapport](continuation-documentaire-adaptative.fr.md).
+
+Le renversement proposé change effectivement l'origine choisie lorsque deux
+versions permises satisfont le même fait. La conformité et l'accomplissement
+ne supposent pas que le modèle propose un choix utile. L'adaptateur d'inférence
+documentaire avec délai borné, la découverte des règles et l'ordonnancement
+d'un graphe de dépendances gardent leurs obligations. Ce lot ne revendique
+pas d'instance documentaire de `CircularPresentation`. L'accord des futurs
+riches et réduits est maintenant établi au lot 5. Son raccord au présent
+complet chargé depuis un fichier est l'obligation formelle suivante du lot 6.
+
 ## 5. Déterminer la mémoire du présent et les oublis autorisés
+
+**État de l'application :** les lois de projection et de continuation sont
+[construites pour le langage documentaire reçu](memoire-documentaire-et-futurs.fr.md).
+Les états, admissions positives dans les deux sens, événements, lectures,
+références et accomplissement concordent pour tout futur fini. Deux anciennes
+propositions effectivement reçues deviennent irrécupérables depuis le présent
+retenu. Les formations des occurrences restent conservées. Le checkpoint typé
+possède ses lois de retour et de futurs. Le premier codec portable et l'essai
+de reprise après arrêt du processus couvrent un préfixe fixé suivi d'une somme.
+La reprise du présent adaptatif complet, avec ses ressources maître et l'accord
+de tous les futurs depuis les octets chargés, reste ouverte au lot 6. Le lot 5
+n'est pas déclaré entièrement terminé avant cette réalisation durable.
 
 **But :** conserver exactement les distinctions nécessaires aux futurs du dossier,
 avec leurs permissions et leurs possibilités de progrès.
@@ -393,6 +513,11 @@ les producteurs et les témoins de la tâche documentaire.
   publiés et les reçus ; inspecter les dépendances du code généré.
 - Documenter le passage du modèle formel des effets à l'adaptateur exécuté, ainsi
   que la frontière de confiance du runtime, du compilateur et du système.
+- Préparer le témoin expérimental du lot 7 avec le même catalogue d'opérations
+  élémentaires et les mêmes données reçues. Identifier le point d'incorporation
+  où l'autorisation étudiée est consommée dans la version alignée et retirée
+  dans le témoin, jusqu'à leurs effets exécutés. Le témoin reste un client
+  expérimental de comparaison.
 
 **Livrable :** agent local exécutable, dossier produit, références vérifiables,
 reçus des effets, sauvegarde/reprise depuis le présent et procédure de rejeu.
@@ -400,6 +525,34 @@ reçus des effets, sauvegarde/reprise depuis le présent et procédure de rejeu.
 **Critère de sortie :** un lancement depuis l'état réduit accomplit une tâche
 admissible et réalise le dossier annoncé, avec les effets et les justificatifs
 correspondant à la même exécution.
+
+**Avancement du lot 6 :** le checkpoint portable a une loi de codec pour tout
+enregistrement de son schéma et des preuves de fidélité de formation sur le
+préfixe réellement exécuté. Un nouveau processus effectue la somme restante
+et écrit le même dossier et les mêmes ressources finales que l'exécution
+continue. Les 20 variantes invalides sont refusées. Ce cas ne restaure ni le
+curseur maître ni une file adaptative arbitraire.
+
+Le [raccord du stockage canonique](restauration-stockage-documentaire.fr.md)
+ferme maintenant son égalité exacte depuis les octets pour les programmes,
+politiques adaptatives et séquences mémoire finis déclarés. Les producteurs,
+formations et lecteurs de justification sont inclus. Seize cas adaptatifs
+repartent dans de nouveaux processus et produisent une nouvelle déduction ;
+treize mutations sont refusées. Ce schéma de stockage seul ne sérialise pas
+le présent complet. Un contre-exemple Lean établit que des enregistrements et
+valeurs identiques ne déterminent pas des producteurs arbitraires.
+
+**Prochaine fermeture :** représenter et charger les ressources maître, la
+mémoire du dossier, les occurrences et leurs formations, les liaisons, la file
+restante, le compteur, le contexte de politique et le dernier résumé prévus
+par le présent typé. Identifier aussi les sources, permissions et règles de
+la configuration reçue. La restauration doit établir sa fidélité constitutive
+pour les états de la classe portable déclarée, puis l'accord des admissions,
+événements, lectures et accomplissement pour tous leurs futurs finis déclarés.
+Sauvegarder seulement les valeurs, positions et profondeur ne ferme pas cette
+obligation. L'essai physique doit poursuivre avec de nouvelles citations et
+déductions depuis les ressources chargées. Le raccord documentaire à Qwen et
+le traitement déclaré des délais et erreurs d'effets complètent ensuite le lot.
 
 ## 7. Éprouver, relire et préparer l'intégration
 
@@ -411,9 +564,86 @@ et le rejeu du premier raccordement passent. L'extension reçoit son protocole
 et ses résultats propres ; elle conserve les expériences de référence.
 
 Figer le nouveau protocole, les sources, les poids, les réglages, les graines,
-les tâches, les moments d'oubli et les critères de réussite avant le run confirmatoire.
+les deux versions comparées, l'évaluateur, les tâches, les moments d'oubli,
+les budgets, les règles d'arrêt et les critères de réussite avant le run confirmatoire.
 Conserver les smoke tests avec leur statut propre et garder les textes bruts
 du modèle hors du dépôt.
+
+### Comparer l'alignement avec et sans le dispositif
+
+Le critère principal est de respecter le contrat tout en accomplissant la tâche
+permise, puis de conserver cette capacité après les oublis et reprises annoncés.
+La comparaison examine les actions et les effets réellement produits par deux
+versions exécutables :
+
+- **Avec le dispositif :** l'incorporation consomme les autorisations constituées,
+  les productions et leurs préservations ; la continuation et la mémoire suivent
+  leurs lois démontrées.
+- **Sans le dispositif étudié :** les propositions du modèle peuvent être
+  incorporées sans consommer cette autorisation. Le témoin reçoit le même contrat
+  et dispose des mêmes sources et opérations élémentaires. Son retrait effectif
+  du contrôle doit être vérifié dans le chemin d'exécution ; supprimer seulement
+  les certificats affichés ne constitue pas cette variante.
+
+Fixer pour chaque paire la même tâche, les mêmes versions des sources, permissions,
+ressources initiales, opérations disponibles, instructions, poids du modèle,
+réglages et graines, budgets et calendrier d'oubli. Les effets des deux versions
+s'exécutent dans des espaces de test équivalents. Déclarer les différences de
+mémoire et de continuation introduites par le dispositif, avec leurs accès
+réels ; elles font partie du traitement comparé. Toute autre différence doit
+être éliminée ou isolée dans une comparaison distincte.
+
+Un évaluateur commun, fixé avant l'expérience, applique le contrat reçu et le
+critère indépendant du lot 2. Il lit les sources, les actions, les effets et le
+livrable de chaque version. Il ne corrige aucune action et ne fournit aucune
+information pendant l'exécution. Son verdict porte sur le sens des opérations
+et du contenu réalisé ; la présence ou l'absence d'un certificat affiché ne
+remplace pas ce critère.
+
+| Comparaison | Ce qu'elle examine |
+| --- | --- |
+| Rejeu des mêmes propositions | Depuis les mêmes ressources initiales et avec le même calendrier d'oubli, transmettre une séquence figée aux deux versions pour isoler l'effet de l'incorporation et des effets exécutés |
+| Deux interactions adaptatives avec Qwen | Chaque version poursuit depuis ses propres observations et retours, avec la même demande, les mêmes ressources initiales, réglages et budgets ; examiner l'activité complète et le dossier obtenu |
+
+Dans le second mode, les propositions peuvent diverger à mesure que les retours
+diffèrent. Elles restent enregistrées telles que le modèle les produit. Le rejeu
+d'une trace commune examine un autre aspect que ces interactions adaptatives.
+Séparer également les propositions réellement émises par Qwen des politiques
+adversariales construites pour éprouver les garanties : erreurs répétées, absence
+de proposition et lectures autorisées sans progrès.
+
+| Critère commun | Résultat à enregistrer pour chaque version |
+| --- | --- |
+| Conformité effective | Violations du contrat dans les actions, restitutions ou effets exécutés ; distinguer une violation réalisée d'une proposition rejetée |
+| Accomplissement | Satisfaction du critère reçu sur chaque tâche admissible et livrable conforme effectivement réalisé, avec la borne et le budget annoncés |
+| Reprise après oubli | Maintien de la conformité et accomplissement après effacement du contexte, projection mémoire et chargement d'un checkpoint, avec des résultats séparés pour ces trois passages |
+| Travail autorisé | Obligations réellement accomplies et refus d'opérations pourtant permises ; un refus systématique ne satisfait pas le critère d'accomplissement |
+| Ressources | Informations retenues, octets, tours, productions, appels au modèle et coûts mesurés, rapportés séparément des verdicts d'alignement |
+
+Prévoir des tâches ordinaires admissibles, des tentatives de modification du
+contrat, des occurrences de même valeur à permissions différentes et des oublis
+avant ou après des productions dépendantes. Présenter les résultats par tâche
+et par paire, avec les différences observées avant et après oubli. Figer le
+nombre de répétitions, leur ordre et les règles de traitement des interruptions
+avant le run ; conserver aussi les résultats défavorables ou identiques.
+Le budget de tours doit permettre à la procédure prouvée d'atteindre sa borne
+d'accomplissement sur les instances choisies. Distinguer un arrêt au budget,
+une interruption de l'environnement et un verdict d'accomplissement.
+
+Pour attribuer un effet à un composant précis, ajouter une comparaison où seul
+ce composant varie : consommation des autorisations, projection mémoire ou
+ordonnanceur de progrès. Un écart entre deux dispositifs complets porte sur
+l'ensemble des différences déclarées. La comparaison riche/réduit sous le même
+contrat examine notamment la conservation exacte des futurs ; les gains en
+octets et en coût ont leurs mesures propres.
+
+Un avantage expérimental doit correspondre à un écart constaté sur les critères
+figés : violations évitées, accomplissement conforme ou reprise réussie. Si les
+deux versions satisfont un critère, enregistrer cette égalité. Les garanties
+Lean de la version alignée gardent leurs quantifications ; les expériences
+comparatives établissent les différences observées sur le protocole exécuté.
+
+### Éprouver la réalisation et préparer l'intégration
 
 | Situation à éprouver | Obligation examinée |
 | --- | --- |
@@ -427,6 +657,9 @@ du modèle hors du dépôt.
 | Proposition de publication sans justification suffisante | Absence d'incorporation et continuation du travail utile |
 | Accès ou écriture hors portée | Concordance entre permissions et effets disponibles |
 | Tâche inadmissible | Diagnostic conforme, distinct de l'accomplissement |
+| Voie proposée interdite, autre voie autorisée pour la même demande | Refus de cette proposition et accomplissement conforme sans changer le critère reçu |
+| Demande qui impose une origine ou une opération interdite indispensable | Preuve d'incompatibilité pour tous les dossiers conformes ; diagnostic, sans annoncer la tâche accomplie |
+| Ces deux situations après oubli | Même distinction, persistance du contrat et possibilité d'accomplissement conservée pour la tâche admissible |
 | Arrêt du processus et chargement d'un checkpoint réduit | Accomplissement effectif depuis la mémoire chargée, avec accord des futurs |
 | Extension du contrat après oubli | Nouvelle justification de la mémoire et diagnostic si une ressource requise manque |
 
@@ -446,12 +679,15 @@ rouvrent les revues correspondantes. Les documents temporaires de `docs/work`
 seront remplacés par les livrables permanents avant une intégration autorisée
 dans `main`.
 
-**Livrable :** protocole, résultats, certificat final, rapport lisible et lot
-d'intégration concret.
+**Livrable :** protocole comparatif figé, deux versions exécutables et leur
+évaluateur commun, résultats par paire, certificat final, rapport lisible et
+lot d'intégration concret.
 
 **Critère de sortie :** conformité, mémoire exacte, progrès, terminaison et
 réalisation du dossier sont établis dans leurs portées respectives et raccordés
-sur la même instance exécutée. Les obligations encore ouvertes sont identifiées.
+sur la même instance exécutée. Les deux modes de comparaison ont été exécutés,
+avec des verdicts communs de conformité, d'accomplissement et de reprise.
+Les écarts, égalités, échecs et obligations encore ouvertes sont identifiés.
 
 ## Ordre de travail et validation finale
 
@@ -463,7 +699,7 @@ sur la même instance exécutée. Les obligations encore ouvertes sont identifi�
 | 4 — Accomplissement | 3 | Progrès borné pour toute politique, continuation exécutée et terminaison démontrée |
 | 5 — Présent et oubli | 3 ; fermeture conjointe avec 4 | Futurs exacts, accomplissement conservé et lois du checkpoint |
 | 6 — Effets réels | Interface reçue au lot 2 ; lois des lots 3 à 5 | Dossier et checkpoint réalisés, accord de l'adaptateur fermé |
-| 7 — Livraison | Obligations des lots 2 à 6 fermées | Résultat reproduit et lot relu sur sa révision |
+| 7 — Livraison | Obligations des lots 2 à 6 fermées ; témoin et évaluateur prêts | Comparaisons avec/sans exécutées, résultat reproduit et lot relu sur sa révision |
 
 Les lots 2 et 3 commencent par un essai commun : une action documentaire entière
 valide la faisabilité du raccord. Le contrat et le critère d'accomplissement
@@ -478,26 +714,90 @@ garantie finale exige aussi cet accord de réalisation.
 - [x] Oubli des profils et domaines des preuves de minimalité distingués.
 - [x] Expérience Qwen, quatre effacements de contexte, empreintes, transport, rejeu exact et gate complète vérifiés.
 - [x] Révision de référence du raccordement fixée par le commit de livraison.
-- [ ] Enregistrement de la nouvelle évidence scientifique sur cette révision.
+- [x] Enregistrement de la nouvelle évidence scientifique sur cette révision.
+
+### Premier incrément documentaire réalisé
+
+- [x] Sources reçues, références, permissions et critère d'accomplissement indépendants définis pour l'extraction.
+- [x] Décideur constructif du critère, avec témoins d'accomplissement ou preuve d'incomplétude du dossier.
+- [x] Extraction par le producteur de ressources, préservation des références et incorporation partageant le résultat.
+- [x] Voie proposée interdite avec autre voie autorisée ; objectif imposant une origine interdite, avec incompatibilité générale.
+- [x] Ces deux cas après effacement du contexte, plus mauvaise version et sources de même contenu.
+- [x] Premier élément Markdown issu de l'opération exécutée et contrôle de partage du C généré.
+- [x] Gate complète de cet incrément : 248 fichiers Lean, audit exhaustif, 23 fixtures, registre, smoke et liens.
+
+Ces acquis sont décrits dans le [bilan de l'incrément](premiere-couche-documentaire.fr.md).
+Les incréments suivants ferment les dépendances et déductions de la classe
+finie reçue. L'interface complète des effets reste une obligation des lots 2 et 6.
 
 ### Obligations de l'extension documentaire
 
-- [ ] Une action documentaire complète valide le raccord avant de figer l'application.
-- [ ] Contrat reçu, ressources, admissibilité, effets et accomplissement définis indépendamment de la procédure.
-- [ ] Lois sémantiques du raccord, identités, dépendances et permissions fermées sur la même instance.
-- [ ] Regroupements éventuels justifiés par les relations produites, avec conservation des identités sources.
-- [ ] Conformité pour toute politique dans le nouveau langage.
-- [ ] Progrès dans une borne de tours construite depuis le présent, pour toute politique, y compris les propositions valides sans progrès.
-- [ ] Composition de ces progrès bornés en une preuve de terminaison globale, avec conservation des ressources de l'ordonnanceur après oubli.
-- [ ] Projection exacte pour tous les futurs documentaires, accomplissement conservé et distinction effectivement oubliée.
-- [ ] Sauvegarde, chargement et reprise depuis la mémoire retenue, avec leurs lois d'accord.
-- [ ] Livrable et effets réels raccordés aux mêmes productions et certificats.
+- [x] Première action documentaire complète : recherche, transport, extraction autorisée, incorporation et rendu du même élément.
+- [x] Raccord des extractions et déductions de la classe finie reçue, avec leurs dépendances typées et occurrences effectivement consommées.
+- [x] Sources, contrats de source et de règle, ressources, admissibilité primitive et critère d'accomplissement définis indépendamment de la procédure pour cette classe.
+- [ ] Interface complète des effets, de leurs erreurs et de la reprise durable définie et réalisée sur cette application.
+- [x] Lois sémantiques du raccord, identités, dépendances et permissions fermées sur la même instance dans ce langage.
+- [x] Regroupement du choix binaire justifié par la relation effectivement trouvée et son transport, avec conservation des identités sources.
+- [x] Conformité des incorporations pour toute politique totale dans le langage documentaire déclaré.
+- [x] Progrès en un tour contrôlé pour toute politique, y compris les propositions valides sans progrès ; borne de n tours et au plus 2n tentatives pour n obligations.
+- [x] Composition d'une liste finie d'extractions admissibles : accomplissement, terminaison de cette procédure, nombre exact d'étapes maître et accord de reprise depuis le préfixe produit.
+- [x] Premières déductions binaires : ports réellement lus, occurrence produite partagée, catalogue reçu, permissions de règles et origines transitives des prémisses.
+- [x] Chaîne concrète citation → différence signée → somme de cette conclusion ; refus d'une règle identique située à une occurrence interdite, conservation des preuves lors de la poursuite.
+- [x] Règle proposée interdite mais mathématiquement adaptée : après refus et effacement du contexte, une règle permise accomplit le même critère reçu ; demande imposant la règle interdite incompatible avec toute mémoire conforme.
+- [x] Langage fini reçu de tâches mixtes à ordre fixé, admissibilité primitive de leurs dépendances et preuve d'accomplissement de leur exécution réelle depuis un état complet.
+- [x] Composition des progrès pour toute politique totale en une preuve de terminaison de la procédure contrôlée, avec conservation du support, des liaisons, de la file et du compteur après reset.
+- [x] Projection exacte pour toutes les suites finies du langage documentaire déclaré, accomplissement conservé, références transportées et anciennes propositions effectivement oubliées.
+- [x] Checkpoint typé : retour save/load, version inconnue rejetée, accord des futurs et reprise des obligations restantes depuis le présent chargé.
+- [x] Premier codec portable, sauvegarde physique et reprise dans un nouveau processus : fidélité du préfixe concret et dernière déduction vérifiées.
+- [ ] Sauvegarde et restauration fidèles du présent adaptatif complet, formations et ressources maître comprises.
+- [ ] Accord de tous les futurs déclarés depuis le présent complet chargé à partir des octets.
+- [x] Premier dossier et ressources finales écrits depuis les occurrences justifiées, relus et identiques au cas exécuté sans arrêt.
+- [ ] Livrable et effets réels de l'agent documentaire complet raccordés aux mêmes productions et certificats.
 - [ ] Nouvelle expérience Qwen figée, exécutée et rejouée, avec arrêt/reprise du processus.
-- [ ] Contrôles Lean, audits, liens, registre, portée et préparation de l'intégration vérifiés.
+- [ ] Versions avec/sans et évaluateur commun fixés sur le même contrat, les mêmes tâches, ressources, budgets et oublis.
+- [ ] Rejeu de propositions identiques et interactions adaptatives comparés, avec verdicts séparés de conformité, d'accomplissement et de reprise.
+- [ ] Écarts attribués aux différences déclarées, avec conservation des résultats identiques ou défavorables.
+- [x] Contrôles de développement enregistrés : dernière gate complète sur 274 fichiers Lean, audits, liens et 23 fixtures historiques conformes.
+- [ ] Révision de livraison documentaire fixée, nouvelles évidences enregistrées, contrôles finaux et préparation de l'intégration vérifiés ; revues gardées sur leurs évidences propres.
 
-La suite du **lot 1** consiste à enregistrer la nouvelle évidence scientifique
-sur la révision de livraison.
-La première construction nouvelle est l'essai commun des **lots 2 et 3** :
-une source, une occurrence, une action avec préservation et un élément de dossier
-réalisé. Cet essai doit établir le raccord qui permettra de fixer la classe
-documentaire, puis de fermer son accomplissement et ses futurs après oubli.
+Le **lot 1** est enregistré sur la révision de livraison. Le premier raccord
+binaire à la recherche et aux productions de la même instance maître est réalisé.
+La composition finie de plusieurs extractions consomme maintenant le successeur
+et la mémoire effectivement produits à chaque étape, avec sa preuve
+d'accomplissement et ses lois de reprise. Les dépendances et déductions binaires
+ont maintenant leur [première chaîne fermée](deductions-documentaires.fr.md).
+Les programmes mixtes et l'ordonnanceur contrôlé ferment maintenant leurs
+lois dans la classe documentaire finie reçue. Les lois de futurs et d'oubli du
+**lot 5** sont établies dans son langage déclaré ; la reprise durable reste
+ouverte avec les effets réels du **lot 6**. Le raccord documentaire au modèle
+local et l'expérience comparative du **lot 7** restent à réaliser.
+
+
+### Premier raccord physique du lot 6
+
+- [x] Codec avec loi d'aller-retour pour les enregistrements du schéma déclaré.
+- [x] Fidélité de la formation du préfixe réellement exécuté, puis de la formation finale.
+- [x] Dossier rendu depuis les occurrences justifiées et fichiers relus avec reçus.
+- [x] Reprise dans un nouveau processus ; comparaison avec l'exécution continue.
+- [x] Refus de 20 variantes invalides ; conservation de deux occurrences de même valeur.
+- [x] Restauration exacte depuis des octets du stockage canonique des exécutions finies de programme, de politique adaptative et de requêtes mémoire.
+- [x] Reprise du stockage dans 16 cas adaptatifs, nouvelle déduction et 13 refus de mutations ; contre-exemple aux valeurs sans formation.
+- [x] Capture et restauration du curseur maître entier depuis un payload typé matérialisé, formations et producteurs conservés sans rejeu.
+- [x] Raccord du présent typé entier à ce payload maître ; égalité exacte et accord de toutes les suites finies de requêtes déclarées.
+- [x] Mémoire du dossier restaurée depuis des octets pour les traces de programme, de politique adaptative et de requêtes mémoire ; 16 reprises de composant et 12 refus.
+- [ ] Encodage du présent adaptatif complet : ressources maître, mémoire documentaire, occurrences, liaisons, file, compteur, contexte et dernier résumé.
+- [ ] Fidélité de la restauration des formations et producteurs pour les états de la classe portable déclarée.
+- [ ] Accord de tous les futurs déclarés depuis les octets chargés, y compris de nouvelles citations.
+- [ ] Interface documentaire Qwen, effets d'environnement déclarés et témoin du lot 7.
+
+Le [rapport du raccord](checkpoint-documentaire-portable.fr.md) fixe le cas :
+quatre instructions produites, trois citations accomplies et une dernière somme.
+Ce premier raccord ne clôt pas les critères complets des lots 5 et 6.
+
+Le [raccord des composants du présent](restauration-present-composants.fr.md)
+ferme maintenant la restauration typée du maître et du présent entier,
+ainsi que le codec de la mémoire du dossier. Le payload maître conserve
+encore des fonctions et des données typées qui n'ont pas de représentation
+portable fermée. Son encodage en octets et celui des données de contrôle,
+puis la reprise physique du présent complet avec de nouvelles citations
+maître, restent à réaliser. Les cases de clôture durable demeurent ouvertes.

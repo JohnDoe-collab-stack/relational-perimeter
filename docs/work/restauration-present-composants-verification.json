@@ -1,0 +1,555 @@
+{
+  "kind": "constructed_development_verification",
+  "confirmatory": false,
+  "status": "passed",
+  "branch": "codex/ai-alignment-under-contract",
+  "base_revision": "d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08",
+  "extension_committed": false,
+  "verified_utc": "2026-10-10T06:59:11.382983+00:00",
+  "toolchain": "leanprover/lean4:v4.33.1",
+  "scope": "Exact typed materialized master and full-present restoration, including all finite declared Memory futures. Exact byte restoration of the canonical documentary dossier component under unchanged received sources and contract. Complete-present byte encoding and physical master restart remain open.",
+  "claim_candidate": {
+    "id": "DOCUMENTARY_RESTORATION_COMPONENTS",
+    "status": "development_uncommitted",
+    "evidence_revision": null,
+    "canonical_document": "docs/work/restauration-present-composants.fr.md",
+    "quantification": "Every typed Support and master Cursor for materialization; every typed Snapshot.PresentData and finite declared Memory request sequence for exact typed restoration and positive trace agreement; all canonical Formed dossiers and actual finite program/adaptive/memory executions from a Formed initial dossier for byte roundtrip. No full-present byte theorem or physical master restart is claimed.",
+    "formal_references": [
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.Error"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.prepend"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.record"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.loadPositions"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.Formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.positions_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.packet_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.dossier_step_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.quotation_step_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.program_step_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.program_execution_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.fallback_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.diverted_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.dispatch_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.turn_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.adaptive_execution_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.memory_step_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.memory_execution_formed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.envelope"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.save"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.load"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.byte_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.adaptive_execution_byte_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.memory_execution_byte_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableMemory",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableMemory.component_futures"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.Tree"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.Tree.formation"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.captureFrom"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.captureTree"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.capture_formation"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.ResourceData"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.resources"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.ResourceData.restore"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.resources_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.CursorData"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.cursor"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.CursorData.restore"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.cursor_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.all_cursor_consumers"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMasterPayload",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MasterPayload.future_heads"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.FrameData"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.frame"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.FrameData.restore"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.frame_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.SessionData"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.session"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.SessionData.restore"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.session_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.PresentData"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.present"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.PresentData.restore"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.present_exact"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.all_futures"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.future_events"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryMaterializedPresent",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.MaterializedPresent.accomplishment"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.every_program_dossier_recovered"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.unsuitable_dossier_recovered"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.blocked_dossier_recovered"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.every_adaptive_dossier_recovered"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.every_memory_dossier_recovered"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.output"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.once"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.twice"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.twiceFormed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.repeated_citations_recovered"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.equal_items_separate_occurrences"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.emptyEnvelope"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.wire"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.bad_version"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.wrong_component"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.bad_header"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.unexpected_nodes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.absent_source"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.forbidden_equal_content_source"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.missing_permission"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.invalid_bytes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.every_master_cursor_materialized"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.noncanonical_formation_materialized"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.actual_prefix_materialized"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.every_declared_future_materialized"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryRestorationComponentsCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.RestorationComponentsCases.quotation_and_sum_after_materialization"
+      }
+    ]
+  },
+  "checks": {
+    "selected_axiom_audits": 81,
+    "full_gate": {
+      "command": "scripts/verify.ps1 with RELATIONAL_PERIMETER_PYTHON set to the bundled Python",
+      "status": "passed",
+      "lean_files": 274,
+      "build_jobs": 276,
+      "constants": 24072,
+      "modules": 273,
+      "generated_exceptions": 364,
+      "written_exceptions": 0,
+      "expected_failure_fixtures": 23,
+      "raw_log_filename": "rp-restoration-components-full-verify-20261010.log",
+      "raw_log_sha256": "7bae2763ec087ecae4fa1f9aca1b3952e4beba7b2ed2959c79715143aa48bc5f"
+    },
+    "components_codegen": {
+      "status": "passed",
+      "roots": 5,
+      "reachable_named_bodies": [
+        41,
+        3,
+        3,
+        7,
+        7
+      ],
+      "mutations_rejected": 4,
+      "scope": "Master/present capture and restoration: named dependencies and no indirect closure application. Dossier loader: no historical producer in named dependencies and no indirect application in the direct call graph; retained evidence-reader callbacks are not excluded. Whole-process module initialization and heap identity are outside scope."
+    },
+    "components_smoke": {
+      "status": "passed",
+      "processes": 45,
+      "adaptive_dossier_saves": 16,
+      "fresh_process_dossier_loads": 16,
+      "invalid_dossiers_rejected": 12,
+      "new_certified_extractions": 16,
+      "typed_full_present_continuations": 1,
+      "typed_future_includes": "one new master quotation and one dependent sum",
+      "byte_restart_scope": "documentary dossier only; no physical master or complete-present restart",
+      "qwen_calls": 0
+    }
+  },
+  "review": {
+    "reader": "pending",
+    "translation": "not_applicable_french_only",
+    "independent": "not_recorded"
+  },
+  "prior_math_sha256_lf_unchanged": {
+    "Tests/LocalAlignment/DocumentaryAdaptive.lean": "fca18a29d12143e385468a063d6f9bb8162feb4083c45d40c09e9ef72541a177",
+    "Tests/LocalAlignment/DocumentaryAdaptiveCases.lean": "5c5ac466af887fbd72f61573cff47a09e63c0f10a425e640e5f5ce0c7b15ea20",
+    "Tests/LocalAlignment/DocumentaryCanonicalAdaptiveRestoration.lean": "30405ea9cc67475c89e29107546f49fb474e8ee0f6ca15ef6ec3853d90392a38",
+    "Tests/LocalAlignment/DocumentaryCanonicalRestoration.lean": "ee13bef3265aefbab92417c14c71cd0891036bb4affe1d67adbe657d0b95f1cf",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryDeduction.lean": "e0c47edc703c3ab6afadbb5c11a92b9719efb22d84b1146929aeda08bee14017",
+    "Tests/LocalAlignment/DocumentaryDeductionCases.lean": "a04bb5065d81ad4942d6965e9863cfc7ab787d954da420b57799e86ef88e4bb2",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentaryMemory.lean": "066d92f60bab73b6963f8c26dc95a62b06390ca9164167eed6aebd0f7445eab7",
+    "Tests/LocalAlignment/DocumentaryMemoryCases.lean": "e077758f5a6fc518cc475a8ceccfeb82fd33c7588a6981312fc7eb20c7604112",
+    "Tests/LocalAlignment/DocumentaryPortable.lean": "72dba0634c69749256e16a5da9715230a25a1c600a3f90c236ce8cdb5301abf4",
+    "Tests/LocalAlignment/DocumentaryPortableCases.lean": "e700d01b277e09f25f4c73527e84237c5fe030dd5ff5850398aef69c3d8059b5",
+    "Tests/LocalAlignment/DocumentaryPortableCheckpoint.lean": "3f3091643a4e78448b12de35969ba579b88ab0e118ac5ea6e79d06bb0ba87f35",
+    "Tests/LocalAlignment/DocumentaryPortableStart.lean": "4ae9f46299041e015479d513ced35eb15d1e6e469813a86f37a3245a06647e7d",
+    "Tests/LocalAlignment/DocumentaryPortableStore.lean": "4db61b65d5785059bb4e69558a0b79827d39b66935645c058115cb3cc22732fe",
+    "Tests/LocalAlignment/DocumentaryPortableStoreCases.lean": "fa3f984943a2b33750bc6bb5aba90a64ca6c5a224d58479ae67ea059b5caf7ad",
+    "Tests/LocalAlignment/DocumentaryProgram.lean": "decf0ead9a3bd1ebc6f90198fc863194b050bf1b4e4dcf6cdcf0c4bf0dd794cd",
+    "Tests/LocalAlignment/DocumentaryProgramCases.lean": "ff701ac289efa1ffdcd01bcdc0ad4ef8cb6e2c2429c89756238f22b4435ffe6b",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "Tests/LocalAlignment/DocumentarySnapshot.lean": "23a4e2ccb493d76936c7db0a84d8bd7595842e0ce809c5876b221ab4da311d46"
+  },
+  "historical_ledgers_sha256_lf_unchanged": {
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/raccord-documentaire-maitre-verification.json": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1",
+    "docs/work/composition-dossier-maitre-verification.json": "d4f0d090591456abf63bec1ddd06c515cbe2386b5452aad4da634abc7a2fea0d",
+    "docs/work/deductions-documentaires-verification.json": "de34f2a8a2183ac5adfefed4245f9e5880600083058dd2b3d72fdece5c271feb",
+    "docs/work/programmes-documentaires-verification.json": "3485d921605f5371d1a2dd0fe3a3c7f3302b4b3c06f888ac150fab9cb182cecb",
+    "docs/work/continuation-documentaire-adaptative-verification.json": "38f3e4696098f3024e08aca019cd92eb061c02d9128ac61098081250cb77cd3e",
+    "docs/work/memoire-documentaire-verification.json": "8f4e3bc1d809cf2147c00fd0696396164db4a43c2e7781cf348b0df7e06002bc",
+    "docs/work/checkpoint-documentaire-portable-verification.json": "984300f4fdd501bd9ccb5f984a0ebdc2adf85fe7556c0b29b934fff48bda82d0",
+    "docs/work/restauration-stockage-documentaire-verification.json": "298e0bce7e6d9857ae8372f717ec237e7de9c9afe5a462b6c3cb32f4fbce830d"
+  },
+  "registry_sha256_lf_unchanged": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+  "open_obligations": [
+    "First-order portable representation and faithful byte decoding of actual master producers, values and higher-order environments.",
+    "Portable encoding and validation of slots, bindings, remaining typed queue, policy context, clock and summary.",
+    "Configuration identification, joint byte restoration and all finite declared future laws from loaded bytes.",
+    "Physical full-present restart with new master quotations and dependent deductions.",
+    "Qwen documentary realization, common evaluator and with/without protocol of lot 7."
+  ],
+  "commands": [
+    "lake env lean Tests/LocalAlignment/DocumentaryPortableMemory.lean",
+    "lake env lean Tests/LocalAlignment/DocumentaryMasterPayload.lean",
+    "lake env lean Tests/LocalAlignment/DocumentaryMaterializedPresent.lean",
+    "lake env lean Tests/LocalAlignment/DocumentaryRestorationComponentsCases.lean",
+    "python -B -X utf8 scripts/check-restoration-components-codegen.py",
+    "python -B -X utf8 scripts/run-restoration-components-smoke.py",
+    "scripts/verify.ps1",
+    "python -B -X utf8 scripts/check-scientific-docs.py --static",
+    "git diff --check"
+  ],
+  "verification_attempts": [
+    {
+      "stage": "new Lean modules",
+      "result": "Type-index and dependent-match elaboration errors repaired before successful selected audits; no placeholder retained."
+    },
+    {
+      "stage": "new smoke",
+      "result": "A generic entry matcher introduced a propext dependency; exhaustive list-length cases removed it. A namespace qualification was corrected. All runtime audits then passed."
+    },
+    {
+      "stage": "initial full gate",
+      "result": "Wrong Python environment-variable name selected the Windows Store alias. Correct RELATIONAL_PERIMETER_PYTHON configuration used for the complete passing gate."
+    }
+  ],
+  "git": {
+    "upstream": "d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08",
+    "ahead_behind": [
+      "0",
+      "0"
+    ],
+    "commit_or_push_performed": false
+  },
+  "source_sha256_lf": {
+    "Tests/AllConstantsAudit.lean": "08e6bd3567906fb6ee157a13eef2dd9204bb854bd3b3121adf4f18938d4db60a",
+    "Tests/LocalAlignment/DocumentaryAdaptive.lean": "fca18a29d12143e385468a063d6f9bb8162feb4083c45d40c09e9ef72541a177",
+    "Tests/LocalAlignment/DocumentaryAdaptiveCases.lean": "5c5ac466af887fbd72f61573cff47a09e63c0f10a425e640e5f5ce0c7b15ea20",
+    "Tests/LocalAlignment/DocumentaryCanonicalAdaptiveRestoration.lean": "30405ea9cc67475c89e29107546f49fb474e8ee0f6ca15ef6ec3853d90392a38",
+    "Tests/LocalAlignment/DocumentaryCanonicalRestoration.lean": "ee13bef3265aefbab92417c14c71cd0891036bb4affe1d67adbe657d0b95f1cf",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryDeduction.lean": "e0c47edc703c3ab6afadbb5c11a92b9719efb22d84b1146929aeda08bee14017",
+    "Tests/LocalAlignment/DocumentaryDeductionCases.lean": "a04bb5065d81ad4942d6965e9863cfc7ab787d954da420b57799e86ef88e4bb2",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentaryMasterPayload.lean": "c2b9d7f2b7756e7596e58b465310cd8f9f8140c6e04bc3665787a851264c4031",
+    "Tests/LocalAlignment/DocumentaryMaterializedPresent.lean": "a73b8e8cb3a3a8072970910ffc62424e3b81565317ea13816e67dabaed7da452",
+    "Tests/LocalAlignment/DocumentaryMemory.lean": "066d92f60bab73b6963f8c26dc95a62b06390ca9164167eed6aebd0f7445eab7",
+    "Tests/LocalAlignment/DocumentaryMemoryCases.lean": "e077758f5a6fc518cc475a8ceccfeb82fd33c7588a6981312fc7eb20c7604112",
+    "Tests/LocalAlignment/DocumentaryPortable.lean": "72dba0634c69749256e16a5da9715230a25a1c600a3f90c236ce8cdb5301abf4",
+    "Tests/LocalAlignment/DocumentaryPortableCases.lean": "e700d01b277e09f25f4c73527e84237c5fe030dd5ff5850398aef69c3d8059b5",
+    "Tests/LocalAlignment/DocumentaryPortableCheckpoint.lean": "3f3091643a4e78448b12de35969ba579b88ab0e118ac5ea6e79d06bb0ba87f35",
+    "Tests/LocalAlignment/DocumentaryPortableMemory.lean": "5346236268ceea596da2274815843d8f17ee5d86b99f9a6dc052db2c03d177e7",
+    "Tests/LocalAlignment/DocumentaryPortableStart.lean": "4ae9f46299041e015479d513ced35eb15d1e6e469813a86f37a3245a06647e7d",
+    "Tests/LocalAlignment/DocumentaryPortableStore.lean": "4db61b65d5785059bb4e69558a0b79827d39b66935645c058115cb3cc22732fe",
+    "Tests/LocalAlignment/DocumentaryPortableStoreCases.lean": "fa3f984943a2b33750bc6bb5aba90a64ca6c5a224d58479ae67ea059b5caf7ad",
+    "Tests/LocalAlignment/DocumentaryProgram.lean": "decf0ead9a3bd1ebc6f90198fc863194b050bf1b4e4dcf6cdcf0c4bf0dd794cd",
+    "Tests/LocalAlignment/DocumentaryProgramCases.lean": "ff701ac289efa1ffdcd01bcdc0ad4ef8cb6e2c2429c89756238f22b4435ffe6b",
+    "Tests/LocalAlignment/DocumentaryRestorationComponentsCases.lean": "c45e41c590131bc903c1318215bc329c96fced934d4ea577d4bdc61414768e2a",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "Tests/LocalAlignment/DocumentarySnapshot.lean": "23a4e2ccb493d76936c7db0a84d8bd7595842e0ce809c5876b221ab4da311d46",
+    "apps/local-alignment/README.fr.md": "ddd08db4f643504e96332c5ef97221d8daa92d787e00369e2d25837e81d67592",
+    "apps/local-alignment/documentary-checkpoint.py": "9b84f4482dbcfece4bcddede2301ef2c8ae9f31574b6e152fc51d01ccfac72e1",
+    "docs/methode-de-travail-scientifique.fr.md": "04dd6b4187fccd20961491f24e2517c9d7f76c863c7520e8b3a3f55cca90b131",
+    "docs/scientific-claims.json": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+    "docs/work/alignement-ia-locale-resultats.fr.md": "b90a5a24baa7f9b731b6c041d6ec5410af8762a846e133314741a1a91308b026",
+    "docs/work/checkpoint-documentaire-portable-verification.json": "984300f4fdd501bd9ccb5f984a0ebdc2adf85fe7556c0b29b934fff48bda82d0",
+    "docs/work/checkpoint-documentaire-portable.fr.md": "8fc557a42438f4d25da4e9b2d552bb4b06812c48fe1139b0dd6e6350cca994d8",
+    "docs/work/composition-dossier-maitre-verification.json": "d4f0d090591456abf63bec1ddd06c515cbe2386b5452aad4da634abc7a2fea0d",
+    "docs/work/composition-dossier-maitre.fr.md": "f86e72693e506a7ac1e81d8d7d12a324f60c6fd06080da71b74293621535f438",
+    "docs/work/continuation-documentaire-adaptative-verification.json": "38f3e4696098f3024e08aca019cd92eb061c02d9128ac61098081250cb77cd3e",
+    "docs/work/continuation-documentaire-adaptative.fr.md": "f970d95c77fc7cc9890ea42cbf2c01120c8ed0fbaae4f38e21ff8f6a81598a13",
+    "docs/work/deductions-documentaires-verification.json": "de34f2a8a2183ac5adfefed4245f9e5880600083058dd2b3d72fdece5c271feb",
+    "docs/work/deductions-documentaires.fr.md": "df9e8e777e41e3adf300ad41946ad872bfe6f6f079cae9e1126f9bd7c8a3a263",
+    "docs/work/dossier-fixture-adaptatif.fr.md": "5a72da33b673378192bd556e545e3e331a8936de30da160b23d9416c692c8788",
+    "docs/work/dossier-fixture-compose.fr.md": "ab253f60f15de40aacebb4b246082277b02167c6cbdabb453aa4fc197e3ca22f",
+    "docs/work/dossier-fixture-constitue.fr.md": "044188c9c4eba9ff5ba674fc8de6d6846f0d1b1432cff129d01214b63b421877",
+    "docs/work/dossier-fixture-deductions.fr.md": "f63109ed94d82afdc70dd3de37ad465a4d82eec26fb69bda3c2362e7ee35c678",
+    "docs/work/dossier-fixture-maitre.fr.md": "f03864523721f92bf463738fb6102d924987de71b3396f39e5a76883b824f923",
+    "docs/work/dossier-fixture-programme.fr.md": "7120ae154944d0f1e4cd879d44f0a231dbb78fcc571e4aaf04dda47a7d1ac40b",
+    "docs/work/memoire-documentaire-et-futurs.fr.md": "28b7461efdee5f3d8b12ead387bdea9a1b4b58a39aede6cbcc0a3e6f1e426370",
+    "docs/work/memoire-documentaire-verification.json": "8f4e3bc1d809cf2147c00fd0696396164db4a43c2e7781cf348b0df7e06002bc",
+    "docs/work/plan-alignement-agent-dossier.fr.md": "f8dbccc9e9e5f85e7af31ade2f983fc2088e4271a5ff34ea73cfb6079fc3ceb5",
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/premiere-couche-documentaire.fr.md": "1580a40b435b330b43bf2ff43b92a4bb314d09dafbd2e546ebd296ca1d6da465",
+    "docs/work/programmes-documentaires-mixtes.fr.md": "5640ffe5cd57d83d903a016305cb6117258bfac2f118096835d77faeb5b13bcb",
+    "docs/work/programmes-documentaires-verification.json": "3485d921605f5371d1a2dd0fe3a3c7f3302b4b3c06f888ac150fab9cb182cecb",
+    "docs/work/raccord-documentaire-maitre-verification.json": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1",
+    "docs/work/raccord-documentaire-maitre.fr.md": "4fbc1c1a36d5af6e3e13191876d2197100f0134ed7a2375ccdb8cfb3fc30f912",
+    "docs/work/restauration-present-composants.fr.md": "3a1446748d9d0b4b324f3c96bd134b122cf020dfcd1cb697d0c5f4e692fdec4f",
+    "docs/work/restauration-stockage-documentaire-verification.json": "298e0bce7e6d9857ae8372f717ec237e7de9c9afe5a462b6c3cb32f4fbce830d",
+    "docs/work/restauration-stockage-documentaire.fr.md": "cc9e754b1c38fc3b46c6033478c07d60692f15244787212226d6e42a9545c376",
+    "scripts/check-documentary-adaptive-codegen.py": "4a0248649f26888f74be80ca2b7eea9cd1e2c8c8695bc5205487eb7f0a90228e",
+    "scripts/check-documentary-checkpoint-codegen.py": "86c953ba87d1762609c30d86cbafcdd6e7cfcbeb79d530d7f4e2446eba4f796b",
+    "scripts/check-documentary-codegen.py": "871b2e39ec462335d51566e92160d2af119d48c2f0da2bad5e6ee311584dbf9b",
+    "scripts/check-documentary-deduction-codegen.py": "bfd3c25963f6a02501324c2ffbadd7d76b7b14e045c3a97bcdc4702238691bdf",
+    "scripts/check-documentary-dossier-codegen.py": "df244c155096804d787cfefd8ec309609a4a0580ace7ddf37a48023819988ce7",
+    "scripts/check-documentary-master-codegen.py": "6eacca67954c85da92ecc6bd4ada45966d12332e8f7e73e7c9ecb5eaf1b83f8e",
+    "scripts/check-documentary-memory-codegen.py": "33df04969a65388225d63bf75d3bf2d5087e5334e08a627a650c9753d8158544",
+    "scripts/check-documentary-portable-store-codegen.py": "fd11f576e404dff2fbf5d7f288ae3434bc9b626175dd69056d60f6ca76e7f904",
+    "scripts/check-documentary-program-codegen.py": "fc79597c4463fcef9e9afd2c3d1d3177c42361ec8454160fba9b66919cd17742",
+    "scripts/check-restoration-components-codegen.py": "ee9d043ee4cb5fee312f2545ef82f76a53a6e0782cf001341121a4d4bf319a7e",
+    "scripts/check-scientific-docs.py": "2942ce4d3cf79b3805c76eb81fad468f0c409822f9ea5071de777417674a0615",
+    "scripts/run-documentary-adaptive-smoke.py": "8fe5eead903d7fab2cf193645ee77f9794d741de44f94cabc89ba25fba3c4371",
+    "scripts/run-documentary-checkpoint-smoke.py": "8f8403ce6551cccf39d5ceea54fbc378892251964e17bd03c298b6ce492f9928",
+    "scripts/run-documentary-deduction-smoke.py": "6793a59ddd9fbfaedc7e11a24d9c2560d6115527731a5990f85c72b300e1fb34",
+    "scripts/run-documentary-dossier-smoke.py": "e2179c7c3bfb3d3c532298f3b1b326172e10e8ac8e4cfe7782c4de85a4356e25",
+    "scripts/run-documentary-master-smoke.py": "19c6199e9ff1de3f0491246aa36334663d27eebcb19f57c93b3304cc0c94dec6",
+    "scripts/run-documentary-memory-smoke.py": "a5d1b69148eede16d3d407fe677b45bbb4237a02f31817d4328c7d92cd62a132",
+    "scripts/run-documentary-portable-store-smoke.py": "90cf67180c0af714df74e6195e863f20fc3510591b457463d1eef99eb44eaecb",
+    "scripts/run-documentary-program-smoke.py": "100f19f513ccede4feaa7a907ba21a1095e5d6a4e5007b447ef8776a72b5ad2f",
+    "scripts/run-documentary-smoke.py": "4f28889323ce6d283cc051018cbe1cb97dd72457c32a8e01bd6e17e24b7167e5",
+    "scripts/run-restoration-components-smoke.py": "f0758c02c029fe16312e268c021a076af389e363ca9f0399c008a660a4757c0b",
+    "scripts/verify.ps1": "5920096da1246b26c500399c698450c41ac3dd26d58a94f02265f83d4610011a",
+    "scripts/verify.sh": "e6a5a50d4b55c46837ec347da4e3df32c20555c5197d0709b9d03897f695edad"
+  },
+  "source_fingerprint": "2c886c34e09783530c0c6fec4f41f7c21cf727a817628a26e2e17dba0db6f758",
+  "manifest_scope": "All 83 currently changed/untracked source and documentation paths excluding this ledger. CRLF normalized to LF only. Older evidence files preserved, never refreshed to this new tree."
+}

@@ -1,0 +1,1056 @@
+{
+  "kind": "constructed_development_verification",
+  "confirmatory": false,
+  "status": "passed",
+  "created_utc": "2026-10-09T21:44:20.754799+00:00",
+  "branch": "codex/ai-alignment-under-contract",
+  "base_revision": "d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08",
+  "extension_committed": false,
+  "toolchain": "leanprover/lean4:v4.33.1",
+  "scope": "Canonical quotation/binary-rule resources under unchanged fixed received fixture; actual four-instruction prefix, one final sum; portable record codec and real fresh-process file restart. General adaptive PresentData and retained master cursor serialization still open.",
+  "claim_candidate": {
+    "id": "DOCUMENTARY_FINAL_DEDUCTION_PORTABLE_CHECKPOINT",
+    "status": "development_uncommitted",
+    "evidence_revision": null,
+    "canonical_document": "docs/work/checkpoint-documentaire-portable.fr.md",
+    "quantification": "All Saved records: pure codec roundtrip. All Loaded witnesses of fixed four-slot schema: final sum value/origins. Closed actual prefix: exact support with formation/producers restored and exact final support versus uninterrupted original Program. Physical finite fixture test under compiler/runtime/filesystem/system boundary; no general adaptive-byte future agreement.",
+    "formal_references": [
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.Node"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.Error"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.recordKind"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.recordValues"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.record"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.restoreQuotation"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.restoreQuotation_value"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.restoreQuotation_previous"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.restoreDerived"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.restoreDerived_value"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.restoreDerived_previous"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.require"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.loadNode"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.loadStore"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.Bound"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.loadBound"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.Table"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.Table.read"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.Table.positions"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.loadTable"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.Table.frame"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.Table.complete"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.Finished"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.finish"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortable",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Portable.finish_meets"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.context"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.sources"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.contract"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.policy"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.difference"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.sum"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.baseline"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.revision"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.delta"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.demand"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.slots"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.compatible"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.Saved"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.Loaded"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.captureBindings"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.save"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.LoadError"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.load"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.resume"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.continuation_value"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.continuation_origins"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.integerParts"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.positionsParts"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.sourceParts"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.renderBytes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.render"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.nodeWords"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.nodesWords"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.natural"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.readNode"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.readNodes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.nodes_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.bindingWords"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.readBindings"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.bindings_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.words"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.fromWords"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.append_empty"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.append_associative"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.words_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.unary"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.readUnary"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.unary_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.wordBytes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.readWord"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.word_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.bodyBytes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.readBody"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.body_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.encode"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.decode"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.codec_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.Alphabet"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.alphabet_append"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.unary_alphabet"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.word_alphabet"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.body_alphabet"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.encode_alphabet"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.toBytes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.fromBytes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.alphabet_byte_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCheckpoint.physical_byte_codec_roundtrip"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableStart",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableStart.baselineTask"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableStart",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableStart.revisionTask"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableStart",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableStart.script"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableStart",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableStart.initial"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableStart",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableStart.executePrefix"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableStart",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableStart.remaining"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.same_sources"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.same_contract"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.same_rules"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.actual"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.saved"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.actual_bindings_saved"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.actual_nodes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.actual_boundary"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.restoredStore"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.supportView"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.actual_formation_recovered"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.restored"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.loaded_actual_checkpoint"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.byte_codec_actual"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.finished"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.uninterrupted"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.restarted_formation_same"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.restarted_value"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.restarted_origins"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.remaining_does_not_advance_master"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.bad_version"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.bad_task"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.bad_binding"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.bad_value"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.forbidden_source"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.forbidden_rule"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryPortableCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.PortableCases.missing_premise"
+      }
+    ]
+  },
+  "selected_audits": 120,
+  "review": {
+    "independent": "not_recorded",
+    "reader_revision": "pending"
+  },
+  "model_run": "none_new",
+  "prior_math_unchanged": {
+    "Tests/LocalAlignment/DocumentaryAdaptive.lean": "fca18a29d12143e385468a063d6f9bb8162feb4083c45d40c09e9ef72541a177",
+    "Tests/LocalAlignment/DocumentaryAdaptiveCases.lean": "5c5ac466af887fbd72f61573cff47a09e63c0f10a425e640e5f5ce0c7b15ea20",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryDeduction.lean": "e0c47edc703c3ab6afadbb5c11a92b9719efb22d84b1146929aeda08bee14017",
+    "Tests/LocalAlignment/DocumentaryDeductionCases.lean": "a04bb5065d81ad4942d6965e9863cfc7ab787d954da420b57799e86ef88e4bb2",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentaryMemory.lean": "066d92f60bab73b6963f8c26dc95a62b06390ca9164167eed6aebd0f7445eab7",
+    "Tests/LocalAlignment/DocumentaryMemoryCases.lean": "e077758f5a6fc518cc475a8ceccfeb82fd33c7588a6981312fc7eb20c7604112",
+    "Tests/LocalAlignment/DocumentaryProgram.lean": "decf0ead9a3bd1ebc6f90198fc863194b050bf1b4e4dcf6cdcf0c4bf0dd794cd",
+    "Tests/LocalAlignment/DocumentaryProgramCases.lean": "ff701ac289efa1ffdcd01bcdc0ad4ef8cb6e2c2429c89756238f22b4435ffe6b",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "Tests/LocalAlignment/DocumentarySnapshot.lean": "23a4e2ccb493d76936c7db0a84d8bd7595842e0ce809c5876b221ab4da311d46"
+  },
+  "historical_ledgers_unchanged": {
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/raccord-documentaire-maitre-verification.json": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1",
+    "docs/work/composition-dossier-maitre-verification.json": "d4f0d090591456abf63bec1ddd06c515cbe2386b5452aad4da634abc7a2fea0d",
+    "docs/work/deductions-documentaires-verification.json": "de34f2a8a2183ac5adfefed4245f9e5880600083058dd2b3d72fdece5c271feb",
+    "docs/work/programmes-documentaires-verification.json": "3485d921605f5371d1a2dd0fe3a3c7f3302b4b3c06f888ac150fab9cb182cecb",
+    "docs/work/continuation-documentaire-adaptative-verification.json": "38f3e4696098f3024e08aca019cd92eb061c02d9128ac61098081250cb77cd3e",
+    "docs/work/memoire-documentaire-verification.json": "8f4e3bc1d809cf2147c00fd0696396164db4a43c2e7781cf348b0df7e06002bc"
+  },
+  "registry_sha256_unchanged": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+  "open_obligations": [
+    "portable higher-order master resources",
+    "full adaptive retained present and context/observations",
+    "all declared documentary futures from decoded bytes",
+    "Qwen documentary effect interface",
+    "declared effect-error environment and lot7 comparison"
+  ],
+  "verified_utc": "2026-10-09T21:54:28.989553+00:00",
+  "checks": {
+    "full_gate": {
+      "status": "passed",
+      "lean_files": 266,
+      "constants": 23624,
+      "modules": 265,
+      "generated_exceptions": 364,
+      "written_exceptions": 0,
+      "expected_failure_fixtures": 23,
+      "lean_warnings": 0,
+      "raw_log_sha256": "c4ca74780b6c344317d5eba6aa3b4ae51b43103df4ac26d038d03214390d1d24",
+      "raw_log_stored": "outside_repository"
+    },
+    "physical_smoke": {
+      "status": "passed",
+      "physical_processes": 25,
+      "rejections": 20,
+      "normal_and_alternative_runs": 5,
+      "runtime_audits_per_process": 5,
+      "checkpoint_bytes": 235,
+      "document_bytes": 379,
+      "same_uninterrupted_document_and_resources": true,
+      "receipts": [
+        {
+          "mode": "start",
+          "process_id": 44476,
+          "returncode": 0,
+          "client_sha256": "c0820eeb6b3c9154df2a830e2c7ddd4e54280cf48abe1568978602a898d6fffe",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableStart",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "checkpoint": {
+            "bytes": 235,
+            "sha256": "d023b6dd3a16fa698051c91cd2484a16fa21a16deb8c60615127717fa52d2e27",
+            "read_back": true
+          }
+        },
+        {
+          "mode": "resume",
+          "process_id": 3004,
+          "returncode": 0,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "checkpoint": {
+            "bytes": 235,
+            "sha256": "d023b6dd3a16fa698051c91cd2484a16fa21a16deb8c60615127717fa52d2e27",
+            "read_back": true
+          },
+          "document": {
+            "bytes": 379,
+            "sha256": "454c69decffe24cf9c12429bb43c716398bb07f4895b46d7109635d367800796",
+            "read_back": true
+          },
+          "result": {
+            "bytes": 265,
+            "sha256": "3428b2232a32525bae4afe09bc1c622541620e72088a245cf029701d73cf058c",
+            "read_back": true
+          }
+        },
+        {
+          "mode": "continuous",
+          "process_id": 33388,
+          "returncode": 0,
+          "client_sha256": "65d4455e143c64743298c934c3d935215c10781a397a227e413c5428b173ffee",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableStart",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "checkpoint": {
+            "bytes": 235,
+            "sha256": "d023b6dd3a16fa698051c91cd2484a16fa21a16deb8c60615127717fa52d2e27",
+            "read_back": true
+          },
+          "document": {
+            "bytes": 379,
+            "sha256": "454c69decffe24cf9c12429bb43c716398bb07f4895b46d7109635d367800796",
+            "read_back": true
+          },
+          "result": {
+            "bytes": 265,
+            "sha256": "3428b2232a32525bae4afe09bc1c622541620e72088a245cf029701d73cf058c",
+            "read_back": true
+          }
+        },
+        {
+          "mode": "resume",
+          "process_id": 33348,
+          "returncode": 0,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "checkpoint": {
+            "bytes": 235,
+            "sha256": "d023b6dd3a16fa698051c91cd2484a16fa21a16deb8c60615127717fa52d2e27",
+            "read_back": true
+          },
+          "document": {
+            "bytes": 379,
+            "sha256": "454c69decffe24cf9c12429bb43c716398bb07f4895b46d7109635d367800796",
+            "read_back": true
+          },
+          "result": {
+            "bytes": 265,
+            "sha256": "3428b2232a32525bae4afe09bc1c622541620e72088a245cf029701d73cf058c",
+            "read_back": true
+          }
+        },
+        {
+          "mode": "resume",
+          "process_id": 36128,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 48052,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 34136,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 35312,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 47400,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 43792,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 26992,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 16752,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 11284,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 27840,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 8080,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 35664,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 48496,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "c10f0a15b3324736dbbdf215ac24703445e5c3abfa88aa8e9f3f1de4c4cb5c72"
+        },
+        {
+          "mode": "resume",
+          "process_id": 44188,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 28892,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 43488,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 7176,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "b0814883490309b8ede181be62c13f4393b7809dbadbcaf53314d0ca12622194"
+        },
+        {
+          "mode": "resume",
+          "process_id": 26424,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "c10f0a15b3324736dbbdf215ac24703445e5c3abfa88aa8e9f3f1de4c4cb5c72"
+        },
+        {
+          "mode": "resume",
+          "process_id": 2208,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "c10f0a15b3324736dbbdf215ac24703445e5c3abfa88aa8e9f3f1de4c4cb5c72"
+        },
+        {
+          "mode": "resume",
+          "process_id": 46572,
+          "returncode": 1,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "rejected": true,
+          "diagnostic_sha256": "c10f0a15b3324736dbbdf215ac24703445e5c3abfa88aa8e9f3f1de4c4cb5c72"
+        },
+        {
+          "mode": "resume",
+          "process_id": 14432,
+          "returncode": 0,
+          "client_sha256": "454d2dd41cb1507a7f0196f14cdf386ee7d9a2b3d4119cacb9b6097190425b99",
+          "client_import": "import Tests.LocalAlignment.DocumentaryPortableCheckpoint",
+          "runtime_audits": 5,
+          "compiler_runtime_system_boundary": "Lean IO, runtime, filesystem and operating system",
+          "mathematical_scope": "fixed quotation/binary-rule formation; one final sum; no master cursor reload",
+          "checkpoint": {
+            "bytes": 235,
+            "sha256": "445ea6174a1f2da88f69da5e12f6983870916ae372b226f4e02af836ee03fe2b",
+            "read_back": true
+          },
+          "document": {
+            "bytes": 379,
+            "sha256": "454c69decffe24cf9c12429bb43c716398bb07f4895b46d7109635d367800796",
+            "read_back": true
+          },
+          "result": {
+            "bytes": 265,
+            "sha256": "499933d95799cdd4dda47e1357ff9a7043cd1d97a8a72136b019c418d36ecece",
+            "read_back": true
+          }
+        }
+      ]
+    },
+    "compiled_scope": {
+      "direct_loader_bodies": 23,
+      "production_reachable": false,
+      "continuation_execute_sites": 1,
+      "rejected_mutations": 2,
+      "coverage": "generated C direct calls only; no global initialization or indirect-closure completeness claim"
+    },
+    "typed_codec": {
+      "all_saved_records": true,
+      "alphabet_proven": [
+        0,
+        1,
+        2
+      ],
+      "uint8_conversion_roundtrip_proven": true
+    },
+    "candidate_references_checked": 120,
+    "documentation_relative_links_checked": 61,
+    "historical_registry_claims": 19,
+    "no_new_model_run": true
+  },
+  "attempts": [
+    {
+      "phase": "constructive codec and rendering",
+      "status": "corrected",
+      "reason": "Standard integer/string helpers and overlapping constructor patterns introduced forbidden dependencies; replaced by explicit constructor parsing, local list lemmas and byte-part rendering."
+    },
+    {
+      "phase": "physical client audit",
+      "status": "corrected",
+      "reason": "Pattern bindings introduced a forbidden dependency; replaced by explicit Option branches before accepting receipts."
+    },
+    {
+      "phase": "complete gate preliminary",
+      "status": "failed_missing_ledger_link",
+      "reason": "Documentation referenced the new ledger before its draft existed. Draft created; historical ledgers untouched."
+    },
+    {
+      "phase": "exhaustive constant audit",
+      "status": "corrected",
+      "reason": "Unused automatically derived LoadError comparator matcher depended on an excluded logical principle. Removed unused derived helpers; gate policy unchanged."
+    },
+    {
+      "phase": "complete gate final",
+      "status": "passed"
+    }
+  ],
+  "failed_gate_log_sha256": [
+    "0c05d0c2eb1b0bc9c5f1510fcce713cff20c1274b76b56587486399e49d3140d",
+    "f1fb5c009dd4020beb1926cd89210b002693687d707a9346bcd2d01b4df4901b"
+  ],
+  "commands": [
+    "lake build Tests.LocalAlignment.DocumentaryPortableCases",
+    "python scripts/check-documentary-checkpoint-codegen.py",
+    "python scripts/run-documentary-checkpoint-smoke.py",
+    "pwsh -NoProfile -File scripts/verify.ps1"
+  ],
+  "git": {
+    "branch": "codex/ai-alignment-under-contract",
+    "head": "d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08",
+    "upstream_divergence": "0\t0",
+    "commit_push_performed": false
+  },
+  "source_sha256_lf": {
+    "Tests/AllConstantsAudit.lean": "abbcdc79be0894a838cf4ae3ecd27999bf0a2bb2039724d693e11c168531082e",
+    "Tests/LocalAlignment/DocumentaryAdaptive.lean": "fca18a29d12143e385468a063d6f9bb8162feb4083c45d40c09e9ef72541a177",
+    "Tests/LocalAlignment/DocumentaryAdaptiveCases.lean": "5c5ac466af887fbd72f61573cff47a09e63c0f10a425e640e5f5ce0c7b15ea20",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryDeduction.lean": "e0c47edc703c3ab6afadbb5c11a92b9719efb22d84b1146929aeda08bee14017",
+    "Tests/LocalAlignment/DocumentaryDeductionCases.lean": "a04bb5065d81ad4942d6965e9863cfc7ab787d954da420b57799e86ef88e4bb2",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentaryMemory.lean": "066d92f60bab73b6963f8c26dc95a62b06390ca9164167eed6aebd0f7445eab7",
+    "Tests/LocalAlignment/DocumentaryMemoryCases.lean": "e077758f5a6fc518cc475a8ceccfeb82fd33c7588a6981312fc7eb20c7604112",
+    "Tests/LocalAlignment/DocumentaryPortable.lean": "72dba0634c69749256e16a5da9715230a25a1c600a3f90c236ce8cdb5301abf4",
+    "Tests/LocalAlignment/DocumentaryPortableCases.lean": "e700d01b277e09f25f4c73527e84237c5fe030dd5ff5850398aef69c3d8059b5",
+    "Tests/LocalAlignment/DocumentaryPortableCheckpoint.lean": "3f3091643a4e78448b12de35969ba579b88ab0e118ac5ea6e79d06bb0ba87f35",
+    "Tests/LocalAlignment/DocumentaryPortableStart.lean": "4ae9f46299041e015479d513ced35eb15d1e6e469813a86f37a3245a06647e7d",
+    "Tests/LocalAlignment/DocumentaryProgram.lean": "decf0ead9a3bd1ebc6f90198fc863194b050bf1b4e4dcf6cdcf0c4bf0dd794cd",
+    "Tests/LocalAlignment/DocumentaryProgramCases.lean": "ff701ac289efa1ffdcd01bcdc0ad4ef8cb6e2c2429c89756238f22b4435ffe6b",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "Tests/LocalAlignment/DocumentarySnapshot.lean": "23a4e2ccb493d76936c7db0a84d8bd7595842e0ce809c5876b221ab4da311d46",
+    "apps/local-alignment/README.fr.md": "b3bff2448ed2fb54ea2c46ebcc42b73eeec93b1a447bb1c1dd4ff2b14eb3a6a5",
+    "apps/local-alignment/documentary-checkpoint.py": "9b84f4482dbcfece4bcddede2301ef2c8ae9f31574b6e152fc51d01ccfac72e1",
+    "docs/methode-de-travail-scientifique.fr.md": "04dd6b4187fccd20961491f24e2517c9d7f76c863c7520e8b3a3f55cca90b131",
+    "docs/scientific-claims.json": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+    "docs/work/alignement-ia-locale-resultats.fr.md": "b90a5a24baa7f9b731b6c041d6ec5410af8762a846e133314741a1a91308b026",
+    "docs/work/checkpoint-documentaire-portable.fr.md": "8fc557a42438f4d25da4e9b2d552bb4b06812c48fe1139b0dd6e6350cca994d8",
+    "docs/work/composition-dossier-maitre-verification.json": "d4f0d090591456abf63bec1ddd06c515cbe2386b5452aad4da634abc7a2fea0d",
+    "docs/work/composition-dossier-maitre.fr.md": "f86e72693e506a7ac1e81d8d7d12a324f60c6fd06080da71b74293621535f438",
+    "docs/work/continuation-documentaire-adaptative-verification.json": "38f3e4696098f3024e08aca019cd92eb061c02d9128ac61098081250cb77cd3e",
+    "docs/work/continuation-documentaire-adaptative.fr.md": "f970d95c77fc7cc9890ea42cbf2c01120c8ed0fbaae4f38e21ff8f6a81598a13",
+    "docs/work/deductions-documentaires-verification.json": "de34f2a8a2183ac5adfefed4245f9e5880600083058dd2b3d72fdece5c271feb",
+    "docs/work/deductions-documentaires.fr.md": "df9e8e777e41e3adf300ad41946ad872bfe6f6f079cae9e1126f9bd7c8a3a263",
+    "docs/work/dossier-fixture-adaptatif.fr.md": "5a72da33b673378192bd556e545e3e331a8936de30da160b23d9416c692c8788",
+    "docs/work/dossier-fixture-compose.fr.md": "ab253f60f15de40aacebb4b246082277b02167c6cbdabb453aa4fc197e3ca22f",
+    "docs/work/dossier-fixture-constitue.fr.md": "044188c9c4eba9ff5ba674fc8de6d6846f0d1b1432cff129d01214b63b421877",
+    "docs/work/dossier-fixture-deductions.fr.md": "f63109ed94d82afdc70dd3de37ad465a4d82eec26fb69bda3c2362e7ee35c678",
+    "docs/work/dossier-fixture-maitre.fr.md": "f03864523721f92bf463738fb6102d924987de71b3396f39e5a76883b824f923",
+    "docs/work/dossier-fixture-programme.fr.md": "7120ae154944d0f1e4cd879d44f0a231dbb78fcc571e4aaf04dda47a7d1ac40b",
+    "docs/work/memoire-documentaire-et-futurs.fr.md": "28b7461efdee5f3d8b12ead387bdea9a1b4b58a39aede6cbcc0a3e6f1e426370",
+    "docs/work/memoire-documentaire-verification.json": "8f4e3bc1d809cf2147c00fd0696396164db4a43c2e7781cf348b0df7e06002bc",
+    "docs/work/plan-alignement-agent-dossier.fr.md": "961faf94561d2bae7d2373d68361175b2f69771164bb82f6efb53aa66a865e55",
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/premiere-couche-documentaire.fr.md": "1580a40b435b330b43bf2ff43b92a4bb314d09dafbd2e546ebd296ca1d6da465",
+    "docs/work/programmes-documentaires-mixtes.fr.md": "5640ffe5cd57d83d903a016305cb6117258bfac2f118096835d77faeb5b13bcb",
+    "docs/work/programmes-documentaires-verification.json": "3485d921605f5371d1a2dd0fe3a3c7f3302b4b3c06f888ac150fab9cb182cecb",
+    "docs/work/raccord-documentaire-maitre-verification.json": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1",
+    "docs/work/raccord-documentaire-maitre.fr.md": "4fbc1c1a36d5af6e3e13191876d2197100f0134ed7a2375ccdb8cfb3fc30f912",
+    "scripts/check-documentary-adaptive-codegen.py": "4a0248649f26888f74be80ca2b7eea9cd1e2c8c8695bc5205487eb7f0a90228e",
+    "scripts/check-documentary-checkpoint-codegen.py": "86c953ba87d1762609c30d86cbafcdd6e7cfcbeb79d530d7f4e2446eba4f796b",
+    "scripts/check-documentary-codegen.py": "871b2e39ec462335d51566e92160d2af119d48c2f0da2bad5e6ee311584dbf9b",
+    "scripts/check-documentary-deduction-codegen.py": "bfd3c25963f6a02501324c2ffbadd7d76b7b14e045c3a97bcdc4702238691bdf",
+    "scripts/check-documentary-dossier-codegen.py": "df244c155096804d787cfefd8ec309609a4a0580ace7ddf37a48023819988ce7",
+    "scripts/check-documentary-master-codegen.py": "6eacca67954c85da92ecc6bd4ada45966d12332e8f7e73e7c9ecb5eaf1b83f8e",
+    "scripts/check-documentary-memory-codegen.py": "33df04969a65388225d63bf75d3bf2d5087e5334e08a627a650c9753d8158544",
+    "scripts/check-documentary-program-codegen.py": "fc79597c4463fcef9e9afd2c3d1d3177c42361ec8454160fba9b66919cd17742",
+    "scripts/check-scientific-docs.py": "2942ce4d3cf79b3805c76eb81fad468f0c409822f9ea5071de777417674a0615",
+    "scripts/run-documentary-adaptive-smoke.py": "8fe5eead903d7fab2cf193645ee77f9794d741de44f94cabc89ba25fba3c4371",
+    "scripts/run-documentary-checkpoint-smoke.py": "8f8403ce6551cccf39d5ceea54fbc378892251964e17bd03c298b6ce492f9928",
+    "scripts/run-documentary-deduction-smoke.py": "6793a59ddd9fbfaedc7e11a24d9c2560d6115527731a5990f85c72b300e1fb34",
+    "scripts/run-documentary-dossier-smoke.py": "e2179c7c3bfb3d3c532298f3b1b326172e10e8ac8e4cfe7782c4de85a4356e25",
+    "scripts/run-documentary-master-smoke.py": "19c6199e9ff1de3f0491246aa36334663d27eebcb19f57c93b3304cc0c94dec6",
+    "scripts/run-documentary-memory-smoke.py": "a5d1b69148eede16d3d407fe677b45bbb4237a02f31817d4328c7d92cd62a132",
+    "scripts/run-documentary-program-smoke.py": "100f19f513ccede4feaa7a907ba21a1095e5d6a4e5007b447ef8776a72b5ad2f",
+    "scripts/run-documentary-smoke.py": "4f28889323ce6d283cc051018cbe1cb97dd72457c32a8e01bd6e17e24b7167e5",
+    "scripts/verify.ps1": "0f1789f4896520b4836d1592ceb9497c41c0863cc07dfbd3ba1f12db1114b7ed",
+    "scripts/verify.sh": "0b9a61c06c5c64f78700784516d6c7ee21e61d0ca043f4bc0d7a36342e84743c"
+  },
+  "source_fingerprint": "85e6b498154bf9a411f37b81305cf7a6b1b8283649ea40eabab219706431fae9",
+  "manifest_scope": "Current modified/untracked sources, normalized LF UTF-8; sorted path-tab-sha-newline. Own ledger excluded. Seven historical ledgers retained without refreshing their fingerprints."
+}

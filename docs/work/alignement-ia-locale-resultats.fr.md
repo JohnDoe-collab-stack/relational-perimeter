@@ -51,8 +51,10 @@ Le [protocole figé](../../apps/local-alignment/evidence/protocol.json) fixe les
 sources Lean et Python, les poids, le runtime, les paramètres, les graines et
 les demandes avant le run. Les sources existantes partent de `main`, révision
 `b71904ab3b1cabb18faec791a690fa87b434e00e` ; les nouveaux fichiers sont identifiés
-par leurs empreintes dans ce protocole. Les preuves nouvelles ne sont pas encore
-des entrées figées du registre scientifique.
+par leurs empreintes dans ce protocole. Au moment de ce run, les preuves nouvelles
+n'étaient pas encore des entrées figées du registre scientifique. Elles sont
+désormais enregistrées sous `LOCAL_ADAPTIVE_CONTRACT`, sur la révision de livraison
+`d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08` ; le protocole historique reste inchangé.
 
 Le modèle est le
 [Qwen3 4B GGUF officiel](https://huggingface.co/Qwen/Qwen3-4B-GGUF), révision
@@ -140,3 +142,16 @@ La [cible de chantier](alignement-ia-locale-cible.fr.md) et les
 [commandes de reproduction](../../apps/local-alignment/README.fr.md) rendent ces
 obligations explicites. Le serveur local a été arrêté après les expériences ;
 ses poids vérifiés restent disponibles pour les prochaines exécutions.
+
+
+## Premier checkpoint documentaire sur disque
+
+Le [raccord portable](checkpoint-documentaire-portable.fr.md) restaure les formations du préfixe documentaire
+réel et effectue sa dernière déduction dans un nouveau processus. Les octets du
+dossier et des ressources finales sont identiques à l'exécution continue.
+Le test comprend 20 refus de checkpoints invalides et conserve les identités
+de deux occurrences de même valeur. Il est intégré à la gate complète.
+
+La portée est un schéma fixé après les trois citations, avec une seule somme
+restante. La reprise du présent adaptatif complet et du curseur maître reste
+ouverte ; cet incrément ne lance pas de nouvel essai Qwen.

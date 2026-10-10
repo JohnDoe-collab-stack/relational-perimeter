@@ -1,0 +1,54 @@
+{
+  "kind": "non-confirmatory-development",
+  "date": "2026-10-09",
+  "base_commit": "d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08",
+  "extension_committed": false,
+  "command": "pwsh -NoProfile -File scripts/verify.ps1",
+  "exit_code": 0,
+  "log_filename": "rp-documentary-verify-20261009-171946.log",
+  "log_sha256": "ad5e20aede20024a33e7ec0c5a17b549520e9045fbc5df391724a5fe4ec65e4a",
+  "lean_files": 248,
+  "constants": 21240,
+  "modules_audited": 247,
+  "compiler_generated_exceptions": 364,
+  "written_exceptions": 0,
+  "expected_failure_fixtures": 23,
+  "scientific_claims": 19,
+  "registered_declarations": 91,
+  "documentary_selected_audits": {
+    "Tests/LocalAlignment/DocumentaryContract.lean": 47,
+    "Tests/LocalAlignment/DocumentaryCases.lean": 39
+  },
+  "smoke_goal_verdicts": 5,
+  "compiled_applications": {
+    "execute_to_executeCertified": [
+      1,
+      1
+    ],
+    "executeCertified_to_extract": [
+      0,
+      1
+    ],
+    "executeCertified_to_incorporate": [
+      0,
+      1
+    ]
+  },
+  "scope": "Received-source extraction, publication permissions, independent finite goal decision, two prohibition cases after context erasure; master semantic bridge, documentary memory projection, durable restart and model runs remain open.",
+  "source_sha256_lf": {
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/AllConstantsAudit.lean": "d9e34385b8238be53b5cea3d4a060808d98a2e8999602110df368d02575e7fe7",
+    "scripts/check-scientific-docs.py": "2942ce4d3cf79b3805c76eb81fad468f0c409822f9ea5071de777417674a0615",
+    "scripts/check-documentary-codegen.py": "871b2e39ec462335d51566e92160d2af119d48c2f0da2bad5e6ee311584dbf9b",
+    "scripts/run-documentary-smoke.py": "4f28889323ce6d283cc051018cbe1cb97dd72457c32a8e01bd6e17e24b7167e5",
+    "scripts/verify.ps1": "d78c702775a134c440fb22b596954155296ea4681c604f2fa5e046d3a0bcb7e7",
+    "scripts/verify.sh": "efaac4b5053c8f118ec22b04a9093b4da2acf39ebc7f157ca74b5f4ba3780724",
+    "docs/scientific-claims.json": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+    "docs/methode-de-travail-scientifique.fr.md": "04dd6b4187fccd20961491f24e2517c9d7f76c863c7520e8b3a3f55cca90b131",
+    "docs/work/premiere-couche-documentaire.fr.md": "1580a40b435b330b43bf2ff43b92a4bb314d09dafbd2e546ebd296ca1d6da465",
+    "docs/work/plan-alignement-agent-dossier.fr.md": "a6801fe4c1e56cdee873191d47a7041783f48372d97eeab19ab5d49a47582f1a",
+    "docs/work/dossier-fixture-constitue.fr.md": "044188c9c4eba9ff5ba674fc8de6d6846f0d1b1432cff129d01214b63b421877",
+    "apps/local-alignment/README.fr.md": "6be8afd235370ffddd1c90319a4f43859fb233cf18f04cc24bf41ddfcd8c1c31"
+  }
+}

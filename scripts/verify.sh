@@ -89,6 +89,26 @@ fi
 "${python_command[@]}" scripts/check-scientific-docs.py --lean
 "${python_command[@]}" scripts/check-unified-codegen.py
 "${python_command[@]}" scripts/check-agent-codegen.py
+"${python_command[@]}" scripts/check-documentary-codegen.py
+"${python_command[@]}" scripts/run-documentary-smoke.py
+"${python_command[@]}" scripts/check-documentary-master-codegen.py
+"${python_command[@]}" scripts/run-documentary-master-smoke.py
+"${python_command[@]}" scripts/check-documentary-dossier-codegen.py
+"${python_command[@]}" scripts/run-documentary-dossier-smoke.py
+"${python_command[@]}" scripts/check-documentary-deduction-codegen.py
+"${python_command[@]}" scripts/run-documentary-deduction-smoke.py
+"${python_command[@]}" scripts/check-documentary-program-codegen.py
+"${python_command[@]}" scripts/run-documentary-program-smoke.py
+"${python_command[@]}" scripts/check-documentary-adaptive-codegen.py
+"${python_command[@]}" scripts/run-documentary-adaptive-smoke.py
+"${python_command[@]}" scripts/check-documentary-memory-codegen.py
+"${python_command[@]}" scripts/run-documentary-memory-smoke.py
+"${python_command[@]}" scripts/check-documentary-checkpoint-codegen.py
+"${python_command[@]}" scripts/run-documentary-checkpoint-smoke.py
+"${python_command[@]}" scripts/check-documentary-portable-store-codegen.py
+"${python_command[@]}" scripts/run-documentary-portable-store-smoke.py
+"${python_command[@]}" scripts/check-restoration-components-codegen.py
+"${python_command[@]}" scripts/run-restoration-components-smoke.py
 "${python_command[@]}" scripts/check-continuation-signature-codegen.py
 "${python_command[@]}" scripts/check-variable-master-codegen.py
 "${python_command[@]}" scripts/check-integrated-machine-codegen.py

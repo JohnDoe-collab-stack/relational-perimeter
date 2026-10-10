@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "document_relocations": {
     "docs/science/chaine-constitutive-machine.fr.md": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
     "docs/science/constitutive-machine-chain.en.md": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
@@ -1410,6 +1410,92 @@
         "FULL_FUTURES"
       ],
       "source_sha256": "36f62f46a9564280d2a9df705a94df72795c2a543a75be6c515eeb7a9b9ff837",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "LOCAL_ADAPTIVE_CONTRACT",
+      "kind": "behavioral",
+      "scope": "Raccord expérimental au langage Agent existant : toute politique adaptative, tout contexte et toute suite finie ; contrat, anciennes lectures et témoins de réponses conservés après remise à zéro du contexte. Accomplissement positif de obtain permis, sans terminaison globale de toute politique ni preuve du contrat documentaire.",
+      "evidence_revision": "d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08",
+      "anchors": [
+        {
+          "path": "docs/work/alignement-ia-locale-resultats.fr.md",
+          "heading": "Ce qui est démontré",
+          "paragraph": null,
+          "sha256": "54ce93c2902a086c4a3bef476d576389f98f10c45af139414e01b3164bdda4d2"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "Tests.LocalAlignment.ModelLoop",
+          "name": "ConstitutiveSearch.Agent.Local.certifyRun",
+          "role": "test"
+        },
+        {
+          "module": "Tests.LocalAlignment.ModelLoop",
+          "name": "ConstitutiveSearch.Agent.Local.accepted_entire_producer",
+          "role": "test"
+        },
+        {
+          "module": "Tests.LocalAlignment.ModelLoop",
+          "name": "ConstitutiveSearch.Agent.Local.all_adaptive_requirements",
+          "role": "test"
+        },
+        {
+          "module": "Tests.LocalAlignment.ModelLoop",
+          "name": "ConstitutiveSearch.Agent.Local.all_adaptive_old_reads",
+          "role": "test"
+        },
+        {
+          "module": "Tests.LocalAlignment.ModelLoop",
+          "name": "ConstitutiveSearch.Agent.Local.permitted_obtain_answer",
+          "role": "test"
+        },
+        {
+          "module": "Tests.LocalAlignment.ModelLoop",
+          "name": "ConstitutiveSearch.Agent.Local.forgotten_profiles_same_adaptive_run",
+          "role": "test"
+        },
+        {
+          "module": "Tests.LocalAlignment.ModelLoop",
+          "name": "ConstitutiveSearch.Agent.Local.initial_profile_not_recoverable_combined",
+          "role": "test"
+        },
+        {
+          "module": "Tests.LocalAlignment.Kernel",
+          "name": "LocalAlignmentKernel.all_raw_inputs_requirement",
+          "role": "test"
+        },
+        {
+          "module": "Tests.LocalAlignment.Kernel",
+          "name": "LocalAlignmentKernel.all_raw_inputs_old_reads",
+          "role": "test"
+        },
+        {
+          "module": "Tests.LocalAlignment.Kernel",
+          "name": "LocalAlignmentKernel.decode_failure_no_effect",
+          "role": "test"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Les occurrences viennent des cibles de normalisation ou des productions de continuation existantes ; les permissions sont des références typées dans la portée reçue.",
+        "execution": "Chaque incorporation consomme un seul executeProducedInput ; le résultat partagé fournit mémoire suivante, événement et RequestEvidence. La politique ne reçoit que l'observation et ne remplace pas le contrat.",
+        "proof": "certifyRun porte sur les choix réellement successifs ; la conservation compose les lois de l'exécuteur. obtain consomme une permission positive. Les théorèmes bruts traitent aussi l'échec du décodage.",
+        "transport": "La remise à zéro agit sur le contexte du proposeur. À politique, contexte et signaux fixés, les profils initiaux normalisés ont la même exécution ; aucun récupérateur uniforme depuis l'état composé. Ni checkpoint physique ni nouveaux futurs documentaires ne sont inclus."
+      },
+      "consumers": [],
+      "source_sha256": "3930ce2f202a8a99837dd4414532f0dcaf05eda747fb3a464a683f466f745b21",
       "reviews": {
         "reader": {
           "status": "pending"

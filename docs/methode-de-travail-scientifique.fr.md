@@ -91,6 +91,14 @@ pas aux fichiers Lean, aux contrôles, ni à la cible immuable ; les chaînes de
 renommages et les chemins non enregistrés sont refusés. Un nouveau passage
 ou une modification scientifique exige toujours une nouvelle évidence.
 
+Le schéma 3 permet à une nouvelle affirmation de porter son propre
+`evidence_revision`, un commit existant. Les autres entrées gardent la révision
+globale et leurs empreintes. Pour chaque entrée, le contrôle des ancrages, des
+imports et des revues utilise sa révision effective. Cette possibilité évite
+de déplacer artificiellement les anciennes évidences lors d'une extension ;
+elle ne dispense ni de comparer le snapshot aux sources actuelles ni de rouvrir
+une revue dont les dépendances changent.
+
 Le contrôle des liens porte sur tous les documents Markdown publiables,
 y compris les nouveaux documents non encore commités, et ignore les fichiers
 retirés de l'arbre. La lecture des snapshots active `core.longpaths` pour cette

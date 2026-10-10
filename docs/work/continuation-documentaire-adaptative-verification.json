@@ -1,0 +1,314 @@
+{
+  "kind": "constructed_development_verification",
+  "confirmatory": false,
+  "status": "passed",
+  "created_utc": "2026-10-09T20:15:56.574107+00:00",
+  "branch": "codex/ai-alignment-under-contract",
+  "base_revision": "d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08",
+  "extension_committed": false,
+  "scope": "Every total proposal policy and signal feed over the received already-ordered finite documentary Script, from a Complete Frame under primitive task admissibility. One controlled turn per remaining task and at most two documentary step attempts; actual extras retained, source-order contribution, resettable context distinct from retained frame/clock/queue, actual trace certificate and preservation. No new model inference or documentary rich/reduced future equivalence.",
+  "toolchain": "leanprover/lean4:v4.33.1",
+  "claim_candidate": {
+    "id": "DOCUMENTARY_ADAPTIVE_BOUNDED_COMPLETION",
+    "status": "development_uncommitted",
+    "evidence_revision": null,
+    "canonical_document": "docs/work/continuation-documentaire-adaptative.fr.md",
+    "quantification": "For every received finite typed Script in the existing ordered extraction/sum/difference class, every initial Complete Frame, total Policy and Signal feed, task Admissible implies Complete of the actual run. Exactly n controlled rounds and at most 2n step-attempt events; preservation without admissibility. Reset preserves the frame, clock and remaining task queue; no implicit model fairness.",
+    "formal_references": [
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.takeTurn"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.Effect"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.Turn.complete"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.Execution.complete"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.all_policies_accomplish"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.Execution.extension"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.Execution.bindings"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.Execution.rounds"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.Execution.bound"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.remaining_strictly_decreases"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.one_turn_accomplishes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.Present.reset_keeps_remaining"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.reset_keeps_round"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.reset_keeps_frame"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.all_policies_after_reset"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptive",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Adaptive.run_append"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.every_policy_finishes"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.hostileComplete"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.terminal_value"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.terminal_origins"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.terminal_sources"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.hostile_five_turns"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.hostile_action_bound"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.repeatedComplete"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.resetResumedComplete"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.resumed_preserves_delta"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.blocked_stays_incompatible"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.choiceNormalComplete"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryAdaptiveCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.AdaptiveCases.choiceReversedComplete"
+      }
+    ],
+    "environment_conditions": [
+      "A total Lean policy returns one proposal or None per controlled round.",
+      "The declared sources, rule catalogue, source/rule permissions and actual resource frame are available.",
+      "A future external model adapter must implement a finite response deadline and translate timeout to None; that adapter is not part of this increment."
+    ],
+    "reviews": {
+      "author_recheck": "passed",
+      "independent": "not_recorded",
+      "non_specialist": "pending",
+      "translation": "not_applicable_french_only"
+    },
+    "canonical_sha256_lf": "f970d95c77fc7cc9890ea42cbf2c01120c8ed0fbaae4f38e21ff8f6a81598a13"
+  },
+  "reviews": {
+    "author_recheck": "passed",
+    "independent": "not_recorded",
+    "non_specialist": "pending",
+    "translation": "not_applicable_french_only"
+  },
+  "historical_verification_ledgers": [
+    {
+      "path": "docs/work/composition-dossier-maitre-verification.json",
+      "sha256": "d4f0d090591456abf63bec1ddd06c515cbe2386b5452aad4da634abc7a2fea0d"
+    },
+    {
+      "path": "docs/work/deductions-documentaires-verification.json",
+      "sha256": "de34f2a8a2183ac5adfefed4245f9e5880600083058dd2b3d72fdece5c271feb"
+    },
+    {
+      "path": "docs/work/premiere-couche-documentaire-verification.json",
+      "sha256": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b"
+    },
+    {
+      "path": "docs/work/programmes-documentaires-verification.json",
+      "sha256": "33f358c336a34cfd19ccbffd2aced0ee216ec33221cd1572a4bdb710ffe64576"
+    },
+    {
+      "path": "docs/work/raccord-documentaire-maitre-verification.json",
+      "sha256": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1"
+    }
+  ],
+  "verified_utc": "2026-10-09T20:22:16.867481+00:00",
+  "checks": {
+    "selected_audits": {
+      "Tests/LocalAlignment/DocumentaryAdaptive.lean": 46,
+      "Tests/LocalAlignment/DocumentaryAdaptiveCases.lean": 47
+    },
+    "new_selected_audits": 93,
+    "fixture_checks": 31,
+    "literal_oracle_cases": 2048,
+    "runtime_audits": 7,
+    "rendered_bytes_exact": true,
+    "compiled_sharing": "passed",
+    "bounded_codegen_application_checks": 7,
+    "direct_call_site_checks": 4,
+    "call_mutations_rejected": 9,
+    "unsupported_captures_rejected": 2,
+    "full_gate": "passed",
+    "full_gate_log_sha256": "99bd293bdcdf42731c05e276bae0fc847be744bda85d2a9efedb4dd8e0cd33cb",
+    "lean_files": 259,
+    "constants": 22779,
+    "modules": 258,
+    "compiler_generated_exceptions": 364,
+    "written_exceptions": 0,
+    "expected_failure_fixtures": 23,
+    "registered_claims": 19,
+    "registered_declarations": 91,
+    "scientific_document_self_tests": 8,
+    "registry_unchanged_since_previous_increment": 19,
+    "previous_registered_claims_unchanged_since_base": 18,
+    "old_target_unchanged": true,
+    "prior_documentary_mathematical_sources_unchanged": true,
+    "prior_documentary_mathematical_source_count": 11,
+    "historical_verification_ledgers_unchanged": true,
+    "historical_verification_ledger_count": 5,
+    "final_document_links": "passed",
+    "final_local_document_link_count": 44,
+    "final_diff_check": "passed"
+  },
+  "commands": [
+    "lake env lean Tests/LocalAlignment/DocumentaryAdaptive.lean",
+    "lake build Tests.LocalAlignment.DocumentaryAdaptiveCases",
+    "python -B -X utf8 scripts/check-documentary-adaptive-codegen.py",
+    "python -B -X utf8 scripts/run-documentary-adaptive-smoke.py --output docs/work/dossier-fixture-adaptatif.fr.md",
+    "scripts/verify.ps1",
+    "python -B -X utf8 scripts/check-scientific-docs.py --static",
+    "git diff --check"
+  ],
+  "attempts": [
+    {
+      "check": "general Lean elaboration and constructive bound",
+      "status": "corrected",
+      "reasons": [
+        "Dependent instruction branches and pointwise previous-binding transport made explicit.",
+        "Replaced the multiplication lemma which introduced an extensional dependency with the constructive successor multiplication law; all selected audits clean."
+      ]
+    },
+    {
+      "check": "closed Lean cases",
+      "status": "corrected",
+      "reasons": [
+        "Explicit received final and current specification indices for the retained Present.",
+        "Avoided expensive equality normalization through the existential Present wrapper by resuming directly from the same actual prefix Session. The Present reset, queue and clock are checked separately.",
+        "Closed inventory and route reductions checked executably; general completion and preservation consume the stored actual trace. Two interrupted development builds and bounded elaboration failures preceded the clean build."
+      ]
+    },
+    {
+      "check": "compiled sharing guard",
+      "status": "corrected",
+      "reasons": [
+        "Selected the actual run initializer, distinct from its policy initializer.",
+        "Recognized exactly one captured boolean numeric immediate while retaining the compiled closure target; symbolic and nonboolean captures are rejected. Completion engine and policy/environment scopes are explicit."
+      ]
+    },
+    {
+      "check": "development smoke",
+      "status": "corrected",
+      "reasons": [
+        "Memory entries are Citation values, so source position is read directly.",
+        "The initial literal source-order expectation was corrected to the actual retained routing: normal selects received occurrence 2; reversal selects 1. Source goals and machine construction were unchanged.",
+        "Failure diagnostics now write UTF-8 bytes directly: IO.eprintln imported an extensional dependency. Seven runtime client audits are clean."
+      ]
+    }
+  ],
+  "source_sha256_lf": {
+    "Tests/AllConstantsAudit.lean": "b1b108db1d01b42081051bf23243189ffad9826b319491e765a0d58974fce8fb",
+    "Tests/LocalAlignment/DocumentaryAdaptive.lean": "fca18a29d12143e385468a063d6f9bb8162feb4083c45d40c09e9ef72541a177",
+    "Tests/LocalAlignment/DocumentaryAdaptiveCases.lean": "5c5ac466af887fbd72f61573cff47a09e63c0f10a425e640e5f5ce0c7b15ea20",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryDeduction.lean": "e0c47edc703c3ab6afadbb5c11a92b9719efb22d84b1146929aeda08bee14017",
+    "Tests/LocalAlignment/DocumentaryDeductionCases.lean": "a04bb5065d81ad4942d6965e9863cfc7ab787d954da420b57799e86ef88e4bb2",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentaryProgram.lean": "decf0ead9a3bd1ebc6f90198fc863194b050bf1b4e4dcf6cdcf0c4bf0dd794cd",
+    "Tests/LocalAlignment/DocumentaryProgramCases.lean": "ff701ac289efa1ffdcd01bcdc0ad4ef8cb6e2c2429c89756238f22b4435ffe6b",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "apps/local-alignment/README.fr.md": "08e96e65589946ed20681b876484ec35aecd58cf7b43986d293231cbbad7b947",
+    "docs/methode-de-travail-scientifique.fr.md": "04dd6b4187fccd20961491f24e2517c9d7f76c863c7520e8b3a3f55cca90b131",
+    "docs/scientific-claims.json": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+    "docs/work/alignement-ia-locale-resultats.fr.md": "3da613f33c4ef5e346283eb8e6bc5e7f91e94a723290560274bf508686d214f7",
+    "docs/work/composition-dossier-maitre-verification.json": "d4f0d090591456abf63bec1ddd06c515cbe2386b5452aad4da634abc7a2fea0d",
+    "docs/work/composition-dossier-maitre.fr.md": "f86e72693e506a7ac1e81d8d7d12a324f60c6fd06080da71b74293621535f438",
+    "docs/work/continuation-documentaire-adaptative.fr.md": "f970d95c77fc7cc9890ea42cbf2c01120c8ed0fbaae4f38e21ff8f6a81598a13",
+    "docs/work/deductions-documentaires-verification.json": "de34f2a8a2183ac5adfefed4245f9e5880600083058dd2b3d72fdece5c271feb",
+    "docs/work/deductions-documentaires.fr.md": "df9e8e777e41e3adf300ad41946ad872bfe6f6f079cae9e1126f9bd7c8a3a263",
+    "docs/work/dossier-fixture-adaptatif.fr.md": "5a72da33b673378192bd556e545e3e331a8936de30da160b23d9416c692c8788",
+    "docs/work/dossier-fixture-compose.fr.md": "ab253f60f15de40aacebb4b246082277b02167c6cbdabb453aa4fc197e3ca22f",
+    "docs/work/dossier-fixture-constitue.fr.md": "044188c9c4eba9ff5ba674fc8de6d6846f0d1b1432cff129d01214b63b421877",
+    "docs/work/dossier-fixture-deductions.fr.md": "f63109ed94d82afdc70dd3de37ad465a4d82eec26fb69bda3c2362e7ee35c678",
+    "docs/work/dossier-fixture-maitre.fr.md": "f03864523721f92bf463738fb6102d924987de71b3396f39e5a76883b824f923",
+    "docs/work/dossier-fixture-programme.fr.md": "7120ae154944d0f1e4cd879d44f0a231dbb78fcc571e4aaf04dda47a7d1ac40b",
+    "docs/work/plan-alignement-agent-dossier.fr.md": "7f28c5a3e317ae6885bfe655ed352dfbca47d6df4acc24fc865b459fbf70016e",
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/premiere-couche-documentaire.fr.md": "1580a40b435b330b43bf2ff43b92a4bb314d09dafbd2e546ebd296ca1d6da465",
+    "docs/work/programmes-documentaires-mixtes.fr.md": "5640ffe5cd57d83d903a016305cb6117258bfac2f118096835d77faeb5b13bcb",
+    "docs/work/programmes-documentaires-verification.json": "3485d921605f5371d1a2dd0fe3a3c7f3302b4b3c06f888ac150fab9cb182cecb",
+    "docs/work/raccord-documentaire-maitre-verification.json": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1",
+    "docs/work/raccord-documentaire-maitre.fr.md": "4fbc1c1a36d5af6e3e13191876d2197100f0134ed7a2375ccdb8cfb3fc30f912",
+    "scripts/check-documentary-adaptive-codegen.py": "4a0248649f26888f74be80ca2b7eea9cd1e2c8c8695bc5205487eb7f0a90228e",
+    "scripts/check-documentary-codegen.py": "871b2e39ec462335d51566e92160d2af119d48c2f0da2bad5e6ee311584dbf9b",
+    "scripts/check-documentary-deduction-codegen.py": "bfd3c25963f6a02501324c2ffbadd7d76b7b14e045c3a97bcdc4702238691bdf",
+    "scripts/check-documentary-dossier-codegen.py": "df244c155096804d787cfefd8ec309609a4a0580ace7ddf37a48023819988ce7",
+    "scripts/check-documentary-master-codegen.py": "6eacca67954c85da92ecc6bd4ada45966d12332e8f7e73e7c9ecb5eaf1b83f8e",
+    "scripts/check-documentary-program-codegen.py": "fc79597c4463fcef9e9afd2c3d1d3177c42361ec8454160fba9b66919cd17742",
+    "scripts/check-scientific-docs.py": "2942ce4d3cf79b3805c76eb81fad468f0c409822f9ea5071de777417674a0615",
+    "scripts/run-documentary-adaptive-smoke.py": "8fe5eead903d7fab2cf193645ee77f9794d741de44f94cabc89ba25fba3c4371",
+    "scripts/run-documentary-deduction-smoke.py": "6793a59ddd9fbfaedc7e11a24d9c2560d6115527731a5990f85c72b300e1fb34",
+    "scripts/run-documentary-dossier-smoke.py": "e2179c7c3bfb3d3c532298f3b1b326172e10e8ac8e4cfe7782c4de85a4356e25",
+    "scripts/run-documentary-master-smoke.py": "19c6199e9ff1de3f0491246aa36334663d27eebcb19f57c93b3304cc0c94dec6",
+    "scripts/run-documentary-program-smoke.py": "100f19f513ccede4feaa7a907ba21a1095e5d6a4e5007b447ef8776a72b5ad2f",
+    "scripts/run-documentary-smoke.py": "4f28889323ce6d283cc051018cbe1cb97dd72457c32a8e01bd6e17e24b7167e5",
+    "scripts/verify.ps1": "9e5dca5ac8c9298333997854ae347ecef081141d6c1ce68f7bc3893a2367fb7f",
+    "scripts/verify.sh": "3ce02d173f1fa7e61e80f78737c0860d676a2377a19b8326676354f15b0b7af5"
+  },
+  "source_fingerprint": "869df53e3a571926ae216fbb8a4c2bc0554d6fcfbbcd9617ea919b2865400c4b",
+  "manifest_scope": "Changed tracked and non-ignored untracked files, normalized to LF; excludes this record to avoid self-reference. Fingerprint is SHA-256 of sorted path + tab + LF-normalized content SHA-256 + newline entries encoded UTF-8. Development identity, no frozen registered evidence."
+}

@@ -87,6 +87,46 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "compiled-code dependency check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-agent-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled agent dependency check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled documentary sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-master-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled documentary master sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-master-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary master smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-dossier-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled documentary dossier sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-dossier-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary dossier smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-deduction-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled documentary deduction sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-deduction-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary deduction smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-program-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled documentary program sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-program-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary program smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-adaptive-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled documentary adaptive sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-adaptive-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary adaptive smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-memory-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled documentary memory sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-memory-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary memory smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-checkpoint-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled documentary checkpoint check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-checkpoint-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary physical checkpoint smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-portable-store-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary portable store compiled dependencies failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-portable-store-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary portable store smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-restoration-components-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "restoration components compiled dependencies failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-restoration-components-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "restoration components smoke failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-continuation-signature-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled signature dependency check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-variable-master-codegen.py")

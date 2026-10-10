@@ -241,9 +241,9 @@ def load_registry(root):
 def document_relocations(root, registry):
     """Relocate prose only; keep the original committed evidence and hashes."""
     version = registry.get("schema_version")
-    require(type(version) is int and version in (1, 2), "SCHEMA: version")
+    require(type(version) is int and version in (1, 2, 3), "SCHEMA: version")
     keys = ("schema_version", "evidence_revision", "immutable_target", "claims")
-    fields(registry, keys + (("document_relocations",) if version == 2 else ()), "registry")
+    fields(registry, keys + (("document_relocations",) if version >= 2 else ()), "registry")
     aliases = registry.get("document_relocations", {})
     require(isinstance(aliases, dict), "RELOCATION: expected path mapping")
     require(all(isinstance(c, dict) and isinstance(c.get("anchors"), list)
@@ -265,6 +265,18 @@ def document_relocations(root, registry):
     return aliases
 
 
+def claim_revision(root, registry, claim):
+    """A new claim may use a later commit without refreshing older evidence."""
+    revision = claim.get("evidence_revision", registry["evidence_revision"])
+    require("evidence_revision" not in claim or registry["schema_version"] == 3,
+            "SCHEMA: per-claim revision requires version 3")
+    require(isinstance(revision, str) and REV.fullmatch(revision), "SCHEMA: claim revision")
+    exists = subprocess.run(["git", "cat-file", "-e", revision + "^{commit}"], cwd=root,
+                            capture_output=True, check=False)
+    require(exists.returncode == 0, f"SNAPSHOT: unavailable claim commit {revision}")
+    return revision
+
+
 def published_markdown(root):
     result = subprocess.run(["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", "*.md"],
                             cwd=root, capture_output=True, check=False)
@@ -282,7 +294,7 @@ def validate(root, registry):
                             capture_output=True, check=False)
     require(exists.returncode == 0, f"SNAPSHOT: unavailable commit {revision}")
     current = lru_cache(maxsize=None)(lambda path: read_current(root, path))
-    snapshot = lru_cache(maxsize=None)(lambda path: git_text(root, revision, aliases.get(path, path)))
+    snapshots = lru_cache(maxsize=None)(lambda rev, path: git_text(root, rev, aliases.get(path, path)))
     target = registry["immutable_target"]
     fields(target, ("revision", "anchors"), "immutable target")
     require(isinstance(target["revision"], str) and REV.fullmatch(target["revision"]), "SCHEMA: target revision")
@@ -297,8 +309,11 @@ def validate(root, registry):
     require(isinstance(registry["claims"], list) and bool(registry["claims"]), "SCHEMA: empty claims")
     ids, docs, references, open_reviews = set(), {"README.md", "AGENTS.md", "docs/methode-de-travail-scientifique.fr.md"}, [], []
     for claim in registry["claims"]:
-        fields(claim, ("id", "kind", "scope", "anchors", "proofs", "checks", "dependencies",
-                       "consumers", "source_sha256", "reviews"), "claim")
+        keys = ("id", "kind", "scope", "anchors", "proofs", "checks", "dependencies",
+                "consumers", "source_sha256", "reviews")
+        fields(claim, keys + (("evidence_revision",) if "evidence_revision" in claim else ()), "claim")
+        evidence_revision = claim_revision(root, registry, claim)
+        snapshot = lambda path: snapshots(evidence_revision, path)
         identifier = claim["id"]
         require(isinstance(identifier, str) and re.fullmatch(r"[A-Z][A-Z0-9_-]*", identifier), "SCHEMA: claim id")
         require(identifier not in ids, f"SCHEMA: duplicate claim {identifier}")
@@ -336,7 +351,7 @@ def validate(root, registry):
         require(source_fingerprint(root, claim, snapshot)[0] == claim["source_sha256"], f"STALE_SNAPSHOT: {identifier}")
         fields(claim["reviews"], ("reader", "translation", "independent"), identifier + " reviews")
         for key, review in claim["reviews"].items():
-            validate_review(root, review, revision, identifier + " " + key)
+            validate_review(root, review, evidence_revision, identifier + " " + key)
             if review["status"] in ("pending", "not_recorded", "qualified"):
                 open_reviews.append(f"{identifier}:{key}={review['status']}")
     for claim in registry["claims"]:
@@ -421,6 +436,21 @@ class SelfTests(unittest.TestCase):
                                   ({"docs/science/current.md": "docs/science/current.md"}, "chained")):
             self.rejects(expected, lambda mapping=mapping: document_relocations(ROOT, {**base, "document_relocations": mapping}))
 
+    def test_claim_revision_requires_existing_commit(self):
+        registry = {"schema_version": 3, "evidence_revision": "a" * 40}
+        success = subprocess.CompletedProcess([], 0, stdout=b"", stderr=b"")
+        with patch.object(subprocess, "run", return_value=success) as command:
+            self.assertEqual(claim_revision(ROOT, registry, {}), "a" * 40)
+            self.assertEqual(claim_revision(ROOT, registry, {"evidence_revision": "b" * 40}), "b" * 40)
+            self.assertEqual(command.call_args.args[0][-1], "b" * 40 + "^{commit}")
+        self.rejects("version 3", lambda: claim_revision(ROOT, {**registry, "schema_version": 2},
+                                                        {"evidence_revision": "b" * 40}))
+        self.rejects("claim revision", lambda: claim_revision(ROOT, registry, {"evidence_revision": "HEAD"}))
+        missing = subprocess.CompletedProcess([], 1, stdout=b"", stderr=b"missing")
+        with patch.object(subprocess, "run", return_value=missing):
+            self.rejects("unavailable claim commit", lambda: claim_revision(ROOT, registry,
+                                                                           {"evidence_revision": "b" * 40}))
+
     def test_source_fingerprint_and_links(self):
         with tempfile.TemporaryDirectory(prefix="scientific-docs-tests-") as directory:
             root = Path(directory)
@@ -503,6 +533,23 @@ class SelfTests(unittest.TestCase):
                 moved = {**registry, "schema_version": 2, "claims": [moved_claim],
                          "document_relocations": {relocated: original}}
                 validate(root, moved)
+                later = {**moved_claim, "id": "LATER", "evidence_revision": "b" * 40}
+                mixed = {**moved, "schema_version": 3, "claims": [claim, later]}
+                reads = []
+                def committed(_, revision, path):
+                    reads.append((revision, path))
+                    return files[path]
+                with patch.dict(validate.__globals__, {"git_text": committed}):
+                    validate(root, mixed)
+                self.assertIn(("a" * 40, "RelationalPerimeter/Example.lean"), reads)
+                self.assertIn(("b" * 40, original), reads)
+                self.assertEqual(mixed["evidence_revision"], "a" * 40)
+                def stale(_, revision, path):
+                    if revision == "b" * 40 and path.endswith("Example.lean"):
+                        return "def example := 1\n"
+                    return files[path]
+                with patch.dict(validate.__globals__, {"git_text": stale}):
+                    self.rejects("STALE_SNAPSHOT", lambda: validate(root, mixed))
                 safe_path(root, relocated).write_text("# Evidence\n\nchanged evidence\n", encoding="utf-8")
                 self.rejects("STALE_TEXT", lambda: validate(root, moved))
 

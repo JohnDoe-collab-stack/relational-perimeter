@@ -1,0 +1,69 @@
+{
+  "kind": "constructed_development_verification",
+  "confirmatory": false,
+  "status": "passed",
+  "created_utc": "2026-10-09T17:01:32.527324+00:00",
+  "branch": "codex/ai-alignment-under-contract",
+  "base_revision": "d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08",
+  "extension_committed": false,
+  "scope": "One documentary demand and two received sources; semantic encoding, actual opening/reduction, authorized extraction, produced successor and context erasure. No reduced-memory checkpoint or model comparison.",
+  "checks": {
+    "new_modules_selected_audits": 62,
+    "compiled_sharing": "passed",
+    "master_smoke_checks": 17,
+    "lean_files": 251,
+    "constants": 21446,
+    "modules": 250,
+    "compiler_generated_exceptions": 364,
+    "written_exceptions": 0,
+    "expected_failure_fixtures": 23,
+    "scientific_document_self_tests": 8,
+    "registered_claims": 19,
+    "registered_declarations": 91,
+    "original_documentary_smoke_checks": 5,
+    "master_smoke_runtime_audits": 3,
+    "rendered_bytes_exact": true,
+    "compiled_sharing_scope": "run: one head, two checks, one opening, one normalization; complete: one extraction, one incorporation. Higher-order routing is outside application-count analysis.",
+    "final_document_links": "passed",
+    "final_diff_check": "passed",
+    "previous_registered_claims_unchanged": 18
+  },
+  "attempts": [
+    {
+      "gate": "scripts/verify.ps1",
+      "exit": 1,
+      "stage": "static_document_links",
+      "reason": "Verification record linked before creation; record now present."
+    },
+    {
+      "gate": "scripts/verify.ps1",
+      "exit": 0,
+      "log_sha256": "4bfcba619cb6effa9134a5bd22cfed1662aaf0432cbbb2b7eb2b421b3eb382f8"
+    }
+  ],
+  "source_sha256_lf": {
+    "Tests/AllConstantsAudit.lean": "626c3f3ba8166fab111e14f1aa27279a7ca0040ecfc3315bcd18cef6a1289e04",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "1cc57553ac291ff718279fec9c78543aedc38b42e5488ca85ce93e9ae566932a",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "apps/local-alignment/README.fr.md": "9af04a38dd724491577742468b73c60fa3450f5952cd21afd9eef5d6d882eabd",
+    "docs/methode-de-travail-scientifique.fr.md": "04dd6b4187fccd20961491f24e2517c9d7f76c863c7520e8b3a3f55cca90b131",
+    "docs/scientific-claims.json": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+    "docs/work/dossier-fixture-constitue.fr.md": "044188c9c4eba9ff5ba674fc8de6d6846f0d1b1432cff129d01214b63b421877",
+    "docs/work/dossier-fixture-maitre.fr.md": "f03864523721f92bf463738fb6102d924987de71b3396f39e5a76883b824f923",
+    "docs/work/plan-alignement-agent-dossier.fr.md": "774407756db51e2d0f639817c81cec642d23a92dc09d5cd1e68dc51620b8d881",
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/premiere-couche-documentaire.fr.md": "1580a40b435b330b43bf2ff43b92a4bb314d09dafbd2e546ebd296ca1d6da465",
+    "docs/work/raccord-documentaire-maitre.fr.md": "4fbc1c1a36d5af6e3e13191876d2197100f0134ed7a2375ccdb8cfb3fc30f912",
+    "scripts/check-documentary-codegen.py": "871b2e39ec462335d51566e92160d2af119d48c2f0da2bad5e6ee311584dbf9b",
+    "scripts/check-documentary-master-codegen.py": "6eacca67954c85da92ecc6bd4ada45966d12332e8f7e73e7c9ecb5eaf1b83f8e",
+    "scripts/check-scientific-docs.py": "2942ce4d3cf79b3805c76eb81fad468f0c409822f9ea5071de777417674a0615",
+    "scripts/run-documentary-master-smoke.py": "19c6199e9ff1de3f0491246aa36334663d27eebcb19f57c93b3304cc0c94dec6",
+    "scripts/run-documentary-smoke.py": "4f28889323ce6d283cc051018cbe1cb97dd72457c32a8e01bd6e17e24b7167e5",
+    "scripts/verify.ps1": "4beba542dc3495969dbc2577a2ec6deeadf8a66bd3a546f33e26d094e2815db2",
+    "scripts/verify.sh": "6bb1249f45f1a0e4ec46b943790ecc8ecbce410e4588ce531f2d50a88dafdc43"
+  },
+  "completed_utc": "2026-10-09T17:05:14.596746+00:00"
+}

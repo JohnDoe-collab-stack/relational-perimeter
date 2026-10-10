@@ -1,0 +1,230 @@
+{
+  "kind": "constructed_development_verification",
+  "confirmatory": false,
+  "status": "passed",
+  "created_utc": "2026-10-09T19:36:09.664199+00:00",
+  "branch": "codex/ai-alignment-under-contract",
+  "base_revision": "d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08",
+  "extension_committed": false,
+  "scope": "Received finite already-ordered programs interleaving binary master source selection and two-port integer sum/difference; typed previous-output dependencies, occurrence bindings, actual-trace completion under primitive permissions and rule/specification compatibility, preservation, refusal/missing dependencies, wrong-goal outputs retained and context reset. No adaptive documentary model proposal scheduler, reduced future-equivalent checkpoint, file-effect interface or with/without comparison.",
+  "toolchain": "leanprover/lean4:v4.33.1",
+  "checks": {
+    "selected_audits": {
+      "Tests/LocalAlignment/DocumentaryProgram.lean": 44,
+      "Tests/LocalAlignment/DocumentaryProgramCases.lean": 61
+    },
+    "new_selected_audits": 105,
+    "fixture_checks": 26,
+    "literal_oracle_cases": 1536,
+    "runtime_audits": 5,
+    "compiled_sharing": "passed",
+    "bounded_codegen_application_checks": 7,
+    "direct_dispatcher_site_checks": 2,
+    "codegen_mutations_rejected": 6,
+    "rendered_bytes_exact": true,
+    "temporary_type_rejections": [
+      {
+        "case": "future_conclusion_port",
+        "status": "expected_type_rejection",
+        "errors": 1,
+        "source_sha256_lf": "46bf80a562aead32e53d7d1214e8fb9808b27eebe5d3f74e6c3ebc091ccae70b",
+        "log_sha256": "b70a60166491830e4ddb5f469a660abaf097f1006231d1fa1ba6b7f69be13197"
+      },
+      {
+        "case": "unreceived_goal_port",
+        "status": "expected_type_rejection",
+        "errors": 1,
+        "source_sha256_lf": "1bba336d172620e3917268169bbb22d7fac91c3acd0be6c0ad9d497a1437877a",
+        "log_sha256": "179a192a75f6198e30889061ebd4c9e027a78018c69467a023db5944ff86b0a0"
+      }
+    ],
+    "full_gate": "passed",
+    "full_gate_log_sha256": "816811b070bfce41b8fbd97311364ab2a559195202bf8f2937b2a1cf8f48894b",
+    "lean_files": 257,
+    "constants": 22422,
+    "modules": 256,
+    "compiler_generated_exceptions": 364,
+    "written_exceptions": 0,
+    "expected_failure_fixtures": 23,
+    "registered_claims": 19,
+    "registered_declarations": 91,
+    "scientific_document_self_tests": 8,
+    "previous_registered_claims_unchanged": 18,
+    "old_target_unchanged": true,
+    "prior_documentary_mathematical_sources_unchanged": true,
+    "prior_documentary_mathematical_source_count": 9,
+    "historical_verification_ledgers_unchanged": true,
+    "final_document_links": "passed",
+    "final_diff_check": "passed"
+  },
+  "commands": [
+    "lake env lean Tests/LocalAlignment/DocumentaryProgram.lean",
+    "lake env lean Tests/LocalAlignment/DocumentaryProgramCases.lean",
+    "lake build Tests.LocalAlignment.DocumentaryProgramCases",
+    "python -B -X utf8 scripts/check-documentary-program-codegen.py",
+    "python -B -X utf8 scripts/run-documentary-program-smoke.py --output docs/work/dossier-fixture-programme.fr.md",
+    "scripts/verify.ps1"
+  ],
+  "attempts": [
+    {
+      "check": "development Lean elaboration",
+      "status": "corrected",
+      "reasons": [
+        "Ready now computes primitive pair admissibility or a compatibility record directly, avoiding dependent elimination through task projections.",
+        "Explicit specification indices and namespace qualification; constructive None/Some contradictions.",
+        "Expensive closed event/rule/version reductions moved to executable checks; general completion and preservation retained, and concrete source origins derived from the general certificate law."
+      ]
+    },
+    {
+      "check": "development smoke",
+      "status": "corrected",
+      "reason": "Correct UTF-8 renderer namespace. Five runtime audits and literal fixture then passed."
+    },
+    {
+      "check": "compiled sharing guard",
+      "status": "corrected",
+      "reason": "Certificate is a function, actual execution uses a lazy closed initializer; count those exact compiled entries. Recognize exact numeric scalar-tail macros without accepting a symbolic callable. State completion-engine and abstract-binding boundaries explicitly."
+    }
+  ],
+  "claim_candidate": {
+    "id": "DOCUMENTARY_FINITE_PROGRAM_COMPLETION",
+    "status": "development_uncommitted",
+    "evidence_revision": null,
+    "canonical_document": "docs/work/programmes-documentaires-mixtes.fr.md",
+    "quantification": "Every received finite Script in the extraction-pair / sum-and-signed-difference grammar, from any conforming Frame whose previous declared outputs are complete; Admissible supplies primitive eligible source pairs and rule permissions plus universal compatibility of input specifications with each received output criterion. Completion consumes the actual Execution. Preservation holds without admissibility.",
+    "formal_references": [
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgram",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Program.accomplish"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgram",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Program.Execution.complete"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgram",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Program.Execution.extension"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgram",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Program.Execution.bindings"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgram",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Program.Execution.length"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgram",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Program.Execution.depth"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgram",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Program.execute_append"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgram",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Program.succeeded_correct"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgram",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Program.forbidden_rule_incompatible"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgram",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.Program.execute_after_context_erasure"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgramCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ProgramCases.all_five_completed"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgramCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ProgramCases.actual_sum"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgramCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ProgramCases.actual_source_origins"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgramCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ProgramCases.legal_wrong_output_retained"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgramCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ProgramCases.dependent_reads_that_output"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgramCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ProgramCases.wrong_task_incomplete"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgramCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ProgramCases.forbidden_whole_goal_impossible"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryProgramCases",
+        "declaration": "ConstitutiveSearch.Agent.Local.Documentary.ProgramCases.distinct_occurrences"
+      }
+    ],
+    "dependencies": {
+      "formation": "Received typed source/rule occurrences and previous specification ports; actual master packets deposit quotations, actual deduction producer forms a fresh support, no final solution provided.",
+      "execution": "One dispatcher step and one recursive tail per instruction; actual packet/support shared with next Frame, bindings, trace, receipts and renderer.",
+      "proof": "Primitive positive permissions, source demand satisfaction and universal rule/specification compatibility; initial Complete; Step.progress and Execution.complete consume actual resources and stored trace.",
+      "transport": "Support.Extension composes directed read preservation and injectivity; previous bindings map through the actual extensions. execute_append resumes from produced prefix; reset retains constitutive state and contracts."
+    },
+    "reviews": {
+      "reader": "pending",
+      "translation": "not_applicable_fr_only",
+      "independent": "not_recorded"
+    },
+    "canonical_sha256_lf": "5640ffe5cd57d83d903a016305cb6117258bfac2f118096835d77faeb5b13bcb"
+  },
+  "source_sha256_lf": {
+    "Tests/AllConstantsAudit.lean": "e6c0e25bbb9615fdb2945a239f0cb315f70aeacb3188d4f829ea27830d96ebee",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryDeduction.lean": "e0c47edc703c3ab6afadbb5c11a92b9719efb22d84b1146929aeda08bee14017",
+    "Tests/LocalAlignment/DocumentaryDeductionCases.lean": "a04bb5065d81ad4942d6965e9863cfc7ab787d954da420b57799e86ef88e4bb2",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentaryProgram.lean": "decf0ead9a3bd1ebc6f90198fc863194b050bf1b4e4dcf6cdcf0c4bf0dd794cd",
+    "Tests/LocalAlignment/DocumentaryProgramCases.lean": "ff701ac289efa1ffdcd01bcdc0ad4ef8cb6e2c2429c89756238f22b4435ffe6b",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "apps/local-alignment/README.fr.md": "11f8151dea222b3835bf1abbf1de42950dee98bff16f396c0016cb784c98a21f",
+    "docs/methode-de-travail-scientifique.fr.md": "04dd6b4187fccd20961491f24e2517c9d7f76c863c7520e8b3a3f55cca90b131",
+    "docs/scientific-claims.json": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+    "docs/work/alignement-ia-locale-resultats.fr.md": "3da613f33c4ef5e346283eb8e6bc5e7f91e94a723290560274bf508686d214f7",
+    "docs/work/composition-dossier-maitre-verification.json": "d4f0d090591456abf63bec1ddd06c515cbe2386b5452aad4da634abc7a2fea0d",
+    "docs/work/composition-dossier-maitre.fr.md": "f86e72693e506a7ac1e81d8d7d12a324f60c6fd06080da71b74293621535f438",
+    "docs/work/deductions-documentaires-verification.json": "de34f2a8a2183ac5adfefed4245f9e5880600083058dd2b3d72fdece5c271feb",
+    "docs/work/deductions-documentaires.fr.md": "df9e8e777e41e3adf300ad41946ad872bfe6f6f079cae9e1126f9bd7c8a3a263",
+    "docs/work/dossier-fixture-compose.fr.md": "ab253f60f15de40aacebb4b246082277b02167c6cbdabb453aa4fc197e3ca22f",
+    "docs/work/dossier-fixture-constitue.fr.md": "044188c9c4eba9ff5ba674fc8de6d6846f0d1b1432cff129d01214b63b421877",
+    "docs/work/dossier-fixture-deductions.fr.md": "f63109ed94d82afdc70dd3de37ad465a4d82eec26fb69bda3c2362e7ee35c678",
+    "docs/work/dossier-fixture-maitre.fr.md": "f03864523721f92bf463738fb6102d924987de71b3396f39e5a76883b824f923",
+    "docs/work/dossier-fixture-programme.fr.md": "7120ae154944d0f1e4cd879d44f0a231dbb78fcc571e4aaf04dda47a7d1ac40b",
+    "docs/work/plan-alignement-agent-dossier.fr.md": "2ba74c61a4a046a1eec01748c50d160d854f17cda06e0892d6030a0d5e29f2f0",
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/premiere-couche-documentaire.fr.md": "1580a40b435b330b43bf2ff43b92a4bb314d09dafbd2e546ebd296ca1d6da465",
+    "docs/work/programmes-documentaires-mixtes.fr.md": "5640ffe5cd57d83d903a016305cb6117258bfac2f118096835d77faeb5b13bcb",
+    "docs/work/raccord-documentaire-maitre-verification.json": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1",
+    "docs/work/raccord-documentaire-maitre.fr.md": "4fbc1c1a36d5af6e3e13191876d2197100f0134ed7a2375ccdb8cfb3fc30f912",
+    "scripts/check-documentary-codegen.py": "871b2e39ec462335d51566e92160d2af119d48c2f0da2bad5e6ee311584dbf9b",
+    "scripts/check-documentary-deduction-codegen.py": "bfd3c25963f6a02501324c2ffbadd7d76b7b14e045c3a97bcdc4702238691bdf",
+    "scripts/check-documentary-dossier-codegen.py": "df244c155096804d787cfefd8ec309609a4a0580ace7ddf37a48023819988ce7",
+    "scripts/check-documentary-master-codegen.py": "6eacca67954c85da92ecc6bd4ada45966d12332e8f7e73e7c9ecb5eaf1b83f8e",
+    "scripts/check-documentary-program-codegen.py": "fc79597c4463fcef9e9afd2c3d1d3177c42361ec8454160fba9b66919cd17742",
+    "scripts/check-scientific-docs.py": "2942ce4d3cf79b3805c76eb81fad468f0c409822f9ea5071de777417674a0615",
+    "scripts/run-documentary-deduction-smoke.py": "6793a59ddd9fbfaedc7e11a24d9c2560d6115527731a5990f85c72b300e1fb34",
+    "scripts/run-documentary-dossier-smoke.py": "e2179c7c3bfb3d3c532298f3b1b326172e10e8ac8e4cfe7782c4de85a4356e25",
+    "scripts/run-documentary-master-smoke.py": "19c6199e9ff1de3f0491246aa36334663d27eebcb19f57c93b3304cc0c94dec6",
+    "scripts/run-documentary-program-smoke.py": "100f19f513ccede4feaa7a907ba21a1095e5d6a4e5007b447ef8776a72b5ad2f",
+    "scripts/run-documentary-smoke.py": "4f28889323ce6d283cc051018cbe1cb97dd72457c32a8e01bd6e17e24b7167e5",
+    "scripts/verify.ps1": "4fd1406ea8211ada13f89e481088b9bda1014935a19b8fd3ce3db653bbf052cb",
+    "scripts/verify.sh": "482fbac9c49347d117ab1f49ea9e4cf4d7eecee082c94a219115d6eaee49f3ac"
+  },
+  "source_fingerprint": "470f0e8f27c99b23677bcf39884c65d23fe241a849c920f5aaac46d127978d8f",
+  "manifest_scope": "Changed tracked and non-ignored untracked files, normalized to LF; excludes this record to avoid self-reference. Development identity, no registered frozen evidence."
+}

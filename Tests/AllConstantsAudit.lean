@@ -1,5 +1,15 @@
 import Lean
 import Tests.LocalAlignment.Kernel
+import Tests.LocalAlignment.DocumentaryCases
+import Tests.LocalAlignment.DocumentaryMasterCases
+import Tests.LocalAlignment.DocumentaryDossierCases
+import Tests.LocalAlignment.DocumentaryDeductionCases
+import Tests.LocalAlignment.DocumentaryProgramCases
+import Tests.LocalAlignment.DocumentaryAdaptiveCases
+import Tests.LocalAlignment.DocumentaryMemoryCases
+import Tests.LocalAlignment.DocumentaryPortableCases
+import Tests.LocalAlignment.DocumentaryPortableStoreCases
+import Tests.LocalAlignment.DocumentaryRestorationComponentsCases
 import Tests.AristotleCorrectionRegression
 import Tests.ComputationalPhenomenonRegression
 import Tests.ConstitutiveComplexityHierarchyRegression

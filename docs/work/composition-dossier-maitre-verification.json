@@ -1,0 +1,185 @@
+{
+  "kind": "constructed_development_verification",
+  "confirmatory": false,
+  "status": "passed",
+  "created_utc": "2026-10-09T17:47:57.922487+00:00",
+  "branch": "codex/ai-alignment-under-contract",
+  "base_revision": "d8729a9d26d2725da96a0ffa6e7d13c84ea4ef08",
+  "extension_committed": false,
+  "scope": "Finite lists of received two-source extraction obligations; accomplishment of the actual dossier under positive pair admissibility; exact master step count; preservation of old occurrences and evidence; exact prefix continuation. No deduction rule, adaptive documentary model loop, reduced-memory checkpoint or comparative experiment.",
+  "corrections": [
+    "Plan advances beyond the completed binary bridge.",
+    "Historical Qwen report records its later claim registration without changing the canonical anchor.",
+    "Completion comment identifies the produced successor in the associated stage."
+  ],
+  "checks": {
+    "selected_audits": {
+      "Tests/LocalAlignment/DocumentaryDossier.lean": 41,
+      "Tests/LocalAlignment/DocumentaryDossierCases.lean": 43
+    },
+    "new_selected_audits": 84,
+    "fixture_checks": 21,
+    "literal_oracle_cases": 680,
+    "runtime_audits": 4,
+    "compiled_sharing": "passed",
+    "duplicate_codegen_mutations_rejected": 3,
+    "rendered_bytes_exact": true,
+    "previous_registered_claims_unchanged": 18,
+    "old_target_unchanged": true,
+    "full_gate": "passed",
+    "lean_files": 253,
+    "constants": 21667,
+    "modules": 252,
+    "compiler_generated_exceptions": 364,
+    "written_exceptions": 0,
+    "expected_failure_fixtures": 23,
+    "registered_claims": 19,
+    "registered_declarations": 91,
+    "scientific_document_self_tests": 8,
+    "temporary_type_rejections": [
+      {
+        "case": "restart_from_original_state",
+        "status": "expected_type_rejection",
+        "errors": 1,
+        "log_sha256": "2fbf925029dc98f4854631b8eb794e21e26c5aefff2d9e395fb96d3975ae9db4"
+      },
+      {
+        "case": "discard_produced_dossier",
+        "status": "expected_type_rejection",
+        "errors": 1,
+        "log_sha256": "e8496b79205c2b0e824a044b8600721adb8b37aa49c85f68c6680e7844af03d7"
+      }
+    ],
+    "final_document_links": "passed",
+    "final_diff_check": "passed"
+  },
+  "commands": [
+    "lake build +Tests.LocalAlignment.DocumentaryDossierCases",
+    "python -B -X utf8 scripts/check-documentary-dossier-codegen.py",
+    "python -B -X utf8 scripts/run-documentary-dossier-smoke.py --output docs/work/dossier-fixture-compose.fr.md",
+    "scripts/verify.ps1"
+  ],
+  "attempts": [
+    {
+      "check": "run-documentary-dossier-smoke.py",
+      "exit": 1,
+      "reason": "Client missing open for the revised demand; import namespace added."
+    },
+    {
+      "check": "run-documentary-dossier-smoke.py",
+      "exit": 0
+    },
+    {
+      "check": "scripts/verify.ps1",
+      "exit": 0,
+      "log_sha256": "0cc032e63a9c8754c1a027d4c29482933c359b1ae9498c0294d71d10f33d2b65"
+    },
+    {
+      "check": "scripts/check-scientific-docs.py --static and git diff --check",
+      "exit": 0,
+      "stage": "final_documentary_bilan",
+      "scope": "Documentation changes after the successful full gate; mathematical sources and scripts unchanged."
+    }
+  ],
+  "source_sha256_lf": {
+    "Tests/AllConstantsAudit.lean": "ae62db76ac1828e96d6badb437c5cb45f074c184167e6e8175a88e256ec39e85",
+    "Tests/LocalAlignment/DocumentaryCases.lean": "65efcac272cd2596654964c56d898e1fc3f99b0798222f91c78736bd1619e373",
+    "Tests/LocalAlignment/DocumentaryContract.lean": "7d53ca5378c6388cba28337a5d51e3840d30d3dd80abe2a76c09dbed534e1f64",
+    "Tests/LocalAlignment/DocumentaryDossier.lean": "623ea316c29b656f9048d9cc8cd42233f3dc547a3e2895d819fab4540307fc10",
+    "Tests/LocalAlignment/DocumentaryDossierCases.lean": "fe3f8bb5ce7c372ab4d365963de1ead3ed93fdd1f29380b8e28581624ddbd57a",
+    "Tests/LocalAlignment/DocumentaryMaster.lean": "d4621594ee1ffe326fab710b5bf8dc05eeba638712c112e4c1aa4d02307c35ac",
+    "Tests/LocalAlignment/DocumentaryMasterCases.lean": "98c0ffde54b78383a6984a2dd098fb7d8e96f08fe42451456db65212871078dc",
+    "Tests/LocalAlignment/DocumentarySelection.lean": "903d09e8976a64b3b0fbe83e78b13f8310a247f712a049680407f5b63ca09319",
+    "apps/local-alignment/README.fr.md": "b82bbf0f47436b12f84eefb39b50793062a1325cabd950d3a1ac36a1ad002aeb",
+    "docs/methode-de-travail-scientifique.fr.md": "04dd6b4187fccd20961491f24e2517c9d7f76c863c7520e8b3a3f55cca90b131",
+    "docs/scientific-claims.json": "ca0d35234b31afb3681db59ad8976e43dd7cab01a0635287db3c6c87bdc94d0a",
+    "docs/work/alignement-ia-locale-resultats.fr.md": "3da613f33c4ef5e346283eb8e6bc5e7f91e94a723290560274bf508686d214f7",
+    "docs/work/composition-dossier-maitre.fr.md": "f86e72693e506a7ac1e81d8d7d12a324f60c6fd06080da71b74293621535f438",
+    "docs/work/dossier-fixture-compose.fr.md": "ab253f60f15de40aacebb4b246082277b02167c6cbdabb453aa4fc197e3ca22f",
+    "docs/work/dossier-fixture-constitue.fr.md": "044188c9c4eba9ff5ba674fc8de6d6846f0d1b1432cff129d01214b63b421877",
+    "docs/work/dossier-fixture-maitre.fr.md": "f03864523721f92bf463738fb6102d924987de71b3396f39e5a76883b824f923",
+    "docs/work/plan-alignement-agent-dossier.fr.md": "c07d17eeb81f3c58048cc7a31b5f4e99ead5800484cc78c87315f4a664f4323f",
+    "docs/work/premiere-couche-documentaire-verification.json": "1a175584e2e1306dcc442fbc82c54ef9198956ec5ede05a5bd50290d8a3d0e9b",
+    "docs/work/premiere-couche-documentaire.fr.md": "1580a40b435b330b43bf2ff43b92a4bb314d09dafbd2e546ebd296ca1d6da465",
+    "docs/work/raccord-documentaire-maitre-verification.json": "47f6e86612560a294b60e66cc75e691f6ff949924d9feeab9b93d22dc3314ee1",
+    "docs/work/raccord-documentaire-maitre.fr.md": "4fbc1c1a36d5af6e3e13191876d2197100f0134ed7a2375ccdb8cfb3fc30f912",
+    "scripts/check-documentary-codegen.py": "871b2e39ec462335d51566e92160d2af119d48c2f0da2bad5e6ee311584dbf9b",
+    "scripts/check-documentary-dossier-codegen.py": "df244c155096804d787cfefd8ec309609a4a0580ace7ddf37a48023819988ce7",
+    "scripts/check-documentary-master-codegen.py": "6eacca67954c85da92ecc6bd4ada45966d12332e8f7e73e7c9ecb5eaf1b83f8e",
+    "scripts/check-scientific-docs.py": "2942ce4d3cf79b3805c76eb81fad468f0c409822f9ea5071de777417674a0615",
+    "scripts/run-documentary-dossier-smoke.py": "e2179c7c3bfb3d3c532298f3b1b326172e10e8ac8e4cfe7782c4de85a4356e25",
+    "scripts/run-documentary-master-smoke.py": "19c6199e9ff1de3f0491246aa36334663d27eebcb19f57c93b3304cc0c94dec6",
+    "scripts/run-documentary-smoke.py": "4f28889323ce6d283cc051018cbe1cb97dd72457c32a8e01bd6e17e24b7167e5",
+    "scripts/verify.ps1": "ba665aecd25381be5316ab1538589c0edbd91a099a6c1c781a248b96ef0d49a9",
+    "scripts/verify.sh": "4863d139c8c2697296fb00379fd6671088559cf6d9988c4511683f25c69c0658"
+  },
+  "completed_utc": "2026-10-09T17:52:05.048216+00:00",
+  "claim_candidate": {
+    "id": "DOCUMENTARY_FINITE_COMPOSITION",
+    "status": "development_uncommitted",
+    "evidence_revision": null,
+    "scope": "Finite lists of received two-source extraction obligations; accomplishment of the actual dossier under positive pair admissibility; exact master step count; preservation of old occurrences and evidence; exact prefix continuation. No deduction rule, adaptive documentary model loop, reduced-memory checkpoint or comparative experiment.",
+    "proofs": [
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDossier",
+        "name": "ConstitutiveSearch.Agent.Local.Documentary.Dossier.accomplishment",
+        "role": "test"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDossier",
+        "name": "ConstitutiveSearch.Agent.Local.Documentary.Dossier.completion_verdict",
+        "role": "test"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDossier",
+        "name": "ConstitutiveSearch.Agent.Local.Documentary.Dossier.exact_step_count",
+        "role": "test"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDossier",
+        "name": "ConstitutiveSearch.Agent.Local.Documentary.Dossier.exact_item_count",
+        "role": "test"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDossier",
+        "name": "ConstitutiveSearch.Agent.Local.Documentary.Dossier.Execution.previous_position",
+        "role": "test"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDossier",
+        "name": "ConstitutiveSearch.Agent.Local.Documentary.Dossier.Execution.previous_evidence",
+        "role": "test"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDossier",
+        "name": "ConstitutiveSearch.Agent.Local.Documentary.Dossier.Execution.old_goal",
+        "role": "test"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDossier",
+        "name": "ConstitutiveSearch.Agent.Local.Documentary.Dossier.execute_append",
+        "role": "test"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDossier",
+        "name": "ConstitutiveSearch.Agent.Local.Documentary.Dossier.execute_append_events",
+        "role": "test"
+      },
+      {
+        "module": "Tests.LocalAlignment.DocumentaryDossier",
+        "name": "ConstitutiveSearch.Agent.Local.Documentary.Dossier.forbidden_list_incompatible",
+        "role": "test"
+      }
+    ],
+    "reviews": {
+      "reader": "pending",
+      "independent": "not_recorded"
+    }
+  },
+  "final_document_updates_reviewed": [
+    "apps/local-alignment/README.fr.md",
+    "docs/work/composition-dossier-maitre.fr.md",
+    "docs/work/plan-alignement-agent-dossier.fr.md"
+  ],
+  "finalized_utc": "2026-10-09T17:54:54.206178+00:00"
+}
