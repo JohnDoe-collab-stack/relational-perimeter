@@ -64,6 +64,49 @@ inductive Label where
   | citationCompletion
   | citationDecision
   | citationPacket
+  | masterProducer
+  | masterDiscover
+  | masterApply
+  | masterDecompose
+  | masterAssemble
+  | masterNextPrefix
+  | masterNextSource
+  | masterNextFresh
+  | masterNextCursor
+  | masterHeadPacket
+  | masterGeneration
+  | masterCandidateCell
+  | masterProvenanceCell
+  | masterProvenanceReturn
+  | masterFilterCell
+  | masterFilterReturn
+  | masterDiscoveryPacket
+  | assemblyDossier
+  | masterWorkPacket
+  | masterConstructionCell
+  | masterConstructionReturn
+  | masterExtractionCell
+  | masterExtractionReturn
+  | listAppendCell
+  | listAppendReturn
+  | frameRestore
+  | justificationCell
+  | justificationReturn
+  | referenceIdentity
+  | referenceShift
+  | referenceComposition
+  | controlInspect
+  | controlCall
+  | controlCompose
+  | controlClosure
+  | controlFrame
+  | controlTrace
+  | controlWitness
+  | controlResult
+  | masterCandidateAttempt
+  | masterCandidateReturn
+  | masterNextStateGeneration
+  | masterNextStateQuery
 
 variable {context : List SourceKey} {sources : Support SourceValue context}
   {contract : Contract} {rules : Deduction.Policy} {store : Deduction.Store sources contract rules}

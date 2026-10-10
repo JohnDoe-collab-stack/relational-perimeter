@@ -378,3 +378,56 @@ effectivement constitué au suivant et conserver l'égalité du paquet entier,
 dont la tête, le curseur suivant et les formations. L'ouverture de ces
 producteurs devra aussi couvrir leurs calculs internes ; leur seul
 séquençage ne fermerait pas D2.
+
+## Ouverture de la tête et des assemblages
+
+Le [raccord suivant](controle-tete-assemblages.fr.md) exécute la chaîne des
+sept productions du même maître et conserve le paquet `MasterHead` entier.
+Il ouvre génération, extraction, filtrage de provenance, parcours des
+candidats et assemblages de leurs compteurs. Il ouvre aussi les tentatives
+entières : fraîcheur, résidus, enfants, transformations et comparaisons de
+formule et d'histoire, puis la recherche de relation sur ces endpoints réels.
+Les assemblages de citation et
+d'entrée manquante sont décomposés et raccordés à l'étape originale entière.
+L'application ouvre le schedule stocké, ses deux recherches, le transport
+composé, le stade et l'assemblage du successeur. La décomposition conserve
+les deux occurrences et leurs constitutions, puis exécute la collecte des
+sorties et la déduplication de leur image. Ces constructions alimentent le
+support réel ; leurs accords portent sur les paquets entiers.
+La voie `ControlStep.expandedCode` consomme cette tête et paie sa restauration
+de frame ; l'administration de l'évaluateur source possède son propre
+résultat et sa preuve de terminaison.
+
+| Passage de D2 | État courant de la voie étendue |
+| --- | --- |
+| Génération, extraction, provenance et tentatives | Instrumentées, résultats entiers et endpoints conservés |
+| Application et décomposition | Schedules, recherches, transport, stade, successeur, licence et image construits depuis les résultats réels ; générateur constitutif, ouverture du rôle et formations internes encore ouverts |
+| Kinds dépendants et arguments de métadonnées | Douze sites de lectures natives de tête et deux sites d'endpoints de schedule révélés par le C ; coût encore ouvert |
+| Ouverture, normalisation, préservation, routage et assignation | Obligations internes antérieures toujours ouvertes |
+| Assemblages de citation et d'entrée manquante | Décomposés, même étape et même progression |
+| Restauration et lectures différées | Frame et table contrôlées ; lecteurs vide/citation/déduction et recettes de transports fermés ; raccord complet aux frames et codecs encore ouvert |
+| Composition, traces et allocations abstraites | Évaluateur source construit ; migration de tous les callbacks et enveloppes encore à établir |
+
+Le protocole courant comporte 31 contrôles d'intégration et seize
+audits runtime ; les gardes C ciblées rejettent 683 mutations textuelles.
+Les seuils 2, 5 et 18 des trois formes de transport sont vérifiés par le
+noyau, avec expiration à une unité en moins. Deux des quatre reconstructions
+natives de schedule apparues dans ce raccord sont supprimées ; deux sites
+d'indices exécutables d'endpoints restent à remplacer par un cache payé.
+Le relevé intermédiaire
+de 23 104 transitions est historique : l'intérieur des tentatives n'était
+pas encore instrumenté. Le plafond de test n'est pas
+présenté comme une borne de bootstrap. Les API et relevés antérieurs restent
+historiques ; le secours de `RecoveryData.prepare` n'est pas encore remplacé.
+
+La [qualification locale](controle-tete-assemblages-verification.json) expose
+les réparations de développement, les limites et les vérifications de cette
+révision. La gate complète a réussi sur 337 fichiers Lean : 27 371 constantes,
+aucune exception pour une déclaration écrite, 486 audits explicites des
+modules de contrôle sans axiome et 23 fixtures d'échecs attendus. Les 31
+contrôles runtime et leurs seize audits ont passé sur ce même arbre.
+**La demande entière et D2 restent ouverts.** La prochaine
+fermeture doit traiter le générateur constitutif et l'ouverture du rôle,
+avec l'intérieur des formations, la représentation payée des métadonnées
+et les autres moteurs et lecteurs listés. D3 et D4 ne sont pas déclarés commencés
+par cet incrément ; A conserve sa priorité sur B.

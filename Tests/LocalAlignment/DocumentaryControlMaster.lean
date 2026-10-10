@@ -1,4 +1,5 @@
 import Tests.LocalAlignment.DocumentaryControlCompletion
+import Tests.LocalAlignment.DocumentaryControlMasterHead
 
 /-! The quotation search uses the same head, opening and retained reduction.
 Paid source checks supply the actual flags and formula. Head production,
@@ -90,6 +91,67 @@ theorem run_finite {context sources contract} (state : @Dossier.State context so
   obtain ⟨produced, labels, trace, _⟩ := run_bounded state task
   exact ⟨produced, labels, trace⟩
 
+def expandedSearchCode {context} (cursor : MasterResources.Cursor) (sources : Support SourceValue context)
+    (contract : Contract) (demand : Demand) (left right : Location context) :
+    Code Label (Search cursor sources contract demand left right) :=
+  (ControlMasterHead.code cursor).bind (fun actualHead =>
+    let head := actualHead.1
+    (ControlSelection.checkCode sources contract demand left).bind (fun leftCheck =>
+      (ControlSelection.checkCode sources contract demand right).bind (fun rightCheck =>
+        .step .citationFormula (fun _ =>
+          let formula := Selection.choiceFormula (VariableMaster.selected head) leftCheck.1.flag rightCheck.1.flag
+          .step .citationOpening (fun _ =>
+            let opening := VariableMaster.openFrontier formula (VariableMaster.selected head)
+              [SAT.GeneratedStructuralBranchContext.root formula]
+            .step .citationReduction (fun _ =>
+              let reduction := SAT.normalizeGeneratedStructuralFrontierByFlip formula
+                (VariableMaster.selected head) opening.frontier
+              .step .citationStage (fun _ => .done
+                ⟨Master.stageFromParts cursor sources contract demand left right head actualHead.2
+                  leftCheck.1 leftCheck.2 rightCheck.1 rightCheck.2 opening rfl reduction rfl,
+                  Master.stageFromParts_actual cursor sources contract demand left right head actualHead.2
+                    leftCheck.1 leftCheck.2 rightCheck.1 rightCheck.2 opening rfl reduction rfl⟩)))))))
+
+
+def expandedRunCode {context sources contract} (state : @Dossier.State context sources contract)
+    (task : Dossier.Obligation context) : Code Label (Run state task) :=
+  (expandedSearchCode state.cursor sources contract task.demand task.left task.right).bind (fun actual =>
+    (ControlCompletion.decideCode actual.1 state.memory).bind (fun decision =>
+      .step .citationPacket (fun _ =>
+        let produced : Dossier.Step state task := ⟨actual.1, decision.1⟩
+        .done ⟨produced, by
+          obtain ⟨stage, stageActual⟩ := actual
+          obtain ⟨decision, decisionActual⟩ := decision
+          cases stageActual
+          cases decisionActual
+          rfl⟩)))
+
+
+theorem expanded_search_finite {context} (cursor : MasterResources.Cursor) (sources : Support SourceValue context)
+    (contract : Contract) (demand : Demand) (left right : Location context) :
+    Finite (expandedSearchCode cursor sources contract demand left right) := by
+  apply finite_bind (ControlMasterHead.finite cursor); intro head
+  apply finite_bind
+  · obtain ⟨value, labels, trace, _⟩ := ControlSelection.check_bounded sources contract demand left
+    exact ⟨value, labels, trace⟩
+  · intro leftCheck
+    apply finite_bind
+    · obtain ⟨value, labels, trace, _⟩ := ControlSelection.check_bounded sources contract demand right
+      exact ⟨value, labels, trace⟩
+    · intro rightCheck
+      repeat apply finite_step
+      exact finite_done _
+
+theorem expanded_run_finite {context sources contract} (state : @Dossier.State context sources contract)
+    (task : Dossier.Obligation context) : Finite (expandedRunCode state task) := by
+  apply finite_bind (expanded_search_finite state.cursor sources contract task.demand task.left task.right)
+  intro actual
+  apply finite_bind
+  · obtain ⟨value, labels, trace, _⟩ := ControlCompletion.pair_bounded actual.1 state.memory
+    exact ⟨value, labels, trace⟩
+  · intro decision
+    exact finite_step _ _ (finite_done _)
+
 end ConstitutiveSearch.Agent.Local.Documentary.ControlMaster
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -102,4 +164,8 @@ end ConstitutiveSearch.Agent.Local.Documentary.ControlMaster
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMaster.runBound
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMaster.run_bounded
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMaster.run_finite
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMaster.expandedSearchCode
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMaster.expandedRunCode
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMaster.expanded_search_finite
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMaster.expanded_run_finite
 /- AXIOM_AUDIT_END -/
