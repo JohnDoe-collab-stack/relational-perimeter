@@ -1,8 +1,9 @@
 import Tests.LocalAlignment.DocumentaryControlSequentialStage
+import Tests.LocalAlignment.DocumentaryControlConstitutiveGeneration
 
 /-! Retain the next state produced from the actual executed stage. The supplied
-constitutive generator and function-valued bit query are explicit remaining
-engines; this file does not claim their internal instruction costs. -/
+constitutive generator is expanded from its received positive source. The
+function-valued bit query remains an explicit engine. -/
 set_option genInjectivity false
 set_option maxHeartbeats 8000000
 namespace ConstitutiveSearch.Agent.Local.Documentary.ControlNextState
@@ -30,8 +31,12 @@ def decisionCode {depth : Nat} {assignment : SequentialAssignment depth}
 def generationCode {depth : Nat} {assignment : SequentialAssignment depth}
     (state : ThreadedConstitutiveState depth assignment) :
     Code Label (Actual (generateCanonicalStageFromSource state.generation.target state.generation.targetExact)) :=
-  .step .masterNextStateGeneration (fun _ => .done
-    ⟨generateCanonicalStageFromSource state.generation.target state.generation.targetExact, rfl⟩)
+  ControlConstitutiveGeneration.canonicalCode state.generation.target state.generation.targetExact
+
+theorem generation_bounded {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment) :
+    Within (generationCode state) (ControlConstitutiveGeneration.bound state.generation.target + 1) :=
+  ControlConstitutiveGeneration.canonical_bounded _ _
 
 def fromParts {depth : Nat} {assignment : SequentialAssignment depth}
     (state : ThreadedConstitutiveState depth assignment) (stage : SequentialStageRun depth assignment)
@@ -104,7 +109,8 @@ theorem finite {depth : Nat} {assignment : SequentialAssignment depth}
   · exact finite_step _ _ (finite_done _)
   · intro provenance
     apply finite_bind
-    · exact finite_step _ _ (finite_done _)
+    · obtain ⟨value, labels, trace, _⟩ := generation_bounded state
+      exact ⟨value, labels, trace⟩
     · intro generation
       apply finite_bind
       · unfold seedCode; apply finite_step; split <;> exact finite_done _
@@ -120,6 +126,7 @@ end ConstitutiveSearch.Agent.Local.Documentary.ControlNextState
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.seedCode
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.decisionCode
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.generationCode
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.generation_bounded
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.fromParts
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.from_parts_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.code

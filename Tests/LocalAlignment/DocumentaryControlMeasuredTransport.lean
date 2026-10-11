@@ -1,4 +1,5 @@
 import Tests.LocalAlignment.DocumentaryControlMeasuredSchedule
+import Tests.LocalAlignment.DocumentaryControlScheduleCache
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.SequentialResolution
 
 /-! Interpret the actual returned transport code, consuming the first output
@@ -121,19 +122,24 @@ theorem applied_from_run_actual {root : Cnf} {state : GeneratedStructuralBranchC
     execution.code input).outputExact
 
 def applicationCode {root : Cnf} {state : GeneratedStructuralBranchContext root}
-    {discovery : EndogenousFlipDiscovery state} {schedule : DiscoverySchedule discovery}
-    {validation : ValidatedDiscoverySchedule schedule} (execution : ExecutedDiscoverySchedule validation)
-    (input : GeneratedStructuralBranchContinuation schedule.entry.source) :
+    {discovery : EndogenousFlipDiscovery state} (stored : StoredLocalSchedule discovery)
+    {validation : ValidatedDiscoverySchedule (scheduleFromDiscovery discovery)}
+    (execution : ExecutedDiscoverySchedule validation)
+    (input : GeneratedStructuralBranchContinuation (scheduleFromDiscovery discovery).entry.source) :
     Code Label (Actual (applyDiscoveryExecution execution input)) :=
-  (flipCode discovery.1 execution.code input).bind (fun run =>
+  (flipCode discovery.1 (ControlScheduleCache.program stored execution)
+    (ControlScheduleCache.input stored input)).bind (fun run =>
     .step .masterConstructionReturn (fun _ => .done
-      ⟨appliedFromRun execution input run.1 run.2, applied_from_run_actual _ _ _ _⟩))
+      ⟨appliedFromRun execution input (ControlScheduleCache.originalRun stored execution input run.1)
+        (ControlScheduleCache.original_run_actual stored execution input run.1 run.2),
+        applied_from_run_actual _ _ _ _⟩))
 
 theorem application_finite {root : Cnf} {state : GeneratedStructuralBranchContext root}
-    {discovery : EndogenousFlipDiscovery state} {schedule : DiscoverySchedule discovery}
-    {validation : ValidatedDiscoverySchedule schedule} (execution : ExecutedDiscoverySchedule validation)
-    (input : GeneratedStructuralBranchContinuation schedule.entry.source) :
-    Finite (applicationCode execution input) := by
+    {discovery : EndogenousFlipDiscovery state} (stored : StoredLocalSchedule discovery)
+    {validation : ValidatedDiscoverySchedule (scheduleFromDiscovery discovery)}
+    (execution : ExecutedDiscoverySchedule validation)
+    (input : GeneratedStructuralBranchContinuation (scheduleFromDiscovery discovery).entry.source) :
+    Finite (applicationCode stored execution input) := by
   apply finite_bind (flip_finite _ _ _); intro run
   exact finite_step _ _ (finite_done _)
 

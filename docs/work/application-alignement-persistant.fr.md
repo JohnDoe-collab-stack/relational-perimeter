@@ -431,3 +431,65 @@ fermeture doit traiter le générateur constitutif et l'ouverture du rôle,
 avec l'intérieur des formations, la représentation payée des métadonnées
 et les autres moteurs et lecteurs listés. D3 et D4 ne sont pas déclarés commencés
 par cet incrément ; A conserve sa priorité sur B.
+
+## Génération constitutive, occurrences et bornes locales
+
+Le [passage suivant](controle-generation-roles-bornes.fr.md) remplace
+l'appel atomique du générateur constitutif par la construction de sa couche,
+de sa cible et de ses lois, consommées dans le paquet original entier.
+Il raccorde la formation des deux occurrences aux endpoints du schedule
+effectivement produit, puis leurs évidences à la licence exécutée.
+Les deux reconstructions natives d'endpoints restantes sont supprimées
+du transport et de la formation de son lecteur.
+
+Le compte structural `o` du code de frontière donne une borne locale
+`o + 31` au générateur. Le calcul contrôlé de cette allocation lit seulement
+le code reçu et possède sa propre borne `b + 64`. La preuve consomme
+l'allocation calculée avant l'exécution du générateur. Ces majorants locaux
+préparent la fermeture ; ils ne sont pas l'enveloppe de tout le secours.
+
+La gate complète passe sur 342 fichiers Lean, avec 27 554 constantes,
+aucune exception pour une déclaration écrite et 552 audits explicites des
+modules de contrôle sans axiome. Les 31 contrôles d'intégration, les quatre
+histoires du bootstrap et les 842 mutations textuelles des gardes C passent.
+La [qualification](controle-generation-roles-bornes-verification.json) conserve
+les empreintes de cet arbre ; les qualifications antérieures restent
+historiques. Les douze sites de lectures natives des
+métadonnées de tête, les autres indices exécutables, les moteurs documentaires,
+les lecteurs différés et l'administration complète restent à fermer en D2.
+Les enveloppes obligatoires et successorales de D3 et le raccord borné de D4
+au présent conservé et rechargé restent à implémenter. A conserve sa priorité
+sur B.
+
+## Arguments et métadonnées de tête conservés
+
+Le [raccord suivant de D2](controle-metadonnees-tete.fr.md) conserve les arguments
+effectivement lus, forme les indices dans le contrôle et transmet les supports
+entiers aux sept producteurs du maître. Les références suivantes utilisent
+ces arguments et ces indices conservés. Les douze sites de lectures natives
+de métadonnées de tête recensés précédemment sont supprimés du C de tête.
+La garde rejette leur réintroduction dans les modules de tête et de formation
+conservée, ainsi que la perte des arguments, de l'indice ou du support positif.
+
+Les preuves conservent l'égalité au paquet maître entier, avec sa tête, son
+curseur suivant et l'accord de sa frontière. Les lois de lecture établissent
+que la nouvelle occurrence lit la valeur produite et que les références
+antérieures conservent leur lecture. La formation conservée possède une borne
+locale composée, conditionnelle aux bornes fournies de ses codes d'indice et
+d'opération ; l'enveloppe globale demeure une obligation de D3.
+
+La gate complète passe sur 342 fichiers Lean et 27 584 constantes, avec aucune
+exception pour une déclaration écrite, 572 audits explicites de contrôle sans
+axiome et 23 fixtures d'échecs attendus. Les 31 contrôles d'intégration exigent
+les sept indices payés et conservent leurs critères de livraison, d'origine,
+de refus et de progression. Les quatre histoires du bootstrap et les 1 192
+mutations textuelles des gardes passent également.
+La [qualification](controle-metadonnees-tete-verification.json) enregistre les
+410 sources et scripts figés avant la gate, inchangés jusqu'à sa sortie.
+
+La liste des douze lectures de tête est traitée. D2 reste ouvert pour les
+autres indices exécutables, l'ouverture et la normalisation documentaires,
+les lecteurs différés, les frames et codecs, ainsi que l'administration et
+les allocations complètes. Les enveloppes et réserves de D3, puis le secours
+borné de D4 sur le présent conservé et rechargé, restent à implémenter.
+A conserve sa priorité sur B.

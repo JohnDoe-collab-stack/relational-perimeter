@@ -7,7 +7,7 @@ import Tests.LocalAlignment.DocumentaryControlMasterDecomposition
 support produced by its predecessor. Head and continuation share those
 productions; the equality is on the whole original MasterHead. -/
 set_option genInjectivity false
-set_option maxHeartbeats 8000000
+set_option maxHeartbeats 32000000
 namespace ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead
 open Resources EndogenousDecomposition Control ControlBindings ControlConstitutiveResources
 
@@ -45,14 +45,20 @@ def decompositionOperation {depth : Nat} {assignment : SequentialAssignment dept
     (past : Ref context (.prefix state)) (application : Ref context (.application state))
     (args : Values MasterResources.Value [.prefix state, .application state]) :
     Code Label (Operation (MasterResources.decompose past application) args) :=
-  (ControlMasterDecomposition.code args.1.down (causalStageOfThreadedStage args.2.1.down.run)).bind
-    (fun production => .done ⟨⟨production.1⟩, by obtain ⟨_, actual⟩ := production; cases actual; rfl⟩)
+  (ControlRoleFormation.endpointsCode args.2.1.down.run).bind (fun endpoints =>
+    (ControlMasterDecomposition.code args.1.down (causalStageOfThreadedStage args.2.1.down.run)
+      endpoints.1).bind
+      (fun production => .done ⟨⟨production.1⟩, by obtain ⟨_, actual⟩ := production; cases actual; rfl⟩))
 
 theorem decomposition_finite {depth : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment} {context : List MasterResources.Kind}
     (past : Ref context (.prefix state)) (application : Ref context (.application state))
     (args : Values MasterResources.Value [.prefix state, .application state]) : Finite (decompositionOperation past application args) := by
-  apply finite_bind (ControlMasterDecomposition.finite _ _); intro production; exact finite_done _
+  apply finite_bind
+  · obtain ⟨value, labels, trace, _⟩ := ControlRoleFormation.endpoints_bounded args.2.1.down.run
+    exact ⟨value, labels, trace⟩
+  · intro endpoints
+    apply finite_bind (ControlMasterDecomposition.finite _ _ _); intro production; exact finite_done _
 
 def assemblyOperation {depth : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -85,6 +91,67 @@ def freshOperation {depth : Nat} {assignment : SequentialAssignment depth}
     Code Label (Operation (MasterResources.headNextFresh head fresh) args) :=
   .step .masterNextFresh (fun _ => .done ⟨⟨⟨args.1.down.run.nextRun.fresh args.2.1.down.down⟩⟩, rfl⟩)
 
+def discoveryKind {depth : Nat} {assignment : SequentialAssignment depth} {context : List MasterResources.Kind}
+    (source : Ref context (.source depth assignment))
+    (args : Values MasterResources.Value [.source depth assignment]) :
+    Code Label {kind // kind = (MasterResources.discover source).outputKind args} :=
+  .step .producerOutputKind (fun _ => .done ⟨.discovery args.1.down, rfl⟩)
+
+def applicationKind {depth : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment} {context : List MasterResources.Kind}
+    (discovery : Ref context (.discovery state)) (fresh : Ref context (.fresh state))
+    (args : Values MasterResources.Value [.discovery state, .fresh state]) :
+    Code Label {kind // kind = (MasterResources.applyStage discovery fresh).outputKind args} :=
+  .step .producerOutputKind (fun _ => .done ⟨.application state, rfl⟩)
+
+def decompositionKind {depth : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment} {context : List MasterResources.Kind}
+    (past : Ref context (.prefix state)) (application : Ref context (.application state))
+    (args : Values MasterResources.Value [.prefix state, .application state]) :
+    Code Label {kind // kind = (MasterResources.decompose past application).outputKind args} :=
+  .step .producerOutputKind (fun _ => .done ⟨.decomposition state args.1.down args.2.1.down, rfl⟩)
+
+def assemblyKind {depth : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {past : ConstitutedOperationalPrefix (causalStateOfThreadedState state)}
+    {built : ConstructedThreadedStageRun state} {context : List MasterResources.Kind}
+    (production : Ref context (.decomposition state past built))
+    (args : Values MasterResources.Value [.decomposition state past built]) :
+    Code Label {kind // kind = (MasterResources.assemble production).outputKind args} :=
+  .step .producerOutputKind (fun _ => .done ⟨.head state past, rfl⟩)
+
+def prefixKind {depth : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {past : ConstitutedOperationalPrefix (causalStateOfThreadedState state)} {context : List MasterResources.Kind}
+    (head : Ref context (.head state past)) (args : Values MasterResources.Value [.head state past]) :
+    Code Label {kind // kind = (MasterResources.headNextPrefix head).outputKind args} :=
+  .step .producerOutputKind (fun _ => .done ⟨.prefix args.1.down.run.nextRun.next, rfl⟩)
+
+def sourceKind {depth : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {past : ConstitutedOperationalPrefix (causalStateOfThreadedState state)} {context : List MasterResources.Kind}
+    (head : Ref context (.head state past)) (args : Values MasterResources.Value [.head state past]) :
+    Code Label {kind // kind = (MasterResources.headNextSource head).outputKind args} :=
+  .step .producerOutputKind (fun _ => .done ⟨.source (depth + 1) args.1.down.stage.next, rfl⟩)
+
+def freshKind {depth : Nat} {assignment : SequentialAssignment depth}
+    {state : ThreadedConstitutiveState depth assignment}
+    {past : ConstitutedOperationalPrefix (causalStateOfThreadedState state)} {context : List MasterResources.Kind}
+    (head : Ref context (.head state past)) (fresh : Ref context (.fresh state))
+    (args : Values MasterResources.Value [.head state past, .fresh state]) :
+    Code Label {kind // kind = (MasterResources.headNextFresh head fresh).outputKind args} :=
+  .step .producerOutputKind (fun _ => .done ⟨.fresh args.1.down.run.nextRun.next, rfl⟩)
+
+def pastAt (cursor : MasterResources.Cursor)
+    (source : Arguments (MasterResources.discover cursor.source).inputs cursor.support.values) :
+    Ref cursor.kinds (.prefix source.1.1.down) :=
+  retargetRef cursor.past (by rw [source.2]; rfl)
+
+def freshAt (cursor : MasterResources.Cursor)
+    (source : Arguments (MasterResources.discover cursor.source).inputs cursor.support.values) :
+    Ref cursor.kinds (.fresh source.1.1.down) :=
+  retargetRef cursor.fresh (by rw [source.2]; rfl)
+
 abbrev Continued {depth : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
     {past : ConstitutedOperationalPrefix (causalStateOfThreadedState state)} {context : List MasterResources.Kind}
@@ -99,36 +166,50 @@ def continueCode {depth : Nat} {assignment : SequentialAssignment depth}
     (freshRef : Ref context (.fresh state)) : Code Label (Continued support headRef freshRef) :=
   (ControlResources.readCode support.values headRef).bind (fun head =>
   .step .masterProducer (fun _ =>
-    (extendCode support (MasterResources.headNextPrefix headRef) (prefixOperation headRef)).bind (fun prefixed =>
+    (cachedCode support (MasterResources.headNextPrefix headRef)
+      (prefixKind headRef) (prefixOperation headRef)).bind (fun prefixed =>
     .step .masterProducer (fun _ =>
-      (extendCode prefixed.1 (MasterResources.headNextSource (.prior headRef))
-        (sourceOperation (.prior headRef))).bind (fun sourced =>
+      let sourceHead := retainedPrior prefixed.kind headRef
+      (cachedCode prefixed.after (MasterResources.headNextSource sourceHead)
+        (sourceKind sourceHead) (sourceOperation sourceHead)).bind (fun sourced =>
       .step .masterProducer (fun _ =>
-        (extendCode sourced.1 (MasterResources.headNextFresh (.prior (.prior headRef)) (.prior (.prior freshRef)))
-          (freshOperation (.prior (.prior headRef)) (.prior (.prior freshRef)))).bind (fun freshened =>
+        let freshHead := retainedPrior sourced.kind sourceHead
+        let freshInput := retainedPrior sourced.kind (retainedPrior prefixed.kind freshRef)
+        (cachedCode sourced.after (MasterResources.headNextFresh freshHead freshInput)
+          (freshKind freshHead freshInput) (freshOperation freshHead freshInput)).bind (fun freshened =>
         .step .masterNextCursor (fun _ =>
+          have prefixedHead : prefixed.args.1.1 = head.1 :=
+            (congrArg Prod.fst prefixed.args.2).trans head.2.symm
+          have sourcedHead : sourced.args.1.1 = head.1 :=
+            (congrArg Prod.fst sourced.args.2).trans
+              ((prefixed.read_prior headRef).trans head.2.symm)
+          have freshenedHead : freshened.args.1.1 = head.1 :=
+            (congrArg Prod.fst freshened.args.2).trans
+              ((sourced.read_prior sourceHead).trans
+                ((prefixed.read_prior headRef).trans head.2.symm))
+          let actualSource := retainedPrior freshened.kind sourced.here
+          let actualPast := retainedPrior freshened.kind (retainedPrior sourced.kind prefixed.here)
+          let actualFresh := freshened.here
+          have sourceRead : freshened.after.read actualSource =
+              (⟨sourced.args.1.1.down.run.nextRun.next⟩ : MasterResources.Value
+                (.source (depth + 1) sourced.args.1.1.down.stage.next)) :=
+            (freshened.read_prior sourced.here).trans sourced.read_here
           let next : MasterResources.Cursor :=
-            ⟨depth + 1, head.1.down.stage.next, _, freshened.1,
-              (by obtain ⟨_, actual⟩ := freshened; cases actual
-                  obtain ⟨_, actual⟩ := sourced; cases actual
-                  obtain ⟨_, actual⟩ := prefixed; cases actual
-                  obtain ⟨_, actual⟩ := head; cases actual
-                  exact .prior .here),
-              (by obtain ⟨_, actual⟩ := freshened; cases actual
-                  obtain ⟨_, actual⟩ := sourced; cases actual
-                  obtain ⟨_, actual⟩ := prefixed; cases actual
-                  obtain ⟨_, actual⟩ := head; cases actual
-                  exact .prior (.prior .here)),
-              (by obtain ⟨_, actual⟩ := freshened; cases actual
-                  obtain ⟨_, actual⟩ := sourced; cases actual
-                  obtain ⟨_, actual⟩ := prefixed; cases actual
-                  obtain ⟨_, actual⟩ := head; cases actual
-                  exact .here)⟩
+            ⟨depth + 1, sourced.args.1.1.down.stage.next, _, freshened.after, actualSource,
+              retargetRef actualPast (by
+                change MasterResources.Kind.prefix prefixed.args.1.1.down.run.nextRun.next =
+                  .prefix (freshened.after.read actualSource).down
+                rw [sourceRead, prefixedHead, sourcedHead]),
+              retargetRef actualFresh (by
+                change MasterResources.Kind.fresh freshened.args.1.1.down.run.nextRun.next =
+                  .fresh (freshened.after.read actualSource).down
+                rw [sourceRead, freshenedHead, sourcedHead])⟩
           .done ⟨next, by
-            obtain ⟨_, actual⟩ := freshened; cases actual
-            obtain ⟨_, actual⟩ := sourced; cases actual
-            obtain ⟨_, actual⟩ := prefixed; cases actual
-            obtain ⟨_, actual⟩ := head; cases actual; rfl⟩))))))))
+            cases freshened.exact
+            cases sourced.exact
+            cases prefixed.exact
+            obtain ⟨_, ah⟩ := head; cases ah
+            rfl⟩))))))))
 
 theorem continue_finite {depth : Nat} {assignment : SequentialAssignment depth}
     {state : ThreadedConstitutiveState depth assignment}
@@ -140,11 +221,14 @@ theorem continue_finite {depth : Nat} {assignment : SequentialAssignment depth}
     exact ⟨value, labels, trace⟩
   · intro head
     apply finite_step
-    apply finite_bind (extend_finite _ _ _ (fun _ => finite_step _ _ (finite_done _))); intro prefixed
+    apply finite_bind (cached_finite _ _ _ _ (fun _ => finite_step _ _ (finite_done _))
+      (fun _ => finite_step _ _ (finite_done _))); intro prefixed
     apply finite_step
-    apply finite_bind (extend_finite _ _ _ (fun _ => finite_step _ _ (finite_done _))); intro sourced
+    apply finite_bind (cached_finite _ _ _ _ (fun _ => finite_step _ _ (finite_done _))
+      (fun _ => finite_step _ _ (finite_done _))); intro sourced
     apply finite_step
-    apply finite_bind (extend_finite _ _ _ (fun _ => finite_step _ _ (finite_done _))); intro freshened
+    apply finite_bind (cached_finite _ _ _ _ (fun _ => finite_step _ _ (finite_done _))
+      (fun _ => finite_step _ _ (finite_done _))); intro freshened
     exact finite_step _ _ (finite_done _)
 
 def fromParts (cursor : MasterResources.Cursor)
@@ -171,38 +255,50 @@ abbrev Head (cursor : MasterResources.Cursor) :=
 
 def code (cursor : MasterResources.Cursor) : Code Label (Head cursor) :=
   .step .masterProducer (fun _ =>
-    (extendCode cursor.support (MasterResources.discover cursor.source)
-      (discoveryOperation cursor.source)).bind (fun discovered =>
+    (cachedCode cursor.support (MasterResources.discover cursor.source)
+      (discoveryKind cursor.source) (discoveryOperation cursor.source)).bind (fun discovered =>
     .step .masterProducer (fun _ =>
-      (extendCode discovered.1 (MasterResources.applyStage .here (.prior cursor.fresh))
-        (applicationOperation .here (.prior cursor.fresh))).bind (fun applied =>
+      let freshRef := retainedPrior discovered.kind (freshAt cursor discovered.args)
+      (cachedCode discovered.after (MasterResources.applyStage discovered.here freshRef)
+        (applicationKind discovered.here freshRef)
+        (applicationOperation discovered.here freshRef)).bind (fun applied =>
       .step .masterProducer (fun _ =>
-        (extendCode applied.1 (MasterResources.decompose (.prior (.prior cursor.past)) .here)
-          (decompositionOperation (.prior (.prior cursor.past)) .here)).bind (fun decomposed =>
+        let pastRef := retainedPrior applied.kind (retainedPrior discovered.kind (pastAt cursor discovered.args))
+        (cachedCode applied.after (MasterResources.decompose pastRef applied.here)
+          (decompositionKind pastRef applied.here)
+          (decompositionOperation pastRef applied.here)).bind (fun decomposed =>
         .step .masterProducer (fun _ =>
-          (extendCode decomposed.1 (MasterResources.assemble .here) (assemblyOperation .here)).bind (fun assembled =>
-          (ControlResources.readCode assembled.1.values Ref.here).bind (fun head =>
-          have pastExact :
-              ((MasterResources.decompose (.prior (.prior cursor.past)) Ref.here).arguments applied.1.values).1.down =
-                cursor.context := by
-            obtain ⟨_, actual⟩ := applied; cases actual
-            obtain ⟨_, actual⟩ := discovered; cases actual
+          (cachedCode decomposed.after (MasterResources.assemble decomposed.here)
+            (assemblyKind decomposed.here) (assemblyOperation decomposed.here)).bind (fun assembled =>
+          (ControlResources.readCode assembled.after.values assembled.here).bind (fun head =>
+          have headIndices :
+              MasterResources.Kind.head discovered.args.1.1.down decomposed.args.1.1.down =
+                .head cursor.state cursor.context := by
+            cases decomposed.exact
+            cases applied.exact
+            cases discovered.exact
             rfl
           let returnedHead : CausalOperationalHead cursor.state cursor.context :=
-            Eq.rec (motive := fun past _ => CausalOperationalHead cursor.state past) head.1.down pastExact
-          (continueCode assembled.1 Ref.here (.prior (.prior (.prior (.prior cursor.fresh))))).bind (fun next =>
+            (Eq.rec (motive := fun kind _ => MasterResources.Value kind) head.1 headIndices).down
+          let continuedFresh := retainedPrior assembled.kind (retainedPrior decomposed.kind
+            (retainedPrior applied.kind freshRef))
+          (continueCode assembled.after assembled.here continuedFresh).bind (fun next =>
             have actualHead : returnedHead = cursor.head := by
+              dsimp only [returnedHead]
               obtain ⟨_, actual⟩ := head; cases actual
-              obtain ⟨_, actual⟩ := assembled; cases actual
-              obtain ⟨_, actual⟩ := decomposed; cases actual
-              obtain ⟨_, actual⟩ := applied; cases actual
-              obtain ⟨_, actual⟩ := discovered; cases actual; rfl
+              cases assembled.exact
+              cases decomposed.exact
+              cases applied.exact
+              cases discovered.exact
+              rfl
             have actualNext : next.1 = VariableMaster.nextCursor cursor := by
+              dsimp only [continuedFresh]
               obtain ⟨_, actual⟩ := next; cases actual
-              obtain ⟨_, actual⟩ := assembled; cases actual
-              obtain ⟨_, actual⟩ := decomposed; cases actual
-              obtain ⟨_, actual⟩ := applied; cases actual
-              obtain ⟨_, actual⟩ := discovered; cases actual; rfl
+              cases assembled.exact
+              cases decomposed.exact
+              cases applied.exact
+              cases discovered.exact
+              rfl
             have boundary : next.1.boundary =
                 ⟨cursor.depth + 1, returnedHead.stage.next,
                   returnedHead.run.nextRun.next, returnedHead.production.nextContext⟩ := by
@@ -213,19 +309,20 @@ def code (cursor : MasterResources.Cursor) : Code Label (Head cursor) :=
 
 theorem finite (cursor : MasterResources.Cursor) : Finite (code cursor) := by
   apply finite_step
-  apply finite_bind (extend_finite _ _ _ (discovery_finite _))
+  apply finite_bind (cached_finite _ _ _ _ (fun _ => finite_step _ _ (finite_done _)) (discovery_finite _))
   intro discovered
   apply finite_step
-  apply finite_bind (extend_finite _ _ _ (application_finite _ _))
+  apply finite_bind (cached_finite _ _ _ _ (fun _ => finite_step _ _ (finite_done _)) (application_finite _ _))
   intro applied
   apply finite_step
-  apply finite_bind (extend_finite _ _ _ (decomposition_finite _ _))
+  apply finite_bind (cached_finite _ _ _ _ (fun _ => finite_step _ _ (finite_done _)) (decomposition_finite _ _))
   intro decomposed
   apply finite_step
-  apply finite_bind (extend_finite _ _ _ (fun _ => finite_step _ _ (finite_done _)))
+  apply finite_bind (cached_finite _ _ _ _ (fun _ => finite_step _ _ (finite_done _))
+    (fun _ => finite_step _ _ (finite_done _)))
   intro assembled
   apply finite_bind
-  · obtain ⟨value, labels, trace, _⟩ := ControlResources.read_bounded assembled.1.values Ref.here
+  · obtain ⟨value, labels, trace, _⟩ := ControlResources.read_bounded assembled.after.values assembled.here
     exact ⟨value, labels, trace⟩
   · intro head
     apply finite_bind (continue_finite _ _ _)
@@ -246,6 +343,15 @@ end ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.prefixOperation
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.sourceOperation
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.freshOperation
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.discoveryKind
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.applicationKind
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.decompositionKind
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.assemblyKind
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.prefixKind
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.sourceKind
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.freshKind
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.pastAt
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.freshAt
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.Continued
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.continueCode
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterHead.continue_finite

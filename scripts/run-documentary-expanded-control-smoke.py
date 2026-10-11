@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Frozen development checks of the expanded head, assemblies and administration.
 
+Generation and endpoint-cache formation add two paid resource packets.
+The cached master pays seven output kinds and must preserve their productions.
 The 200000 probe is a test ceiling, not a proved bootstrap bound. Exact and
 one-short probes follow the actual certified trace. No physical cost claim.
 """
@@ -154,6 +156,7 @@ def quotationCheck (before : FrameData Cases.sources Cases.contract DeductionCas
       event && next.store.2.resources.read occurrence.2 == expected && occurrence.1.origins == origins &&
       next.dossier.cursor.depth == before.dossier.cursor.depth + 1 &&
       count .masterProducer actual.labels == 7 &&
+      count .producerOutputKind actual.labels == 7 &&
       count .masterHeadPacket actual.labels == 1 &&
       count .masterDiscoveryPacket actual.labels == 1 &&
       count .masterGeneration actual.labels == 1 &&
@@ -162,7 +165,7 @@ def quotationCheck (before : FrameData Cases.sources Cases.contract DeductionCas
       count .masterNextStateQuery actual.labels == 1 &&
       count .masterDecompose actual.labels == 1 &&
       count .masterNextCursor actual.labels == 1 &&
-      count .formationResources actual.labels == 9 &&
+      count .formationResources actual.labels == 11 &&
       count .frameRestore actual.labels == 1 &&
       count .citationHead actual.labels == 0 &&
       !short.isSome && stable
@@ -176,8 +179,9 @@ def blockedCheck : Bool :=
     (match actual.value.1.next.bindings .here with | none => true | _ => false) &&
     actual.value.1.next.store.1.length == quoteFrame.store.1.length &&
     count .masterProducer actual.labels == 7 &&
+    count .producerOutputKind actual.labels == 7 &&
     count .masterHeadPacket actual.labels == 1 &&
-    count .formationResources actual.labels == 7
+    count .formationResources actual.labels == 9
 
 def adminCheck (fuel budget : Nat) : Bool :=
   match Control.execute budget (ControlAdministration.executeCode fuel oneCode) with

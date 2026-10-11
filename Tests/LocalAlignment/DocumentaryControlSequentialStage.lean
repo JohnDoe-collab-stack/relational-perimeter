@@ -30,6 +30,7 @@ theorem source_accepted (depth : Nat) (input : SequentialAssignment depth)
 
 def nextFromApplication (depth : Nat) (input : SequentialAssignment depth)
     (discovery : EndogenousFlipDiscovery (constructStage (depth + 1)).operationalRoot)
+    (stored : StoredLocalSchedule discovery)
     (canonicalFound : (stageRecordedDiscoveryRun (depth + 1)).outcome.discovered? = some discovery)
     (validated : ValidatedDiscoverySchedule (scheduleFromDiscovery discovery))
     (execution : ExecutedDiscoverySchedule validated)
@@ -46,8 +47,8 @@ def nextFromApplication (depth : Nat) (input : SequentialAssignment depth)
       executedDiscoverySchedule_code]
     change Assignment.flipAt discovery.var input.assignment = _
     rw [same]; rfl
-  let reader := readTransportedAssignment discovery.1
-    execution.code (sourceFromInput depth input discovery canonicalFound) input.reader
+  let reader := ControlScheduleCache.reader stored execution
+    (sourceFromInput depth input discovery canonicalFound) input.reader
   let indexedReader := Eq.rec (motive := fun assignment _ => MeasuredAssignment assignment) reader
     (congrArg Subtype.val application.outputExact).symm
   exact
@@ -56,6 +57,18 @@ def nextFromApplication (depth : Nat) (input : SequentialAssignment depth)
       zeroTrue := by rw [outputReference]; exact returnedAssignment_zeroTrue depth input
       futureSelectedFalse := by rw [outputReference]; exact returnedAssignment_futureSelectedFalse depth input
       futureAnchorTrue := by rw [outputReference]; exact returnedAssignment_futureAnchorTrue depth input }
+
+theorem next_from_application_canonical (depth : Nat) (input : SequentialAssignment depth)
+    (discovery : EndogenousFlipDiscovery (constructStage (depth + 1)).operationalRoot)
+    (stored : StoredLocalSchedule discovery)
+    (canonicalFound : (stageRecordedDiscoveryRun (depth + 1)).outcome.discovered? = some discovery)
+    (validated : ValidatedDiscoverySchedule (scheduleFromDiscovery discovery))
+    (execution : ExecutedDiscoverySchedule validated)
+    (application : AppliedDiscoveryExecution execution (sourceFromInput depth input discovery canonicalFound)) :
+    nextFromApplication depth input discovery stored canonicalFound validated execution application =
+      nextFromApplication depth input discovery ⟨(scheduleFromDiscovery discovery).entry, rfl⟩
+        canonicalFound validated execution application := by
+  rcases stored with ⟨entry, actual⟩; cases actual; rfl
 
 def fromParts (depth : Nat) (input : SequentialAssignment depth)
     (generation : CanonicalStageGeneration depth)
@@ -80,7 +93,7 @@ def fromParts (depth : Nat) (input : SequentialAssignment depth)
     (application : AppliedDiscoveryExecution execution source)
     (applicationActual : application = applyDiscoveryExecution execution source)
     (next : SequentialAssignment (depth + 1))
-    (nextActual : HEq next (nextFromApplication depth input discovery canonicalFound validated execution
+    (nextActual : HEq next (nextFromApplication depth input discovery stored canonicalFound validated execution
       (Eq.rec (motive := fun source _ => AppliedDiscoveryExecution execution source) application sourceActual))) :
     SequentialStageRun depth input :=
   { generation := generation, discoveryRun := recorded, extractionExact := extractionExact
@@ -99,9 +112,14 @@ def fromParts (depth : Nat) (input : SequentialAssignment depth)
     next := next
     nextAssignmentExact := by cases sourceActual; cases nextActual; rfl
     nextReaderExact := by
-      cases sourceActual; cases nextActual; cases applicationActual; rfl
+      cases sourceActual; cases nextActual; cases applicationActual
+      exact heq_of_eq (ControlScheduleCache.reader_actual stored execution
+        (sourceFromInput depth input discovery canonicalFound) input.reader)
     nextReaderWorkExact := by
-      cases sourceActual; cases nextActual; cases applicationActual; intro query; rfl }
+      cases sourceActual; cases nextActual; cases applicationActual; intro query
+      exact congrArg (fun reader => (reader query).work)
+        (ControlScheduleCache.reader_actual stored execution
+          (sourceFromInput depth input discovery canonicalFound) input.reader) }
 
 theorem from_parts_actual (depth : Nat) (input : SequentialAssignment depth)
     (generation : CanonicalStageGeneration depth)
@@ -125,7 +143,7 @@ theorem from_parts_actual (depth : Nat) (input : SequentialAssignment depth)
     (application : AppliedDiscoveryExecution execution source)
     (applicationActual : application = applyDiscoveryExecution execution source)
     (next : SequentialAssignment (depth + 1))
-    (nextActual : HEq next (nextFromApplication depth input discovery canonicalFound validated execution
+    (nextActual : HEq next (nextFromApplication depth input discovery stored canonicalFound validated execution
       (Eq.rec (motive := fun source _ => AppliedDiscoveryExecution execution source) application sourceActual))) :
     fromParts depth input generation recorded extractionExact discovery found canonicalFound workLeCanonical
       stored storedActual validation validationActual measured measuredActual validated validatedActual
@@ -133,7 +151,10 @@ theorem from_parts_actual (depth : Nat) (input : SequentialAssignment depth)
     executeSequentialStageFromActiveRecorded depth input generation recorded extractionExact
       discovery found canonicalFound workLeCanonical := by
   cases storedActual; cases validationActual; cases measuredActual; cases validatedActual
-  cases executionActual; cases sourceActual; cases applicationActual; cases nextActual
+  cases executionActual; cases sourceActual; cases applicationActual
+  have canonicalNext := nextActual.trans (heq_of_eq (next_from_application_canonical depth input discovery _
+    canonicalFound _ _ _))
+  cases canonicalNext
   rfl
 
 def code (depth : Nat) (input : SequentialAssignment depth)
@@ -160,9 +181,9 @@ def code (depth : Nat) (input : SequentialAssignment depth)
     have actualExecution : HEq indexedExecution measured.1.execution := by
       obtain ⟨_, actual⟩ := execution; cases actual
       obtain ⟨_, actual⟩ := validated; cases actual; rfl
-    (ControlMeasuredTransport.applicationCode indexedExecution source).bind (fun application =>
+    (ControlMeasuredTransport.applicationCode stored.1 indexedExecution source).bind (fun application =>
       .step .controlClosure (fun _ =>
-        let next := nextFromApplication depth input discovery canonicalFound validated.1 indexedExecution application.1
+        let next := nextFromApplication depth input discovery stored.1 canonicalFound validated.1 indexedExecution application.1
         .step .masterConstructionReturn (fun _ =>
           .done ⟨fromParts depth input generation recorded extractionExact discovery found canonicalFound workLeCanonical
             stored.1 stored.2 validation.1 validation.2 measured.1 measured.2 validated.1 validated.2
@@ -188,7 +209,7 @@ theorem finite (depth : Nat) (input : SequentialAssignment depth)
   apply finite_bind (ControlMeasuredSchedule.execution_finite _); intro measured
   apply finite_bind (ControlMeasuredSchedule.executed_finite _); intro execution
   apply finite_step
-  apply finite_bind (ControlMeasuredTransport.application_finite _ _); intro application
+  apply finite_bind (ControlMeasuredTransport.application_finite _ _ _); intro application
   exact finite_step _ _ (finite_step _ _ (finite_done _))
 
 end ConstitutiveSearch.Agent.Local.Documentary.ControlSequentialStage
@@ -197,6 +218,7 @@ end ConstitutiveSearch.Agent.Local.Documentary.ControlSequentialStage
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlSequentialStage.sourceFromInput
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlSequentialStage.source_accepted
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlSequentialStage.nextFromApplication
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlSequentialStage.next_from_application_canonical
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlSequentialStage.fromParts
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlSequentialStage.from_parts_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlSequentialStage.code
