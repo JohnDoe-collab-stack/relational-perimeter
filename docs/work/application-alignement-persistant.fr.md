@@ -493,3 +493,35 @@ les lecteurs différés, les frames et codecs, ainsi que l'administration et
 les allocations complètes. Les enveloppes et réserves de D3, puis le secours
 borné de D4 sur le présent conservé et rechargé, restent à implémenter.
 A conserve sa priorité sur B.
+
+## Ouverture contrôlée de la frontière
+
+Le [raccord d'ouverture](controle-ouverture-frontiere.fr.md) remplace l'appel
+natif à `VariableMaster.openFrontier` dans la recherche étendue par le parcours
+de la frontière reçue, la vérification de fraîcheur, les résidus et leurs
+témoins positifs `CnfWeakening`, la formation des enfants et les transports de
+préservation. Il conserve l'ouverture et le `Master.Stage` originaux entiers.
+Le splitter est indexé par les deux enfants réellement produits avant
+l'expansion : les deux reconstructions cachées d'enfants révélées pendant la
+relecture du C sont supprimées.
+
+La borne locale est fermée pour toute formule, variable sélectionnée et
+frontière de contextes engendrés reçues. Elle dépend de leur syntaxe sans
+exécuter le moteur natif. Le paiement et le majorant de son propre bootstrap
+restent à construire ; ce raccord ne ferme pas les enveloppes globales de D3.
+Les fonctions de transport sont formées et conservées ; le coût de leurs
+invocations différées demeure une obligation distincte.
+
+La vérification complète réussit sur 344 fichiers Lean et 27 719 constantes,
+sans exception pour une déclaration écrite. Les 613 audits explicites de
+contrôle sont sans axiome. Les onze contrôles du composant, les 31 contrôles
+d'intégration, les quatre histoires de génération et les 2 269 mutations
+textuelles des gardes passent. La
+[qualification](controle-ouverture-frontiere-verification.json) conserve les
+413 empreintes figées avant cette vérification ; les résultats précédents
+restent historiques.
+
+D2 reste ouvert pour la normalisation, le routage et les invocations différées,
+les autres indices exécutables, les frames et codecs, le bootstrap et
+l'administration, les traces et les allocations complètes. D3 et D4 restent
+à fermer suivant l'ordre du plan. A conserve sa priorité sur B.

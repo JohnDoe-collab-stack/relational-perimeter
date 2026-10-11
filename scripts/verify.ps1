@@ -163,6 +163,8 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "expanded documentary control smoke failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-generation-budget-smoke.py")
   if ($LASTEXITCODE -ne 0) { throw "documentary generation bootstrap smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-frontier-opening-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary frontier opening smoke failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-continuation-signature-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled signature dependency check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-variable-master-codegen.py")

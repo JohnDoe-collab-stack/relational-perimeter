@@ -125,6 +125,10 @@ def tag : Label → Nat
   | .masterCandidateReturn => 95
   | .masterNextStateGeneration => 96
   | .masterNextStateQuery => 97
+  | .frontierCell => 98
+  | .frontierDecisionCell => 99
+  | .frontierChild => 100
+  | .frontierPacket => 101
 
 def baselineLabels : List Nat :=
   [0, 37, 10, 6, 5, 6, 5, 6, 7, 7, 35,

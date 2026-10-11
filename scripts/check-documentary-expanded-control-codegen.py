@@ -20,9 +20,10 @@ MODULES = ("ControlConstitutiveResources_", "ControlMasterData_", "ControlMaster
            "ControlMeasuredState_", "ControlMeasuredDiscovery_",
            "ControlMeasuredSchedule_", "ControlScheduleCache_", "ControlMeasuredTransport_", "ControlSequentialStage_",
            "ControlNextState_", "ControlMasterApplication_", "ControlProducedImage_", "ControlMasterDecomposition_",
-           "ControlProvenance_", "ControlQuotationAssembly_", "ControlMissingAssembly_",
+           "ControlProvenance_", "ControlFrontierSyntax_", "ControlFrontierOpening_",
+           "ControlQuotationAssembly_", "ControlMissingAssembly_",
            "ControlDeferred_", "ControlAdministration_", "ControlMaster_expanded", "ControlStep_expanded")
-FORBIDDEN = (r"\b\w*(?:EndogenousDecomposition_VariableMaster_(?:masterHead|nextCursor)|"
+FORBIDDEN = (r"\b\w*(?:EndogenousDecomposition_VariableMaster_(?:masterHead|nextCursor|openFrontier)|"
              r"EndogenousDecomposition_(?:runThreadedNextDiscovery|measuredGeneratedExtractionFromSeed|"
              r"exploreRecordedCandidates|tryMeasuredCandidate|searchMeasuredRelation(?:FromData)?|"
              r"compareUnary|compareMeasured(?:List|Literal|Cnf|Bool|Decision|History)|"
@@ -44,6 +45,10 @@ FORBIDDEN = (r"\b\w*(?:EndogenousDecomposition_VariableMaster_(?:masterHead|next
              r"Documentary_Program_(?:quotationStep|missingStep)|Documentary_Deduction_quote)"
              r"(?:___redArg)?\s*\(")
 NATIVE_METADATA = r"\b\w*Resources_(?:Producer_arguments|Support_read|read)(?:___redArg)?\s*\("
+OPENING_NATIVE = (r"\b\w*SAT_(?:GeneratedStructuralBranchContext_child|structuralChildContext|"
+                  r"structuralDecisionsAvoidCheck|branchResidual|branchWeakening|branchSyntax|"
+                  r"branchReduction|Clause_containsLiteral)"
+                  r"(?:___redArg)?\s*\(")
 
 def make_check(functions, select):
     scope = [name for name in functions if any(BASE + module in name for module in MODULES)
@@ -94,13 +99,32 @@ def make_check(functions, select):
         ("ControlConstitutiveGeneration_canonicalFromProduced___redArg", ((0, "fst"), (1, "snd"))),
         ("ControlProducedImage_fromFrontier___redArg", ((1, "frontier"),)))
     retained_fields = [(select(functions, BASE + owner), fields) for owner, fields in retained_fields]
+    opening_fields = (
+        ("ControlFrontierOpening_fromFresh___redArg", ((0, "left"), (0, "right"),
+            (1, "frontier"), (1, "preservation"))),
+        ("ControlFrontierOpening_childCode___redArg___lam__0", ((0, "context"), (1, "generated"))),
+        ("ControlFrontierOpening_splitCode___redArg___lam__1", ((0, "split"), (1, "merge"))),
+        ("ControlFrontierOpening_prependCode___redArg___lam__2", ((0, "forward"), (1, "backward"))),
+        ("ControlFrontierOpening_transCode___redArg___lam__2", ((0, "forward"), (1, "backward"))),
+        ("ControlFrontierOpening_identityCode___lam__1", ((0, "forward"), (1, "forward"))))
+    opening_fields = [(select(functions, BASE + owner), fields) for owner, fields in opening_fields]
+    opening_code = select(functions, BASE + "ControlFrontierOpening_code___redArg")
+    expanded_opening_owners = [name for name in scope if BASE + "ControlMaster_expandedSearchCode" in name]
+    opening_context = select(functions, BASE + "ControlFrontierOpening_childCode___redArg___lam__2")
+    residual_packets = [(select(functions, BASE + "ControlFrontierSyntax_residualCode___lam__" + str(index)), tag)
+                        for index, tag in ((1, 1), (2, 2))]
     metadata_owners = [name for name in scope if any(BASE + owner in name for owner in
                        ("ControlMasterHead_", "ControlConstitutiveResources_"))]
+    opening_owners = [name for name in scope if any(BASE + owner in name for owner in
+                      ("ControlFrontierSyntax_", "ControlFrontierOpening_", "ControlMaster_expanded"))]
     paid_kinds = [(select(functions, BASE + "ControlMasterHead_" + kind + "Kind___redArg"),
                    select(functions, BASE + "ControlMasterHead_" + kind + "Kind___redArg___lam__0"))
                   for kind in ("discovery", "application", "decomposition", "assembly", "prefix", "source", "fresh")]
 
     def check(current):
+        for name in opening_owners:
+            if re.search(OPENING_NATIVE, current[name]):
+                raise ValueError("Native frontier opening helper replayed: " + name)
         for name in metadata_owners:
             if re.search(NATIVE_METADATA, current[name]):
                 raise ValueError("Unpaid native producer metadata/value read: " + name)
@@ -152,11 +176,41 @@ def make_check(functions, select):
             for field, variable in fields:
                 if not re.search(r"lean_ctor_set\([^,]+, " + str(field) + r", v_" + variable + r"_\d+_\)", current[owner]):
                     raise ValueError("Constitutive packet drops actual " + variable + ": " + owner)
+        for owner, fields in opening_fields:
+            for field, variable in fields:
+                if not re.search(r"lean_ctor_set\([^,]+, " + str(field) + r", v_" + variable + r"_\d+_\)", current[owner]):
+                    raise ValueError("Frontier packet drops actual " + variable + ": " + owner)
+        projected = re.search(r"(v_\w+) = lean_ctor_get\(v_residual_\d+_, 0\)", current[opening_context])
+        if not projected or not re.search(r"lean_ctor_set\(v_context_\d+_, 0, " +
+                                         re.escape(projected[1]) + r"\)", current[opening_context]):
+            raise ValueError("Child context does not consume the actual controlled residual")
+        for owner, tag in residual_packets:
+            body = current[owner]
+            syntax = re.search(r"(v_\w+) = lean_ctor_get\((v_tail_\d+_), 0\)", body)
+            weakening = re.search(r"(v_\w+) = lean_ctor_get\((v_tail_\d+_), 1\)", body)
+            witness = re.search(r"(v_\w+) = lean_alloc_ctor\(" + str(tag) + r", 4, 0\)", body)
+            if (not syntax or not weakening or not witness or syntax[2] != weakening[2] or
+                not re.search(r"lean_ctor_set\(" + re.escape(witness[1]) + r", 1, " +
+                              re.escape(syntax[1]) + r"\)", body) or
+                not re.search(r"lean_ctor_set\(" + re.escape(witness[1]) + r", 3, " +
+                              re.escape(weakening[1]) + r"\)", body) or
+                len(re.findall(r"lean_ctor_set\([^,]+, 1, " + re.escape(witness[1]) + r"\)", body)) != 2):
+                raise ValueError("Residual packet drops its actual syntax/weakening or positive formation: " + owner)
+        if sum(len(re.findall(re.escape(opening_code) + r"\s*\(", current[name]))
+               for name in expanded_opening_owners) != 1:
+            raise ValueError("Expanded search does not consume one controlled opening")
 
     mutations = [(name, functions[name] + " lp_forbidden_EndogenousDecomposition_VariableMaster_masterHead();")
                  for name in scope]
     mutations.extend((name, functions[name] + " lp_forbidden_Resources_" + reader + "();")
                      for name in metadata_owners for reader in ("Producer_arguments", "Support_read", "read"))
+    opening_helpers = ("GeneratedStructuralBranchContext_child", "structuralChildContext",
+                       "structuralDecisionsAvoidCheck", "branchResidual", "branchWeakening",
+                       "branchSyntax", "branchReduction", "Clause_containsLiteral")
+    mutations.extend((name, functions[name] + " lp_forbidden_SAT_" + helper + "();")
+                     for name in opening_owners for helper in opening_helpers)
+    mutations.extend((name, functions[name] + " lp_forbidden_EndogenousDecomposition_VariableMaster_openFrontier();")
+                     for name in opening_owners)
     for parent, callback in paid_kinds:
         mutations += [(parent, functions[parent].replace("= 15;", "= 0;")),
                       (parent, functions[parent].replace(callback, "lp_substituted"))]
@@ -180,6 +234,25 @@ def make_check(functions, select):
     for owner, fields in retained_fields:
         for _, variable in fields:
             mutations.append((owner, re.sub(r"v_" + variable + r"_\d+_", "v_substituted", functions[owner])))
+    for owner, fields in opening_fields:
+        for _, variable in fields:
+            mutations.append((owner, re.sub(r"v_" + variable + r"_\d+_", "v_substituted", functions[owner])))
+    mutations.append((opening_context, re.sub(r"v_residual_\d+_", "v_substituted", functions[opening_context])))
+    mutations.append((opening_context, re.sub(r"(lean_ctor_set\(v_context_\d+_, 0, )v_\w+(\))",
+                                            r"\1v_substituted\2", functions[opening_context])))
+    for owner, tag in residual_packets:
+        body = functions[owner]
+        for field in (0, 1):
+            mutations.append((owner, re.sub(r"(lean_ctor_get\(v_tail_\d+_, )" + str(field) + r"(\))",
+                                           r"\g<1>9\2", body)))
+        witness = re.search(r"(v_\w+) = lean_alloc_ctor\(" + str(tag) + r", 4, 0\)", body)[1]
+        mutations.extend(((owner, body.replace("lean_alloc_ctor(" + str(tag) + ", 4, 0)", "lean_alloc_ctor(9, 4, 0)")),
+                          (owner, re.sub(r"(lean_ctor_set\([^,]+, 1, )" + re.escape(witness) + r"(\))",
+                                         r"\1v_substituted\2", body))))
+    opening_consumer = next(name for name in expanded_opening_owners
+                            if re.search(re.escape(opening_code) + r"\s*\(", functions[name]))
+    mutations.extend(((opening_consumer, functions[opening_consumer] + opening_code + "();"),
+                      (opening_consumer, functions[opening_consumer].replace(opening_code, "lp_substituted"))))
     native_attempts = ("tryMeasuredCandidate", "searchMeasuredRelation", "searchMeasuredRelationFromData",
                        "compareUnary", "compareMeasuredList", "compareMeasuredLiteral", "compareMeasuredCnf",
                        "compareMeasuredBool", "compareMeasuredDecision", "compareMeasuredHistory",
@@ -222,10 +295,16 @@ def main():
                                  functions[name])) for name in scope if BASE + "ControlMasterHead_" in name)
     schedule_metadata = sum(len(re.findall(r"\b\w*SAT_DiscoverySchedule_entry(?:___redArg)?\s*\(", functions[name]))
                             for name in scope)
+    opening_native_sites = sum(len(re.findall(OPENING_NATIVE, functions[name])) + len(re.findall(
+        r"\b\w*EndogenousDecomposition_VariableMaster_openFrontier(?:___redArg)?\s*\(", functions[name]))
+        for name in scope if any(BASE + owner in name for owner in
+        ("ControlFrontierSyntax_", "ControlFrontierOpening_", "ControlMaster_expanded")))
     print("DOCUMENTARY_EXPANDED_CONTROL_CODEGEN_OK: " + str(len(mutations)) +
           " textual mutations rejected; actual head and formation retained; " + str(metadata) +
           " native head metadata-read sites and " + str(schedule_metadata) +
           " native schedule-entry sites; head argument reads use retained productions; other executable indices and deferred callbacks remain open")
+    print("DOCUMENTARY_FRONTIER_OPENING_CODEGEN_OK: " + str(opening_native_sites) +
+          " native opening/helper sites in named scope; actual children, positive weakening and preservation retained")
 
 if __name__ == "__main__":
     try:

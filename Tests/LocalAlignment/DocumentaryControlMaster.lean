@@ -1,10 +1,12 @@
 import Tests.LocalAlignment.DocumentaryControlCompletion
 import Tests.LocalAlignment.DocumentaryControlMasterHead
+import Tests.LocalAlignment.DocumentaryControlFrontierOpening
 
 /-! The quotation search uses the same head, opening and retained reduction.
-Paid source checks supply the actual flags and formula. Head production,
-frontier engines and continuation routing remain named complex primitives;
-their internal costs are not closed by this partial D2 decomposition. -/
+Paid source checks supply the actual flags and formula. The expanded path opens
+head production and frontier opening with their complete original packets.
+Frontier normalization and continuation routing still contain complex native
+primitives; their internal costs are not closed by this D2 increment. -/
 set_option genInjectivity false
 set_option maxHeartbeats 3000000
 namespace ConstitutiveSearch.Agent.Local.Documentary.ControlMaster
@@ -101,16 +103,17 @@ def expandedSearchCode {context} (cursor : MasterResources.Cursor) (sources : Su
         .step .citationFormula (fun _ =>
           let formula := Selection.choiceFormula (VariableMaster.selected head) leftCheck.1.flag rightCheck.1.flag
           .step .citationOpening (fun _ =>
-            let opening := VariableMaster.openFrontier formula (VariableMaster.selected head)
-              [SAT.GeneratedStructuralBranchContext.root formula]
+            (ControlFrontierOpening.code formula (VariableMaster.selected head)
+              [SAT.GeneratedStructuralBranchContext.root formula]).bind (fun actualOpening =>
+            let opening := actualOpening.1
             .step .citationReduction (fun _ =>
               let reduction := SAT.normalizeGeneratedStructuralFrontierByFlip formula
                 (VariableMaster.selected head) opening.frontier
               .step .citationStage (fun _ => .done
                 ⟨Master.stageFromParts cursor sources contract demand left right head actualHead.2
-                  leftCheck.1 leftCheck.2 rightCheck.1 rightCheck.2 opening rfl reduction rfl,
+                  leftCheck.1 leftCheck.2 rightCheck.1 rightCheck.2 opening actualOpening.2 reduction rfl,
                   Master.stageFromParts_actual cursor sources contract demand left right head actualHead.2
-                    leftCheck.1 leftCheck.2 rightCheck.1 rightCheck.2 opening rfl reduction rfl⟩)))))))
+                    leftCheck.1 leftCheck.2 rightCheck.1 rightCheck.2 opening actualOpening.2 reduction rfl⟩))))))))
 
 
 def expandedRunCode {context sources contract} (state : @Dossier.State context sources contract)
@@ -139,6 +142,10 @@ theorem expanded_search_finite {context} (cursor : MasterResources.Cursor) (sour
     · obtain ⟨value, labels, trace, _⟩ := ControlSelection.check_bounded sources contract demand right
       exact ⟨value, labels, trace⟩
     · intro rightCheck
+      apply finite_step
+      apply finite_step
+      apply finite_bind (ControlFrontierOpening.finite _ _ _)
+      intro actualOpening
       repeat apply finite_step
       exact finite_done _
 

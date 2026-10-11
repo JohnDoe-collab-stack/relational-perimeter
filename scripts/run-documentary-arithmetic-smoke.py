@@ -57,6 +57,7 @@ def client_source():
              "citationSeed citationInput citationPreservation citationRouting citationContinuationCell citationAssignment citationCandidate "
              "citationProducer citationAuthorize citationIncorporate citationCompletion citationDecision citationPacket "
              "masterProducer masterDiscover masterApply masterDecompose masterAssemble masterNextPrefix masterNextSource masterNextFresh masterNextCursor masterHeadPacket masterGeneration masterCandidateCell masterProvenanceCell masterProvenanceReturn masterFilterCell masterFilterReturn masterDiscoveryPacket assemblyDossier masterWorkPacket masterConstructionCell masterConstructionReturn masterExtractionCell masterExtractionReturn listAppendCell listAppendReturn frameRestore justificationCell justificationReturn referenceIdentity referenceShift referenceComposition controlInspect controlCall controlCompose controlClosure controlFrame controlTrace controlWitness controlResult masterCandidateAttempt masterCandidateReturn masterNextStateGeneration masterNextStateQuery").split()
+    names.extend(("frontierCell", "frontierDecisionCell", "frontierChild", "frontierPacket"))
     tags = "\n".join("  | ." + name + " => " + str(i) for i, name in enumerate(names))
     return """import Tests.LocalAlignment.DocumentaryControlArithmetic
 import Tests.LocalAlignment.DocumentaryCases
