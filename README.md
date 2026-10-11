@@ -345,6 +345,13 @@ below.
 - `StrongPerimetralTurning.lean`: the constructive circular presentation and
   its perimetral instance.
 
+`RelationalPerimeter/Constitution/PerimeterPersistence.lean` exposes the
+perimeter reconstruction, faithful exit, finite occurrence persistence, and
+structural readout bus. It reuses `Computation/ConstitutiveGeneration.lean` for
+the actual histories and their old/fresh splits; the generic exact-transport
+interfaces are in `Constitution/OccurrencePersistence.lean`. Both modules are
+available through `import RelationalPerimeter`.
+
 ## Computational construction
 
 - `RelationalPerimeter/Computation/ConstitutiveGeneration.lean` connects the

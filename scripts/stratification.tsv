@@ -1,4 +1,6 @@
 # module	stratum	status	responsibility
+RelationalPerimeter.Constitution.OccurrencePersistence	U	enforced	Exact old/fresh occurrence interfaces finite persistence and downstream readout laws
+RelationalPerimeter.Constitution.PerimeterPersistence	F	enforced	Perimeter facade reusing the existing generated histories and exact occurrence splits
 RelationalPerimeter.Constitution.Resources.TypedReferences	U	enforced	Typed references distinguishing constituted resource occurrences
 RelationalPerimeter.Constitution.Resources.ConstructedSupport	U	enforced	Dependent producers reading earlier typed occurrences
 RelationalPerimeter.Constitution.Grouping.Traces	U	enforced	Directed action traces and distinct symmetric codetermination chains

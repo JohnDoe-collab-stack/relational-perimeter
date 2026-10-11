@@ -12,6 +12,7 @@ import Tests.EndogenousWidthBridgeRegression
 import Tests.ProducedContinuation
 import Tests.ProductionTimelineRegression
 import Tests.PublicRootImport
+import Tests.PerimeterPersistenceRegression
 import Tests.RealizedConstitutionRegression
 import Tests.RelationalExtensiveIffRegression
 import Tests.RolePolicySpectrum

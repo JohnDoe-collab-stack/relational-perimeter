@@ -2,6 +2,7 @@ import SegmentedResidualRole
 import AbstractSegmentedTurning
 import ExactTypeTransport
 import StrongPerimetralTurning
+import RelationalPerimeter.Constitution.PerimeterPersistence
 import RelationalPerimeter.Computation.EndogenousOperationalDecomposition
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.MasterResourceExecution
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleGroupingSemantics
@@ -22,11 +23,17 @@ import RelationalPerimeter.Computation.Machine.MasterContract
 /-!
 # Relational Perimeter
 
-Public entry point for the four foundational modules and the computational
-construction of endogenous operational decomposition.
+Public entry point for the four foundational modules, their exact occurrence
+persistence and readout facade, and the computational construction of endogenous
+operational decomposition.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.PerimeterPersistence.localExactnessReconstructsPerimeter
+#print axioms ConstitutiveSearch.PerimeterPersistence.exactPerimeterAndFaithfulExit
+#print axioms ConstitutiveSearch.PerimeterPersistence.finiteConstitutivePersistence
+#print axioms ConstitutiveSearch.PerimeterPersistence.finiteOperationalResidualPersists
+#print axioms ConstitutiveSearch.PerimeterPersistence.exactReadoutBus
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.endogenous_production_and_width_separation
 #print axioms RelationalPerimeter.Computation.EndogenousOperationalDecomposition.extensive_multiplicity_does_not_force_full_operational_width
 #print axioms StrongPerimetralTurning.Example.examplePresentation
