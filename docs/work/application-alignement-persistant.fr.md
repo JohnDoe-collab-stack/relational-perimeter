@@ -525,3 +525,79 @@ D2 reste ouvert pour la normalisation, le routage et les invocations différées
 les autres indices exécutables, les frames et codecs, le bootstrap et
 l'administration, les traces et les allocations complètes. D3 et D4 restent
 à fermer suivant l'ordre du plan. A conserve sa priorité sur B.
+
+## Normalisation contrôlée de la frontière
+
+Le [raccord de normalisation](controle-normalisation-frontiere.fr.md) ouvre
+les transformations et comparaisons de formules et d’histoires, la recherche
+dans les deux directions, la classification, l’insertion et la normalisation.
+Il construit le paquet `AcceptedIrreducibleFrontierReduction` original entier :
+frontière retenue, code de routage, témoins dirigés et irréductibilité relative
+au finder. Chaque constructeur de routage possède sa formation payée.
+`expandedSearchCode` transmet cette réduction effectivement produite au même
+`Master.Stage`, après la même ouverture et les mêmes contrôles de sources.
+
+La borne locale est démontrée pour toute frontière de contextes engendrés
+reçue. Elle est calculée depuis la syntaxe et la longueur de la source,
+indépendamment du verdict de recherche et de la normalisation native. Les
+preuves de provenance et de longueur majorent les insertions sur les sorties
+réelles. Le paiement et le majorant indépendant du bootstrap de cette borne
+restent à établir.
+
+La gate complète réussit sur 347 fichiers Lean, 346 modules et 27 930
+constantes, avec aucune exception pour une déclaration écrite. Les 680 audits
+explicites de contrôle sont sans axiome, dont 67 nouveaux noms. Les dix-neuf
+contrôles de normalisation, les 31 contrôles d’intégration, les contrôles
+d’ouverture et de génération ainsi que les 23 fixtures d’échec attendu passent.
+Les gardes rejettent 1 735 mutations textuelles de normalisation et 2 279
+mutations de la voie étendue. La
+[qualification](controle-normalisation-frontiere-verification.json) conserve
+les 418 empreintes figées avant la gate, sans réécrire les résultats historiques.
+
+La formation du code de normalisation est traitée. D2 reste ouvert pour
+l’évaluation de ce code en préservations, puis les invocations de ces transports
+et de leurs affectations différées, les autres indices, les frames et codecs,
+les bootstraps, l’administration, les traces et les allocations complètes.
+Le prochain raccord passe par `ControlCompletion.decideCode` : évaluer le code
+reçu, composer avec la préservation d’ouverture, appliquer le routage à la
+continuation, puis lire l’affectation transformée dans `completeCode`.
+Les enveloppes globales de D3 et le secours sur le présent effectivement
+conservé et rechargé de D4 restent à fermer. A conserve sa priorité sur B.
+
+## Évaluation contrôlée du routage conservé
+
+Le [raccord suivant de D2](controle-evaluation-frontiere.fr.md) évalue le
+`AcceptedFrontierCode` effectivement reçu en une préservation originale entière,
+avec ses transports avant et arrière et leurs lois d'acceptation. Chaque
+constructeur est ouvert ; les compositions utilisent les vrais sous-paquets.
+La préservation du même Stage compose ce résultat avec la préservation de son
+ouverture réelle. Le nouveau `expandedDecideCode` consomme ce paquet et sa
+continuation transportée dans la voie étendue du maître. La `Decision` et le
+`Dossier.Step` originaux entiers sont conservés.
+
+La borne locale est fermée pour tout code reçu de l'action SAT originale :
+identité/échange 5, absorption 8, préfixage enfant +5, composition somme +5.
+Le Stage ajoute 4. La décision possède la borne uniforme
+`(ControlStagePreservation.bound stage + pairBound left right) + 3`, calculée
+sans verdict de seed ni évaluation native. Les APIs et bornes historiques de
+la décision et du maître restent intactes. Le calcul payé et le majorant
+indépendant de leurs bootstraps restent à établir.
+
+La gate complète passe sur 349 fichiers Lean, 348 modules et 27 996 constantes,
+avec aucune exception pour une déclaration écrite. Les 703 audits explicites
+de contrôle sont sans axiome, dont 23 nouvelles déclarations. Les treize
+contrôles du composant, les 31 contrôles d'intégration et les 23 fixtures d'échec
+attendu passent ; les contrôles de normalisation, d'ouverture et de génération
+passent aussi. La garde nouvelle rejette 2 293 mutations textuelles. La
+[qualification](controle-evaluation-frontiere-verification.json) conserve les
+423 empreintes figées avant cette gate et les journaux de développement,
+sans réécrire les qualifications historiques.
+
+La formation des préservations et son raccord à la décision sont traités.
+La prochaine obligation de D2 est l'application contrôlée de ces transports
+à la continuation effectivement reçue, puis les requêtes de l'affectation
+transformée. `citationRouting` et `citationAssignment` restent ouverts pour
+leur coût interne. Les autres indices, les frames et codecs, les bootstraps,
+l'administration, les traces et les allocations complètes restent également
+à fermer, avant les enveloppes et réserves de D3 et le secours borné de D4 sur
+le présent effectivement conservé et rechargé. A conserve sa priorité sur B.

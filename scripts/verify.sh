@@ -126,6 +126,12 @@ fi
 "${python_command[@]}" scripts/run-documentary-arithmetic-smoke.py
 "${python_command[@]}" scripts/check-documentary-expanded-control-codegen.py
 "${python_command[@]}" scripts/run-documentary-expanded-control-smoke.py
+"${python_command[@]}" scripts/run-documentary-generation-budget-smoke.py
+"${python_command[@]}" scripts/run-documentary-frontier-opening-smoke.py
+"${python_command[@]}" scripts/check-documentary-frontier-normalization-codegen.py
+"${python_command[@]}" scripts/run-documentary-frontier-normalization-smoke.py
+"${python_command[@]}" scripts/check-documentary-frontier-evaluation-codegen.py
+"${python_command[@]}" scripts/run-documentary-frontier-evaluation-smoke.py
 "${python_command[@]}" scripts/check-continuation-signature-codegen.py
 "${python_command[@]}" scripts/check-variable-master-codegen.py
 "${python_command[@]}" scripts/check-integrated-machine-codegen.py

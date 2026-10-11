@@ -1,4 +1,5 @@
 import Tests.LocalAlignment.DocumentaryControlCitation
+import Tests.LocalAlignment.DocumentaryControlStagePreservation
 
 /-! Open the actual retained continuation and completion. Routing and assignment
 application remain named complex primitives. Bounds count the declared catalogue;
@@ -280,6 +281,85 @@ theorem pair_bounded {context cursor sources contract demand left right}
     Within (decideCode stage memory) (pairBound left right) :=
   within_weaken (decide_bounded stage memory) (decide_cost_le stage memory)
 
+/-- The expanded consumer forms the complete actual stage preservation from
+its retained route. Applying that preservation and reading the assignment
+remain the same explicitly open primitives as in the historical consumer. -/
+def expandedDecideCode {context cursor sources contract demand left right}
+    (stage : @Master.Stage context cursor sources contract demand left right) (memory : Memory sources contract) :
+    Code Label (Decision stage memory) :=
+  .step .citationSeed (fun _ =>
+    match found : seed (VariableMaster.selected stage.head) stage.leftCheck.flag stage.rightCheck.flag with
+    | .blocked impossible => .step .citationDecision (fun _ => .done
+        ⟨.blocked
+          (fun permission meets => impossible false (stage.leftCheck.complete permission meets))
+          (fun permission meets => impossible true (stage.rightCheck.complete permission meets)), by
+            unfold Master.decide
+            rw [found]⟩)
+    | .viable assignment accepted =>
+      .step .citationInput (fun _ =>
+        let input : FrontierContinuation (generatedStructuralBranchSystem stage.formula)
+            [GeneratedStructuralBranchContext.root stage.formula] := .head ⟨assignment, True.intro⟩
+        .step .citationPreservation (fun _ =>
+          (ControlStagePreservation.code stage).bind (fun actualPreservation =>
+            .step .citationRouting (fun _ =>
+              let retained := actualPreservation.1.forward.map input
+              let retainedAccepted := actualPreservation.1.forward.preservesAccept input accepted
+              (completeCode stage memory retained retainedAccepted).bind (fun packet =>
+                .step .citationDecision (fun _ => .done ⟨.complete packet.1, by
+                  obtain ⟨_, actual⟩ := actualPreservation
+                  cases actual
+                  unfold Master.decide
+                  rw [found]
+                  exact congrArg Master.Decision.complete packet.2⟩)))))))
+
+/-- A uniform local envelope over the received routing syntax and references.
+Its calculation is distinct from its execution bootstrap, and neither native
+evaluation nor the seed verdict is used to discover this budget. -/
+def expandedDecideBound {context cursor sources contract demand left right}
+    (stage : @Master.Stage context cursor sources contract demand left right) (memory : Memory sources contract) : Nat :=
+  let _ := memory
+  (ControlStagePreservation.bound stage + pairBound left right) + 3
+
+theorem expanded_decide_bounded {context cursor sources contract demand left right}
+    (stage : @Master.Stage context cursor sources contract demand left right) (memory : Memory sources contract) :
+    Within (expandedDecideCode stage memory) (expandedDecideBound stage memory) := by
+  unfold expandedDecideCode expandedDecideBound
+  split
+  · exact within_weaken (within_step _ _ (within_step _ _ (within_done _)))
+      (Nat.le_trans (by decide : 2 ≤ 3) (Nat.le_add_left 3 _))
+  · rename_i assignment accepted found
+    apply within_step; apply within_step; apply within_step
+    apply within_bind (ControlStagePreservation.bounded stage)
+    intro actualPreservation
+    let input : FrontierContinuation (generatedStructuralBranchSystem stage.formula)
+        [GeneratedStructuralBranchContext.root stage.formula] := .head ⟨assignment, True.intro⟩
+    let retained := actualPreservation.1.forward.map input
+    let retainedAccepted := actualPreservation.1.forward.preservesAccept input accepted
+    have completeWithin := complete_bounded stage memory retained retainedAccepted
+    have routedWithin : Within
+        (.step Label.citationRouting (fun _ =>
+          (completeCode stage memory retained retainedAccepted).bind (fun packet =>
+            .step Label.citationDecision (fun _ => .done (⟨Master.Decision.complete packet.1, by
+              obtain ⟨_, actual⟩ := actualPreservation; cases actual
+              unfold Master.decide; rw [found]
+              exact congrArg Master.Decision.complete packet.2⟩ : Decision stage memory)))))
+        ((completeBound stage memory retained retainedAccepted + 1) + 1) := by
+      apply within_step
+      apply within_bind completeWithin
+      intro packet
+      exact within_step _ _ (within_done _)
+    exact within_weaken routedWithin (Nat.le_trans
+      (by
+        rw [Nat.add_assoc]
+        exact Nat.add_le_add_left (by decide : 2 ≤ 5) _)
+      (complete_cost_le stage memory retained retainedAccepted))
+
+theorem expanded_decide_finite {context cursor sources contract demand left right}
+    (stage : @Master.Stage context cursor sources contract demand left right) (memory : Memory sources contract) :
+    Finite (expandedDecideCode stage memory) := by
+  obtain ⟨value, labels, trace, _⟩ := expanded_decide_bounded stage memory
+  exact ⟨value, labels, trace⟩
+
 end ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -307,4 +387,8 @@ end ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.complete_cost_le
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.decide_cost_le
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.pair_bounded
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.expandedDecideCode
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.expandedDecideBound
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.expanded_decide_bounded
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.expanded_decide_finite
 /- AXIOM_AUDIT_END -/

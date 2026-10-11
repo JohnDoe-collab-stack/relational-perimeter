@@ -111,6 +111,16 @@ inductive Label where
   | frontierDecisionCell
   | frontierChild
   | frontierPacket
+  | normalizationCell
+  | normalizationInsertCell
+  | normalizationSearch
+  | normalizationPair
+  | normalizationCode
+  | normalizationPacket
+  | frontierEvaluationCell
+  | frontierEvaluationPacket
+  | frontierEvaluationAtom
+  | stagePreservation
 
 variable {context : List SourceKey} {sources : Support SourceValue context}
   {contract : Contract} {rules : Deduction.Policy} {store : Deduction.Store sources contract rules}

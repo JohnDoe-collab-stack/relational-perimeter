@@ -129,6 +129,16 @@ def tag : Label → Nat
   | .frontierDecisionCell => 99
   | .frontierChild => 100
   | .frontierPacket => 101
+  | .normalizationCell => 102
+  | .normalizationInsertCell => 103
+  | .normalizationSearch => 104
+  | .normalizationPair => 105
+  | .normalizationCode => 106
+  | .normalizationPacket => 107
+  | .frontierEvaluationCell => 108
+  | .frontierEvaluationPacket => 109
+  | .frontierEvaluationAtom => 110
+  | .stagePreservation => 111
 
 def baselineLabels : List Nat :=
   [0, 37, 10, 6, 5, 6, 5, 6, 7, 7, 35,

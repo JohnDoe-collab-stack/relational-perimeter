@@ -129,6 +129,16 @@ def tag : Label → Nat
   | .frontierDecisionCell => 99
   | .frontierChild => 100
   | .frontierPacket => 101
+  | .normalizationCell => 102
+  | .normalizationInsertCell => 103
+  | .normalizationSearch => 104
+  | .normalizationPair => 105
+  | .normalizationCode => 106
+  | .normalizationPacket => 107
+  | .frontierEvaluationCell => 108
+  | .frontierEvaluationPacket => 109
+  | .frontierEvaluationAtom => 110
+  | .stagePreservation => 111
 
 def count (label : Label) (labels : List Label) : Nat :=
   (labels.filter (fun found => tag found == tag label)).length
@@ -169,11 +179,18 @@ def quotationCheck (before : FrameData Cases.sources Cases.contract DeductionCas
       count .masterNextStateQuery actual.labels == 1 &&
       count .masterDecompose actual.labels == 1 &&
       count .masterNextCursor actual.labels == 1 &&
-      count .formationResources actual.labels == 16 &&
+      count .formationResources actual.labels == 27 &&
+      count .frontierEvaluationCell actual.labels == 10 &&
+      count .frontierEvaluationPacket actual.labels == 10 &&
+      count .frontierEvaluationAtom actual.labels == 0 &&
+      count .stagePreservation actual.labels == 1 &&
       count .frontierCell actual.labels == 2 &&
       count .frontierDecisionCell actual.labels == 1 &&
       count .frontierChild actual.labels == 2 &&
       count .frontierPacket actual.labels == 2 &&
+      count .normalizationCell actual.labels == 3 &&
+      count .normalizationSearch actual.labels == 2 &&
+      count .normalizationPair actual.labels == 1 &&
       count .frameRestore actual.labels == 1 &&
       count .citationHead actual.labels == 0 &&
       !short.isSome && stable
@@ -190,10 +207,17 @@ def blockedCheck : Bool :=
     count .producerOutputKind actual.labels == 7 &&
     count .masterHeadPacket actual.labels == 1 &&
     count .formationResources actual.labels == 14 &&
+    count .frontierEvaluationCell actual.labels == 0 &&
+    count .frontierEvaluationPacket actual.labels == 0 &&
+    count .frontierEvaluationAtom actual.labels == 0 &&
+    count .stagePreservation actual.labels == 0 &&
     count .frontierCell actual.labels == 2 &&
     count .frontierDecisionCell actual.labels == 1 &&
     count .frontierChild actual.labels == 2 &&
-    count .frontierPacket actual.labels == 2
+    count .frontierPacket actual.labels == 2 &&
+    count .normalizationCell actual.labels == 3 &&
+    count .normalizationSearch actual.labels == 2 &&
+    count .normalizationPair actual.labels == 1
 
 def adminCheck (fuel budget : Nat) : Bool :=
   match Control.execute budget (ControlAdministration.executeCode fuel oneCode) with

@@ -1,12 +1,13 @@
 import Tests.LocalAlignment.DocumentaryControlCompletion
 import Tests.LocalAlignment.DocumentaryControlMasterHead
 import Tests.LocalAlignment.DocumentaryControlFrontierOpening
+import Tests.LocalAlignment.DocumentaryControlFrontierNormalization
 
 /-! The quotation search uses the same head, opening and retained reduction.
 Paid source checks supply the actual flags and formula. The expanded path opens
-head production and frontier opening with their complete original packets.
-Frontier normalization and continuation routing still contain complex native
-primitives; their internal costs are not closed by this D2 increment. -/
+head production, frontier opening, normalization and evaluation of the actual
+routing syntax into the complete preservation packet. Invoking the preserved
+maps and reading the continuation assignment still have open internal costs. -/
 set_option genInjectivity false
 set_option maxHeartbeats 3000000
 namespace ConstitutiveSearch.Agent.Local.Documentary.ControlMaster
@@ -107,19 +108,20 @@ def expandedSearchCode {context} (cursor : MasterResources.Cursor) (sources : Su
               [SAT.GeneratedStructuralBranchContext.root formula]).bind (fun actualOpening =>
             let opening := actualOpening.1
             .step .citationReduction (fun _ =>
-              let reduction := SAT.normalizeGeneratedStructuralFrontierByFlip formula
-                (VariableMaster.selected head) opening.frontier
+              (ControlFrontierNormalization.code formula (VariableMaster.selected head)
+                opening.frontier).bind (fun actualReduction =>
+              let reduction := actualReduction.1
               .step .citationStage (fun _ => .done
                 ⟨Master.stageFromParts cursor sources contract demand left right head actualHead.2
-                  leftCheck.1 leftCheck.2 rightCheck.1 rightCheck.2 opening actualOpening.2 reduction rfl,
+                  leftCheck.1 leftCheck.2 rightCheck.1 rightCheck.2 opening actualOpening.2 reduction actualReduction.2,
                   Master.stageFromParts_actual cursor sources contract demand left right head actualHead.2
-                    leftCheck.1 leftCheck.2 rightCheck.1 rightCheck.2 opening actualOpening.2 reduction rfl⟩))))))))
+                    leftCheck.1 leftCheck.2 rightCheck.1 rightCheck.2 opening actualOpening.2 reduction actualReduction.2⟩)))))))))
 
 
 def expandedRunCode {context sources contract} (state : @Dossier.State context sources contract)
     (task : Dossier.Obligation context) : Code Label (Run state task) :=
   (expandedSearchCode state.cursor sources contract task.demand task.left task.right).bind (fun actual =>
-    (ControlCompletion.decideCode actual.1 state.memory).bind (fun decision =>
+    (ControlCompletion.expandedDecideCode actual.1 state.memory).bind (fun decision =>
       .step .citationPacket (fun _ =>
         let produced : Dossier.Step state task := ⟨actual.1, decision.1⟩
         .done ⟨produced, by
@@ -146,7 +148,10 @@ theorem expanded_search_finite {context} (cursor : MasterResources.Cursor) (sour
       apply finite_step
       apply finite_bind (ControlFrontierOpening.finite _ _ _)
       intro actualOpening
-      repeat apply finite_step
+      apply finite_step
+      apply finite_bind (ControlFrontierNormalization.finite _ _ _)
+      intro actualReduction
+      apply finite_step
       exact finite_done _
 
 theorem expanded_run_finite {context sources contract} (state : @Dossier.State context sources contract)
@@ -154,8 +159,7 @@ theorem expanded_run_finite {context sources contract} (state : @Dossier.State c
   apply finite_bind (expanded_search_finite state.cursor sources contract task.demand task.left task.right)
   intro actual
   apply finite_bind
-  · obtain ⟨value, labels, trace, _⟩ := ControlCompletion.pair_bounded actual.1 state.memory
-    exact ⟨value, labels, trace⟩
+  · exact ControlCompletion.expanded_decide_finite actual.1 state.memory
   · intro decision
     exact finite_step _ _ (finite_done _)
 
