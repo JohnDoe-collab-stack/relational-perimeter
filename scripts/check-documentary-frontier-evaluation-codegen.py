@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Named C guards for actual routing evaluation and complete stage preservation.
 Textual mutation fixtures exercise these guards; they are not corrupt compiled
-executions. Deferred map/Assignment applications and bound bootstraps are open.
+executions. Historical formation APIs retain deferred map boundaries. The new
+operative applications have a separate guard; bound bootstraps remain open.
 """
 from pathlib import Path
 import re
@@ -87,8 +88,10 @@ def make_check(functions, select):
         ('ControlCompletion_expandedDecideCode___redArg___lam__3', r'v_forward_\d+_ = lean_ctor_get\(v_actualPreservation_\d+_, 0\)'),
         ('ControlCompletion_expandedDecideCode___redArg___lam__3', r'v_retained_\d+_ = lean_apply_1\(v_forward_\d+_, v_input_\d+_\)'),
         ('ControlCompletion_expandedDecideCode___redArg___lam__3', r'ControlCompletion_completeCode___redArg\(v_context_\d+_, v_sources_\d+_, v_demand_\d+_, v_left_\d+_, v_right_\d+_, v_stage_\d+_, v_memory_\d+_, v_retained_\d+_\)'),
-        ('ControlMaster_expandedRunCode___lam__2', r'lean_closure_set\([^,]+, 0, v_actual_\d+_\)'),
-        ('ControlMaster_expandedRunCode___lam__2', r'ControlCompletion_expandedDecideCode___redArg\(v_context_\d+_, v_sources_\d+_, v_demand_\d+_, v_left_\d+_, v_right_\d+_, v_actual_\d+_, v_memory_\d+_\)'),
+        ('ControlMaster_expandedRunCode___lam__2', r'lean_ctor_get\(v_actual_\d+_, 0\)'),
+        ('ControlMaster_expandedRunCode___lam__2', r'lean_ctor_get\(v_actual_\d+_, 1\)'),
+        ('ControlMaster_expandedRunCode___lam__2', r'lean_closure_set\([^,]+, 0, v_stage_\d+_\)'),
+        ('ControlMaster_expandedRunCode___lam__2', r'ControlCompletion_executedDecideCode___redArg\(v_context_\d+_, v_sources_\d+_, v_demand_\d+_, v_left_\d+_, v_right_\d+_, v_stage_\d+_, v_memory_\d+_, v_payload_\d+_\)'),
     )
     paths = [(select(functions, BASE + suffix), pattern) for suffix, pattern in paths]
     ordered = [select(functions, BASE + 'ControlFrontierOpening_transCode___redArg___lam__' + str(n)) for n in (0, 1)]
@@ -99,7 +102,7 @@ def make_check(functions, select):
         raise ValueError('Expected one actual Stage consumer')
     owner = owners[0]
     master_consumers = [name for name in scope if BASE + 'ControlMaster_expandedRunCode' in name]
-    decide = select(functions, BASE + 'ControlCompletion_expandedDecideCode___redArg')
+    decide = select(functions, BASE + 'ControlCompletion_executedDecideCode___redArg')
     master_owners = [name for name in master_consumers if re.search(re.escape(decide) + r'\s*\(', functions[name])]
     if len(master_owners) != 1:
         raise ValueError('Expected one actual expanded decision consumer')
@@ -158,7 +161,7 @@ def main():
     print('DOCUMENTARY_FRONTIER_EVALUATION_CODEGEN_OK: ' + str(len(mutations)) +
           ' textual mutations rejected; no native preservation producer references in ' + str(len(scope)) +
           ' named bodies; actual recursive packets, both maps, ordered composition and whole same Stage; '
-          'unique expanded consumers; deferred invocations and bootstrap costs remain open')
+          'unique current master consumer; historical deferred invocations checked separately; bootstrap costs remain open')
 
 if __name__ == '__main__':
     try:

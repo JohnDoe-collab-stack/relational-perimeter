@@ -5,3 +5,4 @@
 *.json text eol=lf
 *.sh text eol=lf
 *.ps1 text eol=lf
+scripts/documentary_native_client.py text eol=lf

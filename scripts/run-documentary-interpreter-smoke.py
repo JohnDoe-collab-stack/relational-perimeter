@@ -139,6 +139,12 @@ def tag : Label → Nat
   | .frontierEvaluationPacket => 109
   | .frontierEvaluationAtom => 110
   | .stagePreservation => 111
+  | .assignmentQueryCell => 112
+  | .assignmentQueryReturn => 113
+  | .transportApplicationCell => 114
+  | .transportApplicationPacket => 115
+  | .transportSplitDecision => 116
+  | .executionPayload => 117
 
 def baselineLabels : List Nat :=
   [0, 37, 10, 6, 5, 6, 5, 6, 7, 7, 35,
@@ -164,8 +170,9 @@ def traceTag {Value : Type u} {code : Code Label Value} {labels value} :
     Eval code labels value → Nat
   | .done => 0
   | .step _ => 1
+  | .admin rest => traceTag rest
 
-def eventTag : Event → Nat
+def eventTag : Program.Event → Nat
   | .quoted => 0
   | .derived => 1
   | .refused => 2
@@ -174,7 +181,7 @@ def eventTag : Event → Nat
 def stepCheck {slots spec}
     (before : FrameData Cases.sources Cases.contract DeductionCases.policy slots)
     (instruction : Instruction Cases.context DeductionCases.policy slots spec)
-    (bound : Nat) (labels : List Nat) (event : Event) (value : Option Int)
+    (bound : Nat) (labels : List Nat) (event : Program.Event) (value : Option Int)
     (origins : Option (List Nat)) (successful : Bool) (fuel : Nat) : Bool :=
   match Control.execute fuel (ControlStep.code before instruction) with
   | none => fuel < bound
@@ -426,7 +433,9 @@ def run : IO Unit := do
     sumActual.labels.length == 61,
     sumActual.value.1.next.store.2.resources.read terminal.occurrence.2 == 2,
     terminal.occurrence.1.origins == [1, 2, 1, 2],
-    traceTag certified.1 == 1])
+    traceTag certified.1 == 1,
+    traceTag (Value := Unit) (code := Code.admin .compose (fun _ => Code.done ()) 0)
+      (.admin .done) == 0])
   let stdout ← IO.getStdout
   stdout.write ⟨(Cases.utf8 "DOCUMENTARY_INTERPRETER_SMOKE_DONE\n").toArray⟩
 end DocumentaryInterpreterSmoke
@@ -487,7 +496,7 @@ def main():
     if set(result.stdout.splitlines()) != expected or len(result.stdout.splitlines()) != len(expected):
         raise ValueError("Missing runtime audit or unexpected output: " + result.stdout.decode("utf-8", "replace"))
     print("DOCUMENTARY_INTERPRETER_SMOKE_OK: 2200 documentary, 234 permission, 72 position, 32 resource, 800 source-check, "
-          "120 citation, 60 continuation and 120 decision fuel checks, nine integration checks, "
+          "120 citation, 60 continuation and 120 decision fuel checks, ten integration checks, "
           "33 clean runtime audits; client_sha256=" + hashlib.sha256(source).hexdigest())
 
 

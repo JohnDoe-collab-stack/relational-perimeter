@@ -121,6 +121,12 @@ inductive Label where
   | frontierEvaluationPacket
   | frontierEvaluationAtom
   | stagePreservation
+  | assignmentQueryCell
+  | assignmentQueryReturn
+  | transportApplicationCell
+  | transportApplicationPacket
+  | transportSplitDecision
+  | executionPayload
 
 variable {context : List SourceKey} {sources : Support SourceValue context}
   {contract : Contract} {rules : Deduction.Policy} {store : Deduction.Store sources contract rules}

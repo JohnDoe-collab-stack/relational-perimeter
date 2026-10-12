@@ -1,5 +1,6 @@
 import Tests.LocalAlignment.DocumentaryControlMasterData
 import Tests.LocalAlignment.DocumentaryControlReference
+import Tests.LocalAlignment.DocumentaryControlResources
 
 /-! Actual restored binding reads and closed justification readers. A reader
 for an arbitrary received knowledge function is an explicit interface; the
@@ -65,6 +66,14 @@ theorem quotation_finite {kinds : List Deduction.Kind}
     intro actual
     exact finite_done _
 
+@[inline] def derivedTreeFromReceivedValues {left right : Deduction.Kind}
+    (request : Deduction.Request rules) (permission : Ref rules.allowed request.2.position)
+    (leftPosition rightPosition : Nat) (leftValue rightValue : Int)
+    (leftEvidence : Deduction.Justified sources contract rules left leftValue)
+    (rightEvidence : Deduction.Justified sources contract rules right rightValue) :=
+  Deduction.Justified.derived request permission (left := left) (right := right)
+    leftPosition rightPosition (leftValue := leftValue) (rightValue := rightValue) leftEvidence rightEvidence
+
 def derivedReader {kinds : List Deduction.Kind} {left right : Deduction.Kind}
     (knowledge : Deduction.Knowledge sources contract rules kinds) (reader : EvidenceReader knowledge)
     (request : Deduction.Request rules) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
@@ -75,18 +84,26 @@ def derivedReader {kinds : List Deduction.Kind} {left right : Deduction.Kind}
       (reader rightRef).bind (fun rightEvidence =>
       (ControlReference.positionCode leftRef).bind (fun leftPosition =>
       (ControlReference.positionCode rightRef).bind (fun rightPosition =>
+      (ControlResources.readCode knowledge.resources.values leftRef).bind (fun leftValue =>
+      (ControlResources.readCode knowledge.resources.values rightRef).bind (fun rightValue =>
       .step .justificationReturn (fun _ =>
         have kindActual : Deduction.Kind.derived request.1 request.2.position
             left leftPosition.1 right rightPosition.1 = Deduction.derivedKind request leftRef rightRef := by
           rw [leftPosition.2, rightPosition.2]; rfl
-        let tree := Deduction.Justified.derived request permission leftPosition.1 rightPosition.1
-          leftEvidence.1 rightEvidence.1
+        let tree := derivedTreeFromReceivedValues request permission leftPosition.1 rightPosition.1
+          leftValue.1 rightValue.1 (leftValue.2.symm ▸ leftEvidence.1) (rightValue.2.symm ▸ rightEvidence.1)
+        have valuesActual : Deduction.evaluate request.1.operation leftValue.1 rightValue.1 =
+            Deduction.evaluate request.1.operation (knowledge.resources.read leftRef) (knowledge.resources.read rightRef) :=
+          (congrArg (fun value => Deduction.evaluate request.1.operation value rightValue.1) leftValue.2).trans
+            (congrArg (Deduction.evaluate request.1.operation (knowledge.resources.read leftRef)) rightValue.2)
         let reindexed := kindActual ▸ tree
-        .done ⟨action.value.symm ▸ reindexed, by
+        .done ⟨action.value.symm ▸ (valuesActual ▸ reindexed), by
+          obtain ⟨_, actual⟩ := rightValue; cases actual
+          obtain ⟨_, actual⟩ := leftValue; cases actual
           obtain ⟨_, actual⟩ := rightPosition; cases actual
           obtain ⟨_, actual⟩ := leftPosition; cases actual
           obtain ⟨_, actual⟩ := rightEvidence; cases actual
-          obtain ⟨_, actual⟩ := leftEvidence; cases actual; rfl⟩)))))
+          obtain ⟨_, actual⟩ := leftEvidence; cases actual; rfl⟩)))))))
     | .prior old => (reader old).bind (fun evidence => .done
       ⟨(action.old_value old).symm ▸ evidence.1, by obtain ⟨_, actual⟩ := evidence; cases actual; rfl⟩))
 
@@ -109,8 +126,42 @@ theorem derived_finite {kinds : List Deduction.Kind} {left right : Deduction.Kin
       apply finite_bind
       · obtain ⟨value, labels, trace, _⟩ := ControlReference.position_bounded rightRef
         exact ⟨value, labels, trace⟩
-      · intro rightPosition; exact finite_step _ _ (finite_done _)
+      · intro rightPosition
+        apply finite_bind
+        · obtain ⟨value, labels, trace, _⟩ := ControlResources.read_bounded knowledge.resources.values leftRef
+          exact ⟨value, labels, trace⟩
+        · intro leftValue
+          apply finite_bind
+          · obtain ⟨value, labels, trace, _⟩ := ControlResources.read_bounded knowledge.resources.values rightRef
+            exact ⟨value, labels, trace⟩
+          · intro rightValue; exact finite_step _ _ (finite_done _)
   | prior old => apply finite_bind (readerFinite old); intro evidence; exact finite_done _
+
+@[inline] def derivedAtReader {kinds : List Deduction.Kind} {left right : Deduction.Kind}
+    (knowledge : Deduction.Knowledge sources contract rules kinds) (reader : EvidenceReader knowledge)
+    (request : Deduction.Request rules) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
+    (action : Deduction.FormationAction knowledge request leftRef rightRef)
+    (permission : Ref rules.allowed request.2.position)
+    (kind : Deduction.Kind) (kindActual : kind = Deduction.derivedKind request leftRef rightRef)
+    (after : Deduction.Knowledge sources contract rules (kind :: kinds))
+    (afterActual : HEq after (Deduction.incorporateDerived action permission)) : EvidenceReader after :=
+  fun ref => by
+    cases kindActual
+    cases eq_of_heq afterActual
+    exact derivedReader knowledge reader request leftRef rightRef action permission ref
+
+theorem derived_at_finite {kinds : List Deduction.Kind} {left right : Deduction.Kind}
+    (knowledge : Deduction.Knowledge sources contract rules kinds) (reader : EvidenceReader knowledge)
+    (readerFinite : ReaderFinite reader)
+    (request : Deduction.Request rules) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
+    (action : Deduction.FormationAction knowledge request leftRef rightRef)
+    (permission : Ref rules.allowed request.2.position)
+    (kind : Deduction.Kind) (kindActual : kind = Deduction.derivedKind request leftRef rightRef)
+    (after : Deduction.Knowledge sources contract rules (kind :: kinds))
+    (afterActual : HEq after (Deduction.incorporateDerived action permission)) :
+    ReaderFinite (derivedAtReader knowledge reader request leftRef rightRef action permission kind kindActual after afterActual) := by
+  cases kindActual; cases eq_of_heq afterActual
+  exact derived_finite knowledge reader readerFinite request leftRef rightRef action permission
 
 /-- This class closes the received reader interface by the actual documentary
 constructors, including the retained rule permission and formation action. -/
@@ -126,13 +177,24 @@ inductive KnowledgeRecipe : {kinds : List Deduction.Kind} →
       (action : Deduction.FormationAction knowledge request leftRef rightRef)
       (permission : Ref rules.allowed request.2.position) : KnowledgeRecipe (Deduction.incorporateDerived action permission)
 
+  | derivedAt {kinds : List Deduction.Kind} {knowledge : Deduction.Knowledge sources contract rules kinds}
+      {left right : Deduction.Kind} (prior : KnowledgeRecipe knowledge)
+      (request : Deduction.Request rules) (leftRef : Ref kinds left) (rightRef : Ref kinds right)
+      (action : Deduction.FormationAction knowledge request leftRef rightRef)
+      (permission : Ref rules.allowed request.2.position)
+      (kind : Deduction.Kind) (kindActual : kind = Deduction.derivedKind request leftRef rightRef)
+      (after : Deduction.Knowledge sources contract rules (kind :: kinds))
+      (afterActual : HEq after (Deduction.incorporateDerived action permission)) : KnowledgeRecipe after
+
 def recipeReader {kinds : List Deduction.Kind} {knowledge : Deduction.Knowledge sources contract rules kinds}
     (recipe : KnowledgeRecipe knowledge) : EvidenceReader knowledge := fun ref =>
   .step .controlInspect (fun _ => match kinds, knowledge, recipe with
     | _, _, .empty => nomatch ref
     | _, _, .quotation prior output => quotationReader _ (recipeReader prior) output ref
     | _, _, .derived prior request left right action permission =>
-      derivedReader _ (recipeReader prior) request left right action permission ref)
+      derivedReader _ (recipeReader prior) request left right action permission ref
+    | _, _, .derivedAt prior request left right action permission kind kindActual after afterActual =>
+      derivedAtReader _ (recipeReader prior) request left right action permission kind kindActual after afterActual ref)
 termination_by structural recipe
 
 theorem recipe_finite {kinds : List Deduction.Kind} {knowledge : Deduction.Knowledge sources contract rules kinds}
@@ -145,6 +207,9 @@ theorem recipe_finite {kinds : List Deduction.Kind} {knowledge : Deduction.Knowl
   | derived prior request left right action permission previous =>
     intro kind ref; apply finite_step
     exact derived_finite _ _ previous request left right action permission ref
+  | derivedAt prior request left right action permission kind kindActual after afterActual previous =>
+    intro kind ref; apply finite_step
+    exact derived_at_finite _ _ previous request left right action permission _ kindActual after afterActual ref
 
 universe u v
 
@@ -197,8 +262,11 @@ end ConstitutiveSearch.Agent.Local.Documentary.ControlDeferred
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlDeferred.empty_finite
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlDeferred.quotationReader
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlDeferred.quotation_finite
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlDeferred.derivedTreeFromReceivedValues
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlDeferred.derivedReader
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlDeferred.derived_finite
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlDeferred.derivedAtReader
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlDeferred.derived_at_finite
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlDeferred.KnowledgeRecipe
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlDeferred.recipeReader
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlDeferred.recipe_finite

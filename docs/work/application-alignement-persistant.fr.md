@@ -114,7 +114,7 @@ indépendante d'effectuation ne lui est ajoutée.
 | --- | --- | --- |
 | A0 | Qualifier la révision reçue et ses dépendances | Révision existante, lectures et vérifications rapportées |
 | D1 | Relier les données de continuation reçues au secours réel | Validité primitive séparée du calcul ; paquet partagé et progrès |
-| D2 | Construire l'interprète instrumenté | CTL-SOUND, CTL-COMPLETE et CTL-MONO |
+| D2 | Construire l'interprète et couvrir le chemin documentaire réel | Clos le 12 octobre 2026 après suite complète et revue indépendante. CTL-SOUND, CTL-COMPLETE, CTL-MONO ; producteurs, lecteurs et administration effectivement raccordés ; [reçu autonome](cloture-d2-verification.json) |
 | D3 | Calculer et protéger les enveloppes | Bornes du contrôle et du bootstrap, isolement, fermeture des successeurs |
 | D4 | Composer les tours | Secours dans sa borne, paquet réel, progrès et fermeture |
 | A1 | Charger toutes les ressources maître et le présent | Couverture positive, octets, activation et reprise utilisable |
@@ -127,6 +127,32 @@ D1 prolonge les recettes documentaires existantes. D2 à D4 doivent
 instrumenter leurs contrôles réels ; un petit interprète sans raccord aux
 producteurs ne ferme pas leurs obligations. A1 réutilise ces lois pour
 l'activation et ne remplace pas le maître par une nouvelle instance.
+
+### Correction de pilotage et clôture de D2
+
+La demande du 11 octobre 2026 exige la clôture entière de D2 sous supervision.
+Le [dossier de clôture](cloture-d2.fr.md) fixe désormais ses critères, les
+entrées effectives, l'inventaire et les validations nécessaires. Les comptes
+rendus ci-dessous restent historiques ; leurs listes de reste mêlaient
+parfois instrumentation, budgets et activation.
+
+`D2` désigne le jalon de ce tableau. La section D.2 de l'annexe de la
+spécification regroupe aussi `BOUND-COMPUTABLE` : dans cet ordre de travail,
+le calcul des enveloppes et le bootstrap correspondant relèvent de D3.
+La conservation de recettes de lecteurs utilisables relève déjà du raccord
+de D2 ; leurs codecs complets, leur activation depuis des octets et son coût
+relèvent d'A1 et des obligations de reprise. D4 compose les tours et établit
+le secours commun dans son allocation. Cette répartition conserve toutes
+les obligations de la spécification.
+
+Les cinq critères du dossier de D2 sont maintenant qualifiés ensemble, avec
+réception racine et indépendante de la suite complète réellement terminée.
+D2 est clos après mise à jour documentaire, vérification des liens et du diff.
+L'inventaire porte sur les chemins effectivement appelés, y compris les
+closures différées et l'administration. L'instance concrète forme et conserve
+ses entrées, les transmet à ses vrais consommateurs et ferme les conditions
+de ses interfaces. Les recettes sont maintenues depuis l'état initial général
+et par tous ses constructeurs de successeurs.
 
 ## Premier raccord : données de reprise documentaire
 
@@ -601,3 +627,386 @@ leur coût interne. Les autres indices, les frames et codecs, les bootstraps,
 l'administration, les traces et les allocations complètes restent également
 à fermer, avant les enveloppes et réserves de D3 et le secours borné de D4 sur
 le présent effectivement conservé et rechargé. A conserve sa priorité sur B.
+
+## Applications contrôlées des transports et des affectations
+
+Le [raccord suivant de D2](controle-application-transports.fr.md) ouvre les
+invocations avant et arrière des transports, ainsi que les requêtes des
+affectations qu'ils retournent. Les six constructeurs du routage SAT original
+possèdent leurs exécutants et leurs bornes locales. La composition consomme
+les vrais sous-paquets dans l'ordre de chaque direction ; le retour d'une
+absorption conserve l'inclusion originale. Le lecteur retourné transporte
+l'histoire de ses flips, sans identifier les occurrences sources.
+
+Le maître produit une seule ouverture et une seule normalisation, conserve
+leurs paquets entiers, puis évalue le code réellement retenu et compose ses
+exécutants. `expandedRunCode` consomme le Stage et ce payload effectifs. La
+décision obtient le Seed original avec son lecteur payé, applique le transport
+avant puis interroge le lecteur reçu dans la complétion. Les égalités portent
+sur la `Decision` et le `Dossier.Step` originaux entiers. Sur refus, la formation
+du routage a lieu, mais aucune application de transport ou requête de lecteur
+n'est exécutée. Les primitives opaques `citationRouting` et
+`citationAssignment` disparaissent de cette voie effective.
+
+Les bornes d'application et de requête sont démontrées sans exécuter les maps
+natives pour trouver leur budget. Le lecteur générique est une hypothèse
+positive reçue avec l'affectation ; les quatre Seed concrets ferment cette
+hypothèse dans le maître. Les requêtes constantes coûtent 1, les requêtes d'un
+flip sont majorées par `R.queryBound q + q + 3`, et les plafonds de lecteurs
+sont propagés dans l'ordre réel des compositions. Leur propre calcul payé
+et son bootstrap restent à établir.
+
+La gate complète passe sur 358 fichiers Lean, 357 modules et 28 376
+constantes, sans exception pour une déclaration écrite. Les 802 audits
+explicites de contrôle, dont 99 nouveaux noms, sont sans axiome. Les 56
+requêtes et six observations de lecteurs formés, les 23 contrôles
+d'application avec 34 paires avant/arrière, les 31 contrôles d'intégration
+et les 23 fixtures d'échec attendu passent. Les deux nouvelles gardes
+rejettent 137 et 8 426 mutations textuelles de leurs entrées. La
+[qualification](controle-application-transports-verification.json) conserve
+les 436 empreintes figées avant la gate et la supervision indépendante,
+sans réécrire les résultats historiques ni le registre scientifique.
+
+L'obligation locale d'application des transports et de lecture de leurs
+affectations est traitée. Ce compte rendu qualifie cet incrément, pas la
+fermeture de D2. La liste précédente mêlait la couverture des calculs de D2
+au bootstrap et aux enveloppes calculables de D3. Le
+[dossier de clôture de D2](cloture-d2.fr.md) fixe désormais les obligations
+de couverture du lecteur effectivement transmis, des frames, des recettes,
+de la composition, des traces et des allocations abstraites. Toute obligation
+non classée ou non vérifiée maintient D2 ouvert.
+
+D3 conserve le bootstrap payé, les enveloppes globales et les réserves de
+successeur ; D4 doit raccorder le secours borné au présent réellement conservé
+et rechargé. Les codecs et l'activation relèvent aussi d'A1.
+`RecoveryData.prepare` utilise encore `Memory.step` nativement. La réalisation
+en cours transmet le lecteur au maître et à ses frames. L'exécuteur final
+conserve les événements intrinsèques des compositions ; ses lois CTL, son
+unicité et son arrêt faute de carburant sont prouvés sur le résultat entier.
+Les projections causales reprennent maintenant l'histoire et la génération
+reçues, et la décomposition transmet sa racine mesurée à la continuation et
+à la frame suivante. Leur qualification finale reste à effectuer.
+La revue du consommateur complet a détecté une réinstrumentation exponentielle
+des événements administratifs par `Code.bind`. `bindForward` conserve désormais
+les événements reçus et le runner prépaie leurs couches effectives ; les lois
+générales et 140 attentes indépendantes qualifient localement cette correction.
+La formation générique de frame et l'amorçage du maître paient également leur
+lecture de source. Les premières sondes terminales ont rencontré des plafonds
+de fixture puis une limite de pile hôte ; un prototype à frames denses a
+ensuite conservé trop de closures administratives. Ces échecs restent archivés.
+
+Le consommateur public utilise maintenant `ControlCompactExecution`. Il
+retourne une trace positive `Path` et la tape administrative, avec la valeur
+constitutive entière. Ses lois générales et son raffinement constructif
+conservent les coûts, les budgets, les arrêts et le résultat original. La
+première citation réelle termine et son lecteur reçu passe les requêtes ; les
+140 coupons indépendants passent aussi avec cet exécuteur. Le catalogue donne
+3 016 666 780 unités terminales pour cette première citation. C'est le coût
+d'une fixture de validation, pas une enveloppe calculable de production.
+
+La revue compilée a figé 1 887 corps, 40 frontières de fonctions originales
+stockées et les sites des 35 symboles FFI. Les gardes rejettent 1 977 mutations
+pour cet inventaire et 152 pour le consommateur compact. Les scénarios publics
+conservent toutes les branches, valeurs, origines, lecteurs et justifications
+des fixtures précédentes ; ils exécutent chaque grosse étape une seule fois.
+Les tests des budgets restent indépendants, avec les 140 coupons et une
+citation réelle à coût figé. Les scénarios publics passent en développement,
+mais la troisième gate confirmatoire échoue sur le délai physique du client
+étendu, avec les 485 entrées figées et les 30 anciens reçus inchangés. La
+reprise native v2 a généré 241 modules avec C identique au C revu, puis échoué
+sur un champ obligatoire absent de la configuration du client, avant tout
+audit ou assertion de ce client. La reprise v4 corrigée est lancée après
+revue indépendante ; le contrôle officiel de la configuration et les 17 audits
+du même client, les 242 compilations d'objets et la liaison passent. Le parcours
+natif des cas est effectivement lancé, puis le client et son lanceur sont
+constatés absents à 21 h 19 sans reçu de fin ni sortie. L'arrêt et le redémarrage
+du service sandbox Codex à 21 h 18 sont établis par les événements Windows,
+sans preuve directe de la cause de disparition du client. Aucun code de sortie,
+dépassement de délai ni verdict sur ses 31 assertions n'est revendiqué.
+La revue racine recontrôle 14 974 empreintes sans différence et conserve cette
+tentative sans relance. Les cas, carburants et attentes
+restent identiques. Le dossier détaille les coûts de
+composition et de traces identifiés, ainsi que les mesures qui restent à
+effectuer. Une sonde indépendante du `Code.bind` original confirme désormais
+les `2n` événements et `n(n−1)` couches de la famille identité : pour 512,
+1 024 et 2 048 compositions, les temps observés sont 2,6713, 11,1001 et
+43,0762 ms. Ses huit audits sont sans axiome, ses sorties brutes et
+14 975 empreintes sont recontrôlées. Le dossier précise le périmètre de
+mesure. La capture suivante du vrai client couvre aussi le nouveau thread
+de calcul : 1 550 de ses 1 577 piles contiennent le callback de `bindForward`.
+La revue racine contrôle 17 113 échantillons, 213 644 adresses et 14 979
+empreintes inchangées. Ce sont des présences de fonctions dans une fenêtre
+de 60 secondes, sans pourcentage exact du CPU ni verdict sur les 31 assertions.
+La lecture indépendante du C distingue aussi huit `SourceResult` mis en
+cellules globales et trois initialisateurs scalaires ; le runtime once reçu
+rend les premiers persistants. Le dossier conserve les reçus et les limites
+de ces constats. Une génération externe du client exact avec l'option
+`compiler.extract_closed=false` supprime les huit cellules dans le C ;
+les 17 audits restent sans axiome et 14 989 empreintes sont recontrôlées.
+Aucun objet ni runtime de ce candidat n'est revendiqué. La correction des
+callbacks dispose maintenant d'un premier incrément sémantique qualifié :
+recettes et pile de continuations typées, avec équations sur le `Code` entier.
+La compilation v2 rejetée est conservée ; la correction v3 garde les mêmes
+énoncés et termine avec exactement 24 audits sans axiome. La revue racine
+contrôle les sorties brutes, les corps C d'entrée de composition et de retour,
+15 004 empreintes inchangées, puis les 485 entrées et les 30 anciens reçus.
+Ces deux fonctions locales conservent la continuation reçue et son résultat,
+sans appeler les dénotations denses. L'exécuteur complet, ses traces, ses
+coûts et sa fermeture générale restent à établir. Un second incrément conserve
+la profondeur dans les frames avec un accord général prouvé ; ses 16 audits
+sans axiome et 15 015 empreintes inchangées sont vérifiés indépendamment.
+Les helpers compilés ne parcourent pas la pile ; le prochain appelant doit
+lire les champs de la frame reçue et prépayer les calculs entiers, les appels
+et les constructions effectives. Les événements source conservés restent
+distincts des opérations terminales réellement exécutées.
+Un troisième incrément établit les blocs ordonnés de l'événement métier avec
+17 audits sans axiome ; sa revue indépendante contrôle les bruts, le C et
+15 022 empreintes inchangées. Sa grammaire positive n'est pas encore une trace
+produite par une course. La carte de migration relue suit tous les producteurs,
+les interfaces différées et les successeurs jusqu'à l'entrée publique, avec
+les cinq critères conservés. L'agent prépare l'opérateur payé qui devra lire
+les vraies frames, puis le modèle de course et le raccord des traces.
+L'ensemble attend une nouvelle gate complète.
+**D2 reste ouvert** : une réussite locale ne remplace pas la gate
+complète et sa revue. D3, D4 et A1 conservent leurs obligations, et A précède B.
+
+La relecture suivante retrouve deux descentes anticipées dans la formation
+des lecteurs mesurés : `recipeCode` construit récursivement son code avant
+les paiements de cellules, et `visitCode` invoque le lecteur précédent avant
+sa propre transition. Leur correction minimale est préparée sous supervision,
+avec conservation des résultats originaux et contrôle de l'ordre dans le C.
+Les sources restent figées pendant le parcours natif du client étendu inchangé,
+dont le nouvel objet et le lien ont réussi. Cette exécution et les corrections
+devront ensuite être qualifiées par un nouveau protocole de gate complète.
+Les prototypes externes de nouvelle composition ne deviennent pas, par leur
+seule existence, une condition supplémentaire de clôture de D2.
+
+La revue des transports détecte en outre une application réelle des closures
+de plafond dans `transForward` et `transBackward`. Leur récursion ne peut être
+classée comme un index effacé : le C invoque la borne du premier enfant avant
+l'application du second. Le raccord préparé conserve le plafond effectivement
+produit et le transmet au consommateur, avec réalisation payée des
+transformateurs nécessaires. Les fonctions de bornes utilisées uniquement dans
+les preuves restent séparées. Ce défaut de couverture doit être réparé dans
+D2 ; il ne déplace pas les obligations globales de bootstrap de D3.
+
+La correction locale du lecteur est maintenant vérifiée effectivement. Le
+protocole externe de préfixes v5 conserve les 24 cas et les deux séries de
+sept contrôles, les mêmes attentes et le même délai de 600 secondes. Le
+lanceur place les options de compilation et de setup avant le fichier de
+--run : après celui-ci, Lean les transmet au programme et n'utilise pas
+l'artefact corrigé. Le diagnostic v3 observe les deux ordres de commande avec
+un audit propre et les arguments réellement reçus.
+
+La course v5 termine avec sortie zéro en 3,9551292 secondes, exactement huit
+audits sans axiome, le marqueur attendu et aucun flux d'erreur. La revue racine
+recontrôle 15 540 entrées du protocole, 15 542 premières empreintes du résultat
+et l'environnement, sans différence. Son reçu autonome externe est
+measured-reader-payment-prefix-v5-root-actual-review-v1.json, SHA-256
+4ec09767209888a8daff30c2663d9d28fe8b252c376d270011b9f80c16326801.
+Tous les essais rejetés restent conservés. Cette réussite qualifie seulement
+les contrôles locaux du lecteur ; le raccord des plafonds aux consommateurs
+concrets et la nouvelle gate complète restent exigés pour fermer D2.
+
+Les 104 régressions prescrites des lecteurs passent désormais sur les artefacts
+corrigés : 72 cas du lecteur mesuré et 32 cas de transport. Les bits, nombres
+de nœuds et étapes historiques restent identiques ; les attentes de traces
+comptent les transitions supplémentaires réellement payées. Les phases
+terminent avec sortie zéro en 270,3184684 et 167,4125794 secondes, dans les
+mêmes délais de 300 secondes, avec six puis quinze audits sans axiome et les
+deux marqueurs exacts. Le transport a été recompilé avec le nouveau lecteur :
+une première préparation utilisant ses anciennes closures inlinées a été
+rejetée avant exécution et conservée.
+
+Le reçu racine reader-regression-payment-v4-root-actual-review-v1.json,
+SHA-256 7f79222ce841a27156f67cf51df745938d2da6302052b7ffaaedbe767563297f,
+recontrôle 15 574 premières empreintes pour chaque phase, l'environnement et
+les flux bruts. La revue indépendante v10 confirme ces résultats, avec
+SHA-256 66d759e22444e85ec7cc46bed5ab760498c6e2b13cd742744d8cb9c6fa3bd755.
+Le composite corrigé transmet aussi le plafond Nat effectivement retourné
+par le premier enfant au second, avec les mêmes continuation et lecteur.
+Ses douze audits et le C entier sont relus ; les closures de métadonnées
+historiques restent conservées dans le paquet original entier, sans être
+invoquées dans ce nouveau chemin d'application. Ce raccord local et les
+régressions ne remplacent pas la qualification des consommateurs publics ni
+la gate complète exigées pour fermer D2.
+
+## Adoption des corrections de couverture et de consommation
+
+Les treize sources qualifiées ont été adoptées octet exact. Les dix fichiers du
+raccord des plafonds et du maître totalisent 95 audits, le lecteur mesuré 18,
+et les deux modules compacts 53 : 166 noms au total. Les 104 régressions du
+lecteur et des transports et les 80 coupons indépendants de plafond ont
+effectivement réussi. Ces résultats sont conservés séparément de la
+qualification des consommateurs publics reconstruits et de la gate complète.
+
+Le transformateur payé conserve le Nat réellement retourné. La composition
+transmet au second enfant la continuation, le lecteur et ce plafond du premier
+enfant, dans l'ordre de la direction. L'évaluation de la route paie sa cellule
+avant de sélectionner le constructeur et de descendre. Le Stage conserve
+l'original entier de la composition effectivement produite ; la complétion
+utilise sa vraie application. Les fonctions historiques de métadonnées restent
+dans leurs paquets originaux, sans invocation sur cette nouvelle voie.
+
+La consommation de la pile compacte libère chaque cellule terminée avant de
+poursuivre sur sa queue. Le helper monomorphe transfère seulement le pointeur
+reçu. Sur la voie terminale payée, son invocation suit un returnPaid réussi ;
+un échec de paiement retourne sans ce helper. Un arrêt métier peut toutefois
+remonter avec le suffixe d'échec, sa formation de frame ayant déjà été payée à
+l'entrée. Cette opération ABI fixe appartient à la primitive de frame déclarée ;
+elle ne constitue ni un parcours gratuit de la queue ni une borne physique.
+
+Le protocole externe d'adoption
+adopt-qualified-d2-sources-root-v1-protocol.json porte le SHA-256
+a0e01006edc1eff541a0e55c46d8ca9e44edc7dec5bb089df1a1e3846393a16f.
+Les 485 sources, scripts et configurations antérieurs et les trente reçus
+historiques ont été archivés octet exact avant la mutation. Les nouvelles
+gardes de paiement du lecteur et de consommation compacte rejettent
+respectivement 32 et 17 mutations textuelles, en complément des anciens
+contrôles conservés. Leurs préparations rejetées sont également conservées.
+
+Le client natif historique est constaté absent, avec son lanceur, après le
+changement de runtime du poste ; aucun reçu de fin n'a été reçu. Les 15 483
+premières empreintes de fichiers restent disponibles et identiques, et seul
+PATH a changé dans l'environnement. Le reçu externe
+native-expanded-no-extract-v4-inconclusive-current-runtime-root-v1.json,
+SHA-256 d269fecd20b65b00be36a30a284e747e307ec979f041da201ee0a1b86a5778b5,
+ne lui attribue ni code de sortie, ni dépassement de délai, ni verdict
+d'assertions. Cette tentative reste distincte de la correction du Trail.
+
+La reconstruction publique courante et la revue des C entiers ont maintenant
+terminé : 26 modules concernés, 333 audits sans axiome, et comparaison exacte
+des 14 C modifiés après les seules substitutions explicites du namespace.
+Les générations externes du client historique et du client public sont
+également reçues et revues, avec respectivement 4 896 + 17 et 5 094 + 31 audits
+sans axiome. L'inventaire courant suit 1 994 corps, dont 52 fonctions originales
+stockées ; sa garde réelle rejette 2 060 mutations sans modifier ses sept
+racines ni les contrats reçus.
+
+Les 242 objets historiques et leur lien passent. Le même client termine
+ensuite avec sortie 1 après 6 407,736 secondes, sans dépassement du délai :
+son flux d'erreur signale un manque de mémoire. Aucun verdict des 31 conditions
+n'est reçu. Les premières empreintes et les artefacts natifs restent identiques.
+La prochaine correction doit partir d'une localisation explicite de cette
+croissance mémoire ; elle conserve les cas, carburants et attentes prescrits.
+Le client public des cinq étapes reste préparé et relu, sans nouveau runtime.
+Le coût historique de citation doit aussi être requalifié sur les nouveaux
+paiements avant les variantes de budget. Ces contrôles restent distincts de
+la suite complète finale. D2 demeure ouvert jusqu'au reçu autonome et à la
+revue des cinq critères du dossier. D3, D4 et A1 conservent leurs obligations ;
+A précède B.
+
+
+Le diagnostic court reçu localise le parcours avant le retour de la première
+citation de loadedOk, depuis le présent effectivement rechargé. Les imports
+et six initialisations se terminent ; les variantes exactes, courtes et
+excédentaires de cette citation ne commencent pas. Leur rétention entre
+parcours ne peut donc expliquer la croissance précédant ce premier retour.
+L'obligation immédiate consiste à localiser et corriger le calcul intérieur,
+en conservant tous les cas, carburants et observations exigés, puis à reprendre
+la qualification complète sur les sources finales figées. La revue racine du
+diagnostic porte le SHA-256
+43979d25a4ff404e2ddb386c4a22bed638bb267af65ef1f57e7ba1cbee96d1d8.
+Cette localisation maintient D2 ouvert ; D3, D4 et A1 restent distincts.
+
+Le diagnostic interne a maintenant localisé l'accumulation avant la
+restauration du premier calcul de loadedOk : sa dernière publication
+complète porte 71 237 632 transitions, dont 71 086 978 administratives.
+Une correction externe de l'addition utilise une pile positive payée en
+conservant les valeurs et les labels métier pour tout carburant. Le maximum
+est préparé pour ses usages ultérieurs. La revue source est faite ; Lean,
+le C, l'intégration, les mêmes régressions et la gate finale doivent encore
+qualifier cette correction. Le
+[dossier de D2](cloture-d2.fr.md) conserve les preuves de réception et leurs
+limites ; D2 reste ouvert.
+
+Le correctif arithmétique a maintenant passé le contrôle Lean/C strict :
+39 audits sans axiome pour le candidat, puis 113 audits pour chacun des
+passages frontend et génération de sa chaîne externe de six modules.
+Le graphe C des 14 producteurs et callbacks conserve le paiement, la vraie
+pile et sa consommation ; les accords historiques portent sur toutes les
+entrées et tous les carburants. L'administration décrit le travail nouveau
+réel. Les autres consommateurs, les mêmes régressions et la gate finale
+restent à qualifier avant adoption et clôture ; le
+[dossier de D2](cloture-d2.fr.md) conserve les reçus et les tentatives rejetées.
+
+La reconstruction externe de tous les consommateurs affectés est maintenant
+reçue : 76 modules, 152 premières sorties et 152 phases admises avec sortie 0.
+Le contrôle exhaustif reçoit 30 357 constantes, 364 exceptions générées
+classifiées et zéro exception écrite ; les noms audités sont sans axiome.
+Le reçu racine contrôle les entrées, les imports frais, les sorties et les
+trente reçus historiques sans différence. Les tentatives au délai et les
+préparations non exécutées restent conservées séparément. Le
+[dossier de D2](cloture-d2.fr.md) expose cette réception. Les gardes textuels,
+la revue de leur inventaire, les mêmes régressions, l'adoption et la gate
+finale restent à qualifier ; ce résultat de génération ne clôt pas D2.
+
+
+Les gardes arithmétiques ont maintenant terminé leur qualification textuelle
+sur les C externes reçus : deux références acceptées et 589 mutations rejetées,
+avec les 91 anciens cas conservés. Le reçu racine contrôle les résultats et
+les premières empreintes sans différence. Le relevé du graphe expose
+12 ajouts, 14 retraits et 39 corps modifiés ; il ne met pas à jour l'inventaire
+avant la revue des corps et de leurs interfaces. Les mêmes régressions métier,
+l'adoption et la gate complète finale restent nécessaires. Le
+[dossier de D2](cloture-d2.fr.md) conserve cette étape de qualification ;
+D2 demeure ouvert.
+
+
+La régression native des 31 conditions passe désormais après la correction
+arithmétique : 242 objets nouveaux, lien et runtime ont tous terminé avec
+sortie 0. Le runtime dure 25,662 secondes, rend le marqueur exact et garde
+un flux d'erreur vide. Les mêmes cas, attentes et carburants sont conservés ;
+la revue racine et la revue indépendante contrôlent les phases, les premières
+empreintes et les trente reçus historiques sans différence. Le
+[dossier de D2](cloture-d2.fr.md) distingue cette réussite effective de l'ancien
+échec mémoire conservé. Les contrôles publics, le prix courant, l'adoption
+et la gate finale restent exigés avant la clôture.
+
+### Consommateurs publics et prix courant qualifiés — 12 octobre 2026
+
+Le contrôle du graphe accepte la base puis rejette les 2 058 mutations
+originales. Le scénario public des cinq étapes réussit en exécution native,
+avec ses sept vérifications de branches et douze fixtures de requêtes.
+L'observation indépendante de la citation courante réussit également :
+son prix de catalogue est 45 988 723, figé avant les tests exact, moins un,
+nul et plus 17 ; la valeur, les origines, la restauration, le lecteur et
+le chemin positif demeurent vérifiés. Le dossier de clôture conserve les
+reçus autonomes et leurs revues indépendantes.
+
+La correction arithmétique et l'inventaire restent externes à ce stade.
+Les tests aux budgets figés, leur adoption et la gate complète finale sont
+les passages restants de D2. D2 n'est pas encore fermé ; D3, D4 et A1 restent
+leurs obligations propres et A conserve sa priorité sur B.
+
+### Qualification complète de D2 sur l'arbre intégré — 12 octobre 2026
+
+Les douze fichiers qualifiés sont adoptés et le correctif EOF de deux octets
+est reçu séparément. G1 demeure une tentative rejetée au contrôle final de
+diff ; G2 est une nouvelle exécution complète sur un nouveau gel. Elle termine
+avec sortie 0, ses 392 fichiers Lean vérifiés, les audits, l'inventaire fermé,
+les contrôles de partage et les 23 cas d'échec attendu.
+
+Les trois nouveaux clients natifs réussissent : 31 conditions historiques,
+cinq étapes publiques et leurs branches, puis les quatre budgets fixés avant
+l'expérience à partir du prix indépendant 45 988 723. Les productions entières,
+lecteurs et successeurs sont consommés par leurs vrais chemins. Les premières
+empreintes, l'environnement, les ensembles de sources et les 30 anciens reçus
+sont contrôlés sans différence. La réception racine et la revue indépendante
+confrontent ces résultats aux cinq critères du dossier, sous les hypothèses
+explicites des preuves générales.
+
+Le [reçu autonome de D2](cloture-d2-verification.json) et le
+[dossier de clôture](cloture-d2.fr.md) font foi pour ce snapshot qualifié.
+Les vérifications documentaires, les liens et le diff passent ; D2 est clos.
+Le registre scientifique et les reçus historiques conservent leurs statuts
+et leurs empreintes antérieurs.
+
+La prochaine obligation est D3 : calculer les enveloppes du contrôle et de
+son bootstrap avant l'appel, protéger la réserve obligatoire de l'activité
+facultative et établir leur fermeture dans les successeurs. D4 compose ensuite
+les tours et le secours dans cette allocation, avec le paquet réel, le progrès
+et la fermeture. A1 établit le chargement de toutes les ressources maître et
+du présent, sa couverture positive, ses octets, son activation et sa reprise
+utilisable. Les phases et transactions restent A2 ; les opérations physiques
+A3 ; le raccord Qwen et la comparaison A4/A5. A garde sa priorité sur B.

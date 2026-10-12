@@ -8,7 +8,7 @@ Role opening and positive occurrence formation use the retained endpoints. -/
 set_option genInjectivity false
 set_option maxHeartbeats 8000000
 namespace ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition
-open SAT Extensive EndogenousDecomposition Control ControlBindings ControlMasterData
+open SAT Extensive RelationalExtensive EndogenousDecomposition Control ControlBindings ControlMasterData
 
 def outputCode {source : CausalConstitutiveState} {run : CausalConstitutiveStageExecution source}
     {role : RelationalConstitutiveRoleStage run} (atom : RoleStageAtom role)
@@ -190,6 +190,93 @@ theorem finite {source : CausalConstitutiveState} (context : ConstitutedOperatio
   apply finite_step; apply finite_bind (decomposition_finite _ _); intro decomposition
   exact finite_step _ _ (finite_done _)
 
+/- The actual execution path uses the two occurrences returned by licenseCode.
+The historical code above retains its API and its observation conventions. -/
+def carrierFromFrontier {source : CausalConstitutiveState} {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) (frontier : List (RoleConstitutedOccurrence role))
+    (actual : frontier = (roleOpeningFiniteCarrier role).frontier) : FiniteCarrier :=
+  { Identity := RoleConstitutedOccurrence role
+    decEq := relationallyConstitutedOccurrenceDecEq (generalOpeningStageOfRole role)
+    frontier := frontier
+    complete := fun identity => by
+      rw [actual]
+      exact relationallyConstitutedOccurrenceFrontier_complete (generalOpeningStageOfRole role) identity
+    nodup := by
+      rw [actual]
+      exact relationallyConstitutedOccurrenceFrontier_nodup (generalOpeningStageOfRole role) }
+
+theorem carrier_from_frontier_actual {source : CausalConstitutiveState} {run : CausalConstitutiveStageExecution source}
+    (role : RelationalConstitutiveRoleStage run) (frontier : List (RoleConstitutedOccurrence role))
+    (actual : frontier = (roleOpeningFiniteCarrier role).frontier) :
+    carrierFromFrontier role frontier actual = roleOpeningFiniteCarrier role := by
+  cases actual; rfl
+
+def carrierFromLicense {source : CausalConstitutiveState} {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run} {atom : RoleStageAtom role}
+    (license : ExecutedRoleReductionLicense role atom) : FiniteCarrier :=
+  carrierFromFrontier role [license.transformedOccurrence, license.retainedOccurrence]
+    (by rw [license.transformedOccurrenceExact, license.retainedOccurrenceExact]; rfl)
+
+theorem carrier_from_license_actual {source : CausalConstitutiveState} {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run} {atom : RoleStageAtom role}
+    (license : ExecutedRoleReductionLicense role atom) :
+    carrierFromLicense license = roleOpeningFiniteCarrier role := by
+  exact carrier_from_frontier_actual _ _ _
+
+def imageFromLicenseCode {source : CausalConstitutiveState} {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run} {atom : RoleStageAtom role}
+    (license : ExecutedRoleReductionLicense role atom) : Code Label (Actual (producedRoleOutputRegime license)) :=
+  .step .formationResources (fun _ =>
+    let carrier := carrierFromLicense license
+    let frontier : Actual (roleOpeningFiniteCarrier role).frontier :=
+      ⟨carrier.frontier, by
+        change [license.transformedOccurrence, license.retainedOccurrence] = _
+        rw [license.transformedOccurrenceExact, license.retainedOccurrenceExact]; rfl⟩
+    ControlProducedImage.codeFromFrontier (roleOpeningFiniteCarrier role) (producedRoleOutput atom)
+      frontier (outputCode atom)
+      (ProducedOutputImage.decEq (roleOpeningFiniteCarrier role) (producedRoleOutput atom)
+        (producedRoleOutputs_converge license)) (compareCode license))
+
+theorem image_from_license_finite {source : CausalConstitutiveState} {run : CausalConstitutiveStageExecution source}
+    {role : RelationalConstitutiveRoleStage run} {atom : RoleStageAtom role}
+    (license : ExecutedRoleReductionLicense role atom) : Finite (imageFromLicenseCode license) := by
+  apply finite_step
+  exact ControlProducedImage.from_frontier_finite _ _ _ (outputCode atom) (output_finite atom) _
+    (compareCode license) (fun _ _ => finite_step _ _ (finite_done _))
+
+def actualDecompositionCode {source : CausalConstitutiveState} (stage : CausalConstitutiveStageExecution source)
+    (endpoints : ControlRoleFormation.Endpoints stage) :
+    Code Label (Actual (executedStageDecomposition stage)) :=
+  (roleCode stage).bind (fun role => (licenseCode role.1 endpoints).bind (fun license =>
+    (imageFromLicenseCode license.1).bind (fun image => .step .masterConstructionReturn (fun _ => .done
+      ⟨decompositionFromParts stage role.1 role.2 license.1 license.2 image.1 image.2,
+        decomposition_from_parts_actual _ _ _ _ _ _ _⟩))))
+
+theorem actual_decomposition_finite {source : CausalConstitutiveState} (stage : CausalConstitutiveStageExecution source)
+    (endpoints : ControlRoleFormation.Endpoints stage) : Finite (actualDecompositionCode stage endpoints) := by
+  apply finite_bind
+  · obtain ⟨value, labels, trace, _⟩ := ControlRoleFormation.role_bounded stage
+    exact ⟨value, labels, trace⟩
+  · intro role
+    apply finite_bind
+    · obtain ⟨value, labels, trace, _⟩ := license_bounded role endpoints
+      exact ⟨value, labels, trace⟩
+    · intro license
+      apply finite_bind (image_from_license_finite _); intro image; exact finite_step _ _ (finite_done _)
+
+def actualCode {source : CausalConstitutiveState} (context : ConstitutedOperationalPrefix source)
+    (stage : CausalConstitutiveStageExecution source) (endpoints : ControlRoleFormation.Endpoints stage) :
+    Code Label (Actual (prefixLocalOperationalProducer context stage)) :=
+  .step .masterDecompose (fun _ => (actualDecompositionCode stage endpoints).bind (fun decomposition =>
+    .step .masterConstructionReturn (fun _ => .done
+      ⟨fromParts context stage decomposition.1 decomposition.2, from_parts_actual _ _ _ _⟩)))
+
+theorem actual_finite {source : CausalConstitutiveState} (context : ConstitutedOperationalPrefix source)
+    (stage : CausalConstitutiveStageExecution source) (endpoints : ControlRoleFormation.Endpoints stage) :
+    Finite (actualCode context stage endpoints) := by
+  apply finite_step; apply finite_bind (actual_decomposition_finite _ _); intro decomposition
+  exact finite_step _ _ (finite_done _)
+
 end ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -211,4 +298,14 @@ end ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.from_parts_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.code
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.finite
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.carrierFromLicense
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.carrierFromFrontier
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.carrier_from_frontier_actual
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.carrier_from_license_actual
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.imageFromLicenseCode
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.image_from_license_finite
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.actualDecompositionCode
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.actual_decomposition_finite
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.actualCode
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlMasterDecomposition.actual_finite
 /- AXIOM_AUDIT_END -/

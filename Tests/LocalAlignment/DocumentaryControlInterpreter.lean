@@ -1,6 +1,8 @@
 import Tests.LocalAlignment.DocumentaryRecoveryData
 
-/-! A fuel interpreter with labelled paid transitions and lazy continuations.
+/-! The source interpreter retains intrinsic administration events. Its historical
+business fuel and labels ignore those events; ControlRunner pays every event.
+A fuel interpreter with labelled paid transitions and lazy continuations.
 Returning a value costs zero. A transition is entered only after one unit has
 been available. Labels count this declared abstract machine, not seconds or
 the internal work of a library call made inside a transition. -/
@@ -9,14 +11,20 @@ set_option maxHeartbeats 3000000
 namespace ConstitutiveSearch.Agent.Local.Documentary.Control
 universe u v
 
+inductive Event where
+  | compose | call | closure | frame | trace | result | allocation
+
 inductive Code (Label : Type) (Value : Type u) : Type u where
   | done (value : Value)
   | step (label : Label) (next : Unit → Code Label Value)
+  | admin (event : Event) (next : Unit → Code Label Value) (forwards : Nat := 0)
 
 inductive Eval {Label : Type} {Value : Type u} : Code Label Value → List Label → Value → Type u where
   | done {value} : Eval (.done value) [] value
   | step {label next labels value} (rest : Eval (next ()) labels value) :
       Eval (.step label next) (label :: labels) value
+  | admin {event next forwards labels value} (rest : Eval (next ()) labels value) :
+      Eval (.admin event next forwards) labels value
 
 structure Result {Label : Type} {Value : Type u} (code : Code Label Value) (fuel : Nat) where
   value : Value
@@ -34,6 +42,11 @@ def execute {Label : Type} {Value : Type u} : (fuel : Nat) → (code : Code Labe
       | none => none
       | some actual => some ⟨actual.value, label :: actual.labels, .step actual.trace,
           Nat.succ_le_succ actual.bounded⟩
+  | fuel, .admin _ next _ =>
+      match execute fuel (next ()) with
+      | none => none
+      | some actual => some ⟨actual.value, actual.labels, .admin actual.trace, actual.bounded⟩
+termination_by structural _fuel code => code
 
 def Result.observation {Label : Type} {Value : Type u} {code : Code Label Value} {fuel}
     (actual : Result code fuel) : Value × List Label := (actual.value, actual.labels)
@@ -49,6 +62,13 @@ theorem runCtl_step {Label : Type} {Value : Type u} (fuel : Nat)
     (label : Label) (next : Unit → Code Label Value) :
     runCtl (fuel + 1) (.step label next) =
       (runCtl fuel (next ())).map (fun result => (result.1, label :: result.2)) := by
+  unfold runCtl
+  rw [execute]
+  cases execute fuel (next ()) <;> rfl
+
+theorem runCtl_admin {Label : Type} {Value : Type u} (fuel : Nat)
+    (event : Event) (next : Unit → Code Label Value) (forwards : Nat := 0) :
+    runCtl fuel (.admin event next forwards) = runCtl fuel (next ()) := by
   unfold runCtl
   rw [execute]
   cases execute fuel (next ()) <;> rfl
@@ -81,6 +101,7 @@ theorem ctl_complete {Label : Type} {Value : Type u} {code : Code Label Value} {
           rw [runCtl_step]
           rw [ih fuel (Nat.le_of_succ_le_succ enough)]
           rfl
+  | @admin event next forwards labels value rest ih => rw [runCtl_admin fuel event next forwards]; exact ih fuel enough
 
 theorem ctl_mono {Label : Type} {Value : Type u} {code : Code Label Value} {value labels}
     (fuel more : Nat) (actual : runCtl fuel code = some (value, labels)) (increase : fuel ≤ more) :
@@ -100,6 +121,9 @@ theorem Eval.unique {Label : Type} {Value : Type u} {code : Code Label Value}
           have same := ih after
           cases same
           rfl
+  | admin rest ih =>
+      cases second with
+      | admin after => exact ih after
 
 theorem fuel_required {Label : Type} {Value : Type u} {code : Code Label Value} {value labels}
     (trace : Eval code labels value) (fuel : Nat) {found received}
@@ -117,19 +141,35 @@ theorem fuel_short {Label : Type} {Value : Type u} {code : Code Label Value} {va
   | some result =>
       exact False.elim (Nat.not_lt_of_ge (fuel_required trace fuel actual) short)
 
-def Code.bind {Label : Type} {Value : Type u} {Next : Type v}
+/-- Forwarding an already administrative node preserves its event exactly once.
+The received counter records actual callback/inspection/closure layers. -/
+def Code.bindForward {Label : Type} {Value : Type u} {Next : Type v}
     (code : Code Label Value) (continuation : Value → Code Label Next) : Code Label Next :=
   match code with
-  | .done value => continuation value
-  | .step label next => .step label (fun _ => (next ()).bind continuation)
+    | .done value => .admin .call (fun _ => continuation value)
+    | .step label next => .admin .closure (fun _ => .step label (fun _ =>
+        .admin .compose (fun _ => bindForward (next ()) continuation)))
+    | .admin event next forwards => .admin event (fun _ => bindForward (next ()) continuation) (forwards + 1)
+termination_by structural code
+
+def Code.bind {Label : Type} {Value : Type u} {Next : Type v}
+    (code : Code Label Value) (continuation : Value → Code Label Next) : Code Label Next :=
+  .admin .compose (fun _ => code.bindForward continuation)
+
+def Eval.bindForward {Label : Type} {Value : Type u} {Next : Type v}
+    {code : Code Label Value} {continuation : Value → Code Label Next} {firstLabels secondLabels value next}
+    (first : Eval code firstLabels value) (second : Eval (continuation value) secondLabels next) :
+    Eval (code.bindForward continuation) (firstLabels ++ secondLabels) next :=
+  match first with
+  | .done => .admin second
+  | .step rest => .admin (.step (.admin (rest.bindForward second)))
+  | .admin rest => .admin (rest.bindForward second)
 
 def Eval.bind {Label : Type} {Value : Type u} {Next : Type v}
     {code : Code Label Value} {continuation : Value → Code Label Next} {firstLabels secondLabels value next}
     (first : Eval code firstLabels value) (second : Eval (continuation value) secondLabels next) :
     Eval (code.bind continuation) (firstLabels ++ secondLabels) next :=
-  match first with
-  | .done => second
-  | .step rest => .step (rest.bind second)
+  .admin (first.bindForward second)
 
 def Finite {Label : Type} {Value : Type u} (code : Code Label Value) : Prop :=
   ∃ (value : Value) (labels : List Label), Nonempty (Eval code labels value)
@@ -200,7 +240,9 @@ theorem within_complete {Label : Type} {Value : Type u} {code : Code Label Value
 end ConstitutiveSearch.Agent.Local.Documentary.Control
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Control.Event
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Control.Code
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Control.runCtl_admin
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Control.Eval
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Control.Result
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Control.execute
@@ -228,4 +270,6 @@ end ConstitutiveSearch.Agent.Local.Documentary.Control
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Control.within_weaken
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Control.within_bind
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.Control.within_complete
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Control.Code.bindForward
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.Control.Eval.bindForward
 /- AXIOM_AUDIT_END -/

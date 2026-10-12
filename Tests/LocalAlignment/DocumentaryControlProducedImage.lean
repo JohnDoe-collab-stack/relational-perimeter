@@ -125,6 +125,54 @@ theorem finite (source : FiniteCarrier) {Target : Type} (produced : source.Ident
   apply finite_bind (deduplicate_finite equality compare compareClosed mapped.1); intro frontier
   exact finite_step _ _ (finite_done _)
 
+def fromReceivedFrontier (source : FiniteCarrier) {Target : Type} (produced : source.Identity → Target)
+    (equality : DecidableEq (ProducedOutputImage.Value source produced))
+    (frontier : List (ProducedOutputImage.Value source produced))
+    (actual : frontier = deduplicate equality (source.frontier.map (ProducedOutputImage.carry source produced))) :
+    ObligationRegime source :=
+  { Obligation := ProducedOutputImage.Value source produced, decEq := equality
+    frontier := frontier
+    complete := fun value => by rw [actual]; exact (ProducedOutputImage.imageRegime source produced equality).complete value
+    nodup := by rw [actual]; exact deduplicate_nodup equality _
+    carry := fun identity => ProducedOutputImage.carry source produced identity
+    carry_surjective := (ProducedOutputImage.imageRegime source produced equality).carry_surjective }
+
+theorem from_received_frontier_actual (source : FiniteCarrier) {Target : Type} (produced : source.Identity → Target)
+    (equality : DecidableEq (ProducedOutputImage.Value source produced))
+    (frontier : List (ProducedOutputImage.Value source produced))
+    (actual : frontier = deduplicate equality (source.frontier.map (ProducedOutputImage.carry source produced))) :
+    fromReceivedFrontier source produced equality frontier actual =
+      ProducedOutputImage.imageRegime source produced equality := by
+  cases actual; rfl
+
+def codeFromFrontier (source : FiniteCarrier) {Target : Type} (produced : source.Identity → Target)
+    (frontier : Actual source.frontier)
+    (operation : (identity : source.Identity) → Code Label (Actual (produced identity)))
+    (equality : DecidableEq (ProducedOutputImage.Value source produced))
+    (compare : (left right : ProducedOutputImage.Value source produced) → Code Label (Actual (equality left right))) :
+    Code Label (Actual (ProducedOutputImage.imageRegime source produced equality)) :=
+  (mapCode (ProducedOutputImage.carry source produced)
+    (fun identity => carryCode source produced operation identity) frontier.1).bind
+    (fun mapped => (deduplicateCode equality compare mapped.1).bind (fun reduced =>
+      .step .masterConstructionReturn (fun _ =>
+        let actual := reduced.2.trans (congrArg (deduplicate equality)
+          (mapped.2.trans (congrArg (List.map (ProducedOutputImage.carry source produced)) frontier.2)))
+        .done ⟨fromReceivedFrontier source produced equality reduced.1 actual, from_received_frontier_actual _ _ _ _ _⟩)))
+
+theorem from_frontier_finite (source : FiniteCarrier) {Target : Type} (produced : source.Identity → Target)
+    (frontier : Actual source.frontier)
+    (operation : (identity : source.Identity) → Code Label (Actual (produced identity)))
+    (operationClosed : ∀ identity, Finite (operation identity))
+    (equality : DecidableEq (ProducedOutputImage.Value source produced))
+    (compare : (left right : ProducedOutputImage.Value source produced) → Code Label (Actual (equality left right)))
+    (compareClosed : ∀ left right, Finite (compare left right)) :
+    Finite (codeFromFrontier source produced frontier operation equality compare) := by
+  apply finite_bind (map_finite _ _ (fun identity => by
+    apply finite_bind (operationClosed identity); intro value; exact finite_step _ _ (finite_done _)) _)
+  intro mapped
+  apply finite_bind (deduplicate_finite equality compare compareClosed mapped.1); intro reduced
+  exact finite_step _ _ (finite_done _)
+
 end ConstitutiveSearch.Agent.Local.Documentary.ControlProducedImage
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -139,4 +187,8 @@ end ConstitutiveSearch.Agent.Local.Documentary.ControlProducedImage
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlProducedImage.from_frontier_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlProducedImage.code
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlProducedImage.finite
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlProducedImage.codeFromFrontier
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlProducedImage.from_frontier_finite
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlProducedImage.fromReceivedFrontier
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlProducedImage.from_received_frontier_actual
 /- AXIOM_AUDIT_END -/

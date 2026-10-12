@@ -4,6 +4,9 @@
 Expected frontiers and routing constructor counts are fixed independently of
 the native normalizer. Transport invocations inspect the returned routing code;
 their cost is outside the local normalization allowance tested here.
+
+The source interpreter is ControlCompactExecution.sourceExecute; its general
+source_exact refinement preserves the whole value, business labels and fuel.
 """
 import hashlib
 from pathlib import Path
@@ -14,6 +17,7 @@ import tempfile
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parent.parent
 CLIENT = r"""
+import Tests.LocalAlignment.DocumentaryControlCompactExecution
 import Tests.LocalAlignment.DocumentaryControlFrontierNormalization
 set_option genInjectivity false
 set_option backward.match.sparseCases false
@@ -137,6 +141,12 @@ def tag : Label → Nat
   | .frontierEvaluationPacket => 109
   | .frontierEvaluationAtom => 110
   | .stagePreservation => 111
+  | .assignmentQueryCell => 112
+  | .assignmentQueryReturn => 113
+  | .transportApplicationCell => 114
+  | .transportApplicationPacket => 115
+  | .transportSplitDecision => 116
+  | .executionPayload => 117
 
 abbrev Summary := List (List (Bool × Nat)) × List (Nat × Bool) × Nat
 
@@ -190,12 +200,12 @@ def normalizationProbe (formula : Cnf) (selected : Var)
     (wanted : List Summary) (counts : List Nat) : Bool :=
   let code := ControlFrontierNormalization.code formula selected source
   let allowance := ControlFrontierNormalization.bound formula selected source
-  match Control.execute allowance code with
+  match ControlCompactExecution.sourceExecute allowance code with
   | none => false
   | some actual =>
     let length := actual.labels.length
-    match Control.execute length code, Control.execute (length - 1) code,
-        Control.execute (allowance + 5) code with
+    match ControlCompactExecution.sourceExecute length code, ControlCompactExecution.sourceExecute (length - 1) code,
+        ControlCompactExecution.sourceExecute (allowance + 5) code with
     | some exact, none, some surplus =>
       actual.value.1.retained.map summary == wanted &&
       exact.value.1.retained.map summary == wanted &&
@@ -206,19 +216,19 @@ def normalizationProbe (formula : Cnf) (selected : Var)
       (actual.labels.filter (fun label => tag label == 106)).length == counts.foldl (· + ·) 0 &&
       (actual.labels.filter (fun label => tag label == 102)).length == source.length + 1 &&
       actual.labels.map tag == exact.labels.map tag && actual.labels.map tag == surplus.labels.map tag &&
-      length <= allowance && !(Control.execute 0 code).isSome
+      length <= allowance && !(ControlCompactExecution.sourceExecute 0 code).isSome
     | _, _, _ => false
 
 def searchProbe (formula : Cnf) (selected : Var)
     (source target : GeneratedStructuralBranchContext formula) (wanted : Bool) : Bool :=
   let code := ControlFrontierNormalizationSearch.findCode formula selected source target
   let allowance := ControlFrontierNormalizationSearch.findBound source target
-  match Control.execute allowance code with
+  match ControlCompactExecution.sourceExecute allowance code with
   | none => false
   | some actual =>
     let length := actual.labels.length
-    match Control.execute length code, Control.execute (length - 1) code,
-        Control.execute (allowance + 5) code with
+    match ControlCompactExecution.sourceExecute length code, ControlCompactExecution.sourceExecute (length - 1) code,
+        ControlCompactExecution.sourceExecute (allowance + 5) code with
     | some exact, none, some surplus =>
       actual.value.1.isSome == wanted && exact.value.1.isSome == wanted &&
       surplus.value.1.isSome == wanted && actual.labels.map tag == exact.labels.map tag &&
@@ -242,7 +252,7 @@ def routingProbe (source : List (GeneratedStructuralBranchContext []))
     (input : FrontierContinuation (generatedStructuralBranchSystem []) source)
     (forwardWanted backwardWanted : Nat × List Bool) : Bool :=
   let code := ControlFrontierNormalization.code [] 0 source
-  match Control.execute (ControlFrontierNormalization.bound [] 0 source) code with
+  match ControlCompactExecution.sourceExecute (ControlFrontierNormalization.bound [] 0 source) code with
   | none => false
   | some actual =>
       let preservation := actual.value.1.preservation
@@ -319,6 +329,7 @@ def main : IO Unit := FrontierNormalizationSmoke.run
 #print axioms FrontierNormalizationSmoke.routingProbe
 #print axioms FrontierNormalizationSmoke.run
 #print axioms main
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompactExecution.source_exact
 /- AXIOM_AUDIT_END -/
 """
 
@@ -340,12 +351,13 @@ def main():
     expected = {("'FrontierNormalizationSmoke." + name + "' does not depend on any axioms").encode()
                 for name in names}
     expected.update((b"'main' does not depend on any axioms", b"DOCUMENTARY_FRONTIER_NORMALIZATION_SMOKE_DONE"))
+    expected.add(b"'ConstitutiveSearch.Agent.Local.Documentary.ControlCompactExecution.source_exact' does not depend on any axioms")
     if set(result.stdout.splitlines()) != expected or len(result.stdout.splitlines()) != len(expected):
         raise ValueError("Unexpected runtime output: " + result.stdout.decode("utf-8", "replace"))
     print("DOCUMENTARY_FRONTIER_NORMALIZATION_SMOKE_OK: nineteen development checks; actual retained "
           "syntax, ordered decisions, generation depth and complete paid routing constructor counts; "
           "exact/short/surplus fuel; three observable transport probes outside the cost scope; "
-          "twenty-six clean runtime audits; client_sha256=" + hashlib.sha256(source).hexdigest())
+          "twenty-seven clean runtime audits; client_sha256=" + hashlib.sha256(source).hexdigest())
 
 
 if __name__ == "__main__":

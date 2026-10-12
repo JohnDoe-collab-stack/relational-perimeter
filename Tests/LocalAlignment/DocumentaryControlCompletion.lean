@@ -1,9 +1,12 @@
 import Tests.LocalAlignment.DocumentaryControlCitation
 import Tests.LocalAlignment.DocumentaryControlStagePreservation
+import Tests.LocalAlignment.DocumentaryControlStageExecution
+import Tests.LocalAlignment.DocumentaryControlSeedApplication
 
-/-! Open the actual retained continuation and completion. Routing and assignment
-application remain named complex primitives. Bounds count the declared catalogue;
-computing those bounds is a separate bootstrap obligation. -/
+/-! Open the actual retained continuation and completion. Historical APIs retain
+the named complex routing and assignment primitives. The executed APIs consume
+paid transport applications and their actual assignment readers. Local bounds
+count the declared catalogue; their bootstrap remains a separate obligation. -/
 set_option genInjectivity false
 set_option maxHeartbeats 3000000
 namespace ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion
@@ -360,6 +363,146 @@ theorem expanded_decide_finite {context cursor sources contract demand left righ
   obtain ⟨value, labels, trace, _⟩ := expanded_decide_bounded stage memory
   exact ⟨value, labels, trace⟩
 
+/- The execution consumer receives the reader coupled to the actual produced
+continuation. Its paid bit is consumed by candidateFromBit and by the entire
+original completion. No native assignment query or map is replayed. -/
+def executedCompleteCode {context cursor sources contract demand left right}
+    (stage : @Master.Stage context cursor sources contract demand left right) (memory : Memory sources contract)
+    (continuation : FrontierContinuation (generatedStructuralBranchSystem stage.formula) stage.reduction.retained)
+    (accepted : FrontierAccept (generatedStructuralBranchSystem stage.formula) stage.reduction.retained continuation)
+    (reader : ControlAssignmentApplication.Reader (frontierAssignment (formula := stage.formula)
+      (frontier := stage.reduction.retained) continuation)) :
+    Code Label (Completion stage memory continuation accepted) :=
+  (reader.readCode (VariableMaster.selected stage.head)).bind (fun bit =>
+    .step .citationCandidate (fun _ =>
+      let candidate := stage.candidateFromBit (frontierAssignment continuation)
+        (frontier_root_accept continuation accepted) bit
+      have candidateActual : candidate = stage.candidate (frontierAssignment continuation)
+          (frontier_root_accept continuation accepted) := stage.candidateFromBit_actual _ _ bit
+      (ControlCitation.extractCode sources candidate.origin).bind (fun action =>
+        (ControlCitation.readoutCode action.1).bind (fun readout =>
+          .step .citationAuthorize (fun _ =>
+            let output := authorizeFromCitation contract action.1 candidate.permission readout.1 readout.2
+            have outputActual := authorizeFromCitation_actual contract action.1 candidate.permission readout.1 readout.2
+            .step .citationIncorporate (fun _ =>
+              let result := incorporate memory output
+              .step .citationCompletion (fun _ => .done
+                ⟨Master.completionFromParts stage memory continuation accepted candidate candidateActual
+                  action.1 action.2 output outputActual result rfl,
+                  Master.completionFromParts_actual stage memory continuation accepted candidate candidateActual
+                    action.1 action.2 output outputActual result rfl⟩)))))))
+
+def executedCompleteBound {context cursor sources contract demand left right}
+    (stage : @Master.Stage context cursor sources contract demand left right)
+    {assignment : Assignment} (reader : ControlAssignmentApplication.Reader assignment) : Nat :=
+  reader.queryBound (VariableMaster.selected stage.head) + pairBound left right
+
+theorem executed_complete_bounded {context cursor sources contract demand left right}
+    (stage : @Master.Stage context cursor sources contract demand left right) (memory : Memory sources contract)
+    (continuation : FrontierContinuation (generatedStructuralBranchSystem stage.formula) stage.reduction.retained)
+    (accepted : FrontierAccept (generatedStructuralBranchSystem stage.formula) stage.reduction.retained continuation)
+    (reader : ControlAssignmentApplication.Reader (frontierAssignment (formula := stage.formula)
+      (frontier := stage.reduction.retained) continuation)) :
+    Within (executedCompleteCode stage memory continuation accepted reader) (executedCompleteBound stage reader) := by
+  apply within_bind (reader.bounded _); intro bit
+  let candidate := stage.candidateFromBit (frontierAssignment continuation) (frontier_root_accept continuation accepted) bit
+  have originBound : sourceWorkBound candidate.origin ≤ sourceWorkBound left + sourceWorkBound right := by
+    cases candidateFromBit_origin stage (frontierAssignment continuation) (frontier_root_accept continuation accepted) bit.1 bit.2 with
+    | inl same => rw [show candidate.origin = left from same]; exact Nat.le_add_right _ _
+    | inr same => rw [show candidate.origin = right from same]; exact Nat.le_add_left _ _
+  have formed : Within
+      (.step Label.citationCandidate (fun _ =>
+        (ControlCitation.extractCode sources candidate.origin).bind (fun action =>
+          (ControlCitation.readoutCode action.1).bind (fun readout =>
+            .step Label.citationAuthorize (fun _ =>
+              let output := authorizeFromCitation contract action.1 candidate.permission readout.1 readout.2
+              .step Label.citationIncorporate (fun _ =>
+                .step Label.citationCompletion (fun _ => .done
+                  (⟨Master.completionFromParts stage memory continuation accepted candidate (stage.candidateFromBit_actual _ _ bit)
+                    action.1 action.2 output (authorizeFromCitation_actual _ _ _ _ _) (incorporate memory output) rfl,
+                    Master.completionFromParts_actual _ _ _ _ _ _ _ _ _ _ _ _⟩ : Completion stage memory continuation accepted))))))))
+      ((ControlCitation.extractBound sources candidate.origin +
+        (ControlCitation.readoutBound (extract sources candidate.origin) + 3)) + 1) := by
+    apply within_step
+    apply within_bind (ControlCitation.extract_bounded _ _); intro action
+    apply within_bind (ControlCitation.readout_bounded action.1); intro readout
+    repeat apply within_step
+    exact within_done _
+  apply within_weaken formed
+  change sourceWorkBound candidate.origin + 4 ≤ pairBound left right
+  exact Nat.le_trans (Nat.add_le_add_right originBound 4)
+    (Nat.add_le_add_left (by decide : 4 ≤ 12) _)
+
+theorem completion_same_continuation {context cursor sources contract demand left right}
+    (stage : @Master.Stage context cursor sources contract demand left right) (memory : Memory sources contract)
+    (first second : FrontierContinuation (generatedStructuralBranchSystem stage.formula) stage.reduction.retained)
+    (firstAccepted : FrontierAccept (generatedStructuralBranchSystem stage.formula) stage.reduction.retained first)
+    (secondAccepted : FrontierAccept (generatedStructuralBranchSystem stage.formula) stage.reduction.retained second)
+    (same : first = second) : Master.complete stage memory first firstAccepted = Master.complete stage memory second secondAccepted := by
+  cases same; rfl
+
+def executedDecideCode {context cursor sources contract demand left right}
+    (stage : @Master.Stage context cursor sources contract demand left right) (memory : Memory sources contract)
+    (payload : ControlStageExecution.Payload stage) : Code Label (Decision stage memory) :=
+  (ControlSeedApplication.code (VariableMaster.selected stage.head) stage.leftCheck.flag stage.rightCheck.flag).bind (fun produced =>
+    match produced with
+    | .blocked impossible found => .step .citationDecision (fun _ => .done
+        ⟨.blocked
+          (fun permission meets => impossible false (stage.leftCheck.complete permission meets))
+          (fun permission meets => impossible true (stage.rightCheck.complete permission meets)), by
+            unfold Master.decide; rw [← found]⟩)
+    | .viable assignment accepted reader limited found =>
+      .step .citationInput (fun _ =>
+        let input : FrontierContinuation (generatedStructuralBranchSystem stage.formula)
+            [GeneratedStructuralBranchContext.root stage.formula] := .head ⟨assignment, True.intro⟩
+        .step .citationPreservation (fun _ =>
+          (payload.execution.forward input 1 reader limited).bind (fun applied =>
+            have retainedAccepted : FrontierAccept (generatedStructuralBranchSystem stage.formula)
+                stage.reduction.retained applied.continuation.1 :=
+              applied.continuation.2.symm ▸ payload.execution.preservation.forward.preservesAccept input accepted
+            (executedCompleteCode stage memory applied.continuation.1 retainedAccepted applied.reader).bind (fun packet =>
+              .step .citationDecision (fun _ => .done ⟨.complete packet.1, by
+                have continuationExact : applied.continuation.1 = stage.preservation.forward.map input :=
+                  applied.continuation.2.trans
+                    (congrArg (fun preservation => preservation.forward.map input) payload.preservationExact)
+                have completionExact : Master.complete stage memory applied.continuation.1 retainedAccepted =
+                    Master.complete stage memory (stage.preservation.forward.map input)
+                      (stage.preservation.forward.preservesAccept input accepted) :=
+                  completion_same_continuation stage memory _ _ _ _ continuationExact
+                unfold Master.decide; rw [← found]
+                exact congrArg Master.Decision.complete (packet.2.trans completionExact)⟩))))))
+
+def executedDecideBound {context cursor sources contract demand left right}
+    (stage : @Master.Stage context cursor sources contract demand left right)
+    (payload : ControlStageExecution.Payload stage) : Nat :=
+  6 + (((payload.execution.forwardCost 1 +
+    ((payload.execution.forwardReaderBound 1 + pairBound left right) + 1)) + 1) + 1)
+
+theorem executed_decide_bounded {context cursor sources contract demand left right}
+    (stage : @Master.Stage context cursor sources contract demand left right) (memory : Memory sources contract)
+    (payload : ControlStageExecution.Payload stage) :
+    Within (executedDecideCode stage memory payload) (executedDecideBound stage payload) := by
+  apply within_bind (ControlSeedApplication.bounded _ _ _); intro produced
+  cases produced with
+  | blocked impossible found =>
+      apply within_weaken (bound := 1)
+      · exact within_step _ _ (within_done _)
+      · exact Nat.le_trans (Nat.le_add_left 1 _) (Nat.le_trans (Nat.le_add_right _ 1) (Nat.le_add_right _ 1))
+  | viable assignment accepted reader limited found =>
+      apply within_step; apply within_step
+      apply within_bind (payload.execution.forward_bounded _ _ _ _); intro applied
+      apply within_bind
+      · exact within_weaken (executed_complete_bounded _ _ _ _ _)
+          (Nat.add_le_add_right applied.limited (pairBound left right))
+      · intro packet
+        exact within_step _ _ (within_done _)
+
+theorem executed_decide_finite {context cursor sources contract demand left right}
+    (stage : @Master.Stage context cursor sources contract demand left right) (memory : Memory sources contract)
+    (payload : ControlStageExecution.Payload stage) : Finite (executedDecideCode stage memory payload) := by
+  obtain ⟨value, labels, trace, _⟩ := executed_decide_bounded stage memory payload
+  exact ⟨value, labels, trace⟩
+
 end ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -391,4 +534,12 @@ end ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.expandedDecideBound
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.expanded_decide_bounded
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.expanded_decide_finite
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.executedCompleteCode
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.executedCompleteBound
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.executed_complete_bounded
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.completion_same_continuation
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.executedDecideCode
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.executedDecideBound
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.executed_decide_bounded
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompletion.executed_decide_finite
 /- AXIOM_AUDIT_END -/

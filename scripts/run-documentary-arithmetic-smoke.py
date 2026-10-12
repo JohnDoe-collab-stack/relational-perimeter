@@ -61,6 +61,8 @@ def client_source():
     names.extend(("normalizationCell", "normalizationInsertCell", "normalizationSearch",
                   "normalizationPair", "normalizationCode", "normalizationPacket"))
     names.extend(("frontierEvaluationCell", "frontierEvaluationPacket", "frontierEvaluationAtom", "stagePreservation"))
+    names.extend(("assignmentQueryCell", "assignmentQueryReturn", "transportApplicationCell",
+                  "transportApplicationPacket", "transportSplitDecision", "executionPayload"))
     tags = "\n".join("  | ." + name + " => " + str(i) for i, name in enumerate(names))
     return """import Tests.LocalAlignment.DocumentaryControlArithmetic
 import Tests.LocalAlignment.DocumentaryCases

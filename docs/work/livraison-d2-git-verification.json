@@ -1,0 +1,149 @@
+{
+  "schema": "D2-git-delivery-verification-v1",
+  "at_utc": "2026-10-12T18:13:32.487175+00:00",
+  "status": "WHITESPACE_ONLY_LEAN_EDITS_COMPILE_C_IDENTICAL_AND_PINNED_HELPER_CHECKOUT_QUALIFIED",
+  "scope": "Complément de livraison Git du snapshot D2 déjà clos. Aucun terme Lean, preuve, cas, attente, carburant ou contrat changé ; la suite G2 demeure l'expérience complète historique et n'est pas réétiquetée comme un nouveau run.",
+  "original_D2_receipt": {
+    "path": "docs/work/cloture-d2-verification.json",
+    "sha256": "010c0f49a87f8d05630fffaf26cb924272df0b991352e38a0b2ab902a0039c90",
+    "bytes": 226242,
+    "domain": "RAW"
+  },
+  "staged_diff_findings": "Quatre espaces terminaux dans FrontierCeilingLeaves et une ligne vide finale dans chacun des trois autres modules. Les nouveaux fichiers étaient absents du git diff --check non stagé initial ; le contrôle stagé est désormais utilisé pour la livraison.",
+  "source_edits": [
+    {
+      "path": "Tests/LocalAlignment/DocumentaryControlFrontierCeilingLeaves.lean",
+      "before": {
+        "sha256": "eae4857ff9feeb76f519c867ed0a880118256f81d88535826338f444123cd10a",
+        "bytes": 11388
+      },
+      "after": {
+        "sha256": "f00c67ce1e04c3668a88f8fdca2c4f392870e657b67c9ab6401c5c7efc49e397",
+        "bytes": 11384
+      },
+      "edit": "four trailing spaces only",
+      "all_non_whitespace_bytes_and_token_order_equal": true
+    },
+    {
+      "path": "Tests/LocalAlignment/DocumentaryControlMeasuredMaster.lean",
+      "before": {
+        "sha256": "8cd67044d4d3e58c25f7dc38d08a3dff3358577dc2f3654d84269e9102ae610c",
+        "bytes": 9391
+      },
+      "after": {
+        "sha256": "cdc13ac9b080b04ff242b0ec6d84b69c3a6ce74e3b3e80f864480b7cf411c878",
+        "bytes": 9389
+      },
+      "edit": "one trailing blank CRLF only",
+      "all_non_whitespace_bytes_and_token_order_equal": true
+    },
+    {
+      "path": "Tests/LocalAlignment/DocumentaryControlNaturalStackAgreement.lean",
+      "before": {
+        "sha256": "79682c732794ab487f62c59e98114cc5730a0e81fb7c1e03e5896c529e8079ce",
+        "bytes": 5632
+      },
+      "after": {
+        "sha256": "a2d911a44cfadd10369a85e23422b1174550cb9cf82b496001f089a7cfd653e1",
+        "bytes": 5630
+      },
+      "edit": "one trailing blank CRLF only",
+      "all_non_whitespace_bytes_and_token_order_equal": true
+    },
+    {
+      "path": "Tests/LocalAlignment/DocumentaryControlReaderCeiling.lean",
+      "before": {
+        "sha256": "3e513c4f294e8dfebf1109275f9b5ed23775198e4f795768161bfe020cf2efbb",
+        "bytes": 16007
+      },
+      "after": {
+        "sha256": "aeee68ef75f8062b072aa938e009e32aea1dee21f26f47e6149f0e6718932994",
+        "bytes": 16005
+      },
+      "edit": "one trailing blank CRLF only",
+      "all_non_whitespace_bytes_and_token_order_equal": true
+    }
+  ],
+  "compiler_protocol": {
+    "artifact": "protocol-before-compile.json",
+    "sha256": "2aaff42ce615c51b39e6000adc221f5c3bfdf0730c125736757c54e58591e37f",
+    "bytes": 6339,
+    "domain": "RAW"
+  },
+  "compiler_result": {
+    "artifact": "compilation-result.json",
+    "sha256": "02ed343987d08f5cb9f41411f1bae78866af32058a653fdffb7ff1548cf43583",
+    "bytes": 2204,
+    "domain": "RAW"
+  },
+  "actual_module_compilation_results": [
+    {
+      "name": "DocumentaryControlReaderCeiling",
+      "exit_code": 0,
+      "pid": 50312,
+      "elapsed_seconds": 1.0261478000320494,
+      "stdout_sha256": "1fbec96133cdecc3c9889ae00c7d4b695dc23e1b5485c6c10d433a8493709d50",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "clean_audits": 27,
+      "fresh_C_sha256": "60c250c5b64ebf750270f9e67b36946cb3e630b9170e22c8a4e2c74e3aa1caef",
+      "whole_C_byte_identical": true
+    },
+    {
+      "name": "DocumentaryControlFrontierCeilingLeaves",
+      "exit_code": 0,
+      "pid": 26700,
+      "elapsed_seconds": 0.8828106001019478,
+      "stdout_sha256": "25dfadf50c0c67cf5bfe659cb16921e3769c339bd18690f964b8a65e54cd3589",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "clean_audits": 8,
+      "fresh_C_sha256": "8faa5b5cbaf215ae402cfd386ff6dea7861363d30a962901bf9b19ff7be0a980",
+      "whole_C_byte_identical": true
+    },
+    {
+      "name": "DocumentaryControlMeasuredMaster",
+      "exit_code": 0,
+      "pid": 46088,
+      "elapsed_seconds": 1.077436299994588,
+      "stdout_sha256": "dce38596582bf422846726950444d4fae70e2b2aa221cb5d83475c7e8c7903ce",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "clean_audits": 11,
+      "fresh_C_sha256": "2779992147d49057778bf6149725e1725fb3c11ca9e637eea26601a31be12366",
+      "whole_C_byte_identical": true
+    },
+    {
+      "name": "DocumentaryControlNaturalStackAgreement",
+      "exit_code": 0,
+      "pid": 30164,
+      "elapsed_seconds": 0.778999799862504,
+      "stdout_sha256": "d63c610214678b7985d6780acf5b1356f4c021f549efe77cbd1df9d9f809a82e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "clean_audits": 7,
+      "fresh_C_sha256": "616d9b1b933fe54828e3c2d9136cfe00fee017509b9495d42248bf365e2d15e3",
+      "whole_C_byte_identical": true
+    }
+  ],
+  "clean_authored_audits": 53,
+  "compilation_scope": "Quatre modules recompilés hors du dépôt, imports révisés retargetés vers leurs olean frais ; autres dépendances compilées reçues de G2. Cache du projet conservé, aucune nouvelle exécution métier ou suite complète revendiquée.",
+  "checkout_metadata": {
+    "rule": "scripts/documentary_native_client.py text eol=lf",
+    "core_autocrlf_received": "true",
+    "before_filter_SHA256": "d357dc41ef76e2083c9e811ffd8f51bf88e353cc9a8563be4b5cfc81db9aba9c",
+    "after_filter_SHA256": "1d912561c86ed8bcf9697a83fe33a84693c5ddfd70b52800edebc7fd2a5b88ed",
+    "actual_helper_SHA256": "1d912561c86ed8bcf9697a83fe33a84693c5ddfd70b52800edebc7fd2a5b88ed",
+    "filtered_checkout_bytes_equal_to_pinned_original": true,
+    "before_attribute_RAW": {
+      "sha256": "e864304154c799dcee913b5347af8f85a00618b2956d2bd7e3e06f0cb8706041",
+      "bytes": 128
+    },
+    "after_attribute_RAW": {
+      "sha256": "bfd55977927cb970ab2738268025184af4d6bd2d228ad237b50a0862e4d12ccf",
+      "bytes": 177
+    },
+    "helper_source_modified": false
+  },
+  "historical30_unchanged": true,
+  "D2_qualified_scientific_behavior_preserved": true,
+  "D3_D4_A1_closed": false,
+  "A_before_B": true,
+  "raw_materials": "Protocoles, sources avant/après, C/olean et sorties conservés hors du dépôt dans l'archive de clôture, sous git-delivery-whitespace-v2 ; la première inspection CRLF rejetée est conservée."
+}

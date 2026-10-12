@@ -3,6 +3,9 @@
 All six constructors, actual recursive composition, received normalized codes and
 the whole actual stage are checked. This is a development protocol, not a model
 experiment or bootstrap/physical cost theorem.
+
+The source interpreter is ControlCompactExecution.sourceExecute; its general
+source_exact refinement preserves the whole value, business labels and fuel.
 """
 import hashlib
 from pathlib import Path
@@ -12,6 +15,7 @@ import tempfile
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parent.parent
 CLIENT = r"""
+import Tests.LocalAlignment.DocumentaryControlCompactExecution
 import Tests.LocalAlignment.DocumentaryControlCompletion
 import Tests.LocalAlignment.DocumentaryControlStagePreservation
 import Tests.LocalAlignment.DocumentaryControlFrontierNormalization
@@ -138,6 +142,12 @@ def tag : Label → Nat
   | .frontierEvaluationPacket => 109
   | .frontierEvaluationAtom => 110
   | .stagePreservation => 111
+  | .assignmentQueryCell => 112
+  | .assignmentQueryReturn => 113
+  | .transportApplicationCell => 114
+  | .transportApplicationPacket => 115
+  | .transportSplitDecision => 116
+  | .executionPayload => 117
 
 def root : GeneratedStructuralBranchContext [] := GeneratedStructuralBranchContext.root []
 def left : GeneratedStructuralBranchContext [] := root.child 0 false True.intro
@@ -186,8 +196,8 @@ def probe {source target : List (GeneratedStructuralBranchContext [])}
     (nodes atoms allowance : Nat) (observations : List (Observation source)) : Bool :=
   let program := ControlFrontierEvaluation.code [] 0 route
   let budget := ControlFrontierEvaluation.bound [] 0 route
-  match Control.execute budget program, Control.execute (budget - 1) program,
-      Control.execute (budget + 5) program with
+  match ControlCompactExecution.sourceExecute budget program, ControlCompactExecution.sourceExecute (budget - 1) program,
+      ControlCompactExecution.sourceExecute (budget + 5) program with
   | some actual, none, some surplus =>
       let preservation := actual.value.1
       budget == allowance && actual.labels.length == allowance &&
@@ -196,7 +206,7 @@ def probe {source target : List (GeneratedStructuralBranchContext [])}
       count 110 actual.labels == atoms && count 111 actual.labels == 0 &&
       count 89 actual.labels == nodes * 2 + atoms &&
       count 25 actual.labels == nodes && count 24 actual.labels == atoms &&
-      !(Control.execute 0 program).isSome &&
+      !(ControlCompactExecution.sourceExecute 0 program).isSome &&
       observations.all (fun (input, forwardWanted, backwardWanted) =>
         let forward := preservation.forward.map input
         let backward := preservation.backward.map forward
@@ -208,7 +218,7 @@ def probe {source target : List (GeneratedStructuralBranchContext [])}
 
 def normalizedProbe (source : List (GeneratedStructuralBranchContext []))
     (nodes atoms allowance : Nat) (observations : List (Observation source)) : Bool :=
-  match Control.execute (ControlFrontierNormalization.bound [] 0 source)
+  match ControlCompactExecution.sourceExecute (ControlFrontierNormalization.bound [] 0 source)
       (ControlFrontierNormalization.code [] 0 source) with
   | none => false
   | some actual => probe actual.value.1.code nodes atoms allowance observations
@@ -220,8 +230,8 @@ def stageProbe : Bool :=
   let input : FrontierContinuation (generatedStructuralBranchSystem stage.formula)
       [GeneratedStructuralBranchContext.root stage.formula] :=
     .head ⟨fun _ => false, True.intro⟩
-  match Control.execute budget program, Control.execute (budget - 1) program,
-      Control.execute (budget + 5) program with
+  match ControlCompactExecution.sourceExecute budget program, ControlCompactExecution.sourceExecute (budget - 1) program,
+      ControlCompactExecution.sourceExecute (budget + 5) program with
   | some actual, none, some surplus =>
     let forward := actual.value.1.forward.map input
     let backward := actual.value.1.backward.map forward
@@ -245,12 +255,12 @@ def decisionProbe {context cursor sources contract demand left right}
     (memory : Memory sources contract) (wanted : Option Nat) (nodes atoms : Nat) : Bool :=
   let program := ControlCompletion.expandedDecideCode stage memory
   let budget := ControlCompletion.expandedDecideBound stage memory
-  match Control.execute budget program with
+  match ControlCompactExecution.sourceExecute budget program with
   | none => false
   | some actual =>
     let length := actual.labels.length
-    match Control.execute length program, Control.execute (length - 1) program,
-        Control.execute (budget + 5) program with
+    match ControlCompactExecution.sourceExecute length program, ControlCompactExecution.sourceExecute (length - 1) program,
+        ControlCompactExecution.sourceExecute (budget + 5) program with
     | some exact, none, some surplus =>
       let position := fun (decision : Master.Decision stage memory) => match decision with
         | .blocked _ _ => none
@@ -345,6 +355,7 @@ def main : IO Unit := FrontierEvaluationSmoke.run
 #print axioms FrontierEvaluationSmoke.acceptancePreserved
 #print axioms FrontierEvaluationSmoke.run
 #print axioms main
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompactExecution.source_exact
 /- AXIOM_AUDIT_END -/
 """
 NAMES = ('tag', 'root', 'left', 'right', 'other', 'swapRoute', 'reverseSwapRoute', 'identityRoute', 'nestedRoute', 'forwardRelation', 'reverseRelation', 'falseContinuation', 'trueContinuation', 'otherContinuation', 'view', 'count', 'probe', 'normalizedProbe', 'stageProbe', 'decisionProbe', 'acceptancePreserved', 'run')
@@ -361,12 +372,13 @@ def main():
     expected = {("'FrontierEvaluationSmoke." + name + "' does not depend on any axioms").encode()
                 for name in NAMES}
     expected.update((b"'main' does not depend on any axioms", b'DOCUMENTARY_FRONTIER_EVALUATION_SMOKE_DONE'))
+    expected.add(b"'ConstitutiveSearch.Agent.Local.Documentary.ControlCompactExecution.source_exact' does not depend on any axioms")
     if set(result.stdout.splitlines()) != expected or len(result.stdout.splitlines()) != len(expected):
         raise ValueError('Unexpected runtime output: ' + result.stdout.decode('utf-8', 'replace'))
     print('DOCUMENTARY_FRONTIER_EVALUATION_SMOKE_OK: thirteen development checks, all six constructors, '
           'twenty-six forward/backward observations repeated with surplus fuel; '
           'exact/short/surplus fuel and fixed local formation costs; whole actual stage; '
-          'twenty-three clean runtime audits; client_sha256=' + hashlib.sha256(source).hexdigest())
+          'twenty-four clean runtime audits; client_sha256=' + hashlib.sha256(source).hexdigest())
 
 if __name__ == '__main__':
     try:

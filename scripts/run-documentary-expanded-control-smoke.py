@@ -5,16 +5,35 @@ Generation and endpoint-cache formation add two paid resource packets.
 The cached master pays seven output kinds and must preserve their productions.
 The 200000 probe is a test ceiling, not a proved bootstrap bound. Exact and
 one-short probes follow the actual certified trace. No physical cost claim.
+
+The source interpreter is ControlCompactExecution.sourceExecute; its general
+source_exact refinement preserves the whole value, business labels and fuel.
+The physical timeout is 7200 s for the retained repeated heavy quotations; it
+does not alter any business fuel or claim an execution envelope.
 """
 import hashlib
 from pathlib import Path
-import subprocess
 import sys
-import tempfile
+import types
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parent.parent
+
+
+PINNED_NATIVE_HELPER_SHA256 = '1d912561c86ed8bcf9697a83fe33a84693c5ddfd70b52800edebc7fd2a5b88ed'
+
+
+def _load_native_helper():
+    path = (ROOT / 'scripts/documentary_native_client.py').resolve()
+    source = path.read_bytes()
+    if hashlib.sha256(source).hexdigest() != PINNED_NATIVE_HELPER_SHA256:
+        raise ValueError('Native helper source differs from the reviewed pin')
+    helper = types.ModuleType('_rp_documentary_native_client_from_pinned_source')
+    helper.__file__ = str(path)
+    exec(compile(source, helper.__file__, 'exec', dont_inherit=True), helper.__dict__)
+    return helper
 CLIENT = r"""
+import Tests.LocalAlignment.DocumentaryControlCompactExecution
 import Tests.LocalAlignment.DocumentaryExpandedControlCases
 import Tests.LocalAlignment.DocumentaryMasterCases
 set_option genInjectivity false
@@ -139,11 +158,17 @@ def tag : Label → Nat
   | .frontierEvaluationPacket => 109
   | .frontierEvaluationAtom => 110
   | .stagePreservation => 111
+  | .assignmentQueryCell => 112
+  | .assignmentQueryReturn => 113
+  | .transportApplicationCell => 114
+  | .transportApplicationPacket => 115
+  | .transportSplitDecision => 116
+  | .executionPayload => 117
 
 def count (label : Label) (labels : List Label) : Nat :=
   (labels.filter (fun found => tag found == tag label)).length
 
-def eventTag : Event → Nat
+def eventTag : Program.Event → Nat
   | .quoted => 0
   | .derived => 1
   | .refused => 2
@@ -152,7 +177,7 @@ def eventTag : Event → Nat
 def quotationCheck (before : FrameData Cases.sources Cases.contract DeductionCases.policy slots)
     (task : Dossier.Obligation Cases.context) (expected : Int) (origins : List Nat) : Bool :=
   let code := ControlStep.expandedCode before (.quotation task)
-  match Control.execute 200000 code with
+  match ControlCompactExecution.sourceExecute 200000 code with
   | none => false
   | some actual =>
     let next := actual.value.1.next
@@ -160,9 +185,9 @@ def quotationCheck (before : FrameData Cases.sources Cases.contract DeductionCas
     | none => false
     | some occurrence =>
       let fuel := actual.labels.length
-      let exact := Control.execute fuel code
-      let short := Control.execute (fuel - 1) code
-      let surplus := Control.execute (fuel + 5) code
+      let exact := ControlCompactExecution.sourceExecute fuel code
+      let short := ControlCompactExecution.sourceExecute (fuel - 1) code
+      let surplus := ControlCompactExecution.sourceExecute (fuel + 5) code
       let stable := match exact, surplus with
         | some first, some second => first.labels.map tag == second.labels.map tag
         | _, _ => false
@@ -179,11 +204,17 @@ def quotationCheck (before : FrameData Cases.sources Cases.contract DeductionCas
       count .masterNextStateQuery actual.labels == 1 &&
       count .masterDecompose actual.labels == 1 &&
       count .masterNextCursor actual.labels == 1 &&
-      count .formationResources actual.labels == 27 &&
+      count .formationResources actual.labels == 44 &&
       count .frontierEvaluationCell actual.labels == 10 &&
       count .frontierEvaluationPacket actual.labels == 10 &&
       count .frontierEvaluationAtom actual.labels == 0 &&
       count .stagePreservation actual.labels == 1 &&
+      count .executionPayload actual.labels == 15 &&
+      count .assignmentQueryCell actual.labels == 2 &&
+      count .assignmentQueryReturn actual.labels == 0 &&
+      count .transportSplitDecision actual.labels == 1 &&
+      count .citationRouting actual.labels == 0 &&
+      count .citationAssignment actual.labels == 0 &&
       count .frontierCell actual.labels == 2 &&
       count .frontierDecisionCell actual.labels == 1 &&
       count .frontierChild actual.labels == 2 &&
@@ -196,7 +227,7 @@ def quotationCheck (before : FrameData Cases.sources Cases.contract DeductionCas
       !short.isSome && stable
 
 def blockedCheck : Bool :=
-  match Control.execute 200000 (ControlStep.expandedCode quoteFrame
+  match ControlCompactExecution.sourceExecute 200000 (ControlStep.expandedCode quoteFrame
       (.quotation ⟨Cases.pinnedDemand, Cases.privateOrigin, Cases.publicOrigin⟩)) with
   | none => false
   | some actual =>
@@ -206,11 +237,18 @@ def blockedCheck : Bool :=
     count .masterProducer actual.labels == 7 &&
     count .producerOutputKind actual.labels == 7 &&
     count .masterHeadPacket actual.labels == 1 &&
-    count .formationResources actual.labels == 14 &&
-    count .frontierEvaluationCell actual.labels == 0 &&
-    count .frontierEvaluationPacket actual.labels == 0 &&
-    count .frontierEvaluationAtom actual.labels == 0 &&
-    count .stagePreservation actual.labels == 0 &&
+    count .formationResources actual.labels == 35 &&
+    count .frontierEvaluationCell actual.labels == 7 &&
+    count .frontierEvaluationPacket actual.labels == 7 &&
+    count .frontierEvaluationAtom actual.labels == 1 &&
+    count .stagePreservation actual.labels == 1 &&
+    count .executionPayload actual.labels == 12 &&
+    count .assignmentQueryCell actual.labels == 0 &&
+    count .assignmentQueryReturn actual.labels == 0 &&
+    count .transportApplicationCell actual.labels == 0 &&
+    count .transportSplitDecision actual.labels == 0 &&
+    count .citationRouting actual.labels == 0 &&
+    count .citationAssignment actual.labels == 0 &&
     count .frontierCell actual.labels == 2 &&
     count .frontierDecisionCell actual.labels == 1 &&
     count .frontierChild actual.labels == 2 &&
@@ -220,14 +258,14 @@ def blockedCheck : Bool :=
     count .normalizationPair actual.labels == 1
 
 def adminCheck (fuel budget : Nat) : Bool :=
-  match Control.execute budget (ControlAdministration.executeCode fuel oneCode) with
+  match ControlCompactExecution.sourceExecute budget (ControlAdministration.executeCode fuel oneCode) with
   | none => false
   | some actual => match actual.value.1 with
     | none => fuel == 0
     | some source => source.value == 3 && source.labels.map tag == [0]
 
 def candidateCheck : Bool :=
-  match emptyCandidateExecution with
+  match ControlCompactExecution.sourceExecute 500 emptyCandidate with
   | none => false
   | some actual => match actual.value.1.produced? with
     | none => false
@@ -238,7 +276,7 @@ def candidateCheck : Bool :=
 
 def relationReject (code : Code Label (ControlMasterData.Actual
     (ConstitutiveSearch.EndogenousDecomposition.searchMeasuredRelation 1 repeatedState repeatedState))) : Bool :=
-  match Control.execute 100 code with
+  match ControlCompactExecution.sourceExecute 100 code with
   | none => false
   | some actual => !actual.value.1.result.isSome && actual.value.1.historyTransform.nodes > 0
 
@@ -255,9 +293,12 @@ def deferredCheck : Bool :=
   let thirdRecipe : ControlDeferred.KnowledgeRecipe third :=
     .derived secondRecipe DeductionCases.differenceRequest (.prior .here) .here action .here
   let code := ControlDeferred.recipeReader thirdRecipe .here
-  match Control.execute 15 code, Control.execute 14 code, Control.execute 20 code with
+  -- 2 outer cells + left/right evidence 5+3 + positions 3+1 + paid values 2+1 + return1 =18.
+  match ControlCompactExecution.sourceExecute 18 code, ControlCompactExecution.sourceExecute 17 code, ControlCompactExecution.sourceExecute 23 code with
   | some actual, none, some surplus =>
-    actual.labels.length == 15 && actual.labels.map tag == surplus.labels.map tag &&
+    actual.labels.length == 18 &&
+    actual.labels.map tag == [86,81,86,81,86,81,82,86,81,82,10,10,11,10,12,12,12,82] &&
+    actual.labels.map tag == surplus.labels.map tag &&
     actual.value.1.sources.map (fun output => output.item.position) == [1, 2] &&
     actual.value.1.rules == [0]
   | _, _, _ => false
@@ -271,7 +312,7 @@ def referenceCheck : Bool :=
     (ControlDeferred.ExtensionRecipe.identity knowledge.resources)
     (ControlDeferred.ExtensionRecipe.produced knowledge.resources producer)
   let code := ControlDeferred.referenceCode recipe Ref.here
-  match Control.execute 6 code, Control.execute 5 code with
+  match ControlCompactExecution.sourceExecute 6 code, ControlCompactExecution.sourceExecute 5 code with
   | some actual, none => actual.value.1.position == 1 && actual.labels.map tag == [86, 85, 86, 83, 86, 84]
   | _, _ => false
 
@@ -281,7 +322,7 @@ def naturalEqualityCode (left right : Nat) : Code Label (ControlMasterData.Actua
 
 def deduplicateCheck : Bool :=
   let code := ControlProducedImage.deduplicateCode Nat.decEq naturalEqualityCode [1, 2, 1, 3, 2]
-  match Control.execute 1000 code with
+  match ControlCompactExecution.sourceExecute 1000 code with
   | none => false
   | some actual => actual.value.1 == [1, 3, 2]
 
@@ -289,7 +330,7 @@ def transportCheck
     (program : TransportCode (SAT.GeneratedStructuralFlipAtRelation 0) transportState transportState)
     (fuel atoms : Nat) (bit : Bool) : Bool :=
   let code := ControlMeasuredTransport.flipCode 0 program transportInput
-  match Control.execute fuel code, Control.execute (fuel - 1) code, Control.execute (fuel + 3) code with
+  match ControlCompactExecution.sourceExecute fuel code, ControlCompactExecution.sourceExecute (fuel - 1) code, ControlCompactExecution.sourceExecute (fuel + 3) code with
   | some actual, none, some surplus =>
     actual.value.1.evaluatedAtoms == atoms && actual.value.1.continuationApplications == atoms &&
     actual.value.1.output.1 0 == bit && !(actual.value.1.output.1 1) &&
@@ -297,7 +338,7 @@ def transportCheck
   | _, _, _ => false
 
 def scheduleCheck : Bool :=
-  match emptyCandidateExecution with
+  match ControlCompactExecution.sourceExecute 500 emptyCandidate with
   | none => false
   | some attempted => match attempted.value.1.produced? with
     | none => false
@@ -313,7 +354,7 @@ def scheduleCheck : Bool :=
           (validated.1.run.success && result.1.code.size == 1 &&
             result.1.producedState.context.decisions.map (fun decision => (decision.var, decision.value)) == [(0, true)]
             && validation.1.search.result.isSome && execution.1.search.result.isSome))))))
-      match Control.execute 1000 code with
+      match ControlCompactExecution.sourceExecute 1000 code with
       | none => false
       | some actual => actual.value
 
@@ -335,18 +376,20 @@ def run : IO Unit := do
     quotationCheck (Memory.project MemoryCases.leftProduced.1).session.frame ProgramCases.revisedTask 43 [2],
     quotationCheck (Memory.project MemoryCases.rightProduced.1).session.frame ProgramCases.revisedTask 43 [2],
     loadedOk, blockedCheck,
-    leftExecution.isSome, rightExecution.isSome, forbiddenExecution.isSome,
-    (Control.execute 7 (ControlStep.expandedCode refusedFrame leftMissing)).isSome == false,
-    (Control.execute 9 (ControlStep.expandedCode refusedFrame rightMissing)).isSome == false,
-    (Control.execute 23 (ControlStep.expandedCode twoFrame forbiddenInstruction)).isSome == false,
+    (ControlCompactExecution.sourceExecute 8 (ControlStep.expandedCode refusedFrame leftMissing)).isSome,
+    (ControlCompactExecution.sourceExecute 10 (ControlStep.expandedCode refusedFrame rightMissing)).isSome,
+    (ControlCompactExecution.sourceExecute 24 (ControlStep.expandedCode twoFrame forbiddenInstruction)).isSome,
+    (ControlCompactExecution.sourceExecute 7 (ControlStep.expandedCode refusedFrame leftMissing)).isSome == false,
+    (ControlCompactExecution.sourceExecute 9 (ControlStep.expandedCode refusedFrame rightMissing)).isSome == false,
+    (ControlCompactExecution.sourceExecute 23 (ControlStep.expandedCode twoFrame forbiddenInstruction)).isSome == false,
     adminCheck 0 2, adminCheck 1 21, adminCheck 1 26,
-    (Control.execute 20 (ControlAdministration.executeCode 1 oneCode)).isSome == false,
-    (Control.execute 3 shortComparator).isSome,
-    !(Control.execute 2 shortComparator).isSome,
-    (Control.execute 6 repeatedCandidate).isSome,
-    !(Control.execute 5 repeatedCandidate).isSome,
+    (ControlCompactExecution.sourceExecute 20 (ControlAdministration.executeCode 1 oneCode)).isSome == false,
+    (ControlCompactExecution.sourceExecute 3 shortComparator).isSome,
+    !(ControlCompactExecution.sourceExecute 2 shortComparator).isSome,
+    (ControlCompactExecution.sourceExecute 6 repeatedCandidate).isSome,
+    !(ControlCompactExecution.sourceExecute 5 repeatedCandidate).isSome,
     candidateCheck,
-    (match Control.execute 100 mismatchFormula with
+    (match ControlCompactExecution.sourceExecute 100 mismatchFormula with
       | none => false
       | some actual => !actual.value.1.result.isSome && actual.value.1.historyTransform.nodes == 0),
     relationReject mismatchHistory, deferredCheck, referenceCheck,
@@ -377,33 +420,29 @@ def main : IO Unit := ExpandedControlSmoke.run
 #print axioms ExpandedControlSmoke.scheduleCheck
 #print axioms ExpandedControlSmoke.run
 #print axioms main
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompactExecution.source_exact
 /- AXIOM_AUDIT_END -/
 """
 
 def main():
+    native = _load_native_helper()
     source = CLIENT.encode("utf-8")
-    with tempfile.TemporaryDirectory(prefix="rp-expanded-control-") as directory:
-        client = Path(directory) / "Smoke.lean"
-        client.write_bytes(source)
-        result = subprocess.run(["lake", "env", "lean", "--run", str(client)],
-                                cwd=ROOT, capture_output=True, timeout=300, check=False)
-    if result.returncode or result.stderr:
-        raise ValueError("Expanded control smoke failed: " +
-                         (result.stdout + result.stderr).decode("utf-8", "replace"))
     names = ("tag", "count", "eventTag", "quotationCheck", "blockedCheck", "adminCheck",
              "candidateCheck", "relationReject", "deferredCheck", "referenceCheck", "naturalEqualityCode",
              "deduplicateCheck", "transportCheck", "scheduleCheck", "run")
-    expected = {("'ExpandedControlSmoke." + name + "' does not depend on any axioms").encode()
-                for name in names}
-    expected.update((b"'main' does not depend on any axioms", b"DOCUMENTARY_EXPANDED_CONTROL_SMOKE_DONE"))
-    if set(result.stdout.splitlines()) != expected or len(result.stdout.splitlines()) != len(expected):
-        raise ValueError("Unexpected runtime output: " + result.stdout.decode("utf-8", "replace"))
-    print("DOCUMENTARY_EXPANDED_CONTROL_SMOKE_OK: 31 development checks; sixteen clean runtime audits; "
-          "client_sha256=" + hashlib.sha256(source).hexdigest())
+    expected = ["'ExpandedControlSmoke." + name + "' does not depend on any axioms" for name in names]
+    expected += ["'main' does not depend on any axioms",
+                 "'ConstitutiveSearch.Agent.Local.Documentary.ControlCompactExecution.source_exact' does not depend on any axioms"]
+    result = native.run_native_client(ROOT, source, expected,
+                               b"DOCUMENTARY_EXPANDED_CONTROL_SMOKE_DONE\n", runtime_timeout=7200)
+    print("DOCUMENTARY_EXPANDED_CONTROL_SMOKE_OK: 31 development checks; seventeen clean elaboration audits; "
+          "native runtime DONE; client_sha256=" + hashlib.sha256(source).hexdigest() +
+          "; raw_artifacts=" + result["raw_artifacts"])
+
 
 if __name__ == "__main__":
     try:
         main()
-    except (OSError, ValueError, subprocess.TimeoutExpired) as error:
+    except (OSError, ValueError) as error:
         print("DOCUMENTARY_EXPANDED_CONTROL_SMOKE_ERROR: " + str(error), file=sys.stderr)
         sys.exit(1)

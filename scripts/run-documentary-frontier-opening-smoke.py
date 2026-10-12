@@ -5,6 +5,9 @@ Fixtures cover freshness rejection, delayed rejection, retained order and
 clause deletion. Exact and short fuel use the actual trace, independently
 of the component's upper bound. Deferred transport invocation is outside
 this component probe; no physical or whole-fallback bound is claimed.
+
+The source interpreter is ControlCompactExecution.sourceExecute; its general
+source_exact refinement preserves the whole value, business labels and fuel.
 """
 import hashlib
 from pathlib import Path
@@ -15,6 +18,7 @@ import tempfile
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parent.parent
 CLIENT = r"""
+import Tests.LocalAlignment.DocumentaryControlCompactExecution
 import Tests.LocalAlignment.DocumentaryControlFrontierOpening
 set_option genInjectivity false
 set_option backward.match.sparseCases false
@@ -70,12 +74,12 @@ def residualProbe (formula : Cnf) (selected : Var) (bit : Bool) (wanted : Cnf)
     (weakening : List Bool) : Bool :=
   let code := ControlFrontierSyntax.residualCode selected bit formula
   let allowance := ControlFrontierSyntax.residualBound formula
-  match Control.execute allowance code with
+  match ControlCompactExecution.sourceExecute allowance code with
   | none => false
   | some actual =>
     let length := actual.labels.length
-    match Control.execute length code, Control.execute (length - 1) code,
-        Control.execute (allowance + 5) code with
+    match ControlCompactExecution.sourceExecute length code, ControlCompactExecution.sourceExecute (length - 1) code,
+        ControlCompactExecution.sourceExecute (allowance + 5) code with
     | some exact, none, some surplus =>
       actual.value.1.1.map (fun clause => clause.map literalSummary) ==
         wanted.map (fun clause => clause.map literalSummary) &&
@@ -90,19 +94,19 @@ def probe (formula : Cnf) (selected : Var) (source : List (GeneratedStructuralBr
     (wanted : List Summary) (minimumComparisons : Nat) : Bool :=
   let code := ControlFrontierOpening.code formula selected source
   let allowance := ControlFrontierOpening.bound formula selected source
-  match Control.execute allowance code with
+  match ControlCompactExecution.sourceExecute allowance code with
   | none => false
   | some actual =>
     let length := actual.labels.length
-    match Control.execute length code, Control.execute (length - 1) code,
-        Control.execute (allowance + 5) code with
+    match ControlCompactExecution.sourceExecute length code, ControlCompactExecution.sourceExecute (length - 1) code,
+        ControlCompactExecution.sourceExecute (allowance + 5) code with
     | some exact, none, some surplus =>
       actual.value.1.frontier.map summary == wanted &&
       exact.value.1.frontier.map summary == wanted &&
       surplus.value.1.frontier.map summary == wanted &&
       length <= allowance && length == exact.labels.length && length == surplus.labels.length &&
       minimumComparisons <= (actual.labels.filter naturalLabel).length &&
-      !(Control.execute 0 code).isSome
+      !(ControlCompactExecution.sourceExecute 0 code).isSome
     | _, _, _ => false
 
 def run : IO Unit := do
@@ -150,6 +154,7 @@ def main : IO Unit := FrontierOpeningSmoke.run
 #print axioms FrontierOpeningSmoke.probe
 #print axioms FrontierOpeningSmoke.run
 #print axioms main
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlCompactExecution.source_exact
 /- AXIOM_AUDIT_END -/
 """
 
@@ -169,10 +174,11 @@ def main():
     expected = {("'FrontierOpeningSmoke." + name + "' does not depend on any axioms").encode()
                 for name in names}
     expected.update((b"'main' does not depend on any axioms", b"DOCUMENTARY_FRONTIER_OPENING_SMOKE_DONE"))
+    expected.add(b"'ConstitutiveSearch.Agent.Local.Documentary.ControlCompactExecution.source_exact' does not depend on any axioms")
     if set(result.stdout.splitlines()) != expected or len(result.stdout.splitlines()) != len(expected):
         raise ValueError("Unexpected runtime output: " + result.stdout.decode("utf-8", "replace"))
     print("DOCUMENTARY_FRONTIER_OPENING_SMOKE_OK: eleven development checks; freshness, residuals, "
-          "positive weakening, retained order and provenance depth; exact/short/surplus fuel; fifteen clean runtime audits; "
+          "positive weakening, retained order and provenance depth; exact/short/surplus fuel; sixteen clean runtime audits; "
           "client_sha256=" + hashlib.sha256(source).hexdigest())
 
 

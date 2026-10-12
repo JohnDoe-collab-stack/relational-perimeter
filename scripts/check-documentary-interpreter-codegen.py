@@ -144,17 +144,39 @@ def main():
         body = current[names["Control_execute___redArg"]]
         applications = list(re.finditer(r"\blean_apply_1\s*\(", body))
         recursions = sites(body, "Control_execute___redArg")
-        if len(applications) != 1 or len(recursions) != 1:
-            raise ValueError("Expected one continuation and one recursive evaluation site")
-        guard = re.search(r"if \(v_isZero_\d+_ == 1\)\s*\{", body)
-        decrement = re.search(r"\blean_nat_sub\s*\(", body)
+        if len(applications) != 2 or len(recursions) != 2:
+            raise ValueError("Expected one business and one retained-event continuation/recursion site")
+        business_start = re.search(r"case 1:\s*\{", body)
+        administration_start = re.search(r"default:\s*\{", body)
+        if business_start is None or administration_start is None:
+            raise ValueError("Business and retained administration branches are absent")
+        business = body[business_start.end() - 1:block(body, business_start.end() - 1)]
+        administration = body[administration_start.end() - 1:block(body, administration_start.end() - 1)]
+        business_applications = list(re.finditer(r"\blean_apply_1\s*\(", business))
+        business_recursions = sites(business, "Control_execute___redArg")
+        admin_applications = list(re.finditer(r"\blean_apply_1\s*\(", administration))
+        admin_recursions = sites(administration, "Control_execute___redArg")
+        if any(len(found) != 1 for found in (business_applications, business_recursions,
+                                             admin_applications, admin_recursions)):
+            raise ValueError("Each historical branch must consume its actual child once")
+        guard = re.search(r"if \(v_isZero_\d+_ == 1\)\s*\{", business)
+        decrement = re.search(r"\blean_nat_sub\s*\(", business)
         if guard is None or decrement is None:
             raise ValueError("Paid transition guard or decrement missing")
-        end = block(body, guard.end() - 1)
-        if not end < decrement.start() < applications[0].start() < recursions[0].start():
+        end = block(business, guard.end() - 1)
+        if not end < decrement.start() < business_applications[0].start() < business_recursions[0].start():
             raise ValueError("Continuation entered before fuel guard/decrement")
-        if "return " not in body[guard.end():end] or "lean_apply" in body[guard.end():end]:
+        if "return " not in business[guard.end():end] or "lean_apply" in business[guard.end():end]:
             raise ValueError("Zero-fuel branch must return without continuation")
+        historical_fuel = re.search(r"lean_nat_dec_eq\((v_\w+), v_zero_\d+_\)", business)
+        admin_call = call(administration, "Control_execute___redArg")
+        if (historical_fuel is None or admin_call[1].split(',')[0].strip() != historical_fuel[1]
+                or "lean_nat_sub(" in administration
+                or not admin_applications[0].start() < admin_recursions[0].start()):
+            raise ValueError("Retained events must preserve historical business fuel")
+        # This interpreter provides historical business semantics only. The
+        # final ControlRunner separately pays these retained events; its guard
+        # and CTL laws are checked by check-documentary-runner-codegen.py.
 
         for name in scope:
             if any(sites(current[name], target) for target in

@@ -1,5 +1,6 @@
 import Tests.LocalAlignment.DocumentaryControlSequentialStage
 import Tests.LocalAlignment.DocumentaryControlConstitutiveGeneration
+import Tests.LocalAlignment.DocumentaryControlSequentialReader
 
 /-! Retain the next state produced from the actual executed stage. The supplied
 constitutive generator is expanded from its received positive source. The
@@ -119,6 +120,58 @@ theorem finite {depth : Nat} {assignment : SequentialAssignment depth}
         · exact finite_step _ _ (finite_step _ _ (finite_done _))
         · intro decision; exact finite_step _ _ (finite_done _)
 
+def decisionWithReaderCode {depth : Nat} {assignment : SequentialAssignment depth}
+    (stage : SequentialStageRun depth assignment)
+    (reader : ControlMeasuredAssignmentReader.Reader stage.next.reader) :
+    Code Label (Actual (executedBranchDecision stage)) :=
+  .step .masterNextStateQuery (fun _ =>
+    (reader.queryCode stage.discovery.1).bind (fun returned =>
+      .step .masterConstructionReturn (fun _ => .done
+        ⟨⟨stage.discovery.1, returned.1.value⟩, by
+          unfold executedBranchDecision
+          rw [← sequentialStage_selected_exact stage]
+          have bitExact := returned.1.valueExact.trans
+            (congrArg (fun assignment => assignment stage.discovery.1) stage.nextAssignmentExact)
+          exact congrArg (fun bit => StructuralBranchDecision.mk stage.discovery.1 bit) bitExact⟩)))
+
+theorem decision_with_reader_finite {depth : Nat} {assignment : SequentialAssignment depth}
+    (stage : SequentialStageRun depth assignment)
+    (reader : ControlMeasuredAssignmentReader.Reader stage.next.reader) :
+    Finite (decisionWithReaderCode stage reader) := by
+  apply finite_step; apply finite_bind (reader.finite _); intro returned
+  exact finite_step _ _ (finite_done _)
+
+def withReaderCode {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment) (stage : SequentialStageRun depth assignment)
+    (avoid : StructuralDecisionsAvoid (stageSelectedVar (depth + 1)) state.decisions)
+    (reader : ControlMeasuredAssignmentReader.Reader stage.next.reader) :
+    Code Label (Actual (realizeNextOperationalState state stage avoid)) :=
+  (provenanceCode stage.discovery.1 state.provenance).bind (fun provenance =>
+  (generationCode state).bind (fun generation =>
+  (seedCode stage).bind (fun seed =>
+  (decisionWithReaderCode stage reader).bind (fun decision =>
+    .step .masterConstructionReturn (fun _ => .done
+      ⟨fromParts state stage avoid provenance.1 provenance.2 generation.1 generation.2 seed.1 seed.2 decision.1 decision.2,
+        from_parts_actual _ _ _ _ _ _ _ _ _ _ _⟩)))))
+
+theorem with_reader_finite {depth : Nat} {assignment : SequentialAssignment depth}
+    (state : ThreadedConstitutiveState depth assignment) (stage : SequentialStageRun depth assignment)
+    (avoid : StructuralDecisionsAvoid (stageSelectedVar (depth + 1)) state.decisions)
+    (reader : ControlMeasuredAssignmentReader.Reader stage.next.reader) :
+    Finite (withReaderCode state stage avoid reader) := by
+  apply finite_bind
+  · exact finite_step _ _ (finite_done _)
+  · intro provenance
+    apply finite_bind
+    · obtain ⟨value, labels, trace, _⟩ := generation_bounded state
+      exact ⟨value, labels, trace⟩
+    · intro generation
+      apply finite_bind
+      · unfold seedCode; apply finite_step; split <;> exact finite_done _
+      · intro seed
+        apply finite_bind (decision_with_reader_finite stage reader); intro decision
+        exact finite_step _ _ (finite_done _)
+
 end ConstitutiveSearch.Agent.Local.Documentary.ControlNextState
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -131,4 +184,8 @@ end ConstitutiveSearch.Agent.Local.Documentary.ControlNextState
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.from_parts_actual
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.code
 #print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.finite
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.decisionWithReaderCode
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.decision_with_reader_finite
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.withReaderCode
+#print axioms ConstitutiveSearch.Agent.Local.Documentary.ControlNextState.with_reader_finite
 /- AXIOM_AUDIT_END -/

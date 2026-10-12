@@ -155,6 +155,8 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "compiled documentary interpreter check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-interpreter-smoke.py")
   if ($LASTEXITCODE -ne 0) { throw "documentary interpreter smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-arithmetic-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary arithmetic compiled check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-arithmetic-smoke.py")
   if ($LASTEXITCODE -ne 0) { throw "documentary arithmetic smoke failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-expanded-control-codegen.py")
@@ -173,6 +175,48 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "documentary frontier evaluation compiled check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-frontier-evaluation-smoke.py")
   if ($LASTEXITCODE -ne 0) { throw "documentary frontier evaluation smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-assignment-application-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary assignment application compiled check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-assignment-application-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary assignment application smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-frontier-application-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary frontier application compiled check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-frontier-application-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary frontier application smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-measured-reader-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary measured reader compiled check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-reader-payment-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary reader payment order compiled check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-actual-image-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary actual image compiled check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-frame-execution-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary actual frame compiled check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-runner-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary terminal runner compiled check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-compact-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary actual compact consumer check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-compact-ownership-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary compact ownership compiled check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-ceiling-consumers-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary ceiling consumers compiled check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-d2-closure-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary complete reviewed runtime inventory failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-documentary-causal-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary causal projection compiled check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-direct-runner-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary terminal runner smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-measured-reader-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary measured reader smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-measured-transport-reader-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary measured transport reader smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-master-reader-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary actual master reader smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-binding-reader-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary binding reader smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-terminal-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary public terminal initialization/succession smoke failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "run-documentary-terminal-budget-smoke.py")
+  if ($LASTEXITCODE -ne 0) { throw "documentary public frozen citation budgets failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-continuation-signature-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled signature dependency check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-variable-master-codegen.py")
