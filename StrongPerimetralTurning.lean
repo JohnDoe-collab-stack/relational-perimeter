@@ -8006,7 +8006,45 @@ structure ExecutedGodelTotalLoop
     interpretation.Truth witness.production.sentence =
       coding.Proof witness.production.sentence
 
-def ExecutedGodelWitness.rejectTotalLoop
+/- The standard semantic obstruction needed from the produced sentence is
+   only the directed completeness map below.  A total loop is stronger: its
+   type identification induces this map, but the two notions are not
+   identified.  This factorization makes explicit which part of the circular
+   closure is rejected by the Godel witness. -/
+abbrev ExecutedGodelProducedCompleteness
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    (witness :
+      ExecutedGodelWitness coding unprovabilityFormula interpretation) :
+    Type _ :=
+  interpretation.Truth witness.production.sentence →
+    coding.Proof witness.production.sentence
+
+def ExecutedGodelTotalLoop.toProducedCompleteness
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {witness :
+      ExecutedGodelWitness coding unprovabilityFormula interpretation}
+    (loop : ExecutedGodelTotalLoop witness) :
+    ExecutedGodelProducedCompleteness witness :=
+  fun truthWitness =>
+    Eq.mp loop.identifiesProducedTruthAndProof truthWitness
+
+def ExecutedGodelWitness.rejectProducedCompleteness
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    (witness :
+      ExecutedGodelWitness coding unprovabilityFormula interpretation) :
+    ExecutedGodelProducedCompleteness witness → Empty :=
+  fun completeness => witness.unprovable (completeness witness.trueWitness)
+
+def ExecutedGodelWitness.rejectTotalLoopThroughCompleteness
     {coding : GodelDiagonalSyntax}
     {unprovabilityFormula : coding.UnaryFormula}
     {interpretation :
@@ -8015,8 +8053,17 @@ def ExecutedGodelWitness.rejectTotalLoop
       ExecutedGodelWitness coding unprovabilityFormula interpretation) :
     ExecutedGodelTotalLoop witness → Empty :=
   fun loop =>
-    witness.unprovable
-      (Eq.mp loop.identifiesProducedTruthAndProof witness.trueWitness)
+    witness.rejectProducedCompleteness loop.toProducedCompleteness
+
+def ExecutedGodelWitness.rejectTotalLoop
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    (witness :
+      ExecutedGodelWitness coding unprovabilityFormula interpretation) :
+    ExecutedGodelTotalLoop witness → Empty :=
+  witness.rejectTotalLoopThroughCompleteness
 
 def executedGodelNode
     {coding : GodelDiagonalSyntax}
@@ -9227,6 +9274,20 @@ def uniformTotalSeedAdmitsGodelSentence :
         numberedUnprovabilityFormula) :=
   ⟨godelPair 5 0, .admitted ()⟩
 
+/- The total seed is already unsound independently of diagonalization: it
+   admits an instance whose semantics is the empty type for every proof code.
+   This witness is kept separate from the diagonal argument so that it cannot
+   be used to explain the Godel obstruction. -/
+def uniformTotalSeedAdmitsUniversalFalsity :
+    UniformNumberedProof UniformTotalSeed
+      (.apply (.forallProof .falsity) 0) :=
+  ⟨godelPair 5 0, .admitted ()⟩
+
+def uniformTotalSeedCannotBeSoundWithoutDiagonal :
+    UniformNumberedSeedSound UniformTotalSeed → Empty :=
+  fun seedSound =>
+    (uniformTotalSeedAdmitsUniversalFalsity.sound seedSound) 0
+
 def uniformTotalSeedCannotBeSound :
     UniformNumberedSeedSound UniformTotalSeed → Empty :=
   fun seedSound =>
@@ -9252,6 +9313,42 @@ theorem uniformNumberedGodelSentence_seedIndependent
         (uniformNumberedGodelSyntax rightSeed)
         numberedUnprovabilityFormula :=
   rfl
+
+abbrev uniformCanonicalGodelSentence : NumberedSentence :=
+  godelSentence
+    (uniformNumberedGodelSyntax UniformTotalSeed)
+    numberedUnprovabilityFormula
+
+/- This seed has exactly one admissible sentence: the common diagonal
+   sentence.  It has no unrelated false admission from which unsoundness could
+   be obtained. -/
+def UniformGodelOnlySeed
+    (_ : NumberedProofCode) (sentence : NumberedSentence) : Type :=
+  PLift (sentence = uniformCanonicalGodelSentence)
+
+def UniformGodelOnlySeed.admittedSentenceExact
+    {proofCode : NumberedProofCode}
+    {sentence : NumberedSentence}
+    (admission : UniformGodelOnlySeed proofCode sentence) :
+    sentence = uniformCanonicalGodelSentence :=
+  admission.down
+
+def uniformGodelOnlySeedAdmitsItsGodelSentence :
+    UniformNumberedProof UniformGodelOnlySeed
+      (godelSentence
+        (uniformNumberedGodelSyntax UniformGodelOnlySeed)
+        numberedUnprovabilityFormula) :=
+  ⟨godelPair 5 0,
+    .admitted
+      ⟨uniformNumberedGodelSentence_seedIndependent
+        UniformGodelOnlySeed UniformTotalSeed⟩⟩
+
+def uniformGodelOnlySeedCannotBeSound :
+    UniformNumberedSeedSound UniformGodelOnlySeed → Empty :=
+  fun seedSound =>
+    everySoundUniformSeedRejectsItsGodelSentence
+      UniformGodelOnlySeed seedSound
+        uniformGodelOnlySeedAdmitsItsGodelSentence
 
 inductive UniformKernelSeed :
     NumberedProofCode → NumberedSentence → Type
@@ -9411,6 +9508,25 @@ def uniformTotalSeedAdmitsKernelProducedSentence :
       uniformKernelProducedSentence_is_totalSeedGodelSentence.symm)
     uniformTotalSeedAdmitsGodelSentence
 
+theorem uniformKernelProducedSentence_is_godelOnlySeedGodelSentence :
+    uniformKernelExecutedGodelLink.exit.witness.production.sentence =
+      godelSentence
+        (uniformNumberedGodelSyntax UniformGodelOnlySeed)
+        numberedUnprovabilityFormula :=
+  uniformKernelExecutedGodelLink.exit.witness.production
+    |>.sentence_is_godelSentence
+    |>.trans
+      (uniformNumberedGodelSentence_seedIndependent
+        UniformKernelSeed UniformGodelOnlySeed)
+
+def uniformGodelOnlySeedAdmitsKernelProducedSentence :
+    UniformNumberedProof UniformGodelOnlySeed
+      uniformKernelExecutedGodelLink.exit.witness.production.sentence :=
+  Eq.mp
+    (congrArg (UniformNumberedProof UniformGodelOnlySeed)
+      uniformKernelProducedSentence_is_godelOnlySeedGodelSentence.symm)
+    uniformGodelOnlySeedAdmitsItsGodelSentence
+
 structure UniformExecutedDiagonalCollision
     {Seed : UniformNumberedSeed}
     (seedSound : UniformNumberedSeedSound Seed)
@@ -9528,6 +9644,21 @@ structure UniformGodelDiagonalPerimetralConclusion where
   syntaxAndVerifierAdmitTheProducedSentence :
     UniformNumberedProof UniformTotalSeed
       execution.exit.witness.production.sentence
+  totalSeedAdmitsNonDiagonalUniversalFalsity :
+    UniformNumberedProof UniformTotalSeed
+      (.apply (.forallProof .falsity) 0)
+  totalSeedHasIndependentUnsoundness :
+    UniformNumberedSeedSound UniformTotalSeed → Empty
+  godelOnlySeedAdmissionsAreExact :
+    {proofCode : NumberedProofCode} →
+      {sentence : NumberedSentence} →
+        UniformGodelOnlySeed proofCode sentence →
+          sentence = uniformCanonicalGodelSentence
+  godelOnlySeedAdmitsTheProducedSentence :
+    UniformNumberedProof UniformGodelOnlySeed
+      execution.exit.witness.production.sentence
+  godelOnlyAdmissionIsIncompatibleWithSoundness :
+    UniformNumberedSeedSound UniformGodelOnlySeed → Empty
   structuralExclusionWithoutSoundnessIsImpossible :
     ((Seed : UniformNumberedSeed) →
       UniformNumberedProof Seed
@@ -9551,6 +9682,11 @@ structure UniformGodelDiagonalPerimetralConclusion where
         uniformKernelSeedSound execution.exit.witness proof
   producedWitnessRejectsTotalLoop :
     ExecutedGodelTotalLoop execution.exit.witness → Empty
+  producedWitnessRejectsSemanticCompleteness :
+    ExecutedGodelProducedCompleteness execution.exit.witness → Empty
+  totalLoopFactorsThroughSemanticCompleteness :
+    ExecutedGodelTotalLoop execution.exit.witness →
+      ExecutedGodelProducedCompleteness execution.exit.witness
   continuationConsumesProducedWitness :
     execution.exit.continuation =
       oneStepAfterPerimeter
@@ -9592,6 +9728,16 @@ def uniformGodelDiagonalPerimetralTheorem :
       uniformKernelProofRejectionFamilyExclusionRejected
     syntaxAndVerifierAdmitTheProducedSentence :=
       uniformTotalSeedAdmitsKernelProducedSentence
+    totalSeedAdmitsNonDiagonalUniversalFalsity :=
+      uniformTotalSeedAdmitsUniversalFalsity
+    totalSeedHasIndependentUnsoundness :=
+      uniformTotalSeedCannotBeSoundWithoutDiagonal
+    godelOnlySeedAdmissionsAreExact :=
+      UniformGodelOnlySeed.admittedSentenceExact
+    godelOnlySeedAdmitsTheProducedSentence :=
+      uniformGodelOnlySeedAdmitsKernelProducedSentence
+    godelOnlyAdmissionIsIncompatibleWithSoundness :=
+      uniformGodelOnlySeedCannotBeSound
     structuralExclusionWithoutSoundnessIsImpossible :=
       uniformVerifierExclusionWithoutSoundnessRejected
     totalAdmissionIsIncompatibleWithSoundness :=
@@ -9604,6 +9750,10 @@ def uniformGodelDiagonalPerimetralTheorem :
           uniformKernelExecutedGodelLink.exit.witness proof
     producedWitnessRejectsTotalLoop :=
       uniformKernelExecutedGodelLink.exit.witness.rejectTotalLoop
+    producedWitnessRejectsSemanticCompleteness :=
+      uniformKernelExecutedGodelLink.exit.witness.rejectProducedCompleteness
+    totalLoopFactorsThroughSemanticCompleteness :=
+      ExecutedGodelTotalLoop.toProducedCompleteness
     continuationConsumesProducedWitness :=
       uniformKernelExecutedGodelLink.exit.continuationIsCanonical
     globalClosureForcesProducedIdentification :=
@@ -9614,6 +9764,235 @@ def uniformGodelDiagonalPerimetralTheorem :
       uniformKernelProducedWitnessRejectsGlobalClosure
     continuationRejectsTotalizingRegime :=
       uniformKernelProducedWitnessRejectsTotalizingRegime }
+
+/-! ### Effective presentation bridge to the soundness form of incompleteness
+
+The concrete uniform verifier above is an executable separating model.  The
+following independent adapter states the standard hypotheses used by the
+soundness-based Godel argument in effective form.  Sentences and unary
+formulas have natural-number encodings with executable decoders; proofs and
+provable equivalences are natural-number certificates accepted by Boolean
+verifiers.  Diagonal exactness, soundness, truth transport, and internal
+representation of unprovability are the explicit mathematical premises.
+
+No incompleteness conclusion, truth witness for the diagonal sentence, or
+rejection of its proof occurs among the fields.  Those are derived below and
+then consumed by the same perimetral presentation and continuation.  This is
+a correspondence theorem for every system satisfying the displayed standard
+hypotheses; constructing such data for a particular arithmetic theory remains
+the separate arithmetic-realization obligation recorded in the TODO above. -/
+
+abbrev CheckedSentenceProof
+    {Sentence : Type}
+    (encodeSentence : Sentence → Nat)
+    (proofCheck : Nat → Nat → Bool)
+    (sentence : Sentence) : Type :=
+  Σ proofCode : Nat,
+    PLift (proofCheck proofCode (encodeSentence sentence) = true)
+
+abbrev CheckedSentenceEquivalence
+    {Sentence : Type}
+    (encodeSentence : Sentence → Nat)
+    (equivalenceCheck : Nat → Nat → Nat → Bool)
+    (left right : Sentence) : Type :=
+  Σ certificateCode : Nat,
+    PLift
+      (equivalenceCheck certificateCode
+        (encodeSentence left) (encodeSentence right) = true)
+
+structure EffectivelyPresentedSoundGodelSystem where
+  UnaryFormula : Type
+  Sentence : Type
+  encodeUnary : UnaryFormula → Nat
+  decodeUnary : Nat → Option UnaryFormula
+  decodeUnary_encode :
+    (formula : UnaryFormula) →
+      decodeUnary (encodeUnary formula) = some formula
+  encodeSentence : Sentence → Nat
+  decodeSentence : Nat → Option Sentence
+  decodeSentence_encode :
+    (sentence : Sentence) →
+      decodeSentence (encodeSentence sentence) = some sentence
+  substitute : UnaryFormula → Nat → Sentence
+  diagonalize : UnaryFormula → UnaryFormula
+  proofCheck : Nat → Nat → Bool
+  equivalenceCheck : Nat → Nat → Nat → Bool
+  diagonalizeExact :
+    (target source : UnaryFormula) →
+      CheckedSentenceEquivalence encodeSentence equivalenceCheck
+        (substitute (diagonalize target) (encodeUnary source))
+        (substitute target
+          (encodeSentence (substitute source (encodeUnary source))))
+  proofForward :
+    {left right : Sentence} →
+      CheckedSentenceEquivalence encodeSentence equivalenceCheck left right →
+      CheckedSentenceProof encodeSentence proofCheck left →
+      CheckedSentenceProof encodeSentence proofCheck right
+  proofBackward :
+    {left right : Sentence} →
+      CheckedSentenceEquivalence encodeSentence equivalenceCheck left right →
+      CheckedSentenceProof encodeSentence proofCheck right →
+      CheckedSentenceProof encodeSentence proofCheck left
+  Truth : Sentence → Type
+  proofSound :
+    {sentence : Sentence} →
+      CheckedSentenceProof encodeSentence proofCheck sentence →
+        Truth sentence
+  equivalenceTruthForward :
+    {left right : Sentence} →
+      CheckedSentenceEquivalence encodeSentence equivalenceCheck left right →
+        Truth left → Truth right
+  equivalenceTruthBackward :
+    {left right : Sentence} →
+      CheckedSentenceEquivalence encodeSentence equivalenceCheck left right →
+        Truth right → Truth left
+  unprovabilityFormula : UnaryFormula
+  representsUnprovabilityForward :
+    (sentence : Sentence) →
+      Truth (substitute unprovabilityFormula (encodeSentence sentence)) →
+        CheckedSentenceProof encodeSentence proofCheck sentence → Empty
+  representsUnprovabilityBackward :
+    (sentence : Sentence) →
+      (CheckedSentenceProof encodeSentence proofCheck sentence → Empty) →
+        Truth (substitute unprovabilityFormula (encodeSentence sentence))
+
+def EffectivelyPresentedSoundGodelSystem.encodeUnary_injective
+    (system : EffectivelyPresentedSoundGodelSystem)
+    {left right : system.UnaryFormula}
+    (equality : system.encodeUnary left = system.encodeUnary right) :
+    left = right := by
+  have decodedEquality : some left = some right :=
+    (system.decodeUnary_encode left).symm.trans
+      ((congrArg system.decodeUnary equality).trans
+        (system.decodeUnary_encode right))
+  exact Option.some.inj decodedEquality
+
+def EffectivelyPresentedSoundGodelSystem.encodeSentence_injective
+    (system : EffectivelyPresentedSoundGodelSystem)
+    {left right : system.Sentence}
+    (equality : system.encodeSentence left = system.encodeSentence right) :
+    left = right := by
+  have decodedEquality : some left = some right :=
+    (system.decodeSentence_encode left).symm.trans
+      ((congrArg system.decodeSentence equality).trans
+        (system.decodeSentence_encode right))
+  exact Option.some.inj decodedEquality
+
+def EffectivelyPresentedSoundGodelSystem.toGodelSyntax
+    (system : EffectivelyPresentedSoundGodelSystem) :
+    GodelDiagonalSyntax :=
+  { Code := Nat
+    UnaryFormula := system.UnaryFormula
+    Sentence := system.Sentence
+    Proof := CheckedSentenceProof system.encodeSentence system.proofCheck
+    ProvableIff :=
+      CheckedSentenceEquivalence system.encodeSentence
+        system.equivalenceCheck
+    quoteUnary := system.encodeUnary
+    quoteSentence := system.encodeSentence
+    substitute := system.substitute
+    diagonalize := system.diagonalize
+    diagonalizeExact := system.diagonalizeExact
+    proofForward := system.proofForward
+    proofBackward := system.proofBackward }
+
+def EffectivelyPresentedSoundGodelSystem.toGodelInterpretation
+    (system : EffectivelyPresentedSoundGodelSystem) :
+    GodelProvabilityInterpretation system.toGodelSyntax
+      system.unprovabilityFormula :=
+  { Truth := system.Truth
+    proofSound := system.proofSound
+    provableIffTruthForward := system.equivalenceTruthForward
+    provableIffTruthBackward := system.equivalenceTruthBackward
+    representsUnprovabilityForward :=
+      system.representsUnprovabilityForward
+    representsUnprovabilityBackward :=
+      system.representsUnprovabilityBackward }
+
+abbrev effectiveGodelExecutedLink
+    (system : EffectivelyPresentedSoundGodelSystem) :
+    ExecutedGodelDiagonalPerimetralLink
+      system.toGodelSyntax system.unprovabilityFormula
+        system.toGodelInterpretation :=
+  executedGodelDiagonalPerimetralLink
+    system.toGodelSyntax system.unprovabilityFormula
+      system.toGodelInterpretation
+
+structure EffectiveGodelPerimetralCorrespondence
+    (system : EffectivelyPresentedSoundGodelSystem) where
+  execution :
+    ExecutedGodelDiagonalPerimetralLink
+      system.toGodelSyntax system.unprovabilityFormula
+        system.toGodelInterpretation
+  producedSentenceIsConstructedDiagonal :
+    execution.exit.witness.production.sentence =
+      godelSentence system.toGodelSyntax system.unprovabilityFormula
+  producedFixedPoint :
+    system.toGodelSyntax.ProvableIff
+      execution.exit.witness.production.sentence
+      (system.toGodelSyntax.substitute system.unprovabilityFormula
+        (system.toGodelSyntax.quoteSentence
+          execution.exit.witness.production.sentence))
+  producedSentenceIsTrue :
+    system.toGodelInterpretation.Truth
+      execution.exit.witness.production.sentence
+  producedSentenceIsUnprovable :
+    system.toGodelSyntax.Proof
+      execution.exit.witness.production.sentence → Empty
+  semanticCompletenessAtProducedSentenceIsImpossible :
+    ExecutedGodelProducedCompleteness execution.exit.witness → Empty
+  totalLoopFactorsThroughSemanticCompleteness :
+    ExecutedGodelTotalLoop execution.exit.witness →
+      ExecutedGodelProducedCompleteness execution.exit.witness
+  continuationIsTheConstructedPositiveExtension :
+    execution.exit.continuation =
+      oneStepAfterPerimeter
+        (executedGodelCircularPresentation execution.exit.witness)
+  continuationIsStrict :
+    StrictConstitutivePrefix
+      (perimeterDeployment
+        (executedGodelCircularPresentation execution.exit.witness))
+      execution.exit.continuation
+  continuationIsLocallyExact :
+    ExactNonClosingRealization
+      (executedGodelCircularPresentation execution.exit.witness)
+      execution.exit.continuation
+  specifiedGlobalClosureIsImpossible :
+    CircularClosureMeaning
+      (executedGodelCircularPresentation execution.exit.witness)
+      execution.exit.continuation → False
+  specifiedTotalizingRegimeIsImpossible :
+    CircularRefinement
+      (executedGodelCircularPresentation execution.exit.witness)
+      execution.exit.continuation → False
+
+def effectiveGodelPerimetralCorrespondence
+    (system : EffectivelyPresentedSoundGodelSystem) :
+    EffectiveGodelPerimetralCorrespondence system := by
+  let execution := effectiveGodelExecutedLink system
+  exact
+    { execution := execution
+      producedSentenceIsConstructedDiagonal :=
+        execution.exit.witness.production.sentence_is_godelSentence
+      producedFixedPoint := execution.exit.witness.fixedPoint
+      producedSentenceIsTrue := execution.exit.witness.trueWitness
+      producedSentenceIsUnprovable := execution.exit.witness.unprovable
+      semanticCompletenessAtProducedSentenceIsImpossible :=
+        execution.exit.witness.rejectProducedCompleteness
+      totalLoopFactorsThroughSemanticCompleteness :=
+        ExecutedGodelTotalLoop.toProducedCompleteness
+      continuationIsTheConstructedPositiveExtension :=
+        execution.exit.continuationIsCanonical
+      continuationIsStrict := by
+        rw [execution.exit.continuationIsCanonical]
+        exact
+          oneStepAfterPerimeterStrict
+            (executedGodelCircularPresentation execution.exit.witness)
+      continuationIsLocallyExact := execution.exit.locallyExact
+      specifiedGlobalClosureIsImpossible :=
+        execution.exit.rejectsGlobalClosure
+      specifiedTotalizingRegimeIsImpossible :=
+        execution.exit.rejectsTotalizingRegime }
 /-! ## Derived structural length
 
 `Nat` enters only here, after the constitutive boundary and its maximality have
@@ -11645,6 +12024,10 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.ExecutedGodelWitness
 #print axioms StrongPerimetralTurning.certifyExecutedGodelWitness
 #print axioms StrongPerimetralTurning.ExecutedGodelTotalLoop
+#print axioms StrongPerimetralTurning.ExecutedGodelProducedCompleteness
+#print axioms StrongPerimetralTurning.ExecutedGodelTotalLoop.toProducedCompleteness
+#print axioms StrongPerimetralTurning.ExecutedGodelWitness.rejectProducedCompleteness
+#print axioms StrongPerimetralTurning.ExecutedGodelWitness.rejectTotalLoopThroughCompleteness
 #print axioms StrongPerimetralTurning.ExecutedGodelWitness.rejectTotalLoop
 #print axioms StrongPerimetralTurning.executedGodelNode
 #print axioms StrongPerimetralTurning.executedGodelPerimeter
@@ -11755,9 +12138,16 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.everySoundUniformSeedRejectsItsGodelSentence
 #print axioms StrongPerimetralTurning.UniformTotalSeed
 #print axioms StrongPerimetralTurning.uniformTotalSeedAdmitsGodelSentence
+#print axioms StrongPerimetralTurning.uniformTotalSeedAdmitsUniversalFalsity
+#print axioms StrongPerimetralTurning.uniformTotalSeedCannotBeSoundWithoutDiagonal
 #print axioms StrongPerimetralTurning.uniformTotalSeedCannotBeSound
 #print axioms StrongPerimetralTurning.uniformVerifierExclusionWithoutSoundnessRejected
 #print axioms StrongPerimetralTurning.uniformNumberedGodelSentence_seedIndependent
+#print axioms StrongPerimetralTurning.uniformCanonicalGodelSentence
+#print axioms StrongPerimetralTurning.UniformGodelOnlySeed
+#print axioms StrongPerimetralTurning.UniformGodelOnlySeed.admittedSentenceExact
+#print axioms StrongPerimetralTurning.uniformGodelOnlySeedAdmitsItsGodelSentence
+#print axioms StrongPerimetralTurning.uniformGodelOnlySeedCannotBeSound
 #print axioms StrongPerimetralTurning.UniformKernelSeed
 #print axioms StrongPerimetralTurning.UniformNumberedVerifies.kernelNotUniversalFalsity
 #print axioms StrongPerimetralTurning.UniformNumberedVerifies.kernelImpossibleSelfApplication
@@ -11771,6 +12161,8 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.uniformKernelProducedSentence_is_proofRejectionFamily
 #print axioms StrongPerimetralTurning.uniformKernelProducedSentence_is_totalSeedGodelSentence
 #print axioms StrongPerimetralTurning.uniformTotalSeedAdmitsKernelProducedSentence
+#print axioms StrongPerimetralTurning.uniformKernelProducedSentence_is_godelOnlySeedGodelSentence
+#print axioms StrongPerimetralTurning.uniformGodelOnlySeedAdmitsKernelProducedSentence
 #print axioms StrongPerimetralTurning.UniformExecutedDiagonalCollision
 #print axioms StrongPerimetralTurning.uniformExecutedDiagonalCollision
 #print axioms StrongPerimetralTurning.uniformKernelGlobalClosureForcesProducedIdentification
@@ -11779,4 +12171,14 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.uniformKernelProducedWitnessRejectsTotalizingRegime
 #print axioms StrongPerimetralTurning.UniformGodelDiagonalPerimetralConclusion
 #print axioms StrongPerimetralTurning.uniformGodelDiagonalPerimetralTheorem
+#print axioms StrongPerimetralTurning.CheckedSentenceProof
+#print axioms StrongPerimetralTurning.CheckedSentenceEquivalence
+#print axioms StrongPerimetralTurning.EffectivelyPresentedSoundGodelSystem
+#print axioms StrongPerimetralTurning.EffectivelyPresentedSoundGodelSystem.encodeUnary_injective
+#print axioms StrongPerimetralTurning.EffectivelyPresentedSoundGodelSystem.encodeSentence_injective
+#print axioms StrongPerimetralTurning.EffectivelyPresentedSoundGodelSystem.toGodelSyntax
+#print axioms StrongPerimetralTurning.EffectivelyPresentedSoundGodelSystem.toGodelInterpretation
+#print axioms StrongPerimetralTurning.effectiveGodelExecutedLink
+#print axioms StrongPerimetralTurning.EffectiveGodelPerimetralCorrespondence
+#print axioms StrongPerimetralTurning.effectiveGodelPerimetralCorrespondence
 /- AXIOM_AUDIT_END -/
