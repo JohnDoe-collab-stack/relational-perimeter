@@ -1,11 +1,7 @@
 {
   "schema_version": 2,
-  "document_relocations": {
-    "docs/science/chaine-constitutive-machine.fr.md": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
-    "docs/science/constitutive-machine-chain.en.md": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
-    "docs/science/preuves-chaine-constitutive-machine.fr.md": "docs/work/PREUVES_CHAINE_CONSTITUTIVE_MACHINE.fr.md"
-  },
-  "evidence_revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
+  "document_relocations": {},
+  "evidence_revision": "3914b9578e650226c7269fce9932f646359af498",
   "immutable_target": {
     "revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
     "anchors": [
@@ -101,7 +97,7 @@
         "SEARCH_CONTEXTS",
         "MASTER_COUPLING"
       ],
-      "source_sha256": "5a69e2217115909a80770431fb92cb242b281ac83489d80581061377dc6cae04",
+      "source_sha256": "c4c6f9fe64d353da364bc71927898d1a38d4227d0f2f20dcf026a49cfd3129ad",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -176,7 +172,7 @@
         "TARGET_4",
         "PROFILE_FORGETTING"
       ],
-      "source_sha256": "d0b053c12e4eb13cba63001ed721d88e6b3efeb2de14cf1d233610511ca80e83",
+      "source_sha256": "180739d1d8eea1df7579da3e72d00ca7a665db677bec17cc3bf328c43f192425",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -241,7 +237,7 @@
         "TARGET_4",
         "PARTIAL_WIDTHS"
       ],
-      "source_sha256": "3aa28d7e2e286f9eae3f092424538952dd48c918ccdc290424da0027051c0312",
+      "source_sha256": "364aa59ced451437aedc7a22692d270763909bed4acd950672ff0573aea3faeb",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -308,7 +304,7 @@
         "transport": "La non-conservation indépendante n'efface pas les identités ; la portée reste celle de largeur, non du temps."
       },
       "consumers": [],
-      "source_sha256": "d0b053c12e4eb13cba63001ed721d88e6b3efeb2de14cf1d233610511ca80e83",
+      "source_sha256": "180739d1d8eea1df7579da3e72d00ca7a665db677bec17cc3bf328c43f192425",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -457,7 +453,7 @@
         "MASTER_COUPLING",
         "MACHINE_EXAMPLE"
       ],
-      "source_sha256": "0ce024d307bed5ccd453e503221925c81aef8ae7e8b8863c356f55140c64abe5",
+      "source_sha256": "e2dbe2d56a56742b632a3a70056be63ceed15538ec221db24df7f01f2eb296b2",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -537,7 +533,7 @@
         "MASTER_COUPLING",
         "SINGLE_EXECUTION"
       ],
-      "source_sha256": "c7ac84aa789d60377a43f785dc4082d4367c81fc8629486a4b93fe5c1d44cbad",
+      "source_sha256": "855f362a74f4b204d6249f52050bcd9b5470844cd66319c24d496cacd69e217f",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -650,7 +646,7 @@
         "FULL_FUTURES",
         "SINGLE_EXECUTION"
       ],
-      "source_sha256": "ede445b457f9329ecf9dc0d927c3df36897149bf07c0e867e5f39218d1a85dac",
+      "source_sha256": "9411d8b2ad1833aa2a2c6f4ee73e5b2700cd4e3389140f77d1d705cd955a5d76",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -726,7 +722,7 @@
         "FULL_FUTURES",
         "MACHINE_EXAMPLE"
       ],
-      "source_sha256": "7c772a9033d131294ebf07b517f467758a7820d667d82efdb9d29b2ea9cd160b",
+      "source_sha256": "a10f3c0c6822613e051e3615c2de52fe9d8650c97b339818ea0f36c6726cc8fb",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -801,7 +797,7 @@
       "consumers": [
         "SINGLE_EXECUTION"
       ],
-      "source_sha256": "556375a130de7eb0303434d2dd8a7b8a9c7e6ac234a5351484ca903ebfe5b04d",
+      "source_sha256": "d928be3598dfd4957c70155fc7b0e4d52aa2d1c74e540e7fa136723a48202ad5",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -899,7 +895,7 @@
         "transport": "L'échec des deux directions du chercheur ne démontre pas l'absence universelle d'une relation."
       },
       "consumers": [],
-      "source_sha256": "36f660d8480c816e07edc89bb5c99ba6542d0f3f8b6a1380f7e3f78e32199a12",
+      "source_sha256": "fa06f6fa8cf212ec38ec36ba90db0975a4ee732628b1e983a2f03cb87f60bf6e",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -981,7 +977,7 @@
         "transport": "Les gates restent représentées par constructeurs logiciels ; ni FPGA ni coût de routage physique prouvé."
       },
       "consumers": [],
-      "source_sha256": "e7c36553da7101788552ddc9cc25e57ec31b6fdf461c84ef029dcd3132619634",
+      "source_sha256": "81c683c209ca38299304534c611dd9ac6797d9391fa99540a316dfb615779b71",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1054,7 +1050,7 @@
         "transport": "L'oubli est relatif aux futurs permis, sans identification des sources ni suppression d'une demande du contrat."
       },
       "consumers": [],
-      "source_sha256": "2c62244972e2f8094d8a4d102373e036166d639214965bd5d81aa067c0de6ab3",
+      "source_sha256": "1c0cdee552b585c1b7778ebc315b3777ea55161a10c49a6badf5758ae73d26e5",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1129,7 +1125,7 @@
       "consumers": [
         "REACHABLE_SIGNATURE"
       ],
-      "source_sha256": "d0b053c12e4eb13cba63001ed721d88e6b3efeb2de14cf1d233610511ca80e83",
+      "source_sha256": "180739d1d8eea1df7579da3e72d00ca7a665db677bec17cc3bf328c43f192425",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1200,7 +1196,7 @@
         "transport": "Les droits ont deux lois de retour ; la réalisation par nombre n'est pas une gratuité physique."
       },
       "consumers": [],
-      "source_sha256": "650101f22467c9ea72601049c88008b54201865d650263865accf6ae6359dbe4",
+      "source_sha256": "7843ffc6fb4f13b80b682d0c5665d1e46082c3cbe4b500e28ed2daaca9874211",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1268,7 +1264,7 @@
         "transport": "Cette réduction ne retire aucune demande d'un autre contrat complet."
       },
       "consumers": [],
-      "source_sha256": "ee043ecc02a48919c572ccd452a2da8ab37d42a26045c42b3f8d3d324bdabe79",
+      "source_sha256": "b7bd774d464ed7122aa10b28b90ff308734cd6f144ad9ada689294bbaa945aff",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1345,7 +1341,7 @@
         "transport": "Comparer 4, 2, 1 sur les mêmes rôles n'identifie pas leurs occurrences."
       },
       "consumers": [],
-      "source_sha256": "7f37b9f73f5bc0ab2cf0d802eea584b64fb0310c3f4eb47d04dc5ca92cf361db",
+      "source_sha256": "63da942bb78d5d3c55cd9f39a2ac47bd7c0bb7f7111e86cccf7e886e8d6bbd60",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1409,7 +1405,62 @@
       "consumers": [
         "FULL_FUTURES"
       ],
-      "source_sha256": "36f62f46a9564280d2a9df705a94df72795c2a543a75be6c515eeb7a9b9ff837",
+      "source_sha256": "2798529fdd56ecb3f66a220fe331a8775f21bacb6520e267bb6a78335e6eb30e",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "GODEL_AFFIRMATIVE_CONSTITUTION",
+      "kind": "causal",
+      "scope": "Forme sémantique fondée sur la correction : toute présentation effective satisfaisant les lois explicites de codage, diagonalisation, vérification, transport et représentation de la non-prouvabilité produit une phrase vraie non prouvable, l'inscrit dans le tout relationnel et construit une continuation positive incompatible avec la fermeture spécifiée ; instance uniforme exécutable séparée, sans instanciation revendiquée pour une théorie arithmétique nommée.",
+      "anchors": [
+        {
+          "path": "docs/constitution-affirmative-incompletude-godel.fr.md",
+          "heading": "Conclusion canonique à portée explicite",
+          "paragraph": 1,
+          "sha256": "00215cfab47d89f2e9cbd2a13181cdc9bbe7676fe7ee75ae69f65326777a764e"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "StrongPerimetralTurning",
+          "name": "StrongPerimetralTurning.executedGodelDiagonalPerimetralLink",
+          "role": "production"
+        },
+        {
+          "module": "StrongPerimetralTurning",
+          "name": "StrongPerimetralTurning.uniformGodelDiagonalPerimetralTheorem",
+          "role": "production"
+        },
+        {
+          "module": "StrongPerimetralTurning",
+          "name": "StrongPerimetralTurning.ExecutedGodelTotalLoop.toProducedCompleteness",
+          "role": "production"
+        },
+        {
+          "module": "StrongPerimetralTurning",
+          "name": "StrongPerimetralTurning.effectiveGodelPerimetralCorrespondence",
+          "role": "production"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Les types de formule, phrase, preuve, vérité, équivalence, témoin produit, occurrence et continuation restent indexés par le système reçu et par la phrase effectivement construite.",
+        "execution": "L'histoire exécute dans l'ordre received, diagonalize, selfApply, certify et continue ; chaque producteur consomme la sortie typée du précédent et la continuation est construite depuis la présentation du même témoin.",
+        "proof": "La non-prouvabilité consomme correction, point fixe et représentation ; la vérité consomme la direction inverse. La fermeture se factorise par Truth(G) vers Proof(G), puis rencontre le certificat de non-prouvabilité.",
+        "transport": "Les équivalences transportent séparément preuves et vérités ; la provenance impose l'égalité au témoin transmis, et la réalisation exacte conserve les occurrences intérieures dans l'extension stricte sans identifier vérité et preuve."
+      },
+      "consumers": [],
+      "source_sha256": "f3649d88a633b2ddd3a9e06ce90bb2fd821fea2ade253caf2da31187131bc6df",
       "reviews": {
         "reader": {
           "status": "pending"
