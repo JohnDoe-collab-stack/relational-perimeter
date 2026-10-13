@@ -9049,7 +9049,7 @@ def concreteGodelDiagonalPerimetralTheorem :
 The closed verifier above remains useful as a small executable instance, but
 its constructors can also be inspected to obtain a separate syntactic
 non-derivability argument.  The authoritative construction below removes that
-possible shortcut.  A seed relation may admit *any* numbered sentence.  The
+possible shortcut.  A seed relation may accept *any* numbered sentence.  The
 uniform verifier merely closes those admissions under the same executable
 equivalence rules.  In particular, a total seed admits the produced Godel
 sentence, so neither its syntax nor the verifier shape excludes it.
@@ -9057,7 +9057,7 @@ sentence, so neither its syntax nor the verifier shape excludes it.
 Correction is a separate datum.  The diagonal argument proves that every
 correct seed rejects the produced sentence and, conversely, that the total
 seed cannot be correct.  A concrete kernel seed closes the correction
-obligation without naming the Godel sentence.  It does explicitly admit the
+obligation without naming the Godel sentence.  It does explicitly accept the
 distinct `numberedNonDiagonalRejectionSentence` through
 `impossibleSelfApplicationRejection`; this positive inhabitant is what rules
 out a blanket syntactic exclusion of the proof-rejection family.  The same
