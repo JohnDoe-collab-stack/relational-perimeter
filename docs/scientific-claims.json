@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "document_relocations": {},
-  "evidence_revision": "23009c93681b65a9da0ed6d25feedc61648838ba",
+  "evidence_revision": "25c51eeea62607ccbf1daacd57353457505c0ac8",
   "immutable_target": {
     "revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
     "anchors": [
@@ -1450,6 +1450,11 @@
           "module": "StrongPerimetralTurning",
           "name": "StrongPerimetralTurning.effectiveGodelPerimetralCorrespondence",
           "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
+          "name": "StrongPerimetralTurning.arithmeticGodelPerimetralCorrespondence",
+          "role": "production"
         }
       ],
       "checks": [],
@@ -1460,7 +1465,7 @@
         "transport": "Les équivalences transportent séparément preuves et vérités ; la provenance impose l'égalité au témoin transmis, et la réalisation exacte conserve les occurrences intérieures dans l'extension stricte sans identifier vérité et preuve."
       },
       "consumers": [],
-      "source_sha256": "b20aa30154058c0ee7c2240adf47fe818935e032a34a3075671ac8535c3d5935",
+      "source_sha256": "24719993d99e439835c9a3ed726618e2527e3792c27c67dd7424b3e92be796f5",
       "reviews": {
         "reader": {
           "status": "pending"
