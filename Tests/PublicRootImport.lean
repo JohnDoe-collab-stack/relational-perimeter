@@ -28,6 +28,24 @@ def publicArithmeticGodelCorrespondence
     StrongPerimetralTurning.ArithmeticGodelPerimetralCorrespondence theory :=
   StrongPerimetralTurning.arithmeticGodelPerimetralCorrespondence theory
 
+def publicArithmeticGodelCausalParticipation
+    (theory :
+      StrongPerimetralTurning.EffectivelyPresentedSoundArithmeticTheory) :
+    StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation
+      (StrongPerimetralTurning.arithmeticGodelPerimetralCorrespondence
+        theory).effective.execution :=
+  (StrongPerimetralTurning.arithmeticGodelPerimetralCorrespondence
+    theory).executedCausalParticipation
+
+def publicArithmeticGodelCausalClosureRejection
+    (theory :
+      StrongPerimetralTurning.EffectivelyPresentedSoundArithmeticTheory) :
+    StrongPerimetralTurning.ArithmeticExecutedGodelCausalClosureMeaning
+        (publicArithmeticGodelCausalParticipation theory) →
+      Empty :=
+  (StrongPerimetralTurning.arithmeticGodelPerimetralCorrespondence
+    theory).causalClosureIsImpossible
+
 def publicSemanticallyDefinedArithmeticGodelCorrespondence
     (theory :
       StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory) :
@@ -69,6 +87,8 @@ end RelationalPerimeter.Tests.PublicRootImport
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicFamily
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicSuccinctnessEvidence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelCorrespondence
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelCausalParticipation
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelCausalClosureRejection
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicSemanticallyDefinedArithmeticGodelCorrespondence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicSemanticallyDefinedArithmeticGodelConclusion
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicIndependentAddressingBound

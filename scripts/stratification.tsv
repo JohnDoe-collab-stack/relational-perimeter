@@ -24,6 +24,7 @@ SegmentedResidualRole	F	enforced	Primitive residual roles and exact internal rea
 AbstractSegmentedTurning	F	enforced	Abstract segmented boundary and turning
 ExactTypeTransport	U	enforced	Constructive exact transport between carriers
 StrongPerimetralTurning	F	enforced	Strong relational perimeter and affirmative turning
+RelationalPerimeter.Constitution.GodelDiagonalPerimetral	F	enforced	Gödel diagonal production, executed witness, and conditional rejection of total closure
 RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence	F	enforced	Object-arithmetic bridge to the conditional affirmative Godel correspondence
 RelationalPerimeter	M19	enforced	Public root joining scientific production and the integrated master machine
 RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement

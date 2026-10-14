@@ -1,4 +1,4 @@
-import StrongPerimetralTurning
+import RelationalPerimeter.Constitution.GodelDiagonalPerimetral
 
 set_option linter.defProp false
 set_option linter.checkUnivs false
@@ -273,6 +273,348 @@ def arithmeticExecutedGodelCircularPresentation
     rejectInitialContraction := fun _ equality =>
       Empty.elim
         (witness.unprovable (Eq.mp equality witness.trueWitness)) }
+
+/-! ## Causal participation and provenanced closure
+
+The generic closure meaning remains unchanged.  The layer below records the
+specific positive continuation produced by the strong turning certificate and
+the exact final interpretation of that continuation.  Its refined contraction
+does not choose the executed witness directly: it reads a candidate from the
+historical provenance record and can identify that candidate with the produced
+witness only by consuming the recorded provenance. -/
+
+abbrev ArithmeticExecutedGodelPresentation
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    (link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation) : CircularPresentation :=
+  arithmeticExecutedGodelCircularPresentation link.exit.witness
+
+def StrongPerimetralTurningCertificate.freelyGeneratedStrictContinuation
+    {P : CircularPresentation}
+    (turning : StrongPerimetralTurningCertificate P) :
+    StrictConstitutivePrefix turning.deployment
+      (appendGenerated turning.deployment
+        turning.continuesFreelyBeyondPerimeter) :=
+  { continuation :=
+      { predecessor := turning.deployment.endpoint
+        priorHistory := .root
+        lastStep := turning.continuesFreelyBeyondPerimeter.2 }
+    historyExact := rfl }
+
+def recordedSourceProvenance
+    {P : CircularPresentation}
+    {difference : ReturnedDifference P}
+    {candidate : P.Difference}
+    (differenceExact : difference = .source candidate)
+    (provenance : ReturnedProvenance P difference) :
+    P.Provenance candidate := by
+  cases differenceExact
+  cases provenance with
+  | source sourceProvenance => exact sourceProvenance
+
+structure ArithmeticExecutedGodelCausalParticipation
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    (link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation) : Type _ where
+  historyPinsConsumedExit :
+    link.exit = arithmeticCanonicalExecutedGodelRegimeExit coding
+      unprovabilityFormula interpretation
+  turning : StrongPerimetralTurningCertificate
+    (ArithmeticExecutedGodelPresentation link)
+  turningDeploymentIsPerimeter :
+    turning.deployment =
+      perimeterDeployment (ArithmeticExecutedGodelPresentation link)
+  continuation : RootedGeneratedHistory
+    (ArithmeticExecutedGodelPresentation link)
+  continuationIsTurningExtension :
+    continuation =
+      appendGenerated turning.deployment
+        turning.continuesFreelyBeyondPerimeter
+  continuationIsCanonical :
+    continuation =
+      oneStepAfterPerimeter (ArithmeticExecutedGodelPresentation link)
+  labelled : FaithfullyLabelledPerimeterExtension
+    (ArithmeticExecutedGodelPresentation link) continuation
+  positive : PositiveContinuation labelled.extension
+  productionOccurrence : History.Occurrence continuation.history
+  productionOccurrenceIsExact :
+    productionOccurrence =
+      labelled.extension.oldOccurrence
+        (arithmeticExecutedGodelProductionPosition link.exit.witness)
+  certificationOccurrence : History.Occurrence continuation.history
+  certificationOccurrenceIsExact :
+    certificationOccurrence =
+      labelled.extension.oldOccurrence
+        (arithmeticExecutedGodelCertificationPosition link.exit.witness)
+  productionPrecedesCertification :
+    History.OccurrencePrecedes productionOccurrence certificationOccurrence
+  residualOccurrence : History.Occurrence labelled.continuation
+  residualOccurrenceIsPositive :
+    residualOccurrence =
+      transportOccurrence positive.historyExact.symm
+        positive.path.lastOccurrence
+  residualDiffersFromProduction :
+    labelled.extension.oldOccurrence
+        (arithmeticExecutedGodelProductionPosition link.exit.witness) ≠
+      labelled.extension.newOccurrence residualOccurrence
+  residualDiffersFromCertification :
+    labelled.extension.oldOccurrence
+        (arithmeticExecutedGodelCertificationPosition link.exit.witness) ≠
+      labelled.extension.newOccurrence residualOccurrence
+  finalInterpretation : FinalClosureInterpretation
+    (ArithmeticExecutedGodelPresentation link) continuation
+  finalInterpretationIsCanonical :
+    finalInterpretation =
+      finalClosureInterpretation (finalBoundaryOccurrence labelled positive)
+
+def ExecutedGodelDiagonalPerimetralLink.arithmeticCausalParticipation
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    (link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation) :
+    ArithmeticExecutedGodelCausalParticipation link := by
+  let P := ArithmeticExecutedGodelPresentation link
+  let turning := strongPerimetralTurning P
+  let continuation := oneStepAfterPerimeter P
+  let labelled := oneStepFaithfullyLabelledExtension P
+  let positive := oneStepAfterPerimeter_positiveContinuation P
+  let productionOccurrence :=
+    labelled.extension.oldOccurrence
+      (arithmeticExecutedGodelProductionPosition link.exit.witness)
+  let certificationOccurrence :=
+    labelled.extension.oldOccurrence
+      (arithmeticExecutedGodelCertificationPosition link.exit.witness)
+  let residualOccurrence :=
+    transportOccurrence positive.historyExact.symm positive.path.lastOccurrence
+  exact
+    { historyPinsConsumedExit := link.arithmeticHistoryPinsExit
+      turning := turning
+      turningDeploymentIsPerimeter := rfl
+      continuation := continuation
+      continuationIsTurningExtension := rfl
+      continuationIsCanonical := rfl
+      labelled := labelled
+      positive := positive
+      productionOccurrence := productionOccurrence
+      productionOccurrenceIsExact := rfl
+      certificationOccurrence := certificationOccurrence
+      certificationOccurrenceIsExact := rfl
+      productionPrecedesCertification := by
+        exact labelled.extension.toExactNonClosingRealization.preservesPrecedence
+          (arithmeticExecutedGodelProductionPrecedesCertification
+            link.exit.witness)
+      residualOccurrence := residualOccurrence
+      residualOccurrenceIsPositive := rfl
+      residualDiffersFromProduction :=
+        labelled.extension.old_new_occurrences_disjoint _ _
+      residualDiffersFromCertification :=
+        labelled.extension.old_new_occurrences_disjoint _ _
+      finalInterpretation :=
+        turning.finalInterpretationFromPositive labelled positive
+      finalInterpretationIsCanonical := rfl }
+
+def ArithmeticExecutedGodelCausalParticipation.strictTurningContinuation
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    StrictConstitutivePrefix
+      (perimeterDeployment (ArithmeticExecutedGodelPresentation link))
+      participation.continuation := by
+  rw [participation.continuationIsTurningExtension]
+  rw [← participation.turningDeploymentIsPerimeter]
+  exact participation.turning.freelyGeneratedStrictContinuation
+
+def ArithmeticExecutedGodelCausalParticipation.locallyExact
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    ExactNonClosingRealization (ArithmeticExecutedGodelPresentation link)
+      participation.continuation :=
+  participation.labelled.extension.toExactNonClosingRealization
+
+theorem ArithmeticExecutedGodelCausalParticipation.recordedDifferenceIsSource
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    participation.finalInterpretation.provenanceRecord.recordedDifference =
+      .source
+        (ArithmeticExecutedGodelPresentation link).perimeter.finalNode.difference := by
+  change differenceAtCursor participation.finalInterpretation.boundary.source.1 = _
+  rw [participation.finalInterpretation.boundary.source_cursor_is_boundary]
+  rfl
+
+def ArithmeticExecutedGodelCausalParticipation.historicalProvenance
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    (ArithmeticExecutedGodelPresentation link).Provenance
+      (ArithmeticExecutedGodelPresentation link).perimeter.finalNode.difference :=
+  recordedSourceProvenance participation.recordedDifferenceIsSource
+    participation.finalInterpretation.provenanceRecord.recordedProvenance
+
+structure ArithmeticExecutedGodelCausalContraction
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) where
+  candidate : ExecutedGodelWitness coding unprovabilityFormula interpretation
+  recordedDifferenceIsCandidate :
+    participation.finalInterpretation.provenanceRecord.recordedDifference =
+      .source candidate
+  poleContraction :
+    interpretation.Truth candidate.production.sentence =
+      coding.Proof candidate.production.sentence
+
+abbrev ArithmeticExecutedGodelCausalClosureMeaning
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    Type _ :=
+  StrictConstitutivePrefix
+      (perimeterDeployment (ArithmeticExecutedGodelPresentation link))
+      participation.continuation →
+    ArithmeticExecutedGodelCausalContraction participation
+
+def ArithmeticExecutedGodelCausalParticipation.circularClosureToCausalClosure
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    CircularClosureMeaning (ArithmeticExecutedGodelPresentation link)
+        participation.continuation →
+      ArithmeticExecutedGodelCausalClosureMeaning participation := by
+  intro closure strict
+  let loop := closure strict
+  let candidate :=
+    (ArithmeticExecutedGodelPresentation link).perimeter.finalNode.difference
+  have differenceExact :
+      participation.finalInterpretation.provenanceRecord.recordedDifference =
+        .source candidate :=
+    participation.recordedDifferenceIsSource
+  let provenance : PLift (candidate = link.exit.witness) :=
+    recordedSourceProvenance differenceExact
+      participation.finalInterpretation.provenanceRecord.recordedProvenance
+  have contraction :
+      interpretation.Truth candidate.production.sentence =
+        coding.Proof candidate.production.sentence := by
+    cases provenance.down
+    exact loop.identifiesProducedTruthAndProof
+  exact
+    { candidate := candidate
+      recordedDifferenceIsCandidate := differenceExact
+      poleContraction := contraction }
+
+def ArithmeticExecutedGodelCausalParticipation.causalClosureToCircularClosure
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    ArithmeticExecutedGodelCausalClosureMeaning participation →
+      CircularClosureMeaning (ArithmeticExecutedGodelPresentation link)
+        participation.continuation := by
+  intro closure strict
+  rcases closure strict with ⟨candidate, differenceExact, contraction⟩
+  have provenance : PLift (candidate = link.exit.witness) :=
+    recordedSourceProvenance differenceExact
+      participation.finalInterpretation.provenanceRecord.recordedProvenance
+  cases provenance.down
+  exact { identifiesProducedTruthAndProof := contraction }
+
+def ArithmeticExecutedGodelCausalParticipation.causalClosureContraction
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link)
+    (closure : ArithmeticExecutedGodelCausalClosureMeaning participation) :
+    ArithmeticExecutedGodelCausalContraction participation :=
+  closure participation.strictTurningContinuation
+
+def ArithmeticExecutedGodelCausalParticipation.causalClosureToProducedCompleteness
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    ArithmeticExecutedGodelCausalClosureMeaning participation →
+      ExecutedGodelProducedCompleteness link.exit.witness := by
+  intro closure truthWitness
+  rcases participation.causalClosureContraction closure with
+    ⟨candidate, differenceExact, contraction⟩
+  have provenance : PLift (candidate = link.exit.witness) :=
+    recordedSourceProvenance differenceExact
+      participation.finalInterpretation.provenanceRecord.recordedProvenance
+  cases provenance.down
+  exact Eq.mp contraction truthWitness
+
+def ArithmeticExecutedGodelCausalParticipation.rejectCausalClosure
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    ArithmeticExecutedGodelCausalClosureMeaning participation → Empty :=
+  fun closure =>
+    interpretation.fixedPoint_rejectsProducedCompleteness
+      link.exit.witness.production.sentence link.exit.witness.fixedPoint
+      (participation.causalClosureToProducedCompleteness closure)
+
+def ArithmeticExecutedGodelCausalParticipation.rejectSpecifiedClosure
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    CircularClosureMeaning (ArithmeticExecutedGodelPresentation link)
+        participation.continuation → Empty :=
+  fun closure =>
+    participation.rejectCausalClosure
+      (participation.circularClosureToCausalClosure closure)
 
 structure ArithmeticExecutedGodelRegimeParticipation
     {coding : GodelDiagonalSyntax}
@@ -880,6 +1222,11 @@ structure ArithmeticGodelPerimetralCorrespondence
         theory.toEffectiveGodelSystem.toGodelInterpretation
   executedGlobalParticipation :
     ArithmeticExecutedGodelGlobalParticipation effective.execution
+  executedCausalParticipation :
+    ArithmeticExecutedGodelCausalParticipation effective.execution
+  causalContinuationMatchesLegacy :
+    executedCausalParticipation.continuation =
+      executedGlobalParticipation.perimeterParticipation.continuation
   affirmativeContinuationIsStrict :
     StrictConstitutivePrefix
       (perimeterDeployment
@@ -898,6 +1245,23 @@ structure ArithmeticGodelPerimetralCorrespondence
         executedGlobalParticipation.perimeterParticipation.continuation →
       ExecutedGodelProducedCompleteness
         effective.execution.exit.witness
+  specifiedClosureToCausalClosure :
+    CircularClosureMeaning
+        (ArithmeticExecutedGodelPresentation effective.execution)
+        executedCausalParticipation.continuation →
+      ArithmeticExecutedGodelCausalClosureMeaning executedCausalParticipation
+  causalClosureToSpecifiedClosure :
+    ArithmeticExecutedGodelCausalClosureMeaning executedCausalParticipation →
+      CircularClosureMeaning
+        (ArithmeticExecutedGodelPresentation effective.execution)
+        executedCausalParticipation.continuation
+  causalClosureFactorsThroughProducedCompleteness :
+    ArithmeticExecutedGodelCausalClosureMeaning executedCausalParticipation →
+      ExecutedGodelProducedCompleteness
+        effective.execution.exit.witness
+  causalClosureIsImpossible :
+    ArithmeticExecutedGodelCausalClosureMeaning executedCausalParticipation →
+      Empty
   specifiedGlobalClosureIsImpossible :
     CircularClosureMeaning
         (arithmeticExecutedGodelCircularPresentation
@@ -927,6 +1291,44 @@ def arithmeticGodelPerimetralCorrespondence
   let effective :=
     effectiveGodelPerimetralCorrespondence theory.toEffectiveGodelSystem
   let participation := effective.execution.arithmeticGlobalParticipation
+  let causalParticipation :=
+    effective.execution.arithmeticCausalParticipation
+  have continuationMatches :
+      causalParticipation.continuation =
+        participation.perimeterParticipation.continuation := by
+    rw [causalParticipation.continuationIsCanonical,
+      participation.perimeterParticipation.continuationIsCanonical]
+  let legacyClosureToCompleteness :
+      CircularClosureMeaning
+          (arithmeticExecutedGodelCircularPresentation
+            effective.execution.exit.witness)
+          participation.perimeterParticipation.continuation →
+        ExecutedGodelProducedCompleteness
+          effective.execution.exit.witness := by
+    intro closure
+    have causalContinuationClosure :
+        CircularClosureMeaning
+            (ArithmeticExecutedGodelPresentation effective.execution)
+            causalParticipation.continuation := by
+      rw [continuationMatches]
+      exact closure
+    exact causalParticipation.causalClosureToProducedCompleteness
+      (causalParticipation.circularClosureToCausalClosure
+        causalContinuationClosure)
+  let legacyClosureRejected :
+      CircularClosureMeaning
+          (arithmeticExecutedGodelCircularPresentation
+            effective.execution.exit.witness)
+          participation.perimeterParticipation.continuation → False := by
+    intro closure
+    have causalContinuationClosure :
+        CircularClosureMeaning
+            (ArithmeticExecutedGodelPresentation effective.execution)
+            causalParticipation.continuation := by
+      rw [continuationMatches]
+      exact closure
+    exact Empty.elim
+      (causalParticipation.rejectSpecifiedClosure causalContinuationClosure)
   exact
     { effective := effective
       diagonalCertificateIsObjectBiconditional :=
@@ -941,6 +1343,8 @@ def arithmeticGodelPerimetralCorrespondence
       executedHistoryPinsTheConsumedExit :=
         effective.execution.arithmeticHistoryPinsExit
       executedGlobalParticipation := participation
+      executedCausalParticipation := causalParticipation
+      causalContinuationMatchesLegacy := continuationMatches
       affirmativeContinuationIsStrict := by
         rw [participation.perimeterParticipation.continuationIsCanonical]
         exact
@@ -950,11 +1354,20 @@ def arithmeticGodelPerimetralCorrespondence
       affirmativeContinuationIsLocallyExact :=
         participation.perimeterParticipation.locallyExact
       specifiedGlobalClosureFactorsThroughProducedCompleteness :=
-        participation.globalClosureFactorsThroughProducedCompleteness
+        legacyClosureToCompleteness
+      specifiedClosureToCausalClosure :=
+        causalParticipation.circularClosureToCausalClosure
+      causalClosureToSpecifiedClosure :=
+        causalParticipation.causalClosureToCircularClosure
+      causalClosureFactorsThroughProducedCompleteness :=
+        causalParticipation.causalClosureToProducedCompleteness
+      causalClosureIsImpossible :=
+        causalParticipation.rejectCausalClosure
       specifiedGlobalClosureIsImpossible :=
-        participation.rejectGlobalClosure
-      specifiedTotalizingRegimeIsImpossible :=
-        participation.rejectTotalizingRegime }
+        legacyClosureRejected
+      specifiedTotalizingRegimeIsImpossible := fun refinement =>
+        legacyClosureRejected
+          (circularRefinement_soundSpecification refinement).trajectory }
 
 abbrev SemanticallyDefinedArithmeticGodelPerimetralCorrespondence
     (theory : SemanticallyDefinedProofArithmeticTheory) :=
@@ -995,6 +1408,23 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.arithmeticExecutedGodelCertificationPosition
 #print axioms StrongPerimetralTurning.arithmeticExecutedGodelProductionPrecedesCertification
 #print axioms StrongPerimetralTurning.arithmeticExecutedGodelCircularPresentation
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelPresentation
+#print axioms StrongPerimetralTurning.StrongPerimetralTurningCertificate.freelyGeneratedStrictContinuation
+#print axioms StrongPerimetralTurning.recordedSourceProvenance
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation
+#print axioms StrongPerimetralTurning.ExecutedGodelDiagonalPerimetralLink.arithmeticCausalParticipation
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.strictTurningContinuation
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.locallyExact
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.recordedDifferenceIsSource
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.historicalProvenance
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalContraction
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalClosureMeaning
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.circularClosureToCausalClosure
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.causalClosureToCircularClosure
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.causalClosureContraction
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.causalClosureToProducedCompleteness
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.rejectCausalClosure
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.rejectSpecifiedClosure
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelRegimeParticipation
 #print axioms StrongPerimetralTurning.arithmeticExecutedGodelRegimeParticipation
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelRegimeParticipation.globalClosureToProducedCompleteness

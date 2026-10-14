@@ -58,6 +58,78 @@ theorem abstractDegenerateHistoryStillPinsItsExactExit :
         abstractDegenerateSystem.toGodelInterpretation :=
   abstractDegenerateCorrespondence.execution.arithmeticHistoryPinsExit
 
+def abstractDegenerateCausalParticipation :
+    ArithmeticExecutedGodelCausalParticipation
+      abstractDegenerateCorrespondence.execution :=
+  abstractDegenerateCorrespondence.execution.arithmeticCausalParticipation
+
+theorem abstractDegenerateContinuationIsProducedByTurning :
+    abstractDegenerateCausalParticipation.continuation =
+      appendGenerated abstractDegenerateCausalParticipation.turning.deployment
+        abstractDegenerateCausalParticipation.turning.continuesFreelyBeyondPerimeter :=
+  abstractDegenerateCausalParticipation.continuationIsTurningExtension
+
+def abstractDegenerateTurningProducesStrictContinuation :
+    StrictConstitutivePrefix
+      (perimeterDeployment
+        (ArithmeticExecutedGodelPresentation
+          abstractDegenerateCorrespondence.execution))
+      abstractDegenerateCausalParticipation.continuation :=
+  abstractDegenerateCausalParticipation.strictTurningContinuation
+
+def abstractDegenerateCausalContinuationIsLocallyExact :
+    ExactNonClosingRealization
+      (ArithmeticExecutedGodelPresentation
+        abstractDegenerateCorrespondence.execution)
+      abstractDegenerateCausalParticipation.continuation :=
+  abstractDegenerateCausalParticipation.locallyExact
+
+theorem abstractDegenerateProductionPrecedesCertification :
+    History.OccurrencePrecedes
+      abstractDegenerateCausalParticipation.productionOccurrence
+      abstractDegenerateCausalParticipation.certificationOccurrence :=
+  abstractDegenerateCausalParticipation.productionPrecedesCertification
+
+theorem abstractDegenerateResidualIsDistinctFromBothInteriorOccurrences :
+    abstractDegenerateCausalParticipation.labelled.extension.oldOccurrence
+          (arithmeticExecutedGodelProductionPosition
+            abstractDegenerateCorrespondence.execution.exit.witness) ≠
+        abstractDegenerateCausalParticipation.labelled.extension.newOccurrence
+          abstractDegenerateCausalParticipation.residualOccurrence ∧
+      abstractDegenerateCausalParticipation.labelled.extension.oldOccurrence
+          (arithmeticExecutedGodelCertificationPosition
+            abstractDegenerateCorrespondence.execution.exit.witness) ≠
+        abstractDegenerateCausalParticipation.labelled.extension.newOccurrence
+          abstractDegenerateCausalParticipation.residualOccurrence :=
+  ⟨abstractDegenerateCausalParticipation.residualDiffersFromProduction,
+    abstractDegenerateCausalParticipation.residualDiffersFromCertification⟩
+
+def abstractDegenerateFinalInterpretationCarriesHistoricalProvenance :
+    (ArithmeticExecutedGodelPresentation
+      abstractDegenerateCorrespondence.execution).Provenance
+      (ArithmeticExecutedGodelPresentation
+        abstractDegenerateCorrespondence.execution).perimeter.finalNode.difference :=
+  abstractDegenerateCausalParticipation.historicalProvenance
+
+def abstractDegenerateSpecifiedClosureFactorsThroughHistoricalProvenance :
+    CircularClosureMeaning
+        (ArithmeticExecutedGodelPresentation
+          abstractDegenerateCorrespondence.execution)
+        abstractDegenerateCausalParticipation.continuation →
+      ExecutedGodelProducedCompleteness
+        abstractDegenerateCorrespondence.execution.exit.witness :=
+  fun closure =>
+    abstractDegenerateCausalParticipation.causalClosureToProducedCompleteness
+      (abstractDegenerateCausalParticipation.circularClosureToCausalClosure
+        closure)
+
+def abstractDegenerateSpecifiedClosureIsRejectedByProducedFixedPoint :
+    CircularClosureMeaning
+        (ArithmeticExecutedGodelPresentation
+          abstractDegenerateCorrespondence.execution)
+        abstractDegenerateCausalParticipation.continuation → Empty :=
+  abstractDegenerateCausalParticipation.rejectSpecifiedClosure
+
 end RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -65,4 +137,13 @@ end RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression
 #print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateCorrespondence
 #print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractInterfaceDoesNotImplyAnyProofExists
 #print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateHistoryStillPinsItsExactExit
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateCausalParticipation
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateContinuationIsProducedByTurning
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateTurningProducesStrictContinuation
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateCausalContinuationIsLocallyExact
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateProductionPrecedesCertification
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateResidualIsDistinctFromBothInteriorOccurrences
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateFinalInterpretationCarriesHistoricalProvenance
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateSpecifiedClosureFactorsThroughHistoricalProvenance
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateSpecifiedClosureIsRejectedByProducedFixedPoint
 /- AXIOM_AUDIT_END -/

@@ -1,0 +1,16 @@
+import Tests.GodelCorrespondenceScopeRegression
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression
+
+namespace RelationalPerimeter.Tests.ExpectedFailure
+
+-- A bare contradiction has neither the executed link nor the historical
+-- provenance required by the causal closure meaning.
+def arbitraryContradictionCannotReplaceExecutedGodelClosure
+    (arbitraryContradiction : Unit → Empty) :
+    ArithmeticExecutedGodelCausalClosureMeaning
+      abstractDegenerateCausalParticipation := by
+  exact arbitraryContradiction
+
+end RelationalPerimeter.Tests.ExpectedFailure

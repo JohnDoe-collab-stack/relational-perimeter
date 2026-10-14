@@ -1,0 +1,48 @@
+import Tests.GodelCorrespondenceScopeRegression
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression
+
+namespace RelationalPerimeter.Tests.ExpectedFailure
+
+def stipulatedEmptyLoopNode :
+    LocalNode Unit Unit (fun _ _ => Unit) Unit (fun _ => Unit) :=
+  { explicit := ()
+    implicit := ()
+    difference := ()
+    provenance := ()
+    internallyCompatible := () }
+
+def stipulatedEmptyLoopPresentation : CircularPresentation :=
+  { Explicit := Unit
+    Implicit := Unit
+    Compatible := fun _ _ => Unit
+    Difference := Unit
+    Provenance := fun _ => Unit
+    initialNode := stipulatedEmptyLoopNode
+    perimeter := .advance () (.boundary stipulatedEmptyLoopNode)
+    perimeterPositive := .here
+    finalJunction := ()
+    Endpoint := Type
+    leftEndpoint := Unit
+    rightEndpoint := Empty
+    leftPole := fun _ => Unit
+    rightPole := fun _ => Empty
+    initialLeftPole := rfl
+    initialRightPole := rfl
+    TotalLoop := Empty
+    closeFromIdentification := fun equality => Eq.mp equality ()
+    loopContractsInitialDifference := fun loop => nomatch loop
+    rejectInitialContraction := fun _ equality => nomatch Eq.mp equality () }
+
+-- Even a generic closure whose loop type is stipulated to be Empty cannot be
+-- passed to the causal adapter for the executed Gödel presentation.
+def stipulatedEmptyLoopCannotReplaceCausalGodelClosure
+    (closure : CircularClosureMeaning stipulatedEmptyLoopPresentation
+      (oneStepAfterPerimeter stipulatedEmptyLoopPresentation)) :
+    ArithmeticExecutedGodelCausalClosureMeaning
+      abstractDegenerateCausalParticipation := by
+  exact
+    abstractDegenerateCausalParticipation.circularClosureToCausalClosure closure
+
+end RelationalPerimeter.Tests.ExpectedFailure

@@ -8,13 +8,16 @@ codage, substitution des numéraux, diagonalisation, vérification des
 dérivations, relation de preuve représentée, correction sémantique et preuve
 de la réflexivité de l'égalité, la formalisation exécute une chaîne qui
 construit sa phrase diagonale, certifie que cette même phrase est vraie et non
-prouvable, et démontre qu'elle n'est aucune égalité réflexive. La chaîne fixe
-ensuite exactement l'issue consommée, inscrit le témoin dans un périmètre
-ordonné à plusieurs étapes, réalise ses occurrences dans une continuation
-stricte et positive, et préserve leur ordre. Sur cette même ressource, toute
-complétude locale `Truth(G) -> Proof(G)` est impossible ; la fermeture
-totalisante spécifiée se factorise explicitement par cette conversion et
-échoue sur le certificat du témoin produit. Cette correspondance est un
+prouvable en partageant le point fixe de la production reçue, et démontre
+qu'elle n'est aucune égalité réflexive. La chaîne fixe ensuite exactement
+l'issue consommée, inscrit le témoin dans un périmètre ordonné à plusieurs
+étapes, réalise ses occurrences dans la continuation stricte et positive
+produite par le turning, préserve leur ordre et distingue l'occurrence
+résiduelle. La fermeture spécifiée est équivalente à une fermeture causale qui
+lit son candidat dans l'interprétation finale et doit consommer la provenance
+historique pour l'identifier au témoin produit. Elle se factorise alors par
+`Truth(G) -> Proof(G)` ; la collision est redérivée du point fixe exact, de la
+correction et des deux lois de représentation. Cette correspondance est un
 théorème conditionnel pour les contrats affichés : aucune instance de PA, Q ou
 d'une autre théorie arithmétique nommée n'est revendiquée, et aucune autre
 notion de fermeture n'est rejetée.
@@ -54,8 +57,9 @@ affirmée ici.
 | Correction | `proofSound` | Toute preuve vérifiée fournit un témoin de vérité |
 | Représentation de la non-prouvabilité | `representsUnprovabilityForward` et `representsUnprovabilityBackward` | Reçue par l'interface historique ; dérivée par le nouvel accès depuis la relation de preuve explicite et les transports sémantiques de substitution |
 | Phrase produite | `executeGodelDiagonalProduction` puis `executeGodelSentenceProduction` | La formule diagonalisée est produite avant son auto-application |
-| Conclusion d'incomplétude | `certifyExecutedGodelWitness` | `trueWitness` et `unprovable` sont dérivés du point fixe et de la correction |
-| Constitution et continuation | `arithmeticExecutedGodelRegimeParticipation` | Le témoin issu de l'issue exécutée devient la différence du périmètre arithmétique renforcé, puis sa continuation canonique est construite |
+| Conclusion d'incomplétude | `certifyExecutedGodelWitness` | Le point fixe est transporté depuis la production reçue ; il produit la non-prouvabilité, puis la vérité du même résultat |
+| Constitution et continuation | `ArithmeticExecutedGodelCausalParticipation` | Le témoin issu de l'issue exécutée devient la différence du périmètre ; le certificat de turning produit la continuation, ses occurrences intérieures et son occurrence résiduelle |
+| Fermeture spécifiée et provenance | `ArithmeticExecutedGodelCausalClosureMeaning` | La forme causale est équivalente à `CircularClosureMeaning` sur la même continuation ; son candidat est lu dans `recordedDifference` et aligné au témoin produit par `recordedProvenance` |
 
 Les adaptateurs `toGodelSyntax` et `toGodelInterpretation` transportent les
 contrats vers le noyau diagonal sans fournir la conclusion. L'interface
@@ -95,6 +99,10 @@ correction et le point fixe dans le langage arithmétique affiché.
 L'histoire `ExecutedGodelConstitutiveStep` impose successivement les passages
 `received`, `diagonalize`, `selfApply`, `certify` et `continue`. La
 certification consomme la production de phrase issue de l'étape précédente.
+Elle construit le point fixe de cette production exacte, utilise ce même point
+fixe pour dériver la non-prouvabilité, puis utilise cette non-prouvabilité et
+ce point fixe pour dériver la vérité ; les trois champs ne sont plus obtenus
+par des appels indépendants reconstruisant la phrase canonique.
 La présentation circulaire prend ensuite ce témoin certifié comme type de sa
 différence et exige, par sa provenance, l'égalité au témoin transmis. La
 présentation historique de `StrongPerimetralTurning.lean` reste inchangée et
@@ -109,7 +117,15 @@ occurrences distinctes et ordonnées dans la continuation.
 `arithmeticHistoryPinsExit` démontre en outre que
 toute histoire allant de `received` à `regimeExited` fixe exactement l'issue
 canonique produite par les quatre transitions. Ces lois sont regroupées dans
-`ArithmeticExecutedGodelGlobalParticipation`.
+`ArithmeticExecutedGodelGlobalParticipation` pour la compatibilité historique.
+La nouvelle `ArithmeticExecutedGodelCausalParticipation` ajoute le certificat
+de turning qui engendre la continuation utilisée, l'extension étiquetée, sa
+positivité, l'occurrence résiduelle distincte des deux occurrences intérieures
+et l'interprétation finale contenant l'enregistrement de provenance.
+`strictTurningContinuation` construit en particulier le préfixe strict depuis
+le déploiement et le pas libre fournis par ce certificat ; c'est ce préfixe que
+la factorisation terminale remet à la fermeture. L'interprétation finale est
+elle aussi obtenue par `finalInterpretationFromPositive` du même certificat.
 
 Le turning ne fabrique donc pas tardivement un autre témoin : la production
 diagonale et sa certification précèdent la continuation, et la continuation
@@ -122,18 +138,28 @@ occurrence résiduelle.
 ## Obstruction exacte et contre-tests
 
 `ExecutedGodelProducedCompleteness` isole l'obligation dirigée
-`Truth(G) -> Proof(G)`. La vérité produite suivie de cette fonction contredit
-directement le certificat `unprovable`. `ExecutedGodelTotalLoop` demande
-l'identification plus forte `Truth(G) = Proof(G)` ;
-`toProducedCompleteness` montre formellement sa factorisation par l'obligation
-dirigée. Enfin, la spécification globale appliquée à la continuation stricte
-produit ce total loop.
-`ArithmeticExecutedGodelRegimeParticipation.globalClosureToProducedCompleteness`
-effectue cette factorisation sur la participation arithmétique renforcée, et
-`ArithmeticExecutedGodelGlobalParticipation.rejectGlobalClosure` la compose
-avec le certificat du même témoin. Cette preuve ne passe pas par le champ
-générique `rejectInitialContraction` de la présentation. C'est cette fermeture
-définie qui est rejetée, et non toute fermeture concevable.
+`Truth(G) -> Proof(G)`. `ExecutedGodelTotalLoop` demande l'identification plus
+forte `Truth(G) = Proof(G)`. Sur la continuation causale,
+`circularClosureToCausalClosure` transforme exactement la fermeture spécifiée
+en une contraction portant le candidat lu dans le `recordedDifference` de
+l'interprétation finale. `recordedSourceProvenance` extrait ensuite du
+`recordedProvenance` la preuve `PLift (candidate = witness)` ; cette preuve est
+consommée avant tout transport de la contraction au témoin produit.
+`causalClosureToCircularClosure` établit la direction inverse sur la même
+présentation et la même continuation : la cible n'est donc pas remplacée par
+une fermeture plus forte.
+
+`causalClosureToProducedCompleteness` effectue la factorisation dirigée après
+ce transport historique. `rejectCausalClosure` ne réutilise pas seulement la
+paire `trueWitness`/`unprovable` stockée :
+`fixedPoint_rejectsProducedCompleteness` redérive la non-prouvabilité et la
+vérité depuis le point fixe exact, `proofSound` et les deux directions de
+représentation. Le résultat public sur l'ancienne continuation est transporté
+vers cette même continuation canonique et passe par cette voie causale. Aucun
+de ces théorèmes n'appelle `rejectInitialContraction`. L'ancien rejet générique
+reste disponible comme résultat de compatibilité ; il n'est pas l'évidence
+citée pour la dépendance gödelienne. C'est cette fermeture définie qui est
+rejetée, et non toute fermeture concevable.
 
 Les contre-tests séparent deux causes. `UniformTotalSeed` admet aussi une
 fausseté universelle non diagonale : son incohérence ne peut donc pas expliquer
@@ -144,6 +170,13 @@ diagonal. Par ailleurs, `UniformKernelSeed` est corrigé et admet une autre
 application de la même famille syntaxique ; l'absence de preuve de `G` n'est
 donc ni une exclusion de toute la famille, ni une propriété du seul squelette
 du vérificateur.
+
+Deux échecs attendus permanents contrôlent en plus que ni une contradiction
+arbitraire `Unit -> Empty`, ni une présentation dont `TotalLoop` est stipulé
+égal à `Empty`, ne peuvent être passées à la fermeture causale exécutée. Un
+probe séparé vérifie que le point fixe produit ne se transporte pas à
+l'application non diagonale, et qu'un témoin étranger ne peut pas réutiliser
+l'enregistrement historique sans fournir l'égalité de provenance manquante.
 
 ## Limite ouverte distincte
 

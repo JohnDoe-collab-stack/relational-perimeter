@@ -1,5 +1,7 @@
 # fixture	category	line	column	expected Lean JSON error diagnostic
 Tests/ExpectedFailure/AbstractGodelSystemCannotReplaceArithmeticRealization.lean.fail	dependent-type	13	4	Application type mismatch
+Tests/ExpectedFailure/ArbitraryContradictionCannotReplaceExecutedGodelClosure.lean.fail	semantic-type	14	2	Type mismatch
+Tests/ExpectedFailure/StipulatedEmptyLoopCannotReplaceCausalGodelClosure.lean.fail	dependent-type	46	73	Application type mismatch
 Tests/ExpectedFailure/ResourcePortsCannotBePermuted.lean.fail	dependent-type	12	13	applyStage fresh
 Tests/ExpectedFailure/PrivateConstitutiveNormalizerCertificate.lean.fail	privacy	6	7	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerSuccinctness.mk`
 Tests/ExpectedFailure/PrivateConstitutiveExtensiveSeparationCertificate.lean.fail	privacy	8	7	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate.mk`
