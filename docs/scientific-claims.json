@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "document_relocations": {},
-  "evidence_revision": "960ea77aa587e7f89973ff8ffb369ba9bb0eaf8a",
+  "evidence_revision": "3d74ca129802475c9f6d569ae38ea7ecb1b8c797",
   "immutable_target": {
     "revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
     "anchors": [
