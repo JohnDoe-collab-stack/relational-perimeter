@@ -46,9 +46,11 @@ affirmée ici.
 | Syntaxe et numérotation | `encodeUnary`, `encodeSentence`, `decodeUnary`, `decodeSentence` | Les deux lois de décodage impliquent l'injectivité des codages |
 | Substitution et lemme diagonal | `substitute`, `diagonalize`, `diagonalizeExact` | Le certificat vérifié relie l'auto-substitution à la substitution de la phrase codée |
 | Dérivations | `CheckedSentenceProof` et `proofCheck` | Une preuve est un code naturel dont le vérificateur renvoie `true` |
+| Relation de preuve explicite | `SemanticallyDefinedProofArithmeticTheory.proofRelationFormula` | Sous l'affectation exacte `0 -> proofCode`, `1 -> sentenceCode`, sa vérité est transportée dans les deux sens avec le résultat du même vérificateur booléen |
+| Provabilité et non-prouvabilité construites | `provabilityFormula` et `unprovabilityFormula` | `Prov(n)` est l'existentielle constructive sur le code de preuve ; `Unprov(n)` est sa négation |
 | Équivalence prouvable | `CheckedSentenceEquivalence` et `equivalenceCheck` | Les transports de preuve et de vérité sont reçus séparément |
 | Correction | `proofSound` | Toute preuve vérifiée fournit un témoin de vérité |
-| Représentation de la non-prouvabilité | `representsUnprovabilityForward` et `representsUnprovabilityBackward` | La vérité de la formule substituée est équivalente, par deux fonctions, à l'absence de preuve |
+| Représentation de la non-prouvabilité | `representsUnprovabilityForward` et `representsUnprovabilityBackward` | Reçue par l'interface historique ; dérivée par le nouvel accès depuis la relation de preuve explicite et les transports sémantiques de substitution |
 | Phrase produite | `executeGodelDiagonalProduction` puis `executeGodelSentenceProduction` | La formule diagonalisée est produite avant son auto-application |
 | Conclusion d'incomplétude | `certifyExecutedGodelWitness` | `trueWitness` et `unprovable` sont dérivés du point fixe et de la correction |
 | Constitution et continuation | `executeGodelRegimeExit` | Le même témoin devient la différence du tout, puis la continuation canonique est construite |
@@ -66,14 +68,22 @@ Le module
 [`ArithmeticGodelCorrespondence`](../RelationalPerimeter/Constitution/ArithmeticGodelCorrespondence.lean)
 fixe en outre un langage objet arithmétique avec zéro, successeur, addition,
 multiplication, égalité, implication, conjonction et quantification
-universelle. Son interface `EffectivelyPresentedSoundArithmeticTheory` exige
-que `diagonalIffProof` soit une dérivation vérifiée du biconditionnel dans ce
-langage objet. L’adaptateur `toEffectiveGodelSystem` fournit alors l’interface
-générique, et `arithmeticGodelPerimetralCorrespondence` dérive la vérité, la
-non-prouvabilité, la continuation affirmative et le rejet de la totalisation ;
-aucune de ces conclusions n’est un champ reçu. Cette spécialisation demeure
-conditionnelle : elle ne construit pas encore les données de l’interface pour
-PA, Q ou une autre théorie arithmétique nommée.
+universelle et existentielle. Son interface historique
+`EffectivelyPresentedSoundArithmeticTheory` exige que `diagonalIffProof` soit
+une dérivation vérifiée du biconditionnel dans ce langage objet et reçoit les
+deux lois sémantiques de non-prouvabilité. Le nouvel accès
+`SemanticallyDefinedProofArithmeticTheory` reçoit à leur place une formule
+binaire de preuve, sa correction sémantique point par point relativement au
+même vérificateur booléen, et la correction sémantique de la substitution des
+numéraux. Il construit `Prov` et `Unprov`, puis dérive les deux lois historiques
+avant d'appliquer, sans la modifier, la chaîne existante par
+`semanticallyDefinedArithmeticGodelPerimetralCorrespondence`.
+
+Le certificat diagonal objet, les transports de preuves et la correction
+restent des prémisses. Le nouvel accès n'établit donc ni une représentabilité
+arithmétique interne complète du vérificateur ni une instance pour PA, Q ou une
+autre théorie nommée. Il renforce la factorisation conditionnelle des
+hypothèses ; il n'élargit pas la portée arithmétique revendiquée.
 
 ## Ordre constitutif et identité de ressource
 
