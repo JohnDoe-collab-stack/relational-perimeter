@@ -9,6 +9,7 @@ import Tests.ConstitutiveObjectiveRegression
 import Tests.DeepPreservationRegression
 import Tests.EndogenousOperationalStabilityRegression
 import Tests.EndogenousWidthBridgeRegression
+import Tests.GodelCorrespondenceScopeRegression
 import Tests.ProducedContinuation
 import Tests.ProductionTimelineRegression
 import Tests.PublicRootImport
