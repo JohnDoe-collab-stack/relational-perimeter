@@ -492,6 +492,37 @@ structure ArithmeticExecutedGodelCausalContraction
     interpretation.Truth candidate.production.sentence =
       coding.Proof candidate.production.sentence
 
+/- The diagnostic notion is independent of Gödel witnesses and perimetral
+   presentations.  The causal closure below attaches this same sentence-local
+   predicate to a produced history; tests can apply it unchanged to a decided
+   sentence. -/
+abbrev DirectedSemanticCompletenessAt
+    {Sentence : Type}
+    (Truth Proof : Sentence → Type)
+    (sentence : Sentence) : Type :=
+  Truth sentence → Proof sentence
+
+/- The directed closure is the exact semantic-completeness obligation rejected
+   by the produced fixed point.  Unlike the historical pole identification, it
+   asks only for a proof producer at the candidate actually read from the final
+   interpretation.  The recorded difference and its provenance remain part of
+   the contraction, so the candidate cannot be replaced independently. -/
+structure ArithmeticExecutedGodelDirectedContraction
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) where
+  candidate : ExecutedGodelWitness coding unprovabilityFormula interpretation
+  recordedDifferenceIsCandidate :
+    participation.finalInterpretation.provenanceRecord.recordedDifference =
+      .source candidate
+  producedCompleteness :
+    DirectedSemanticCompletenessAt interpretation.Truth coding.Proof
+      candidate.production.sentence
+
 abbrev ArithmeticExecutedGodelCausalClosureMeaning
     {coding : GodelDiagonalSyntax}
     {unprovabilityFormula : coding.UnaryFormula}
@@ -505,6 +536,20 @@ abbrev ArithmeticExecutedGodelCausalClosureMeaning
       (perimeterDeployment (ArithmeticExecutedGodelPresentation link))
       participation.continuation →
     ArithmeticExecutedGodelCausalContraction participation
+
+abbrev ArithmeticExecutedGodelDirectedClosureMeaning
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    Type _ :=
+  StrictConstitutivePrefix
+      (perimeterDeployment (ArithmeticExecutedGodelPresentation link))
+      participation.continuation →
+    ArithmeticExecutedGodelDirectedContraction participation
 
 def ArithmeticExecutedGodelCausalParticipation.circularClosureToCausalClosure
     {coding : GodelDiagonalSyntax}
@@ -569,6 +614,56 @@ def ArithmeticExecutedGodelCausalParticipation.causalClosureContraction
     ArithmeticExecutedGodelCausalContraction participation :=
   closure participation.strictTurningContinuation
 
+def ArithmeticExecutedGodelCausalParticipation.causalClosureToDirectedClosure
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    ArithmeticExecutedGodelCausalClosureMeaning participation →
+      ArithmeticExecutedGodelDirectedClosureMeaning participation := by
+  intro closure strict
+  rcases closure strict with
+    ⟨candidate, differenceExact, contraction⟩
+  exact
+    { candidate := candidate
+      recordedDifferenceIsCandidate := differenceExact
+      producedCompleteness := fun truthWitness =>
+        Eq.mp contraction truthWitness }
+
+def ArithmeticExecutedGodelCausalParticipation.directedClosureContraction
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link)
+    (closure : ArithmeticExecutedGodelDirectedClosureMeaning participation) :
+    ArithmeticExecutedGodelDirectedContraction participation :=
+  closure participation.strictTurningContinuation
+
+def ArithmeticExecutedGodelCausalParticipation.directedClosureToProducedCompleteness
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    ArithmeticExecutedGodelDirectedClosureMeaning participation →
+      ExecutedGodelProducedCompleteness link.exit.witness := by
+  intro closure truthWitness
+  rcases participation.directedClosureContraction closure with
+    ⟨candidate, differenceExact, completeness⟩
+  have provenance : PLift (candidate = link.exit.witness) :=
+    recordedSourceProvenance differenceExact
+      participation.finalInterpretation.provenanceRecord.recordedProvenance
+  cases provenance.down
+  exact completeness truthWitness
+
 def ArithmeticExecutedGodelCausalParticipation.causalClosureToProducedCompleteness
     {coding : GodelDiagonalSyntax}
     {unprovabilityFormula : coding.UnaryFormula}
@@ -578,15 +673,24 @@ def ArithmeticExecutedGodelCausalParticipation.causalClosureToProducedCompletene
       interpretation}
     (participation : ArithmeticExecutedGodelCausalParticipation link) :
     ArithmeticExecutedGodelCausalClosureMeaning participation →
-      ExecutedGodelProducedCompleteness link.exit.witness := by
-  intro closure truthWitness
-  rcases participation.causalClosureContraction closure with
-    ⟨candidate, differenceExact, contraction⟩
-  have provenance : PLift (candidate = link.exit.witness) :=
-    recordedSourceProvenance differenceExact
-      participation.finalInterpretation.provenanceRecord.recordedProvenance
-  cases provenance.down
-  exact Eq.mp contraction truthWitness
+      ExecutedGodelProducedCompleteness link.exit.witness :=
+  fun closure =>
+    participation.directedClosureToProducedCompleteness
+      (participation.causalClosureToDirectedClosure closure)
+
+def ArithmeticExecutedGodelCausalParticipation.rejectDirectedClosure
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    ArithmeticExecutedGodelDirectedClosureMeaning participation → Empty :=
+  fun closure =>
+    interpretation.fixedPoint_rejectsProducedCompleteness
+      link.exit.witness.production.sentence link.exit.witness.fixedPoint
+      (participation.directedClosureToProducedCompleteness closure)
 
 def ArithmeticExecutedGodelCausalParticipation.rejectCausalClosure
     {coding : GodelDiagonalSyntax}
@@ -598,9 +702,8 @@ def ArithmeticExecutedGodelCausalParticipation.rejectCausalClosure
     (participation : ArithmeticExecutedGodelCausalParticipation link) :
     ArithmeticExecutedGodelCausalClosureMeaning participation → Empty :=
   fun closure =>
-    interpretation.fixedPoint_rejectsProducedCompleteness
-      link.exit.witness.production.sentence link.exit.witness.fixedPoint
-      (participation.causalClosureToProducedCompleteness closure)
+    participation.rejectDirectedClosure
+      (participation.causalClosureToDirectedClosure closure)
 
 def ArithmeticExecutedGodelCausalParticipation.rejectSpecifiedClosure
     {coding : GodelDiagonalSyntax}
@@ -1089,6 +1192,52 @@ def SemanticallyDefinedProofArithmeticTheory.noProof_implies_unprovabilityTruth
       (theory.provabilityTruth_implies_checkedProof
         sentence provabilitySentenceTruth)
 
+/- Semantic completeness at one sentence is the directed obligation used by
+   the diagnostic closure below.  Keeping this predicate independent of the
+   Gödel witness makes it possible to test the very same obligation at a
+   decided sentence of the same theory. -/
+abbrev ArithmeticSemanticCompletenessAt
+    (theory : SemanticallyDefinedProofArithmeticTheory)
+    (sentence : FirstOrderArithmeticFormula 0) : Type :=
+  DirectedSemanticCompletenessAt
+    FirstOrderArithmeticFormula.sentenceTruth
+    (CheckedArithmeticProof theory.encodeSentence theory.proofCheck)
+    sentence
+
+abbrev arithmeticReflexiveZeroSentence : FirstOrderArithmeticFormula 0 :=
+  .equal .zero .zero
+
+def SemanticallyDefinedProofArithmeticTheory.reflexiveZeroTruth
+    (_theory : SemanticallyDefinedProofArithmeticTheory) :
+    FirstOrderArithmeticFormula.sentenceTruth
+      arithmeticReflexiveZeroSentence :=
+  ⟨rfl⟩
+
+def SemanticallyDefinedProofArithmeticTheory.reflexiveZeroProof
+    (theory : SemanticallyDefinedProofArithmeticTheory) :
+    CheckedArithmeticProof theory.encodeSentence theory.proofCheck
+      arithmeticReflexiveZeroSentence :=
+  theory.equalityReflexivityProof .zero
+
+def SemanticallyDefinedProofArithmeticTheory.reflexiveZeroCompleteness
+    (theory : SemanticallyDefinedProofArithmeticTheory) :
+    ArithmeticSemanticCompletenessAt theory
+      arithmeticReflexiveZeroSentence :=
+  fun _ => theory.reflexiveZeroProof
+
+/- The exact arithmetic interface cannot be instantiated by the proofless
+   countermodel used against the abstract Gödel adapter: reflexivity already
+   supplies a checked derivation. -/
+def SemanticallyDefinedProofArithmeticTheory.rejectProoflessChecker
+    (theory : SemanticallyDefinedProofArithmeticTheory)
+    (proofless :
+      (proofCode sentenceCode : Nat) →
+        theory.proofCheck proofCode sentenceCode = false) : Empty := by
+  rcases theory.reflexiveZeroProof with ⟨proofCode, ⟨verification⟩⟩
+  rw [proofless proofCode
+    (theory.encodeSentence arithmeticReflexiveZeroSentence)] at verification
+  cases verification
+
 def SemanticallyDefinedProofArithmeticTheory.toEffectivelyPresentedSoundArithmeticTheory
     (theory : SemanticallyDefinedProofArithmeticTheory) :
     EffectivelyPresentedSoundArithmeticTheory :=
@@ -1250,11 +1399,21 @@ structure ArithmeticGodelPerimetralCorrespondence
         (ArithmeticExecutedGodelPresentation effective.execution)
         executedCausalParticipation.continuation →
       ArithmeticExecutedGodelCausalClosureMeaning executedCausalParticipation
+  causalClosureToDirectedClosure :
+    ArithmeticExecutedGodelCausalClosureMeaning executedCausalParticipation →
+      ArithmeticExecutedGodelDirectedClosureMeaning executedCausalParticipation
   causalClosureToSpecifiedClosure :
     ArithmeticExecutedGodelCausalClosureMeaning executedCausalParticipation →
       CircularClosureMeaning
         (ArithmeticExecutedGodelPresentation effective.execution)
         executedCausalParticipation.continuation
+  directedClosureFactorsThroughProducedCompleteness :
+    ArithmeticExecutedGodelDirectedClosureMeaning executedCausalParticipation →
+      ExecutedGodelProducedCompleteness
+        effective.execution.exit.witness
+  directedClosureIsImpossible :
+    ArithmeticExecutedGodelDirectedClosureMeaning executedCausalParticipation →
+      Empty
   causalClosureFactorsThroughProducedCompleteness :
     ArithmeticExecutedGodelCausalClosureMeaning executedCausalParticipation →
       ExecutedGodelProducedCompleteness
@@ -1279,11 +1438,37 @@ structure SemanticallyDefinedArithmeticGodelPerimetralConclusion
   correspondence :
     ArithmeticGodelPerimetralCorrespondence
       theory.toEffectivelyPresentedSoundArithmeticTheory
+  producedNegationHasNoCheckedDerivation :
+    CheckedArithmeticProof theory.encodeSentence theory.proofCheck
+        (FirstOrderArithmeticFormula.negation
+          correspondence.effective.execution.exit.witness.production.sentence) →
+      Empty
   producedSentenceIsNotAReflexiveEquality :
     (term : FirstOrderArithmeticTerm 0) →
       correspondence.effective.execution.exit.witness.production.sentence =
           FirstOrderArithmeticFormula.equal term term →
         Empty
+
+/- This package compares the same directed semantic-completeness predicate at
+   two sentences of one non-proofless arithmetic theory.  It is satisfied at
+   the decided reflexive equality and rejected at the produced diagonal
+   sentence, while retaining the positive constitutive correspondence. -/
+structure SemanticallyDefinedArithmeticGodelDiagnostic
+    (theory : SemanticallyDefinedProofArithmeticTheory) where
+  conclusion : SemanticallyDefinedArithmeticGodelPerimetralConclusion theory
+  decidedSentenceSupportsSemanticCompleteness :
+    ArithmeticSemanticCompletenessAt theory
+      arithmeticReflexiveZeroSentence
+  producedSentenceRejectsSemanticCompleteness :
+    ArithmeticSemanticCompletenessAt theory
+        conclusion.correspondence.effective.execution.exit.witness.production.sentence →
+      Empty
+  producedContinuationRemainsStrict :
+    StrictConstitutivePrefix
+      (perimeterDeployment
+        (arithmeticExecutedGodelCircularPresentation
+          conclusion.correspondence.effective.execution.exit.witness))
+      conclusion.correspondence.executedGlobalParticipation.perimeterParticipation.continuation
 
 def arithmeticGodelPerimetralCorrespondence
     (theory : EffectivelyPresentedSoundArithmeticTheory) :
@@ -1357,8 +1542,14 @@ def arithmeticGodelPerimetralCorrespondence
         legacyClosureToCompleteness
       specifiedClosureToCausalClosure :=
         causalParticipation.circularClosureToCausalClosure
+      causalClosureToDirectedClosure :=
+        causalParticipation.causalClosureToDirectedClosure
       causalClosureToSpecifiedClosure :=
         causalParticipation.causalClosureToCircularClosure
+      directedClosureFactorsThroughProducedCompleteness :=
+        causalParticipation.directedClosureToProducedCompleteness
+      directedClosureIsImpossible :=
+        causalParticipation.rejectDirectedClosure
       causalClosureFactorsThroughProducedCompleteness :=
         causalParticipation.causalClosureToProducedCompleteness
       causalClosureIsImpossible :=
@@ -1387,11 +1578,31 @@ def semanticallyDefinedArithmeticGodelPerimetralConclusion
     semanticallyDefinedArithmeticGodelPerimetralCorrespondence theory
   refine
     { correspondence := correspondence
+      producedNegationHasNoCheckedDerivation := ?_
       producedSentenceIsNotAReflexiveEquality := ?_ }
+  · intro proof
+    have negationTruth := theory.proofSound proof
+    exact
+      negationTruth
+        correspondence.producedSentenceIsTrueInStandardArithmeticSemantics
   intro term equality
   apply correspondence.producedSentenceHasNoCheckedDerivation
   rw [equality]
   exact theory.equalityReflexivityProof term
+
+def semanticallyDefinedArithmeticGodelDiagnostic
+    (theory : SemanticallyDefinedProofArithmeticTheory) :
+    SemanticallyDefinedArithmeticGodelDiagnostic theory := by
+  let conclusion :=
+    semanticallyDefinedArithmeticGodelPerimetralConclusion theory
+  exact
+    { conclusion := conclusion
+      decidedSentenceSupportsSemanticCompleteness :=
+        theory.reflexiveZeroCompleteness
+      producedSentenceRejectsSemanticCompleteness :=
+        conclusion.correspondence.producedSentenceRejectsSemanticCompleteness
+      producedContinuationRemainsStrict :=
+        conclusion.correspondence.affirmativeContinuationIsStrict }
 
 end StrongPerimetralTurning
 
@@ -1418,11 +1629,18 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.recordedDifferenceIsSource
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.historicalProvenance
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalContraction
+#print axioms StrongPerimetralTurning.DirectedSemanticCompletenessAt
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelDirectedContraction
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalClosureMeaning
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelDirectedClosureMeaning
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.circularClosureToCausalClosure
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.causalClosureToCircularClosure
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.causalClosureContraction
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.causalClosureToDirectedClosure
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.directedClosureContraction
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.directedClosureToProducedCompleteness
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.causalClosureToProducedCompleteness
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.rejectDirectedClosure
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.rejectCausalClosure
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.rejectSpecifiedClosure
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelRegimeParticipation
@@ -1454,6 +1672,12 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory.provabilityTruth_implies_checkedProof
 #print axioms StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory.unprovabilityTruth_implies_noProof
 #print axioms StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory.noProof_implies_unprovabilityTruth
+#print axioms StrongPerimetralTurning.ArithmeticSemanticCompletenessAt
+#print axioms StrongPerimetralTurning.arithmeticReflexiveZeroSentence
+#print axioms StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory.reflexiveZeroTruth
+#print axioms StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory.reflexiveZeroProof
+#print axioms StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory.reflexiveZeroCompleteness
+#print axioms StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory.rejectProoflessChecker
 #print axioms StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory.toEffectivelyPresentedSoundArithmeticTheory
 #print axioms StrongPerimetralTurning.arithmeticEquivalenceCheck
 #print axioms StrongPerimetralTurning.EffectivelyPresentedSoundArithmeticTheory.equivalenceIsBiconditionalProof
@@ -1465,4 +1689,6 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.semanticallyDefinedArithmeticGodelPerimetralCorrespondence
 #print axioms StrongPerimetralTurning.SemanticallyDefinedArithmeticGodelPerimetralConclusion
 #print axioms StrongPerimetralTurning.semanticallyDefinedArithmeticGodelPerimetralConclusion
+#print axioms StrongPerimetralTurning.SemanticallyDefinedArithmeticGodelDiagnostic
+#print axioms StrongPerimetralTurning.semanticallyDefinedArithmeticGodelDiagnostic
 /- AXIOM_AUDIT_END -/

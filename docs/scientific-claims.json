@@ -1421,13 +1421,13 @@
     {
       "id": "GODEL_AFFIRMATIVE_CONSTITUTION",
       "kind": "causal",
-      "scope": "Forme sémantique fondée sur la correction, limitée à SemanticallyDefinedProofArithmeticTheory : les contrats de syntaxe arithmétique, substitution, point fixe, relation de preuve, correction et réflexivité de l'égalité produisent séquentiellement une même phrase vraie non prouvable et non réflexive, fixent l'issue consommée, réalisent un périmètre ordonné à plusieurs étapes et font produire au certificat de turning une continuation positive avec occurrence résiduelle et interprétation finale. Sur cette même continuation, la fermeture spécifiée est équivalente à une fermeture causale qui doit lire le candidat depuis la différence finale et consommer sa provenance enregistrée avant de se factoriser par Truth(G) vers Proof(G), puis de rencontrer à nouveau le point fixe et les lois de correction et de représentation ; aucune instance de théorie arithmétique nommée n'est revendiquée.",
+      "scope": "Forme sémantique fondée sur la correction, avec deux niveaux explicitement séparés. Le théorème générique reste conditionnel pour toute EffectivelyPresentedSoundGodelSystem et le diagnostic arithmétique abstrait reste conditionnel pour toute SemanticallyDefinedProofArithmeticTheory. Le dépôt construit en plus une instance nommée de l'arithmétique de Heyting : syntaxe arithmétique du premier ordre, calcul intuitionniste, codages et décodeurs, vérificateur numérique primitif récursif limité aux règles intuitionnistes, reconstruction de toute preuve acceptée, prédicat interne de preuve pour ce même vérificateur, point fixe paramétrique interne et correction dans le modèle standard. La chaîne produit une même phrase HA vraie dont ni elle ni sa négation n'ont de dérivation vérifiée, fixe l'issue consommée et construit une continuation stricte. La fermeture dirigée causale lit le candidat depuis la différence finale, consomme sa provenance enregistrée, fournit Truth(G) vers Proof(G), puis rencontre le point fixe, la correction et la représentation. La fermeture spécifiée historique, fondée sur Truth(G) = Proof(G), se factorise vers cette obligation dirigée sans être présentée comme un critère caractéristique de l'incomplétude. La portée n'est ni Rosser ni une conclusion sous simple cohérence.",
       "anchors": [
         {
           "path": "docs/constitution-affirmative-incompletude-godel.fr.md",
           "heading": "Conclusion canonique à portée explicite",
           "paragraph": 1,
-          "sha256": "08b552bc508c6e9e51b65abae35be0225f6c8a73e02a7086ba8f3f63454fbcaa"
+          "sha256": "e84f49b193c559588742dd68b0188e56f7b5dbf6964de652c9775d3e4a13702a"
         }
       ],
       "proofs": [
@@ -1454,6 +1454,41 @@
         {
           "module": "RelationalPerimeter.Constitution.GodelDiagonalPerimetral",
           "name": "StrongPerimetralTurning.effectiveGodelPerimetralCorrespondence",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.PrimitiveRecursiveProofLineChecking",
+          "name": "RelationalPerimeter.HeytingArithmetic.PRFunction.checkProofLineRules_rejects_doubleNegationTag",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.ProvabilityPredicate",
+          "name": "RelationalPerimeter.HeytingArithmetic.provHA_spec",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.InternalFixedPoint",
+          "name": "RelationalPerimeter.HeytingArithmetic.internalFixedPoint_derivable",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmeticGodelInstance",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticEffectiveGodelSystem",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmeticGodelInstance",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelPerimetralCorrespondence",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmeticGodelInstance",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticProducedNegationIsUnprovable",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmeticGodelInstance",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticCausalClosureIsImpossible",
           "role": "production"
         },
         {
@@ -1498,6 +1533,21 @@
         },
         {
           "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
+          "name": "StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.causalClosureToDirectedClosure",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
+          "name": "StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.directedClosureToProducedCompleteness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
+          "name": "StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.rejectDirectedClosure",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
           "name": "StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.causalClosureToProducedCompleteness",
           "role": "production"
         },
@@ -1519,6 +1569,21 @@
         {
           "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
           "name": "StrongPerimetralTurning.semanticallyDefinedArithmeticGodelPerimetralConclusion",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
+          "name": "StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory.reflexiveZeroCompleteness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
+          "name": "StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory.rejectProoflessChecker",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
+          "name": "StrongPerimetralTurning.semanticallyDefinedArithmeticGodelDiagnostic",
           "role": "production"
         },
         {
@@ -1545,17 +1610,37 @@
           "module": "Tests.GodelCorrespondenceScopeRegression",
           "name": "RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateSpecifiedClosureIsRejectedByProducedFixedPoint",
           "role": "test"
+        },
+        {
+          "module": "Tests.GodelCorrespondenceScopeRegression",
+          "name": "RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.kernelDecidedSentenceSupportsDirectedCompleteness",
+          "role": "test"
+        },
+        {
+          "module": "Tests.HeytingArithmeticGodelInstanceRegression",
+          "name": "RelationalPerimeter.Tests.HeytingArithmeticGodelInstanceRegression.reflexiveZeroCertificateIsAccepted",
+          "role": "test"
+        },
+        {
+          "module": "Tests.HeytingArithmeticGodelInstanceRegression",
+          "name": "RelationalPerimeter.Tests.HeytingArithmeticGodelInstanceRegression.doubleNegationTagIsRejectedByHADispatcher",
+          "role": "test"
+        },
+        {
+          "module": "Tests.HeytingArithmeticGodelInstanceRegression",
+          "name": "RelationalPerimeter.Tests.HeytingArithmeticGodelInstanceRegression.namedProducedSentenceUnprovability",
+          "role": "test"
         }
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Les types de formule, phrase, preuve, vérité, équivalence, témoin produit, occurrences intérieure et résiduelle, continuation et interprétation finale restent indexés par le système reçu, par la phrase effectivement construite et par la même histoire. La certification dérive le point fixe exact de la production reçue, puis construit la non-prouvabilité et la vérité depuis ce même point fixe.",
-        "execution": "L'histoire exécute dans l'ordre received, diagonalize, selfApply, certify et continue ; chaque producteur consomme la sortie typée du précédent. arithmeticHistoryPinsExit fixe l'issue canonique exacte. Le certificat StrongPerimetralTurningCertificate fournit son déploiement et son pas libre ; strictTurningContinuation consomme ces données pour la continuation, tandis que la labellisation conserve les occurrences produced et certified et ajoute une occurrence résiduelle distincte. L'interprétation finale est obtenue par finalInterpretationFromPositive du même certificat, sans modifier les sources fondationnelles.",
-        "proof": "La non-prouvabilité consomme correction, point fixe et représentation ; dans l'accès arithmétique retenu, les deux directions de représentation sont dérivées de la relation de preuve explicite, de son adéquation au même vérificateur et de la sémantique de substitution. La réflexivité vérifiée exclut toute égalité t=t comme phrase produite. Les deux adaptateurs prouvent, sur la même continuation, l'équivalence entre CircularClosureMeaning inchangée et la fermeture causale. La factorisation applique la fermeture à la stricte continuation produite par le turning, lit son candidat depuis recordedDifference, consomme le recordedProvenance de l'interprétation finale pour l'identifier au témoin exécuté, puis transporte Truth(G) vers Proof(G). Le rejet terminal est redérivé du point fixe exact et des lois de correction et de représentation, pas d'un champ de contradiction stocké.",
+        "formation": "Les types de formule, phrase, preuve, vérité, équivalence, témoin produit, occurrences intérieure et résiduelle, continuation et interprétation finale restent indexés par le système reçu, par la phrase effectivement construite et par la même histoire. Dans l'instance HA, Sentence et Predicate portent leur preuve de scoping, les codages se décodent, et le point fixe interne est construit pour la formule cible reçue. La certification dérive le point fixe exact de la production reçue, puis construit la non-prouvabilité et la vérité depuis ce même point fixe.",
+        "execution": "Le vérificateur HA exécute le contrôle numérique de l'histoire racine et son dispatcher énumère exactement les tags intuitionnistes 0 à 21 ; le tag classique 22 est rejeté. Tout code accepté est reconstruit en dérivation intuitionniste exacte, et toute dérivation HA peut être encodée en certificat accepté. L'histoire gödelienne exécute ensuite received, diagonalize, selfApply, certify et continue ; chaque producteur consomme la sortie typée du précédent. Le certificat StrongPerimetralTurningCertificate fournit le déploiement et le pas libre de la continuation sans modification des sources fondationnelles.",
+        "proof": "Pour HA, provHA est construit depuis le graphe arithmétique du même vérificateur primitif récursif et provHA_spec relie sa vérité à une dérivation HA. La diagonalisation paramétrique est une dérivation objet intuitionniste et haProofSound établit la correction dans le modèle standard. Ces constructions ferment les deux directions de représentation de la non-prouvabilité ; elles ne les ajoutent pas comme conclusion supposée. La phrase produite est vraie et sans certificat accepté ; la correction d'une preuve supposée de sa négation consomme ce même témoin de vérité. La fermeture dirigée lit son candidat depuis recordedDifference, consomme recordedProvenance pour l'identifier au témoin exécuté, puis fournit Truth(G) vers Proof(G). Le rejet terminal est redérivé du point fixe exact, de la correction et de la représentation. Le diagnostic abstrait SemanticallyDefinedArithmeticGodelDiagnostic demeure un résultat séparé et conditionnel.",
         "transport": "Les équivalences transportent séparément preuves et vérités jusqu'à l'hypothèse de fermeture. La provenance enregistrée impose ensuite l'égalité entre le candidat lu et le témoin transmis avant tout transport de la contraction. ArithmeticExecutedGodelCausalParticipation conserve l'ordre des deux occurrences intérieures et leur séparation avec l'occurrence résiduelle dans l'extension stricte ; ni la production, ni la continuation, ni le candidat final ne sont reconstruits indépendamment au point de consommation."
       },
       "consumers": [],
-      "source_sha256": "4ee65660f871eaf315dab222e934de5004225627d994979361d19095a5e7a0ba",
+      "source_sha256": "da1417be9eeeae0502a0ab99dce43fce86559054b8c8b2035514173e201a0062",
       "reviews": {
         "reader": {
           "status": "pending"

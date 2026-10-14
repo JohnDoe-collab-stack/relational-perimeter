@@ -130,6 +130,28 @@ def abstractDegenerateSpecifiedClosureIsRejectedByProducedFixedPoint :
         abstractDegenerateCausalParticipation.continuation → Empty :=
   abstractDegenerateCausalParticipation.rejectSpecifiedClosure
 
+/- The directed semantic-completeness obligation is not contradictory by
+   itself.  A sentence already proved by the corrected kernel admits the map
+   from truth to proof, independently of how many proof witnesses it has. -/
+abbrev kernelDecidedSentence : NumberedSentence :=
+  .apply .theoremFormula 0
+
+def kernelDecidedSentenceProof :
+    UniformNumberedProof UniformKernelSeed kernelDecidedSentence :=
+  ⟨godelPair 5 (NumberedProofCode.theoremIntroduction 0),
+    .admitted (.theoremIntroduction 0)⟩
+
+def kernelDecidedSentenceTruth :
+    uniformNumberedSentenceTruth UniformKernelSeed kernelDecidedSentence :=
+  UniformNumberedProof.sound uniformKernelSeedSound kernelDecidedSentenceProof
+
+def kernelDecidedSentenceSupportsDirectedCompleteness :
+    DirectedSemanticCompletenessAt
+      (uniformNumberedSentenceTruth UniformKernelSeed)
+      (UniformNumberedProof UniformKernelSeed)
+      kernelDecidedSentence :=
+  fun _ => kernelDecidedSentenceProof
+
 end RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression
 
 /- AXIOM_AUDIT_BEGIN -/
@@ -146,4 +168,8 @@ end RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression
 #print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateFinalInterpretationCarriesHistoricalProvenance
 #print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateSpecifiedClosureFactorsThroughHistoricalProvenance
 #print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateSpecifiedClosureIsRejectedByProducedFixedPoint
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.kernelDecidedSentence
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.kernelDecidedSentenceProof
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.kernelDecidedSentenceTruth
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.kernelDecidedSentenceSupportsDirectedCompleteness
 /- AXIOM_AUDIT_END -/

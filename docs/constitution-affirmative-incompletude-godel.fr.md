@@ -5,22 +5,29 @@
 Pour toute instance de `SemanticallyDefinedProofArithmeticTheory`, sur le
 langage objet arithmétique fixé, satisfaisant les contrats explicites de
 codage, substitution des numéraux, diagonalisation, vérification des
-dérivations, relation de preuve représentée, correction sémantique et preuve
+dérivations, relation de preuve sémantiquement définie, correction sémantique et preuve
 de la réflexivité de l'égalité, la formalisation exécute une chaîne qui
 construit sa phrase diagonale, certifie que cette même phrase est vraie et non
-prouvable en partageant le point fixe de la production reçue, et démontre
-qu'elle n'est aucune égalité réflexive. La chaîne fixe ensuite exactement
+prouvable en partageant le point fixe de la production reçue, démontre que sa
+négation n'est pas davantage prouvable et qu'elle n'est aucune égalité
+réflexive. La chaîne fixe ensuite exactement
 l'issue consommée, inscrit le témoin dans un périmètre ordonné à plusieurs
 étapes, réalise ses occurrences dans la continuation stricte et positive
 produite par le turning, préserve leur ordre et distingue l'occurrence
-résiduelle. La fermeture spécifiée est équivalente à une fermeture causale qui
-lit son candidat dans l'interprétation finale et doit consommer la provenance
-historique pour l'identifier au témoin produit. Elle se factorise alors par
-`Truth(G) -> Proof(G)` ; la collision est redérivée du point fixe exact, de la
-correction et des deux lois de représentation. Cette correspondance est un
-théorème conditionnel pour les contrats affichés : aucune instance de PA, Q ou
-d'une autre théorie arithmétique nommée n'est revendiquée, et aucune autre
-notion de fermeture n'est rejetée.
+résiduelle. La fermeture dirigée causale lit son candidat dans
+l'interprétation finale, doit consommer la provenance historique pour
+l'identifier au témoin produit et demande exactement `Truth(G) -> Proof(G)`.
+La fermeture spécifiée historique, plus forte, se factorise vers cette
+fermeture dirigée par son identification `Truth(G) = Proof(G)` ; la collision
+est redérivée du point fixe exact, de la correction et des deux lois de
+représentation. Cette correspondance reste un théorème conditionnel pour toute
+instance abstraite reçue. Le dépôt en donne désormais une réalisation nommée
+pour l'arithmétique de Heyting (HA) : calcul intuitionniste, postulats
+arithmétiques usuels, codages et décodeurs, vérificateur numérique exécutable,
+prédicat interne de preuve, diagonalisation interne et correction sont fermés
+dans `heytingArithmeticEffectiveGodelSystem`. La conclusion correspondante est
+`heytingArithmeticGodelPerimetralCorrespondence`. Aucune autre notion de
+fermeture n'est rejetée.
 
 ## Formulation standard retenue
 
@@ -39,8 +46,9 @@ Cette formulation est plus forte dans ses prémisses que la version seulement
 fondée sur la cohérence, et elle n'est pas la variante de Rosser. Sa conclusion
 formalisée est exactement : une phrase diagonale construite, un témoin
 externe de sa vérité et une fonction qui transforme toute preuve supposée de
-cette phrase en `Empty`. Aucune non-prouvabilité de la négation de `G` n'est
-affirmée ici.
+cette phrase en `Empty`. La correction transforme aussi toute preuve supposée
+de la négation de cette phrase en `Empty`, en appliquant sa vérité au témoin de
+vérité déjà produit.
 
 ## Correspondance formelle
 
@@ -48,6 +56,7 @@ affirmée ici.
 | --- | --- | --- |
 | Présentation abstraite de compatibilité | `EffectivelyPresentedSoundGodelSystem` | Codes naturels, décodeurs exécutables et vérificateurs booléens ; cette interface accepte des modèles dégénérés et ne constitue pas la cible arithmétique |
 | Présentation arithmétique retenue | `SemanticallyDefinedProofArithmeticTheory` | Langage arithmétique fixé, substitution sémantiquement correcte, relation de preuve explicite, correction et preuve vérifiée de `t = t` |
+| Réalisation nommée | `heytingArithmeticEffectiveGodelSystem` | Syntaxe du premier ordre arithmétique, dérivations HA, vérificateur primitif récursif, représentabilité interne de ce vérificateur, point fixe paramétrique et correction standard sont construits dans le dépôt |
 | Syntaxe et numérotation | `encodeUnary`, `encodeSentence`, `decodeUnary`, `decodeSentence` | Les deux lois de décodage impliquent l'injectivité des codages |
 | Substitution et lemme diagonal | `substitute`, `diagonalize`, `diagonalizeExact` | Le certificat vérifié relie l'auto-substitution à la substitution de la phrase codée |
 | Dérivations | `CheckedSentenceProof` et `proofCheck` | Une preuve est un code naturel dont le vérificateur renvoie `true` |
@@ -58,8 +67,12 @@ affirmée ici.
 | Représentation de la non-prouvabilité | `representsUnprovabilityForward` et `representsUnprovabilityBackward` | Reçue par l'interface historique ; dérivée par le nouvel accès depuis la relation de preuve explicite et les transports sémantiques de substitution |
 | Phrase produite | `executeGodelDiagonalProduction` puis `executeGodelSentenceProduction` | La formule diagonalisée est produite avant son auto-application |
 | Conclusion d'incomplétude | `certifyExecutedGodelWitness` | Le point fixe est transporté depuis la production reçue ; il produit la non-prouvabilité, puis la vérité du même résultat |
+| Indécidabilité sous correction | `producedNegationHasNoCheckedDerivation` | Une preuve vérifiée de `¬G` serait correcte et consommerait le témoin de vérité de `G` |
 | Constitution et continuation | `ArithmeticExecutedGodelCausalParticipation` | Le témoin issu de l'issue exécutée devient la différence du périmètre ; le certificat de turning produit la continuation, ses occurrences intérieures et son occurrence résiduelle |
-| Fermeture spécifiée et provenance | `ArithmeticExecutedGodelCausalClosureMeaning` | La forme causale est équivalente à `CircularClosureMeaning` sur la même continuation ; son candidat est lu dans `recordedDifference` et aligné au témoin produit par `recordedProvenance` |
+| Fermeture dirigée et provenance | `ArithmeticExecutedGodelDirectedClosureMeaning` | Son candidat est lu dans `recordedDifference`, aligné au témoin produit par `recordedProvenance`, puis sa conversion `Truth(G) -> Proof(G)` rencontre le point fixe |
+| Fermeture spécifiée historique | `ArithmeticExecutedGodelCausalClosureMeaning` | La forme à égalité de types est équivalente à `CircularClosureMeaning` sur la même continuation et se factorise vers la fermeture dirigée ; elle n'est pas utilisée comme critère caractéristique de l'incomplétude |
+| Contraste diagnostique dans un même système | `SemanticallyDefinedArithmeticGodelDiagnostic` | Le même prédicat `DirectedSemanticCompletenessAt` est satisfait en `0 = 0`, rejeté en `G`, et la continuation produite reste stricte |
+| Conclusion HA nommée | `heytingArithmeticGodelPerimetralCorrespondence` | La phrase HA produite est vraie dans le modèle standard et n'a pas de certificat HA accepté ; sa négation n'en a pas davantage, la continuation est stricte et les fermetures causale et dirigée sont rejetées |
 
 Les adaptateurs `toGodelSyntax` et `toGodelInterpretation` transportent les
 contrats vers le noyau diagonal sans fournir la conclusion. L'interface
@@ -67,10 +80,26 @@ générique `EffectivelyPresentedSoundGodelSystem` est conservée comme couche d
 compatibilité abstraite : le contre-test permanent `abstractDegenerateSystem`
 montre qu'elle accepte un univers singleton sans preuve. Elle n'est donc plus
 utilisée seule comme évidence de la correspondance arithmétique. La cible
-publique renforcée est
-`semanticallyDefinedArithmeticGodelPerimetralConclusion`. Elle ajoute au
-raccord R1 la conséquence vérifiée que la phrase produite ne peut être aucune
-égalité réflexive, puisque ces égalités possèdent une dérivation vérifiée.
+publique renforcée abstraite est
+`semanticallyDefinedArithmeticGodelDiagnostic`. Elle ajoute au raccord R1 la
+conséquence vérifiée que la phrase produite ne peut être aucune égalité
+réflexive, puisque ces égalités possèdent une dérivation vérifiée, exclut
+formellement tout vérificateur constamment faux, et compare dans le même
+système la fermeture dirigée satisfaite en `0 = 0` à son rejet en `G`.
+
+La réalisation nommée est distincte de ce diagnostic abstrait. Le module
+[`HeytingArithmeticGodelInstance`](../RelationalPerimeter/Constitution/HeytingArithmeticGodelInstance.lean)
+instancie directement `EffectivelyPresentedSoundGodelSystem`. Son
+`haProofCheck` exécute le vérificateur numérique de l'histoire racine HA ; la
+correction reconstruit une dérivation intuitionniste exacte depuis tout code
+accepté. Le dispatcher n'énumère que les règles `0` à `21` et rejette le tag
+`22` de l'élimination de la double négation. `provHA` est la formule
+arithmétique obtenue à partir du graphe primitif récursif de ce même
+vérificateur, et `provHA_spec` en donne la correspondance. Le point fixe
+paramétrique est une dérivation HA interne, non une équivalence sémantique
+supposée. Ces données construisent les deux directions de représentation de
+la non-prouvabilité, puis alimentent sans hypothèse supplémentaire la chaîne
+générique.
 
 Le module
 [`ArithmeticGodelCorrespondence`](../RelationalPerimeter/Constitution/ArithmeticGodelCorrespondence.lean)
@@ -88,11 +117,13 @@ construit `Prov` et `Unprov`, puis dérive les deux lois historiques avant
 d'appliquer la chaîne existante par
 `semanticallyDefinedArithmeticGodelPerimetralConclusion`.
 
-Le certificat diagonal objet, les transports de preuves et la correction
-restent des prémisses. Le nouvel accès n'établit donc ni la représentabilité
-arithmétique interne complète du vérificateur ni une instance pour PA, Q ou une
-autre théorie nommée. Sa portée exacte est le théorème abstrait fondé sur la
-correction et le point fixe dans le langage arithmétique affiché.
+Dans l'accès abstrait `SemanticallyDefinedProofArithmeticTheory`, le certificat
+diagonal objet, les transports de preuves et la correction restent des
+prémisses. La réalisation HA ne les suppose pas : elle les construit dans ses
+modules de syntaxe, de vérification, de représentabilité, de point fixe et de
+correction. Le simple champ booléen d'une instance abstraite ne suffirait
+toujours pas à établir cette portée ; c'est la fermeture concrète de ces
+obligations, et non le seul nom de l'interface, qui justifie ici la portée HA.
 
 ## Ordre constitutif et identité de ressource
 
@@ -149,17 +180,20 @@ consommée avant tout transport de la contraction au témoin produit.
 présentation et la même continuation : la cible n'est donc pas remplacée par
 une fermeture plus forte.
 
-`causalClosureToProducedCompleteness` effectue la factorisation dirigée après
-ce transport historique. `rejectCausalClosure` ne réutilise pas seulement la
+`directedClosureToProducedCompleteness` effectue la factorisation dirigée après
+ce transport historique. `rejectDirectedClosure` ne réutilise pas seulement la
 paire `trueWitness`/`unprovable` stockée :
 `fixedPoint_rejectsProducedCompleteness` redérive la non-prouvabilité et la
 vérité depuis le point fixe exact, `proofSound` et les deux directions de
-représentation. Le résultat public sur l'ancienne continuation est transporté
-vers cette même continuation canonique et passe par cette voie causale. Aucun
-de ces théorèmes n'appelle `rejectInitialContraction`. L'ancien rejet générique
-reste disponible comme résultat de compatibilité ; il n'est pas l'évidence
-citée pour la dépendance gödelienne. C'est cette fermeture définie qui est
-rejetée, et non toute fermeture concevable.
+représentation. `causalClosureToDirectedClosure` montre séparément comment
+l'ancienne égalité de types induit cette obligation dirigée ;
+`rejectCausalClosure` passe désormais par cette conversion. Le résultat public
+sur l'ancienne continuation est transporté vers cette même continuation
+canonique et passe par cette voie causale. Aucun de ces théorèmes n'appelle
+`rejectInitialContraction`. L'ancien rejet générique reste disponible comme
+résultat de compatibilité ; il n'est pas l'évidence citée pour la dépendance
+gödelienne. C'est cette fermeture dirigée au témoin produit qui porte le
+diagnostic d'incomplétude, et non l'égalité de types prise isolément.
 
 Les contre-tests séparent deux causes. `UniformTotalSeed` admet aussi une
 fausseté universelle non diagonale : son incohérence ne peut donc pas expliquer
@@ -171,6 +205,20 @@ application de la même famille syntaxique ; l'absence de preuve de `G` n'est
 donc ni une exclusion de toute la famille, ni une propriété du seul squelette
 du vérificateur.
 
+Le contre-test permanent `kernelDecidedSentenceSupportsDirectedCompleteness`
+exhibe en sens inverse une phrase du noyau qui est vraie et prouvable et porte
+le même prédicat `DirectedSemanticCompletenessAt`. Plus fortement,
+`SemanticallyDefinedArithmeticGodelDiagnostic` réalise ce contraste dans une
+seule instance arithmétique reçue : `reflexiveZeroCompleteness` satisfait le
+prédicat en `0 = 0`, tandis que la phrase diagonale produite le rejette et que
+sa continuation reste stricte. `rejectProoflessChecker` démontre que le modèle
+abstrait `Proof := Empty` du contre-probe ne peut pas fournir cette interface,
+car la réflexivité donne déjà une preuve vérifiée. La notion dirigée n'est donc
+pas contradictoire par construction. L'égalité de types historique peut encore
+échouer sur une phrase vraie et prouvable à cause de la pluralité de ses
+preuves ; elle reste une spécification de compatibilité plus forte, et non le
+diagnostic primaire.
+
 Deux échecs attendus permanents contrôlent en plus que ni une contradiction
 arbitraire `Unit -> Empty`, ni une présentation dont `TotalLoop` est stipulé
 égal à `Empty`, ne peuvent être passées à la fermeture causale exécutée. Un
@@ -178,13 +226,15 @@ probe séparé vérifie que le point fixe produit ne se transporte pas à
 l'application non diagonale, et qu'un témoin étranger ne peut pas réutiliser
 l'enregistrement historique sans fournir l'égalité de provenance manquante.
 
-## Limite ouverte distincte
+## Limites restantes distinctes
 
-Le dépôt ne construit pas encore une instance de
-`SemanticallyDefinedProofArithmeticTheory` pour PA, Q ou une autre théorie
-arithmétique nommée, avec l'arithmétisation interne complète de son prédicat de
-preuve. Cette instanciation renforcerait la portée par un exemple standard
-particulier ; elle n'est pas cachée dans la conclusion conditionnelle et reste
-un travail à faire. Elle ne doit pas être confondue avec la correspondance
-formelle générique déjà établie ni avec la réalisation uniforme exécutable du
-dépôt.
+La réalisation HA ferme dans le dépôt les obligations de codage, substitution,
+vérification, représentabilité du prédicat de preuve, diagonalisation et
+correction nécessaires à la conclusion nommée. Elle ne transforme pas le
+résultat en variante de Rosser ni en théorème fondé sur la seule cohérence : la
+portée demeure la forme sémantique fondée sur la correction annoncée plus haut.
+Elle ne prétend pas non plus identifier définitionnellement ce calcul à toute
+autre présentation éditoriale de HA ; une telle comparaison exigerait un
+théorème de traduction séparé. Enfin, le statut de revue indépendante reste
+`not_recorded` tant qu'un rapport extérieur portant sur le commit exact n'a pas
+été reçu, lu et enregistré.

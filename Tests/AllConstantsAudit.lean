@@ -10,6 +10,7 @@ import Tests.DeepPreservationRegression
 import Tests.EndogenousOperationalStabilityRegression
 import Tests.EndogenousWidthBridgeRegression
 import Tests.GodelCorrespondenceScopeRegression
+import Tests.HeytingArithmeticGodelInstanceRegression
 import Tests.ProducedContinuation
 import Tests.ProductionTimelineRegression
 import Tests.PublicRootImport
@@ -47,8 +48,11 @@ import Tests.Machine.RunMachine
 
 /-! Build-time tooling, not a mathematical hypothesis or a new production
 dependency. Scan every constant in every imported repository module, including
-private declarations. Classify compiler exceptions using source locations and
-the constructor/definition metadata; an unclassified exception fails closed.
+private declarations. Classify compiler exceptions using source locations,
+generated-name markers, and constructor/definition metadata; an unclassified
+exception fails closed. Tactic-macro expanders are elaboration-time programs:
+their generated constants are classified, while every declaration produced by
+their use remains in the ordinary dependency scan.
 The selected declarations printed in each module remain independently audited. -/
 set_option maxHeartbeats 0
 open Lean
@@ -143,6 +147,9 @@ run_cmd do
       else if !authored && userName.contains "instRepr" && source.contains "deriving" &&
           (match info with | .defnInfo _ => true | _ => false) then
         "compiler-derived-representation"
+      else if !authored && userName.contains "___macroRules_" && source.contains "macro" &&
+          (match info with | .defnInfo _ => true | _ => false) then
+        "compiler-tactic-macro"
       else "REJECTED"
     if category == "REJECTED" then
       throwError "All-constant audit rejected {name}; source identifier '{selected}'; dependencies {dependencies}"

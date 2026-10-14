@@ -46,6 +46,15 @@ def publicArithmeticGodelCausalClosureRejection
   (StrongPerimetralTurning.arithmeticGodelPerimetralCorrespondence
     theory).causalClosureIsImpossible
 
+def publicArithmeticGodelDirectedClosureRejection
+    (theory :
+      StrongPerimetralTurning.EffectivelyPresentedSoundArithmeticTheory) :
+    StrongPerimetralTurning.ArithmeticExecutedGodelDirectedClosureMeaning
+        (publicArithmeticGodelCausalParticipation theory) →
+      Empty :=
+  (StrongPerimetralTurning.arithmeticGodelPerimetralCorrespondence
+    theory).directedClosureIsImpossible
+
 def publicSemanticallyDefinedArithmeticGodelCorrespondence
     (theory :
       StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory) :
@@ -61,6 +70,50 @@ def publicSemanticallyDefinedArithmeticGodelConclusion
       theory :=
   StrongPerimetralTurning.semanticallyDefinedArithmeticGodelPerimetralConclusion
     theory
+
+def publicSemanticallyDefinedArithmeticGodelDiagnostic
+    (theory :
+      StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory) :
+    StrongPerimetralTurning.SemanticallyDefinedArithmeticGodelDiagnostic
+      theory :=
+  StrongPerimetralTurning.semanticallyDefinedArithmeticGodelDiagnostic theory
+
+def publicSemanticallyDefinedArithmeticGodelNegationRejection
+    (theory :
+      StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory) :
+    StrongPerimetralTurning.CheckedArithmeticProof
+        theory.encodeSentence theory.proofCheck
+        (StrongPerimetralTurning.FirstOrderArithmeticFormula.negation
+          (publicSemanticallyDefinedArithmeticGodelConclusion theory).correspondence.effective.execution.exit.witness.production.sentence) →
+      Empty :=
+  (publicSemanticallyDefinedArithmeticGodelConclusion
+    theory).producedNegationHasNoCheckedDerivation
+
+def publicSemanticallyDefinedArithmeticRejectsProoflessChecker
+    (theory :
+      StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory)
+    (proofless :
+      (proofCode sentenceCode : Nat) →
+        theory.proofCheck proofCode sentenceCode = false) : Empty :=
+  theory.rejectProoflessChecker proofless
+
+def publicHeytingArithmeticEffectiveGodelSystem :=
+  RelationalPerimeter.HeytingArithmetic.heytingArithmeticEffectiveGodelSystem
+
+def publicHeytingArithmeticGodelCorrespondence :=
+  RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelPerimetralCorrespondence
+
+def publicHeytingArithmeticCausalParticipation :=
+  RelationalPerimeter.HeytingArithmetic.heytingArithmeticCausalParticipation
+
+def publicHeytingArithmeticStrictContinuation :=
+  RelationalPerimeter.HeytingArithmetic.heytingArithmeticStrictContinuation
+
+def publicHeytingArithmeticCausalClosureRejection :=
+  RelationalPerimeter.HeytingArithmetic.heytingArithmeticCausalClosureIsImpossible
+
+def publicHeytingArithmeticNegationRejection :=
+  RelationalPerimeter.HeytingArithmetic.heytingArithmeticProducedNegationIsUnprovable
 
 theorem publicIndependentAddressingBound
     (input : Nat) (addressing : IndependentProfileAddressing input) :
@@ -89,8 +142,18 @@ end RelationalPerimeter.Tests.PublicRootImport
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelCorrespondence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelCausalParticipation
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelCausalClosureRejection
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelDirectedClosureRejection
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicSemanticallyDefinedArithmeticGodelCorrespondence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicSemanticallyDefinedArithmeticGodelConclusion
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicSemanticallyDefinedArithmeticGodelDiagnostic
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicSemanticallyDefinedArithmeticGodelNegationRejection
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicSemanticallyDefinedArithmeticRejectsProoflessChecker
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticEffectiveGodelSystem
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticGodelCorrespondence
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticCausalParticipation
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticStrictContinuation
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticCausalClosureRejection
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticNegationRejection
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicIndependentAddressingBound
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicNormalizerProgramSize
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicNormalizerMetricAgreement
