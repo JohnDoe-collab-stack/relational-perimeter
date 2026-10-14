@@ -62,6 +62,19 @@ complétude et les données constitutives supplémentaires. La réalisation
 uniforme fermée du dépôt demeure un modèle exécutable distinct ; elle ne sert
 pas, à elle seule, à revendiquer la portée arithmétique générale.
 
+Le module
+[`ArithmeticGodelCorrespondence`](../RelationalPerimeter/Constitution/ArithmeticGodelCorrespondence.lean)
+fixe en outre un langage objet arithmétique avec zéro, successeur, addition,
+multiplication, égalité, implication, conjonction et quantification
+universelle. Son interface `EffectivelyPresentedSoundArithmeticTheory` exige
+que `diagonalIffProof` soit une dérivation vérifiée du biconditionnel dans ce
+langage objet. L’adaptateur `toEffectiveGodelSystem` fournit alors l’interface
+générique, et `arithmeticGodelPerimetralCorrespondence` dérive la vérité, la
+non-prouvabilité, la continuation affirmative et le rejet de la totalisation ;
+aucune de ces conclusions n’est un champ reçu. Cette spécialisation demeure
+conditionnelle : elle ne construit pas encore les données de l’interface pour
+PA, Q ou une autre théorie arithmétique nommée.
+
 ## Ordre constitutif et identité de ressource
 
 L'histoire `ExecutedGodelConstitutiveStep` impose successivement les passages

@@ -22,6 +22,12 @@ def publicFamily :=
 def publicSuccinctnessEvidence :=
   RelationalPerimeter.Computation.EndogenousOperationalDecomposition.constitutiveNormalizerSuccinctnessEvidence
 
+def publicArithmeticGodelCorrespondence
+    (theory :
+      StrongPerimetralTurning.EffectivelyPresentedSoundArithmeticTheory) :
+    StrongPerimetralTurning.ArithmeticGodelPerimetralCorrespondence theory :=
+  StrongPerimetralTurning.arithmeticGodelPerimetralCorrespondence theory
+
 theorem publicIndependentAddressingBound
     (input : Nat) (addressing : IndependentProfileAddressing input) :
     2 ^ (input + 1) <= addressing.slotCount :=
@@ -46,6 +52,7 @@ end RelationalPerimeter.Tests.PublicRootImport
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicEvidence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicFamily
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicSuccinctnessEvidence
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelCorrespondence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicIndependentAddressingBound
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicNormalizerProgramSize
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicNormalizerMetricAgreement
