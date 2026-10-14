@@ -36,6 +36,14 @@ def publicSemanticallyDefinedArithmeticGodelCorrespondence
   StrongPerimetralTurning.semanticallyDefinedArithmeticGodelPerimetralCorrespondence
     theory
 
+def publicSemanticallyDefinedArithmeticGodelConclusion
+    (theory :
+      StrongPerimetralTurning.SemanticallyDefinedProofArithmeticTheory) :
+    StrongPerimetralTurning.SemanticallyDefinedArithmeticGodelPerimetralConclusion
+      theory :=
+  StrongPerimetralTurning.semanticallyDefinedArithmeticGodelPerimetralConclusion
+    theory
+
 theorem publicIndependentAddressingBound
     (input : Nat) (addressing : IndependentProfileAddressing input) :
     2 ^ (input + 1) <= addressing.slotCount :=
@@ -62,6 +70,7 @@ end RelationalPerimeter.Tests.PublicRootImport
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicSuccinctnessEvidence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelCorrespondence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicSemanticallyDefinedArithmeticGodelCorrespondence
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicSemanticallyDefinedArithmeticGodelConclusion
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicIndependentAddressingBound
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicNormalizerProgramSize
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicNormalizerMetricAgreement

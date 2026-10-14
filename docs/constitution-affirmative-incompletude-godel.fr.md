@@ -2,21 +2,22 @@
 
 ## Conclusion canonique à portée explicite
 
-Pour tout système effectivement présenté satisfaisant les hypothèses
-explicites de codage, substitution diagonale, vérification des dérivations,
-transport des équivalences, correction sémantique et représentation de la
-non-prouvabilité, la formalisation exécute une chaîne qui construit sa phrase
-diagonale, certifie que cette même phrase est vraie et non prouvable, l'inscrit
-comme ressource d'un tout relationnel exactement réalisé, puis construit une
-continuation stricte et positive qui conserve ce tout. Sur cette même
-ressource, toute complétude sémantique locale `Truth(G) -> Proof(G)` est
-impossible ; la fermeture totalisante spécifiée, plus forte parce qu'elle
-identifie les types `Truth(G)` et `Proof(G)`, se factorise par cette
-complétude et échoue donc. Le résultat explique ainsi le mécanisme
-d'incomplétude visé par une constitution et une continuation affirmatives,
-dans cette portée conditionnelle exacte ; il ne prétend ni avoir déjà
-instancié ces hypothèses pour une théorie arithmétique particulière, ni
-rejeter toute notion possible de fermeture.
+Pour toute instance de `SemanticallyDefinedProofArithmeticTheory`, sur le
+langage objet arithmétique fixé, satisfaisant les contrats explicites de
+codage, substitution des numéraux, diagonalisation, vérification des
+dérivations, relation de preuve représentée, correction sémantique et preuve
+de la réflexivité de l'égalité, la formalisation exécute une chaîne qui
+construit sa phrase diagonale, certifie que cette même phrase est vraie et non
+prouvable, et démontre qu'elle n'est aucune égalité réflexive. La chaîne fixe
+ensuite exactement l'issue consommée, inscrit le témoin dans un périmètre
+ordonné à plusieurs étapes, réalise ses occurrences dans une continuation
+stricte et positive, et préserve leur ordre. Sur cette même ressource, toute
+complétude locale `Truth(G) -> Proof(G)` est impossible ; la fermeture
+totalisante spécifiée se factorise explicitement par cette conversion et
+échoue sur le certificat du témoin produit. Cette correspondance est un
+théorème conditionnel pour les contrats affichés : aucune instance de PA, Q ou
+d'une autre théorie arithmétique nommée n'est revendiquée, et aucune autre
+notion de fermeture n'est rejetée.
 
 ## Formulation standard retenue
 
@@ -42,7 +43,8 @@ affirmée ici.
 
 | Composant de l'argument standard | Composant formel | Loi utilisée |
 | --- | --- | --- |
-| Présentation effective | `EffectivelyPresentedSoundGodelSystem` | Codes naturels, décodeurs exécutables et vérificateurs booléens |
+| Présentation abstraite de compatibilité | `EffectivelyPresentedSoundGodelSystem` | Codes naturels, décodeurs exécutables et vérificateurs booléens ; cette interface accepte des modèles dégénérés et ne constitue pas la cible arithmétique |
+| Présentation arithmétique retenue | `SemanticallyDefinedProofArithmeticTheory` | Langage arithmétique fixé, substitution sémantiquement correcte, relation de preuve explicite, correction et preuve vérifiée de `t = t` |
 | Syntaxe et numérotation | `encodeUnary`, `encodeSentence`, `decodeUnary`, `decodeSentence` | Les deux lois de décodage impliquent l'injectivité des codages |
 | Substitution et lemme diagonal | `substitute`, `diagonalize`, `diagonalizeExact` | Le certificat vérifié relie l'auto-substitution à la substitution de la phrase codée |
 | Dérivations | `CheckedSentenceProof` et `proofCheck` | Une preuve est un code naturel dont le vérificateur renvoie `true` |
@@ -53,16 +55,18 @@ affirmée ici.
 | Représentation de la non-prouvabilité | `representsUnprovabilityForward` et `representsUnprovabilityBackward` | Reçue par l'interface historique ; dérivée par le nouvel accès depuis la relation de preuve explicite et les transports sémantiques de substitution |
 | Phrase produite | `executeGodelDiagonalProduction` puis `executeGodelSentenceProduction` | La formule diagonalisée est produite avant son auto-application |
 | Conclusion d'incomplétude | `certifyExecutedGodelWitness` | `trueWitness` et `unprovable` sont dérivés du point fixe et de la correction |
-| Constitution et continuation | `executeGodelRegimeExit` | Le même témoin devient la différence du tout, puis la continuation canonique est construite |
+| Constitution et continuation | `arithmeticExecutedGodelRegimeParticipation` | Le témoin issu de l'issue exécutée devient la différence du périmètre arithmétique renforcé, puis sa continuation canonique est construite |
 
-Les adaptateurs `toGodelSyntax` et `toGodelInterpretation` montrent la
-direction essentielle de la correspondance : les hypothèses standard
-effectives fournissent les interfaces du dépôt sans fournir la conclusion.
-`effectiveGodelPerimetralCorrespondence` montre la direction inverse utile :
-ces interfaces produisent la phrase vraie non prouvable, l'obstruction de
-complétude et les données constitutives supplémentaires. La réalisation
-uniforme fermée du dépôt demeure un modèle exécutable distinct ; elle ne sert
-pas, à elle seule, à revendiquer la portée arithmétique générale.
+Les adaptateurs `toGodelSyntax` et `toGodelInterpretation` transportent les
+contrats vers le noyau diagonal sans fournir la conclusion. L'interface
+générique `EffectivelyPresentedSoundGodelSystem` est conservée comme couche de
+compatibilité abstraite : le contre-test permanent `abstractDegenerateSystem`
+montre qu'elle accepte un univers singleton sans preuve. Elle n'est donc plus
+utilisée seule comme évidence de la correspondance arithmétique. La cible
+publique renforcée est
+`semanticallyDefinedArithmeticGodelPerimetralConclusion`. Elle ajoute au
+raccord R1 la conséquence vérifiée que la phrase produite ne peut être aucune
+égalité réflexive, puisque ces égalités possèdent une dérivation vérifiée.
 
 Le module
 [`ArithmeticGodelCorrespondence`](../RelationalPerimeter/Constitution/ArithmeticGodelCorrespondence.lean)
@@ -75,15 +79,16 @@ deux lois sémantiques de non-prouvabilité. Le nouvel accès
 `SemanticallyDefinedProofArithmeticTheory` reçoit à leur place une formule
 binaire de preuve, sa correction sémantique point par point relativement au
 même vérificateur booléen, et la correction sémantique de la substitution des
-numéraux. Il construit `Prov` et `Unprov`, puis dérive les deux lois historiques
-avant d'appliquer, sans la modifier, la chaîne existante par
-`semanticallyDefinedArithmeticGodelPerimetralCorrespondence`.
+numéraux. Il exige aussi une dérivation vérifiée de chaque égalité réflexive,
+construit `Prov` et `Unprov`, puis dérive les deux lois historiques avant
+d'appliquer la chaîne existante par
+`semanticallyDefinedArithmeticGodelPerimetralConclusion`.
 
 Le certificat diagonal objet, les transports de preuves et la correction
-restent des prémisses. Le nouvel accès n'établit donc ni une représentabilité
+restent des prémisses. Le nouvel accès n'établit donc ni la représentabilité
 arithmétique interne complète du vérificateur ni une instance pour PA, Q ou une
-autre théorie nommée. Il renforce la factorisation conditionnelle des
-hypothèses ; il n'élargit pas la portée arithmétique revendiquée.
+autre théorie nommée. Sa portée exacte est le théorème abstrait fondé sur la
+correction et le point fixe dans le langage arithmétique affiché.
 
 ## Ordre constitutif et identité de ressource
 
@@ -92,9 +97,19 @@ L'histoire `ExecutedGodelConstitutiveStep` impose successivement les passages
 certification consomme la production de phrase issue de l'étape précédente.
 La présentation circulaire prend ensuite ce témoin certifié comme type de sa
 différence et exige, par sa provenance, l'égalité au témoin transmis. La
-continuation est `oneStepAfterPerimeter` de cette présentation précise ; son
-extension stricte et sa réalisation locale exacte sont des données positives,
-pas les conséquences d'une simple proposition d'existence.
+présentation historique de `StrongPerimetralTurning.lean` reste inchangée et
+n'est pas citée comme preuve de cette participation globale. La présentation
+renforcée `arithmeticExecutedGodelCircularPresentation`, définie dans le module
+de constitution arithmétique, distingue les étapes `produced`, `certified` et
+`continued` ; les
+porteurs correspondants contiennent respectivement la production exacte et le
+témoin certifié puis retenu, et leurs compatibilités imposent ces mêmes
+ressources. Ses deux positions non fermantes sont réalisées par deux
+occurrences distinctes et ordonnées dans la continuation.
+`arithmeticHistoryPinsExit` démontre en outre que
+toute histoire allant de `received` à `regimeExited` fixe exactement l'issue
+canonique produite par les quatre transitions. Ces lois sont regroupées dans
+`ArithmeticExecutedGodelGlobalParticipation`.
 
 Le turning ne fabrique donc pas tardivement un autre témoin : la production
 diagonale et sa certification précèdent la continuation, et la continuation
@@ -112,8 +127,13 @@ directement le certificat `unprovable`. `ExecutedGodelTotalLoop` demande
 l'identification plus forte `Truth(G) = Proof(G)` ;
 `toProducedCompleteness` montre formellement sa factorisation par l'obligation
 dirigée. Enfin, la spécification globale appliquée à la continuation stricte
-produit ce total loop. C'est cette fermeture définie qui est rejetée, et non
-toute fermeture concevable.
+produit ce total loop.
+`ArithmeticExecutedGodelRegimeParticipation.globalClosureToProducedCompleteness`
+effectue cette factorisation sur la participation arithmétique renforcée, et
+`ArithmeticExecutedGodelGlobalParticipation.rejectGlobalClosure` la compose
+avec le certificat du même témoin. Cette preuve ne passe pas par le champ
+générique `rejectInitialContraction` de la présentation. C'est cette fermeture
+définie qui est rejetée, et non toute fermeture concevable.
 
 Les contre-tests séparent deux causes. `UniformTotalSeed` admet aussi une
 fausseté universelle non diagonale : son incohérence ne peut donc pas expliquer
@@ -128,7 +148,7 @@ du vérificateur.
 ## Limite ouverte distincte
 
 Le dépôt ne construit pas encore une instance de
-`EffectivelyPresentedSoundGodelSystem` pour PA, Q ou une autre théorie
+`SemanticallyDefinedProofArithmeticTheory` pour PA, Q ou une autre théorie
 arithmétique nommée, avec l'arithmétisation interne complète de son prédicat de
 preuve. Cette instanciation renforcerait la portée par un exemple standard
 particulier ; elle n'est pas cachée dans la conclusion conditionnelle et reste

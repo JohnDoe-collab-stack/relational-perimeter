@@ -1421,13 +1421,13 @@
     {
       "id": "GODEL_AFFIRMATIVE_CONSTITUTION",
       "kind": "causal",
-      "scope": "Forme sémantique fondée sur la correction : toute présentation effective satisfaisant les lois explicites de codage, diagonalisation, vérification, transport et représentation de la non-prouvabilité produit une phrase vraie non prouvable, l'inscrit dans le tout relationnel et construit une continuation positive incompatible avec la fermeture spécifiée ; le nouvel accès arithmétique dérive les lois de non-prouvabilité depuis une relation de preuve explicite et sa correction sémantique, sans instanciation revendiquée pour une théorie arithmétique nommée.",
+      "scope": "Forme sémantique fondée sur la correction, limitée à SemanticallyDefinedProofArithmeticTheory : les contrats de syntaxe arithmétique, substitution, point fixe, relation de preuve, correction et réflexivité de l'égalité produisent une phrase vraie non prouvable et non réflexive, fixent l'issue consommée, réalisent un périmètre ordonné à plusieurs étapes et construisent une continuation positive dont la fermeture spécifiée se factorise par Truth(G) vers Proof(G) ; aucune instance de théorie arithmétique nommée n'est revendiquée.",
       "anchors": [
         {
           "path": "docs/constitution-affirmative-incompletude-godel.fr.md",
           "heading": "Conclusion canonique à portée explicite",
           "paragraph": 1,
-          "sha256": "00215cfab47d89f2e9cbd2a13181cdc9bbe7676fe7ee75ae69f65326777a764e"
+          "sha256": "7b84e9f68d3a735ca73f1224805a2a7b5e563b82b75c68cb458556db2c78b4a1"
         }
       ],
       "proofs": [
@@ -1458,19 +1458,49 @@
         },
         {
           "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
+          "name": "StrongPerimetralTurning.ExecutedGodelDiagonalPerimetralLink.arithmeticHistoryPinsExit",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
+          "name": "StrongPerimetralTurning.ExecutedGodelDiagonalPerimetralLink.arithmeticGlobalParticipation",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
+          "name": "StrongPerimetralTurning.ArithmeticExecutedGodelGlobalParticipation.rejectGlobalClosure",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
+          "name": "StrongPerimetralTurning.ArithmeticExecutedGodelRegimeParticipation.globalClosureToProducedCompleteness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
           "name": "StrongPerimetralTurning.semanticallyDefinedArithmeticGodelPerimetralCorrespondence",
           "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.ArithmeticGodelCorrespondence",
+          "name": "StrongPerimetralTurning.semanticallyDefinedArithmeticGodelPerimetralConclusion",
+          "role": "production"
+        },
+        {
+          "module": "Tests.GodelCorrespondenceScopeRegression",
+          "name": "RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractInterfaceDoesNotImplyAnyProofExists",
+          "role": "test"
         }
       ],
       "checks": [],
       "dependencies": {
         "formation": "Les types de formule, phrase, preuve, vérité, équivalence, témoin produit, occurrence et continuation restent indexés par le système reçu et par la phrase effectivement construite.",
-        "execution": "L'histoire exécute dans l'ordre received, diagonalize, selfApply, certify et continue ; chaque producteur consomme la sortie typée du précédent et la continuation est construite depuis la présentation du même témoin.",
-        "proof": "La non-prouvabilité consomme correction, point fixe et représentation ; dans le nouvel accès arithmétique, les deux directions de représentation sont d'abord dérivées de la relation de preuve explicite, de son adéquation au même vérificateur et de la sémantique de substitution. La vérité consomme la direction inverse. La fermeture se factorise par Truth(G) vers Proof(G), puis rencontre le certificat de non-prouvabilité.",
-        "transport": "Les équivalences transportent séparément preuves et vérités ; la provenance impose l'égalité au témoin transmis, et la réalisation exacte conserve les occurrences intérieures dans l'extension stricte sans identifier vérité et preuve."
+        "execution": "L'histoire exécute dans l'ordre received, diagonalize, selfApply, certify et continue ; chaque producteur consomme la sortie typée du précédent, arithmeticHistoryPinsExit fixe l'issue canonique exacte et la continuation renforcée est construite depuis la présentation arithmétique de ce même témoin, sans modifier la présentation fondationnelle historique.",
+        "proof": "La non-prouvabilité consomme correction, point fixe et représentation ; dans l'accès arithmétique retenu, les deux directions de représentation sont dérivées de la relation de preuve explicite, de son adéquation au même vérificateur et de la sémantique de substitution. La réflexivité vérifiée exclut toute égalité t=t comme phrase produite. La fermeture se factorise explicitement par Truth(G) vers Proof(G), puis rencontre le certificat du même témoin.",
+        "transport": "Les équivalences transportent séparément preuves et vérités ; la provenance impose l'égalité au témoin transmis, et ArithmeticExecutedGodelGlobalParticipation réalise les positions produced et certified par des occurrences distinctes et ordonnées dans l'extension stricte, sans identifier vérité et preuve."
       },
       "consumers": [],
-      "source_sha256": "79995fc1d17623d595c707e709ae64fdcc8dcbf26de24863980238154fd326f8",
+      "source_sha256": "6765cb6ca98c0f3e71f0bfcd2e6e23de664d247c7ab43d62b35ad7164725babe",
       "reviews": {
         "reader": {
           "status": "pending"

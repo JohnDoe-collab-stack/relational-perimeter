@@ -1,0 +1,15 @@
+import Tests.GodelCorrespondenceScopeRegression
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression
+
+namespace RelationalPerimeter.Tests.ExpectedFailure
+
+-- The abstract Unit countermodel cannot be passed to the arithmetic theorem:
+-- it has neither the fixed arithmetic syntax nor the semantic substitution and
+-- proof-relation obligations required by the stronger entry point.
+def abstractGodelSystemCannotReplaceArithmeticRealization :=
+  semanticallyDefinedArithmeticGodelPerimetralCorrespondence
+    abstractDegenerateSystem
+
+end RelationalPerimeter.Tests.ExpectedFailure
