@@ -6,17 +6,14 @@ import RelationalPerimeter.Constitution.GodelExplanatorySeparation
 
 This gate checks the constitutive dependency added to the HA history tower.
 The exact production, certification and residual occurrences are consumed in
-that order.  Certification and residual continuation carry the same Gödel
-witness but yield distinct phase observations, so the observation family
-cannot factor through the witness, the source stage, or `Unit`.
+that order, and the public successor is extracted from the completed protocol
+output.
 
 The proof-theoretic check is intentionally asymmetric.  Every derivation of
 the produced boundary in its successor history uses the newest postulate.  The
 already derivable sentence `0 = 0`, when added instead, has a preserved
 derivation that does not use that newest postulate.  The general equivalence
-test records that this diagnostic is exactly source non-derivability.  The
-additional constitutive result is tested separately: certification and
-residual continuation cannot factor through the source terminal facts alone.
+test records that this diagnostic is exactly source non-derivability.
 -/
 
 namespace RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression
@@ -105,94 +102,6 @@ theorem rootRetainedResourceRemainsRetained :
   cases rootGodelHistoryStage
   rfl
 
-def rootOccurrenceAdvanceDoesNotFactorThroughUnit
-    (factor : Unit ->
-      Option (StageAdvanceState SoundGodelHistoryStage))
-    (productionFactors :
-      stageAdvanceFromReturnedImplicit rootGodelHistoryStage
-          (implicitRead rootParticipation.productionOccurrence.locatedStep.source) =
-        factor ())
-    (certificationFactors :
-      stageAdvanceFromReturnedImplicit rootGodelHistoryStage
-          (implicitRead rootParticipation.certificationOccurrence.locatedStep.source) =
-        factor ()) : Empty :=
-  rootCertifiedProgression.phaseDoesNotFactorThroughUnit
-    factor productionFactors certificationFactors
-
-def rootWitnessPhaseDoesNotFactor
-    (factor :
-      ExecutedGodelWitness rootGodelHistoryStage.system.toGodelSyntax
-        rootGodelHistoryStage.system.unprovabilityFormula
-        rootGodelHistoryStage.system.toGodelInterpretation ->
-      Option (StageAdvanceState SoundGodelHistoryStage))
-    (certificationFactors :
-      stageAdvanceFromReturnedImplicit rootGodelHistoryStage
-          (implicitRead
-            rootParticipation.certificationOccurrence.locatedStep.source) =
-        factor rootGodelHistoryStage.producedWitness)
-    (residualFactors :
-      stageAdvanceFromReturnedImplicit rootGodelHistoryStage
-          (implicitRead
-            (rootParticipation.labelled.extension.newOccurrence
-              rootParticipation.residualOccurrence).locatedStep.source) =
-        factor rootGodelHistoryStage.producedWitness) :
-    Empty :=
-  rootCertifiedProgression.phaseDoesNotFactorThroughWitness
-    factor certificationFactors residualFactors
-
-def rootTerminalFactsPhaseDoesNotFactor
-    (factor : SourceTerminalGodelFacts rootGodelHistoryStage ->
-      Option (StageAdvanceState SoundGodelHistoryStage))
-    (certificationFactors :
-      stageAdvanceFromReturnedImplicit rootGodelHistoryStage
-          (implicitRead
-            rootParticipation.certificationOccurrence.locatedStep.source) =
-        factor (sourceTerminalGodelFacts rootGodelHistoryStage))
-    (residualFactors :
-      stageAdvanceFromReturnedImplicit rootGodelHistoryStage
-          (implicitRead
-            (rootParticipation.labelled.extension.newOccurrence
-              rootParticipation.residualOccurrence).locatedStep.source) =
-        factor (sourceTerminalGodelFacts rootGodelHistoryStage)) :
-    Empty :=
-  rootCertifiedProgression.phaseDoesNotFactorThroughTerminalFacts
-    factor certificationFactors residualFactors
-
-def rootStagePhaseDoesNotFactor
-    (factor : SoundGodelHistoryStage ->
-      Option (StageAdvanceState SoundGodelHistoryStage))
-    (certificationFactors :
-      stageAdvanceFromReturnedImplicit rootGodelHistoryStage
-          (implicitRead
-            rootParticipation.certificationOccurrence.locatedStep.source) =
-        factor rootGodelHistoryStage)
-    (residualFactors :
-      stageAdvanceFromReturnedImplicit rootGodelHistoryStage
-          (implicitRead
-            (rootParticipation.labelled.extension.newOccurrence
-              rootParticipation.residualOccurrence).locatedStep.source) =
-        factor rootGodelHistoryStage) :
-    Empty :=
-  stagePhaseDoesNotFactorThroughStage _ _ factor certificationFactors
-    residualFactors
-
-def rootUnitPhaseDoesNotFactor
-    (factor : Unit -> Option (StageAdvanceState SoundGodelHistoryStage))
-    (certificationFactors :
-      stageAdvanceFromReturnedImplicit rootGodelHistoryStage
-          (implicitRead
-            rootParticipation.certificationOccurrence.locatedStep.source) =
-        factor ())
-    (residualFactors :
-      stageAdvanceFromReturnedImplicit rootGodelHistoryStage
-          (implicitRead
-            (rootParticipation.labelled.extension.newOccurrence
-              rootParticipation.residualOccurrence).locatedStep.source) =
-        factor ()) :
-    Empty :=
-  stagePhaseDoesNotFactorThroughUnit _ _ factor certificationFactors
-    residualFactors
-
 /-! The three phase consumers reject every out-of-order substitution. -/
 
 theorem rootProducedConsumerRejectsCertification :
@@ -210,6 +119,7 @@ theorem rootProducedConsumerRejectsResidual :
 theorem rootCertifiedConsumerRejectsProduction :
     consumeCertifiedStageResource
         (extendStageFromCertifiedWitness rootGodelHistoryStage)
+        ⟨rootGodelHistoryStage.producedWitness.production⟩
         (.produced rootGodelHistoryStage.producedWitness.production) =
       none :=
   rfl
@@ -217,13 +127,20 @@ theorem rootCertifiedConsumerRejectsProduction :
 theorem rootCertifiedConsumerRejectsResidual :
     consumeCertifiedStageResource
         (extendStageFromCertifiedWitness rootGodelHistoryStage)
+        ⟨rootGodelHistoryStage.producedWitness.production⟩
         (.retained rootGodelHistoryStage.producedWitness) =
       none :=
   rfl
 
 def rootTransitionAuthorization :
-    StageTransitionAuthorization SoundGodelHistoryStage :=
-  ⟨rootGodelHistoryStage.advance⟩
+    StageTransitionAuthorization
+      rootGodelHistoryStage.system.toGodelSyntax
+      rootGodelHistoryStage.system.unprovabilityFormula
+      rootGodelHistoryStage.system.toGodelInterpretation
+      SoundGodelHistoryStage :=
+  ⟨rootGodelHistoryStage.producedWitness.production,
+    rootGodelHistoryStage.producedWitness,
+    rootGodelHistoryStage.advance⟩
 
 def rootProducedStageResource :
     Option
@@ -268,7 +185,11 @@ theorem rootRetainedConsumerRejectsRepeatedCertification :
 theorem rootRetainedConsumerCompletes :
     consumeRetainedStageResource rootTransitionAuthorization
         (.retained rootGodelHistoryStage.producedWitness) =
-      some ⟨rootGodelHistoryStage.advance⟩ :=
+      some
+        ⟨rootGodelHistoryStage.producedWitness.production,
+          rootGodelHistoryStage.producedWitness,
+          rootGodelHistoryStage.producedWitness,
+          rootGodelHistoryStage.advance⟩ :=
   rfl
 
 theorem rootResourceTraceCompletes :
@@ -276,7 +197,11 @@ theorem rootResourceTraceCompletes :
         (extendStageFromCertifiedWitness rootGodelHistoryStage)
         rootProducedStageResource rootCertifiedStageResource
         rootRetainedStageResource =
-      some ⟨rootGodelHistoryStage.advance⟩ :=
+      some
+        ⟨rootGodelHistoryStage.producedWitness.production,
+          rootGodelHistoryStage.producedWitness,
+          rootGodelHistoryStage.producedWitness,
+          rootGodelHistoryStage.advance⟩ :=
   rfl
 
 theorem rootResourceTraceRejectsOmittedProduction :
@@ -326,7 +251,11 @@ theorem rootResourceTraceRejectsRepeatedCertification :
 
 theorem rootCanonicalTransitionCompletesExactly :
     runCompletedStageTransition rootGodelHistoryStage rootParticipation =
-      some ⟨rootGodelHistoryStage.advance⟩ :=
+      some
+        ⟨rootGodelHistoryStage.producedWitness.production,
+          rootGodelHistoryStage.producedWitness,
+          rootGodelHistoryStage.producedWitness,
+          rootGodelHistoryStage.advance⟩ :=
   runCompletedStageTransition_exact _ _
 
 theorem rootCompletedTargetIsExact :
@@ -441,11 +370,6 @@ end RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression
 #print axioms RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootCertificationAuthorizesExactAdvance
 #print axioms RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootResidualRetainsExactAdvance
 #print axioms RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootRetainedResourceRemainsRetained
-#print axioms RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootOccurrenceAdvanceDoesNotFactorThroughUnit
-#print axioms RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootWitnessPhaseDoesNotFactor
-#print axioms RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootTerminalFactsPhaseDoesNotFactor
-#print axioms RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootStagePhaseDoesNotFactor
-#print axioms RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootUnitPhaseDoesNotFactor
 #print axioms RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootProducedConsumerRejectsCertification
 #print axioms RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootProducedConsumerRejectsResidual
 #print axioms RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootCertifiedConsumerRejectsProduction

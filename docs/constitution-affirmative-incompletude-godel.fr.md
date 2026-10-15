@@ -353,36 +353,35 @@ Le noyau `stageAdvanceKernel` ne reçoit qu'une fonction qui consomme un témoin
 certifié. La production y donne `waiting`, la certification donne
 `authorized (extend witness)` et la rétention reste un état distinct. Son
 instanciation sur les occurrences exactes renvoie successivement `waiting`,
-`authorized source.advance` et `retained source.advance`. Les deux dernières
-observations portent littéralement le même `source.producedWitness`, mais leurs
-phases diffèrent. `stageWitnessPhaseDoesNotFactor` démontre donc qu'une fonction
-du seul témoin ne peut les reproduire simultanément ; les variantes par le
-seul stade source ou par `Unit` échouent pour la même famille de deux lois.
-`stageTerminalFactsPhaseDoesNotFactor` spécialise cette non-factorisation aux
-seuls faits terminaux `Truth(G_n)` et `¬Proof_n(G_n)` : même réunis, ils ne
-déterminent pas si l'observation exécutée est l'autorisation de certification
-ou la rétention résiduelle. Ce résultat ne nie pas qu'une fonction constante
-puisse reconstruire une valeur isolée ; il porte sur les deux observations de
-phase d'une même participation.
+`authorized source.advance` et `retained source.advance`. Ces observations de
+phase restent des contrôles locaux du protocole ; aucune non-factorisation par
+le témoin, le stade, `Unit` ou les faits terminaux n'est revendiquée.
 
 `runCompletedStageTransition` lit ensuite les occurrences réelles dans l'ordre
 production, certification, résidu. Trois consommateurs totaux et séparés
-refusent chaque autre tag : la certification construit une autorisation et le
-résidu transforme cette même autorisation en achèvement sans reconstruire la
-cible. `CompletedStageOutcome` ne fournit une cible publique qu'à partir de cet
-achèvement. Les faits de `GodelHistoryProgressionAtTarget` et la participation
-suivante sont indexés par cette cible ; l'ancien
-`GodelHistoryProgression source` n'est obtenu qu'ensuite par transport le long
-du théorème `completedStageOutcome_target_eq_advance`.
+refusent chaque autre tag. La production conserve sa production, la
+certification conserve cette production et son témoin en construisant la cible,
+et le résidu ajoute son propre témoin sans remplacer la cible autorisée. Le
+théorème `runStageTransitionResources_preservesPayloads` expose explicitement
+ces trois charges utiles dans l'achèvement, y compris lorsqu'elles sont
+distinctes dans l'interface générique.
+
+`completedStageOutcome` analyse le résultat effectivement renvoyé par
+`runCompletedStageTransition` : la branche `some` conserve cet achèvement et la
+branche `none` est éliminée par l'exactitude de l'exécution canonique.
+`completedStageTarget` extrait ensuite la cible de ce même achèvement conservé,
+sans réexécuter le protocole. Les faits de `GodelHistoryProgressionAtTarget`
+sont construits au type de cette cible et la participation suivante n'est
+construite qu'après cette extraction ; l'ancien
+`GodelHistoryProgression source` est seulement une projection de compatibilité
+obtenue le long du théorème `completedStageOutcome_target_eq_advance`.
 
 `CertifiedPerimetralGodelHistoryProgression` rassemble cet achèvement, les
-faits à sa cible, sa participation et la non-factorisation par le témoin ; sa
-projection `phaseDoesNotFactorThroughTerminalFacts` expose séparément la
-non-factorisation par les deux faits terminaux. La tour
-`perimetralGodelHistoryStage` itère la cible de ce paquet achevé ; son égalité
-étage par étage avec `godelHistoryStage` et sa projection vers l'ancienne
-progression sont des théorèmes de compatibilité, pas le procédé de construction
-de la nouvelle tour.
+faits à sa cible et sa participation. La tour `perimetralGodelHistoryStage`
+itère la cible de ce paquet achevé ; le code extrait cette cible en appelant le
+protocole sur la participation courante. Son égalité étage par étage avec
+`godelHistoryStage` et sa projection vers l'ancienne progression sont des
+théorèmes de compatibilité, pas le procédé de construction de la nouvelle tour.
 
 La fonction récursive `historyDerivationUsesNewest` inspecte toutes les règles
 du calcul. `eraseNewestFreeDerivation` reconstruit dans l'histoire source toute
@@ -446,12 +445,12 @@ périmétrales exactes qui portent leurs sorties. Cette fermeture formelle ne
 change pas la portée sémantique annoncée et ne vaut pas verdict d'audit
 indépendant. La progression constitutive exécute désormais la séquence
 production-certification-résidu jusqu'à un achèvement dont la cible indexe les
-faits suivants. Les phases certification et résidu portent le même témoin mais
-leurs observations ne se factorisent ni par ce témoin, ni par le seul stade,
-ni par `Unit`, ni par le couple terminal `Truth(G_n)` et `¬Proof_n(G_n)`.
-La caractérisation générale de `newest` enregistre au contraire son
-équivalence exacte avec la non-dérivabilité source et empêche de l'utiliser
-comme surplus explicatif. La séparation contre tous les shells reste hors de
-la portée revendiquée et ne constitue pas un critère d'acceptation. Cette
-correction locale ne préjuge pas du verdict d'une nouvelle revue extérieure
-portant sur la révision exacte.
+faits suivants. Cet achèvement conserve les charges de production, de
+certification et de résidu effectivement lues ; sa cible est partagée par les
+faits de progression et par la participation suivante. Aucune
+non-factorisation de phase n'est revendiquée. La caractérisation générale de
+`newest` enregistre son équivalence exacte avec la non-dérivabilité source et
+empêche de l'utiliser comme surplus explicatif. La séparation contre tous les
+shells reste hors de la portée revendiquée et ne constitue pas un critère
+d'acceptation. Cette correction locale ne préjuge pas du verdict d'une nouvelle
+revue extérieure portant sur la révision exacte.

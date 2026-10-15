@@ -13,10 +13,7 @@ only after the residual resource completes the transition.
 The module also records the proof-theoretic dependency created by the
 extension.  Every target derivation of the source Gödel boundary uses the
 newest history postulate; otherwise it erases to a forbidden source derivation.
-This necessity is characterized exactly as source non-derivability.  The
-strictly additional constitutive fact is instead phase-sensitive: the
-certification and residual observations of the same witness cannot be
-reconstructed from the source truth and non-provability facts alone.
+This necessity is characterized exactly as source non-derivability.
 -/
 
 namespace RelationalPerimeter
@@ -263,154 +260,35 @@ theorem residualOccurrenceRetainsExactly
   cases source
   rfl
 
-def StageWitnessPhaseDoesNotFactor
-    (source : SoundGodelHistoryStage)
-    (participation : StagePerimetralParticipation source) : Type :=
-  (factor :
-    ExecutedGodelWitness source.system.toGodelSyntax
-      source.system.unprovabilityFormula
-      source.system.toGodelInterpretation ->
-    Option (StageAdvanceState SoundGodelHistoryStage)) ->
-  stageAdvanceFromReturnedImplicit source
-      (implicitRead participation.certificationOccurrence.locatedStep.source) =
-    factor source.producedWitness ->
-  stageAdvanceFromReturnedImplicit source
-      (implicitRead
-        (participation.labelled.extension.newOccurrence
-          participation.residualOccurrence).locatedStep.source) =
-    factor source.producedWitness ->
-  Empty
-
-def stageWitnessPhaseDoesNotFactor
-    (source : SoundGodelHistoryStage)
-    (participation : StagePerimetralParticipation source) :
-    StageWitnessPhaseDoesNotFactor source participation := by
-  intro factor certificationFactors residualFactors
-  rw [certificationOccurrenceAdvancesExactly] at certificationFactors
-  rw [residualOccurrenceRetainsExactly] at residualFactors
-  have impossible :
-      some (.authorized source.advance :
-        StageAdvanceState SoundGodelHistoryStage) =
-      some (.retained source.advance) :=
-    certificationFactors.trans residualFactors.symm
-  cases impossible
-
-/-- The terminal Gödel facts available at the source: truth of the produced
-sentence and absence of a checked source proof. -/
-def SourceTerminalGodelFacts
-    (source : SoundGodelHistoryStage) : Type :=
-  SourceSentenceTruth source × SourceSentenceUnprovableAtSource source
-
-def sourceTerminalGodelFacts
-    (source : SoundGodelHistoryStage) :
-    SourceTerminalGodelFacts source :=
-  ⟨source.producedTruth, source.producedNoProof⟩
-
-/-- Certification and residual continuation carry the same Gödel witness but
-produce distinct observations.  Consequently their executed observation
-family cannot factor through the source terminal facts
-`Truth(G_n)` and `¬ Proof_n(G_n)` alone. -/
-def StageTerminalFactsPhaseDoesNotFactor
-    (source : SoundGodelHistoryStage)
-    (participation : StagePerimetralParticipation source) : Type :=
-  (factor : SourceTerminalGodelFacts source ->
-    Option (StageAdvanceState SoundGodelHistoryStage)) ->
-  stageAdvanceFromReturnedImplicit source
-      (implicitRead participation.certificationOccurrence.locatedStep.source) =
-    factor (sourceTerminalGodelFacts source) ->
-  stageAdvanceFromReturnedImplicit source
-      (implicitRead
-        (participation.labelled.extension.newOccurrence
-          participation.residualOccurrence).locatedStep.source) =
-    factor (sourceTerminalGodelFacts source) ->
-  Empty
-
-def stageTerminalFactsPhaseDoesNotFactor
-    (source : SoundGodelHistoryStage)
-    (participation : StagePerimetralParticipation source) :
-    StageTerminalFactsPhaseDoesNotFactor source participation := by
-  intro factor certificationFactors residualFactors
-  exact stageWitnessPhaseDoesNotFactor source participation
-    (fun _witness => factor (sourceTerminalGodelFacts source))
-    certificationFactors residualFactors
-
-def stagePhaseDoesNotFactorThroughStage
-    (source : SoundGodelHistoryStage)
-    (participation : StagePerimetralParticipation source)
-    (factor : SoundGodelHistoryStage ->
-      Option (StageAdvanceState SoundGodelHistoryStage))
-    (certificationFactors :
-      stageAdvanceFromReturnedImplicit source
-        (implicitRead participation.certificationOccurrence.locatedStep.source) =
-      factor source)
-    (residualFactors :
-      stageAdvanceFromReturnedImplicit source
-        (implicitRead
-          (participation.labelled.extension.newOccurrence
-            participation.residualOccurrence).locatedStep.source) =
-      factor source) :
-    Empty := by
-  rw [certificationOccurrenceAdvancesExactly] at certificationFactors
-  rw [residualOccurrenceRetainsExactly] at residualFactors
-  have impossible :
-      some (.authorized source.advance :
-        StageAdvanceState SoundGodelHistoryStage) =
-      some (.retained source.advance) :=
-    certificationFactors.trans residualFactors.symm
-  cases impossible
-
-def stagePhaseDoesNotFactorThroughUnit
-    (source : SoundGodelHistoryStage)
-    (participation : StagePerimetralParticipation source)
-    (factor : Unit -> Option (StageAdvanceState SoundGodelHistoryStage))
-    (certificationFactors :
-      stageAdvanceFromReturnedImplicit source
-        (implicitRead participation.certificationOccurrence.locatedStep.source) =
-      factor ())
-    (residualFactors :
-      stageAdvanceFromReturnedImplicit source
-        (implicitRead
-          (participation.labelled.extension.newOccurrence
-            participation.residualOccurrence).locatedStep.source) =
-      factor ()) :
-    Empty := by
-  rw [certificationOccurrenceAdvancesExactly] at certificationFactors
-  rw [residualOccurrenceRetainsExactly] at residualFactors
-  have impossible :
-      some (.authorized source.advance :
-        StageAdvanceState SoundGodelHistoryStage) =
-      some (.retained source.advance) :=
-    certificationFactors.trans residualFactors.symm
-  cases impossible
-
-def occurrenceAdvanceNotFactorsThroughUnit
-    (source : SoundGodelHistoryStage)
-    (participation : StagePerimetralParticipation source)
-    (factor : Unit -> Option (StageAdvanceState SoundGodelHistoryStage))
-    (productionFactors :
-      stageAdvanceFromReturnedImplicit source
-        (implicitRead participation.productionOccurrence.locatedStep.source) =
-          factor ())
-    (certificationFactors :
-      stageAdvanceFromReturnedImplicit source
-        (implicitRead participation.certificationOccurrence.locatedStep.source) =
-          factor ()) :
-    Empty := by
-  rw [productionOccurrenceWaits] at productionFactors
-  rw [certificationOccurrenceAdvancesExactly] at certificationFactors
-  have impossible :
-      some (StageAdvanceState.waiting :
-          StageAdvanceState SoundGodelHistoryStage) =
-        some (.authorized source.advance) :=
-    productionFactors.trans certificationFactors.symm
-  cases impossible
-
 /-! ## An ordered production-certification-residual protocol -/
 
-structure StageTransitionAuthorization (TargetStage : Type) : Type where
+structure StageTransitionProduction
+    (coding : GodelDiagonalSyntax)
+    (unprovabilityFormula : coding.UnaryFormula) : Type where
+  production : ExecutedGodelSentenceProduction coding unprovabilityFormula
+
+structure StageTransitionAuthorization
+    (coding : GodelDiagonalSyntax)
+    (unprovabilityFormula : coding.UnaryFormula)
+    (interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula)
+    (TargetStage : Type) : Type where
+  production : ExecutedGodelSentenceProduction coding unprovabilityFormula
+  certifiedWitness :
+    ExecutedGodelWitness coding unprovabilityFormula interpretation
   target : TargetStage
 
-structure StageTransitionCompletion (TargetStage : Type) : Type where
+structure StageTransitionCompletion
+    (coding : GodelDiagonalSyntax)
+    (unprovabilityFormula : coding.UnaryFormula)
+    (interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula)
+    (TargetStage : Type) : Type where
+  production : ExecutedGodelSentenceProduction coding unprovabilityFormula
+  certifiedWitness :
+    ExecutedGodelWitness coding unprovabilityFormula interpretation
+  retainedWitness :
+    ExecutedGodelWitness coding unprovabilityFormula interpretation
   target : TargetStage
 
 def consumeProducedStageResource
@@ -419,8 +297,8 @@ def consumeProducedStageResource
     {interpretation :
       GodelProvabilityInterpretation coding unprovabilityFormula} :
     StageAvailablePerimeterResource coding unprovabilityFormula interpretation ->
-    Option Unit
-  | .produced _ => some ()
+    Option (StageTransitionProduction coding unprovabilityFormula)
+  | .produced production => some ⟨production⟩
   | .certified _ => none
   | .retained _ => none
 
@@ -432,11 +310,15 @@ def consumeCertifiedStageResource
     {TargetStage : Type}
     (extend :
       ExecutedGodelWitness coding unprovabilityFormula interpretation ->
-        TargetStage) :
+        TargetStage)
+    (produced : StageTransitionProduction coding unprovabilityFormula) :
     StageAvailablePerimeterResource coding unprovabilityFormula interpretation ->
-    Option (StageTransitionAuthorization TargetStage)
+    Option
+      (StageTransitionAuthorization coding unprovabilityFormula interpretation
+        TargetStage)
   | .produced _ => none
-  | .certified witness => some ⟨extend witness⟩
+  | .certified witness =>
+      some ⟨produced.production, witness, extend witness⟩
   | .retained _ => none
 
 def consumeRetainedStageResource
@@ -445,12 +327,19 @@ def consumeRetainedStageResource
     {interpretation :
       GodelProvabilityInterpretation coding unprovabilityFormula}
     {TargetStage : Type}
-    (authorization : StageTransitionAuthorization TargetStage) :
+    (authorization :
+      StageTransitionAuthorization coding unprovabilityFormula interpretation
+        TargetStage) :
     StageAvailablePerimeterResource coding unprovabilityFormula interpretation ->
-    Option (StageTransitionCompletion TargetStage)
+    Option
+      (StageTransitionCompletion coding unprovabilityFormula interpretation
+        TargetStage)
   | .produced _ => none
   | .certified _ => none
-  | .retained _ => some ⟨authorization.target⟩
+  | .retained witness =>
+      some
+        ⟨authorization.production, authorization.certifiedWitness, witness,
+          authorization.target⟩
 
 def runStageTransitionResources
     {coding : GodelDiagonalSyntax}
@@ -465,19 +354,44 @@ def runStageTransitionResources
       Option
         (StageAvailablePerimeterResource coding unprovabilityFormula
           interpretation)) :
-    Option (StageTransitionCompletion TargetStage) := do
+    Option
+      (StageTransitionCompletion coding unprovabilityFormula interpretation
+        TargetStage) := do
   let productionResource <- production
-  let _ <- consumeProducedStageResource productionResource
+  let produced <- consumeProducedStageResource productionResource
   let certificationResource <- certification
   let authorization <-
-    consumeCertifiedStageResource extend certificationResource
+    consumeCertifiedStageResource extend produced certificationResource
   let residualResource <- residual
   consumeRetainedStageResource authorization residualResource
+
+theorem runStageTransitionResources_preservesPayloads
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {TargetStage : Type}
+    (extend :
+      ExecutedGodelWitness coding unprovabilityFormula interpretation ->
+        TargetStage)
+    (production :
+      ExecutedGodelSentenceProduction coding unprovabilityFormula)
+    (certified retained :
+      ExecutedGodelWitness coding unprovabilityFormula interpretation) :
+    runStageTransitionResources extend
+        (some (.produced production))
+        (some (.certified certified))
+        (some (.retained retained)) =
+      some ⟨production, certified, retained, extend certified⟩ :=
+  rfl
 
 def runCompletedStageTransition
     (source : SoundGodelHistoryStage)
     (participation : StagePerimetralParticipation source) :
-    Option (StageTransitionCompletion SoundGodelHistoryStage) :=
+    Option
+      (StageTransitionCompletion source.system.toGodelSyntax
+        source.system.unprovabilityFormula
+        source.system.toGodelInterpretation SoundGodelHistoryStage) :=
   runStageTransitionResources (extendStageFromCertifiedWitness source)
     (productionOccurrenceAvailableResource source participation)
     (certificationOccurrenceAvailableResource source participation)
@@ -487,7 +401,9 @@ theorem runCompletedStageTransition_exact
     (source : SoundGodelHistoryStage)
     (participation : StagePerimetralParticipation source) :
     runCompletedStageTransition source participation =
-      some ⟨source.advance⟩ := by
+      some
+        ⟨source.producedWitness.production, source.producedWitness,
+          source.producedWitness, source.advance⟩ := by
   unfold runCompletedStageTransition runStageTransitionResources
   rw [productionOccurrenceAvailableResource_exact]
   rw [certificationOccurrenceAvailableResource_exact]
@@ -496,16 +412,40 @@ theorem runCompletedStageTransition_exact
   rfl
 
 def CompletedStageOutcome
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
     {TargetStage : Type}
-    (outcome : Option (StageTransitionCompletion TargetStage)) : Type :=
-  Sigma fun target : TargetStage =>
-    PLift (outcome = some ⟨target⟩)
+    (outcome :
+      Option
+        (StageTransitionCompletion coding unprovabilityFormula interpretation
+          TargetStage)) : Type :=
+  Sigma fun completion :
+      StageTransitionCompletion coding unprovabilityFormula interpretation
+        TargetStage =>
+    PLift (outcome = some completion)
 
 def completedStageOutcome
     (source : SoundGodelHistoryStage)
     (participation : StagePerimetralParticipation source) :
-    CompletedStageOutcome (runCompletedStageTransition source participation) :=
-  ⟨source.advance, ⟨runCompletedStageTransition_exact source participation⟩⟩
+    CompletedStageOutcome (runCompletedStageTransition source participation) := by
+  match exactness : runCompletedStageTransition source participation with
+  | none =>
+      have impossible :
+          (none :
+              Option
+                (StageTransitionCompletion source.system.toGodelSyntax
+                  source.system.unprovabilityFormula
+                  source.system.toGodelInterpretation
+                  SoundGodelHistoryStage)) =
+            some
+              ⟨source.producedWitness.production, source.producedWitness,
+                source.producedWitness, source.advance⟩ :=
+        exactness.symm.trans
+          (runCompletedStageTransition_exact source participation)
+      cases impossible
+  | some actual => exact ⟨actual, ⟨rfl⟩⟩
 
 def completedStageTarget
     {source : SoundGodelHistoryStage}
@@ -513,14 +453,7 @@ def completedStageTarget
     (completion :
       CompletedStageOutcome (runCompletedStageTransition source participation)) :
     SoundGodelHistoryStage :=
-  completion.1
-
-theorem completedStageTarget_eq_advance
-    (source : SoundGodelHistoryStage)
-    (participation : StagePerimetralParticipation source) :
-    completedStageTarget (completedStageOutcome source participation) =
-      source.advance :=
-  rfl
+  completion.1.target
 
 theorem completedStageOutcome_target_eq_advance
     (source : SoundGodelHistoryStage)
@@ -528,14 +461,23 @@ theorem completedStageOutcome_target_eq_advance
     (completion :
       CompletedStageOutcome (runCompletedStageTransition source participation)) :
     completedStageTarget completion = source.advance := by
-  rcases completion with ⟨target, ⟨targetExact⟩⟩
+  rcases completion with ⟨completed, ⟨completionExact⟩⟩
   have sameCompletion :
-      (some ⟨target⟩ :
-          Option (StageTransitionCompletion SoundGodelHistoryStage)) =
-        some ⟨source.advance⟩ :=
-    targetExact.symm.trans
+      some completed =
+        some
+          ⟨source.producedWitness.production, source.producedWitness,
+            source.producedWitness, source.advance⟩ :=
+    completionExact.symm.trans
       (runCompletedStageTransition_exact source participation)
-  exact StageTransitionCompletion.mk.inj (Option.some.inj sameCompletion)
+  exact congrArg StageTransitionCompletion.target
+    (Option.some.inj sameCompletion)
+
+theorem completedStageTarget_eq_advance
+    (source : SoundGodelHistoryStage)
+    (participation : StagePerimetralParticipation source) :
+    completedStageTarget (completedStageOutcome source participation) =
+      source.advance :=
+  completedStageOutcome_target_eq_advance source participation _
 
 /-! ## Compatibility with the former certification-only target -/
 
@@ -846,8 +788,7 @@ theorem checkedSourceBoundaryDerivationUsesNewest
 
 /-- At the successor of `source`, every derivation of the sentence produced at
 `source` consumes the newest history postulate.  The characterization below
-records that this statement is exactly source non-derivability; the separate
-phase non-factorization theorem carries the constitutive surplus. -/
+records that this statement is exactly source non-derivability. -/
 def SourceBoundaryUsesNewestAtAdvance
     (source : SoundGodelHistoryStage) : Prop :=
   ∀ proof : Derivation LogicMode.intuitionistic source.advance.history.theory
@@ -866,24 +807,6 @@ theorem sourceBoundaryUsesNewestAtAdvance_iff_sourceUnprovable
   boundaryUsesNewestAfterExtension_iff_sourceUnprovable
     source.history source.producedSentence
 
-def StageOccurrenceAdvanceDoesNotFactorThroughUnit
-    (source : SoundGodelHistoryStage)
-    (participation : StagePerimetralParticipation source) : Type :=
-  (factor : Unit -> Option (StageAdvanceState SoundGodelHistoryStage)) ->
-  stageAdvanceFromReturnedImplicit source
-      (implicitRead participation.productionOccurrence.locatedStep.source) =
-    factor () ->
-  stageAdvanceFromReturnedImplicit source
-      (implicitRead participation.certificationOccurrence.locatedStep.source) =
-    factor () ->
-  Empty
-
-def stageOccurrenceAdvanceDoesNotFactorThroughUnit
-    (source : SoundGodelHistoryStage)
-    (participation : StagePerimetralParticipation source) :
-    StageOccurrenceAdvanceDoesNotFactorThroughUnit source participation :=
-  occurrenceAdvanceNotFactorsThroughUnit source participation
-
 /-! ## A progression indexed by the completed perimetral target -/
 
 def GodelHistoryProgressionAtTarget
@@ -900,11 +823,36 @@ def GodelHistoryProgressionAtTarget
 
 def godelHistoryProgressionAtCompletedTarget
     (source : SoundGodelHistoryStage)
-    (participation : StagePerimetralParticipation source) :
+    (participation : StagePerimetralParticipation source)
+    (completion :
+      CompletedStageOutcome
+        (runCompletedStageTransition source participation)) :
     GodelHistoryProgressionAtTarget source
-      (completedStageTarget (completedStageOutcome source participation)) := by
-  change GodelHistoryProgressionAtTarget source source.advance
-  exact godelHistoryProgression source
+      (completedStageTarget completion) := by
+  let target := completedStageTarget completion
+  have targetExact : target = source.advance :=
+    completedStageOutcome_target_eq_advance source participation completion
+  have occurrence : target.history.Contains source.producedSentence := by
+    rw [targetExact]
+    exact source.sourceSentenceOccursAtAdvance
+  have sourceProof :
+      CheckedSentenceProof Sentence.quote
+        (historyProofCheck target.history) source.producedSentence := by
+    rw [targetExact]
+    exact source.sourceSentenceProofAtAdvance
+      source.sourceSentenceOccursAtAdvance
+  have different : source.producedSentence ≠ target.producedSentence := by
+    intro sameSentence
+    exact Empty.elim
+      (target.producedNoProof (sameSentence ▸ sourceProof))
+  exact
+    ⟨source.producedNoProof,
+      source.producedTruth,
+      occurrence,
+      sourceProof,
+      target.producedTruth,
+      target.producedNoProof,
+      ⟨different⟩⟩
 
 /-! ## A tower whose successor is the completed target -/
 
@@ -932,9 +880,7 @@ theorem ParticipatingGodelHistoryStage.advance_stage_eq
 /-- The public result of one occurrence-driven history transition.  Its
 completion is constructed by consuming production, certification and residual
 readouts in order.  The arithmetic facts and the target participation are
-indexed by the target extracted from that completion.  The final component
-records that certification and residual observations, despite carrying the
-same witness, cannot factor through that witness alone. -/
+indexed by the target extracted from that completion. -/
 def CertifiedPerimetralGodelHistoryProgression
     (source : ParticipatingGodelHistoryStage) : Type 1 :=
   Sigma fun completion :
@@ -942,17 +888,15 @@ def CertifiedPerimetralGodelHistoryProgression
         (runCompletedStageTransition source.1 source.2) =>
     GodelHistoryProgressionAtTarget source.1
         (completedStageTarget completion) ×
-      StagePerimetralParticipation (completedStageTarget completion) ×
-      StageWitnessPhaseDoesNotFactor source.1 source.2
+      StagePerimetralParticipation (completedStageTarget completion)
 
 def certifiedPerimetralGodelHistoryProgression
     (source : ParticipatingGodelHistoryStage) :
     CertifiedPerimetralGodelHistoryProgression source :=
   let completion := completedStageOutcome source.1 source.2
   ⟨completion,
-    godelHistoryProgressionAtCompletedTarget source.1 source.2,
-    (completedStageTarget completion).perimetralParticipation,
-    stageWitnessPhaseDoesNotFactor source.1 source.2⟩
+    godelHistoryProgressionAtCompletedTarget source.1 source.2 completion,
+    (completedStageTarget completion).perimetralParticipation⟩
 
 def CertifiedPerimetralGodelHistoryProgression.progressionAtTarget
     {source : ParticipatingGodelHistoryStage}
@@ -977,32 +921,11 @@ theorem CertifiedPerimetralGodelHistoryProgression.sourceBoundaryUsesNewest
     SourceBoundaryUsesNewestAtAdvance source.1 :=
   sourceBoundaryUsesNewestAtAdvance source.1
 
-def CertifiedPerimetralGodelHistoryProgression.phaseDoesNotFactorThroughUnit
-    {source : ParticipatingGodelHistoryStage}
-    (_result : CertifiedPerimetralGodelHistoryProgression source) :
-    StageOccurrenceAdvanceDoesNotFactorThroughUnit source.1 source.2 :=
-  stageOccurrenceAdvanceDoesNotFactorThroughUnit source.1 source.2
-
-def CertifiedPerimetralGodelHistoryProgression.phaseDoesNotFactorThroughWitness
-    {source : ParticipatingGodelHistoryStage}
-    (result : CertifiedPerimetralGodelHistoryProgression source) :
-    StageWitnessPhaseDoesNotFactor source.1 source.2 :=
-  result.2.2.2
-
-def CertifiedPerimetralGodelHistoryProgression.phaseDoesNotFactorThroughTerminalFacts
-    {source : ParticipatingGodelHistoryStage}
-    (result : CertifiedPerimetralGodelHistoryProgression source) :
-    StageTerminalFactsPhaseDoesNotFactor source.1 source.2 := by
-  intro factor certificationFactors residualFactors
-  exact result.phaseDoesNotFactorThroughWitness
-    (fun _witness => factor (sourceTerminalGodelFacts source.1))
-    certificationFactors residualFactors
-
 def CertifiedPerimetralGodelHistoryProgression.target
     {source : ParticipatingGodelHistoryStage}
     (progression : CertifiedPerimetralGodelHistoryProgression source) :
     ParticipatingGodelHistoryStage :=
-  ⟨completedStageTarget progression.1, progression.2.2.1⟩
+  ⟨completedStageTarget progression.1, progression.2.2⟩
 
 theorem CertifiedPerimetralGodelHistoryProgression.target_stage_eq
     {source : ParticipatingGodelHistoryStage}
@@ -1094,21 +1017,14 @@ end RelationalPerimeter
 #print axioms RelationalPerimeter.HeytingArithmetic.productionOccurrenceWaits
 #print axioms RelationalPerimeter.HeytingArithmetic.certificationOccurrenceAdvancesExactly
 #print axioms RelationalPerimeter.HeytingArithmetic.residualOccurrenceRetainsExactly
-#print axioms RelationalPerimeter.HeytingArithmetic.StageWitnessPhaseDoesNotFactor
-#print axioms RelationalPerimeter.HeytingArithmetic.stageWitnessPhaseDoesNotFactor
-#print axioms RelationalPerimeter.HeytingArithmetic.SourceTerminalGodelFacts
-#print axioms RelationalPerimeter.HeytingArithmetic.sourceTerminalGodelFacts
-#print axioms RelationalPerimeter.HeytingArithmetic.StageTerminalFactsPhaseDoesNotFactor
-#print axioms RelationalPerimeter.HeytingArithmetic.stageTerminalFactsPhaseDoesNotFactor
-#print axioms RelationalPerimeter.HeytingArithmetic.stagePhaseDoesNotFactorThroughStage
-#print axioms RelationalPerimeter.HeytingArithmetic.stagePhaseDoesNotFactorThroughUnit
-#print axioms RelationalPerimeter.HeytingArithmetic.occurrenceAdvanceNotFactorsThroughUnit
+#print axioms RelationalPerimeter.HeytingArithmetic.StageTransitionProduction
 #print axioms RelationalPerimeter.HeytingArithmetic.StageTransitionAuthorization
 #print axioms RelationalPerimeter.HeytingArithmetic.StageTransitionCompletion
 #print axioms RelationalPerimeter.HeytingArithmetic.consumeProducedStageResource
 #print axioms RelationalPerimeter.HeytingArithmetic.consumeCertifiedStageResource
 #print axioms RelationalPerimeter.HeytingArithmetic.consumeRetainedStageResource
 #print axioms RelationalPerimeter.HeytingArithmetic.runStageTransitionResources
+#print axioms RelationalPerimeter.HeytingArithmetic.runStageTransitionResources_preservesPayloads
 #print axioms RelationalPerimeter.HeytingArithmetic.runCompletedStageTransition
 #print axioms RelationalPerimeter.HeytingArithmetic.runCompletedStageTransition_exact
 #print axioms RelationalPerimeter.HeytingArithmetic.CompletedStageOutcome
@@ -1135,8 +1051,6 @@ end RelationalPerimeter
 #print axioms RelationalPerimeter.HeytingArithmetic.SourceBoundaryUsesNewestAtAdvance
 #print axioms RelationalPerimeter.HeytingArithmetic.sourceBoundaryUsesNewestAtAdvance
 #print axioms RelationalPerimeter.HeytingArithmetic.sourceBoundaryUsesNewestAtAdvance_iff_sourceUnprovable
-#print axioms RelationalPerimeter.HeytingArithmetic.StageOccurrenceAdvanceDoesNotFactorThroughUnit
-#print axioms RelationalPerimeter.HeytingArithmetic.stageOccurrenceAdvanceDoesNotFactorThroughUnit
 #print axioms RelationalPerimeter.HeytingArithmetic.GodelHistoryProgressionAtTarget
 #print axioms RelationalPerimeter.HeytingArithmetic.godelHistoryProgressionAtCompletedTarget
 #print axioms RelationalPerimeter.HeytingArithmetic.ParticipatingGodelHistoryStage
@@ -1150,9 +1064,6 @@ end RelationalPerimeter
 #print axioms RelationalPerimeter.HeytingArithmetic.CertifiedPerimetralGodelHistoryProgression.progressionAtTarget
 #print axioms RelationalPerimeter.HeytingArithmetic.CertifiedPerimetralGodelHistoryProgression.progression
 #print axioms RelationalPerimeter.HeytingArithmetic.CertifiedPerimetralGodelHistoryProgression.sourceBoundaryUsesNewest
-#print axioms RelationalPerimeter.HeytingArithmetic.CertifiedPerimetralGodelHistoryProgression.phaseDoesNotFactorThroughUnit
-#print axioms RelationalPerimeter.HeytingArithmetic.CertifiedPerimetralGodelHistoryProgression.phaseDoesNotFactorThroughWitness
-#print axioms RelationalPerimeter.HeytingArithmetic.CertifiedPerimetralGodelHistoryProgression.phaseDoesNotFactorThroughTerminalFacts
 #print axioms RelationalPerimeter.HeytingArithmetic.CertifiedPerimetralGodelHistoryProgression.sourceSentenceProofUsesNewest
 #print axioms RelationalPerimeter.HeytingArithmetic.certifiedPerimetralGodelHistoryProgression_target_eq_advance
 #print axioms RelationalPerimeter.HeytingArithmetic.perimetralGodelHistoryStage

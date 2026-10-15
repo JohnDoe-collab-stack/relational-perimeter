@@ -146,18 +146,15 @@ theorem publicRootCompletedPerimetralTargetIsAdvance :
 def publicRootProgressionAtCompletedTarget :=
   publicRootCertifiedPerimetralGodelProgression.progressionAtTarget
 
-def publicRootWitnessPhaseDoesNotFactor :=
-  publicRootCertifiedPerimetralGodelProgression.phaseDoesNotFactorThroughWitness
-
-def publicRootTerminalFactsPhaseDoesNotFactor :=
-  publicRootCertifiedPerimetralGodelProgression.phaseDoesNotFactorThroughTerminalFacts
-
 theorem publicRootCompletedTransitionIsExact :
     RelationalPerimeter.HeytingArithmetic.runCompletedStageTransition
         RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage
         RelationalPerimeter.HeytingArithmetic.rootParticipatingGodelHistoryStage.2 =
       some
-        ⟨RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage.advance⟩ :=
+        ⟨RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage.producedWitness.production,
+          RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage.producedWitness,
+          RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage.producedWitness,
+          RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage.advance⟩ :=
   RelationalPerimeter.HeytingArithmetic.runCompletedStageTransition_exact _ _
 
 theorem publicRootProducedBoundaryUsesNewest :
@@ -219,8 +216,6 @@ end RelationalPerimeter.Tests.PublicRootImport
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootCompletedPerimetralTarget
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootCompletedPerimetralTargetIsAdvance
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootProgressionAtCompletedTarget
-#print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootWitnessPhaseDoesNotFactor
-#print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootTerminalFactsPhaseDoesNotFactor
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootCompletedTransitionIsExact
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootProducedBoundaryUsesNewest
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootProducedBoundaryUsesNewestIffSourceUnprovable
