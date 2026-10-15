@@ -74,6 +74,7 @@ vérité déjà produit.
 | Fermeture spécifiée historique | `ArithmeticExecutedGodelCausalClosureMeaning` | La forme à égalité de types est équivalente à `CircularClosureMeaning` sur la même continuation et se factorise vers la fermeture dirigée ; elle n'est pas utilisée comme critère caractéristique de l'incomplétude |
 | Contraste diagnostique dans un même système | `SemanticallyDefinedArithmeticGodelDiagnostic` | Le même prédicat `DirectedSemanticCompletenessAt` est satisfait en `0 = 0`, rejeté en `G`, et la continuation produite reste stricte |
 | Frontière sélective effective | `EffectiveGodelSelectiveBoundary` | Un certificat accepté d'une phrase d'ancrage construit sa vérité et sa complétude dirigée locale ; la correspondance canonique rejette séparément cette complétude en `G`, impose que les deux phrases diffèrent et conserve la continuation stricte |
+| Progression constitutive des théories HA | `GodelHistoryProgression` | À partir d'une histoire finie saine, la phrase `G_n` produite et vraie est ajoutée comme occurrence la plus récente de `T_(n+1)` ; le vérificateur cible accepte cette même occurrence, puis construit une phrase `G_(n+1)` vraie, non prouvable dans la cible et distincte de `G_n` |
 | Conclusion HA nommée | `heytingArithmeticGodelPerimetralCorrespondence` | La phrase HA produite est vraie dans le modèle standard et n'a pas de certificat HA accepté ; sa négation n'en a pas davantage, la continuation est stricte et les fermetures causale et dirigée sont rejetées |
 
 Les adaptateurs `toGodelSyntax` et `toGodelInterpretation` transportent les
@@ -287,6 +288,49 @@ reste exactement équivalente à `Truth(G) -> Proof(G)` ; aucune nouvelle notion
 de fermeture n'est introduite. Ce résultat constitue un candidat formel local
 pour E1, et non un verdict d'audit extérieur.
 
+## Progression constitutive des théories HA
+
+Le module
+[`HistoryGodelSystem`](../RelationalPerimeter/Constitution/HeytingArithmetic/HistoryGodelSystem.lean)
+construit, pour chaque histoire finie de HA dont chaque phrase ajoutée possède
+un témoin de vérité dans le modèle standard, un vérificateur numérique indexé
+par cette histoire, son décodage exact en dérivation, la correction de ces
+dérivations et le prédicat de non-prouvabilité correspondant. L'histoire
+racine utilise exactement `haProofCheck` et `haUnprovabilityPredicate`. La
+réalisation ne reçoit donc pas la conclusion d'incomplétude : elle ferme les
+contrats de `EffectivelyPresentedSoundGodelSystem` depuis la relation de preuve
+de l'histoire et sa correction construite.
+
+Le module
+[`GodelTheoryProgression`](../RelationalPerimeter/Constitution/HeytingArithmetic/GodelTheoryProgression.lean)
+définit ensuite une étape `T_n -> T_(n+1)` qui ajoute exactement la phrase
+`G_n` produite par l'exécution de `T_n`. La preuve de vérité déjà produite pour
+`G_n` est consommée pour préserver la correction de l'histoire étendue.
+L'occurrence `newest` construite dans cette extension est elle-même consommée
+par l'encodage de la dérivation vérifiée : `G_n` devient donc prouvable dans
+`T_(n+1)`, sans reconstruction indépendante d'une autre phrase ou d'un autre
+certificat. La cible construit alors `G_(n+1)`, vraie et non prouvable dans
+`T_(n+1)`. Ces deux phrases sont distinctes, car leur égalité transporterait
+la preuve cible de `G_n` vers la phrase que le vérificateur cible rejette.
+
+`godelHistoryStage` itère constructivement cette étape pour tout entier. Le
+paquet `ProgressiveGodelPerimetralCorrespondence` conserve conjointement la
+progression vérifiée et les participations périmétrales des étapes source et
+cible. Sa séparation
+`rejectsSourceBoundaryExclusion` exclut directement un régime qui rejetterait
+par principe, dans la cible, le membre de frontière produit par la source : ce
+membre est précisément le nouveau postulat accepté. La stationnarité est aussi
+impossible, tandis que `soundTheoryHistoryRejectsNewestFalse` empêche une
+fausseté canonique d'entrer comme nouvelle phrase d'une histoire saine.
+
+Cette propriété est strictement plus structurée que les seuls faits terminaux
+`Truth(G_n)` et `¬Proof_(T_n)(G_n)` : elle porte aussi l'occurrence de `G_n`
+dans la théorie cible, sa preuve effectivement vérifiée par le nouveau
+vérificateur et la production d'une frontière suivante distincte. Elle ne
+prétend ni que toute extension arithmétique est saine, ni que l'ajout d'une
+phrase fausse serait autorisé, ni qu'un système abstrait quelconque réalise
+cette progression HA. Son statut d'audit indépendant reste séparé.
+
 ## Limites restantes distinctes
 
 La réalisation HA ferme dans le dépôt les obligations de codage, substitution,
@@ -306,4 +350,7 @@ relation de preuve représentée dans les deux sens. E3 est fermée localement p
 le raccord direct des étapes exécutées `selfApply` et `certify` aux occurrences
 périmétrales exactes qui portent leurs sorties. Cette fermeture formelle ne
 change pas la portée sémantique annoncée et ne vaut pas verdict d'audit
-indépendant.
+indépendant. La progression constitutive ajoute désormais une séparation
+formelle d'avec l'exclusion syntaxique uniforme et avec la fausseté canonique
+stipulée ; elle ne préjuge pas du verdict d'une nouvelle revue extérieure
+portant sur la révision exacte.
