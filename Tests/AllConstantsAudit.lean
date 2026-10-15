@@ -11,6 +11,7 @@ import Tests.EndogenousOperationalStabilityRegression
 import Tests.EndogenousWidthBridgeRegression
 import Tests.GodelCorrespondenceScopeRegression
 import Tests.GodelExplanatorySeparationRegression
+import Tests.GodelTheoryProgressionRegression
 import Tests.HeytingArithmeticGodelInstanceRegression
 import Tests.HeytingArithmeticSemanticArithmeticInstanceRegression
 import Tests.ProducedContinuation

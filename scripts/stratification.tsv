@@ -111,6 +111,8 @@ RelationalPerimeter.Constitution.HeytingArithmetic.Diagonal	F	enforced	External 
 RelationalPerimeter.Constitution.HeytingArithmetic.InternalFixedPoint	F	enforced	Parametric object-language fixed-point derivations in HA
 RelationalPerimeter.Constitution.HeytingArithmetic.ProvabilityPredicate	F	enforced	Internal HA proof predicate built from the numeric verifier graph
 RelationalPerimeter.Constitution.HeytingArithmeticGodelInstance	F	enforced	Named effective HA realization of the affirmative Godel correspondence
+RelationalPerimeter.Constitution.HeytingArithmetic.HistoryGodelSystem	F	enforced	Uniform effective Godel realization for each finite sound HA theory history
+RelationalPerimeter.Constitution.HeytingArithmetic.GodelTheoryProgression	F	enforced	Constructive HA theory progression admitting each produced boundary and generating a distinct next boundary
 RelationalPerimeter.Constitution.HeytingArithmetic.InformativeSemantics	F	enforced	Type-valued constructive realizers and informative soundness for HA derivations
 RelationalPerimeter.Constitution.HeytingArithmetic.InformativeRepresentability	F	enforced	Constructive informative witnesses for primitive-recursive arithmetic graphs
 RelationalPerimeter.Constitution.HeytingArithmeticSemanticArithmeticInstance	F	enforced	Named HA realization of the semantic proof-arithmetic interface and its derived Godel diagnostic
