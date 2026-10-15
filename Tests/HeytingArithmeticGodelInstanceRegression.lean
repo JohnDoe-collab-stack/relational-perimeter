@@ -67,6 +67,23 @@ def namedStrictContinuation :=
 def namedCausalParticipation :=
   heytingArithmeticCausalParticipation
 
+def namedExecutedOccurrenceCorrespondence :=
+  heytingArithmeticExecutedOccurrenceCorrespondence
+
+theorem namedExecutedSelfApplyImmediatelyPrecedesCertify :
+    History.OccurrenceNext
+      namedExecutedOccurrenceCorrespondence.executed.selfApplyOccurrence
+      namedExecutedOccurrenceCorrespondence.executed.certifyOccurrence :=
+  namedExecutedOccurrenceCorrespondence.executedSelfApplyNextCertify
+
+theorem namedExecutedOutputsAreThePerimeterResources :
+    namedExecutedOccurrenceCorrespondence.executed.production =
+        heytingArithmeticExecutedGodelLink.exit.witness.production ∧
+      namedExecutedOccurrenceCorrespondence.executed.witness =
+        heytingArithmeticExecutedGodelLink.exit.witness :=
+  ⟨namedExecutedOccurrenceCorrespondence.selfApplyConstitutesProduction,
+    namedExecutedOccurrenceCorrespondence.certifyConstitutesCertification⟩
+
 def namedCausalClosureRejection :=
   heytingArithmeticCausalClosureIsImpossible
 
@@ -87,6 +104,9 @@ end RelationalPerimeter.Tests.HeytingArithmeticGodelInstanceRegression
 #print axioms RelationalPerimeter.Tests.HeytingArithmeticGodelInstanceRegression.namedProducedNegationUnprovability
 #print axioms RelationalPerimeter.Tests.HeytingArithmeticGodelInstanceRegression.namedStrictContinuation
 #print axioms RelationalPerimeter.Tests.HeytingArithmeticGodelInstanceRegression.namedCausalParticipation
+#print axioms RelationalPerimeter.Tests.HeytingArithmeticGodelInstanceRegression.namedExecutedOccurrenceCorrespondence
+#print axioms RelationalPerimeter.Tests.HeytingArithmeticGodelInstanceRegression.namedExecutedSelfApplyImmediatelyPrecedesCertify
+#print axioms RelationalPerimeter.Tests.HeytingArithmeticGodelInstanceRegression.namedExecutedOutputsAreThePerimeterResources
 #print axioms RelationalPerimeter.Tests.HeytingArithmeticGodelInstanceRegression.namedCausalClosureRejection
 #print axioms RelationalPerimeter.Tests.HeytingArithmeticGodelInstanceRegression.namedDirectedClosureRejection
 /- AXIOM_AUDIT_END -/

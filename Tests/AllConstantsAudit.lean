@@ -10,7 +10,9 @@ import Tests.DeepPreservationRegression
 import Tests.EndogenousOperationalStabilityRegression
 import Tests.EndogenousWidthBridgeRegression
 import Tests.GodelCorrespondenceScopeRegression
+import Tests.GodelExplanatorySeparationRegression
 import Tests.HeytingArithmeticGodelInstanceRegression
+import Tests.HeytingArithmeticSemanticArithmeticInstanceRegression
 import Tests.ProducedContinuation
 import Tests.ProductionTimelineRegression
 import Tests.PublicRootImport

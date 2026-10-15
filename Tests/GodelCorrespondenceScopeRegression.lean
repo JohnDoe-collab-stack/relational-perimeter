@@ -63,6 +63,25 @@ def abstractDegenerateCausalParticipation :
       abstractDegenerateCorrespondence.execution :=
   abstractDegenerateCorrespondence.execution.arithmeticCausalParticipation
 
+def abstractDegenerateExecutedOccurrenceCorrespondence :
+    ArithmeticExecutedGodelOccurrenceCorrespondence
+      abstractDegenerateCausalParticipation :=
+  abstractDegenerateCausalParticipation.executedOccurrenceCorrespondence
+
+theorem abstractDegenerateSelfApplyImmediatelyPrecedesCertify :
+    History.OccurrenceNext
+      abstractDegenerateExecutedOccurrenceCorrespondence.executed.selfApplyOccurrence
+      abstractDegenerateExecutedOccurrenceCorrespondence.executed.certifyOccurrence :=
+  abstractDegenerateExecutedOccurrenceCorrespondence.executedSelfApplyNextCertify
+
+theorem abstractDegenerateExecutedOutputsAreThePerimeterResources :
+    abstractDegenerateExecutedOccurrenceCorrespondence.executed.production =
+        abstractDegenerateCorrespondence.execution.exit.witness.production ∧
+      abstractDegenerateExecutedOccurrenceCorrespondence.executed.witness =
+        abstractDegenerateCorrespondence.execution.exit.witness :=
+  ⟨abstractDegenerateExecutedOccurrenceCorrespondence.selfApplyConstitutesProduction,
+    abstractDegenerateExecutedOccurrenceCorrespondence.certifyConstitutesCertification⟩
+
 theorem abstractDegenerateContinuationIsProducedByTurning :
     abstractDegenerateCausalParticipation.continuation =
       appendGenerated abstractDegenerateCausalParticipation.turning.deployment
@@ -160,6 +179,9 @@ end RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression
 #print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractInterfaceDoesNotImplyAnyProofExists
 #print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateHistoryStillPinsItsExactExit
 #print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateCausalParticipation
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateExecutedOccurrenceCorrespondence
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateSelfApplyImmediatelyPrecedesCertify
+#print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateExecutedOutputsAreThePerimeterResources
 #print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateContinuationIsProducedByTurning
 #print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateTurningProducesStrictContinuation
 #print axioms RelationalPerimeter.Tests.GodelCorrespondenceScopeRegression.abstractDegenerateCausalContinuationIsLocallyExact

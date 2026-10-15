@@ -119,6 +119,112 @@ theorem ExecutedGodelDiagonalPerimetralLink.arithmeticHistoryPinsExit
         unprovabilityFormula interpretation :=
   arithmeticExecutedGodelHistory_isCanonical link.history
 
+/- The complete executed history contains more information than its terminal
+   state.  This certificate extracts the actual `selfApply` and `certify`
+   occurrences from that history, together with the resources carried by the
+   intervening steps.  The occurrences are retained as data; their identity is
+   not replaced by an equality between their outputs. -/
+structure ArithmeticExecutedGodelHistoryOccurrences
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    (link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation) : Type _ where
+  diagonal : ExecutedGodelDiagonalProduction coding unprovabilityFormula
+  production : ExecutedGodelSentenceProduction coding unprovabilityFormula
+  witness : ExecutedGodelWitness coding unprovabilityFormula interpretation
+  diagonalIsCanonical :
+    diagonal = executeGodelDiagonalProduction coding unprovabilityFormula
+  productionIsSelfApplication :
+    production = executeGodelSentenceProduction diagonal
+  witnessIsCertification :
+    witness = certifyExecutedGodelWitness coding unprovabilityFormula
+      interpretation production
+  exitIsContinuation :
+    link.exit = executeGodelRegimeExit coding unprovabilityFormula
+      interpretation witness
+  selfApplyOccurrence : History.Occurrence link.history
+  selfApplyOccurrenceIsExact :
+    selfApplyOccurrence.locatedStep =
+      (⟨.diagonalized diagonal,
+        .sentenceProduced (executeGodelSentenceProduction diagonal),
+        .selfApply diagonal⟩ :
+        History.LocatedStep
+          (@ExecutedGodelConstitutiveStep coding unprovabilityFormula
+            interpretation))
+  certifyOccurrence : History.Occurrence link.history
+  certifyOccurrenceIsExact :
+    certifyOccurrence.locatedStep =
+      (⟨.sentenceProduced production,
+        .witnessProduced
+          (certifyExecutedGodelWitness coding unprovabilityFormula
+            interpretation production),
+        .certify production⟩ :
+        History.LocatedStep
+          (@ExecutedGodelConstitutiveStep coding unprovabilityFormula
+            interpretation))
+  selfApplyNextCertify :
+    History.OccurrenceNext selfApplyOccurrence certifyOccurrence
+
+def ExecutedGodelDiagonalPerimetralLink.arithmeticHistoryOccurrences
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    (link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation) :
+    ArithmeticExecutedGodelHistoryOccurrences link := by
+  cases link with
+  | mk exit history =>
+      cases history with
+      | extend beforeContinue continueStep =>
+          cases continueStep with
+          | «continue» witness =>
+              cases beforeContinue with
+              | extend beforeCertify certifyStep =>
+                  cases certifyStep with
+                  | certify production =>
+                      cases beforeCertify with
+                      | extend beforeSelfApply selfApplyStep =>
+                          cases selfApplyStep with
+                          | selfApply diagonal =>
+                              cases beforeSelfApply with
+                              | extend beforeDiagonalize diagonalizeStep =>
+                                  cases diagonalizeStep with
+                                  | diagonalize =>
+                                      cases beforeDiagonalize with
+                                      | root =>
+                                          exact
+                                            { diagonal :=
+                                                executeGodelDiagonalProduction
+                                                  coding unprovabilityFormula
+                                              production :=
+                                                executeGodelSentenceProduction
+                                                  (executeGodelDiagonalProduction
+                                                    coding unprovabilityFormula)
+                                              witness :=
+                                                certifyExecutedGodelWitness
+                                                  coding unprovabilityFormula
+                                                  interpretation
+                                                  (executeGodelSentenceProduction
+                                                    (executeGodelDiagonalProduction
+                                                      coding unprovabilityFormula))
+                                              diagonalIsCanonical := rfl
+                                              productionIsSelfApplication := rfl
+                                              witnessIsCertification := rfl
+                                              exitIsContinuation := rfl
+                                              selfApplyOccurrence :=
+                                                .earlier (.earlier .last)
+                                              selfApplyOccurrenceIsExact := rfl
+                                              certifyOccurrence :=
+                                                .earlier .last
+                                              certifyOccurrenceIsExact := rfl
+                                              selfApplyNextCertify :=
+                                                .earlier_earlier .previous_last }
+                                      | extend _ impossible =>
+                                          exact nomatch impossible
+
 inductive ArithmeticExecutedGodelPerimeterResource
     {coding : GodelDiagonalSyntax}
     {unprovabilityFormula : coding.UnaryFormula}
@@ -420,6 +526,74 @@ def ExecutedGodelDiagonalPerimetralLink.arithmeticCausalParticipation
       finalInterpretation :=
         turning.finalInterpretationFromPositive labelled positive
       finalInterpretationIsCanonical := rfl }
+
+/- A correspondence keeps the executed and perimetral occurrences as distinct
+   data.  The two equalities below identify only the resources transmitted
+   between them: the output of `selfApply` is the production at the first
+   perimeter position, and the output of `certify` is the witness at the
+   second position. -/
+structure ArithmeticExecutedGodelOccurrenceCorrespondence
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) : Type _
+    where
+  executed : ArithmeticExecutedGodelHistoryOccurrences link
+  productionOccurrenceIsExact :
+    participation.productionOccurrence =
+      participation.labelled.extension.oldOccurrence
+        (arithmeticExecutedGodelProductionPosition link.exit.witness)
+  certificationOccurrenceIsExact :
+    participation.certificationOccurrence =
+      participation.labelled.extension.oldOccurrence
+        (arithmeticExecutedGodelCertificationPosition link.exit.witness)
+  selfApplyConstitutesProduction :
+    executed.production = link.exit.witness.production
+  certifyConstitutesCertification :
+    executed.witness = link.exit.witness
+  executedSelfApplyNextCertify :
+    History.OccurrenceNext executed.selfApplyOccurrence
+      executed.certifyOccurrence
+  perimetralProductionPrecedesCertification :
+    History.OccurrencePrecedes participation.productionOccurrence
+      participation.certificationOccurrence
+
+def ArithmeticExecutedGodelCausalParticipation.executedOccurrenceCorrespondence
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    {link : ExecutedGodelDiagonalPerimetralLink coding unprovabilityFormula
+      interpretation}
+    (participation : ArithmeticExecutedGodelCausalParticipation link) :
+    ArithmeticExecutedGodelOccurrenceCorrespondence participation := by
+  let executed := link.arithmeticHistoryOccurrences
+  have witnessExact : executed.witness = link.exit.witness := by
+    exact
+      (congrArg ExecutedGodelRegimeExit.witness
+        executed.exitIsContinuation).symm
+  have certificationRetainsProduction :
+      executed.witness.production = executed.production := by
+    exact congrArg ExecutedGodelWitness.production
+      executed.witnessIsCertification
+  have productionExact :
+      executed.production = link.exit.witness.production :=
+    certificationRetainsProduction.symm.trans
+      (congrArg ExecutedGodelWitness.production witnessExact)
+  exact
+    { executed := executed
+      productionOccurrenceIsExact :=
+        participation.productionOccurrenceIsExact
+      certificationOccurrenceIsExact :=
+        participation.certificationOccurrenceIsExact
+      selfApplyConstitutesProduction := productionExact
+      certifyConstitutesCertification := witnessExact
+      executedSelfApplyNextCertify := executed.selfApplyNextCertify
+      perimetralProductionPrecedesCertification :=
+        participation.productionPrecedesCertification }
 
 def ArithmeticExecutedGodelCausalParticipation.strictTurningContinuation
     {coding : GodelDiagonalSyntax}
@@ -1611,6 +1785,8 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelConstitutiveCanonical
 #print axioms StrongPerimetralTurning.arithmeticExecutedGodelHistory_isCanonical
 #print axioms StrongPerimetralTurning.ExecutedGodelDiagonalPerimetralLink.arithmeticHistoryPinsExit
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelHistoryOccurrences
+#print axioms StrongPerimetralTurning.ExecutedGodelDiagonalPerimetralLink.arithmeticHistoryOccurrences
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelPerimeterResource
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelPerimeterCompatibility
 #print axioms StrongPerimetralTurning.arithmeticExecutedGodelNode
@@ -1624,6 +1800,8 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.recordedSourceProvenance
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation
 #print axioms StrongPerimetralTurning.ExecutedGodelDiagonalPerimetralLink.arithmeticCausalParticipation
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelOccurrenceCorrespondence
+#print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.executedOccurrenceCorrespondence
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.strictTurningContinuation
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.locallyExact
 #print axioms StrongPerimetralTurning.ArithmeticExecutedGodelCausalParticipation.recordedDifferenceIsSource

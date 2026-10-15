@@ -37,6 +37,14 @@ def publicArithmeticGodelCausalParticipation
   (StrongPerimetralTurning.arithmeticGodelPerimetralCorrespondence
     theory).executedCausalParticipation
 
+def publicArithmeticGodelExecutedOccurrenceCorrespondence
+    (theory :
+      StrongPerimetralTurning.EffectivelyPresentedSoundArithmeticTheory) :
+    StrongPerimetralTurning.ArithmeticExecutedGodelOccurrenceCorrespondence
+      (publicArithmeticGodelCausalParticipation theory) :=
+  (publicArithmeticGodelCausalParticipation
+    theory).executedOccurrenceCorrespondence
+
 def publicArithmeticGodelCausalClosureRejection
     (theory :
       StrongPerimetralTurning.EffectivelyPresentedSoundArithmeticTheory) :
@@ -106,6 +114,9 @@ def publicHeytingArithmeticGodelCorrespondence :=
 def publicHeytingArithmeticCausalParticipation :=
   RelationalPerimeter.HeytingArithmetic.heytingArithmeticCausalParticipation
 
+def publicHeytingArithmeticExecutedOccurrenceCorrespondence :=
+  RelationalPerimeter.HeytingArithmetic.heytingArithmeticExecutedOccurrenceCorrespondence
+
 def publicHeytingArithmeticStrictContinuation :=
   RelationalPerimeter.HeytingArithmetic.heytingArithmeticStrictContinuation
 
@@ -141,6 +152,7 @@ end RelationalPerimeter.Tests.PublicRootImport
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicSuccinctnessEvidence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelCorrespondence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelCausalParticipation
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelExecutedOccurrenceCorrespondence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelCausalClosureRejection
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicArithmeticGodelDirectedClosureRejection
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicSemanticallyDefinedArithmeticGodelCorrespondence
@@ -151,6 +163,7 @@ end RelationalPerimeter.Tests.PublicRootImport
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticEffectiveGodelSystem
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticGodelCorrespondence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticCausalParticipation
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticExecutedOccurrenceCorrespondence
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticStrictContinuation
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticCausalClosureRejection
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticNegationRejection

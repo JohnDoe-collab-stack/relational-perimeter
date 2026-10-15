@@ -57,6 +57,7 @@ vérité déjà produit.
 | Présentation abstraite de compatibilité | `EffectivelyPresentedSoundGodelSystem` | Codes naturels, décodeurs exécutables et vérificateurs booléens ; cette interface accepte des modèles dégénérés et ne constitue pas la cible arithmétique |
 | Présentation arithmétique retenue | `SemanticallyDefinedProofArithmeticTheory` | Langage arithmétique fixé, substitution sémantiquement correcte, relation de preuve explicite, correction et preuve vérifiée de `t = t` |
 | Réalisation nommée | `heytingArithmeticEffectiveGodelSystem` | Syntaxe du premier ordre arithmétique, dérivations HA, vérificateur primitif récursif, représentabilité interne de ce vérificateur, point fixe paramétrique et correction standard sont construits dans le dépôt |
+| Réalisation sémantique HA | `heytingArithmeticSemanticallyDefinedProofArithmeticTheory` | Le langage arithmétique fixé est traduit vers HA, le même `haProofCheck` est représenté dans les deux sens par une formule binaire et la correction informative reconstruit les témoins existentiels dans `Type` |
 | Syntaxe et numérotation | `encodeUnary`, `encodeSentence`, `decodeUnary`, `decodeSentence` | Les deux lois de décodage impliquent l'injectivité des codages |
 | Substitution et lemme diagonal | `substitute`, `diagonalize`, `diagonalizeExact` | Le certificat vérifié relie l'auto-substitution à la substitution de la phrase codée |
 | Dérivations | `CheckedSentenceProof` et `proofCheck` | Une preuve est un code naturel dont le vérificateur renvoie `true` |
@@ -72,6 +73,7 @@ vérité déjà produit.
 | Fermeture dirigée et provenance | `ArithmeticExecutedGodelDirectedClosureMeaning` | Son candidat est lu dans `recordedDifference`, aligné au témoin produit par `recordedProvenance`, puis sa conversion `Truth(G) -> Proof(G)` rencontre le point fixe |
 | Fermeture spécifiée historique | `ArithmeticExecutedGodelCausalClosureMeaning` | La forme à égalité de types est équivalente à `CircularClosureMeaning` sur la même continuation et se factorise vers la fermeture dirigée ; elle n'est pas utilisée comme critère caractéristique de l'incomplétude |
 | Contraste diagnostique dans un même système | `SemanticallyDefinedArithmeticGodelDiagnostic` | Le même prédicat `DirectedSemanticCompletenessAt` est satisfait en `0 = 0`, rejeté en `G`, et la continuation produite reste stricte |
+| Frontière sélective effective | `EffectiveGodelSelectiveBoundary` | Un certificat accepté d'une phrase d'ancrage construit sa vérité et sa complétude dirigée locale ; la correspondance canonique rejette séparément cette complétude en `G`, impose que les deux phrases diffèrent et conserve la continuation stricte |
 | Conclusion HA nommée | `heytingArithmeticGodelPerimetralCorrespondence` | La phrase HA produite est vraie dans le modèle standard et n'a pas de certificat HA accepté ; sa négation n'en a pas davantage, la continuation est stricte et les fermetures causale et dirigée sont rejetées |
 
 Les adaptateurs `toGodelSyntax` et `toGodelInterpretation` transportent les
@@ -125,6 +127,23 @@ correction. Le simple champ booléen d'une instance abstraite ne suffirait
 toujours pas à établir cette portée ; c'est la fermeture concrète de ces
 obligations, et non le seul nom de l'interface, qui justifie ici la portée HA.
 
+Le module
+[`HeytingArithmeticSemanticArithmeticInstance`](../RelationalPerimeter/Constitution/HeytingArithmeticSemanticArithmeticInstance.lean)
+ferme concrètement ce raccord E2. Il construit les deux décodages exacts du
+langage fixé, la substitution et la diagonalisation depuis les opérations HA,
+et instancie `SemanticallyDefinedProofArithmeticTheory` avec exactement
+`haProofCheck`. Les modules `InformativeSemantics` et
+`InformativeRepresentability` transportent des témoins calculatoires dans
+`Type` : une existentielle conserve son entier témoin, et l'exécution du graphe
+primitif récursif construit le réalisateur de la formule de preuve. La formule
+binaire utilisée par l'instance est la traduction certifiée de
+`historyProofFormula TheoryHistory.root`; ses deux directions sont donc
+dérivées du même vérificateur, pas reçues comme nouvelle hypothèse. Les
+déclarations
+`heytingArithmeticSemanticallyDefinedArithmeticGodelConclusion` et
+`heytingArithmeticSemanticallyDefinedArithmeticGodelDiagnostic` en dérivent
+sans prémisse supplémentaire la conclusion et le contraste annoncés.
+
 ## Ordre constitutif et identité de ressource
 
 L'histoire `ExecutedGodelConstitutiveStep` impose successivement les passages
@@ -153,6 +172,17 @@ La nouvelle `ArithmeticExecutedGodelCausalParticipation` ajoute le certificat
 de turning qui engendre la continuation utilisée, l'extension étiquetée, sa
 positivité, l'occurrence résiduelle distincte des deux occurrences intérieures
 et l'interprétation finale contenant l'enregistrement de provenance.
+`arithmeticHistoryOccurrences` élimine directement l'histoire reçue par le
+lien exécuté et en extrait deux occurrences conservées comme données : le pas
+`selfApply` et le pas `certify`. Leurs `LocatedStep` identifient les producteurs
+exécutés, et `OccurrenceNext` établit que la certification suit immédiatement
+l'auto-application. `executedOccurrenceCorrespondence` raccorde ensuite ces
+occurrences aux deux occurrences périmétrales exactes sans les identifier entre
+elles : seule la ressource produite est égalée. La sortie de `selfApply` est la
+production portée par la première position, et la sortie de `certify` est le
+témoin porté par la seconde. La réalisation nommée
+`heytingArithmeticExecutedOccurrenceCorrespondence` applique ce raccord à la
+même chaîne HA.
 `strictTurningContinuation` construit en particulier le préfixe strict depuis
 le déploiement et le pas libre fournis par ce certificat ; c'est ce préfixe que
 la factorisation terminale remet à la fermeture. L'interprétation finale est
@@ -226,6 +256,37 @@ probe séparé vérifie que le point fixe produit ne se transporte pas à
 l'application non diagonale, et qu'un témoin étranger ne peut pas réutiliser
 l'enregistrement historique sans fournir l'égalité de provenance manquante.
 
+## Séparation explicative E1
+
+Le module
+[`GodelExplanatorySeparation`](../RelationalPerimeter/Constitution/GodelExplanatorySeparation.lean)
+isole une propriété positive qui n'est pas la complétude interdite en `G`.
+`EffectiveGodelSelectiveBoundary` contient exactement une phrase du système
+reçu et un certificat accepté par son vérificateur. Sa vérité est obtenue par
+la correction du même système, et sa complétude dirigée locale retourne ce
+certificat déjà construit. Aucun rejet, aucune non-prouvabilité et aucune
+conclusion sur `G` ne figurent parmi ses champs.
+
+Dans HA, `heytingArithmeticGodelSelectiveBoundary` réalise cette propriété
+avec la dérivation objet explicite de `0 = 0`, encodée puis acceptée par
+`haProofCheck`. La correspondance canonique existante rejette en parallèle
+`Truth(G) -> Proof(G)`. Les deux portées ne sont pas seulement distinguées par
+leurs types : `heytingArithmeticReflexiveZeroDiffersFromProduced` démontre que
+`0 = 0` n'est pas la phrase produite, car une égalité supposée transporterait
+le certificat accepté jusqu'à `G` et contredirait sa non-prouvabilité.
+`heytingArithmeticBoundaryDoesNotReduceToProducedCompleteness` exclut aussi
+constructivement qu'une production de cette frontière fournisse la
+complétude interdite en `G`.
+
+Le contre-modèle permanent `abstractDegenerateSystem` conserve sa
+correspondance gödelienne, sa participation causale et son rejet de la
+fermeture spécifiée, mais son vérificateur constamment faux interdit toute
+`EffectiveGodelSelectiveBoundary`. Il sépare donc cette nouvelle propriété de
+l'ancien paquet abstrait sans modifier celui-ci. La fermeture dirigée causale
+reste exactement équivalente à `Truth(G) -> Proof(G)` ; aucune nouvelle notion
+de fermeture n'est introduite. Ce résultat constitue un candidat formel local
+pour E1, et non un verdict d'audit extérieur.
+
 ## Limites restantes distinctes
 
 La réalisation HA ferme dans le dépôt les obligations de codage, substitution,
@@ -238,3 +299,11 @@ autre présentation éditoriale de HA ; une telle comparaison exigerait un
 théorème de traduction séparé. Enfin, le statut de revue indépendante reste
 `not_recorded` tant qu'un rapport extérieur portant sur le commit exact n'a pas
 été reçu, lu et enregistré.
+
+E2 est désormais fermée dans le dépôt par l'instance HA nommée de
+`SemanticallyDefinedProofArithmeticTheory`, avec le même vérificateur et une
+relation de preuve représentée dans les deux sens. E3 est fermée localement par
+le raccord direct des étapes exécutées `selfApply` et `certify` aux occurrences
+périmétrales exactes qui portent leurs sorties. Cette fermeture formelle ne
+change pas la portée sémantique annoncée et ne vaut pas verdict d'audit
+indépendant.

@@ -388,6 +388,11 @@ def heytingArithmeticCausalParticipation :
       heytingArithmeticExecutedGodelLink :=
   heytingArithmeticExecutedGodelLink.arithmeticCausalParticipation
 
+def heytingArithmeticExecutedOccurrenceCorrespondence :
+    ArithmeticExecutedGodelOccurrenceCorrespondence
+      heytingArithmeticCausalParticipation :=
+  heytingArithmeticCausalParticipation.executedOccurrenceCorrespondence
+
 def heytingArithmeticStrictContinuation :
     StrictConstitutivePrefix
       (perimeterDeployment
@@ -456,6 +461,7 @@ end RelationalPerimeter
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticEffectiveGodelSystem
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelPerimetralCorrespondence
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticCausalParticipation
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticExecutedOccurrenceCorrespondence
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticStrictContinuation
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticCausalClosureIsImpossible
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticDirectedClosureIsImpossible
