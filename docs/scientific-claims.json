@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "document_relocations": {},
-  "evidence_revision": "73e185ec6dae64d5e03a1315a28131f79396fc92",
+  "evidence_revision": "3872af049e6593c39795b4999372d936133951e1",
   "immutable_target": {
     "revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
     "anchors": [
@@ -2050,7 +2050,7 @@
         "transport": "Les traductions entre le langage arithmétique fixé et la syntaxe HA disposent de retours certifiés et de lois de décodage ; la formule binaire de preuve est reliée au graphe exact du même vérificateur dans les deux directions. Les équivalences transportent séparément preuves et vérités jusqu'à l'hypothèse de fermeture. La phrase d'ancrage et G restent distinctes, et son certificat n'est transporté vers G que sous l'égalité supposée pour obtenir la contradiction. La provenance enregistrée impose l'égalité entre le candidat lu et le témoin transmis avant tout transport de la contraction. Le raccord exécuté-périmétral conserve séparément les occurrences de selfApply et certify dans l'histoire reçue, les occurrences produite et certifiée dans la continuation et leurs deux ordres ; seules la production et la certification partagées sont identifiées. ArithmeticExecutedGodelCausalParticipation conserve aussi la séparation des occurrences intérieures avec l'occurrence résiduelle dans l'extension stricte ; ni la production, ni la continuation, ni le candidat final ne sont reconstruits indépendamment au point de consommation. Le passage T_n vers T_(n+1) conserve séparément les anciennes dérivations et ajoute l'occurrence produite comme nouveau postulat ; il ne transporte pas réversiblement la non-prouvabilité source, puisque G_n devient prouvable dans la cible et qu'une nouvelle frontière distincte est construite. Le protocole conserve séparément les charges utiles produced, certified et retained dans sa sortie. La cible de la progression est extraite de cette sortie ; l'égalité prouvée avec source.advance transporte ensuite les constructions historiques vers l'API de compatibilité. L'égalité avec l'ancienne tour reste une compatibilité aval et ne reconstruit pas la nouvelle transition."
       },
       "consumers": [],
-      "source_sha256": "5b25151c4589e0e7858634d0a8a47e32ce316945e6331a4669ad8c01a7275ae1",
+      "source_sha256": "22df40ae58a3dd0dbcc5b257868c5b294e8a3e68295ee6053212445b8900ad30",
       "reviews": {
         "reader": {
           "status": "pending"
