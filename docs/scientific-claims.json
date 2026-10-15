@@ -1,11 +1,7 @@
 {
   "schema_version": 2,
-  "document_relocations": {
-    "docs/science/chaine-constitutive-machine.fr.md": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.fr.md",
-    "docs/science/constitutive-machine-chain.en.md": "docs/work/TEXTE_CHAINE_CONSTITUTIVE_A_AUDITER.en.md",
-    "docs/science/preuves-chaine-constitutive-machine.fr.md": "docs/work/PREUVES_CHAINE_CONSTITUTIVE_MACHINE.fr.md"
-  },
-  "evidence_revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
+  "document_relocations": {},
+  "evidence_revision": "072c3a904af5544b4c8a07c65a48987146bca774",
   "immutable_target": {
     "revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
     "anchors": [
@@ -1410,6 +1406,102 @@
         "FULL_FUTURES"
       ],
       "source_sha256": "36f62f46a9564280d2a9df705a94df72795c2a543a75be6c515eeb7a9b9ff837",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "GODEL_INTERNAL_CLOSURE_OBSTRUCTION",
+      "kind": "causal",
+      "scope": "Pour toute réalisation de EffectivelyPresentedSoundGodelSystem : production exécutée et certification du même témoin diagonal ; constitution affirmative d'un tout et d'une continuation stricte avec occurrences et provenance conservées ; rejet constructif de l'admission de cette continuation dans le même régime par tentative bilatérale, totalisation, contraction, conversion Truth(G) vers Proof(G), puis non-prouvabilité du même G. HA ferme concrètement les contrats de l'interface mais demeure une instance, non le cadre. Résultat métathéorique conditionnel, sans revendication de renforcement de Gödel, d'unicité architecturale ni de priorité historique.",
+      "anchors": [
+        {
+          "path": "ENONCE_FORMEL_STABLE_GODEL.md",
+          "heading": "Conclusion formelle",
+          "paragraph": null,
+          "sha256": "a8ee7f076a86986fd63061ca7a646750e5e53e3ee8f0f72b147894ede365be74"
+        },
+        {
+          "path": "docs/godel-false-temoin-interne.fr.md",
+          "heading": "Conclusion canonique à portée explicite",
+          "paragraph": null,
+          "sha256": "11f4ad184dbd0020ac9ae599a5519aa65622e67e6ab424bb7efd27c27791d445"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.Diagonal",
+          "name": "StrongPerimetralTurning.effectiveGodelExecution",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence",
+          "name": "StrongPerimetralTurning.godelAffirmativeConstitution",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence",
+          "name": "StrongPerimetralTurning.godelBilateralClosureAttemptOf",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence",
+          "name": "StrongPerimetralTurning.godelExplicitKernelToProducedCompleteness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence",
+          "name": "StrongPerimetralTurning.rejectGodelExplicitAdmissionToEmpty",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence",
+          "name": "StrongPerimetralTurning.rejectGodelImplicitAdmissionToEmpty",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence",
+          "name": "StrongPerimetralTurning.executedGodelPerimetralCorrespondence",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.Godel",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticEffectiveGodelSystem",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.Godel",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelPerimetralCorrespondence",
+          "role": "production"
+        },
+        {
+          "module": "Tests.GodelPerimetralCorrespondenceRegression",
+          "name": "GodelPerimetralCorrespondenceRegression.generic_result_keeps_positive_and_negative_outputs",
+          "role": "test"
+        },
+        {
+          "module": "Tests.HeytingArithmeticGodelInstanceRegression",
+          "name": "HeytingArithmeticGodelInstanceRegression.ha_same_regime_admission_is_rejected",
+          "role": "test"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "L'exécution diagonale produit et certifie une seule phrase G ; cette production, ses occurrences ordonnées et sa provenance indexent ensuite la présentation périmétrale, le tout et la continuation stricte.",
+        "execution": "La chaîne exécute diagonalisation, auto-application et certification avant de construire la continuation ; l'admission supposée fournit un raffinement et son témoin positif, puis realizesFinal construit la tentative bilatérale et ses deux totalisations.",
+        "proof": "Le noyau positif de totalisation identifie exactement les extrémités Truth(G) et Proof(G), fournit Truth(G) vers Proof(G) sans consulter une obstruction négative, puis la vérité et la non-prouvabilité certifiées du même G produisent Empty et seulement ensuite False.",
+        "transport": "La correspondance conserve séparément les occurrences, la ressource certifiée et la provenance du même témoin à travers la constitution et la continuation ; le rejet porte uniquement sur l'admission totalisante dans le même régime et n'efface ni le tout ni la continuation positive."
+      },
+      "consumers": [],
+      "source_sha256": "47d3f338a5abbde35408d279977598e2968c6f9d2bd7ff191211325e046fbb3d",
       "reviews": {
         "reader": {
           "status": "pending"
