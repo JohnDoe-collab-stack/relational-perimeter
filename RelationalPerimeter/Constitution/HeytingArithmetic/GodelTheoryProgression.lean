@@ -255,8 +255,9 @@ def GodelHistoryProgression.rejectsProoflessTarget
 
 /-- Blanket exclusion of the exact family member produced at the source is
 incompatible with the progression: that member is a checked target postulate.
-This is the direct separation from a shell that rejects every produced
-boundary by syntax. -/
+This rejects that precise exclusion rule.  By itself it does not distinguish
+the progression from an arbitrary stagewise shell allowed to receive a chosen
+postulate. -/
 def GodelHistoryProgression.rejectsSourceBoundaryExclusion
     {source : SoundGodelHistoryStage}
     (progression : GodelHistoryProgression source) :
@@ -328,8 +329,10 @@ def progressiveGodelPerimetralCorrespondence
     source.perimetralParticipation,
     source.advance.perimetralParticipation⟩
 
-/-- At the level of the complete perimetral package, blanket exclusion of the
-source boundary at the target is impossible. -/
+/-- In the bundled package, blanket exclusion of the source boundary at the
+target is impossible.  This projection uses the progression component only;
+the stronger occurrence-sensitive dependency is stated in
+`GodelPerimetralHistoryTransition`. -/
 def ProgressiveGodelPerimetralCorrespondence.rejectsSourceBoundaryExclusion
     {source : SoundGodelHistoryStage}
     (correspondence : ProgressiveGodelPerimetralCorrespondence source) :

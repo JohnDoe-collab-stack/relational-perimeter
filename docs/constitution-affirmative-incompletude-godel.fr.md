@@ -317,11 +317,13 @@ la preuve cible de `G_n` vers la phrase que le vérificateur cible rejette.
 paquet `ProgressiveGodelPerimetralCorrespondence` conserve conjointement la
 progression vérifiée et les participations périmétrales des étapes source et
 cible. Sa séparation
-`rejectsSourceBoundaryExclusion` exclut directement un régime qui rejetterait
-par principe, dans la cible, le membre de frontière produit par la source : ce
-membre est précisément le nouveau postulat accepté. La stationnarité est aussi
-impossible, tandis que `soundTheoryHistoryRejectsNewestFalse` empêche une
-fausseté canonique d'entrer comme nouvelle phrase d'une histoire saine.
+`rejectsSourceBoundaryExclusion` exclut exactement une fonction qui refuserait,
+dans la cible, le postulat source qu'elle reçoit pourtant déjà avec son
+certificat. Cette projection ne consomme que la progression : elle ne sépare
+pas, à elle seule, la construction d'un shell stagewise autorisé à admettre un
+postulat choisi. La stationnarité est aussi impossible, tandis que
+`soundTheoryHistoryRejectsNewestFalse` empêche une fausseté canonique d'entrer
+comme nouvelle phrase d'une histoire saine.
 
 Cette propriété est strictement plus structurée que les seuls faits terminaux
 `Truth(G_n)` et `¬Proof_(T_n)(G_n)` : elle porte aussi l'occurrence de `G_n`
@@ -330,6 +332,60 @@ vérificateur et la production d'une frontière suivante distincte. Elle ne
 prétend ni que toute extension arithmétique est saine, ni que l'ajout d'une
 phrase fausse serait autorisé, ni qu'un système abstrait quelconque réalise
 cette progression HA. Son statut d'audit indépendant reste séparé.
+
+## Transition périmétrale exécutée et nécessité de la frontière
+
+Le module
+[`GodelPerimetralHistoryTransition`](../RelationalPerimeter/Constitution/HeytingArithmetic/GodelPerimetralHistoryTransition.lean)
+renforce la progression sans modifier les fondations. Il efface d'abord
+l'indice extérieur de la ressource périmétrale : la branche `produced` ne
+contient que la production, tandis que `certified` et `retained` portent le
+témoin certifié. Les readouts sont ensuite obtenus depuis les occurrences
+exactes d'une même `StagePerimetralParticipation`, en passant par l'accord des
+occurrences et par `implicitReadoutExact`.
+
+Le noyau `stageAdvanceKernel` ne reçoit qu'une fonction qui consomme un témoin
+certifié. La production y donne `waiting`, la certification donne
+`authorized (extend witness)` et la rétention reste un état distinct. Son
+instanciation sur les occurrences exactes renvoie `waiting` puis
+`authorized source.advance`. `occurrenceAdvanceNotFactorsThroughUnit` démontre qu'une
+même fonction issue de `Unit` ne peut reproduire ces deux observations. La
+cible publique est extraite du résultat autorisé, puis seulement munie de sa
+participation. `CertifiedPerimetralGodelHistoryProgression` rassemble cette
+participation cible, la progression gödelienne, la compatibilité avec l'API
+antérieure, la non-factorisation et la nécessité déductive décrite ci-dessous.
+La tour `perimetralGodelHistoryStage` itère cette transition ; son égalité
+étage par étage avec `godelHistoryStage` est un théorème de compatibilité, pas
+le procédé de construction de la nouvelle tour.
+
+La fonction récursive `historyDerivationUsesNewest` inspecte toutes les règles
+du calcul. `eraseNewestFreeDerivation` reconstruit dans l'histoire source toute
+dérivation cible qui n'utiliserait pas l'axiome `newest`.
+`sourceBoundaryDerivationUsesNewest` applique cet effacement à une dérivation
+supposée de `G_n`, l'encode en certificat source, puis consomme la
+non-prouvabilité produite de `G_n` pour obtenir une contradiction. Toute
+dérivation de la frontière produite dans `T_(n+1)` utilise donc réellement la
+nouvelle occurrence.
+
+Le contre-test permanent `0 = 0` fixe la portée. Sa dérivation HA existe déjà
+dans l'histoire racine, se préserve dans l'extension qui ajoute de nouveau
+`0 = 0`, et `historyDerivationUsesNewest` y retourne `false`. La propriété de
+nécessité démontrée pour `G_n` n'est donc pas une conséquence triviale de
+l'ajout d'une phrase vraie quelconque. En revanche, cette voie ne réfute pas
+le shell stagewise qui reproduit l'ancienne forme de progression : le
+contre-test `rootUnitStagewiseProgressionShell` remplace même les deux places
+périmétrales de l'ancien produit par `Unit` tout en conservant son rejet exact.
+Aucune séparation générale contre ces shells n'est revendiquée.
+La spécialisation à une histoire HA saine n'est pas davantage présentée comme
+une réfutation d'une présentation contradictoire générique : l'échec attendu
+sur la contradiction arbitraire contrôle seulement qu'elle ne remplace pas la
+fermeture gödelienne exécutée.
+
+Cette nécessité porte sur l'action complète de progression et sur la preuve
+de la frontière source dans la cible. Le lemme terminal isolé qui rejette
+`Truth(G) -> Proof(G)` reste dérivable de la vérité et de la non-prouvabilité
+de `G`; la documentation ne lui attribue pas une dépendance périmétrale qu'il
+n'a pas.
 
 ## Limites restantes distinctes
 
@@ -351,6 +407,8 @@ le raccord direct des étapes exécutées `selfApply` et `certify` aux occurrenc
 périmétrales exactes qui portent leurs sorties. Cette fermeture formelle ne
 change pas la portée sémantique annoncée et ne vaut pas verdict d'audit
 indépendant. La progression constitutive ajoute désormais une séparation
-formelle d'avec l'exclusion syntaxique uniforme et avec la fausseté canonique
-stipulée ; elle ne préjuge pas du verdict d'une nouvelle revue extérieure
-portant sur la révision exacte.
+exacte entre les phases produite et certifiée, non factorisable par `Unit`, et
+une nécessité de l'occurrence `newest` qui échoue pour l'extension par
+`0 = 0`. Elle ne revendique pas de séparation générale contre les shells et ne
+préjuge pas du verdict d'une nouvelle revue extérieure portant sur la révision
+exacte.

@@ -126,6 +126,18 @@ def publicHeytingArithmeticCausalClosureRejection :=
 def publicHeytingArithmeticNegationRejection :=
   RelationalPerimeter.HeytingArithmetic.heytingArithmeticProducedNegationIsUnprovable
 
+def publicPerimetralGodelHistoryStage :=
+  RelationalPerimeter.HeytingArithmetic.perimetralGodelHistoryStage
+
+def publicRootCertifiedPerimetralGodelProgression :=
+  RelationalPerimeter.HeytingArithmetic.certifiedPerimetralGodelHistoryProgression
+    RelationalPerimeter.HeytingArithmetic.rootParticipatingGodelHistoryStage
+
+theorem publicRootProducedBoundaryUsesNewest :
+    RelationalPerimeter.HeytingArithmetic.SourceBoundaryUsesNewestAtAdvance
+      RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage :=
+  RelationalPerimeter.HeytingArithmetic.sourceBoundaryUsesNewestAtAdvance _
+
 theorem publicIndependentAddressingBound
     (input : Nat) (addressing : IndependentProfileAddressing input) :
     2 ^ (input + 1) <= addressing.slotCount :=
@@ -167,6 +179,9 @@ end RelationalPerimeter.Tests.PublicRootImport
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticStrictContinuation
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticCausalClosureRejection
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticNegationRejection
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicPerimetralGodelHistoryStage
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootCertifiedPerimetralGodelProgression
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootProducedBoundaryUsesNewest
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicIndependentAddressingBound
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicNormalizerProgramSize
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicNormalizerMetricAgreement
