@@ -16,6 +16,8 @@ import RelationalPerimeter.Agents.ContinuationSignatures.PublicCertificate
 import RelationalPerimeter.Agents.ContinuationSignatures.ExistingAgent
 import RelationalPerimeter.Agents.ContinuationSignatures.ReachableAgent
 import RelationalPerimeter.Constitution.Continuation.CostModel
+import RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence
+import RelationalPerimeter.Instances.HeytingArithmetic.Godel
 import RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.VariableMasterFutures
 import RelationalPerimeter.Computation.Machine.LiveRoot
 import RelationalPerimeter.Computation.Machine.MasterContract
@@ -99,4 +101,8 @@ operational decomposition.
 #print axioms ConstitutiveSearch.EndogenousDecomposition.RolePolicySpectrum.width_spectrum
 #print axioms ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.PolicySpectrum.class_iff_direct
 #print axioms ConstitutiveSearch.EndogenousDecomposition.UnifiedMaster.PolicySpectrum.every_positive_count
+#print axioms StrongPerimetralTurning.executedGodelPerimetralCorrespondence
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticEffectiveGodelSystem
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelPerimetralCorrespondence
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticSameRegimeAdmissionToEmpty
 /- AXIOM_AUDIT_END -/

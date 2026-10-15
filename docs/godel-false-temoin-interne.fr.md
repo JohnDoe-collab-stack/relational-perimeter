@@ -2,9 +2,13 @@
 
 ## Statut du document
 
-Ce document fixe la cible scientifique à atteindre. Il ne constitue ni une
-preuve de cette cible, ni une affirmation qu'elle est déjà satisfaite par le
-code actuel, ni une modification des fondations de `Relational Perimeter`.
+Ce document fixe la cible scientifique et en constitue désormais le passage
+canonique. La réalisation formelle est portée par les modules génériques
+`RelationalPerimeter.Constitution.Godel.Diagonal` et
+`RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence`, puis par
+l'instance distincte `RelationalPerimeter.Instances.HeytingArithmetic.Godel`.
+Ce statut n'est ni un verdict d'originalité ni un audit indépendant ; les
+revues correspondantes restent séparées dans le registre scientifique.
 
 La réalisation de Heyting Arithmetic (HA) peut établir la non-vacuité des
 prémisses arithmétiques, mais HA reste une instance du cadre. Elle n'est ni le
@@ -488,8 +492,45 @@ Le progrès éventuel porte donc sur l'explicitation formelle de la chaîne, des
 porteurs, des occurrences, des provenances et du changement de régime. Il ne
 porte pas sur la découverte d'un nouveau théorème d'incomplétude.
 
+## Conclusion canonique à portée explicite
+
+Pour toute réalisation de `EffectivelyPresentedSoundGodelSystem`, l'exécution
+`effectiveGodelExecution` produit une phrase diagonale, son point fixe exact,
+sa vérité et sa non-prouvabilité. La présentation
+`godelPerimetralPresentation` est construite depuis ce même témoin ;
+`godelAffirmativeConstitution` conserve le tout positif, la continuation
+stricte, les occurrences ordonnées et leur provenance avant toute hypothèse
+d'admission.
+
+Si cette continuation est admise dans le même régime par
+`GodelPositiveSameRegimeAdmission`, `godelBilateralClosureAttemptOf` applique
+`CircularRefinement.realizesFinal` au témoin positif correspondant. La voie
+explicite projette ensuite la totalisation et son noyau par
+`godelExplicitKernelOf`. `godelExplicitKernelToProducedCompleteness` construit
+alors `Truth(G) → Proof(G)` depuis la contraction positive des extrémités et
+leur identification au même témoin produit, sans consulter les champs négatifs
+de la présentation, de l'attachement ou de la différence contractée.
+`rejectGodelExplicitAdmissionToEmpty` applique cette conversion à la vérité
+produite puis à la non-prouvabilité produite ;
+`rejectGodelExplicitSameRegimeAdmission` convertit seulement ensuite l'`Empty`
+obtenu en `False`. La voie implicite fournit la factorisation symétrique.
+
+`ExecutedGodelPerimetralCorrespondence` conserve simultanément les données
+affirmatives et ces deux rejets : la conclusion porte sur l'admission
+totalisante dans le même régime, non sur l'existence du tout ni sur celle de sa
+continuation. `heytingArithmeticEffectiveGodelSystem` ferme concrètement les
+contrats effectifs et sémantiques requis, et
+`heytingArithmeticGodelPerimetralCorrespondence` applique le théorème générique
+à HA sans identifier HA au cadre.
+
+La portée reste exactement conditionnelle aux contrats de l'interface
+générique et métathéorique pour `Truth(G)`, `Empty` et `False`. Le résultat ne
+prétend ni renforcer le théorème d'incomplétude, ni établir une unicité de
+l'architecture périmétrale, ni exclure toute représentation alternative du
+phénomène.
+
 ## Sources de cadrage
 
-- [Relations primitives et constitution du périmètre](docs/relations-primitives-constitution-perimetre.fr.md)
-- [Procédure de travail scientifique](docs/methode-de-travail-scientifique.fr.md)
-- [`CircularPresentation` et `CircularClosureMeaning`](StrongPerimetralTurning.lean)
+- [Relations primitives et constitution du périmètre](relations-primitives-constitution-perimetre.fr.md)
+- [Procédure de travail scientifique](methode-de-travail-scientifique.fr.md)
+- [`CircularPresentation` et `CircularClosureMeaning`](../StrongPerimetralTurning.lean)

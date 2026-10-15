@@ -201,3 +201,90 @@ RelationalPerimeter.Computation.Machine.ConstitutiveLiveExecution	M15	enforced	O
 RelationalPerimeter.Computation.Machine.LiveRoot	M16	enforced	Public reduced live contract facade
 RelationalPerimeter.Computation.Machine.MasterRuntime	M17	enforced	One master-initialized live production drives the next SAT frontier and routing
 RelationalPerimeter.Computation.Machine.MasterContract	M18	enforced	Exact combined core and SAT routing future contract
+RelationalPerimeter.Constitution.Godel.Diagonal	F	enforced	Executed diagonal syntax semantics effective presentation and the shared produced witness
+RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence	F	enforced	Affirmative perimeter constitution and witness-internal rejection of same-regime totalization
+RelationalPerimeter.Instances.HeytingArithmetic.ArithmeticAxiomChecking	F	enforced	Executable recognition of the six arithmetic schemes and full induction
+RelationalPerimeter.Instances.HeytingArithmetic.ArithmeticFormulaTools	F	enforced	Scoped arithmetic formula constructors, bounds, and coding support
+RelationalPerimeter.Instances.HeytingArithmetic.CodeSubstitution	F	enforced	Numeric substitution program and exact decoded-syntax correspondence
+RelationalPerimeter.Instances.HeytingArithmetic.Coding	F	enforced	Executable decoders and exact round trips for arithmetic syntax
+RelationalPerimeter.Instances.HeytingArithmetic.ConstructiveBetaEncoding	F	enforced	Constructive beta coding of finite natural-number sequences
+RelationalPerimeter.Instances.HeytingArithmetic.Diagonal	F	enforced	External executable diagonalization and its coding laws
+RelationalPerimeter.Instances.HeytingArithmetic.FormulaRaisingMachine	F	enforced	Executable capture-safe variable raising for formulas
+RelationalPerimeter.Instances.HeytingArithmetic.GeneralInstantiation	F	enforced	General quantified instantiation and semantic correctness
+RelationalPerimeter.Instances.HeytingArithmetic.GeneralSubstitutionMachine	F	enforced	Executable simultaneous substitution with scoped correctness
+RelationalPerimeter.Instances.HeytingArithmetic.Godel	F	enforced	Named HA realization of the generic effective Godel system and perimetral correspondence
+RelationalPerimeter.Instances.HeytingArithmetic.HASoundness	F	enforced	Constructive standard-model soundness of HA derivations
+RelationalPerimeter.Instances.HeytingArithmetic.HistoryProofArchiveChecking	F	enforced	History-indexed verification and recovery of complete archives
+RelationalPerimeter.Instances.HeytingArithmetic.HistoryProofChecking	F	enforced	Proof-producing checking for arithmetic and added history axioms
+RelationalPerimeter.Instances.HeytingArithmetic.HistoryProofRuleChecking	F	enforced	History-indexed verification of non-leaf intuitionistic rules
+RelationalPerimeter.Instances.HeytingArithmetic.InternalAddition	F	enforced	Internal representation of addition computations in HA
+RelationalPerimeter.Instances.HeytingArithmetic.InternalBoundedCases	F	enforced	Internal finite case analysis over bounded naturals
+RelationalPerimeter.Instances.HeytingArithmetic.InternalBoundedUniversal	F	enforced	Internal bounded universal reasoning in HA
+RelationalPerimeter.Instances.HeytingArithmetic.InternalConcreteArithmetic	F	enforced	Internal closed addition and multiplication correctness derivations
+RelationalPerimeter.Instances.HeytingArithmetic.InternalDerivationTools	F	enforced	Reusable constructive transformations of internal HA derivations
+RelationalPerimeter.Instances.HeytingArithmetic.InternalDiagonal	F	enforced	Internal HA representation of the diagonal substitution function
+RelationalPerimeter.Instances.HeytingArithmetic.InternalExistentialBlocks	F	enforced	Internal construction and manipulation of existential witness blocks
+RelationalPerimeter.Instances.HeytingArithmetic.InternalExistentialElimination	F	enforced	Internal elimination of represented existential blocks
+RelationalPerimeter.Instances.HeytingArithmetic.InternalFixedPoint	F	enforced	Parametric object-language fixed-point derivations in HA
+RelationalPerimeter.Instances.HeytingArithmetic.InternalFormulaVariableReplacement	F	enforced	Internal derivations for formula-variable replacement programs
+RelationalPerimeter.Instances.HeytingArithmetic.InternalInduction	F	enforced	Reusable internal applications of the HA induction scheme
+RelationalPerimeter.Instances.HeytingArithmetic.InternalMultiplication	F	enforced	Internal representation of multiplication computations in HA
+RelationalPerimeter.Instances.HeytingArithmetic.InternalNaturalCases	F	enforced	Internal zero-or-successor case analysis in HA
+RelationalPerimeter.Instances.HeytingArithmetic.InternalNumeralProofs	F	enforced	Internal derivations of concrete numeral equalities
+RelationalPerimeter.Instances.HeytingArithmetic.InternalOrder	F	enforced	Internal representation of order and bounded comparison
+RelationalPerimeter.Instances.HeytingArithmetic.InternalPRDeterminacy	F	enforced	Internal determinacy of primitive-recursive graph representations
+RelationalPerimeter.Instances.HeytingArithmetic.InternalPrimitiveRecursionRepresentation	F	enforced	Internal HA representation of primitive recursion graphs
+RelationalPerimeter.Instances.HeytingArithmetic.InternalPRNumeralwiseCompiler	F	enforced	Numeralwise HA derivations for primitive-recursive computations
+RelationalPerimeter.Instances.HeytingArithmetic.InternalPRRepresentability	F	enforced	Internal representability theorem for primitive-recursive programs
+RelationalPerimeter.Instances.HeytingArithmetic.InternalRemainderFunctionality	F	enforced	Internal functionality of represented quotient and remainder graphs
+RelationalPerimeter.Instances.HeytingArithmetic.InternalScopedSubstitution	F	enforced	Internal correctness of capture-avoiding scoped substitution
+RelationalPerimeter.Instances.HeytingArithmetic.InternalTermNormalization	F	enforced	Internal HA normalization proofs for closed arithmetic terms
+RelationalPerimeter.Instances.HeytingArithmetic.KeepingScopeSubstitutionMachine	F	enforced	Executable substitution retaining the ambient variable scope
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursive	F	enforced	Primitive-recursive programs, composition, recursion, and evaluation
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveArithmetic	F	enforced	Primitive-recursive arithmetic library used by represented programs
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveArithmeticAxioms	F	enforced	Primitive-recursive recognition of standard HA axiom instances
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveAxiomCorrectness	F	enforced	Soundness and completeness of numeric HA axiom recognition
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveBetaLookup	F	enforced	Primitive-recursive lookup in constructive beta encodings
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveBoolean	F	enforced	Primitive-recursive Boolean combinators with exact semantics
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveCodeSubstitution	F	enforced	Primitive-recursive implementation of numeric formula substitution
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveComparison	F	enforced	Primitive-recursive comparison and equality programs
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveContextOperations	F	enforced	Primitive-recursive coding of contexts and context transformations
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveControl	F	enforced	Primitive-recursive bounded control and finite conjunction
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveDivision	F	enforced	Primitive-recursive quotient and remainder programs
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveEvaluation	F	enforced	Arithmetic evaluation of primitive-recursive program codes
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveFormulaRaising	F	enforced	Primitive-recursive compilation of formula raising
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveGeneralSubstitutionMachine	F	enforced	Primitive-recursive simultaneous-substitution compilation
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveKeepingScopeSubstitution	F	enforced	Primitive-recursive scope-retaining substitution compilation
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveProofCheck	F	enforced	Primitive-recursive verification of complete HA proof archives
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveProofCoding	F	enforced	Primitive-recursive accessors for encoded proof archives and lines
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveProofCompletenessBinary	F	enforced	Completeness of numeric verification for binary and ternary rules
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveProofCompletenessCore	F	enforced	Shared completeness infrastructure for canonical proof encodings
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveProofCompletenessUnary	F	enforced	Completeness of numeric verification for unary derivation rules
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveProofCorrectness	F	enforced	Bidirectional correctness of typed and numeric HA proof verification
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveProofLineChecking	F	enforced	Primitive-recursive dispatcher for exactly the intuitionistic rule tags
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveProofSoundness	F	enforced	Reconstruction of typed intuitionistic derivations from accepted codes
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveSubstitutionMachine	F	enforced	Primitive-recursive compilation of substitution-machine execution
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveSyntaxCoding	F	enforced	Primitive-recursive constructors and destructors for syntax codes
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveSyntaxRecognition	F	enforced	Primitive-recursive well-formedness and scoping recognition
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveSyntaxTrace	F	enforced	Certified traces for primitive-recursive syntax recognition
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveTermRaising	F	enforced	Primitive-recursive compilation of term raising
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveTheoryHistory	F	enforced	Primitive-recursive decoding and membership for theory histories
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveTrace	F	enforced	Primitive-recursive execution traces and bounded trace access
+RelationalPerimeter.Instances.HeytingArithmetic.PrimitiveRecursiveUnpair	F	enforced	Primitive-recursive pairing projections and their correctness
+RelationalPerimeter.Instances.HeytingArithmetic.ProofArchiveChecking	F	enforced	Typed verification of complete finite proof archives
+RelationalPerimeter.Instances.HeytingArithmetic.ProofCalculus	F	enforced	Positive intuitionistic first-order derivations with standard HA axioms and induction
+RelationalPerimeter.Instances.HeytingArithmetic.ProofChronology	F	enforced	Chronological reference invariants for encoded derivation archives
+RelationalPerimeter.Instances.HeytingArithmetic.ProofCoding	F	enforced	Finite proof archives, rule tags, and exact derivation encoding
+RelationalPerimeter.Instances.HeytingArithmetic.ProofDecoding	F	enforced	Certified decoding of proof contexts, formulas, and terms
+RelationalPerimeter.Instances.HeytingArithmetic.ProofLeafChecking	F	enforced	Proof-producing verification of intuitionistic derivation leaves
+RelationalPerimeter.Instances.HeytingArithmetic.ProofRuleChecking	F	enforced	Proof-producing verification of all local derivation rules
+RelationalPerimeter.Instances.HeytingArithmetic.ProofTheoryTransport	F	enforced	Exact transport between root-history derivations and HA derivations
+RelationalPerimeter.Instances.HeytingArithmetic.ProvabilityPredicate	F	enforced	Internal HA proof predicate built from the numeric verifier graph
+RelationalPerimeter.Instances.HeytingArithmetic.Representability	F	enforced	Arithmetic graph language and constructive representation compiler interfaces
+RelationalPerimeter.Instances.HeytingArithmetic.Scoping	F	enforced	Decidable De Bruijn scoping for arithmetic terms and formulas
+RelationalPerimeter.Instances.HeytingArithmetic.Semantics	F	enforced	Standard natural-number semantics and scoped environment invariance
+RelationalPerimeter.Instances.HeytingArithmetic.StrictSyntaxCorrectness	F	enforced	Exact structural recognition of term and formula codes
+RelationalPerimeter.Instances.HeytingArithmetic.Substitution	F	enforced	Capture-avoiding renaming, substitution, and semantic substitution laws
+RelationalPerimeter.Instances.HeytingArithmetic.SubstitutionMachine	F	enforced	Executable capture-avoiding substitution machine
+RelationalPerimeter.Instances.HeytingArithmetic.Syntax	F	enforced	First-order arithmetic syntax, constructive equality, and natural-number coding
+RelationalPerimeter.Instances.HeytingArithmetic.TheoryHistoryCoding	F	enforced	Finite arithmetic-theory histories and their injective codes
