@@ -133,10 +133,45 @@ def publicRootCertifiedPerimetralGodelProgression :=
   RelationalPerimeter.HeytingArithmetic.certifiedPerimetralGodelHistoryProgression
     RelationalPerimeter.HeytingArithmetic.rootParticipatingGodelHistoryStage
 
+def publicRootCompletedPerimetralTarget :=
+  RelationalPerimeter.HeytingArithmetic.completedStageTarget
+    publicRootCertifiedPerimetralGodelProgression.1
+
+theorem publicRootCompletedPerimetralTargetIsAdvance :
+    publicRootCompletedPerimetralTarget =
+      RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage.advance :=
+  RelationalPerimeter.HeytingArithmetic.completedStageOutcome_target_eq_advance
+    _ _ _
+
+def publicRootProgressionAtCompletedTarget :=
+  publicRootCertifiedPerimetralGodelProgression.progressionAtTarget
+
+def publicRootWitnessPhaseDoesNotFactor :=
+  publicRootCertifiedPerimetralGodelProgression.phaseDoesNotFactorThroughWitness
+
+def publicRootTerminalFactsPhaseDoesNotFactor :=
+  publicRootCertifiedPerimetralGodelProgression.phaseDoesNotFactorThroughTerminalFacts
+
+theorem publicRootCompletedTransitionIsExact :
+    RelationalPerimeter.HeytingArithmetic.runCompletedStageTransition
+        RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage
+        RelationalPerimeter.HeytingArithmetic.rootParticipatingGodelHistoryStage.2 =
+      some
+        ⟨RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage.advance⟩ :=
+  RelationalPerimeter.HeytingArithmetic.runCompletedStageTransition_exact _ _
+
 theorem publicRootProducedBoundaryUsesNewest :
     RelationalPerimeter.HeytingArithmetic.SourceBoundaryUsesNewestAtAdvance
       RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage :=
   RelationalPerimeter.HeytingArithmetic.sourceBoundaryUsesNewestAtAdvance _
+
+theorem publicRootProducedBoundaryUsesNewestIffSourceUnprovable :
+    RelationalPerimeter.HeytingArithmetic.SourceBoundaryUsesNewestAtAdvance
+        RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage ↔
+      ¬ RelationalPerimeter.HeytingArithmetic.HistoryProvable
+        RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage.history
+        RelationalPerimeter.HeytingArithmetic.rootGodelHistoryStage.producedSentence :=
+  RelationalPerimeter.HeytingArithmetic.sourceBoundaryUsesNewestAtAdvance_iff_sourceUnprovable _
 
 theorem publicIndependentAddressingBound
     (input : Nat) (addressing : IndependentProfileAddressing input) :
@@ -181,7 +216,14 @@ end RelationalPerimeter.Tests.PublicRootImport
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicHeytingArithmeticNegationRejection
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicPerimetralGodelHistoryStage
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootCertifiedPerimetralGodelProgression
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootCompletedPerimetralTarget
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootCompletedPerimetralTargetIsAdvance
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootProgressionAtCompletedTarget
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootWitnessPhaseDoesNotFactor
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootTerminalFactsPhaseDoesNotFactor
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootCompletedTransitionIsExact
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootProducedBoundaryUsesNewest
+#print axioms RelationalPerimeter.Tests.PublicRootImport.publicRootProducedBoundaryUsesNewestIffSourceUnprovable
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicIndependentAddressingBound
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicNormalizerProgramSize
 #print axioms RelationalPerimeter.Tests.PublicRootImport.publicNormalizerMetricAgreement

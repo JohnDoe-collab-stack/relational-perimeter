@@ -1421,7 +1421,7 @@
     {
       "id": "GODEL_AFFIRMATIVE_CONSTITUTION",
       "kind": "causal",
-      "scope": "Forme sémantique fondée sur la correction, avec des niveaux explicitement séparés. Le théorème générique reste conditionnel pour toute EffectivelyPresentedSoundGodelSystem et le diagnostic arithmétique abstrait reste conditionnel pour toute SemanticallyDefinedProofArithmeticTheory. Le dépôt construit en plus deux réalisations nommées et compatibles de l'arithmétique de Heyting : l'instance effective historique et une instance du langage arithmétique fixé dont la vérité vit dans Type, dont la relation binaire représente exactement le même haProofCheck dans les deux sens et dont la correction informative reconstruit les témoins. La chaîne produit une même phrase HA vraie dont ni elle ni sa négation n'ont de dérivation vérifiée, fixe l'issue consommée et construit une continuation stricte. La frontière sélective construit séparément un certificat accepté de 0 = 0, sa vérité et sa complétude dirigée locale, puis prouve que cette phrase diffère de G et que cette propriété positive ne fournit pas la complétude interdite en G ; le système dégénéré conserve l'ancien paquet mais rejette cette frontière. La fermeture dirigée causale lit le candidat depuis la différence finale, consomme sa provenance enregistrée, fournit Truth(G) vers Proof(G), puis rencontre le point fixe, la correction et la représentation. La fermeture spécifiée historique, fondée sur Truth(G) = Proof(G), se factorise vers cette obligation dirigée sans être présentée comme un critère caractéristique de l'incomplétude. Les occurrences exécutées selfApply et certify restent distinctes des occurrences périmétrales et leur raccord identifie uniquement les ressources effectivement transmises. Enfin, la progression HA des histoires finies saines ajoute exactement la phrase G_n produite à T_(n+1), consomme cette occurrence pour construire son certificat accepté dans la cible, puis y produit une phrase G_(n+1) vraie, non prouvable et distincte. L'action lit les occurrences périmétrales de production et de certification d'une même participation, distingue waiting de authorized et ne se factorise pas par Unit ; la tour suivante est extraite de cette autorisation. Toute dérivation cible de G_n consomme l'axiome newest, car son effacement produirait un certificat interdit dans la source, tandis qu'une dérivation préservée de 0 = 0 montre que cette nécessité échoue pour une phrase déjà prouvable. Le rejet historique de l'exclusion de la frontière vise exactement le postulat déjà accepté et ne constitue pas une séparation générale contre les shells stagewise ; la spécialisation HA ne réfute pas non plus une présentation contradictoire générique. La portée n'est ni Rosser ni une conclusion sous simple cohérence.",
+      "scope": "Forme sémantique fondée sur la correction, avec des niveaux explicitement séparés. Le théorème générique reste conditionnel pour toute EffectivelyPresentedSoundGodelSystem et le diagnostic arithmétique abstrait reste conditionnel pour toute SemanticallyDefinedProofArithmeticTheory. Le dépôt construit en plus deux réalisations nommées et compatibles de l'arithmétique de Heyting : l'instance effective historique et une instance du langage arithmétique fixé dont la vérité vit dans Type, dont la relation binaire représente exactement le même haProofCheck dans les deux sens et dont la correction informative reconstruit les témoins. La chaîne produit une même phrase HA vraie dont ni elle ni sa négation n'ont de dérivation vérifiée, fixe l'issue consommée et construit une continuation stricte. La frontière sélective construit séparément un certificat accepté de 0 = 0, sa vérité et sa complétude dirigée locale, puis prouve que cette phrase diffère de G et que cette propriété positive ne fournit pas la complétude interdite en G ; le système dégénéré conserve l'ancien paquet mais rejette cette frontière. La fermeture dirigée causale lit le candidat depuis la différence finale, consomme sa provenance enregistrée, fournit Truth(G) vers Proof(G), puis rencontre le point fixe, la correction et la représentation. La fermeture spécifiée historique, fondée sur Truth(G) = Proof(G), se factorise vers cette obligation dirigée sans être présentée comme un critère caractéristique de l'incomplétude. Les occurrences exécutées selfApply et certify restent distinctes des occurrences périmétrales et leur raccord identifie uniquement les ressources effectivement transmises. Enfin, la progression HA des histoires finies saines ajoute exactement la phrase G_n produite à T_(n+1), consomme cette occurrence pour construire son certificat accepté dans la cible, puis y produit une phrase G_(n+1) vraie, non prouvable et distincte. L'action lit dans l'ordre les occurrences périmétrales de production, de certification et de résidu d'une même participation. Certification et résidu portent le même témoin mais produisent authorized et retained : cette famille ne se factorise ni par le témoin, ni par le seul stade source, ni par Unit, ni par la paire terminale Truth(G_n) et ¬Proof_n(G_n). La cible n'est extraite qu'après achèvement du protocole ; elle indexe les faits de progression et le stade suivant de la tour. L'objet source.advance et l'ancienne progression restent définissables indépendamment comme compatibilités, sans revendication d'unicité explicative. Toute dérivation cible de G_n consomme l'axiome newest, car son effacement produirait un certificat interdit dans la source. Une caractérisation générale prouve cependant que cette nécessité équivaut exactement à la non-dérivabilité source pour toute histoire et toute phrase ajoutée : elle échoue pour 0 = 0 déjà prouvable et vaut aussi pour une phrase fausse non dérivable. Elle n'est donc pas utilisée comme surplus explicatif ; celui-ci est porté par la non-factorisation de phase séparée. Le rejet historique de l'exclusion de la frontière vise exactement le postulat déjà accepté. Aucune séparation générale contre les shells stagewise n'est revendiquée ni retenue comme critère ; la spécialisation HA ne réfute pas non plus une présentation contradictoire générique. La portée n'est ni Rosser ni une conclusion sous simple cohérence.",
       "anchors": [
         {
           "path": "docs/constitution-affirmative-incompletude-godel.fr.md",
@@ -1548,7 +1548,52 @@
         },
         {
           "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
+          "name": "RelationalPerimeter.HeytingArithmetic.residualOccurrenceReturnedImplicit_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
           "name": "RelationalPerimeter.HeytingArithmetic.occurrenceAdvanceNotFactorsThroughUnit",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
+          "name": "RelationalPerimeter.HeytingArithmetic.stageWitnessPhaseDoesNotFactor",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
+          "name": "RelationalPerimeter.HeytingArithmetic.stageTerminalFactsPhaseDoesNotFactor",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
+          "name": "RelationalPerimeter.HeytingArithmetic.stagePhaseDoesNotFactorThroughStage",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
+          "name": "RelationalPerimeter.HeytingArithmetic.stagePhaseDoesNotFactorThroughUnit",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
+          "name": "RelationalPerimeter.HeytingArithmetic.runStageTransitionResources",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
+          "name": "RelationalPerimeter.HeytingArithmetic.runCompletedStageTransition_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
+          "name": "RelationalPerimeter.HeytingArithmetic.completedStageOutcome_target_eq_advance",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
+          "name": "RelationalPerimeter.HeytingArithmetic.godelHistoryProgressionAtCompletedTarget",
           "role": "production"
         },
         {
@@ -1564,6 +1609,16 @@
         {
           "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
           "name": "RelationalPerimeter.HeytingArithmetic.sourceBoundaryDerivationUsesNewest",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
+          "name": "RelationalPerimeter.HeytingArithmetic.boundaryUsesNewestAfterExtension_iff_sourceUnprovable",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.HeytingArithmetic.GodelPerimetralHistoryTransition",
+          "name": "RelationalPerimeter.HeytingArithmetic.sourceBoundaryUsesNewestAtAdvance_iff_sourceUnprovable",
           "role": "production"
         },
         {
@@ -1868,12 +1923,107 @@
         },
         {
           "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootCertificationAndResidualCarrySameWitness",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootCanonicalTransitionCompletesExactly",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootResourceTraceCompletes",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootResourceTraceRejectsOmittedProduction",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootResourceTraceRejectsOmittedCertification",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootResourceTraceRejectsOmittedResidual",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootResourceTraceRejectsResidualBeforeCertification",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootResourceTraceRejectsResidualReplacingCertification",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootResourceTraceRejectsRepeatedCertification",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootProducedConsumerRejectsCertification",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootCertifiedConsumerRejectsResidual",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootRetainedConsumerRejectsRepeatedCertification",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootWitnessPhaseDoesNotFactor",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootTerminalFactsPhaseDoesNotFactor",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootStagePhaseDoesNotFactor",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootUnitPhaseDoesNotFactor",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootProgressionAtCompletedTarget",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootTowerSuccessorUsesCompletedTarget",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
           "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootOccurrenceAdvanceDoesNotFactorThroughUnit",
           "role": "test"
         },
         {
           "module": "Tests.GodelPerimetralHistoryTransitionRegression",
           "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootCanonicalProducedBoundaryProofUsesNewest",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootProducedBoundaryUsesNewestIffSourceUnprovable",
           "role": "test"
         },
         {
@@ -1889,6 +2039,11 @@
         {
           "module": "Tests.GodelPerimetralHistoryTransitionRegression",
           "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.reflexiveZeroExtensionFailsBoundaryNecessity",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelPerimetralHistoryTransitionRegression",
+          "name": "RelationalPerimeter.Tests.GodelPerimetralHistoryTransitionRegression.rootFalseSentenceRequiresNewest",
           "role": "test"
         },
         {
@@ -1924,10 +2079,10 @@
       ],
       "checks": [],
       "dependencies": {
-        "formation": "Les types de formule, phrase, preuve, vérité, équivalence, témoin produit, occurrences exécutées, occurrences périmétrales, occurrence résiduelle, continuation et interprétation finale restent indexés par le système reçu, par la phrase effectivement construite et par leurs histoires respectives. Les identités des occurrences exécutées et périmétrales restent distinctes ; le raccord porte sur leurs ressources exactes. Dans les réalisations HA, Sentence et Predicate portent leur preuve de scoping ; le langage arithmétique fixé est traduit vers cette syntaxe par des codages décodables et sa vérité conserve les témoins existentiels dans Type. La relation de preuve est la traduction certifiée du graphe de l'histoire racine. Le point fixe interne est construit pour la formule cible reçue, tandis que la frontière sélective reçoit seulement une phrase d'ancrage et son certificat vérifié. La progression ajoute une indexation par TheoryHistory et par SoundTheoryHistory : chaque étape cible est formée par l'extension exacte de l'histoire source avec la phrase produite par cette source. La ressource de phase observable n'est pas indexée par un témoin extérieur : produced porte seulement la production, et la cible participante est indexée par le stade extrait du readout certified.",
-        "execution": "Le même haProofCheck exécute le contrôle numérique de l'histoire racine dans les deux réalisations HA, et son dispatcher énumère exactement les tags intuitionnistes 0 à 21 ; le tag classique 22 est rejeté. Tout code accepté est reconstruit en dérivation intuitionniste exacte, toute dérivation HA peut être encodée en certificat accepté et l'exécution du graphe primitif récursif construit les réalisateurs informatifs de la relation de preuve. L'histoire gödelienne exécute received, diagonalize, selfApply, certify et continue ; arithmeticHistoryOccurrences extrait les deux occurrences de cette histoire et prouve leur adjacence. Chaque producteur consomme la sortie typée du précédent, puis executedOccurrenceCorrespondence identifie cette production et ce témoin aux ressources portées par les positions périmétrales exactes. À l'ancrage positif, anchorCompleteness retourne le certificat déjà construit ; le certificat StrongPerimetralTurningCertificate fournit séparément le déploiement et le pas libre de la continuation sans modification des sources fondationnelles. Pour chaque étape de la progression, l'exécution source produit G_n ; advance stocke exactement G_n comme occurrence newest, puis l'encode en certificat accepté par le vérificateur de T_(n+1), qui exécute ensuite sa propre production de G_(n+1). Les readouts de production et de certification proviennent des occurrences de la même participation ; le noyau paramétrique renvoie waiting puis authorized, la cible est extraite de cette seconde sortie et la nouvelle tour itère cette cible avant de construire sa participation.",
-        "proof": "Pour HA, provHA est construit depuis le graphe arithmétique du même vérificateur primitif récursif et provHA_spec relie sa vérité à une dérivation HA. La correction informative haDerivation_realizes et la représentabilité constructive du graphe ferment aussi les champs de SemanticallyDefinedProofArithmeticTheory sans convertir une existence propositionnelle en témoin calculatoire. La diagonalisation paramétrique est une dérivation objet intuitionniste ; la certification dérive du point fixe exact la non-prouvabilité puis la vérité de la même phrase. Sa négation est rejetée par la correction d'une preuve supposée contre ce témoin de vérité. La frontière sélective dérive la vérité de 0 = 0 depuis son certificat, distingue cet ancrage de G en transportant une preuve supposée le long de leur égalité, rejette toute réduction vers la complétude en G et échoue pour le système sans preuve. La fermeture dirigée lit son candidat depuis recordedDifference, consomme recordedProvenance pour l'identifier au témoin exécuté, puis fournit Truth(G) vers Proof(G). Le rejet terminal est redérivé du point fixe exact, de la correction et de la représentation ; le diagnostic abstrait demeure séparé et conditionnel. Dans la progression, la correction de l'histoire étendue consomme la vérité produite de G_n ; sa preuve dans la cible et la non-prouvabilité de G_(n+1) imposent leur différence. Le même certificat cible réfute l'exclusion exacte de la frontière source et la stationnarité, tandis que la vérité requise pour une extension saine exclut la fausseté canonique. La non-factorisation compare les deux readouts réels. L'essentialité de newest efface une dérivation supposée indépendante, l'encode dans la source et consomme producedNoProof ; le contre-test 0 = 0 fournit inversement une dérivation préservée dont le readout vaut false.",
-        "transport": "Les traductions entre le langage arithmétique fixé et la syntaxe HA disposent de retours certifiés et de lois de décodage ; la formule binaire de preuve est reliée au graphe exact du même vérificateur dans les deux directions. Les équivalences transportent séparément preuves et vérités jusqu'à l'hypothèse de fermeture. La phrase d'ancrage et G restent distinctes, et son certificat n'est transporté vers G que sous l'égalité supposée pour obtenir la contradiction. La provenance enregistrée impose l'égalité entre le candidat lu et le témoin transmis avant tout transport de la contraction. Le raccord exécuté-périmétral conserve séparément les occurrences de selfApply et certify dans l'histoire reçue, les occurrences produite et certifiée dans la continuation et leurs deux ordres ; seules la production et la certification partagées sont identifiées. ArithmeticExecutedGodelCausalParticipation conserve aussi la séparation des occurrences intérieures avec l'occurrence résiduelle dans l'extension stricte ; ni la production, ni la continuation, ni le candidat final ne sont reconstruits indépendamment au point de consommation. Le passage T_n vers T_(n+1) conserve séparément les anciennes dérivations et ajoute l'occurrence produite comme nouveau postulat ; il ne transporte pas réversiblement la non-prouvabilité source, puisque G_n devient prouvable dans la cible et qu'une nouvelle frontière distincte est construite. L'effacement de l'indice conserve séparément produced, certified et retained ; l'égalité avec l'ancienne tour sert seulement de compatibilité et ne reconstruit pas la nouvelle transition."
+        "formation": "Les types de formule, phrase, preuve, vérité, équivalence, témoin produit, occurrences exécutées, occurrences périmétrales, occurrence résiduelle, continuation et interprétation finale restent indexés par le système reçu, par la phrase effectivement construite et par leurs histoires respectives. Les identités des occurrences exécutées et périmétrales restent distinctes ; le raccord porte sur leurs ressources exactes. Dans les réalisations HA, Sentence et Predicate portent leur preuve de scoping ; le langage arithmétique fixé est traduit vers cette syntaxe par des codages décodables et sa vérité conserve les témoins existentiels dans Type. La relation de preuve est la traduction certifiée du graphe de l'histoire racine. Le point fixe interne est construit pour la formule cible reçue, tandis que la frontière sélective reçoit seulement une phrase d'ancrage et son certificat vérifié. La progression ajoute une indexation par TheoryHistory et par SoundTheoryHistory : chaque étape cible est formée par l'extension exacte de l'histoire source avec la phrase produite par cette source. La ressource de phase observable n'est pas indexée par un témoin extérieur : produced porte seulement la production, tandis que certified et retained portent le même témoin sous deux phases distinctes. SourceTerminalGodelFacts réunit séparément la vérité et la non-prouvabilité de la frontière source, sans indice de phase. Le paquet public est indexé par un CompletedStageOutcome effectivement construit et les faits de progression mentionnent la cible extraite de cet achèvement.",
+        "execution": "Le même haProofCheck exécute le contrôle numérique de l'histoire racine dans les deux réalisations HA, et son dispatcher énumère exactement les tags intuitionnistes 0 à 21 ; le tag classique 22 est rejeté. Tout code accepté est reconstruit en dérivation intuitionniste exacte, toute dérivation HA peut être encodée en certificat accepté et l'exécution du graphe primitif récursif construit les réalisateurs informatifs de la relation de preuve. L'histoire gödelienne exécute received, diagonalize, selfApply, certify et continue ; arithmeticHistoryOccurrences extrait les deux occurrences de cette histoire et prouve leur adjacence. Chaque producteur consomme la sortie typée du précédent, puis executedOccurrenceCorrespondence identifie cette production et ce témoin aux ressources portées par les positions périmétrales exactes. À l'ancrage positif, anchorCompleteness retourne le certificat déjà construit ; le certificat StrongPerimetralTurningCertificate fournit séparément le déploiement et le pas libre de la continuation sans modification des sources fondationnelles. Pour chaque étape de la progression, l'exécution source produit G_n ; advance stocke exactement G_n comme occurrence newest, puis l'encode en certificat accepté par le vérificateur de T_(n+1), qui exécute ensuite sa propre production de G_(n+1). Les readouts de production, de certification et de résidu proviennent des occurrences réelles de la même participation. Trois consommateurs exécutent ces ressources dans cet ordre, refusent les autres tags, conservent dans l'autorisation la cible construite à la certification et n'atteignent Completion qu'après le résidu. La tour itère cette cible achevée avant de construire sa participation. La projection publique phaseDoesNotFactorThroughTerminalFacts applique la même action aux readouts de certification et de résidu et refuse leur factorisation par le même couple terminal.",
+        "proof": "Pour HA, provHA est construit depuis le graphe arithmétique du même vérificateur primitif récursif et provHA_spec relie sa vérité à une dérivation HA. La correction informative haDerivation_realizes et la représentabilité constructive du graphe ferment aussi les champs de SemanticallyDefinedProofArithmeticTheory sans convertir une existence propositionnelle en témoin calculatoire. La diagonalisation paramétrique est une dérivation objet intuitionniste ; la certification dérive du point fixe exact la non-prouvabilité puis la vérité de la même phrase. Sa négation est rejetée par la correction d'une preuve supposée contre ce témoin de vérité. La frontière sélective dérive la vérité de 0 = 0 depuis son certificat, distingue cet ancrage de G en transportant une preuve supposée le long de leur égalité, rejette toute réduction vers la complétude en G et échoue pour le système sans preuve. La fermeture dirigée lit son candidat depuis recordedDifference, consomme recordedProvenance pour l'identifier au témoin exécuté, puis fournit Truth(G) vers Proof(G). Le rejet terminal est redérivé du point fixe exact, de la correction et de la représentation ; le diagnostic abstrait demeure séparé et conditionnel. Dans la progression, la correction de l'histoire étendue consomme la vérité produite de G_n ; sa preuve dans la cible et la non-prouvabilité de G_(n+1) imposent leur différence. Le même certificat cible réfute l'exclusion exacte de la frontière source et la stationnarité, tandis que la vérité requise pour une extension saine exclut la fausseté canonique. La non-factorisation principale compare les readouts de certification et de résidu de la même participation : ils portent littéralement le même producedWitness mais produisent authorized et retained, ce qui exclut une factorisation simultanée par le témoin, le stade, Unit ou la paire terminale Truth(G_n) et ¬Proof_n(G_n). L'essentialité de newest efface une dérivation supposée indépendante, l'encode dans la source et consomme producedNoProof. Sa réciproque préserve toute dérivation source sans newest ; la caractérisation obtenue vaut pour toute histoire et toute phrase. Le contrôle 0 = 0 montre l'échec pour une phrase déjà prouvable et le contrôle falseSentence montre le succès pour une phrase fausse non dérivable. Newest n'est donc pas compté comme surplus explicatif.",
+        "transport": "Les traductions entre le langage arithmétique fixé et la syntaxe HA disposent de retours certifiés et de lois de décodage ; la formule binaire de preuve est reliée au graphe exact du même vérificateur dans les deux directions. Les équivalences transportent séparément preuves et vérités jusqu'à l'hypothèse de fermeture. La phrase d'ancrage et G restent distinctes, et son certificat n'est transporté vers G que sous l'égalité supposée pour obtenir la contradiction. La provenance enregistrée impose l'égalité entre le candidat lu et le témoin transmis avant tout transport de la contraction. Le raccord exécuté-périmétral conserve séparément les occurrences de selfApply et certify dans l'histoire reçue, les occurrences produite et certifiée dans la continuation et leurs deux ordres ; seules la production et la certification partagées sont identifiées. ArithmeticExecutedGodelCausalParticipation conserve aussi la séparation des occurrences intérieures avec l'occurrence résiduelle dans l'extension stricte ; ni la production, ni la continuation, ni le candidat final ne sont reconstruits indépendamment au point de consommation. Le passage T_n vers T_(n+1) conserve séparément les anciennes dérivations et ajoute l'occurrence produite comme nouveau postulat ; il ne transporte pas réversiblement la non-prouvabilité source, puisque G_n devient prouvable dans la cible et qu'une nouvelle frontière distincte est construite. L'effacement de l'indice conserve séparément produced, certified et retained ; l'oubli vers les seuls faits terminaux perd précisément la distinction authorized/retained et ne permet pas de reconstruire simultanément les deux observations. La cible de la progression est d'abord extraite de Completion ; l'égalité prouvée avec source.advance transporte ensuite les preuves historiques vers l'ancienne API. L'égalité avec l'ancienne tour reste une compatibilité aval et ne reconstruit pas la nouvelle transition."
       },
       "consumers": [],
       "source_sha256": "8d048f1891fbca52cf41132bab964961a7981c84bc6d64efbaec2b190cb3608f",

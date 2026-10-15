@@ -84,7 +84,8 @@ compatibilité abstraite : le contre-test permanent `abstractDegenerateSystem`
 montre qu'elle accepte un univers singleton sans preuve. Elle n'est donc plus
 utilisée seule comme évidence de la correspondance arithmétique. La cible
 publique renforcée abstraite est
-`semanticallyDefinedArithmeticGodelDiagnostic`. Elle ajoute au raccord R1 la
+`semanticallyDefinedArithmeticGodelDiagnostic`. Elle ajoute à l'interface à
+relation de preuve explicite la
 conséquence vérifiée que la phrase produite ne peut être aucune égalité
 réflexive, puisque ces égalités possèdent une dérivation vérifiée, exclut
 formellement tout vérificateur constamment faux, et compare dans le même
@@ -342,21 +343,46 @@ l'indice extérieur de la ressource périmétrale : la branche `produced` ne
 contient que la production, tandis que `certified` et `retained` portent le
 témoin certifié. Les readouts sont ensuite obtenus depuis les occurrences
 exactes d'une même `StagePerimetralParticipation`, en passant par l'accord des
-occurrences et par `implicitReadoutExact`.
+occurrences et par `implicitReadoutExact`. La lecture résiduelle ne stipule pas
+une valeur : elle localise la nouvelle occurrence de l'extension, l'identifie
+à l'occurrence canonique de continuation de la frontière finale et lit sa
+source effective. Elle fournit ainsi `continued source.producedWitness`, puis
+son effacement fournit `retained source.producedWitness`.
 
 Le noyau `stageAdvanceKernel` ne reçoit qu'une fonction qui consomme un témoin
 certifié. La production y donne `waiting`, la certification donne
 `authorized (extend witness)` et la rétention reste un état distinct. Son
-instanciation sur les occurrences exactes renvoie `waiting` puis
-`authorized source.advance`. `occurrenceAdvanceNotFactorsThroughUnit` démontre qu'une
-même fonction issue de `Unit` ne peut reproduire ces deux observations. La
-cible publique est extraite du résultat autorisé, puis seulement munie de sa
-participation. `CertifiedPerimetralGodelHistoryProgression` rassemble cette
-participation cible, la progression gödelienne, la compatibilité avec l'API
-antérieure, la non-factorisation et la nécessité déductive décrite ci-dessous.
-La tour `perimetralGodelHistoryStage` itère cette transition ; son égalité
-étage par étage avec `godelHistoryStage` est un théorème de compatibilité, pas
-le procédé de construction de la nouvelle tour.
+instanciation sur les occurrences exactes renvoie successivement `waiting`,
+`authorized source.advance` et `retained source.advance`. Les deux dernières
+observations portent littéralement le même `source.producedWitness`, mais leurs
+phases diffèrent. `stageWitnessPhaseDoesNotFactor` démontre donc qu'une fonction
+du seul témoin ne peut les reproduire simultanément ; les variantes par le
+seul stade source ou par `Unit` échouent pour la même famille de deux lois.
+`stageTerminalFactsPhaseDoesNotFactor` spécialise cette non-factorisation aux
+seuls faits terminaux `Truth(G_n)` et `¬Proof_n(G_n)` : même réunis, ils ne
+déterminent pas si l'observation exécutée est l'autorisation de certification
+ou la rétention résiduelle. Ce résultat ne nie pas qu'une fonction constante
+puisse reconstruire une valeur isolée ; il porte sur les deux observations de
+phase d'une même participation.
+
+`runCompletedStageTransition` lit ensuite les occurrences réelles dans l'ordre
+production, certification, résidu. Trois consommateurs totaux et séparés
+refusent chaque autre tag : la certification construit une autorisation et le
+résidu transforme cette même autorisation en achèvement sans reconstruire la
+cible. `CompletedStageOutcome` ne fournit une cible publique qu'à partir de cet
+achèvement. Les faits de `GodelHistoryProgressionAtTarget` et la participation
+suivante sont indexés par cette cible ; l'ancien
+`GodelHistoryProgression source` n'est obtenu qu'ensuite par transport le long
+du théorème `completedStageOutcome_target_eq_advance`.
+
+`CertifiedPerimetralGodelHistoryProgression` rassemble cet achèvement, les
+faits à sa cible, sa participation et la non-factorisation par le témoin ; sa
+projection `phaseDoesNotFactorThroughTerminalFacts` expose séparément la
+non-factorisation par les deux faits terminaux. La tour
+`perimetralGodelHistoryStage` itère la cible de ce paquet achevé ; son égalité
+étage par étage avec `godelHistoryStage` et sa projection vers l'ancienne
+progression sont des théorèmes de compatibilité, pas le procédé de construction
+de la nouvelle tour.
 
 La fonction récursive `historyDerivationUsesNewest` inspecte toutes les règles
 du calcul. `eraseNewestFreeDerivation` reconstruit dans l'histoire source toute
@@ -365,17 +391,29 @@ dérivation cible qui n'utiliserait pas l'axiome `newest`.
 supposée de `G_n`, l'encode en certificat source, puis consomme la
 non-prouvabilité produite de `G_n` pour obtenir une contradiction. Toute
 dérivation de la frontière produite dans `T_(n+1)` utilise donc réellement la
-nouvelle occurrence.
+nouvelle occurrence. La réciproque est maintenant formalisée :
+`boundaryUsesNewestAfterExtension_iff_sourceUnprovable` établit, pour toute
+histoire et toute phrase ajoutée, que cette nécessité équivaut exactement à
+la non-dérivabilité dans la source ;
+`sourceBoundaryUsesNewestAtAdvance_iff_sourceUnprovable` en donne l'instance
+gödelienne. Cette propriété n'est donc pas présentée comme un surplus par
+rapport à la non-prouvabilité terminale.
 
 Le contre-test permanent `0 = 0` fixe la portée. Sa dérivation HA existe déjà
 dans l'histoire racine, se préserve dans l'extension qui ajoute de nouveau
 `0 = 0`, et `historyDerivationUsesNewest` y retourne `false`. La propriété de
 nécessité démontrée pour `G_n` n'est donc pas une conséquence triviale de
-l'ajout d'une phrase vraie quelconque. En revanche, cette voie ne réfute pas
-le shell stagewise qui reproduit l'ancienne forme de progression : le
+l'ajout d'une phrase vraie quelconque. Le contrôle
+`rootFalseSentenceRequiresNewest` montre symétriquement qu'une phrase fausse
+mais non dérivable satisfait aussi la nécessité : c'est bien la
+non-dérivabilité, et non le caractère gödelien, que ce diagnostic mesure.
+
+La séparation générale d'avec les architectures stagewise n'est pas un
+critère du résultat revendiqué. Le shell stagewise reproduit l'ancienne forme
+de progression : le
 contre-test `rootUnitStagewiseProgressionShell` remplace même les deux places
 périmétrales de l'ancien produit par `Unit` tout en conservant son rejet exact.
-Aucune séparation générale contre ces shells n'est revendiquée.
+Aucune séparation générale contre ces shells n'est revendiquée ni requise.
 La spécialisation à une histoire HA saine n'est pas davantage présentée comme
 une réfutation d'une présentation contradictoire générique : l'échec attendu
 sur la contradiction arbitraire contrôle seulement qu'elle ne remplace pas la
@@ -406,9 +444,14 @@ relation de preuve représentée dans les deux sens. E3 est fermée localement p
 le raccord direct des étapes exécutées `selfApply` et `certify` aux occurrences
 périmétrales exactes qui portent leurs sorties. Cette fermeture formelle ne
 change pas la portée sémantique annoncée et ne vaut pas verdict d'audit
-indépendant. La progression constitutive ajoute désormais une séparation
-exacte entre les phases produite et certifiée, non factorisable par `Unit`, et
-une nécessité de l'occurrence `newest` qui échoue pour l'extension par
-`0 = 0`. Elle ne revendique pas de séparation générale contre les shells et ne
-préjuge pas du verdict d'une nouvelle revue extérieure portant sur la révision
-exacte.
+indépendant. La progression constitutive exécute désormais la séquence
+production-certification-résidu jusqu'à un achèvement dont la cible indexe les
+faits suivants. Les phases certification et résidu portent le même témoin mais
+leurs observations ne se factorisent ni par ce témoin, ni par le seul stade,
+ni par `Unit`, ni par le couple terminal `Truth(G_n)` et `¬Proof_n(G_n)`.
+La caractérisation générale de `newest` enregistre au contraire son
+équivalence exacte avec la non-dérivabilité source et empêche de l'utiliser
+comme surplus explicatif. La séparation contre tous les shells reste hors de
+la portée revendiquée et ne constitue pas un critère d'acceptation. Cette
+correction locale ne préjuge pas du verdict d'une nouvelle revue extérieure
+portant sur la révision exacte.
