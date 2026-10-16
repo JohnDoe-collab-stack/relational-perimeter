@@ -5,14 +5,14 @@
 Ce document est un plan de travail. Il ne vaut ni preuve obtenue, ni nouvelle
 affirmation scientifique du dépôt, ni audit extérieur.
 
-Le travail doit repartir de `main` au commit exact
-`c6711cc790ba5e0bb6bbe777ab89dc265b6d87b9`. La branche de travail préparée
-est `work/godel-regroupement-raccord` et pointe actuellement sur ce même
-commit. L'implémentation a commencé dans l'arbre de travail, sans commit ni
-push. Les étapes B à K sont désormais implémentées localement. Le gel de
-l'affirmation scientifique dans `docs/scientific-claims.json` reste différé :
-la procédure exige d'abord un commit de référence contenant les nouveaux
-fichiers, et aucun commit n'est autorisé sans demande humaine explicite.
+Le travail est reparti de `main` au commit exact
+`c6711cc790ba5e0bb6bbe777ab89dc265b6d87b9`. La branche
+`work/godel-regroupement-raccord` possède désormais le commit de référence
+`5492a85c0108a7889e08451f9fab6c9eebf4a082`, qui contient les étapes B à K,
+les tests et les passages canoniques. Aucun push n'a été effectué. Le registre
+scientifique est préparé dans l'arbre suivant ce commit, avec une révision
+d'évidence propre à la nouvelle affirmation afin de ne pas déplacer l'audit
+gödelien historique.
 
 ### Registre d'exécution du plan
 
@@ -25,7 +25,7 @@ fichiers, et aucun commit n'est autorisé sans demande humaine explicite.
 | B.5 audit local | blocs `AXIOM_AUDIT` du module et du test | sans axiome |
 | B.6 intégration | `scripts/verify.ps1`, dont `lake build` complet | réussi : 354 jobs, 352 fichiers Lean vérifiés |
 | Contrôle de toutes les constantes | audit global compilé | réussi : 30 127 constantes, 351 modules, 510 exceptions générées, 0 exception écrite |
-| Contrôle scientifique | `--self-test`, `--static`, `--lean` avec Python 3.12 du runtime de travail | réussi : 19 affirmations, 92 déclarations statiques, surfaces Lean publiques et de test valides ; revues préexistantes toujours ouvertes |
+| Contrôle scientifique | `--self-test`, `--static`, `--lean` avec Python 3.12 du runtime de travail | réussi : 20 affirmations, 108 déclarations, dont 88 publiques et 20 de test ; revues déclarées toujours visibles |
 | C. tour partagée | journal, six phases, occurrences fraîches et persistance gödelienne | construit ; audit local sans axiome |
 | D. ressources exécutées | source/limite, provenance, équivalence relationnelle positive et readout postérieur | construit ; audit local sans axiome |
 | E–G. regroupement | chaîne chronologique de profils exécutés, curseur fini ancien-vers-récent, rang exact du nombre restant, forme normale `target`, consommation ordonnée de toutes les charges avec code et `Near`, action cible exacte, préservation, cohérence et non-identification | construit ; audit local sans axiome |
@@ -34,7 +34,7 @@ fichiers, et aucun commit n'est autorisé sans demande humaine explicite.
 | J. raccord terminal | producteur maître universel source–regroupement–limite, aucune exécution parallèle ni rejeu d'un payload formé, spécialisation canonique exacte au premier run, transport des occurrences à travers ses deux requêtes possédées, profondeurs 7 et 13, convergence, readout, `TotalLoop` et restriction d'une fermeture globale cohérente sur les labels antérieurs | construit ; audit local sans axiome |
 | K. instance HA | raccord concret sur l'exécution HA existante | construit ; audit local sans axiome |
 | Mutations typées | périmètre indépendant, source nue, sortie arbitraire, réponse directe ou rejeu de payload substitué au maître typé, fermeture réduite au premier préfixe et lot non exécuté | rejetées aux sites Lean figés ; 30 fixtures globales validées aux sites exacts |
-| Registre scientifique de la nouvelle affirmation | commit de référence, identifiant, empreintes et revues rouvertes | en attente d'une autorisation explicite de commit |
+| Registre scientifique de la nouvelle affirmation | commit de référence, identifiant, empreintes et revues rouvertes | enregistré sur `5492a85c0108a7889e08451f9fab6c9eebf4a082` ; `reader=pending`, `translation=pending`, `independent=not_recorded` |
 
 Le Python 3.9 installé par défaut sur la machine ne peut pas exécuter le
 `--self-test`, car il ne connaît pas l'argument `newline` de
@@ -867,8 +867,9 @@ des tests d'échec artificiels.
 
 ## Obligations documentaires et scientifiques
 
-La réalisation ouvrira une affirmation scientifique majeure distincte. Avant
-toute intégration dans `main`, il faudra :
+La réalisation ouvre une affirmation scientifique majeure distincte. Avant
+toute intégration dans `main`, les obligations suivantes doivent être
+conservées :
 
 1. créer un identifiant propre dans `docs/scientific-claims.json` ;
 2. écrire un passage canonique qui annonce exactement la complétude
@@ -884,11 +885,11 @@ dépôt et contenir exactement un bloc `AXIOM_AUDIT` final. Aucun `axiom`,
 `sorry`, `noncomputable`, `Classical`, `propext`, `Quot.sound`,
 `native_decide` ou `unsafe` n'est admissible.
 
-L'identifiant préparé pour la nouvelle entrée est
-`GODEL_RELATIONAL_SEQUENTIAL_COMPLETENESS`. Ses ancrages seront les sections
+L'identifiant enregistré pour la nouvelle entrée est
+`GODEL_RELATIONAL_SEQUENTIAL_COMPLETENESS`. Ses ancrages sont les sections
 « Conclusion formelle du raccord Gödel–regroupement–réels » du passage français
 et « Formal Gödel–grouping–real conclusion » de sa traduction anglaise. Ses
-références de production devront au minimum couvrir
+références de production couvrent
 `effectiveSequentialCompleteness`, `executeFiniteGrouping`,
 `executeLimitProduction`, `MasterContinuation.bridge`,
 `fullyExecutedSequentialCompleteness`,
@@ -898,17 +899,16 @@ références de production devront au minimum couvrir
 `GodelRelationalCompleteness.raccord`,
 `GodelRelationalCompleteness.firstLimitProduction_is_canonicalProducer` et
 `heytingArithmeticGodelRelationalRaccord`, avec les trois modules de test comme
-références de test. Les revues de cette nouvelle entrée commenceront à
+références de test. Les revues de cette nouvelle entrée commencent à
 `reader=pending`, `translation=pending` et `independent=not_recorded`.
 
-Ce gel ne peut pas précéder le commit de référence : les fichiers nouveaux ne
-figurent pas dans la révision d'évidence actuelle. En outre, le registre actuel
-emploie une révision d'évidence globale, alors que l'audit indépendant de
-`GODEL_INTERNAL_CLOSURE_OBSTRUCTION` reste légitimement attaché à son ancien
-snapshot. Il est interdit de réétiqueter mécaniquement ce rapport sur le futur
-commit. L'enregistrement devra donc préserver explicitement cet audit
-historique ou rouvrir son statut après décision humaine ; aucune de ces deux
-opérations ne sera déduite d'une simple autorisation d'implémentation.
+Le gel a été effectué seulement après création du commit de référence. Le
+schéma 3 permet à la nouvelle entrée de porter sa propre
+`evidence_revision`, tandis que les entrées sans surcharge restent attachées à
+la révision globale. Ainsi, l'audit indépendant de
+`GODEL_INTERNAL_CLOSURE_OBSTRUCTION` demeure exactement sur
+`a020dc3267c0670b1316b2b2f8d5b3259ab40d91` : ni son rapport, ni son statut,
+ni sa portée n'ont été réétiquetés sur le nouveau raccord.
 
 ## Ordre de vérification
 
@@ -980,9 +980,9 @@ limite, tout en gardant les distinctions suivantes :
 - la complétude est produite avant d'être lue extensivement ;
 - le readout numérique conserve la construction mais ne la constitue pas.
 
-Cette chaîne est maintenant construite localement jusqu'au paquet terminal et
-à l'instance HA. Le travail restant avant enregistrement scientifique n'est
-plus mathématique : il faut un commit de référence explicitement autorisé,
-puis inscrire l'affirmation avec ses empreintes et rouvrir ses revues selon la
-procédure du dépôt. Aucun statut d'audit indépendant n'est transféré de la
-preuve de Gödel antérieure vers ce nouveau raccord.
+Cette chaîne est maintenant construite jusqu'au paquet terminal et à l'instance
+HA, puis enregistrée contre son commit de référence avec ses empreintes et ses
+revues ouvertes. La gate intégrale réussit sur cet état enregistré. Aucun
+statut d'audit indépendant n'est transféré de la preuve de Gödel antérieure
+vers ce nouveau raccord. Il ne reste que le commit local final avant toute
+éventuelle demande d'intégration.

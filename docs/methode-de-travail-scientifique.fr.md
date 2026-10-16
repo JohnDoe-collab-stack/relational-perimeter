@@ -80,9 +80,14 @@ prétend pas être le graphe minimal des dépendances d'un terme Lean.
 La révision d'évidence est un commit existant. Le contrôle compare le snapshot,
 les sources actuelles et les empreintes enregistrées. Une dépendance ajoutée
 ou modifiée invalide cette évidence. Les fichiers nouveaux doivent d'abord
-avoir une révision de référence avant de recevoir une évidence figée.
+avoir une révision de référence avant de recevoir une évidence figée. Depuis
+le schéma 3, une affirmation peut porter sa propre `evidence_revision` ; en son
+absence, elle utilise la révision globale. Cette exception permet de conserver
+un audit historique sur son snapshot exact sans réétiqueter les autres
+affirmations. Les ancrages, empreintes et revues de l'affirmation sont tous
+contrôlés contre cette même révision propre.
 
-Le schéma 2 permet uniquement un déplacement documentaire explicite :
+À partir du schéma 2, seul un déplacement documentaire explicite est permis :
 `document_relocations` relie le chemin Markdown publié à son chemin original
 dans la révision d'évidence. Les ancrages doivent conserver exactement leurs
 empreintes dans les deux fichiers. Cette table ne modifie ni la révision,
@@ -120,11 +125,11 @@ ou un identifiant de tâche n'est pas une validation scientifique.
 Toute revue enregistrée exige un fichier d'évidence réel, son empreinte et
 un responsable identifié. Elle enregistre aussi un extrait exact et non ambigu
 du fichier d'évidence qui nomme la révision examinée ; le validateur exige que
-cet extrait contienne la révision du registre. Une revue de traduction peut
-être `not_applicable` lorsque l'affirmation ne possède aucune traduction
-enregistrée, mais ce statut exige lui aussi une évidence et ne peut pas masquer
-une paire FR/EN existante. Aucune commande ne remplit ces champs à la place
-d'une lecture réelle.
+cet extrait contienne la révision d'évidence de l'affirmation. Une revue de
+traduction peut être `not_applicable` lorsque l'affirmation ne possède aucune
+traduction enregistrée, mais ce statut exige lui aussi une évidence et ne peut
+pas masquer une paire FR/EN existante. Aucune commande ne remplit ces champs à
+la place d'une lecture réelle.
 Une revue qualifiée garde ses limites. Ne pas éliminer un avis défavorable en
 changeant de relecteur ou en réécrivant l'audit.
 

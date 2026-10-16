@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "document_relocations": {},
   "evidence_revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91",
   "immutable_target": {
@@ -1526,6 +1526,128 @@
           "responsible": "Aristotle (Harmonic), rapport lu et confronté au commit audité",
           "revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91",
           "revision_evidence": "Scope: the exact target commit `a020dc3267c0670b1316b2b2f8d5b3259ab40d91` only."
+        }
+      }
+    },
+    {
+      "id": "GODEL_RELATIONAL_SEQUENTIAL_COMPLETENESS",
+      "kind": "causal",
+      "evidence_revision": "5492a85c0108a7889e08451f9fab6c9eebf4a082",
+      "scope": "Pour toute exécution gödelienne effective et toute famille de Cauchy exécutée sur la présentation produite par cette même exécution : construction d'un réel relationnel limite et de sa convergence effective ; producteur maître typé dont toute requête de limite possède l'exécution source–regroupement–limite complète ; regroupement chronologique de toute sélection finie exécutée sans identification des sources ; mêmes futurs finis normalisés pour les sources regroupées à profondeur égale ; persistance des occurrences gödeliennes ; rejet de la boucle totale et de toute fermeture globale du même régime qui conserve les labels antérieurs sous les extensions de profondeur. HA ferme concrètement le côté gödelien. Aucune identification avec les réels extensifs usuels, la complétude par borne supérieure, la densité, AC ou CH, ni aucune revendication d'originalité.",
+      "anchors": [
+        {
+          "path": "docs/godel-regroupement-completude-reels.fr.md",
+          "heading": "Conclusion formelle du raccord Gödel–regroupement–réels",
+          "paragraph": null,
+          "sha256": "27ec984718c0683896b74686a9ceac8cf6f01a186f32b4a179a7eac350cf2db9"
+        },
+        {
+          "path": "docs/godel-grouping-relational-real-completeness.en.md",
+          "heading": "Formal Gödel–grouping–real conclusion",
+          "paragraph": null,
+          "sha256": "986438e8d3b36a51c384e9da0a62afdb72e86bb066279abc0dce6cd793c1fdf2"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.SequentialCompleteness",
+          "name": "RelationalPerimeter.Constitution.Reals.effectiveSequentialCompleteness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.FiniteGroupingProduction",
+          "name": "RelationalPerimeter.Constitution.Reals.executeFiniteGrouping",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.LimitProduction",
+          "name": "RelationalPerimeter.Constitution.Reals.executeLimitProduction",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.LimitProduction",
+          "name": "RelationalPerimeter.Constitution.Reals.MasterContinuation.bridge",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.LimitProduction",
+          "name": "RelationalPerimeter.Constitution.Reals.fullyExecutedSequentialCompleteness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.LimitProduction",
+          "name": "RelationalPerimeter.Constitution.Reals.FullyExecutedSequentialCompleteness.groupedSourcesSameMasterFuture",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.RelationalCompleteness",
+          "name": "StrongPerimetralTurning.GodelRelationalCompleteness.GlobalSameRegimeClosure",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.RelationalCompleteness",
+          "name": "StrongPerimetralTurning.GodelRelationalCompleteness.globalSameRegimeClosureToEmpty",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.RelationalCompleteness",
+          "name": "StrongPerimetralTurning.GodelRelationalCompleteness.raccord",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.RelationalCompleteness",
+          "name": "StrongPerimetralTurning.GodelRelationalCompleteness.firstLimitProduction_is_canonicalProducer",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.RelationalCompleteness",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelRelationalRaccord",
+          "role": "production"
+        },
+        {
+          "module": "Tests.RelationalRealPrecision",
+          "name": "RelationalPerimeter.Tests.RelationalRealPrecision.composedPrecision_executes",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelGroupingTowerRegression",
+          "name": "RelationalPerimeter.Tests.GodelGroupingTowerRegression.globalClosureRejected",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalSequentialCompleteness",
+          "name": "RelationalPerimeter.Tests.RelationalSequentialCompleteness.finiteBatchGroupingConsumesExactChronology",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalSequentialCompleteness",
+          "name": "RelationalPerimeter.Tests.RelationalSequentialCompleteness.parallelGroupedSourcesHaveSameFuture",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalSequentialCompleteness",
+          "name": "RelationalPerimeter.Tests.RelationalSequentialCompleteness.completeGodelRaccordUsesCanonicalMaster",
+          "role": "test"
+        }
+      ],
+      "checks": [],
+      "dependencies": {
+        "formation": "Le même ExecutedGodelProduction indexe la présentation P, la première continuation, le journal partagé et la famille de Cauchy ; les requêtes typées portent leurs certificats, et les chaînes finies sont formées uniquement de sources effectivement produites.",
+        "execution": "Chaque requête exécute réception, recherche, action relationnelle, autorisation et décomposition, continuation et mémoire. Une requête de limite exécute d'abord la source du module, consomme son readout et son témoin Near dans le regroupement, puis exécute la limite avec la sortie réelle de cette action.",
+        "proof": "Les lois de Cauchy et le module construisent la limite et sa convergence ; les traces de lot prouvent la consommation chronologique complète ; le pont exact prouve les futurs normalisés ; la restriction d'une fermeture globale cohérente au premier préfixe réutilise la conversion Truth(G) vers Proof(G) et la non-prouvabilité du même G.",
+        "transport": "Les extensions conservent les occurrences gödeliennes, les identités sources, les codes et témoins consommés. La projection publique oublie le journal riche seulement sous le contrat exact de futurs ; elle n'identifie pas les sources et ne transforme pas la complétude relationnelle en fermeture du même régime."
+      },
+      "consumers": [],
+      "source_sha256": "107d38f72ab4be5a3032dc4d6d4a898c5fa102fd2cd9676b61678f8fe8e397eb",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
         }
       }
     }
