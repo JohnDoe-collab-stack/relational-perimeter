@@ -1,0 +1,19 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.FirstPrefixCannotReplaceGlobalClosure
+
+open StrongPerimetralTurning
+open StrongPerimetralTurning.GodelRelationalCompleteness
+open RelationalPerimeter.HeytingArithmetic
+
+-- One depth-one admission cannot be reused as an action at every finite depth.
+example
+    (admission :
+      GodelPositiveSameRegimeAdmission heytingArithmeticGodelExecution) :
+    GlobalSameRegimeClosure heytingArithmeticGodelExecution where
+  closePrefix := fun _depth => admission
+  preservesPriorLabels := by
+    intro source target extension occurrence
+    rfl
+
+end Tests.ExpectedFailure.FirstPrefixCannotReplaceGlobalClosure

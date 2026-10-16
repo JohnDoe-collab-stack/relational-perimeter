@@ -1,0 +1,15 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.PayloadResponseCannotReplaceTypedMaster
+
+open RelationalPerimeter.Constitution.Reals
+
+-- A replay of the already formed payload omits the typed source/grouping master.
+example
+    {P : StrongPerimetralTurning.CircularPresentation}
+    (family : ExecutedCauchyFamily P) :
+    MasterContinuation.Executor family :=
+  fun state request =>
+    ResponseContinuation.executeResponse P state request.payload
+
+end Tests.ExpectedFailure.PayloadResponseCannotReplaceTypedMaster

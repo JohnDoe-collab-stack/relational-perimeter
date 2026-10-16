@@ -1,0 +1,29 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.ArbitraryGroupingOutputCannotFeedLimit
+
+open StrongPerimetralTurning.GodelGroupingTower
+open RelationalPerimeter.Constitution.Reals
+
+-- A limit execution with an unrelated payload cannot inhabit the master package.
+example
+    {P : StrongPerimetralTurning.CircularPresentation}
+    (family : ExecutedCauchyFamily P)
+    (journal : OperationJournal ApproximationPayload)
+    (precision : Nat)
+    (source : family.ProducedSourceAt precision)
+    (sourceJournalExact : source.journal = journal)
+    (sourceIndexExact : source.source.index = family.modulus precision)
+    (sourcePrecisionExact : source.source.readoutPrecision = precision)
+    (arbitrary : SignedDyadicCode)
+    (limitExecution :
+      ExecutedApproximation P source.afterExecutionState.journal
+        (limitPayload precision arbitrary)) :
+    ExecutedLimitProduction family journal precision where
+  source := source
+  sourceJournalExact := sourceJournalExact
+  sourceIndexExact := sourceIndexExact
+  sourcePrecisionExact := sourcePrecisionExact
+  limitExecution := limitExecution
+
+end Tests.ExpectedFailure.ArbitraryGroupingOutputCannotFeedLimit

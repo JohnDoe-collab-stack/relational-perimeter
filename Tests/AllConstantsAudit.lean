@@ -10,6 +10,7 @@ import Tests.DeepPreservationRegression
 import Tests.EndogenousOperationalStabilityRegression
 import Tests.EndogenousWidthBridgeRegression
 import Tests.GodelImplicitAdmissionRegression
+import Tests.GodelGroupingTowerRegression
 import Tests.GodelPerimetralCorrespondenceRegression
 import Tests.HeytingArithmeticGodelInstanceRegression
 import Tests.ProducedContinuation
@@ -17,6 +18,8 @@ import Tests.ProductionTimelineRegression
 import Tests.PublicRootImport
 import Tests.PerimeterPersistenceRegression
 import Tests.RealizedConstitutionRegression
+import Tests.RelationalRealPrecision
+import Tests.RelationalSequentialCompleteness
 import Tests.RelationalExtensiveIffRegression
 import Tests.RolePolicySpectrum
 import Tests.SemanticImageRegression

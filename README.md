@@ -390,6 +390,28 @@ The computational tree imports the foundational modules directly. It has no
 dependency on an external alignment layer, a separate foundation layer, or a
 readout facade.
 
+## Gödel, regroupement et réels relationnels
+
+Le raccord constructif part de l'exécution gödelienne déjà produite, conserve
+sa première continuation comme base d'une tour d'opérations partagée, puis
+construit la limite de toute famille de Cauchy exécutée munie d'un module
+explicite. Un producteur maître conservé dans le résultat exécute toute requête
+publique typée ; une requête de limite possède la source diagonale, son
+regroupement et la réponse de limite correspondante au lieu de rejouer un
+payload déjà formé. Une chaîne finie ne retient que des sources
+réellement exécutées dans un même journal chronologique ; son regroupement de
+lot les énumère de la plus ancienne à la plus récente, prend pour rang le nombre de
+charges restantes et les consomme toutes. Les regroupements finis conservent
+les identités sources, tandis que leur action consomme explicitement le readout
+exécuté et son témoin de proximité avant d'alimenter la réponse de limite. Une
+équivalence relationnelle positive distingue les présentations d'un même réel
+sans quotient. Les codes dyadiques signés restent des readouts aval. La portée
+exacte, la relation local–global et les non-conclusions concernant la
+complétude d'ordre, la densité, `AC` et `CH` sont fixées dans le
+[passage canonique en français](docs/godel-regroupement-completude-reels.fr.md)
+et sa
+[version anglaise](docs/godel-grouping-relational-real-completeness.en.md).
+
 ## Build
 
 Scientific changes follow the repository's [mandatory agent instructions](AGENTS.md)
@@ -413,7 +435,7 @@ bash scripts/verify.sh
 
 Both gates require Python 3, traverse the declared import boundaries, build
 the library, sweep every repository constant (including private declarations),
-check the generated C dependency graph and then compile all 23 expected-failure fixtures listed in the shared
+check the generated C dependency graph and then compile all 30 expected-failure fixtures listed in the shared
 `scripts/expected-failures.tsv` inventory. Unlisted, missing or duplicate fixtures
 fail both gates. Privacy, dependent-type, semantic-type and termination tests
 are reported separately. Both gates validate the same structured Lean errors at

@@ -24,3 +24,11 @@ Tests/ExpectedFailure/RootCannotReplaceProducedTail.lean.fail	dependent-type	9	4
 Tests/ExpectedFailure/MasterCannotUseUnexecutedHistory.lean.fail	semantic-type	16	19	replacement = MasterResources.execute
 Tests/ExpectedFailure/MasterCheckpointCannotPrescribeOutput.lean.fail	semantic-type	7	55	(master.checkpoint profile).output = prescribed
 Tests/ExpectedFailure/AcceptedTargetCannotReplaceProducedOutput.lean.fail	dependent-type	13	2	target = retainedExecutedOperationalTargetProfile reduction → List AnswerTarget
+Tests/ExpectedFailure/IndependentPresentationCannotReplaceGodelPerimeter.lean.fail	dependent-type	14	43	Result heytingArithmeticGodelExecution family
+Tests/ExpectedFailure/IndependentPresentationCannotReplaceGodelPerimeter.lean.fail	dependent-type	15	42	raccord heytingArithmeticGodelExecution family
+Tests/ExpectedFailure/BareSourceCannotEnterFiniteGrouping.lean.fail	dependent-type	17	17	selection.snoc source
+Tests/ExpectedFailure/ArbitraryGroupingOutputCannotFeedLimit.lean.fail	dependent-type	27	20	limitPayload precision (effectiveLimitGroupedCode family precision source)
+Tests/ExpectedFailure/FirstPrefixCannotReplaceGlobalClosure.lean.fail	dependent-type	14	31	SameRegimeAdmissionAt heytingArithmeticGodelExecution _depth
+Tests/ExpectedFailure/SkippedBatchCannotClaimAllSources.lean.fail	dependent-type	17	2	(HistoricalGrouping.initialBatchCharge chain.selection).consumed.length
+Tests/ExpectedFailure/DirectLimitExecutionCannotReplaceMaster.lean.fail	dependent-type	18	2	ExecutedLimitProduction family journal precision
+Tests/ExpectedFailure/PayloadResponseCannotReplaceTypedMaster.lean.fail	dependent-type	13	4	MasterContinuation.ExecutedResponse family state request

@@ -1,0 +1,17 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.IndependentPresentationCannotReplaceGodelPerimeter
+
+open StrongPerimetralTurning
+open StrongPerimetralTurning.GodelRelationalCompleteness
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.HeytingArithmetic
+
+-- An arbitrary presentation cannot index the family consumed by the Gödel raccord.
+example
+    (independent : CircularPresentation)
+    (family : ExecutedCauchyFamily independent) :
+    Result heytingArithmeticGodelExecution family :=
+  raccord heytingArithmeticGodelExecution family
+
+end Tests.ExpectedFailure.IndependentPresentationCannotReplaceGodelPerimeter
