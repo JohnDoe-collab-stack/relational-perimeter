@@ -9,6 +9,7 @@ import Tests.ConstitutiveObjectiveRegression
 import Tests.DeepPreservationRegression
 import Tests.EndogenousOperationalStabilityRegression
 import Tests.EndogenousWidthBridgeRegression
+import Tests.GodelImplicitAdmissionRegression
 import Tests.GodelPerimetralCorrespondenceRegression
 import Tests.HeytingArithmeticGodelInstanceRegression
 import Tests.ProducedContinuation
