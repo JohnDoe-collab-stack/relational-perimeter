@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "document_relocations": {},
-  "evidence_revision": "31c9f6559ef9b56eb91407ff6cd741a9aaabbc1f",
+  "evidence_revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91",
   "immutable_target": {
     "revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
     "anchors": [
@@ -1510,7 +1510,11 @@
           "status": "pending"
         },
         "independent": {
-          "status": "not_recorded"
+          "status": "reviewed",
+          "evidence": "docs/reports/aristotle-godel-a020dc3.md",
+          "sha256": "80ecc6d954eb6f626970cf73a659f15db57ec62b779f99a34028e4cdc5b13d80",
+          "responsible": "Aristotle (Harmonic), rapport lu et confronté au commit audité",
+          "revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91"
         }
       }
     }
