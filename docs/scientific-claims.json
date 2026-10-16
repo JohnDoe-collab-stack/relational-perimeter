@@ -1504,17 +1504,28 @@
       "source_sha256": "47d3f338a5abbde35408d279977598e2968c6f9d2bd7ff191211325e046fbb3d",
       "reviews": {
         "reader": {
-          "status": "pending"
+          "status": "reviewed",
+          "evidence": "docs/reports/godel-reader-translation-a020dc3.fr.md",
+          "sha256": "90b832b076262b88ce038dba17bf93ff0bf2ef4ebbc2e5f81b9a7c31848d2c7c",
+          "responsible": "Codex (OpenAI), lecture autonome puis confrontation aux énoncés et corps Lean complets",
+          "revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91",
+          "revision_evidence": "Révision examinée : `a020dc3267c0670b1316b2b2f8d5b3259ab40d91`."
         },
         "translation": {
-          "status": "pending"
+          "status": "not_applicable",
+          "evidence": "docs/reports/godel-reader-translation-a020dc3.fr.md",
+          "sha256": "90b832b076262b88ce038dba17bf93ff0bf2ef4ebbc2e5f81b9a7c31848d2c7c",
+          "responsible": "Codex (OpenAI), contrôle du périmètre linguistique enregistré",
+          "revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91",
+          "revision_evidence": "Révision examinée : `a020dc3267c0670b1316b2b2f8d5b3259ab40d91`."
         },
         "independent": {
           "status": "reviewed",
           "evidence": "docs/reports/aristotle-godel-a020dc3.md",
           "sha256": "80ecc6d954eb6f626970cf73a659f15db57ec62b779f99a34028e4cdc5b13d80",
           "responsible": "Aristotle (Harmonic), rapport lu et confronté au commit audité",
-          "revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91"
+          "revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91",
+          "revision_evidence": "Scope: the exact target commit `a020dc3267c0670b1316b2b2f8d5b3259ab40d91` only."
         }
       }
     }

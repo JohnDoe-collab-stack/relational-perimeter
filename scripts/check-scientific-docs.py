@@ -213,18 +213,28 @@ def check_links(root, paths):
                 require(unquote(parsed.fragment) in ids, f"LINK: missing fragment {destination} in {relative}")
 
 
-def validate_review(root, review, revision, context):
+def validate_review(root, review, revision, context, allow_not_applicable=False):
     require(isinstance(review, dict) and review.get("status") in
-            ("pending", "not_recorded", "reviewed", "qualified"), f"REVIEW: invalid status {context}")
+            ("pending", "not_recorded", "reviewed", "qualified", "not_applicable"),
+            f"REVIEW: invalid status {context}")
+    require(review["status"] != "not_applicable" or allow_not_applicable,
+            f"REVIEW: not applicable forbidden {context}")
     if review["status"] in ("pending", "not_recorded"):
         fields(review, ("status",), context)
         return
-    fields(review, ("status", "evidence", "sha256", "responsible", "revision"), context)
+    fields(review, ("status", "evidence", "sha256", "responsible", "revision",
+                    "revision_evidence"), context)
     prose(review["responsible"], context + " responsible")
+    prose(review["revision_evidence"], context + " revision evidence")
     require(review["revision"] == revision, f"REVIEW: stale revision {context}")
+    require(review["revision"] in review["revision_evidence"],
+            f"REVIEW: revision absent from evidence marker {context}")
     require(isinstance(review["sha256"], str) and SHA.fullmatch(review["sha256"]), "REVIEW: invalid hash")
-    require(digest(read_current(root, review["evidence"])) == review["sha256"],
+    evidence = read_current(root, review["evidence"])
+    require(digest(evidence) == review["sha256"],
             f"REVIEW: stale evidence {context}")
+    require(evidence.count(review["revision_evidence"]) == 1,
+            f"REVIEW: revision marker missing or ambiguous {context}")
     # Presence and integrity only; a human must read and interpret this evidence.
 
 
@@ -336,7 +346,11 @@ def validate(root, registry):
         require(source_fingerprint(root, claim, snapshot)[0] == claim["source_sha256"], f"STALE_SNAPSHOT: {identifier}")
         fields(claim["reviews"], ("reader", "translation", "independent"), identifier + " reviews")
         for key, review in claim["reviews"].items():
-            validate_review(root, review, revision, identifier + " " + key)
+            if key == "translation" and review["status"] == "not_applicable":
+                require(not any(anchor["path"].endswith(".en.md") for anchor in claim["anchors"]),
+                        f"REVIEW: translation exists {identifier}")
+            validate_review(root, review, revision, identifier + " " + key,
+                            allow_not_applicable=(key == "translation"))
             if review["status"] in ("pending", "not_recorded", "qualified"):
                 open_reviews.append(f"{identifier}:{key}={review['status']}")
     for claim in registry["claims"]:
@@ -407,6 +421,24 @@ class SelfTests(unittest.TestCase):
         self.rejects("SCHEMA", lambda: prose(" ", "empty"))
         self.rejects("SCHEMA", lambda: validate_review(ROOT, {"status": "reviewed"}, "a" * 40, "test"))
         self.rejects("REVIEW", lambda: validate_review(ROOT, {"status": "pass"}, "a" * 40, "test"))
+        with tempfile.TemporaryDirectory(prefix="scientific-review-tests-") as directory:
+            root = Path(directory)
+            revision = "a" * 40
+            marker = f"Audited revision: {revision}"
+            evidence = marker + "\n"
+            (root / "review.md").write_text(evidence, encoding="utf-8")
+            review = {"status": "reviewed", "evidence": "review.md", "sha256": digest(evidence),
+                      "responsible": "Named reviewer", "revision": revision,
+                      "revision_evidence": marker}
+            validate_review(root, review, revision, "test")
+            self.rejects("revision absent", lambda: validate_review(
+                root, {**review, "revision": "b" * 40}, "b" * 40, "test"))
+            self.rejects("marker missing", lambda: validate_review(
+                root, {**review, "revision_evidence": f"Scope: {revision}"}, revision, "test"))
+            self.rejects("not applicable forbidden", lambda: validate_review(
+                root, {**review, "status": "not_applicable"}, revision, "test"))
+            validate_review(root, {**review, "status": "not_applicable"}, revision, "test",
+                            allow_not_applicable=True)
 
     def test_document_relocations(self):
         base = {"schema_version": 2, "evidence_revision": "a" * 40,

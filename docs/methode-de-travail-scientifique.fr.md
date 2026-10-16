@@ -118,7 +118,13 @@ historique reste attaché à son ancien snapshot. Une soumission « acceptée »
 ou un identifiant de tâche n'est pas une validation scientifique.
 
 Toute revue enregistrée exige un fichier d'évidence réel, son empreinte et
-un responsable identifié ; aucune commande ne remplit ces champs à sa place.
+un responsable identifié. Elle enregistre aussi un extrait exact et non ambigu
+du fichier d'évidence qui nomme la révision examinée ; le validateur exige que
+cet extrait contienne la révision du registre. Une revue de traduction peut
+être `not_applicable` lorsque l'affirmation ne possède aucune traduction
+enregistrée, mais ce statut exige lui aussi une évidence et ne peut pas masquer
+une paire FR/EN existante. Aucune commande ne remplit ces champs à la place
+d'une lecture réelle.
 Une revue qualifiée garde ses limites. Ne pas éliminer un avis défavorable en
 changeant de relecteur ou en réécrivant l'audit.
 

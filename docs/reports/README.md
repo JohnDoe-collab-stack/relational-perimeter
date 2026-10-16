@@ -19,6 +19,14 @@ Deux distinctions doivent être conservées lors de la lecture :
   des ressources, non l’affirmation que les certificats du tout et de la
   continuation sont directement consommés par le rejet terminal.
 
+## Revues documentaires Gödel du commit `a020dc3`
+
+La [revue autonome de lecture et de traduction](godel-reader-translation-a020dc3.fr.md)
+confronte les deux passages canoniques français aux énoncés et corps Lean
+complets. La lecture est validée. La traduction est déclarée non applicable,
+car aucune version anglaise n'est enregistrée pour cette revendication et la
+procédure interdit d'en inventer une pour fermer une case du registre.
+
 ## Rapport historique
 
 [Audit indépendant du commit `1ca8e89`](aristotle-1ca8e89.fr.md) : rapport
