@@ -424,6 +424,10 @@ complétude d'ordre, la densité, `AC` et `CH` sont fixées dans le
 [passage canonique en français](docs/godel-regroupement-completude-reels.fr.md)
 et sa
 [version anglaise](docs/godel-grouping-relational-real-completeness.en.md).
+La
+[synthèse conceptuelle sur le regroupement, le runtime, la totalité et le readout](docs/regroupement-runtime-totalite-readout.fr.md)
+explicite l'articulation entre ces résultats sans créer une affirmation
+scientifique concurrente.
 
 ## Build
 
