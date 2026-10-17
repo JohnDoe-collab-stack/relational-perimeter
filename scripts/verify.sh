@@ -39,6 +39,7 @@ bash scripts/check-import-boundaries.sh
 bash scripts/check-import-boundaries.sh scripts/constitutive-normalizer-core-import-boundaries.txt
 bash scripts/check-import-boundaries.sh scripts/executed-history-import-boundaries.txt
 bash scripts/check-import-boundaries.sh scripts/measured-accounting-import-boundaries.txt
+bash scripts/check-import-boundaries.sh scripts/godel-runtime-core-import-boundaries.txt
 bash scripts/check-stratification.sh --self-test
 bash scripts/check-stratification.sh
 

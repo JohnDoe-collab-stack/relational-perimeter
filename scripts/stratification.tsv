@@ -10,6 +10,10 @@ RelationalPerimeter.Constitution.Grouping.Projections	U	enforced	Projection agre
 RelationalPerimeter.Constitution.Grouping.BinaryReadout	U	enforced	Binary coding used downstream of constituted role profiles
 RelationalPerimeter.Constitution.Grouping.Reindexing	U	enforced	Exact transport of local rules and traces
 RelationalPerimeter.Constitution.Grouping.ContinuationContract	U	enforced	Separate acceptance actions and exact future continuation contracts
+RelationalPerimeter.Constitution.Continuation.Execution	U	enforced	Authorized inductive runs with computed targets events and admissions
+RelationalPerimeter.Constitution.Continuation.CommonMemoryGrouping	U	enforced	Executed terminal collision under a fixed exact realization and direct readout equality
+RelationalPerimeter.Constitution.Godel.OperationalClosure	F	enforced	Fixed positive Godel runtime and local obstruction to collision of computed exact memories
+RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure	F	enforced	Specialization of exact runtime separation to the existing HA production
 RelationalPerimeter.Constitution.Grouping.HistoricalExtension	U	enforced	Historical operation inclusion and renormalization
 RelationalPerimeter.Constitution.Grouping.ExactImage	K	enforced	Normal target image reusing the existing finite image implementation
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CertifiedRoleGrouping	A6	enforced	Certified grouping on actual relational role occurrences and returned transports

@@ -1,0 +1,7 @@
+# The generic runtime and memory bridge cannot import a Godel specialization.
+root RelationalPerimeter.Constitution.Continuation.CommonMemoryGrouping
+forbidden RelationalPerimeter.Constitution.Godel.Diagonal
+forbidden RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence
+forbidden RelationalPerimeter.Constitution.Godel.OperationalClosure
+forbidden RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure
+forbidden RelationalPerimeter.Computation.ConstitutiveGeneration

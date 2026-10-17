@@ -1,0 +1,17 @@
+import RelationalPerimeter.Constitution.Godel.OperationalClosure
+open StrongPerimetralTurning ConstitutiveSearch ConstitutiveSearch.ContinuationSignatures
+variable {coding : GodelDiagonalSyntax} {formula : coding.UnaryFormula}
+  {interpretation : GodelProvabilityInterpretation coding formula}
+  (execution : ExecutedGodelProduction coding formula interpretation)
+
+example {Memory : Type} (realization : ExactRealization (godelClosureContract execution) Memory)
+    (collision : Grouping.Continuation.run realization.reduced.next
+        (realization.project (semanticSource execution)) [godelCloseRequest execution] =
+      Grouping.Continuation.run realization.reduced.next
+        (realization.project (syntacticSource execution)) [godelCloseRequest execution]) :
+    ExecutedCommonMemoryGrouping realization (semanticSource execution) (syntacticSource execution) := collision
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms StrongPerimetralTurning.godelClosureContract
+#print axioms StrongPerimetralTurning.godelExecutedGroupingToEndpointEquality
+/- AXIOM_AUDIT_END -/
