@@ -251,9 +251,9 @@ def load_registry(root):
 def document_relocations(root, registry):
     """Relocate prose only; keep the original committed evidence and hashes."""
     version = registry.get("schema_version")
-    require(type(version) is int and version in (1, 2), "SCHEMA: version")
+    require(type(version) is int and version in (1, 2, 3), "SCHEMA: version")
     keys = ("schema_version", "evidence_revision", "immutable_target", "claims")
-    fields(registry, keys + (("document_relocations",) if version == 2 else ()), "registry")
+    fields(registry, keys + (("document_relocations",) if version >= 2 else ()), "registry")
     aliases = registry.get("document_relocations", {})
     require(isinstance(aliases, dict), "RELOCATION: expected path mapping")
     require(all(isinstance(c, dict) and isinstance(c.get("anchors"), list)
@@ -292,7 +292,8 @@ def validate(root, registry):
                             capture_output=True, check=False)
     require(exists.returncode == 0, f"SNAPSHOT: unavailable commit {revision}")
     current = lru_cache(maxsize=None)(lambda path: read_current(root, path))
-    snapshot = lru_cache(maxsize=None)(lambda path: git_text(root, revision, aliases.get(path, path)))
+    snapshot = lru_cache(maxsize=None)(
+        lambda claim_revision, path: git_text(root, claim_revision, aliases.get(path, path)))
     target = registry["immutable_target"]
     fields(target, ("revision", "anchors"), "immutable target")
     require(isinstance(target["revision"], str) and REV.fullmatch(target["revision"]), "SCHEMA: target revision")
@@ -307,8 +308,20 @@ def validate(root, registry):
     require(isinstance(registry["claims"], list) and bool(registry["claims"]), "SCHEMA: empty claims")
     ids, docs, references, open_reviews = set(), {"README.md", "AGENTS.md", "docs/methode-de-travail-scientifique.fr.md"}, [], []
     for claim in registry["claims"]:
-        fields(claim, ("id", "kind", "scope", "anchors", "proofs", "checks", "dependencies",
-                       "consumers", "source_sha256", "reviews"), "claim")
+        claim_fields = ("id", "kind", "scope", "anchors", "proofs", "checks", "dependencies",
+                        "consumers", "source_sha256", "reviews")
+        has_revision = "evidence_revision" in claim
+        require(not has_revision or registry["schema_version"] >= 3,
+                "SCHEMA: claim evidence revision requires version 3")
+        fields(claim, claim_fields + (("evidence_revision",) if has_revision else ()), "claim")
+        claim_revision = claim.get("evidence_revision", revision)
+        require(isinstance(claim_revision, str) and REV.fullmatch(claim_revision),
+                "SCHEMA: claim revision")
+        claim_exists = subprocess.run(
+            ["git", "cat-file", "-e", claim_revision + "^{commit}"], cwd=root,
+            capture_output=True, check=False)
+        require(claim_exists.returncode == 0,
+                f"SNAPSHOT: unavailable commit {claim_revision}")
         identifier = claim["id"]
         require(isinstance(identifier, str) and re.fullmatch(r"[A-Z][A-Z0-9_-]*", identifier), "SCHEMA: claim id")
         require(identifier not in ids, f"SCHEMA: duplicate claim {identifier}")
@@ -318,7 +331,8 @@ def validate(root, registry):
         require(isinstance(claim["anchors"], list) and bool(claim["anchors"]), "SCHEMA: missing anchors")
         for anchor in claim["anchors"]:
             validate_anchor(root, anchor, current)
-            validate_anchor(root, anchor, snapshot)
+            validate_anchor(root, anchor,
+                            lambda path, revision=claim_revision: snapshot(revision, path))
             docs.add(anchor["path"])
         require(isinstance(claim["proofs"], list) and bool(claim["proofs"]), "SCHEMA: missing proofs")
         for proof in claim["proofs"]:
@@ -343,13 +357,15 @@ def validate(root, registry):
         require(len(set(claim["consumers"])) == len(claim["consumers"]), "SCHEMA: duplicate consumers")
         require(isinstance(claim["source_sha256"], str) and SHA.fullmatch(claim["source_sha256"]), "SCHEMA: source hash")
         require(source_fingerprint(root, claim, current)[0] == claim["source_sha256"], f"STALE_SOURCE: {identifier}")
-        require(source_fingerprint(root, claim, snapshot)[0] == claim["source_sha256"], f"STALE_SNAPSHOT: {identifier}")
+        require(source_fingerprint(
+            root, claim, lambda path, revision=claim_revision: snapshot(revision, path))[0] ==
+            claim["source_sha256"], f"STALE_SNAPSHOT: {identifier}")
         fields(claim["reviews"], ("reader", "translation", "independent"), identifier + " reviews")
         for key, review in claim["reviews"].items():
             if key == "translation" and review["status"] == "not_applicable":
                 require(not any(anchor["path"].endswith(".en.md") for anchor in claim["anchors"]),
                         f"REVIEW: translation exists {identifier}")
-            validate_review(root, review, revision, identifier + " " + key,
+            validate_review(root, review, claim_revision, identifier + " " + key,
                             allow_not_applicable=(key == "translation"))
             if review["status"] in ("pending", "not_recorded", "qualified"):
                 open_reviews.append(f"{identifier}:{key}={review['status']}")
@@ -519,6 +535,42 @@ class SelfTests(unittest.TestCase):
                     validate.__globals__, {"git_text": lambda _, revision, path: files[path]}):
                 validate(root, registry)
                 self.rejects("duplicate claim", lambda: validate(root, {**registry, "claims": [claim, claim]}))
+                version_three_claim = {**claim, "evidence_revision": "b" * 40}
+                version_three_registry = {
+                    **registry,
+                    "schema_version": 3,
+                    "document_relocations": {},
+                    "claims": [version_three_claim]
+                }
+                validate(root, version_three_registry)
+                review_revision = "b" * 40
+                review_marker = f"Audited revision: {review_revision}"
+                review_text = review_marker + "\n"
+                (root / "review.md").write_text(review_text, encoding="utf-8")
+                historical_review = {
+                    "status": "reviewed",
+                    "evidence": "review.md",
+                    "sha256": digest(review_text),
+                    "responsible": "Historical reviewer",
+                    "revision": review_revision,
+                    "revision_evidence": review_marker
+                }
+                reviewed_claim = {
+                    **version_three_claim,
+                    "reviews": {**version_three_claim["reviews"], "reader": historical_review}
+                }
+                reviewed_registry = {**version_three_registry, "claims": [reviewed_claim]}
+                validate(root, reviewed_registry)
+                relabelled_review = {**historical_review, "revision": "a" * 40}
+                relabelled_claim = {
+                    **reviewed_claim,
+                    "reviews": {**reviewed_claim["reviews"], "reader": relabelled_review}
+                }
+                self.rejects("stale revision", lambda: validate(
+                    root, {**reviewed_registry, "claims": [relabelled_claim]}))
+                version_two_registry = {**version_three_registry, "schema_version": 2}
+                self.rejects("claim evidence revision requires version 3",
+                             lambda: validate(root, version_two_registry))
                 (root / "RelationalPerimeter/Example.lean").write_text("def example := 1\n", encoding="utf-8")
                 self.rejects("STALE_SOURCE", lambda: validate(root, registry))
                 (root / "RelationalPerimeter/Example.lean").write_text(files["RelationalPerimeter/Example.lean"], encoding="utf-8")

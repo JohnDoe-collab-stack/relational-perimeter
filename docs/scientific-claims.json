@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "document_relocations": {},
   "evidence_revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91",
   "immutable_target": {
@@ -1526,6 +1526,111 @@
           "responsible": "Aristotle (Harmonic), rapport lu et confronté au commit audité",
           "revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91",
           "revision_evidence": "Scope: the exact target commit `a020dc3267c0670b1316b2b2f8d5b3259ab40d91` only."
+        }
+      }
+    },
+    {
+      "id": "GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION",
+      "kind": "causal",
+      "evidence_revision": "75f0d605ee35e47daccd7cce74ff9682ef2be8d1",
+      "scope": "Pour toute production gödelienne exécutée et toute réalisation exacte du contrat de futurs fixé avant la fermeture : les sources sémantique et syntaxique sont reçues sur la continuation H1 du même témoin, la requête canonique non vide est autorisée et exécutée des deux côtés, et une collision des deux sorties réduites calculées force par run_exact et read_exact l'égalité Truth(G) = Proof(G), puis la conversion Truth(G) vers Proof(G) rejetée par la non-prouvabilité du même G. Le runtime ouvert, la continuation positive et les regroupements respectant le contrat demeurent construits. La collision est une hypothèse de fermeture, non une conséquence de Gödel ; aucun résultat sur tout regroupement, le continuum, AC ou CH, ni aucune revendication de renforcement strict ou de nouveauté.",
+      "anchors": [
+        {
+          "path": "docs/godel-fermeture-runtime.fr.md",
+          "heading": "Portée et statut",
+          "paragraph": null,
+          "sha256": "4c8c2514dc2beef61460219aab714d742414c5a4e4381321d5be89071fedd9a9"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Constitution.Continuation.CommonMemoryGrouping",
+          "name": "ConstitutiveSearch.ContinuationSignatures.ExecutedCommonMemoryGrouping.terminalReadEqual",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.godelExecutedGroupingToEndpointEquality",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.godelOperationalClosureToProducedCompleteness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.godelExactRuntimeRejectsCommonTerminalMemory",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.rejectGodelOperationalClosureToEmpty",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticExactRuntimeSeparates",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalClosureToEmpty",
+          "role": "production"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.trivial_grouping_read_exact",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.history_exists_independently",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.exact_identity_outputs_stay_distinct",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.kernel_direct_read_client",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.historical_wrapper_keeps_singleton",
+          "role": "test"
+        },
+        {
+          "module": "Tests.HeytingArithmeticOperationalClosureRegression",
+          "name": "HeytingArithmeticOperationalClosureRegression.ha_every_exact_realization_separates",
+          "role": "test"
+        }
+      ],
+      "checks": [
+        "scripts/expected-failures.tsv",
+        "scripts/godel-runtime-core-import-boundaries.txt",
+        "scripts/stratification.tsv"
+      ],
+      "dependencies": {
+        "formation": "La même ExecutedGodelProduction indexe les deux sources, qui stockent seulement leur rôle et leur profondeur. Leurs histoires, occurrences et provenances sont calculées depuis cette exécution ; GodelInitializedAt reçoit la constitution affirmative et n'habite exactement que la continuation périmétrale H1.",
+        "execution": "Le contexte H1 produit la recherche de la requête close, ses deux autorisations, sa décomposition en étapes et les deux ExecutedRun sur la même liste singleton non vide. Les terminaux et événements proviennent des constructeurs exécutés ; seule la collision des deux sorties réduites calculées est ajoutée par la politique de fermeture.",
+        "proof": "Le noyau compose terminal_eq_run, run_exact, la collision et les deux lois read_exact, puis la stabilité du rôle, pour dériver Truth(G) = Proof(G) sans totalisation, présentation circulaire, FutureEquivalent, vérité ou non-prouvabilité. La conversion Truth(G) vers Proof(G) est construite avant que le rejet terminal consomme trueWitness et unprovable du même témoin.",
+        "transport": "ExactRealization conserve séparément admissions, transitions, événements et readouts. La mémoire commune est la sortie gauche calculée et la sortie droite ne l'atteint que par la collision reçue ; les sources, rôles et occurrences demeurent distincts. L'équivalence de tous les futurs est une conséquence parallèle, non une prémisse du pont critique."
+      },
+      "consumers": [],
+      "source_sha256": "1774d1e06b5a5c7153bd599cd897ca6fb4f61604edc97e87d1d781cc7b6fca0f",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
         }
       }
     }
