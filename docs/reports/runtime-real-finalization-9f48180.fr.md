@@ -1,4 +1,11 @@
-# Rapport final de migration du runtime relationnel et des réels effectifs
+# Rapport historique de migration du runtime relationnel et des réels effectifs
+
+> **Statut historique.** Ce rapport décrit exclusivement la révision
+> `9f48180aa8c2aad43d2bc1cbee7419095d4b43dd`. La révision d'évidence
+> `ffeae501f4425e80705a1b23903dadaf3a3b7937` lui succède et corrige la
+> provenance du témoin source–cible de la limite. Le présent rapport n'est
+> donc pas une revue de la révision courante et ne doit pas être utilisé comme
+> telle.
 
 ## Révision examinée et statut
 

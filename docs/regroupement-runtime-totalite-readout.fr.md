@@ -27,8 +27,9 @@ Il distingue systématiquement trois niveaux :
 Le texte n'ajoute ni nouveau théorème, ni verdict d'originalité, ni audit
 indépendant. Il ne remplace pas non plus les énoncés Lean par une interprétation
 plus forte qu'eux. Les résultats formels décrits ici ont pour révision
-d'évidence `9f48180aa8c2aad43d2bc1cbee7419095d4b43dd`. Leurs revues restent
-`reader=pending`, `translation=pending` et `independent=not_recorded`.
+d'évidence `ffeae501f4425e80705a1b23903dadaf3a3b7937`. Leurs revues de
+lecture et de traduction sont enregistrées sur cette révision ; la revue
+indépendante reste `independent=not_recorded`.
 
 ## Réponse centrale : que deviennent les distinctions ?
 

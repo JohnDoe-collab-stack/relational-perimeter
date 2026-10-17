@@ -1532,20 +1532,20 @@
     {
       "id": "GODEL_RELATIONAL_SEQUENTIAL_COMPLETENESS",
       "kind": "causal",
-      "evidence_revision": "9f48180aa8c2aad43d2bc1cbee7419095d4b43dd",
-      "scope": "Pour toute exécution gödelienne effective et toute famille de Cauchy exécutée reçue sur la présentation produite par cette même exécution à la base H1 : un maître commun contient l'environnement exécutable, réalise exactement l'archive riche et produit le réel relationnel séquentiellement complet ; les regroupements finis consomment chaque chaîne chronologique par transport de la ressource historique normalisée, installent la cible produite et permettent sa réutilisation ; la mémoire commune est caractérisée exactement à environnement fixé ; les occurrences gödeliennes persistent à travers la trace ; la boucle totale et toute fermeture globale cohérente du même régime sont rejetées par le même témoin. HA ferme concrètement le côté gödelien. Aucune identification avec tous les réels classiques, la complétude par borne supérieure, la densité, AC ou CH, ni aucune revendication d'originalité.",
+      "evidence_revision": "ffeae501f4425e80705a1b23903dadaf3a3b7937",
+      "scope": "Pour toute exécution gödelienne effective et toute famille de Cauchy exécutée reçue sur la présentation produite par cette même exécution à la base H1 : un maître commun contient l'environnement exécutable, réalise exactement l'archive riche et produit le réel relationnel séquentiellement complet ; les regroupements finis consomment chaque chaîne chronologique par transport de la ressource historique normalisée, installent la cible produite et permettent sa réutilisation ; le témoin source–cible de la limite est transporté depuis la charge normalisée et consommé sans rejeu indépendant ; la mémoire commune est caractérisée exactement à environnement fixé ; les occurrences gödeliennes persistent à travers la trace ; la boucle totale et toute fermeture globale cohérente du même régime sont rejetées par le même témoin. HA ferme concrètement le côté gödelien. Aucune identification avec tous les réels classiques, la complétude par borne supérieure, la densité, AC ou CH, ni aucune revendication d'originalité.",
       "anchors": [
         {
           "path": "docs/godel-regroupement-completude-reels.fr.md",
           "heading": "Conclusion formelle du raccord Gödel–regroupement–réels",
           "paragraph": null,
-          "sha256": "a537a79596c669414d6c608fa96b4394c8139e98298de9e0e823377212e3d732"
+          "sha256": "e6cee3e250171e6a31e80414967c88dc5dc9677f3de6a95deb57f860e5a802bd"
         },
         {
           "path": "docs/godel-grouping-relational-real-completeness.en.md",
           "heading": "Formal Gödel–grouping–real conclusion",
           "paragraph": null,
-          "sha256": "26384b991babaf597c5fb29a567352e7b0c9d32f377f2ab99ea8a3019163e5b5"
+          "sha256": "5cadd67002b68a05cc45fbb511eebf5eac8e11128396f5d8947e189e19b5fe03"
         }
       ],
       "proofs": [
@@ -1582,6 +1582,21 @@
         {
           "module": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness",
           "name": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness.ExecutedCauchyFamily.ExecutedFiniteGrouping.normalizedBatch_consumed_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness",
+          "name": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.normalizedCharge_consumedCode",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness",
+          "name": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.ProducedTarget.sourceNearTarget_is_normalized",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness",
+          "name": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.Accepted.preservation_is_normalized",
           "role": "production"
         },
         {
@@ -1685,6 +1700,16 @@
           "role": "test"
         },
         {
+          "module": "Tests.RelationalSequentialCompleteness",
+          "name": "RelationalPerimeter.Tests.RelationalSequentialCompleteness.executedLimitTargetWitnessIsNormalized",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalSequentialCompleteness",
+          "name": "RelationalPerimeter.Tests.RelationalSequentialCompleteness.executedLimitPreservationUsesNormalizedWitness",
+          "role": "test"
+        },
+        {
           "module": "Tests.CommonRealRuntime",
           "name": "RelationalPerimeter.Tests.CommonRealRuntime.lastNormalizationConsumesTransportedResource",
           "role": "test"
@@ -1711,18 +1736,28 @@
       ],
       "dependencies": {
         "formation": "Le même ExecutedGodelProduction indexe la présentation P, Journal retient P et la base 1 dans son type, et la famille terminale est indexée par ces données. Environment contient le producteur et le module comme données exécutables. ExactConsumption et HistoricalNormalization indexent la sélection, la chaîne de journaux, la charge précédente et son résultat transporté. Reachable borne le domaine du producteur riche. GlobalSameRegimeClosure porte la préservation des labels comme contrat de formation et de transport.",
-        "execution": "execute imbrique réception, recherche, action, préservation, autorisation, décomposition, continuation et mémoire. Chaque snoc historique passe le HistoricalSeed précédent à advanceBatch ; normalizeFresh agit sur la charge transportée et non sur une graine reconstruite. performGrouping installe OwnedTarget.batch produit ; continueInstalled relit cette ressource. performArchive exécute une seule ressource riche et archiveProjection la relie à performReal, qui lit l'environnement inclus dans son état. Le premier run du raccord réutilise le pas produit par le même maître.",
-        "proof": "completeViaRuntime applique la loi de Cauchy reçue aux réponses possédées par les pas accessibles. normalizedBatch_consumed_exact établit la totalité finie à partir de la normalisation historique, non de la seule énumération. fixedEnvironmentMinimality et archiveMemoryMinimality caractérisent la mémoire uniquement sous leurs contrats et environnements déclarés. La contradiction globale réutilise la conversion Truth(G) vers Proof(G) et la non-prouvabilité du même G ; preservesPriorLabels n'est pas lu par le terme terminal vers Empty.",
-        "transport": "BatchAdvance.resultFromTransport relie la sortie à la charge historique complète ; consumed_exact et oldCharge_exact conservent le préfixe, les charges et leurs Near. archiveRealization oublie les ressources riches seulement après leur exécution et conserve l'environnement comme donnée. persistThroughRunFrom transporte injectivement le même triplet gödelien à travers chaque phase de la trace et le sépare de chaque occurrence fraîche. Les égalités de readouts et de futurs à environnement fixé n'identifient jamais les occurrences ou les programmes."
+        "execution": "execute imbrique réception, recherche, action, préservation, autorisation, décomposition, continuation et mémoire. Chaque snoc historique passe le HistoricalSeed précédent à advanceBatch ; normalizeFresh agit sur la charge transportée et non sur une graine reconstruite. LimitGrouping.program lie normalizedCharge une fois et partage cette sortie entre la cible, l'action et l'admission sans second appel à receivedNear. performGrouping installe OwnedTarget.batch produit ; continueInstalled relit cette ressource. performArchive exécute une seule ressource riche et archiveProjection la relie à performReal, qui lit l'environnement inclus dans son état. Le premier run du raccord réutilise le pas produit par le même maître.",
+        "proof": "completeViaRuntime applique la loi de Cauchy reçue aux réponses possédées par les pas accessibles. normalizedBatch_consumed_exact établit la totalité finie à partir de la normalisation historique, non de la seule énumération. sourceNearTarget_is_normalized et preservation_is_normalized relient hétérogènement les témoins exposés par la cible et l'admission au témoin produit par la normalisation. fixedEnvironmentMinimality et archiveMemoryMinimality caractérisent la mémoire uniquement sous leurs contrats et environnements déclarés. La contradiction globale réutilise la conversion Truth(G) vers Proof(G) et la non-prouvabilité du même G ; preservesPriorLabels n'est pas lu par le terme terminal vers Empty.",
+        "transport": "BatchAdvance.resultFromTransport relie la sortie à la charge historique complète ; consumed_exact et oldCharge_exact conservent le préfixe, les charges et leurs Near. ProducedTarget.sourceNearTarget transporte le témoin source–cible depuis NormalizedHistory.nearSourceTarget au lieu de le reconstruire. archiveRealization oublie les ressources riches seulement après leur exécution et conserve l'environnement comme donnée. persistThroughRunFrom transporte injectivement le même triplet gödelien à travers chaque phase de la trace et le sépare de chaque occurrence fraîche. Les égalités de readouts et de futurs à environnement fixé n'identifient jamais les occurrences ou les programmes."
       },
       "consumers": [],
-      "source_sha256": "6b86f9ab2585a97fb3c226ec80b9909508921a86f488567d152a9c0037ece440",
+      "source_sha256": "32962a5d5deb3010a416b97d04ef3a530fd2277b9bcbd96a9dbbb22aec7e2055",
       "reviews": {
         "reader": {
-          "status": "pending"
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-real-reader-translation-ffeae50.fr.md",
+          "sha256": "9c39bed3d25819a1f1ac716405a9a2ec28005db2237141d77ab38d6c7d4b2c2e",
+          "responsible": "Codex (OpenAI), lecture française autonome puis confrontation aux types et corps Lean complets",
+          "revision": "ffeae501f4425e80705a1b23903dadaf3a3b7937",
+          "revision_evidence": "Révision examinée : `ffeae501f4425e80705a1b23903dadaf3a3b7937`."
         },
         "translation": {
-          "status": "pending"
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-real-reader-translation-ffeae50.fr.md",
+          "sha256": "9c39bed3d25819a1f1ac716405a9a2ec28005db2237141d77ab38d6c7d4b2c2e",
+          "responsible": "Codex (OpenAI), lecture anglaise autonome puis confrontation FR/EN et aux preuves Lean",
+          "revision": "ffeae501f4425e80705a1b23903dadaf3a3b7937",
+          "revision_evidence": "Révision examinée : `ffeae501f4425e80705a1b23903dadaf3a3b7937`."
         },
         "independent": {
           "status": "not_recorded"
@@ -1732,7 +1767,7 @@
     {
       "id": "RUNTIME_EFFECTIVE_CAUCHY_REAL_CORRESPONDENCE",
       "kind": "behavioral",
-      "evidence_revision": "9f48180aa8c2aad43d2bc1cbee7419095d4b43dd",
+      "evidence_revision": "ffeae501f4425e80705a1b23903dadaf3a3b7937",
       "scope": "Pour toute présentation dyadique effective ou tout carrier de Cauchy effectif reçu, à présentation périmétrale et profondeur de base fixées : construction d'un RuntimeReal autoritatif, readout obtenu par exécution des pas limites canoniques, aller-retour exact depuis la présentation, aller-retour du runtime et du carrier par équivalence positive de readouts, correspondance avec les futurs limites finis réellement retenus, et réalisation sur le périmètre Gödel H1 avec partage du même runtime. La correspondance numérique n'identifie ni environnements, ni états, ni journaux, ni ressources, ni occurrences ; elle ne couvre pas tous les réels classiques, les opérations de corps, l'ordre, la densité, la complétude d'ordre, AC ou CH.",
       "anchors": [
         {
@@ -1836,13 +1871,23 @@
         "transport": "ReadoutOrigin conserve la provenance dirigée d'un readout vers son pas canonique. PairedLimitTrace transporte profondeurs et Near sans égaliser les pas. Les traductions vers les présentations et carriers oublient les histoires riches sous une équivalence numérique explicitement définie ; aucune réciproque ne reconstruit journaux, ressources ou occurrences depuis les valeurs."
       },
       "consumers": [],
-      "source_sha256": "f6ab20f3c2a7f5f62aa3ad3cf8bd26348f0aa8fe32c0ee7f0b53543f20ea6783",
+      "source_sha256": "add64e862667de446fd39eab5979a4f9796c859a24fd38d1e274d96896479f6a",
       "reviews": {
         "reader": {
-          "status": "pending"
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-real-reader-translation-ffeae50.fr.md",
+          "sha256": "9c39bed3d25819a1f1ac716405a9a2ec28005db2237141d77ab38d6c7d4b2c2e",
+          "responsible": "Codex (OpenAI), lecture française autonome puis confrontation aux types et corps Lean complets",
+          "revision": "ffeae501f4425e80705a1b23903dadaf3a3b7937",
+          "revision_evidence": "Révision examinée : `ffeae501f4425e80705a1b23903dadaf3a3b7937`."
         },
         "translation": {
-          "status": "pending"
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-real-reader-translation-ffeae50.fr.md",
+          "sha256": "9c39bed3d25819a1f1ac716405a9a2ec28005db2237141d77ab38d6c7d4b2c2e",
+          "responsible": "Codex (OpenAI), lecture anglaise autonome puis confrontation FR/EN et aux preuves Lean",
+          "revision": "ffeae501f4425e80705a1b23903dadaf3a3b7937",
+          "revision_evidence": "Révision examinée : `ffeae501f4425e80705a1b23903dadaf3a3b7937`."
         },
         "independent": {
           "status": "not_recorded"
