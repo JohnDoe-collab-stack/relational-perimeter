@@ -33,6 +33,7 @@ STRENGTHEN = PREFIX + "strengthenSeparation___redArg"
 ADD_MARGIN = PREFIX + "StrictSeparation_addRight___redArg"
 FORWARD = PREFIX + "RelationalRealOrder_ComparisonAttempt_forward___redArg"
 TRANSPORT = PREFIX + "RelationalRealOrder_transportOrder"
+SEED_PRODUCT = PREFIX + "RelationalRealMultiplication_seedMultiplicationArchive___redArg"
 
 
 def require(value, expected, label):
@@ -335,8 +336,10 @@ def main():
     # Independently mutate the final transport's three current-child inputs.
     monotone_mutations = []
     monotone_mutations.append(mutate_call(functions, MULTIPLY, TRANSPORT, 9, "lean_box(0)"))
-    # Mutate only the last fresh-product anchor, not the earlier difference*c.
-    anchor = FIELD + "startProductAt___redArg"
+    # The public startProductAt wrapper is intentionally compiled through the
+    # safe archive factory. Mutate only the last such factory call, not the
+    # earlier difference*c occurrence.
+    anchor = SEED_PRODUCT
     matches = list(re.finditer(re.escape(anchor) + r'\(([^;]+)\)', functions[MULTIPLY]))
     if len(matches) != 2:
         raise ValueError("Monotonicity product-anchor shape changed")
