@@ -184,3 +184,10 @@ Tests/ExpectedFailure/NativeSourceCannotBeReadout.lean.fail	dependent-type	7	2	S
 Tests/ExpectedFailure/NativeGroupingCannotConsumeReconstructedCode.lean.fail	dependent-type	7	24	NativeSourceExecution
 Tests/ExpectedFailure/NativeTargetCannotBePrescribedCode.lean.fail	dependent-type	7	2	NativeTarget source
 Tests/ExpectedFailure/NativeLimitCannotDropProducedStep.lean.fail	dependent-type	7	15	NativeLimitProduction family bank j p
+Tests/ExpectedFailure/PrivateAdditionArchive.lean.fail	privacy	11	2	Unknown constant `RelationalPerimeter.Constitution.Reals.RelationalRealAddition.AdditionArchive.mk`
+Tests/ExpectedFailure/PrivateMultiplicationArchive.lean.fail	privacy	11	2	Unknown constant `RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication.MultiplicationArchive.mk`
+Tests/ExpectedFailure/PrivateNegationArchive.lean.fail	privacy	11	2	Unknown constant `RelationalPerimeter.Constitution.Reals.RelationalRealNegation.NegationArchive.mk`
+Tests/ExpectedFailure/PrivateReciprocalArchive.lean.fail	privacy	12	2	Unknown constant `RelationalPerimeter.Constitution.Reals.ReciprocalRuntime.Archive.mk`
+Tests/ExpectedFailure/PrivateNativeArchive.lean.fail	privacy	10	2	Unknown constant `RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.NativeArchive.mk`
+Tests/ExpectedFailure/PrivateAdditionArchiveUpdate.lean.fail	privacy	10	2	invalid {...} notation, constructor for `AdditionArchive` is marked as private
+Tests/ExpectedFailure/PrivateNativeArchiveUpdate.lean.fail	privacy	9	2	invalid {...} notation, constructor for `NativeArchive` is marked as private

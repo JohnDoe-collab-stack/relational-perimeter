@@ -89,9 +89,12 @@ mêmes futurs sous un contrat
 ```
 
 Le runtime intervient précisément entre la cible commune et les futurs : il
-doit installer la cible produite dans la mémoire réellement consommée par la
-continuation. Sans ce passage, le regroupement resterait un fait local sans
-effet causal sur la suite.
+doit installer la cible produite pour l'observation qui la requiert et
+continuer, sans reconstruction, les ressources que l'exécution suivante
+consomme réellement. Selon le contrat, ces ressources sont la cible elle-même
+ou les successeurs d'archives, la banque et le journal qui l'ont produite. Sans
+ce passage explicite, le regroupement resterait un fait local sans effet causal
+sur la suite.
 
 ## Une différence change de fonction, pas d'existence
 
@@ -247,7 +250,8 @@ Un résultat local est positif parce que ses données et ses témoins sont
 construits. Il ne devient pas global par agrandissement. Même une cible locale
 acceptable ne dit pas encore :
 
-- qu'elle a été installée comme mémoire du pas suivant ;
+- quelle part de son état — cible installée, successeurs d'archives, banque ou
+  journal — sera effectivement lue par le pas suivant ou son observation ;
 - que la même règle vaut dans tous les contextes finis autorisés ;
 - que les futurs issus de deux sources regroupées sont identiques ;
 - que toutes les continuations appartiennent à une clôture déjà achevée.
@@ -291,8 +295,8 @@ fini ; il ne produit pas encore la continuation historique suivante.
 
 ## Second axe local–global : succession par le runtime
 
-Le second axe est **vertical et séquentiel**. La cible produite aujourd'hui
-doit devenir une ressource de l'exécution suivante :
+Le second axe est **vertical et séquentiel**. La transition produite aujourd'hui
+doit fournir exactement les ressources du futur suivant :
 
 ```text
 étape n
@@ -300,8 +304,9 @@ doit devenir une ressource de l'exécution suivante :
   sources distinctes
        -> actions et traces
        -> cible regroupée c_n
-       -> mémoire vivante M_n contenant la ressource nécessaire
-       -> exécution suivante qui lit M_n
+       -> mémoire vivante M_n contenant c_n pour l'observation
+          et les successeurs requis pour continuer
+       -> exécution suivante qui lit dans M_n les champs de son contrat
 
 étape n+1
 
@@ -310,16 +315,16 @@ doit devenir une ressource de l'exécution suivante :
        -> nouvelle mémoire M_(n+1)
 ```
 
-Le regroupement horizontal ne suffit pas : une cible prouvée mais jamais lue
-par le calcul suivant resterait un certificat sans rôle constitutif. Le runtime
-vertical ne suffit pas non plus : transporter un état ne justifie pas que
-plusieurs charges aient une obligation commune.
+Le regroupement horizontal ne suffit pas : une cible prouvée mais sans aucun
+lien avec une observation ou une continuation resterait un certificat sans
+rôle constitutif. Le runtime vertical ne suffit pas non plus : transporter un
+état ne justifie pas que plusieurs charges aient une obligation commune.
 
 Le passage local–global exige leur composition :
 
 ```text
 codétermination horizontale
-  + consommation verticale de la cible produite
+  + continuation verticale des ressources produites requises
   + même contrat sur chaque contexte fini accessible
   = cohérence globale relationnelle
 ```
@@ -341,8 +346,11 @@ indépendamment ne construit pas un comportement global.
 
 ### Une même continuité causale
 
-La sortie du pas précédent doit être la ressource lue par le pas suivant. Un
-témoin stocké mais jamais consommé ne suffit pas.
+Le pas suivant doit lire les ressources que le pas précédent a effectivement
+produites pour lui : cible installée lorsque le contrat la reprend, ou
+successeurs d'archives, banque et journal lorsque la cible n'est qu'une
+observation. Un témoin stocké mais jamais consommé par aucune transition,
+admission, événement ou observation du contrat ne suffit pas.
 
 ### Une stabilité sur tous les futurs finis autorisés
 
@@ -437,7 +445,11 @@ La chaîne exécutée possède les propriétés suivantes :
 - le témoin exposé et accepté est transporté depuis la charge normalisée
   effectivement produite, sans second rappel indépendant de la loi de Cauchy ;
 - le regroupement fini consomme chaque source retenue dans l'ordre ;
-- la sortie regroupée est exécutée comme réponse suivante ;
+- la route autoritative historique peut reprendre explicitement la cible
+  installée par `continueInstalled` ;
+- les services arithmétiques et natifs relisent la cible installée comme
+  observation, tandis que leur calcul suivant continue les archives sources,
+  la banque et le journal produits ;
 - le pont riche–réduit transporte exactement les transitions, événements,
   admissions et observations sur toute liste finie ;
 - deux sources regroupées de même profondeur ont une même projection publique,
@@ -464,7 +476,8 @@ physique, ne permet pas de comparer deux producteurs différents par la seule
 égalité de leurs mémoires et ne reconstruit pas les histoires ou les
 occurrences depuis leur projection.
 
-Le transport historique est lui aussi désormais causalement fermé. Chaque
+Sur la route autoritative `HistoricalGrouping`–`AuthoritativeRuntime`, le
+transport historique est lui aussi causalement fermé. Chaque
 nouvelle charge agit sur la ressource normalisée du préfixe effectivement
 transportée ; elle ne repart pas d'une graine reconstruite. La cible issue de
 ce regroupement est installée dans la mémoire, puis la continuation suivante
@@ -564,7 +577,8 @@ Connaître une production signifie pouvoir :
 - reproduire la recherche et l'action ;
 - vérifier la préservation annoncée ;
 - suivre la cible effectivement produite ;
-- installer cette cible dans la mémoire suivante ;
+- installer cette cible pour l'observation et continuer les ressources que le
+  calcul suivant consomme ;
 - déterminer les futurs permis par le contrat.
 
 Le global est alors une invariance de méthode et de comportement, non une
@@ -650,7 +664,7 @@ mémoire actuelle + précision p
   -> réponse source exécutée
   -> action de regroupement
   -> obligation limite produite
-  -> mémoire suivante
+  -> mémoire suivante : cible observable + banque/journal continués
   -> approximation dyadique lue en aval
 ```
 
@@ -658,7 +672,8 @@ Les réponses à différentes précisions sont des occurrences distinctes. Leur
 compatibilité numérique ne les identifie pas. Le regroupement doit consommer
 leurs ressources et leurs témoins de proximité afin de produire une obligation
 limite commune. Le runtime doit ensuite rendre cette obligation disponible à
-la continuation suivante.
+l'observation et continuer exactement la banque, le journal et les archives
+dont l'exécution suivante a besoin.
 
 Le réel relationnel obtenu n'est donc pas une suite de codes prise comme objet
 runtime primitif. Il est le comportement global d'un runtime capable de
@@ -678,6 +693,15 @@ occurrence ni posséder la même histoire. Leur équivalence porte effectivement
 sur leurs readouts et leurs futurs limites finis, puis se relie dans les deux
 sens à l'équivalence de présentations dyadiques effectives. L'identité
 historique reste plus fine que cette équivalence réelle.
+
+Dans le modèle fonctionnel formalisé, un `Step` est déterminé par son service,
+son archive et sa précision : deux évaluations pures aux mêmes indices sont
+propositionnellement égales. L'individuation relationnelle ne repose donc pas
+sur un jeton caché d'appel machine, mais sur la position dans la trace, les
+archives courantes et leurs continuations. Lorsqu'une médiation « partage le
+même pas », elle lie une seule donnée produite et la transmet aux deux usages
+de la trace ; elle ne prétend pas distinguer deux réévaluations identiques aux
+mêmes indices.
 
 Le producteur, la cohérence intraterme, le module monotone et la loi de Cauchy
 restent des contextes reçus. Le runtime constitue leurs exécutions,
@@ -717,11 +741,22 @@ d'une approximation calculable, d'un module monotone et d'une loi de Cauchy.
 Elle reste cependant numérique et comportementale : elle n'égalise pas les
 environnements, les journaux, les ressources ou les occurrences.
 
-Ce résultat ne constitue pas encore tous les réels usuels. Il ne fournit ni
-les opérations de corps, ni l'ordre ou l'apartness, ni la densité, ni la
-propriété archimédienne, ni la complétude d'ordre. Un futur raccord aux réels
-usuels devra partir de ces comportements effectifs, transporter les structures
-annoncées et seulement ensuite justifier le readout extensif correspondant.
+Le porteur effectif est maintenant muni des constantes dyadiques, de l'addition,
+de l'opposé, de la multiplication, de l'inverse sous témoin positif
+d'apartness à zéro, de l'ordre strict, de l'apartness, de la densité dyadique et
+de bornes naturelles produites. Ces structures sont exécutées sur les archives
+courantes avant leur transport au readout. La complétude de Cauchy native est
+également construite : sa médiation d'unicité part d'une banque native, partage
+un pas terme entre deux lois reçues et continue la banque ainsi que les deux
+archives candidates.
+
+Cela ne constitue toujours pas tous les réels classiques et ne prouve pas la
+complétude par borne supérieure. La correspondance porte sur les présentations,
+carriers et familles de Cauchy effectivement reçus. Le constructeur
+`certified` accepte en outre un service extérieur satisfaisant explicitement
+ses contrats : le type est fermé par ses constructeurs, mais son contenu reste
+ouvert relativement à cette interface reçue. Aucun de ces résultats ne produit
+`AC`, `CH` ou une totalité extensive de tous les réels.
 
 ## Raccord conceptuel avec Gödel
 
@@ -767,7 +802,9 @@ la même chaîne exécutée :
 - chaque réponse de précision est calculée depuis une mémoire accessible ;
 - chaque cible de regroupement est produite par une action qui consomme ses
   sources effectivement exécutées ;
-- la cible produite devient une ressource lue par la transition suivante ;
+- la cible produite est installée et relue exactement comme observation après
+  la transition ; le calcul riche suivant continue la banque et le journal,
+  sans prendre ce champ d'observation installé comme entrée ;
 - les occurrences, journaux et provenances sources restent distincts et
   traçables ;
 - tout oubli de données est autorisé par un contrat explicite de futurs ;
@@ -781,17 +818,18 @@ la même chaîne exécutée :
 - le readout est dérivé de l'exécution et n'est jamais utilisé pour constituer
   rétroactivement ses occurrences.
 
-La cible plus large des réels usuels reste ouverte sur les opérations de corps,
-l'ordre ou l'apartness, la densité, la propriété archimédienne, la complétude
-d'ordre et la fidélité de leur transport par le readout. La couverture de tous
-les réels classiques, `AC` et `CH` ne résulte pas de la seule correspondance
-effective obtenue ici.
+Les opérations de corps constructives dans leur domaine, l'ordre, l'apartness,
+la densité dyadique, les bornes naturelles et la fidélité de leur transport par
+le readout sont fermés dans la portée effective déclarée. Restent hors de cette
+portée la couverture de tous les réels classiques, la complétude d'ordre par
+borne supérieure, `AC` et `CH`.
 
 ## Conclusion
 
 Le regroupement conserve le passé distinct tout en produisant un futur commun.
 Il agit horizontalement sur les obligations de sources constituées ; le runtime
-agit verticalement en faisant de la cible produite la mémoire du calcul suivant.
+agit verticalement en installant la cible produite pour l'observation et en
+continuant les contextes exacts dont le calcul suivant a besoin.
 
 Le global est la cohérence de cette articulation sous toute extension finie
 autorisée. La totalité positive est la capacité effective de produire chaque

@@ -103,10 +103,17 @@ abbrev RetainedNegation (source : Service P baseDepth) :=
     NegationProduction source archive journal p
 
 structure NegationArchive (sourceEnvironment : Service P baseDepth) where
+  private mk ::
   source : sourceEnvironment.Archive
   journal : Journal P baseDepth
   retained : List (RetainedNegation sourceEnvironment)
   last : Option SignedDyadicCode
+
+/-- Start one negation occurrence from the received source archive.  The
+caller cannot prescribe a result or retained history. -/
+def seedNegationArchive {source : Service P baseDepth}
+    (sourceArchive : source.Archive) : NegationArchive source :=
+  ⟨sourceArchive, Journal.root P baseDepth, [], none⟩
 
 structure NegationMemory (source : LiveEnvironment) where
   source : source.Memory
@@ -192,7 +199,7 @@ def negEnvironment (source : Service P baseDepth) : Service P baseDepth where
   RichEvent := NegationRichEvent source
   Read := Option SignedDyadicCode
   Resource archive p := NegationProduction source archive.source archive.journal p
-  initialArchive := ⟨source.initialArchive, Journal.root P baseDepth, [], none⟩
+  initialArchive := seedNegationArchive source.initialArchive
   execute archive p := produceNegation source archive.source archive.journal p
   next {archive} {p} production := negationNext archive production
   richEvent {archive} {p} production := negationEvent archive production
@@ -241,6 +248,7 @@ end RelationalPerimeter.Constitution.Reals.RelationalRealNegation
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNegation.NegationProduction.readoutExact
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNegation.RetainedNegation
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNegation.NegationArchive
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNegation.seedNegationArchive
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNegation.NegationMemory
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNegation.NegationMemory.extensionality
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNegation.NegationLiveEvent

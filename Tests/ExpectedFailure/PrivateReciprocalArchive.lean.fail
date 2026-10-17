@@ -1,0 +1,12 @@
+import RelationalPerimeter.Constitution.Reals.ReciprocalRuntime
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+open RelationalPerimeter.Constitution.Reals.RelationalRealOrder
+open RelationalPerimeter.Constitution.Reals.ReciprocalRuntime
+variable {P : CircularPresentation} {d : Nat}
+variable (source : Real P d) (witness : Apartness source (zero P d))
+def forgedReciprocalArchive (code : SignedDyadicCode) : Archive source witness :=
+  Archive.mk (ReciprocalDomain.sourceSuccessor witness) (Journal.root P d) [] (some code)

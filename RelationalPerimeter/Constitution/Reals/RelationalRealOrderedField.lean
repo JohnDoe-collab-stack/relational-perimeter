@@ -108,13 +108,16 @@ def onePositive (P : CircularPresentation) (baseDepth : Nat) : Positive (one P b
 /-- Fresh composite occurrence, anchored at received native archives. This
 never resets an already existing composite archive or either child archive. -/
 def startAdditionAt (a b : Real P baseDepth) (aa : (environment a).Archive) (ba : (environment b).Archive) :
-    (environment (.add a b)).Archive := ⟨aa, ba, ConstitutiveRuntime.Journal.root P baseDepth, [], none⟩
+    (environment (.add a b)).Archive :=
+  RelationalRealAddition.seedAdditionArchive aa ba
 
 def startProductAt (a b : Real P baseDepth) (aa : (environment a).Archive) (ba : (environment b).Archive) :
-    (environment (.mul a b)).Archive := ⟨aa, ba, ConstitutiveRuntime.Journal.root P baseDepth, [], none⟩
+    (environment (.mul a b)).Archive :=
+  RelationalRealMultiplication.seedMultiplicationArchive aa ba
 
 def startNegationAt (a : Real P baseDepth) (aa : (environment a).Archive) :
-    (environment (.neg a)).Archive := ⟨aa, ConstitutiveRuntime.Journal.root P baseDepth, [], none⟩
+    (environment (.neg a)).Archive :=
+  RelationalRealNegation.seedNegationArchive aa
 
 structure PositiveDifference {a b : Real P baseDepth} (origin : StrictOrder a b)
     (na : (environment (.neg a)).Archive) (za : (environment (zero P baseDepth)).Archive) where

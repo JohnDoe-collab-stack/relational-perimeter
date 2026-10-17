@@ -737,7 +737,7 @@ reproduisent les opérandes ou la cible.
 | Amplitude signée, pas taille des composantes fines | `Amplitude.fromProbe`, `signedCrossProductBound` | `cancellationAmplitude`, `fineComponentsNotBoundedByAmplitude` |
 | Budget croisé suffisant et erreur du produit | `nat_le_powerOfTwo`, `productToleranceBudget`, `Near.mulRight`, `Near.mul` | `crossBudget`, `nonzeroProductError` |
 | Sondages puis raffinements réellement produits | `MultiplicationProduction`, `produceMultiplication` | `currentProbes`, `exactProbeSuccessors`, `twoApplicationsPerRole` |
-| Action, journal, cible installée et réutilisée | `multiplicationProgram`, `multiplicationPacketSameTarget`, `multiplicationNext` | `actionConsumesOwnedRefinements`, `installedSameTarget`, `journalContinues`, `retainedChronologically` |
+| Action, journal, cible installée et relue | `multiplicationProgram`, `multiplicationPacketSameTarget`, `multiplicationNext` | `actionConsumesOwnedRefinements`, `installedSameTarget`, `journalContinues`, `retainedChronologically` |
 | Projection riche/live et mémoire du seul contrat live fixé | `multiplicationNextProjection`, `multiplicationEventProjection`, `mulEnvironment` | `projectedFutures`, `fixedEnvironmentMinimality` |
 | Événement riche discriminant | `multiplicationRichEventReflectsArchive` | `richEventOwnsArchive`, `richEventsDiscriminateHistory` |
 | Composition et cohérence depuis toute archive | `Real.mul`, `currentReadout`, `multiplicationCoherent` | `currentReply`, `coherence`, `valueNineSixteenths` |
@@ -1994,8 +1994,11 @@ build. Le raccord source `ExecutedCauchyFamily` antérieur garde sa portée.
 
 **Classe exacte et instance concrète.** `RelationalRealEffectiveCorrespondence`
 construit `effectiveCorrespondence P d`, sans hypothèse terminale de
-correspondance. Les objets sont le porteur fermé `Real P d` (ses cinq
-constructeurs et leurs compositions), les `EffectiveDyadicPresentation`
+correspondance. Les objets sont le porteur `Real P d`, syntaxiquement fermé par
+ses cinq constructeurs et leurs compositions. Son cas `certified` reçoit
+toutefois un `CertifiedService` extérieur avec ses lois : la syntaxe est fermée,
+mais le contenu reste ouvert relativement à cette interface. Les autres objets
+sont les `EffectiveDyadicPresentation`
 exécutables avec cohérence positive, et les `EffectiveCauchyReal.Carrier`
 munis de leur module monotone propre. Les équivalences sont respectivement
 `Equivalent` / `NumericalFutureEquivalent`, l'équivalence positive des
@@ -2070,7 +2073,11 @@ services, archives ou occurrences.
 
 La ressource riche courante est `NativeArchive family` : banque dépendante
 `(n : Nat) → Archive (environment (family.terms n))`, journal courant,
-chronologie des productions et production installée. À précision `s`,
+chronologie des productions et production installée. Son constructeur est
+privé. `seedNativeArchive` reçoit une banque, mais impose le journal racine,
+l'historique vide et l'absence de cible installée ; les autres archives riches
+d'arithmétique ont la même protection, avec des fabriques qui reçoivent
+seulement leurs archives enfants courantes. À précision `s`,
 `nativeSourceProgram` reçoit `NativeSourceContext.archive`, lié à `bank (M s)`.
 `searchNativeSource` lit ce champ reçu, exécute exactement une fois le terme
 diagonal à `s`, puis réindexe seulement le paramètre archive de ce même Step
@@ -2114,34 +2121,46 @@ canonique dans les cinq constructeurs reste celle détaillée plus haut ; elle n
 constitue pas une absence d'appel compilé. Aucun nouveau `HEq` n'est introduit.
 
 `NativeCandidate` reçoit une loi de convergence sur Steps natifs et
-candidats courants, pas l'équivalence terminale. `observeCandidate` possède
-une contrepartie native nouvellement exécutée pour le Step terme-source
-réalisé reçu, puis consomme celle-ci dans la loi native du candidat et
-réaligne le Near aux codes des deux Steps reçus.
-`asExecutedCandidate` déclare explicitement le contexte natif frais de
-cette commodité. `nativeUnique` réemploie l'unicité de la famille réalisée ;
-`nativeAuthoritativeUnique` compare son véritable candidat natif à l'autre
-via `nativeUnique`. Le médiateur partagé de
-sa trace chronologique est le même terme-source **réalisé** exécuté ; les
-deux contreparties natives supplémentaires sont des observations distinctes.
-Ce transport ne prétend ni partager une histoire native originelle entre
-les deux callbacks ni continuer une archive native à travers des indices
-de types différents. Les trois successeurs continués sont ceux du médiateur
-réalisé et des deux candidats. La conclusion reste `Equivalent` et
-`NumericalFutureEquivalent` depuis archives candidates arbitraires.
-`nativeProducedLimitCorrespondence` compare seulement en aval la limite-source
-de la vue effective à la limite native construite. `nativeCompleteness` expose
+candidats courants, pas l'équivalence terminale. `mediateNative` produit un
+seul Step du terme natif depuis la banque courante de la trace et passe cette même donnée
+aux deux lois candidates. `NativeUniquenessTrace` continue ponctuellement le
+successeur de ce Step dans la banque, ainsi que les deux successeurs candidats.
+`nativeNumericalFutures` projette ensuite cette trace et `nativeUnique` dérive
+de ces futurs `Equivalent` et `NumericalFutureEquivalent`. L'équivalence
+exportée initialise la première banque par `initialBank`; le producteur de trace
+reste paramétré par toute banque courante reçue.
+
+`observeCandidate` et `asExecutedCandidate` restent une commodité numérique :
+ils adaptent explicitement un terme de `realizedFamily` à une contrepartie
+native fraîche. Ils ne sont plus appelés par `nativeUnique` ni par
+`nativeAuthoritativeUnique`. Le médiateur constitutif de l'unicité native n'est
+donc plus une réalisation de `toPresentation`. La correspondance aval
+`nativeProducedLimitCorrespondence` peut encore comparer la limite de la vue
+effective à la limite native construite, sans constituer cette dernière.
+
+La conclusion reste `Equivalent` et `NumericalFutureEquivalent` depuis des
+archives candidates reçues. Elle ne fournit aucune égalité de constructeurs,
+services, archives ou occurrences.
+`nativeCompleteness` expose
 le service riche, cette projection numérique, la limite produite, les comparaisons
-de termes, la convergence sans replay et l'unicité. `FamilyCorrespondence` porte
+de termes, la convergence autoritative et l'unicité native directe.
+`FamilyCorrespondence` porte
 ce paquet ; `LimitCorrespondence` expose également le candidat natif exact et
 sa projection, remplis concrètement dans `EffectiveCorrespondence`.
 
 **Formation, exécution, preuve et oubli.** Les indices de Steps et les
-égalités d'origine conservent les occurrences requises dans les paquets.
-Les producteurs exécutent leurs Steps une fois dans les contextes déclarés ;
-l'observation de convergence extrait ceux déjà possédés sans les réexécuter.
+égalités d'origine conservent les ressources requises dans les paquets et les
+positions de trace portent l'identité historique. Les producteurs canoniques
+exécutent leurs Steps une fois dans les contextes déclarés ; l'observation de
+convergence autoritative extrait ceux déjà possédés sans les réexécuter.
 Les observations numériques de commodité qui exécutent des contreparties
 fraîches sont distinguées de cette route constitutive.
+À service, archive et précision fixés, `Step` est toutefois un paquet
+fonctionnel déterministe : une réévaluation pure aux mêmes indices lui est
+propositionnellement égale. La formalisation interdit un code nu, un indice ou
+une archive étrangers, mais ne prétend pas disposer d'un jeton génératif qui
+distinguerait deux évaluations identiques. « Même Step » désigne ici la même
+donnée liée et partagée dans la construction canonique.
 Les raccords numériques utilisent séparément `currentReadout` en preuve.
 Les projections peuvent oublier les ressources seulement après cette
 construction ; elles ne les récupèrent pas en sens inverse.
@@ -2176,9 +2195,8 @@ explicite est distincte des captures visibles de la fermeture du service,
 contrôlées dans le C. Ni coût universel ni compacité d'un callback arbitraire.
 
 **Vérifications de la correction constitutive.** Les trois modules production
-`NativeLimitRuntime`, `NativeCauchy` et `EffectiveCorrespondence` comportent
-respectivement 48, 22 et 20 déclarations explicites auditées ; leurs deux
-fichiers de tests natif/terminal comportent 58 et 63 déclarations. La famille
+`NativeLimitRuntime`, `NativeCauchy` et `EffectiveCorrespondence` gardent un
+unique bloc terminal `AXIOM_AUDIT`. La famille
 test est composée de sommes ; sa loi consomme les quatre sous-Steps des deux
 productions reçues. Les tests couvrent banque non initiale, plusieurs précisions,
 continuation et retour à un indice conservé (sous l'inégalité des indices
@@ -2193,37 +2211,41 @@ son `SameValue` avec zéro ; le seuil reste l'identité puisque `p ≤ s ≤ s+1
 `candidateConstructorsDistinct` transforme leur égalité en `Empty` ;
 `numericalAgreementWithoutIdentity` conserve conjointement cette séparation,
 `Equivalent` et `NumericalFutureEquivalent`. `nativeUnique` et
-`nativeAuthoritativeUnique` sont appliqués à ce candidat concret ; la trace
-à deux requêtes utilise ses archives non initiales sans identifier les occurrences.
+`nativeAuthoritativeUnique` sont appliqués à ce candidat concret. Une trace
+native directe à deux requêtes part d'une banque non initiale, partage le même
+médiateur entre les deux lois et continue la banque et les deux archives ; la
+trace historique de l'adaptateur réalisé reste testée séparément.
 Le wrapper `certifiedCandidate` ne revendique plus une distinction syntaxique.
 Le test leaf/certified de l'ancien lot d'unicité-source reste inchangé.
 
-Les builds ciblés passent (161 jobs pour les deux tests et dépendances).
-Le build global est rejoué, 398 jobs :
-`ALL_CONSTANTS_OK constants=37002 modules=395 generatedExceptions=735 writtenExceptions=0`.
-Les 396 fichiers Lean ont un unique audit terminal, aucun token interdit et
-un olean ; les 329 modules production sont stratifiés sans orphelin.
-Les quatre frontières d'import et leurs quatre autotests passent. Les 182
-fixtures passent avec leurs 185 sites diagnostiques exacts et sans erreur supplémentaire.
-Six nouvelles fixtures séparent kernels/terms, réception du contexte,
-source/Step versus code, regroupement d'une source versus code reconstruit,
-cible produite versus code prescrit et rétention du Step. Trois fixtures
-existantes sont adaptées à la nouvelle archive exacte/à l'interface enrichie,
-sans affaiblir leur refus de reset ou de loi numérique nue.
+Après la correction issue de l'audit indépendant, les validations antérieures
+ne valent plus comme clôture : build global, audit exhaustif des constantes,
+stratification, frontières d'import, documents et deux façades de fixtures
+doivent être rejoués sur le nouveau SHA d'évidence. Les fixtures de confidentialité
+verrouillent désormais les cinq constructeurs d'archives riches et les deux
+formes de mise à jour qui permettraient de prescrire `last` ou `installed`.
 
-Les seize scripts codegen passent après stabilisation des artefacts. Le
-contrôle natif suit cinq routes et rejette 40 mutations à classe de refus
-vérifiée : production source et regroupement (callbacks concrets des Program),
+Le contrôle codegen natif suit désormais neuf routes : production source et
+regroupement (callbacks concrets des Program),
 charge normalisée issue du Step/Near exacts, mise à jour banque/journal et
 installation partagée, fermeture live kernels+module seuls, convergence
-extraite sans replay. Sont notamment rejetés l'oubli du contexte reçu, les
+autoritative extraite du paquet reçu, médiation d'unicité native, continuation
+de sa banque et de ses archives, projection et futur numérique. Sont notamment
+rejetés l'oubli du contexte reçu, les
 substitutions de Steps/archives, le reset de la banque, la capture visible du
-family riche et la duplication valide d'une production/action. La boucle du
+family riche et la duplication valide d'une production, d'une action ou d'une
+médiation. Ce contrôle exclut explicitement la distinction entre réévaluations
+pures aux mêmes indices. La boucle du
 normaliseur générique existant reste une frontière nommée ; ses entrées et
 la consommation de sa charge sont contrôlées. La continuation est interprétée
 sur le chemin d'allocation partagé : aucun théorème sur la gestion C des
 références ou sur l'allocation en place n'est prétendu. Les captures internes
 des callbacks et les formations propositionnelles sont également exclues.
+
+Les métriques et commandes du paragraphe suivant décrivent l'ancienne révision
+d'évidence `3313f8d`. Elles restent une trace reproductible de ses contrôles
+mécaniques, mais l'audit indépendant qui l'a ensuite déclarée `NOT VALIDATED`
+interdit de les lire comme une clôture de la révision corrigée.
 
 L'autotest des deux gates de fixtures passe les vingt cas : baselines Bash
 et PowerShell de 182 fixtures chacune, puis dix-huit refus de mutations

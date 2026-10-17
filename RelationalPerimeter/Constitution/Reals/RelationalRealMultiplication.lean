@@ -122,11 +122,19 @@ abbrev RetainedMultiplication (left right : Service P baseDepth) :=
     (p : Nat) × MultiplicationProduction left right la ra journal p
 
 structure MultiplicationArchive (leftEnvironment rightEnvironment : Service P baseDepth) where
+  private mk ::
   left : leftEnvironment.Archive
   right : rightEnvironment.Archive
   journal : Journal P baseDepth
   retained : List (RetainedMultiplication leftEnvironment rightEnvironment)
   last : Option SignedDyadicCode
+
+/-- Start one composite multiplication occurrence from the two received child
+archives.  The caller cannot prescribe a result or retained history. -/
+def seedMultiplicationArchive {left right : Service P baseDepth}
+    (leftArchive : left.Archive) (rightArchive : right.Archive) :
+    MultiplicationArchive left right :=
+  ⟨leftArchive, rightArchive, Journal.root P baseDepth, [], none⟩
 
 def MultiplicationArchive.project {left right : Service P baseDepth} (a : MultiplicationArchive left right) :
     CompositeMemory left.liveEnvironment right.liveEnvironment := ⟨left.project a.left, right.project a.right, a.last⟩
@@ -234,7 +242,7 @@ def mulEnvironment (left right : Service P baseDepth) : Service P baseDepth wher
   RichEvent := MultiplicationRichEvent left right
   Read := Option SignedDyadicCode
   Resource a p := MultiplicationProduction left right a.left a.right a.journal p
-  initialArchive := ⟨left.initialArchive, right.initialArchive, Journal.root P baseDepth, [], none⟩
+  initialArchive := seedMultiplicationArchive left.initialArchive right.initialArchive
   execute a p := produceMultiplication left right a.left a.right a.journal p
   next {a} {p} production := multiplicationNext a production
   richEvent {a} {p} production := ⟨a, p, production⟩
@@ -279,6 +287,7 @@ end RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication.MultiplicationProduction.readoutExact
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication.RetainedMultiplication
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication.MultiplicationArchive
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication.seedMultiplicationArchive
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication.MultiplicationArchive.project
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication.MultiplicationRichEvent
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication.MultiplicationLiveEvent

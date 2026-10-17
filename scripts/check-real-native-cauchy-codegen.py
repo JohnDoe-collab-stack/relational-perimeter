@@ -21,12 +21,22 @@ Value, Analysis, PREFIX = base["Value"], base["Analysis"], base["PREFIX"]
 tag, require, mutate = old["tag"], old["require"], old["mutate"]
 N, R, H, C = (PREFIX+x+"_" for x in ("RelationalRealNativeCauchy", "RelationalRealAddition", "HeterogeneousRealRuntime", "ConstitutiveRuntime"))
 PRODUCE, NEXT, LIVE, SERVICE, OBSERVE = (N+x for x in ("produceNativeLimit", "nativeNext", "nativeLiveStep___redArg", "nativeEnvironment", "observeLimit___redArg"))
+UNIQUE_MEDIATE = N+"mediateNative"
+UNIQUE_TRACE = N+"produceNativeUniquenessTrace"
+UNIQUE_PROJECT = N+"NativeUniquenessTrace_toNumerical"
+UNIQUE_FUTURE = N+"nativeNumericalFutures___lam__0"
+UNIQUE = N+"nativeUnique"
 EXEC, ENV, CODE, STEP_NEXT = R+"executeAt", R+"environment", H+"Step_code___redArg", H+"Step_next___redArg"
 NORMAL, EXECUTOR, JOURNAL = N+"nativeNormalized___redArg", C+"execute___redArg", C+"ExecutedRequest_completedJournal___redArg"
 TRACE = N+"nativeNormalizationTrace___redArg"
 SOURCE_CHARGE = PREFIX+"LocalGrouping_sourceCharge"
 TRANSPORT = "lp_relational_x2dperimeter_ConstitutiveSearch_Grouping_AcceptanceAction_transport___redArg"
 TERMS, KERNELS, MOD, MONO, LAW, BANK, KSTEP, ANSWER = ("l_native_"+x for x in ("terms", "kernels", "modulus", "monotone", "cauchy", "bank", "kernel_step", "kernel_answer"))
+UNIQUE_TERMS, UNIQUE_MODULUS, UNIQUE_BANK = (
+    "l_native_unique_terms", "l_native_unique_modulus", "l_native_unique_bank")
+UNIQUE_FIRST_RATE, UNIQUE_SECOND_RATE = "l_native_unique_first_rate", "l_native_unique_second_rate"
+UNIQUE_FIRST_LAW, UNIQUE_SECOND_LAW = "l_native_unique_first_law", "l_native_unique_second_law"
+UNIQUE_SYM, UNIQUE_COMPOSE = PREFIX+"Near_symm___redArg", PREFIX+"Near_compose___redArg"
 
 
 def family():
@@ -186,6 +196,226 @@ def run(functions,params,entry,args,watched="",expected=0,unfold_normalizer=Fals
     return value
 
 
+def uniqueness_family():
+    return Value(fields={0: Value(function=UNIQUE_TERMS), 1: Value(),
+                         2: Value(function=UNIQUE_MODULUS), 3: Value(), 4: Value()})
+
+
+def uniqueness_candidate(side):
+    return Value(fields={0: tag(side+"-real"),
+                         1: Value(function=UNIQUE_FIRST_RATE if side == "first" else UNIQUE_SECOND_RATE),
+                         2: Value(function=UNIQUE_FIRST_LAW if side == "first" else UNIQUE_SECOND_LAW)})
+
+
+def uniqueness_query():
+    # p=2; p+1=3; rates are 7 and 10; the response extensions are 13 and 11.
+    return Value(tags=frozenset({"query"}),
+                 fields={i: Value(number=n) for i,n in enumerate((2,20,21,3,4))})
+
+
+def uniqueness_bank():
+    return Value(tags=frozenset({"bank-current"}),function=UNIQUE_BANK)
+
+
+def uniqueness_packet():
+    return Value(fields={0: tag("term-step"), 1: tag("first-step"), 2: tag("second-step"),
+                         3: tag("first-near"), 4: tag("second-near"), 5: tag("composed-near")})
+
+
+class NativeUniquenessAnalysis(Analysis):
+    def __init__(self,*args,watched="",mode="mediate",**kwargs):
+        super().__init__(*args,target="",capture=True,**kwargs)
+        self.watched,self.mode=watched,mode
+
+    def run(self,name,args):
+        count=int(name == self.watched)
+        if name == "l_native_unique_nat_add":
+            if any(value.number is None for value in args):
+                raise ValueError("Unknown native uniqueness precision arithmetic")
+            return Value(number=args[0].number+args[1].number),count,count
+        if name == UNIQUE_MODULUS:
+            if args[0].number != 3:
+                raise ValueError("Native uniqueness modulus lost p+1")
+            return Value(number=13),count,count
+        if name in (UNIQUE_FIRST_RATE,UNIQUE_SECOND_RATE):
+            if args[0].number != 3:
+                raise ValueError("Native candidate rate lost p+1")
+            return Value(number=7 if name == UNIQUE_FIRST_RATE else 10),count,count
+        if name == UNIQUE_TERMS:
+            if args[0].number != 13:
+                raise ValueError("Native uniqueness term lost modulus index")
+            return tag("term-real"),count,count
+        if name == UNIQUE_BANK:
+            if args[0].number != 13:
+                raise ValueError("Native uniqueness bank lost modulus index")
+            return tag("term-current"),count,count
+        if name == ENV:
+            role=next((side for side in ("term","first","second")
+                       if args[2].retained() == frozenset({side+"-real"})),None)
+            if role is None:
+                raise ValueError("Native uniqueness changed one Real environment")
+            return tag(role+"-environment"),count,count
+        if name == EXEC:
+            role=next((side for side in ("term","first","second")
+                       if args[2].retained() == frozenset({side+"-real"})),None)
+            if role is None:
+                raise ValueError("Unknown native uniqueness execution role")
+            require(args[3],role+"-current","Native uniqueness execution reset its current archive")
+            expected={"term":3,"first":20,"second":21}[role]
+            if args[4].number != expected:
+                raise ValueError("Native uniqueness execution changed its response precision")
+            hit=int(self.watched == "execute-"+role)
+            return tag(role+"-step"),count+hit,count+hit
+        if name in (UNIQUE_FIRST_LAW,UNIQUE_SECOND_LAW):
+            side="first" if name == UNIQUE_FIRST_LAW else "second"
+            for slot,expected in ((0,3),(1,13),(2,3),(3,20 if side == "first" else 21)):
+                if args[slot].number != expected:
+                    raise ValueError("Native convergence lost a positive precision/index extension")
+            for slot,expected in ((4,"term-current"),(5,side+"-current"),
+                                  (6,"term-step"),(7,side+"-step")):
+                require(args[slot],expected,"Native convergence lost its exact shared term/candidate Step")
+            expected_extension=13 if side == "first" else 11
+            if args[10].number != expected_extension:
+                raise ValueError("Native convergence lost a positive precision/index extension")
+            return tag(side+"-near"),count,count
+        if name == UNIQUE_SYM:
+            require(args[0],"first-near","Native uniqueness symmetrizes the wrong convergence")
+            return tag("symmetric-first"),count,count
+        if name == UNIQUE_COMPOSE:
+            require(args[0],"symmetric-first","Native uniqueness composition lost its first direction")
+            require(args[1],"second-near","Native uniqueness composition lost its second convergence")
+            return tag("composed-near"),count,count
+        if name == UNIQUE_MEDIATE and self.mode != "mediate":
+            require(args[5],"bank-current","Native trace mediation reset its incoming bank")
+            require(args[6],"first-current","Native trace mediation reset its first archive")
+            require(args[7],"second-current","Native trace mediation reset its second archive")
+            require(args[8],"query","Native trace mediation changed its query")
+            return uniqueness_packet(),count,count
+        if name == STEP_NEXT:
+            role=next((side for side in ("term","first","second")
+                       if args[0].retained() == frozenset({side+"-environment"})),None)
+            if role is None:
+                raise ValueError("Native trace successor changed environment")
+            require(args[1],role+"-current","Native trace successor changed incoming archive")
+            require(args[3],role+"-step","Native trace successor lost its exact owned Step")
+            expected={"term":3,"first":20,"second":21}[role]
+            if args[2].number != expected:
+                raise ValueError("Native trace successor changed response precision")
+            return tag(role+"-next"),count,count
+        if name in (UNIQUE_TRACE,UNIQUE_PROJECT):
+            if self.mode == "future":
+                bank=args[5]
+                if bank.function != N+"initialBank" or bank.fixed != 3:
+                    raise ValueError("Native future did not use the declared initial bank")
+                require(args[6],"first-current","Native future changed first archive")
+                require(args[7],"second-current","Native future changed second archive")
+                require(args[8],"queries","Native future changed query list")
+                if name == UNIQUE_TRACE:
+                    return tag("whole-native-trace"),count,count
+                require(args[9],"whole-native-trace","Native future projection lost its one produced rich trace")
+                return tag("whole-native-numerical-trace"),count,count
+            bank=args[5]
+            if bank.function != N+"updateBank___boxed" or bank.fixed != 6:
+                raise ValueError("Native trace recursion lost the updated current bank")
+            require(bank.fields[3],"bank-current","Native trace bank update lost the incoming bank")
+            if bank.fields[4].number != 13:
+                raise ValueError("Native trace bank update changed the visited index")
+            require(bank.fields[5],"term-next","Native trace bank update lost the term successor")
+            require(args[6],"first-next","Native trace recursion lost first successor")
+            require(args[7],"second-next","Native trace recursion lost second successor")
+            require(args[8],"remaining","Native trace recursion changed query tail")
+            if name == UNIQUE_TRACE:
+                return tag("native-rich-tail"),count,count
+            require(args[9],"native-rich-tail","Native projection lost the owned rich tail")
+            return tag("native-numerical-tail"),count,count
+        if name in (N+"toEffectiveFamily",N+"asExecutedCandidate",R+"executeReal"):
+            raise ValueError("Native uniqueness reintroduced the downstream readout realization")
+        value,low,high=super().run(name,args)
+        return value,low+count,high+count
+
+
+def run_native_uniqueness(functions,params,entry,args,watched="",expected=0,mode="mediate"):
+    value,low,high=NativeUniquenessAnalysis(functions,params,base["shared"]["reachable"],
+        watched=watched,mode=mode).run(entry,args)
+    if (low,high) != (expected,expected):
+        raise ValueError(f"Native uniqueness multiplicity {watched}: expected {expected}, got [{low},{high}]")
+    return value
+
+
+def native_uniqueness_cons_branch(functions,params,entry,query_slot):
+    condition=params[entry][query_slot]
+    pattern=(r'\{\s*_start:\s*\{\s*if \(lean_obj_tag\('+re.escape(condition)+
+             r'\) == 0\)\s*(\{.*\})\s*else\s*(\{.*\})\s*\}\s*\}')
+    match=re.fullmatch(pattern,functions[entry],re.S)
+    if match is None:
+        raise ValueError("Pinned native uniqueness list-branch shape changed")
+    alias="l_native_unique_cons_"+str(query_slot)+"_"+entry.rsplit("_",1)[-1]
+    return dict(functions,**{alias:match[2]}),dict(params,**{alias:params[entry]}),alias
+
+
+def check_native_uniqueness_mediate(functions,params):
+    args=[Value(),Value(),uniqueness_family(),uniqueness_candidate("first"),
+          uniqueness_candidate("second"),uniqueness_bank(),tag("first-current"),
+          tag("second-current"),uniqueness_query()]
+    for watched in ("execute-term","execute-first","execute-second",UNIQUE_FIRST_LAW,UNIQUE_SECOND_LAW,UNIQUE_COMPOSE):
+        result=run_native_uniqueness(functions,params,UNIQUE_MEDIATE,args,watched,1)
+        for slot,expected in ((0,"term-step"),(1,"first-step"),(2,"second-step"),
+                              (3,"first-near"),(4,"second-near"),(5,"composed-near")):
+            require(result.fields[slot],expected,"Native mediation lost a stored exact resource")
+
+
+def check_native_uniqueness_trace(functions,params):
+    functions,params,entry=native_uniqueness_cons_branch(functions,params,UNIQUE_TRACE,8)
+    query=uniqueness_query()
+    args=[Value(),Value(),uniqueness_family(),uniqueness_candidate("first"),
+          uniqueness_candidate("second"),uniqueness_bank(),tag("first-current"),
+          tag("second-current"),Value(fields={0:query,1:tag("remaining")})]
+    for watched,expected in ((UNIQUE_MEDIATE,1),(UNIQUE_TRACE,1),(EXEC,0)):
+        result=run_native_uniqueness(functions,params,entry,args,watched,expected,"trace")
+        require(result.fields[5].fields[0],"term-step","Native trace lost its one mediation packet")
+        require(result.fields[6],"native-rich-tail","Native trace lost its owned continuation")
+
+
+def check_native_uniqueness_projection(functions,params):
+    functions,params,entry=native_uniqueness_cons_branch(functions,params,UNIQUE_PROJECT,8)
+    rich=Value(fields={5:uniqueness_packet(),6:tag("native-rich-tail")})
+    args=[Value(),Value(),uniqueness_family(),uniqueness_candidate("first"),
+          uniqueness_candidate("second"),uniqueness_bank(),tag("first-current"),
+          tag("second-current"),Value(fields={0:uniqueness_query(),1:tag("remaining")}),rich]
+    for watched,expected in ((UNIQUE_PROJECT,1),(UNIQUE_MEDIATE,0),(EXEC,0),
+                             (UNIQUE_FIRST_LAW,0),(UNIQUE_SECOND_LAW,0)):
+        result=run_native_uniqueness(functions,params,entry,args,watched,expected,"projection")
+        for slot,expected_tag in ((4,"first-step"),(5,"second-step"),
+                                  (6,"composed-near"),(7,"native-numerical-tail")):
+            require(result.fields[slot],expected_tag,"Native numerical projection reconstructed/lost a result")
+
+
+def check_native_uniqueness_future(functions,params):
+    args=[Value(),Value(),uniqueness_family(),uniqueness_candidate("first"),
+          uniqueness_candidate("second"),tag("first-current"),tag("second-current"),tag("queries")]
+    for watched in (UNIQUE_TRACE,UNIQUE_PROJECT):
+        require(run_native_uniqueness(functions,params,UNIQUE_FUTURE,args,watched,1,"future"),
+                "whole-native-numerical-trace","Native future lost the shared rich trace")
+    body=functions[UNIQUE]
+    if N+"nativeNumericalFutures" not in body:
+        raise ValueError("nativeUnique does not derive its result from native futures")
+    for forbidden in (N+"toEffectiveFamily",N+"asExecutedCandidate",N+"realizedFamily",
+                      PREFIX+"RelationalRealLimitUniqueness_unique"):
+        if forbidden in body or forbidden in functions[N+"nativeNumericalFutures"] or forbidden in functions[UNIQUE_FUTURE]:
+            raise ValueError("Native uniqueness reintroduced its old downstream mediation")
+
+
+def reject_native_uniqueness(check,functions,params,label,prefix):
+    try:
+        check(functions,params)
+    except ValueError as error:
+        if not str(error).startswith(prefix):
+            raise ValueError(f"Wrong native uniqueness mutation refusal {label}: {error}") from error
+        print("REAL_NATIVE_UNIQUENESS_MUTATION_REJECTED "+label)
+        return
+    raise ValueError("Native uniqueness mutation accepted: "+label)
+
+
 def produce_args():
     return [Value(),Value(),family(),bank(),tag("current-journal"),tag("p")]
 
@@ -311,7 +541,48 @@ def main():
     injected="lean_object* ignored; ignored = "+alias+"("+",".join(params[entry])+");"
     broken[entry]=functions[entry].replace("{","{"+injected,1)
     reject(check_production,broken,changed,"duplicate-valid-grouping-action","Native multiplicity")
-    print("REAL_NATIVE_CAUCHY_CODEGEN_OK: five routes; owned diagonal/charge, no convergence replay, current journals, shared target and compact visible captures; callback internals/Prop formation excluded")
+    unique_functions={name:body.replace("lean_nat_add(","l_native_unique_nat_add(")
+                      for name,body in functions.items()}
+    for name,arity in ((UNIQUE_MEDIATE,9),(UNIQUE_TRACE,9),(UNIQUE_PROJECT,10),
+                       (UNIQUE_FUTURE,8),(UNIQUE,5)):
+        if len(params.get(name,[])) != arity:
+            raise ValueError("Missing exact native uniqueness C definition/arity: "+name)
+    for check in (check_native_uniqueness_mediate,check_native_uniqueness_trace,
+                  check_native_uniqueness_projection,check_native_uniqueness_future):
+        check(unique_functions,params)
+        print("REAL_NATIVE_UNIQUENESS_ROUTE_OK "+check.__name__)
+    for occurrence in range(3):
+        broken=mutate(unique_functions,UNIQUE_MEDIATE,EXEC,occurrence,3,"lean_box(0)")
+        reject_native_uniqueness(check_native_uniqueness_mediate,broken,params,
+          "reset-execution-"+str(occurrence),"Native uniqueness execution reset its current archive")
+    for occurrence in range(2):
+        for slot in (5,6,7,8,11):
+            broken=mutate(unique_functions,UNIQUE_MEDIATE,"lean_apply_11",occurrence,slot,"lean_box(0)")
+            prefix=("Native convergence lost a positive precision/index extension" if slot == 11
+                    else "Native convergence lost its exact shared term/candidate Step")
+            reject_native_uniqueness(check_native_uniqueness_mediate,broken,params,
+              f"convergence-{occurrence}-lost-{slot}",prefix)
+    for slot in (5,6,7):
+        broken=mutate(unique_functions,UNIQUE_TRACE,UNIQUE_TRACE,0,slot,params[UNIQUE_TRACE][slot])
+        prefix=("Native trace recursion lost the updated current bank" if slot == 5 else
+                "Native trace recursion lost first successor" if slot == 6 else
+                "Native trace recursion lost second successor")
+        reject_native_uniqueness(check_native_uniqueness_trace,broken,params,
+          "reset-recursive-successor-"+str(slot),prefix)
+    broken=mutate(unique_functions,UNIQUE_MEDIATE,UNIQUE_SYM,0,0,"lean_box(0)")
+    reject_native_uniqueness(check_native_uniqueness_mediate,broken,params,
+      "lost-first-direction","Native uniqueness symmetrizes the wrong convergence")
+    broken=mutate(unique_functions,UNIQUE_MEDIATE,UNIQUE_COMPOSE,0,1,"lean_box(0)")
+    reject_native_uniqueness(check_native_uniqueness_mediate,broken,params,
+      "lost-second-near","Native uniqueness composition lost its second convergence")
+    alias="l_native_unique_duplicate_mediate"
+    broken,changed=dict(unique_functions),dict(params)
+    broken[alias],changed[alias]=unique_functions[UNIQUE_MEDIATE],params[UNIQUE_MEDIATE]
+    injected="lean_object* ignored; ignored = "+alias+"("+",".join(params[UNIQUE_MEDIATE])+");"
+    broken[UNIQUE_MEDIATE]=unique_functions[UNIQUE_MEDIATE].replace("{","{"+injected,1)
+    reject_native_uniqueness(check_native_uniqueness_mediate,broken,changed,
+      "duplicate-valid-native-mediation","Native uniqueness multiplicity")
+    print("REAL_NATIVE_CAUCHY_CODEGEN_OK: nine routes; owned diagonal/charge, direct native uniqueness mediation/continuation, current journals, shared target and compact visible captures; same-index pure replay and callback internals/Prop formation excluded")
 
 
 if __name__ == "__main__":

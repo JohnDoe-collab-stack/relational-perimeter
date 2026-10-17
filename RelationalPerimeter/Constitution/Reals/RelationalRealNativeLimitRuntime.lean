@@ -276,10 +276,17 @@ abbrev RetainedNativeLimit (family : NativeCauchyFamily P baseDepth) :=
   (bank : ContextBank family) × (journal : Journal P baseDepth) × (p : Nat) × NativeLimitProduction family bank journal p
 
 structure NativeArchive (family : NativeCauchyFamily P baseDepth) where
+  private mk ::
   bank : ContextBank family
   journal : Journal P baseDepth
   retained : List (RetainedNativeLimit family)
   installed : Option (RetainedNativeLimit family)
+
+/-- Receive an explicit native context bank without fabricating retained or
+installed output. Every nonempty history must then be produced by nativeNext. -/
+def seedNativeArchive (family : NativeCauchyFamily P baseDepth) (bank : ContextBank family) :
+    NativeArchive family :=
+  ⟨bank, Journal.root P baseDepth, [], none⟩
 
 def readNativeInstalled {family : NativeCauchyFamily P baseDepth} (archive : NativeArchive family) : Option SignedDyadicCode :=
   archive.installed.map (fun retained => retained.2.2.2.code)
@@ -359,7 +366,7 @@ def nativeEnvironment (family : NativeCauchyFamily P baseDepth) : Service P base
   RichEvent := NativeRichEvent family
   Read := Option SignedDyadicCode
   Resource archive p := NativeLimitProduction family archive.bank archive.journal p
-  initialArchive := ⟨initialBank family, Journal.root P baseDepth, [], none⟩
+  initialArchive := seedNativeArchive family (initialBank family)
   execute archive p := produceNativeLimit family archive.bank archive.journal p
   next := nativeNext _
   richEvent {archive} {precision} production := ⟨archive, precision, production⟩
@@ -427,6 +434,7 @@ end RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.NativeLimitProduction.codeExact
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.RetainedNativeLimit
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.NativeArchive
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.seedNativeArchive
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.readNativeInstalled
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.nativeNext
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.nativeNext_bank

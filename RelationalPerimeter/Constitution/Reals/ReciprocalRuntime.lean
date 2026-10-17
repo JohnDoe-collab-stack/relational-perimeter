@@ -113,6 +113,7 @@ end Production
 abbrev Retained (source : Real P baseDepth) (witness : Apartness source (zero P baseDepth)) :=
   (archive : (environment source).Archive) × (journal : Journal P baseDepth) × (p : Nat) × Production source witness archive journal p
 structure Archive (realSource : Real P baseDepth) (witness : Apartness realSource (zero P baseDepth)) where
+  private mk ::
   source : (environment realSource).Archive
   journal : Journal P baseDepth
   retained : List (Retained realSource witness)

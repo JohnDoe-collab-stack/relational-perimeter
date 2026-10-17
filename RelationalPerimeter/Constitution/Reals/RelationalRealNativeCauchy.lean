@@ -138,8 +138,11 @@ def observeLimit (family : NativeCauchyFamily P baseDepth) (p n r s : Nat)
   ⟨term, rfl, lim, rfl, la.bank (family.modulus s), rfl, diagonal, rfl, nativeNear, rfl, near, rfl⟩
 
 
-/-- Native convergence is positive and consumes current native/candidate Steps.
-It contains no terminal equivalence and does not identify their occurrences. -/
+/-- Native convergence is positive and is indexed by current native/candidate
+Steps.  The authoritative and arithmetic instances below use those received
+Steps.  As a generic interface, however, this field is a received law: it does
+not by itself certify how an arbitrary external implementation obtained its
+proof.  It contains no terminal equivalence and identifies no occurrence. -/
 structure NativeCandidate (family : NativeCauchyFamily P baseDepth) where
   real : Real P baseDepth
   threshold : Nat → Nat
@@ -211,12 +214,145 @@ def asExecutedCandidate {family : NativeCauchyFamily P baseDepth} (candidate : N
     exact (observeCandidate candidate p n r s term response
       (environment (family.terms n)).initialArchive hn hr hs).near
 
-/-- The shared mediator of this theorem is the executed realized source term.
-The two native counterparts are additional explicitly declared observations,
-not a claim that the original native histories were recovered or shared. -/
+def nativeUniquenessThreshold {family : NativeCauchyFamily P baseDepth}
+    (first second : NativeCandidate family) (precision : Nat) : Nat :=
+  first.threshold (Nat.succ precision) + second.threshold (Nat.succ precision)
+
+def nativeFirstExtension {family : NativeCauchyFamily P baseDepth}
+    (first second : NativeCandidate family)
+    (query : LimitQuery (nativeUniquenessThreshold first second)) :
+    PrecisionExtension (first.threshold (Nat.succ query.accuracy)) query.leftResponse :=
+  (PrecisionExtension.first _ _).trans query.leftBeyond
+
+def nativeSecondExtension {family : NativeCauchyFamily P baseDepth}
+    (first second : NativeCandidate family)
+    (query : LimitQuery (nativeUniquenessThreshold first second)) :
+    PrecisionExtension (second.threshold (Nat.succ query.accuracy)) query.rightResponse :=
+  (PrecisionExtension.second _ _).trans query.rightBeyond
+
+/-- One native term Step is produced from the current bank and passed to both
+received convergence laws before their numerical projection. -/
+structure NativeMediation {family : NativeCauchyFamily P baseDepth}
+    (first second : NativeCandidate family) (bank : ContextBank family)
+    (firstArchive : (environment first.real).Archive)
+    (secondArchive : (environment second.real).Archive)
+    (query : LimitQuery (nativeUniquenessThreshold first second)) where
+  private mk ::
+  termStep : Step
+    (environment (family.terms (family.modulus (Nat.succ query.accuracy))))
+    (bank (family.modulus (Nat.succ query.accuracy))) (Nat.succ query.accuracy)
+  firstStep : Step (environment first.real) firstArchive query.leftResponse
+  secondStep : Step (environment second.real) secondArchive query.rightResponse
+  termExact : termStep = executeAt
+    (family.terms (family.modulus (Nat.succ query.accuracy)))
+    (bank (family.modulus (Nat.succ query.accuracy))) (Nat.succ query.accuracy)
+  firstExact : firstStep = executeAt first.real firstArchive query.leftResponse
+  secondExact : secondStep = executeAt second.real secondArchive query.rightResponse
+  firstNear : Near (Nat.succ query.accuracy) termStep.code firstStep.code
+  firstNearExact : firstNear = first.converges (Nat.succ query.accuracy)
+    (family.modulus (Nat.succ query.accuracy)) (Nat.succ query.accuracy) query.leftResponse
+    termStep firstStep (.refl _) (.refl _) (nativeFirstExtension first second query)
+  secondNear : Near (Nat.succ query.accuracy) termStep.code secondStep.code
+  secondNearExact : secondNear = second.converges (Nat.succ query.accuracy)
+    (family.modulus (Nat.succ query.accuracy)) (Nat.succ query.accuracy) query.rightResponse
+    termStep secondStep (.refl _) (.refl _) (nativeSecondExtension first second query)
+  near : Near query.accuracy firstStep.code secondStep.code
+  nearExact : near = Near.compose firstNear.symm secondNear
+
+def mediateNative {family : NativeCauchyFamily P baseDepth}
+    (first second : NativeCandidate family) (bank : ContextBank family)
+    (firstArchive : (environment first.real).Archive)
+    (secondArchive : (environment second.real).Archive)
+    (query : LimitQuery (nativeUniquenessThreshold first second)) :
+    NativeMediation first second bank firstArchive secondArchive query :=
+  let termStep := executeAt
+    (family.terms (family.modulus (Nat.succ query.accuracy)))
+    (bank (family.modulus (Nat.succ query.accuracy))) (Nat.succ query.accuracy)
+  let firstStep := executeAt first.real firstArchive query.leftResponse
+  let secondStep := executeAt second.real secondArchive query.rightResponse
+  let firstNear := first.converges (Nat.succ query.accuracy)
+    (family.modulus (Nat.succ query.accuracy)) (Nat.succ query.accuracy) query.leftResponse
+    termStep firstStep (.refl _) (.refl _) (nativeFirstExtension first second query)
+  let secondNear := second.converges (Nat.succ query.accuracy)
+    (family.modulus (Nat.succ query.accuracy)) (Nat.succ query.accuracy) query.rightResponse
+    termStep secondStep (.refl _) (.refl _) (nativeSecondExtension first second query)
+  ⟨termStep, firstStep, secondStep, rfl, rfl, rfl,
+    firstNear, rfl, secondNear, rfl, Near.compose firstNear.symm secondNear, rfl⟩
+
+set_option genSizeOf false in
+inductive NativeUniquenessTrace {family : NativeCauchyFamily P baseDepth}
+    (first second : NativeCandidate family) :
+    ContextBank family → (environment first.real).Archive →
+      (environment second.real).Archive →
+      List (LimitQuery (nativeUniquenessThreshold first second)) → Type
+  | done (bank : ContextBank family) (firstArchive : (environment first.real).Archive)
+      (secondArchive : (environment second.real).Archive) :
+      NativeUniquenessTrace first second bank firstArchive secondArchive []
+  | step {bank : ContextBank family} {firstArchive : (environment first.real).Archive}
+      {secondArchive : (environment second.real).Archive}
+      {query : LimitQuery (nativeUniquenessThreshold first second)}
+      {remaining : List (LimitQuery (nativeUniquenessThreshold first second))}
+      (packet : NativeMediation first second bank firstArchive secondArchive query)
+      (later : NativeUniquenessTrace first second
+        (updateBank bank (family.modulus (Nat.succ query.accuracy)) packet.termStep.next)
+        packet.firstStep.next packet.secondStep.next remaining) :
+      NativeUniquenessTrace first second bank firstArchive secondArchive (query :: remaining)
+
+def produceNativeUniquenessTrace {family : NativeCauchyFamily P baseDepth}
+    (first second : NativeCandidate family) :
+    (bank : ContextBank family) → (firstArchive : (environment first.real).Archive) →
+    (secondArchive : (environment second.real).Archive) →
+    (queries : List (LimitQuery (nativeUniquenessThreshold first second))) →
+    NativeUniquenessTrace first second bank firstArchive secondArchive queries
+  | bank, firstArchive, secondArchive, [] => .done bank firstArchive secondArchive
+  | bank, firstArchive, secondArchive, query :: remaining =>
+      let packet := mediateNative first second bank firstArchive secondArchive query
+      .step packet (produceNativeUniquenessTrace first second
+        (updateBank bank (family.modulus (Nat.succ query.accuracy)) packet.termStep.next)
+        packet.firstStep.next packet.secondStep.next remaining)
+
+namespace NativeUniquenessTrace
+
+def toNumerical {family : NativeCauchyFamily P baseDepth}
+    {first second : NativeCandidate family} :
+    {bank : ContextBank family} → {firstArchive : (environment first.real).Archive} →
+    {secondArchive : (environment second.real).Archive} →
+    {queries : List (LimitQuery (nativeUniquenessThreshold first second))} →
+    NativeUniquenessTrace first second bank firstArchive secondArchive queries →
+    NumericalTrace first.real second.real (nativeUniquenessThreshold first second)
+      firstArchive secondArchive queries
+  | _, _, _, [], .done _ firstArchive secondArchive => .done firstArchive secondArchive
+  | _, _, _, _ :: _, .step packet later =>
+      .step packet.firstStep packet.secondStep packet.firstExact packet.secondExact packet.near later.toNumerical
+
+def finalBank {family : NativeCauchyFamily P baseDepth}
+    {first second : NativeCandidate family} :
+    {bank : ContextBank family} → {firstArchive : (environment first.real).Archive} →
+    {secondArchive : (environment second.real).Archive} →
+    {queries : List (LimitQuery (nativeUniquenessThreshold first second))} →
+    NativeUniquenessTrace first second bank firstArchive secondArchive queries → ContextBank family
+  | bank, _, _, [], .done _ _ _ => bank
+  | _, _, _, _ :: _, .step _ later => later.finalBank
+
+end NativeUniquenessTrace
+
+def nativeNumericalFutures {family : NativeCauchyFamily P baseDepth}
+    (first second : NativeCandidate family) : NumericalFutureEquivalent first.real second.real where
+  threshold := nativeUniquenessThreshold first second
+  traces firstArchive secondArchive queries :=
+    (produceNativeUniquenessTrace first second (initialBank family)
+      firstArchive secondArchive queries).toNumerical
+
+/-- Native uniqueness starts one bank, then at every query produces one term
+Step from that trace's current bank, passes the same datum to both received
+convergence laws, and continues its exact successor.  Pure reevaluation at the
+same indices is propositionally equal in this deterministic model; trace
+position and continued archives carry historical identity.  No
+presentation/readout realization is used by this constitutive route. -/
 def nativeUnique {family : NativeCauchyFamily P baseDepth} (first second : NativeCandidate family) :
     Equivalent first.real second.real × NumericalFutureEquivalent first.real second.real :=
-  unique (asExecutedCandidate first) (asExecutedCandidate second)
+  let futures := nativeNumericalFutures first second
+  ⟨futures.toEquivalent, futures⟩
 
 def nativeAuthoritativeUnique {family : NativeCauchyFamily P baseDepth} (candidate : NativeCandidate family) :
     Equivalent (nativeLimit family) candidate.real × NumericalFutureEquivalent (nativeLimit family) candidate.real :=
@@ -288,6 +424,16 @@ end RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.CandidateObservation
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.observeCandidate
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.asExecutedCandidate
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.nativeUniquenessThreshold
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.nativeFirstExtension
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.nativeSecondExtension
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.NativeMediation
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.mediateNative
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.NativeUniquenessTrace
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.produceNativeUniquenessTrace
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.NativeUniquenessTrace.toNumerical
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.NativeUniquenessTrace.finalBank
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.nativeNumericalFutures
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.nativeUnique
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.nativeAuthoritativeUnique
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.nativeProducedLimitCorrespondence

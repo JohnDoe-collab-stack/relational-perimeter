@@ -41,7 +41,7 @@ def native := composedFamily family
 def priorTerm := executeReal ((native family).terms ((native family).modulus 0)) 1
 def seededBank : ContextBank (native family) := fun n => (executeReal ((native family).terms n) 1).next
 def seededArchive : NativeArchive (native family) :=
-  ⟨seededBank family, ConstitutiveRuntime.Journal.root P d, [], none⟩
+  seedNativeArchive (native family) (seededBank family)
 def priorLimit := executeAt (nativeLimit (native family)) (seededArchive family) 2
 def priorDiagonal := executeReal ((native family).terms ((native family).modulus 3)) 1
 def firstTerm := executeAt ((native family).terms ((native family).modulus 0)) (priorTerm family).next 2
@@ -130,13 +130,61 @@ def oldSecond := asExecutedCandidate (addZeroCandidate family)
 def queryOne : LimitQuery (uniquenessThreshold (oldFirst family) (oldSecond family)) := ⟨0,2,3,.refl _,⟨1,rfl⟩⟩
 def queryTwo : LimitQuery (uniquenessThreshold (oldFirst family) (oldSecond family)) := ⟨2,7,8,⟨1,rfl⟩,⟨2,rfl⟩⟩
 def mediatorPrior := executeReal (termReal (realizedFamily (native family)) 0) 1
-def firstPrior := executeReal (oldFirst family).real 1
-def secondPrior := executeReal (oldSecond family).real 1
+def firstPrior := executeReal (nativeCandidate family).real 1
+def secondPrior := executeReal (addZeroCandidate family).real 1
 def rich := produceTrace (oldFirst family) (oldSecond family) (mediatorPrior family).next
   (firstPrior family).next (secondPrior family).next [queryOne family,queryTwo family]
 def projectedTrace := (rich family).toNumerical
+
+/-- The constitutive native uniqueness route has its own queries and begins
+from a received current native bank.  The older realized-family trace above is
+kept only as a downstream numerical-adapter test. -/
+def nativeQueryOne : LimitQuery
+    (nativeUniquenessThreshold (nativeCandidate family) (addZeroCandidate family)) :=
+  ⟨0, 2, 3, .refl _, ⟨1, rfl⟩⟩
+
+def nativeQueryTwo : LimitQuery
+    (nativeUniquenessThreshold (nativeCandidate family) (addZeroCandidate family)) :=
+  ⟨2, 7, 8, ⟨1, rfl⟩, ⟨2, rfl⟩⟩
+
+def nativePacketOne := mediateNative (nativeCandidate family) (addZeroCandidate family)
+  (seededBank family) (firstPrior family).next (secondPrior family).next (nativeQueryOne family)
+
+theorem nativeMediatorFromCurrentBank : (nativePacketOne family).termStep = executeAt
+    ((native family).terms ((native family).modulus 1))
+    (seededBank family ((native family).modulus 1)) 1 :=
+  (nativePacketOne family).termExact
+
+theorem nativeFirstLawUsesMediator : (nativePacketOne family).firstNear =
+    (nativeCandidate family).converges 1 ((native family).modulus 1) 1 2
+      (nativePacketOne family).termStep (nativePacketOne family).firstStep
+      (.refl _) (.refl _) (nativeFirstExtension
+        (nativeCandidate family) (addZeroCandidate family) (nativeQueryOne family)) :=
+  (nativePacketOne family).firstNearExact
+
+theorem nativeSecondLawUsesSameMediator : (nativePacketOne family).secondNear =
+    (addZeroCandidate family).converges 1 ((native family).modulus 1) 1 3
+      (nativePacketOne family).termStep (nativePacketOne family).secondStep
+      (.refl _) (.refl _) (nativeSecondExtension
+        (nativeCandidate family) (addZeroCandidate family) (nativeQueryOne family)) :=
+  (nativePacketOne family).secondNearExact
+
+theorem nativeMediatorBankContinues :
+    updateBank (seededBank family) ((native family).modulus 1)
+      (nativePacketOne family).termStep.next ((native family).modulus 1) =
+        (nativePacketOne family).termStep.next :=
+  updateBank_hit _ _ _
+
+def nativeRich := produceNativeUniquenessTrace
+  (nativeCandidate family) (addZeroCandidate family) (seededBank family)
+  (firstPrior family).next (secondPrior family).next
+  [nativeQueryOne family, nativeQueryTwo family]
+
+def nativeProjectedTrace := (nativeRich family).toNumerical
+def nativeFinalBank := (nativeRich family).finalBank
+
 def futureTrace := (uniqueness family).2.traces (firstPrior family).next (secondPrior family).next
-  [queryOne family,queryTwo family]
+  [nativeQueryOne family, nativeQueryTwo family]
 
 def realizedCurrent := executeAt (termReal (realizedFamily (native family)) ((native family).modulus 0))
   (mediatorPrior family).next 2
@@ -235,6 +283,16 @@ end RelationalPerimeter.Tests.RelationalRealNativeCauchy
 #print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.secondPrior
 #print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.rich
 #print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.projectedTrace
+#print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.nativeQueryOne
+#print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.nativeQueryTwo
+#print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.nativePacketOne
+#print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.nativeMediatorFromCurrentBank
+#print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.nativeFirstLawUsesMediator
+#print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.nativeSecondLawUsesSameMediator
+#print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.nativeMediatorBankContinues
+#print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.nativeRich
+#print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.nativeProjectedTrace
+#print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.nativeFinalBank
 #print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.futureTrace
 #print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.realizedCurrent
 #print axioms RelationalPerimeter.Tests.RelationalRealNativeCauchy.candidateObservation

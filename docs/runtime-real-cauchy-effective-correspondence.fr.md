@@ -83,12 +83,15 @@ numériques n'est ni définie ni revendiquée.
 
 ## Correspondance structurelle effective
 
-Le porteur fermé `RelationalRealAddition.Real P baseDepth` est constitué par
-les cinq constructeurs `leaf`, `add`, `neg`, `mul` et `certified`. Ses objets
-restent des comportements exécutables : leurs environnements riches conservent
-les archives, productions, actions et occurrences, puis leurs environnements
-live projettent exactement la mémoire requise par le contrat de futurs fixé.
-Les fonctions `toPresentation` et `toCarrier` sont des readouts aval ; elles ne
+Le porteur `RelationalRealAddition.Real P baseDepth` est fermé syntaxiquement
+par les cinq constructeurs `leaf`, `add`, `neg`, `mul` et `certified`.
+`certified` reçoit toutefois un `CertifiedService` extérieur muni de ses lois
+de cohérence et d'uniformité : le type inductif est fermé, mais son contenu
+reste ouvert relativement à cette interface reçue. Ses objets restent des
+comportements exécutables : leurs environnements riches conservent les
+archives, productions, actions et occurrences, puis leurs environnements live
+projettent exactement la mémoire requise par le contrat de futurs fixé. Les
+fonctions `toPresentation` et `toCarrier` sont des readouts aval ; elles ne
 forment aucun de ces objets.
 
 `effectiveCorrespondence P baseDepth` construit sans hypothèse terminale un
@@ -138,22 +141,45 @@ de la banque d'archives courante, exécute le terme diagonal choisi par le
 module, fait consommer ce même `Step` par le regroupement, installe la cible
 produite et poursuit le journal. La banque suivante ne remplace que l'entrée
 effectivement visitée. La projection live conserve le code installé ; elle
-n'exécute pas à nouveau la production riche.
+n'exécute pas à nouveau la production riche. Les constructeurs des archives
+riches sont privés : les fabriques publiques peuvent recevoir les contextes
+enfants ou la banque courante, mais ne permettent pas de prescrire un dernier
+code, une cible installée ou un historique retenu.
 
 `nativeCompleteness` construit le candidat autoritatif, sa convergence, le
 readout effectif, la correspondance avec la limite produite de la famille
-réalisée et la réutilisation de la cible installée. `nativeUnique` compare deux
-candidats reçus de la même famille par une médiation qui produit un seul pas
-du terme et partage ce pas entre les deux convergences. Sa conclusion est
-`Equivalent` avec `NumericalFutureEquivalent`; elle ne peut pas identifier les
-constructeurs, archives ou occurrences des candidats.
+réalisée et l'unicité native. La transition de limite installe sa cible et
+`nativeNext_read` en donne la relecture exacte ; ce champ installé est une
+mémoire d'observation publique, non une entrée du calcul riche suivant, lequel
+continue la banque et le journal.
+
+`nativeUnique` compare deux candidats reçus de la même famille par une
+médiation native directe. À chaque requête, elle exécute un seul pas du terme
+depuis la banque courante de la trace — initialisée par `initialBank` dans
+l'équivalence exportée —, passe cette même donnée aux deux lois de convergence,
+puis continue son successeur dans la banque et les deux archives candidates.
+`toEffectiveFamily`, `realizedFamily` et `asExecutedCandidate` restent confinés
+à la correspondance numérique aval ; ils ne constituent plus cette unicité.
+La conclusion est `Equivalent` avec `NumericalFutureEquivalent`; elle ne peut
+pas identifier les constructeurs, archives ou occurrences des candidats.
+
+À service, archive et précision fixés, `Step` décrit un paquet déterministe :
+une réévaluation pure aux mêmes indices lui est propositionnellement égale.
+« Partager le même `Step` » signifie donc que la route canonique lie une seule
+donnée produite et la transmet deux fois dans la même trace ; cela ne fournit
+pas un jeton génératif capable de distinguer deux évaluations identiques. La
+position dans la trace et les archives continuées portent l'identité
+historique. Les types rejettent un code nu, une archive étrangère ou un indice
+différent, mais pas une réévaluation aux mêmes indices.
 
 `LimitCorrespondence` conserve séparément la préservation d'une limite vers
 son readout, sa réflexion et sa réalisation, la route issue d'une famille
 source retournée, les limites de carriers, l'unicité numérique et la trace
 riche dont la projection donne les futurs numériques. La preuve consomme les
-pas terme/candidat reçus ; une cible préfabriquée ou un code nu ne peut pas les
-remplacer.
+pas terme/candidat reçus dans les producteurs et traces canoniques ; une cible
+préfabriquée ou un code nu ne peut pas les remplacer. Cette garantie porte sur
+la provenance typée et la continuation, avec la limite de réévaluation pure
+explicitée ci-dessus.
 
 ## Raccord au périmètre de Gödel
 
@@ -182,6 +208,8 @@ et la complétude de Cauchy effective décrits ci-dessus.
 Elle ne couvre pas tous les réels classiques et ne prouve pas la complétude par
 borne supérieure. Elle n'identifie pas les familles, programmes, archives,
 journaux, témoins Cauchy ou occurrences qui possèdent les mêmes readouts. La
+loi d'un `NativeCandidate` demeure une entrée générique reçue, et le constructeur
+`certified` admet tout service extérieur qui satisfait son contrat explicite. La
 minimalité des mémoires est toujours relative à un environnement et à un
 contrat de futurs fixés ; elle n'est ni une borne de coût physique ni une
 certification universelle des captures de callbacks. Enfin, aucune conclusion

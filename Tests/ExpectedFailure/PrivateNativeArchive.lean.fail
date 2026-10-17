@@ -1,0 +1,10 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealNativeLimitRuntime
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy
+variable {P : CircularPresentation} {d : Nat}
+variable (family : NativeCauchyFamily P d) (bank : ContextBank family)
+def forgedNativeArchive : NativeArchive family :=
+  NativeArchive.mk bank (Journal.root P d) [] none

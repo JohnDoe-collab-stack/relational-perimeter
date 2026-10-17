@@ -1,0 +1,11 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealNegation
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.HeterogeneousRealRuntime
+open RelationalPerimeter.Constitution.Reals.RelationalRealNegation
+variable {P : CircularPresentation} {d : Nat}
+variable (source : Service P d) (archive : source.Archive)
+def forgedNegationArchive (code : SignedDyadicCode) : NegationArchive source :=
+  NegationArchive.mk archive (Journal.root P d) [] (some code)

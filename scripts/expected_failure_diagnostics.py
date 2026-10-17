@@ -16,7 +16,7 @@ import sys
 ROOT = Path(__file__).resolve().parent.parent
 CATEGORIES = {'privacy', 'dependent-type', 'semantic-type', 'termination'}
 ERROR_CLASSES = {
-    'privacy': ('Unknown constant ',),
+    'privacy': ('Unknown constant ', 'invalid {...} notation, constructor for '),
     'dependent-type': ('Application type mismatch', 'Type mismatch', 'Tactic `rfl` failed', 'Not a definitional equality'),
     'semantic-type': ('Type mismatch', 'Tactic `rfl` failed', 'Not a definitional equality'),
     'termination': ('fail to show termination for',),

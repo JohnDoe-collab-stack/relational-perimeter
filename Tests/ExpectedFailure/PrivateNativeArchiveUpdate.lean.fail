@@ -1,0 +1,9 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealNativeLimitRuntime
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy
+variable {P : CircularPresentation} {d : Nat}
+variable (family : NativeCauchyFamily P d) (archive : NativeArchive family)
+def eraseInstalledNativeTarget : NativeArchive family :=
+  { archive with installed := none }

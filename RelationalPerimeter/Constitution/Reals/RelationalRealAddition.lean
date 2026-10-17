@@ -134,11 +134,20 @@ abbrev RetainedAddition (left right : Service P baseDepth) :=
     (journal : Journal P baseDepth) × (precision : Nat) × AdditionProduction left right leftArchive rightArchive journal precision
 
 structure AdditionArchive (leftEnvironment rightEnvironment : Service P baseDepth) where
+  private mk ::
   left : leftEnvironment.Archive
   right : rightEnvironment.Archive
   journal : Journal P baseDepth
   retained : List (RetainedAddition leftEnvironment rightEnvironment)
   last : Option SignedDyadicCode
+
+/-- Start one composite addition occurrence from the two received child
+archives.  No composite event, result, or retained history can be supplied by
+the caller. -/
+def seedAdditionArchive {left right : Service P baseDepth}
+    (leftArchive : left.Archive) (rightArchive : right.Archive) :
+    AdditionArchive left right :=
+  ⟨leftArchive, rightArchive, Journal.root P baseDepth, [], none⟩
 
 def AdditionArchive.project {left right : Service P baseDepth}
     (archive : AdditionArchive left right) : CompositeMemory left.liveEnvironment right.liveEnvironment :=
@@ -214,7 +223,7 @@ def addEnvironment (left right : Service P baseDepth) : Service P baseDepth wher
   RichEvent := AdditionRichEvent left right
   Read := Option SignedDyadicCode
   Resource archive p := AdditionProduction left right archive.left archive.right archive.journal p
-  initialArchive := ⟨left.initialArchive, right.initialArchive, Journal.root P baseDepth, [], none⟩
+  initialArchive := seedAdditionArchive left.initialArchive right.initialArchive
   execute archive p := produceAddition left right archive.left archive.right archive.journal p
   next {archive} {p} production := additionNext archive production
   richEvent {archive} {p} production := additionEvent archive production
@@ -846,6 +855,7 @@ end RelationalPerimeter.Constitution.Reals.RelationalRealAddition
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealAddition.AdditionProduction.readoutExact
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealAddition.RetainedAddition
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealAddition.AdditionArchive
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealAddition.seedAdditionArchive
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealAddition.AdditionArchive.project
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealAddition.AdditionRichEvent
 #print axioms RelationalPerimeter.Constitution.Reals.RelationalRealAddition.AdditionRichEvent.project

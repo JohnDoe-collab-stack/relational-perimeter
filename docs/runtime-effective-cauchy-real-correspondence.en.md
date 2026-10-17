@@ -84,13 +84,15 @@ alone is neither defined nor claimed.
 
 ## Effective structural correspondence
 
-The closed carrier `RelationalRealAddition.Real P baseDepth` is constituted by
-the five constructors `leaf`, `add`, `neg`, `mul`, and `certified`. Its objects
-remain executable behaviors: their rich environments retain archives,
-productions, actions, and occurrences, and their live environments then
-project exactly the memory required by the fixed future contract.
-`toPresentation` and `toCarrier` are downstream readouts; they form none of
-these objects.
+The carrier `RelationalRealAddition.Real P baseDepth` is syntactically closed
+by the five constructors `leaf`, `add`, `neg`, `mul`, and `certified`.
+`certified`, however, receives an external `CertifiedService` together with
+its coherence and uniformity laws: the inductive type is closed, but its
+content remains open relative to this received interface. Its objects remain
+executable behaviors: their rich environments retain archives, productions,
+actions, and occurrences, and their live environments then project exactly
+the memory required by the fixed future contract. `toPresentation` and
+`toCarrier` are downstream readouts; they form none of these objects.
 
 `effectiveCorrespondence P baseDepth` constructs, without a terminal
 assumption, an `EffectiveCorrespondence` package with six blocks.
@@ -137,21 +139,44 @@ the current archive bank, executes the diagonal term selected by the modulus,
 has grouping consume that same `Step`, installs the produced target, and
 continues the journal. The next bank replaces only the entry actually visited.
 The live projection retains the installed code; it does not execute the rich
-production again.
+production again. Rich archive constructors are private: public seed functions
+may receive current child contexts or the current bank, but they cannot
+prescribe a last code, an installed target, or retained history.
 
 `nativeCompleteness` constructs the authoritative candidate, its convergence,
 the effective readout, correspondence with the produced limit of the realized
-family, and reuse of the installed target. `nativeUnique` compares two received
-candidates of the same family through a mediation that produces one term step
-and shares it between the two convergence laws. Its conclusion is
-`Equivalent` together with `NumericalFutureEquivalent`; it cannot identify the
-candidates' constructors, archives, or occurrences.
+family, and native uniqueness. The limit transition installs its target and
+`nativeNext_read` reads it back exactly; this installed field is public
+observation memory, not an input to the next rich computation, which continues
+the bank and journal.
+
+`nativeUnique` compares two received candidates of the same family through a
+direct native mediation. At every query it executes one term step from the
+trace's current bank—initialized by `initialBank` in the exported
+equivalence—passes that same datum to both convergence laws, and then
+continues its successor in the bank and both candidate archives.
+`toEffectiveFamily`, `realizedFamily`, and `asExecutedCandidate` remain confined
+to downstream numerical correspondence; they no longer constitute this
+uniqueness. The conclusion is `Equivalent` together with
+`NumericalFutureEquivalent`; it cannot identify the candidates' constructors,
+archives, or occurrences.
+
+At a fixed service, archive, and precision, `Step` describes a deterministic
+packet: a pure reevaluation at the same indices is propositionally equal to it.
+“Sharing the same `Step`” therefore means that the canonical route binds one
+produced datum and passes it twice within the same trace; it does not provide a
+generative token that distinguishes two identical evaluations. Trace position
+and continued archives carry historical identity. The types reject a naked
+code, a foreign archive, or a different index, but not reevaluation at the same
+indices.
 
 `LimitCorrespondence` separately retains preservation of a limit to its
 readout, reflection and realization, the route from a returned source family,
 carrier limits, numerical uniqueness, and the rich trace whose projection
 gives numerical futures. The proof consumes the received term and candidate
-steps; neither a prefabricated target nor a naked code can replace them.
+steps in the canonical producers and traces; neither a prefabricated target nor
+a naked code can replace them. This guarantee concerns typed provenance and
+continuation, with the pure-reevaluation limitation stated above.
 
 ## Connection to the Gödel perimeter
 
@@ -178,7 +203,10 @@ bounds, and effective Cauchy completeness described above.
 
 It does not cover all classical real numbers and does not prove least-upper-
 bound completeness. It does not identify families, programs, archives,
-journals, Cauchy witnesses, or occurrences that have the same readouts. Memory
+journals, Cauchy witnesses, or occurrences that have the same readouts. The
+law of a `NativeCandidate` remains a received generic input, and the
+`certified` constructor admits any external service satisfying its explicit
+contract. Memory
 minimality always remains relative to a fixed environment and future contract;
 it is neither a physical-cost bound nor a universal certification of callback
 captures. Finally, no conclusion about `AC`, `CH`, or originality follows from

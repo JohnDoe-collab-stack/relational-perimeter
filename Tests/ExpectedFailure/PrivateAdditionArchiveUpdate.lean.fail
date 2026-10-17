@@ -1,0 +1,10 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.HeterogeneousRealRuntime
+open RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+variable {P : CircularPresentation} {d : Nat}
+variable (left right : Service P d) (archive : AdditionArchive left right)
+def prescribedAdditionRead (code : SignedDyadicCode) : AdditionArchive left right :=
+  { archive with last := some code }
