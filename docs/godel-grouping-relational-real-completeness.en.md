@@ -9,19 +9,19 @@ neither an originality verdict, an independent audit, nor an identification
 with the totality of classical real numbers.
 
 The relational reals considered here are produced by finite-precision
-executions. An executed Cauchy family, its producer, monotone modulus, and
-Cauchy law are inputs. Limit responses, their coherence, convergence of
-admissible sources, and finite groupings are then constructed. Dyadic codes are
-downstream readouts of these constructions; they constitute neither histories
-nor occurrences.
+executions. An executed Cauchy family, its producer, same-term coherence,
+monotone modulus, and Cauchy law are inputs. Limit responses, their coherence,
+convergence of admissible sources, and finite groupings are then constructed.
+Dyadic codes are downstream readouts of these constructions; they constitute
+neither histories nor occurrences.
 
 ## Formal Gödel–grouping–real conclusion
 
 For every effective Gödel execution `execution` and every executed Cauchy
 family `family` on the exact presentation
 `godelPerimetralPresentation execution`, at base depth `1`,
-`raccord execution family` constructs one `Result` package. Its exact terminal
-quantification is:
+`raccord execution family` constructs a common `Result` package. Its exact
+terminal quantification is:
 
 ```text
 execution : ExecutedGodelProduction ...

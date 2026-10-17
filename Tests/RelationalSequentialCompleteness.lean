@@ -77,6 +77,18 @@ def executedLimitSourceNearProducedTarget :
       executedLimitProductionAtFour.targetCode :=
   executedLimitProductionAtFour.sourceNearTarget
 
+/-- The public target witness is a transport of the one produced by normalization. -/
+theorem executedLimitTargetWitnessIsNormalized :
+    HEq executedLimitProductionAtFour.execution.action.target.sourceNearTarget
+      executedLimitProductionAtFour.execution.action.target.normalized.consumedNearTarget :=
+  LimitGrouping.ProducedTarget.sourceNearTarget_is_normalized _
+
+/-- Acceptance consumes that same normalized witness, without a Cauchy replay. -/
+theorem executedLimitPreservationUsesNormalizedWitness :
+    HEq executedLimitProductionAtFour.execution.memory.continued.authorized.accepted.preservation
+      executedLimitProductionAtFour.execution.action.target.normalized.consumedNearTarget :=
+  LimitGrouping.Accepted.preservation_is_normalized _
+
 theorem executedLimitProductionReachesDepthThirteen :
     executedLimitProductionAtFour.completedJournal.absoluteDepth = 13 := by
   rw [executedLimitProductionAtFour.completedDepth]
@@ -306,6 +318,8 @@ end RelationalPerimeter.Tests.RelationalSequentialCompleteness
 #print axioms RelationalPerimeter.Tests.RelationalSequentialCompleteness.executedLimitConsumesItsOwnedSource
 #print axioms RelationalPerimeter.Tests.RelationalSequentialCompleteness.executedLimitReadoutComesFromGroupingAction
 #print axioms RelationalPerimeter.Tests.RelationalSequentialCompleteness.executedLimitSourceNearProducedTarget
+#print axioms RelationalPerimeter.Tests.RelationalSequentialCompleteness.executedLimitTargetWitnessIsNormalized
+#print axioms RelationalPerimeter.Tests.RelationalSequentialCompleteness.executedLimitPreservationUsesNormalizedWitness
 #print axioms RelationalPerimeter.Tests.RelationalSequentialCompleteness.executedLimitProductionReachesDepthThirteen
 #print axioms RelationalPerimeter.Tests.RelationalSequentialCompleteness.secondSource
 #print axioms RelationalPerimeter.Tests.RelationalSequentialCompleteness.sourceRequestsRemainDistinct

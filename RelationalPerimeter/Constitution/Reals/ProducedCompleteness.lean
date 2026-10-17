@@ -402,6 +402,36 @@ theorem normalizedCharge_code (produced : family.ProducedSourceAt journal source
   rw [normalizedCharge_exact]
   rfl
 
+/-- The executed normalizer retains the exact source code it consumed. -/
+theorem normalizedCharge_consumedCode
+    (produced : family.ProducedSourceAt journal source) :
+    (normalizedCharge produced).consumedCode = produced.readout := by
+  rw [normalizedCharge_exact]
+  rfl
+
+/-- Transport a positive proximity witness only along recorded endpoint equalities. -/
+def transportNear
+    {precision : Nat}
+    {sourceCode targetCode transportedSource transportedTarget : SignedDyadicCode}
+    (sourceExact : sourceCode = transportedSource)
+    (targetExact : targetCode = transportedTarget)
+    (near : Near precision sourceCode targetCode) :
+    Near precision transportedSource transportedTarget := by
+  rw [← sourceExact, ← targetExact]
+  exact near
+
+/-- Endpoint transport preserves the exact positive witness heterogeneously. -/
+theorem transportNear_heq
+    {precision : Nat}
+    {sourceCode targetCode transportedSource transportedTarget : SignedDyadicCode}
+    (sourceExact : sourceCode = transportedSource)
+    (targetExact : targetCode = transportedTarget)
+    (near : Near precision sourceCode targetCode) :
+    HEq (transportNear sourceExact targetExact near) near := by
+  subst transportedSource
+  subst transportedTarget
+  rfl
+
 
 /--
 Target resource produced by the grouping action.  Its numerical code may
@@ -416,7 +446,29 @@ structure ProducedTarget
   code : SignedDyadicCode
   codeIsNormalized : code = normalized.outputCode
   codeExact : code = produced.readout
-  sourceNearTarget : Near precision produced.readout code
+
+/--
+The source--target witness is projected from the charge actually produced by
+the local normalizer.  It is not an independently reconstructed Cauchy witness.
+-/
+def ProducedTarget.sourceNearTarget
+    {produced : family.ProducedSourceAt journal source}
+    (target : ProducedTarget produced) :
+    Near precision produced.readout target.code := by
+  have consumedCodeExact :
+      target.normalized.consumedCode = produced.readout := by
+    rw [target.normalizedExact]
+    exact normalizedCharge_consumedCode produced
+  exact transportNear consumedCodeExact target.codeExact.symm
+    target.normalized.consumedNearTarget
+
+/-- The exposed witness is only a dependent transport of the normalized charge. -/
+theorem ProducedTarget.sourceNearTarget_is_normalized
+    {produced : family.ProducedSourceAt journal source}
+    (target : ProducedTarget produced) :
+    HEq target.sourceNearTarget target.normalized.consumedNearTarget := by
+  unfold sourceNearTarget
+  apply transportNear_heq
 
 /--
 The grouping action consumes the searched source and its positive proximity to
@@ -428,9 +480,22 @@ structure Action (produced : family.ProducedSourceAt journal source) (_request :
   search : Search produced ()
   searchExact : search = searched
   target : ProducedTarget search.retained
-  consumedNearProduced :
-    Near precision search.retained.readout target.code
-  consumedNearExact : consumedNearProduced = target.sourceNearTarget
+
+/-- The action exposes only the witness retained by its normalized target. -/
+def Action.consumedNearProduced
+    {produced : family.ProducedSourceAt journal source}
+    {searched : Search produced ()}
+    (acted : Action produced () searched) :
+    Near precision acted.search.retained.readout acted.target.code :=
+  acted.target.sourceNearTarget
+
+/-- The action-level view still owns the very witness produced by normalization. -/
+theorem Action.consumedNearProduced_is_normalized
+    {produced : family.ProducedSourceAt journal source}
+    {searched : Search produced ()}
+    (acted : Action produced () searched) :
+    HEq acted.consumedNearProduced acted.target.normalized.consumedNearTarget :=
+  ProducedTarget.sourceNearTarget_is_normalized acted.target
 
 def Action.code
     {produced : family.ProducedSourceAt journal source}
@@ -443,6 +508,16 @@ structure Accepted (produced : family.ProducedSourceAt journal source) (_request
   private mk ::
   preservation : Near precision acted.search.retained.readout acted.target.code
   preservationExact : preservation = acted.consumedNearProduced
+
+/-- Acceptance preserves the normalized witness through the action projection. -/
+theorem Accepted.preservation_is_normalized
+    {produced : family.ProducedSourceAt journal source}
+    {searched : Search produced ()}
+    {acted : Action produced () searched}
+    (accepted : Accepted produced () searched acted) :
+    HEq accepted.preservation acted.target.normalized.consumedNearTarget := by
+  rw [accepted.preservationExact]
+  exact acted.consumedNearProduced_is_normalized
 
 structure Authorization (produced : family.ProducedSourceAt journal source) (_request : Unit)
     (searched : Search produced ()) (acted : Action produced () searched)
@@ -491,20 +566,16 @@ def program (produced : family.ProducedSourceAt journal source) : Program Unit w
   search := fun _request context =>
     { retained := context.retained, retainedExact := context.retainedExact }
   act := fun _request searched =>
+    let normalized := normalizedCharge searched.retained
     let target : ProducedTarget searched.retained :=
-      { normalized := normalizedCharge searched.retained
+      { normalized := normalized
         normalizedExact := rfl
-        code := (normalizedCharge searched.retained).outputCode
+        code := normalized.outputCode
         codeIsNormalized := rfl
-        codeExact := normalizedCharge_code searched.retained
-        sourceNearTarget := by
-          rw [normalizedCharge_code]
-          exact receivedNear searched.retained }
+        codeExact := normalizedCharge_code searched.retained }
     { search := searched
       searchExact := rfl
-      target := target
-      consumedNearProduced := target.sourceNearTarget
-      consumedNearExact := rfl }
+      target := target }
   preserves := fun _request _searched acted =>
     { preservation := acted.consumedNearProduced
       preservationExact := rfl }
@@ -1614,6 +1685,14 @@ end RelationalPerimeter.Constitution.Reals.ProducedCompleteness
 #print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.normalizedCharge
 #print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.normalizedCharge_exact
 #print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.normalizedCharge_code
+#print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.normalizedCharge_consumedCode
+#print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.transportNear
+#print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.transportNear_heq
+#print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.ProducedTarget.sourceNearTarget
+#print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.ProducedTarget.sourceNearTarget_is_normalized
+#print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.Action.consumedNearProduced
+#print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.Action.consumedNearProduced_is_normalized
+#print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.LimitGrouping.Accepted.preservation_is_normalized
 #print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.ExecutedCauchyFamily.DiagonalAnchor
 #print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.ExecutedCauchyFamily.executeAnchor
 #print axioms RelationalPerimeter.Constitution.Reals.ProducedCompleteness.ExecutedCauchyFamily.DiagonalAnchor.sourceAt

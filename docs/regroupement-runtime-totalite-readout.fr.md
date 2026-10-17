@@ -430,6 +430,8 @@ La chaîne exécutée possède les propriétés suivantes :
 - le readout est projeté de la ressource mémorisée après l'action ;
 - une source offerte au regroupement possède son exécution et sa provenance ;
 - le regroupement local consomme le code source et son témoin de proximité ;
+- le témoin exposé et accepté est transporté depuis la charge normalisée
+  effectivement produite, sans second rappel indépendant de la loi de Cauchy ;
 - le regroupement fini consomme chaque source retenue dans l'ordre ;
 - la sortie regroupée est exécutée comme réponse suivante ;
 - le pont riche–réduit transporte exactement les transitions, événements,
@@ -673,18 +675,20 @@ sur leurs readouts et leurs futurs limites finis, puis se relie dans les deux
 sens à l'équivalence de présentations dyadiques effectives. L'identité
 historique reste plus fine que cette équivalence réelle.
 
-Le producteur, le module et les lois de Cauchy restent des contextes reçus. Le
-runtime constitue leurs exécutions, regroupements, mémoires et readouts ; il ne
-prétend ni produire ces entrées à partir de rien, ni calculer leurs valeurs à
-partir de l'obstruction gödelienne.
+Le producteur, la cohérence intraterme, le module monotone et la loi de Cauchy
+restent des contextes reçus. Le runtime constitue leurs exécutions,
+regroupements, mémoires et readouts ; il ne prétend ni produire ces entrées à
+partir de rien, ni calculer leurs valeurs à partir de l'obstruction
+gödelienne.
 
 ## Ce que le raccord actuel établit pour les réels
 
 Le raccord actuel construit une complétude séquentielle effective relativement
 à une famille de Cauchy exécutée reçue. Cette famille fournit notamment son
-producteur, son module et ses lois de cohérence. Le raccord exécute ensuite la
-source diagonale, le regroupement et la réponse limite dans la même architecture
-historique, puis expose le readout effectivement mémorisé.
+producteur, sa cohérence intraterme, son module avec sa monotonie et sa loi de
+Cauchy. Le raccord exécute ensuite la source diagonale, le regroupement et la
+réponse limite dans la même architecture historique, puis expose le readout
+effectivement mémorisé.
 
 L'orientation effectivement obtenue est donc :
 

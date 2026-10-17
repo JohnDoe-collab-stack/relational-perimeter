@@ -9,18 +9,19 @@ un verdict d'originalité, ni un audit indépendant, ni une identification avec
 la totalité des nombres réels classiques.
 
 Les réels relationnels considérés ici sont produits par des exécutions à
-précision finie. Une famille de Cauchy exécutée, son producteur, son module
-monotone et sa loi de Cauchy sont reçus. Les réponses limites, leur cohérence,
-la convergence des sources admissibles et les regroupements finis sont ensuite
-construits. Les codes dyadiques sont des readouts aval de ces constructions ;
-ils ne constituent ni les histoires ni les occurrences.
+précision finie. Une famille de Cauchy exécutée, son producteur, sa cohérence
+intraterme, son module monotone et sa loi de Cauchy sont reçus. Les réponses
+limites, leur cohérence, la convergence des sources admissibles et les
+regroupements finis sont ensuite construits. Les codes dyadiques sont des
+readouts aval de ces constructions ; ils ne constituent ni les histoires ni
+les occurrences.
 
 ## Conclusion formelle du raccord Gödel–regroupement–réels
 
 Pour toute exécution gödelienne effective `execution` et toute famille de
 Cauchy exécutée `family` sur la présentation exacte
 `godelPerimetralPresentation execution`, à la profondeur de base `1`,
-`raccord execution family` construit un unique paquet `Result`. La
+`raccord execution family` construit un paquet commun `Result`. La
 quantification terminale est exactement :
 
 ```text
