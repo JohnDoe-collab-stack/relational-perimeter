@@ -34,6 +34,16 @@ une `RuntimeReadoutEquivalent`. `runtimeReadoutCorrespondence` rend cette
 présentations produites par readout. Aucune de ces constructions ne conclut à
 l'égalité des états, journaux, ressources, programmes ou occurrences riches.
 
+Au-dessus de ce raccord numérique, `effectiveCorrespondence P baseDepth`
+construit la correspondance structurelle pour le porteur runtime fermé :
+applications et allers-retours, constantes, addition, opposé, multiplication,
+inverse sous apartness à zéro, ordre constructif, densité et bornes finies,
+familles de Cauchy source et natives, limites, complétude effective et unicité
+numérique. Ses six blocs sont remplis par les producteurs et théorèmes du
+dépôt ; leur conclusion n'est pas supposée par le constructeur. Les transports
+vers présentations et carriers restent des readouts aval et n'identifient pas
+les données riches oubliées.
+
 ## Futurs limites effectivement retenus
 
 Une `LimitQuery` sépare la précision de comparaison des précisions de réponse

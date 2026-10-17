@@ -35,6 +35,16 @@ equivalence interderivable with positive equivalence of the readout
 presentations. None of these constructions implies equality of rich states,
 journals, resources, programs, or occurrences.
 
+Above this numerical connection, `effectiveCorrespondence P baseDepth`
+constructs the structural correspondence for the closed runtime carrier:
+applications and round trips, constants, addition, negation, multiplication,
+inversion under apartness from zero, constructive order, density and finite
+bounds, source and native Cauchy families, limits, effective completeness, and
+numerical uniqueness. Its six blocks are filled by repository producers and
+theorems; their conclusion is not assumed by the constructor. Transports to
+presentations and carriers remain downstream readouts and do not identify the
+forgotten rich data.
+
 ## Actually retained limit futures
 
 A `LimitQuery` separates comparison accuracy from response precisions chosen
