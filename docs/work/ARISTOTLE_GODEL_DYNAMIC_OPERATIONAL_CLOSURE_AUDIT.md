@@ -2,28 +2,66 @@
 
 ## Audit identity and immutable target
 
-This request starts a **brand-new independent audit**. Do not continue, reuse,
-summarize, or infer a verdict from any earlier Aristotle project, report, or
-conversation. Earlier audits are neither evidence nor authority for this run.
+This request starts a **brand-new independent audit with uploaded sources**.
+Do not continue, reuse, summarize, or infer a verdict from any earlier
+Aristotle project, report, or conversation. In particular, the earlier project
+that received no repository and returned no verdict is only a failed delivery
+record. Earlier audits are neither evidence nor authority for this run.
 
 - Repository: `https://github.com/JohnDoe-collab-stack/relational-perimeter.git`
-- Branch for retrieval: `work/godel-dynamic-operational-closure`
+- Published branch: `work/godel-dynamic-operational-closure`
 - Exact revision to audit: `31d9d0765298acd0d1e9715b57cc8adcfcb7cd7b`
 - Scientific code-and-prose evidence revision:
   `e2b75474c8bef91cfb9f24d6fed8d408e38d0269`
 - Base revision before this work:
   `c3a12b5114ca519aae8e8c83eec6b6d723d450d4`
-- Lean toolchain: `v4.24.0`
+- Lean toolchain: `v4.33.1`
 - Registered claim:
   `GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION`
 
-Check out the exact revision and first report:
+## Uploaded autonomous input
+
+The uploaded archive is authoritative for this audit. It contains:
 
 ```text
+relational-perimeter/                       complete checkout and .git history
+audit-toolchain/lean-4.33.1-linux-minimal.tar.zst
+```
+
+Do not clone or fetch the repository. Network access is not required. Enter the
+uploaded checkout and first report:
+
+```text
+cd relational-perimeter
 git rev-parse HEAD
 git status --short
 git merge-base --is-ancestor e2b75474c8bef91cfb9f24d6fed8d408e38d0269 31d9d0765298acd0d1e9715b57cc8adcfcb7cd7b
+git merge-base --is-ancestor c3a12b5114ca519aae8e8c83eec6b6d723d450d4 31d9d0765298acd0d1e9715b57cc8adcfcb7cd7b
 ```
+
+The checkout must be clean and already detached at the exact target. Its
+`.git` directory is included so ancestry and object contents can be checked
+locally.
+
+An exact Linux Lean toolchain is included because the audit environment may
+not have the pinned release and may have no outbound access. Install it only
+into scratch space outside the repository:
+
+```text
+mkdir -p /tmp/relational-perimeter-lean-4.33.1
+tar --zstd -xf ../audit-toolchain/lean-4.33.1-linux-minimal.tar.zst \
+  -C /tmp/relational-perimeter-lean-4.33.1
+TOOLCHAIN=/tmp/relational-perimeter-lean-4.33.1/lean-minimal
+$TOOLCHAIN/bin/lean --version
+$TOOLCHAIN/bin/lake --version
+export PATH="$TOOLCHAIN/bin:$PATH"
+$TOOLCHAIN/bin/lake build
+```
+
+Expected versions are Lean `4.33.1` at commit
+`819816b2e0a3bf405af45ae5c7af2491d8f5bee6` and Lake
+`5.0.0-src+819816b`. The toolchain archive contains no project proof objects;
+the project must be rebuilt from the uploaded source checkout.
 
 Audit the mathematical and foundational content of that immutable revision,
 not merely whether it compiles. Do not modify the repository. A successful API
