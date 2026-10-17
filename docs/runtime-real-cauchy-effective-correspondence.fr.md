@@ -4,10 +4,12 @@
 
 Ce passage est le texte canonique de l'affirmation
 `RUNTIME_EFFECTIVE_CAUCHY_REAL_CORRESPONDENCE`. Il décrit une correspondance
-constructive entre comportements runtime, présentations dyadiques effectives
-et carriers de Cauchy effectifs. Il ne constitue ni un audit indépendant, ni
-une identification des histoires riches, ni une construction de tous les réels
-classiques.
+constructive et structurelle entre comportements runtime, présentations
+dyadiques effectives et carriers de Cauchy effectifs. Cette correspondance
+comprend les opérations et relations effectivement construites dans le
+porteur relationnel, ainsi que ses familles de Cauchy et leurs limites. Elle ne
+constitue ni un audit indépendant, ni une identification des histoires riches,
+ni une construction de tous les réels classiques.
 
 ## Conclusion formelle de correspondance runtime–réel effectif
 
@@ -69,6 +71,80 @@ inter-dérivable avec l'équivalence des carriers ainsi lus, et
 La réciproque reconstruisant une histoire runtime depuis les seules valeurs
 numériques n'est ni définie ni revendiquée.
 
+## Correspondance structurelle effective
+
+Le porteur fermé `RelationalRealAddition.Real P baseDepth` est constitué par
+les cinq constructeurs `leaf`, `add`, `neg`, `mul` et `certified`. Ses objets
+restent des comportements exécutables : leurs environnements riches conservent
+les archives, productions, actions et occurrences, puis leurs environnements
+live projettent exactement la mémoire requise par le contrat de futurs fixé.
+Les fonctions `toPresentation` et `toCarrier` sont des readouts aval ; elles ne
+forment aucun de ces objets.
+
+`effectiveCorrespondence P baseDepth` construit sans hypothèse terminale un
+paquet `EffectiveCorrespondence` comprenant six blocs. `ApplicationMaps`
+fournit les applications vers et depuis les présentations et carriers, leurs
+allers-retours à `Equivalent` et `NumericalFutureEquivalent` près, ainsi que la
+préservation et la réflexion des équivalences numériques. Ces allers-retours
+ne sont jamais des égalités d'occurrences ou de familles riches.
+
+`OperationTransports` raccorde les constantes dyadiques, zéro, unité,
+l'addition, l'opposé et la multiplication aux opérations correspondantes sur
+les présentations et carriers. L'inverse reste partiel : sa formation exige un
+témoin positif d'`Apartness` à zéro, conservé séparément de l'action qui
+produit l'inverse. Chaque opération relationnelle est exécutée d'abord depuis
+les archives courantes de ses arguments ; le théorème de transport porte
+ensuite son readout. Aucune opération numérique n'est réimportée pour fabriquer
+rétroactivement le runtime.
+
+`RelationTransports` préserve l'ordre strict et l'apartness et les réfléchit
+sur les images des applications en exécutant des comparaisons fraîches depuis
+les archives reçues. L'ordre n'est pas rendu décidable globalement. Les lois
+de `ConstructiveOrderedFieldLaws` et de
+`ConstructiveOrderedFieldFutureLaws` comprennent le groupe additif, les lois
+multiplicatives, l'unité positive, les lois constructives de l'ordre, la
+compatibilité avec addition et multiplication positive, et les deux lois de
+l'inverse sous son domaine explicite. Elles concluent à l'équivalence de
+readouts et de futurs, jamais à l'identité des arbres d'occurrences.
+
+`OrderAndFiniteWitnesses` conserve aussi les producteurs de densité dyadique et
+de bornes naturelles. Ces producteurs reçoivent les témoins d'ordre et les
+archives courantes, exécutent leurs sondages et actions, puis projettent les
+ordres des mêmes cibles produites vers les présentations et carriers. Il s'agit
+de témoins finis construits, non d'une invocation de complétude d'ordre.
+
+## Familles exécutées, regroupement et limites natives
+
+`FamilyCorrespondence` distingue les familles-source
+`ExecutedCauchyFamily`, les `EffectiveFamily` numériques, les familles de
+carriers et les `NativeCauchyFamily` dont les termes sont eux-mêmes des
+comportements du porteur fermé. Les transports source conservent le producteur
+et le module déclarés et établissent les équivalences terme par terme ; ils ne
+récupèrent pas, depuis leurs codes, les histoires ou témoins Cauchy oubliés.
+
+Pour une famille native, le noyau live de chaque terme et son raccord au pas
+riche sont fournis séparément. À chaque demande, la production de limite part
+de la banque d'archives courante, exécute le terme diagonal choisi par le
+module, fait consommer ce même `Step` par le regroupement, installe la cible
+produite et poursuit le journal. La banque suivante ne remplace que l'entrée
+effectivement visitée. La projection live conserve le code installé ; elle
+n'exécute pas à nouveau la production riche.
+
+`nativeCompleteness` construit le candidat autoritatif, sa convergence, le
+readout effectif, la correspondance avec la limite produite de la famille
+réalisée et la réutilisation de la cible installée. `nativeUnique` compare deux
+candidats reçus de la même famille par une médiation qui produit un seul pas
+du terme et partage ce pas entre les deux convergences. Sa conclusion est
+`Equivalent` avec `NumericalFutureEquivalent`; elle ne peut pas identifier les
+constructeurs, archives ou occurrences des candidats.
+
+`LimitCorrespondence` conserve séparément la préservation d'une limite vers
+son readout, sa réflexion et sa réalisation, la route issue d'une famille
+source retournée, les limites de carriers, l'unicité numérique et la trace
+riche dont la projection donne les futurs numériques. La preuve consomme les
+pas terme/candidat reçus ; une cible préfabriquée ou un code nu ne peut pas les
+remplacer.
+
 ## Raccord au périmètre de Gödel
 
 Pour toute `ExecutedGodelProduction`, `realizePresentation` et
@@ -87,9 +163,16 @@ ne calculent aucune approximation.
 
 ## Non-conclusions
 
-La correspondance couvre exactement les présentations dyadiques et les réels
-de Cauchy effectivement présentés par les données reçues. Elle ne couvre pas
-tous les réels classiques. Elle ne prouve pas le transport de l'addition, de
-la multiplication, de l'ordre ou de l'apartness, la densité, la propriété
-archimédienne, la complétude d'ordre, `AC` ou `CH`. Ces propriétés exigent des
-constructions et des affirmations séparées.
+La correspondance couvre le porteur relationnel fermé construit dans le dépôt,
+les présentations dyadiques effectives et les carriers ou familles de Cauchy
+effectivement présentés par les données reçues. Elle établit, dans cette portée,
+les transports structurels, la densité dyadique exécutée, les bornes naturelles
+et la complétude de Cauchy effective décrits ci-dessus.
+
+Elle ne couvre pas tous les réels classiques et ne prouve pas la complétude par
+borne supérieure. Elle n'identifie pas les familles, programmes, archives,
+journaux, témoins Cauchy ou occurrences qui possèdent les mêmes readouts. La
+minimalité des mémoires est toujours relative à un environnement et à un
+contrat de futurs fixés ; elle n'est ni une borne de coût physique ni une
+certification universelle des captures de callbacks. Enfin, aucune conclusion
+sur `AC`, `CH` ou l'originalité n'est dérivée de cette correspondance.
