@@ -1532,7 +1532,7 @@
     {
       "id": "GODEL_RELATIONAL_SEQUENTIAL_COMPLETENESS",
       "kind": "causal",
-      "evidence_revision": "129e38de51437ea26488f8db8b4991305e6a37cc",
+      "evidence_revision": "5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc",
       "scope": "Pour toute exécution gödelienne effective et toute famille de Cauchy exécutée reçue sur la présentation produite par cette même exécution à la base H1 : un maître commun contient l'environnement exécutable, réalise exactement l'archive riche et produit le réel relationnel séquentiellement complet ; les regroupements finis consomment chaque chaîne chronologique par transport de la ressource historique normalisée, installent la cible produite et permettent sa réutilisation ; le témoin source–cible de la limite est transporté depuis la charge normalisée et consommé sans rejeu indépendant ; la mémoire commune est caractérisée exactement à environnement fixé ; les occurrences gödeliennes persistent à travers la trace ; la boucle totale et toute fermeture globale cohérente du même régime sont rejetées par le même témoin. HA ferme concrètement le côté gödelien. Aucune identification avec tous les réels classiques, la complétude par borne supérieure, la densité, AC ou CH, ni aucune revendication d'originalité.",
       "anchors": [
         {
@@ -1745,19 +1745,19 @@
       "reviews": {
         "reader": {
           "status": "reviewed",
-          "evidence": "docs/reports/runtime-real-native-correction-reader-translation-129e38d.fr.md",
-          "sha256": "5753c7612915e525bd97f1ec2cd61d0d2d4558ddfa8823e540837ea8d9f95131",
+          "evidence": "docs/reports/runtime-real-native-correction-reader-translation-5e69b1b.fr.md",
+          "sha256": "232e93c205afc93a55a510538359807de8caf939af8e1d2d0cd2a3b0be893481",
           "responsible": "Codex (OpenAI), lecture française autonome puis confrontation aux types et corps Lean complets",
-          "revision": "129e38de51437ea26488f8db8b4991305e6a37cc",
-          "revision_evidence": "Révision examinée : `129e38de51437ea26488f8db8b4991305e6a37cc`."
+          "revision": "5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc",
+          "revision_evidence": "Révision examinée : `5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc`."
         },
         "translation": {
           "status": "reviewed",
-          "evidence": "docs/reports/runtime-real-native-correction-reader-translation-129e38d.fr.md",
-          "sha256": "5753c7612915e525bd97f1ec2cd61d0d2d4558ddfa8823e540837ea8d9f95131",
+          "evidence": "docs/reports/runtime-real-native-correction-reader-translation-5e69b1b.fr.md",
+          "sha256": "232e93c205afc93a55a510538359807de8caf939af8e1d2d0cd2a3b0be893481",
           "responsible": "Codex (OpenAI), lecture anglaise autonome puis confrontation FR/EN et aux preuves Lean",
-          "revision": "129e38de51437ea26488f8db8b4991305e6a37cc",
-          "revision_evidence": "Révision examinée : `129e38de51437ea26488f8db8b4991305e6a37cc`."
+          "revision": "5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc",
+          "revision_evidence": "Révision examinée : `5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc`."
         },
         "independent": {
           "status": "not_recorded"
@@ -1767,7 +1767,7 @@
     {
       "id": "RUNTIME_EFFECTIVE_CAUCHY_REAL_CORRESPONDENCE",
       "kind": "behavioral",
-      "evidence_revision": "129e38de51437ea26488f8db8b4991305e6a37cc",
+      "evidence_revision": "5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc",
       "scope": "À présentation périmétrale P et profondeur de base fixées : le porteur relationnel fermé Real P baseDepth et chaque présentation dyadique, carrier ou famille de Cauchy effective reçue sont reliés par une correspondance structurelle construite. Le paquet concret fournit applications et allers-retours numériques/comportementaux ; constantes, addition, opposé, multiplication et inverse sous apartness à zéro ; ordre constructif, densité dyadique et bornes naturelles exécutées ; familles-source et familles natives de comportements ; limites produites, complétude de Cauchy effective et unicité numérique. Les productions riches précèdent leurs readouts ; les transports ne reconstruisent ni environnements, états, journaux, témoins Cauchy, ressources ou occurrences. La réalisation au périmètre Gödel H1 partage le même runtime mais ne calcule aucune approximation. Aucune couverture de tous les réels classiques, complétude par borne supérieure, décision globale d'ordre, AC, CH, borne de coût physique ou revendication d'originalité.",
       "anchors": [
         {
@@ -2010,23 +2010,23 @@
         "transport": "ReadoutOrigin, toPresentation et toCarrier conservent la provenance dirigée jusqu'aux pas exécutés puis oublient les données riches sous Equivalent, NumericalFutureEquivalent ou les équivalences positives de présentations/carriers. NativeUniquenessTrace.toNumerical projette la trace native possédée sans reconstruire les Steps ou les lois ; toEffectiveFamily, realizedFamily et asExecutedCandidate restent confinés à la correspondance numérique aval. Les transports préservent et réfléchissent équivalence, ordre et apartness sur les images déclarées ; ils ne rendent pas l'ordre globalement décidable. Les familles retournées conservent producteur et module mais les allers-retours numériques ne récupèrent ni témoins Cauchy, banques, journaux, programmes, ressources ou occurrences. La minimalité mémoire reste relative à l'environnement et au contrat de futurs fixés."
       },
       "consumers": [],
-      "source_sha256": "b66ec9b5c7bad1d1c9fb5fe5c51436f2c2fc06184157a868cadbbc993ac3c811",
+      "source_sha256": "3abe2b41ea36a5438c640b616375bed78a785b8d4c1f6db22a2924f3b0d15795",
       "reviews": {
         "reader": {
           "status": "reviewed",
-          "evidence": "docs/reports/runtime-real-native-correction-reader-translation-129e38d.fr.md",
-          "sha256": "5753c7612915e525bd97f1ec2cd61d0d2d4558ddfa8823e540837ea8d9f95131",
+          "evidence": "docs/reports/runtime-real-native-correction-reader-translation-5e69b1b.fr.md",
+          "sha256": "232e93c205afc93a55a510538359807de8caf939af8e1d2d0cd2a3b0be893481",
           "responsible": "Codex (OpenAI), lecture française autonome puis confrontation aux types et corps Lean complets",
-          "revision": "129e38de51437ea26488f8db8b4991305e6a37cc",
-          "revision_evidence": "Révision examinée : `129e38de51437ea26488f8db8b4991305e6a37cc`."
+          "revision": "5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc",
+          "revision_evidence": "Révision examinée : `5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc`."
         },
         "translation": {
           "status": "reviewed",
-          "evidence": "docs/reports/runtime-real-native-correction-reader-translation-129e38d.fr.md",
-          "sha256": "5753c7612915e525bd97f1ec2cd61d0d2d4558ddfa8823e540837ea8d9f95131",
+          "evidence": "docs/reports/runtime-real-native-correction-reader-translation-5e69b1b.fr.md",
+          "sha256": "232e93c205afc93a55a510538359807de8caf939af8e1d2d0cd2a3b0be893481",
           "responsible": "Codex (OpenAI), lecture anglaise autonome puis confrontation FR/EN et aux preuves Lean",
-          "revision": "129e38de51437ea26488f8db8b4991305e6a37cc",
-          "revision_evidence": "Révision examinée : `129e38de51437ea26488f8db8b4991305e6a37cc`."
+          "revision": "5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc",
+          "revision_evidence": "Révision examinée : `5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc`."
         },
         "independent": {
           "status": "not_recorded"

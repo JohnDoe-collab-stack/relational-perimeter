@@ -4,7 +4,7 @@ Responsable : Codex (OpenAI), lectures autonomes puis confrontation formelle.
 
 Date : 18 octobre 2026.
 
-Révision examinée : `129e38de51437ea26488f8db8b4991305e6a37cc`.
+Révision examinée : `5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc`.
 
 ## Périmètre et ordre de lecture
 
@@ -132,6 +132,13 @@ de remise à zéro d'archives, perte des extensions ou des pas partagés,
 composition erronée, reconstruction par les adaptateurs numériques et double
 médiation. Le harnais des façades a passé ses deux baselines puis ses dix-huit
 mutations ; ses résultats temporaires restent hors du dépôt.
+
+Le premier passage de la façade complète a en outre détecté que le contrôle du
+corps ordonné cherchait encore l'ancien wrapper `startProductAt` dans le code C
+alors que le compilateur expose désormais directement la fabrique sûre
+`seedMultiplicationArchive`. Le contrôle a été raccordé à cette frontière sans
+affaiblissement : ses trois mutations finales remplacent toujours séparément
+les successeurs exacts `ac`, `b` et `c`, et chacune est rejetée par l'analyse.
 
 Ces contrôles établissent la reproductibilité mécanique annoncée, pas le sens
 à eux seuls. L'audit indépendant doit viser exactement la révision indiquée et
