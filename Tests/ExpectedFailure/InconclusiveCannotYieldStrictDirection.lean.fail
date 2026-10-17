@@ -1,0 +1,11 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealOrder
+set_option autoImplicit false
+open RelationalPerimeter.Constitution.Reals
+open RelationalRealOrder
+
+example (p : Nat) (x y : SignedDyadicCode) (direction : FiniteDirection p x y) :
+    StrictSeparation p x y ⊕ StrictSeparation p y x :=
+  match direction with
+  | .forward gap => .inl gap
+  | .backward gap => .inr gap
+  | .inconclusive upper _ => .inl upper

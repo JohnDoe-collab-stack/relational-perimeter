@@ -421,9 +421,12 @@ futurs ont besoin pour rester distinguables.
 
 Le raccord aux réels réalise cette structure dans une portée précisément
 délimitée : l'environnement exécutable contient le producteur et le module,
-tandis que la mémoire vivante contient ce que l'exécution suivante lit
-directement. Le producteur n'est donc ni un indice invisible du type, ni un
-interprète extérieur rappelé après la projection.
+tandis que la mémoire vivante contient exactement les données nécessaires aux
+lectures, transitions et futurs du contrat complet, à environnement fixé.
+Cela ne signifie pas que chaque transition lit tous ses champs : la dernière
+observation peut être nécessaire à la lecture publique sans être consultée
+pour calculer la réponse suivante. Le producteur n'est donc ni un indice
+invisible du type, ni un interprète extérieur rappelé après la projection.
 
 La chaîne exécutée possède les propriétés suivantes :
 

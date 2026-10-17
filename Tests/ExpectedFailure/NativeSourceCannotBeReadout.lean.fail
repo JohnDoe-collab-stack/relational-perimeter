@@ -1,0 +1,7 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open HeterogeneousRealRuntime RelationalRealAddition RelationalRealNativeCauchy
+variable {P : CircularPresentation} {d : Nat}
+example (family : NativeCauchyFamily P d) (bank : ContextBank family) (p : Nat) :
+    Step (environment (family.terms (family.modulus p))) (bank (family.modulus p)) p :=
+  readout (family.terms (family.modulus p)) p

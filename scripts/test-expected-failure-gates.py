@@ -14,7 +14,30 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from unittest.mock import patch
+
+
+def gate_passed(case: str, status: int | None, output: str,
+                executed: list[str], unique: set[str], expected: str | None) -> bool:
+    if 'interrupted or timed out' in output:
+        return False
+    if case == 'baseline':
+        return status == 0 and len(executed) == len(unique) and set(executed) == unique
+    return status == 1 and 'EXPECTED_FAILURE_FAILED:' in output and expected in output
+
+
+def run_gate(command: list[str], work: Path, environment: dict[str, str],
+             timeout: int) -> tuple[int | None, str, bool]:
+    try:
+        result = subprocess.run(command, cwd=work, env=environment, capture_output=True,
+                                text=True, encoding='utf-8', timeout=timeout)
+    except subprocess.TimeoutExpired as error:
+        def decoded(part: str | bytes | None) -> str:
+            return part.decode('utf-8', errors='replace') if isinstance(part, bytes) else part or ''
+        return None, (decoded(error.stdout) + decoded(error.stderr) +
+                      f'\nGATE_SELFTEST_FAILED: interrupted or timed out after {timeout} seconds\n'), True
+    return result.returncode, result.stdout + result.stderr, False
 
 
 def policy_checks(repo: Path) -> None:
@@ -49,7 +72,18 @@ def policy_checks(repo: Path) -> None:
                 raise
         else:
             raise SystemExit('A subprocess timeout was mistaken for a compiler refusal')
-    print('FIXTURE_POLICY_SELFTEST_OK: process status, timeout handler, printed output and diagnostic identity')
+    refusal = 'EXPECTED_FAILURE_FAILED: failed for an unexpected reason'
+    for status in (None, 2, 124, 137, -9):
+        if gate_passed('wrong-site', status, refusal, [], {'fixture'}, 'failed for an unexpected reason'):
+            raise SystemExit('An interrupted gate was mistaken for the expected rejection')
+    if gate_passed('wrong-site', 1, refusal + '\ninterrupted or timed out', [], {'fixture'},
+                   'failed for an unexpected reason'):
+        raise SystemExit('A timeout message was mistaken for the expected rejection')
+    with patch.object(subprocess, 'run', side_effect=subprocess.TimeoutExpired('synthetic-gate', 17)):
+        status, output, timed_out = run_gate(['synthetic-gate'], repo, dict(os.environ), 17)
+    if status is not None or not timed_out or 'after 17 seconds' not in output:
+        raise SystemExit('The outer timeout handler did not report a failed gate')
+    print('FIXTURE_POLICY_SELFTEST_OK: process statuses, both timeout handlers, printed output and diagnostic identity')
 
 
 def link_artifacts(source: Path, destination: Path) -> None:
@@ -70,7 +104,12 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--bash', default='C:/Program Files/Git/bin/bash.exe' if os.name == 'nt' else 'bash')
+    parser.add_argument('--gate-timeout-seconds', type=int,
+                        help='outer deadline per gate; default: 60 + 90 * inventoried fixture count; '
+                             'the exact diagnostic policy and its 90-second fixture deadline are unchanged')
     args = parser.parse_args()
+    if args.gate_timeout_seconds is not None and args.gate_timeout_seconds <= 0:
+        parser.error('--gate-timeout-seconds must be positive')
     repo = Path(__file__).resolve().parent.parent
     if not (repo / '.lake/build').is_dir():
         raise SystemExit('Run lake build before the gate self-tests')
@@ -81,6 +120,12 @@ def main() -> None:
     manifest = (repo / 'scripts/expected-failures.tsv').read_text(encoding='utf-8')
     rows = [line for line in manifest.splitlines() if line and not line.startswith('#')]
     unique = {line.split('\t')[0] for line in rows}
+    # The previous fixed 180 seconds bounded the whole inventory, not one Lean
+    # call. Cover the existing per-fixture deadline plus facade startup instead.
+    # This is a reproducible outer budget, not a performance or cost guarantee.
+    gate_timeout = args.gate_timeout_seconds if args.gate_timeout_seconds is not None else 60 + 90 * len(unique)
+    print(f'GATE_SELFTEST_BUDGET: fixtures={len(unique)} gate_timeout_seconds={gate_timeout} '
+          f'source={"explicit" if args.gate_timeout_seconds is not None else "60+90*fixtures"}', flush=True)
     first = rows[0].split('\t')[0]
     cases = [
         ('baseline', None), ('unlisted', 'uninventoried fixture'),
@@ -130,16 +175,17 @@ def main() -> None:
                 ('bash', [args.bash, 'scripts/check-expected-failures.sh']),
                 ('powershell', ['pwsh', '-NoProfile', '-File', 'scripts/check-expected-failures.ps1']),
             ):
-                result = subprocess.run(command, cwd=work, env=environment, capture_output=True,
-                                        text=True, encoding='utf-8', timeout=180)
-                output = result.stdout + result.stderr
+                started = time.monotonic()
+                status, output, timed_out = run_gate(command, work, environment, gate_timeout)
+                elapsed = time.monotonic() - started
                 log = args.output / f'{case}-{surface}.log'
                 log.write_text(output, encoding='utf-8')
                 executed = [line.split('\t')[-1] for line in output.splitlines() if line.startswith('EXPECTED_FAILURE_OK\t')]
-                passed = (result.returncode == 0 and len(executed) == len(unique) and set(executed) == unique) if case == 'baseline' else (result.returncode != 0 and expected in output)
-                records.append(dict(case=case, surface=surface, exit_code=result.returncode, passed=passed,
-                                    fixture_calls=len(executed), log=log.name))
-                print(case, surface, result.returncode, 'PASS' if passed else 'FAIL', flush=True)
+                passed = not timed_out and gate_passed(case, status, output, executed, unique, expected)
+                records.append(dict(case=case, surface=surface, exit_code=status, passed=passed,
+                                    fixture_calls=len(executed), timeout_seconds=gate_timeout,
+                                    elapsed_seconds=round(elapsed, 3), timed_out=timed_out, log=log.name))
+                print(case, surface, status, 'PASS' if passed else 'FAIL', flush=True)
     (args.output / 'results.json').write_text(json.dumps(records, indent=2), encoding='utf-8')
     if not all(record['passed'] for record in records):
         raise SystemExit('Fixture-gate self-test failed')

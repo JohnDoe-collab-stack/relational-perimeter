@@ -1,0 +1,11 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealOrderedField
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open HeterogeneousRealRuntime RelationalRealAddition RelationalRealOrder RelationalRealOrderedField
+
+example {P : CircularPresentation} {d : Nat} {a b shift : Real P d} {order : StrictOrder a b}
+    {la : (environment (.add a shift)).Archive} {ra : (environment (.add b shift)).Archive}
+    (packet : TranslatedOrder order shift la ra) :
+    Step (environment a) (environment a).initialArchive (order.accuracy + 5 + 1) :=
+  packet.attempt.pair.left.resource.left

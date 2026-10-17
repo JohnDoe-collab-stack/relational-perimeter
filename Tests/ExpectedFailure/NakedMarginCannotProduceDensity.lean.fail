@@ -1,0 +1,8 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealDensity
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalRealAddition RelationalRealOrder RelationalRealDensity
+
+example {P : CircularPresentation} {d p : Nat} (x y : SignedDyadicCode) (gap : StrictSeparation p x y) :=
+  dense (P := P) (baseDepth := d) gap

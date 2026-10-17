@@ -13,6 +13,31 @@ RelationalPerimeter.Constitution.Grouping.ContinuationContract	U	enforced	Separa
 RelationalPerimeter.Constitution.Grouping.HistoricalExtension	U	enforced	Historical operation inclusion and renormalization
 RelationalPerimeter.Constitution.Grouping.ExactImage	K	enforced	Normal target image reusing the existing finite image implementation
 RelationalPerimeter.Constitution.Reals.Precision	U	enforced	Constructive signed dyadic codes exact value transport and positive precision proximity
+RelationalPerimeter.Constitution.Reals.DyadicArithmetic	U	enforced	Explicit common-scale additive action exact laws and constructive successor-precision error budget
+RelationalPerimeter.Constitution.Reals.DyadicMultiplication	U	enforced	Constructive signed-value amplitudes from finite probes and explicit cross-factor precision error budgets
+RelationalPerimeter.Constitution.Reals.DyadicOrder	U	enforced	Positive oriented finite signed-dyadic margins and constructive one-sided tolerance budgets
+RelationalPerimeter.Constitution.Reals.DyadicReciprocal	U	enforced	Positive-denominator fuelled natural division owned quotient remainder packets quantitative reciprocal error budgets and signed cancellation
+RelationalPerimeter.Constitution.Reals.DyadicOrderedField	U	enforced	Exact finite signed-margin translation cancellation and constructive positive-product bounds
+RelationalPerimeter.Constitution.Reals.DyadicDensity	U	enforced	Constructive midpoint with two half-margins and separate natural upper and lower strict bounds on a received finite signed code
+RelationalPerimeter.Constitution.Reals.HeterogeneousRealRuntime	N	enforced	Persistent heterogeneous authoritative archives provenance-rich events compact live environments and exact projected fixed-environment contracts
+RelationalPerimeter.Constitution.Reals.RelationalRealAddition	N	enforced	Closed executable addition trees retained child executions one action archive-reflecting rich events additive numerical futures and downstream readout correspondence
+RelationalPerimeter.Constitution.Reals.RelationalRealNegation	N	enforced	Executed unary opposite current source archive and journal one retained action compact unary live callback and exact projected contracts
+RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication	N	enforced	Current-archive amplitude probes exact successor refinements one retained multiplication action and compact executable live environment
+RelationalPerimeter.Constitution.Reals.RelationalRealMultiplicativeLaws	N	enforced	Numerical multiplication congruence ring laws paired numerical futures and downstream presentation carrier transports
+RelationalPerimeter.Constitution.Reals.RelationalRealOrder	N	enforced	Owned current-archive finite comparison attempts positive directed order and apartness explicit refinement transports and downstream numerical reflection
+RelationalPerimeter.Constitution.Reals.ReciprocalDomain	N	enforced	Executed apartness direction source anchor and margin transport to each owned current source Step
+RelationalPerimeter.Constitution.Reals.ReciprocalRuntime	N	enforced	Current-source reciprocal action owned division target chronological archive compact live specification and derived coherence uniformity
+RelationalPerimeter.Constitution.Reals.RelationalRealInverse	N	enforced	Concrete certified reciprocal service closing the same real carrier without a presentation or carrier input
+RelationalPerimeter.Constitution.Reals.RelationalRealInverseLaws	N	enforced	Received product packet units consuming actual probes refinements reciprocal division and algebraic witness independence without occurrence identification
+RelationalPerimeter.Constitution.Reals.RelationalRealInverseCorrespondence	N	enforced	Downstream inverse presentations and carriers derived from fresh executed domain realization and the primitive reciprocal runtime
+RelationalPerimeter.Constitution.Reals.RelationalRealOrderedField	N	enforced	Owned arithmetic Steps directed finite order translation positive-product margins and constructive ordered-field laws modulo numerical equivalence with apartness-domain inverse
+RelationalPerimeter.Constitution.Reals.RelationalRealDensity	N	enforced	Six-phase stored midpoint and bilateral natural bound actions shared constant targets and strict comparisons consuming exact current successors without a new persistent service
+RelationalPerimeter.Constitution.Reals.RelationalRealCauchy	N	enforced	Executed-family adapter current raw source terms compact fixed-index live route existing authoritative limit and Cauchy convergence consuming received executions without arbitrary-sequence completeness
+RelationalPerimeter.Constitution.Reals.RelationalRealLimitUniqueness	N	enforced	Two received limits of the same executed family unique through one shared current term per mediation and three chronological successors before numerical projection without occurrence identification
+RelationalPerimeter.Constitution.Reals.RelationalRealFamilyTransport	N	enforced	Effective family source realization numerical roundtrips current-Step limit transport and shared-term authoritative uniqueness with explicit rich-data loss and carrier normalization without cofinality
+RelationalPerimeter.Constitution.Reals.RelationalRealNativeLimitRuntime	N	enforced	Owned native diagonal execution and grouping with dependent archive bank and separated numeric live kernels
+RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy	N	enforced	Native composed Real Cauchy laws convergence from retained limit resources and downstream effective correspondence
+RelationalPerimeter.Constitution.Reals.RelationalRealEffectiveCorrespondence	N	enforced	Concrete effective behavioural correspondence applications operations positive order finite witnesses native and source family completeness without unrestricted-real coverage
 RelationalPerimeter.Constitution.Reals.LocalGrouping	K	enforced	Effective local grouping rules preserving distinct sources around a shared target
 RelationalPerimeter.Constitution.Reals.HistoricalGrouping	K	enforced	Historical finite selections extensions normalization and exact chronological batch consumption
 RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime	B	enforced	Six nested semantic phases over one private proof-relevant journal with memory-derived readouts

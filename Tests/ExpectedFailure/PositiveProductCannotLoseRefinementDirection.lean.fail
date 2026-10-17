@@ -1,0 +1,11 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealOrderedField
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalRealAddition RelationalRealOrder RelationalRealOrderedField DyadicReciprocal
+
+example {P : CircularPresentation} {d : Nat} {a b : Real P d} {left : Positive a} {right : Positive b}
+    {za : (environment (zero P d)).Archive} {archive : (environment (.mul a b)).Archive}
+    (packet : PositiveProduct left right za archive) :
+    NonzeroCode .negative (left.accuracy + 2) packet.attempt.pair.right.resource.left.code :=
+  packet.leftCertificate

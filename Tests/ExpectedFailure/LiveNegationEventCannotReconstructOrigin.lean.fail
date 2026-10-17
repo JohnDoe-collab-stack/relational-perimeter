@@ -1,0 +1,9 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.HeterogeneousRealRuntime
+open RelationalPerimeter.Constitution.Reals.RelationalRealNegation
+
+example {P : CircularPresentation} {depth : Nat} (source : Service P depth)
+    (event : NegationLiveEvent source.liveEnvironment) : NegationRichEvent source :=
+  event

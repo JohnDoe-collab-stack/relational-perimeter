@@ -1,0 +1,11 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open HeterogeneousRealRuntime RelationalRealAddition
+
+example {P : CircularPresentation} {depth p : Nat} (left right : Service P depth)
+    (archive : AdditionArchive left right) (step : Step (addEnvironment left right) archive p) :
+    ConstitutiveRuntime.ExecutedRequest
+      (additionProgram step.resource.left step.resource.right Step.code Step.code p) P archive.journal () :=
+  step.resource.left.code.add step.resource.right.code

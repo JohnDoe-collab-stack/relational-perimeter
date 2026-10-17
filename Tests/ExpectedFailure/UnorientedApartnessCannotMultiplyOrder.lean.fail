@@ -1,0 +1,9 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealOrderedField
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalRealAddition RelationalRealOrder RelationalRealOrderedField
+
+example {P : CircularPresentation} {d : Nat} {a b c : Real P d} (order : StrictOrder a b)
+    (apart : Apartness c (zero P d)) : StrictOrder (.mul a c) (.mul b c) :=
+  mulOrderRight order apart

@@ -1,0 +1,7 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealLimitUniqueness
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RelationalRealAddition HeterogeneousRealRuntime RelationalRealCauchy
+variable {P : CircularPresentation} {d : Nat} (family : ExecutedCauchyFamily P d)
+example (archive : TermArchive family) (code : SignedDyadicCode) :
+    Step (environment (termReal family 0)) archive 3 :=
+  code

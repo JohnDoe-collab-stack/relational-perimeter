@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open HeterogeneousRealRuntime RelationalRealAddition RelationalRealNativeCauchy
+variable {P : CircularPresentation} {d : Nat}
+example (family : NativeCauchyFamily P d) : Nat → NativeTermKernel :=
+  family.terms

@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCauchy
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RelationalRealCauchy
+variable {P : CircularPresentation} {d : Nat} (family : ExecutedCauchyFamily P d)
+example (memory : AuthoritativeRuntime.ReducedState) :=
+  termLiveStep family 0 memory 3

@@ -1,0 +1,11 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RuntimeCorrespondence HeterogeneousRealRuntime RelationalRealAddition RelationalRealCauchy RelationalRealFamilyTransport RelationalRealNativeCauchy
+variable {P : CircularPresentation} {d : Nat}
+example (family : NativeCauchyFamily P d) (p n r s : Nat)
+    (ta : (environment (family.terms n)).Archive) (la : (environment (nativeLimit family)).Archive)
+    (term : Step (environment (family.terms n)) ta r) (lim : Step (environment (nativeLimit family)) la s)
+    (hn : PrecisionExtension (family.modulus p) n) (hr : PrecisionExtension p r) (hs : PrecisionExtension p s)
+    (packet : RelationalRealNativeCauchy.LimitObservation family p n r s term lim hn hr hs) :
+    Step (environment (family.terms (family.modulus s))) packet.diagonal.next s :=
+  executeReal (family.terms (family.modulus s)) s

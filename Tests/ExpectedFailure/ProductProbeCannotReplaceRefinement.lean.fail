@@ -1,0 +1,10 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.HeterogeneousRealRuntime
+open RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication
+
+example {P : CircularPresentation} {depth p : Nat} (left right : Service P depth)
+    (a : MultiplicationArchive left right) (step : Step (mulEnvironment left right) a p) :
+    Step left step.resource.leftProbe.next (productBudget step.resource.leftProbe.code step.resource.rightProbe.code p).leftPrecision :=
+  step.resource.leftProbe

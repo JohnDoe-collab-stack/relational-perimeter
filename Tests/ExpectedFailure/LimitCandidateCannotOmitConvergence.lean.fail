@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealLimitUniqueness
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RelationalRealAddition RelationalRealLimitUniqueness
+variable {P : CircularPresentation} {d : Nat} (family : ExecutedCauchyFamily P d)
+example (real : Real P d) (rate : Nat → Nat) : LimitCandidate family :=
+  (⟨real, rate⟩ : Real P d × (Nat → Nat))

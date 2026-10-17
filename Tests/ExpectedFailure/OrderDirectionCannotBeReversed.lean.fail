@@ -1,0 +1,8 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealOrder
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+open RelationalPerimeter.Constitution.Reals.RelationalRealOrder
+
+example {P : CircularPresentation} {d : Nat} {a b : Real P d} (order : StrictOrder a b) : StrictOrder b a :=
+  order

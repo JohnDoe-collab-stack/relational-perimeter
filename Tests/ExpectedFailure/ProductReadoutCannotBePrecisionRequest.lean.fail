@@ -1,0 +1,8 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealMultiplicativeLaws
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalRealAddition
+
+example {P : CircularPresentation} {depth : Nat} (left right : Real P depth) (target : SignedDyadicCode) :=
+  executeReal (.mul left right) target

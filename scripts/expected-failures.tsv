@@ -59,3 +59,128 @@ Tests/ExpectedFailure/NumericalFuturesCannotIdentifyOccurrences.lean.fail	semant
 Tests/ExpectedFailure/MemoryCannotHideExecutableEnvironment.lean.fail	dependent-type	10	2	CommonRealRuntime.Runtime
 Tests/ExpectedFailure/IncoherentBeforeModulusCannotSupplyTerm.lean.fail	semantic-type	14	2	(incoherentBeforeModulus.calculate { term := 0, precision := 3 })
 Tests/ExpectedFailure/FreshSeedCannotReplaceTransportedBatch.lean.fail	dependent-type	8	2	BatchAdvance selection fresh (initialBatchCharge selection)
+Tests/ExpectedFailure/SumCodeCannotBeRequest.lean.fail	dependent-type	9	20	executeReal real sumCode
+Tests/ExpectedFailure/PresentationCannotReplaceCompositeReal.lean.fail	dependent-type	8	2	Real P depth
+Tests/ExpectedFailure/SameValueCannotForgeCompositeOrigin.lean.fail	semantic-type	9	2	Step (leaf real) (leaf real).initialArchive p
+Tests/ExpectedFailure/RecomputedCodeCannotReplaceAdditionAction.lean.fail	dependent-type	11	2	ConstitutiveRuntime.ExecutedRequest
+Tests/ExpectedFailure/LeftProductionCannotReplaceRightProduction.lean.fail	dependent-type	11	2	Step right rightArchive p.succ
+Tests/ExpectedFailure/EqualCompositeReadoutsCannotIdentifyOccurrences.lean.fail	semantic-type	9	2	left = right
+Tests/ExpectedFailure/CompositeArchiveNeedsLiveProjection.lean.fail	dependent-type	9	2	CompositeMemory left.liveEnvironment right.liveEnvironment
+Tests/ExpectedFailure/CompositeMemoryCannotHideEnvironment.lean.fail	dependent-type	8	2	Runtime P depth
+Tests/ExpectedFailure/AdditiveLawCannotIdentifyRichTrees.lean.fail	semantic-type	8	2	left.add right = right.add left
+Tests/ExpectedFailure/RichServiceCannotBeLiveEnvironment.lean.fail	dependent-type	8	3	service
+Tests/ExpectedFailure/LiveEventCannotReplaceRichEvent.lean.fail	dependent-type	8	2	service.projectEvent event
+Tests/ExpectedFailure/NegatedCodeCannotReplaceExecutedNegation.lean.fail	dependent-type	11	2	ConstitutiveRuntime.ExecutedRequest
+Tests/ExpectedFailure/InitialSourceCannotReplaceCurrentNegation.lean.fail	dependent-type	10	2	Step source source.initialArchive p
+Tests/ExpectedFailure/InvolutionCannotIdentifyRichRuntime.lean.fail	semantic-type	8	2	real.neg.neg = real
+Tests/ExpectedFailure/AdditiveInverseCannotIdentifyRichZero.lean.fail	semantic-type	8	2	real.add real.neg = zero P depth
+Tests/ExpectedFailure/NegationArchiveCannotBeLiveMemory.lean.fail	dependent-type	9	2	NegationMemory source.liveEnvironment
+Tests/ExpectedFailure/LiveNegationEventCannotReconstructOrigin.lean.fail	dependent-type	9	2	NegationRichEvent source
+Tests/ExpectedFailure/NegationTargetCannotBePrecisionRequest.lean.fail	dependent-type	9	27	executeReal real.neg target
+Tests/ExpectedFailure/InitialArchiveCannotReplaceProductProbeSuccessor.lean.fail	dependent-type	10	2	Step left a.left (productBudget step.resource.leftProbe.code step.resource.rightProbe.code p).leftPrecision
+Tests/ExpectedFailure/ProductProbeCannotReplaceRefinement.lean.fail	dependent-type	10	2	Step left step.resource.leftProbe.next
+Tests/ExpectedFailure/WrongAmplitudeCannotReplaceCrossProductBudget.lean.fail	dependent-type	10	2	Step left step.resource.leftProbe.next (p + 1 + probeAmplitude step.resource.leftProbe.code)
+Tests/ExpectedFailure/ProductCodeCannotReplaceExecutedAction.lean.fail	dependent-type	11	2	ConstitutiveRuntime.ExecutedRequest
+Tests/ExpectedFailure/ProductLawCannotIdentifyOccurrenceTrees.lean.fail	semantic-type	8	2	left.mul right = right.mul left
+Tests/ExpectedFailure/ProductArchiveCannotBeLiveMemory.lean.fail	dependent-type	9	2	CompositeMemory left.liveEnvironment right.liveEnvironment
+Tests/ExpectedFailure/SignedAmplitudeCannotBoundFineComponents.lean.fail	semantic-type	7	2	cancelled.positive + cancelled.negative ≤ probeAmplitude SignedDyadicCode.zero
+Tests/ExpectedFailure/ProductReadoutCannotBePrecisionRequest.lean.fail	dependent-type	8	32	executeReal (left.mul right) target
+Tests/ExpectedFailure/NakedCodesCannotForgeOrder.lean.fail	dependent-type	9	2	StrictOrder a b
+Tests/ExpectedFailure/NumericalOrderCannotReplaceOwnedSteps.lean.fail	dependent-type	9	2	StrictOrder a b
+Tests/ExpectedFailure/OrderDirectionCannotBeReversed.lean.fail	dependent-type	8	2	StrictOrder b a
+Tests/ExpectedFailure/InitialArchiveCannotReplaceOrderContinuation.lean.fail	dependent-type	10	2	Step (environment a) (environment a).initialArchive (order.accuracy + 5)
+Tests/ExpectedFailure/FiniteInconclusiveCannotDecideEquality.lean.fail	semantic-type	9	2	Equivalent a b
+Tests/ExpectedFailure/FiniteAttemptCannotBeGlobalDecision.lean.fail	semantic-type	9	2	Apartness a b ⊕ Equivalent a b
+Tests/ExpectedFailure/OrderCannotIdentifyOccurrences.lean.fail	semantic-type	8	2	a = b
+Tests/ExpectedFailure/OrderMarginCannotSkipGuardBudget.lean.fail	dependent-type	9	8	PrecisionExtension (0 + 3) 0
+Tests/ExpectedFailure/InconclusiveCannotYieldStrictDirection.lean.fail	dependent-type	11	34	StrictSeparation p x y
+Tests/ExpectedFailure/InverseNeedsExecutedApartness.lean.fail	dependent-type	8	2	Apartness source (zero P depth) → Real P depth
+Tests/ExpectedFailure/NakedMarginCannotForgeInverseDomain.lean.fail	dependent-type	9	2	Apartness source (zero P depth)
+Tests/ExpectedFailure/NakedCodeCannotForgeInverseDomain.lean.fail	dependent-type	9	2	Apartness source (zero P depth)
+Tests/ExpectedFailure/SourceStepCannotReplaceInverseApartness.lean.fail	dependent-type	10	2	Apartness source (zero P depth)
+Tests/ExpectedFailure/InverseCannotLoseWitnessDirection.lean.fail	dependent-type	11	2	NonzeroCode Direction.negative
+Tests/ExpectedFailure/InitialArchiveCannotReplaceInverseContinuation.lean.fail	dependent-type	10	2	Step (environment source) (environment source).initialArchive (sourcePrecision (ReciprocalDomain.away w) p)
+Tests/ExpectedFailure/InverseAnchorCannotResetWitnessSuccessor.lean.fail	dependent-type	9	2	Step (environment source) (environment source).initialArchive (sourcePrecision (ReciprocalDomain.away w) p)
+Tests/ExpectedFailure/InverseTargetCannotBePrescribed.lean.fail	dependent-type	9	33	executeReal (inverse source w) target
+Tests/ExpectedFailure/InverseCodeCannotReplaceDivisionPacket.lean.fail	dependent-type	10	2	ReciprocalResult (ReciprocalDomain.direction w)
+Tests/ExpectedFailure/RecomputedReciprocalCannotReplaceAction.lean.fail	dependent-type	10	2	ReciprocalRuntime.Action step.resource.operand
+Tests/ExpectedFailure/InverseArchiveCannotBeLiveMemory.lean.fail	dependent-type	9	2	(environment (inverse source w)).Memory
+Tests/ExpectedFailure/InverseCertificateCannotBeLiveEnvironment.lean.fail	dependent-type	9	2	LiveEnvironment
+Tests/ExpectedFailure/InverseUnitCannotIdentifyOccurrences.lean.fail	semantic-type	9	2	source.mul (inverse source w) = one P depth
+Tests/ExpectedFailure/InverseWitnessIndependenceCannotIdentifyOccurrences.lean.fail	semantic-type	9	2	inverse source first = inverse source second
+Tests/ExpectedFailure/ReciprocalDivisionNeedsPositiveDenominator.lean.fail	dependent-type	8	13	0 < 0
+Tests/ExpectedFailure/NakedCodeCannotTranslateOrder.lean.fail	dependent-type	9	16	StrictOrder
+Tests/ExpectedFailure/NakedSeparationCannotTranslateOrder.lean.fail	dependent-type	9	16	StrictOrder
+Tests/ExpectedFailure/UnorientedApartnessCannotMultiplyOrder.lean.fail	dependent-type	9	22	Positive c
+Tests/ExpectedFailure/MultiplicationOrderNeedsPositiveFactor.lean.fail	dependent-type	9	2	StrictOrder (a.mul c) (b.mul c)
+Tests/ExpectedFailure/InitialChildCannotReplaceTranslatedStep.lean.fail	dependent-type	11	2	Step (environment a) (environment a).initialArchive (order.accuracy + 5 + 1)
+Tests/ExpectedFailure/InitialChildCannotReplacePositiveProductRefinement.lean.fail	dependent-type	13	2	Step (environment a) (environment a).initialArchive
+Tests/ExpectedFailure/OrderTranslationCannotIdentifyOccurrences.lean.fail	semantic-type	9	2	a.add shift = b.add shift
+Tests/ExpectedFailure/PositiveProductCannotLoseRefinementDirection.lean.fail	dependent-type	11	2	NonzeroCode Direction.negative
+Tests/ExpectedFailure/NakedMarginCannotProduceDensity.lean.fail	dependent-type	8	34	StrictOrder
+Tests/ExpectedFailure/DensityTargetCannotBePrescribed.lean.fail	dependent-type	8	24	ConstitutiveRuntime.Journal P d
+Tests/ExpectedFailure/RecomputedMidpointCannotReplaceDensityAction.lean.fail	dependent-type	9	2	ExecutedRequest (densityProgram origin) P journal ()
+Tests/ExpectedFailure/RecomputedBoundsCannotReplaceBoundAction.lean.fail	dependent-type	10	2	ExecutedRequest (boundProgram probe) P journal ()
+Tests/ExpectedFailure/InitialArchiveCannotReplaceDensityTargetContinuation.lean.fail	dependent-type	10	2	Step (environment packet.target) (environment packet.target).initialArchive
+Tests/ExpectedFailure/InitialArchiveCannotReplaceBoundProbeSuccessor.lean.fail	dependent-type	10	2	Step (environment source) (environment source).initialArchive 5
+Tests/ExpectedFailure/ProbeSuccessorCannotReplaceLowerBoundSuccessor.lean.fail	dependent-type	10	2	Step (environment source) packet.probe.next 5
+Tests/ExpectedFailure/DensityOrderCannotIdentifyTargetOccurrence.lean.fail	semantic-type	9	2	a = packet.target
+Tests/ExpectedFailure/NaturalNumberCannotReplaceExecutedUpperOrder.lean.fail	dependent-type	9	2	StrictOrder source packet.upperTarget
+Tests/ExpectedFailure/InitialArchiveCannotReplaceCurrentBoundProbe.lean.fail	dependent-type	10	2	Step (environment source) (environment source).initialArchive 2
+Tests/ExpectedFailure/NakedCodeCannotReplaceCauchyTermStep.lean.fail	dependent-type	7	2	Step (environment (termReal family 0)) (environment (termReal family 0)).initialArchive 3
+Tests/ExpectedFailure/InitialArchiveCannotReplaceCurrentTermStep.lean.fail	dependent-type	7	2	Step (environment (termReal family 0)) archive 3
+Tests/ExpectedFailure/InitialArchiveCannotReplaceCurrentCauchyLimit.lean.fail	dependent-type	7	2	Step (environment (limitReal family)) archive 3
+Tests/ExpectedFailure/InternalCompletenessCannotCoverArbitraryRealSequence.lean.fail	dependent-type	6	23	ExecutedCauchyFamily
+Tests/ExpectedFailure/CauchyTailCannotForgetModulus.lean.fail	dependent-type	6	2	PrecisionExtension (family.modulus p) n
+Tests/ExpectedFailure/CauchyNearCannotIdentifyTermOccurrences.lean.fail	semantic-type	7	2	termReal family n = termReal family m
+Tests/ExpectedFailure/RawSourceCannotReplaceCauchyLimitStep.lean.fail	dependent-type	7	2	Step (environment (limitReal family)) archive 3
+Tests/ExpectedFailure/CauchyTermArchiveCannotBeLiveMemory.lean.fail	dependent-type	6	2	AuthoritativeRuntime.ReducedState
+Tests/ExpectedFailure/RichCauchyFamilyCannotBeLiveProducer.lean.fail	dependent-type	6	15	SourceProducer
+Tests/ExpectedFailure/LimitCandidateCannotOmitConvergence.lean.fail	dependent-type	6	2	LimitCandidate family
+Tests/ExpectedFailure/ReflexivityCannotReplaceTwoCandidateUniqueness.lean.fail	dependent-type	6	2	Equivalent first.real second.real
+Tests/ExpectedFailure/TwoFamiliesCannotShareLimitUniqueness.lean.fail	dependent-type	7	15	LimitCandidate family
+Tests/ExpectedFailure/LimitNearCannotIdentifyCandidateOccurrences.lean.fail	semantic-type	7	2	first.real = second.real
+Tests/ExpectedFailure/LimitUniquenessCannotIdentifyCandidateOccurrences.lean.fail	semantic-type	6	2	first.real = second.real
+Tests/ExpectedFailure/InitialArchiveCannotReplaceUniquenessTermSuccessor.lean.fail	dependent-type	9	2	Step (environment (termReal family (family.modulus query.accuracy.succ))) packet.termStep.next 3
+Tests/ExpectedFailure/InitialArchiveCannotReplaceUniquenessFirstSuccessor.lean.fail	dependent-type	9	2	Step (environment first.real) packet.firstStep.next 3
+Tests/ExpectedFailure/InitialArchiveCannotReplaceUniquenessSecondSuccessor.lean.fail	dependent-type	9	2	Step (environment second.real) packet.secondStep.next 3
+Tests/ExpectedFailure/NakedCodeCannotReplaceUniquenessTermStep.lean.fail	dependent-type	7	2	Step (environment (termReal family 0)) archive 3
+Tests/ExpectedFailure/NakedCodeCannotReplaceUniquenessCandidateStep.lean.fail	dependent-type	7	2	Step (environment candidate.real) archive 3
+Tests/ExpectedFailure/FamilyPresentationSourceCannotUseOriginalProgram.lean.fail	dependent-type	10	2	ExecutedRequest (sourceProgram family.producer) P
+Tests/ExpectedFailure/FamilyPresentationDiagonalCannotUseOriginalModulus.lean.fail	dependent-type	10	2	family.modulusMonotone beyond
+Tests/ExpectedFailure/TermCoherenceCannotSupplyFamilyCauchy.lean.fail	dependent-type	12	12	Near p ((terms n).approximation r) ((terms m).approximation s)
+Tests/ExpectedFailure/FamilyLimitCannotOmitConvergence.lean.fail	dependent-type	7	2	LimitCandidate (realizeFamily P d numeric)
+Tests/ExpectedFailure/GlobalFamilyLimitCannotOmitCurrentSteps.lean.fail	dependent-type	8	15	candidate.converges
+Tests/ExpectedFailure/CodeCannotReplaceFamilyTransportTermStep.lean.fail	dependent-type	8	2	Step (environment (termReal (returnedFamily family) n)) archive p
+Tests/ExpectedFailure/CodeCannotReplaceFamilyTransportCandidateStep.lean.fail	dependent-type	8	2	Step (environment (limitReal family)) archive p
+Tests/ExpectedFailure/ForeignFamilyCannotSupplyReturnedCandidate.lean.fail	dependent-type	6	2	LimitCandidate (returnedFamily first)
+Tests/ExpectedFailure/FamilyRoundtripCannotIdentifyOccurrences.lean.fail	semantic-type	6	2	limitReal (returnedFamily family) = limitReal family
+Tests/ExpectedFailure/FamilyRoundtripCannotRecoverArchive.lean.fail	dependent-type	6	2	TermArchive family
+Tests/ExpectedFailure/FamilyProducerRoundtripCannotIdentifyFamilies.lean.fail	semantic-type	6	2	returnedFamily family = family
+Tests/ExpectedFailure/FamilyTransportCannotResetTermSuccessor.lean.fail	dependent-type	12	2	packet.termStep.next 3
+Tests/ExpectedFailure/FamilyTransportCannotResetFirstSuccessor.lean.fail	dependent-type	11	2	packet.firstStep.next 3
+Tests/ExpectedFailure/FamilyTransportCannotResetSecondSuccessor.lean.fail	dependent-type	11	2	packet.secondStep.next 3
+Tests/ExpectedFailure/FamilyRoundtripCannotIdentifyCauchyWitnesses.lean.fail	semantic-type	6	2	⊢ 6 = 0
+Tests/ExpectedFailure/BoundedCarrierModulusCannotBeInverted.lean.fail	dependent-type	5	2	PrecisionExtension 1 (boundedCarrier.modulus p)
+Tests/ExpectedFailure/NativeCauchyRequiresOwnedStepLaw.lean.fail	dependent-type	6	2	NativeCauchyFamily P d
+Tests/ExpectedFailure/NativeCodeCannotReplaceTermStep.lean.fail	dependent-type	7	2	Step (environment (family.terms n)) a r
+Tests/ExpectedFailure/RealizedSourceCannotReplaceNativeStep.lean.fail	dependent-type	10	2	Step (environment (family.terms n)) na r
+Tests/ExpectedFailure/NativeLimitNeedsDiagonalArchive.lean.fail	dependent-type	10	2	Step (environment (family.terms (family.modulus s))) foreign s
+Tests/ExpectedFailure/NativeDiagonalCannotResetCurrentArchive.lean.fail	dependent-type	11	2	packet.diagonal.next s
+Tests/ExpectedFailure/NativeTermCannotResetCurrentArchive.lean.fail	dependent-type	8	2	Step (environment (family.terms n)) term.next r
+Tests/ExpectedFailure/NativeLimitCannotResetCurrentArchive.lean.fail	dependent-type	8	2	Step (environment (nativeLimit family)) lim.next s
+Tests/ExpectedFailure/NearCannotReplaceNativeDiagonalStep.lean.fail	dependent-type	8	2	Step (environment (family.terms (family.modulus s))) a s
+Tests/ExpectedFailure/NativeCandidateNeedsConvergence.lean.fail	dependent-type	6	2	NativeCandidate family
+Tests/ExpectedFailure/NativeUniquenessCannotIdentifyOccurrences.lean.fail	semantic-type	6	2	first.real = second.real
+Tests/ExpectedFailure/NativeTermEquivalenceCannotRecoverArchive.lean.fail	dependent-type	6	2	(environment (family.terms n)).Archive
+Tests/ExpectedFailure/NumericReadoutsCannotSupplyNativeCauchy.lean.fail	dependent-type	15	12	Near p first.code second.code
+Tests/ExpectedFailure/TerminalRoundtripCannotIdentifyOccurrences.lean.fail	semantic-type	6	2	ofPresentation P d (toPresentation real) = real
+Tests/ExpectedFailure/TerminalNativeFamilyCannotBeBareSequence.lean.fail	semantic-type	6	2	RelationalRealNativeCauchy.NativeCauchyFamily P d
+Tests/ExpectedFailure/TerminalCorrespondenceCannotOmitFamilies.lean.fail	dependent-type	6	59	FamilyCorrespondence P d
+Tests/ExpectedFailure/TerminalMapCannotIgnoreRuntime.lean.fail	semantic-type	6	2	⊢ EffectiveDyadicPresentation.constant SignedDyadicCode.zero = toPresentation real
+Tests/ExpectedFailure/NativeTermsCannotBeLiveKernels.lean.fail	dependent-type	6	2	Nat → NativeTermKernel
+Tests/ExpectedFailure/NativeSourceNeedsReceivedContext.lean.fail	dependent-type	6	64	NativeSourceContext family bank p
+Tests/ExpectedFailure/NativeSourceCannotBeReadout.lean.fail	dependent-type	7	2	Step (environment (family.terms (family.modulus p))) (bank (family.modulus p)) p
+Tests/ExpectedFailure/NativeGroupingCannotConsumeReconstructedCode.lean.fail	dependent-type	7	24	NativeSourceExecution
+Tests/ExpectedFailure/NativeTargetCannotBePrescribedCode.lean.fail	dependent-type	7	2	NativeTarget source
+Tests/ExpectedFailure/NativeLimitCannotDropProducedStep.lean.fail	dependent-type	7	15	NativeLimitProduction family bank j p

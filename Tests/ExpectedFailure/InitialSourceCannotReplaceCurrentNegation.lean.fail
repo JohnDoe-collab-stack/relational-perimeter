@@ -1,0 +1,10 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.HeterogeneousRealRuntime
+open RelationalPerimeter.Constitution.Reals.RelationalRealNegation
+
+example {P : CircularPresentation} {depth p : Nat} (source : Service P depth)
+    (archive : NegationArchive source) (step : Step (negEnvironment source) archive p) :
+    Step source source.initialArchive p :=
+  step.resource.source

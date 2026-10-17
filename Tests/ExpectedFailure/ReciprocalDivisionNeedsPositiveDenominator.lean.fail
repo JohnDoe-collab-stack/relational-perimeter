@@ -1,0 +1,8 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealInverseLaws
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open HeterogeneousRealRuntime RelationalRealAddition RelationalRealOrder RelationalRealInverse DyadicReciprocal
+
+example : Division 1 0 :=
+  divide 1 0 (Nat.zero_lt_succ 0)

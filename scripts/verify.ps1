@@ -93,6 +93,28 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "compiled variable-master sharing check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-integrated-machine-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled integrated machine sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-real-addition-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled real addition sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-real-negation-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled real negation sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-real-multiplication-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled real multiplication causal budget check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-real-order-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled real order current-resource check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-real-inverse-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled real inverse current-resource and budget check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-real-ordered-field-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled real ordered-field resource and margin check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-real-density-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled real density and natural-bound production check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-real-cauchy-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled executed-family real adapter current-resource and compact-live check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-real-limit-uniqueness-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled limit uniqueness shared-term mediation and chronological projection check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-real-family-transport-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled effective-family current-resource and limit transport check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-real-native-cauchy-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled native Cauchy observations and produced-limit bridge check failed" }
   & (Join-Path $PSScriptRoot "check-expected-failures.ps1")
   if ($LASTEXITCODE -ne 0) { throw "expected-failure check failed" }
 

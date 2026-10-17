@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealEffectiveCorrespondence
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open RuntimeCorrespondence HeterogeneousRealRuntime RelationalRealAddition RelationalRealEffectiveCorrespondence
+example {P : CircularPresentation} {d : Nat} (real : Real P d) :
+    ofPresentation P d (toPresentation real) = real :=
+  (effectiveCorrespondence P d).applications.realReturn real

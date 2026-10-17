@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealFamilyTransport
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RuntimeCorrespondence HeterogeneousRealRuntime RelationalRealAddition RelationalRealCauchy RelationalRealLimitUniqueness RelationalRealFamilyTransport
+variable {P : CircularPresentation} {d : Nat}
+example (family : ExecutedCauchyFamily P d) : limitReal (returnedFamily family) = limitReal family :=
+  (relationalLimitRoundtrip family).1

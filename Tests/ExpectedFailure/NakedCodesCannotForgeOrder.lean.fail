@@ -1,0 +1,9 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealOrder
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalRealAddition RelationalRealOrder
+
+example {P : CircularPresentation} {d p : Nat} (a b : Real P d)
+    (x y : SignedDyadicCode) (gap : StrictSeparation p x y) : StrictOrder a b :=
+  gap

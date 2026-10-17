@@ -92,6 +92,17 @@ fi
 "${python_command[@]}" scripts/check-continuation-signature-codegen.py
 "${python_command[@]}" scripts/check-variable-master-codegen.py
 "${python_command[@]}" scripts/check-integrated-machine-codegen.py
+"${python_command[@]}" scripts/check-real-addition-codegen.py
+"${python_command[@]}" scripts/check-real-negation-codegen.py
+"${python_command[@]}" scripts/check-real-multiplication-codegen.py
+"${python_command[@]}" scripts/check-real-order-codegen.py
+"${python_command[@]}" scripts/check-real-inverse-codegen.py
+"${python_command[@]}" scripts/check-real-ordered-field-codegen.py
+"${python_command[@]}" scripts/check-real-density-codegen.py
+"${python_command[@]}" scripts/check-real-cauchy-codegen.py
+"${python_command[@]}" scripts/check-real-limit-uniqueness-codegen.py
+"${python_command[@]}" scripts/check-real-family-transport-codegen.py
+"${python_command[@]}" scripts/check-real-native-cauchy-codegen.py
 
 bash scripts/check-expected-failures.sh
 

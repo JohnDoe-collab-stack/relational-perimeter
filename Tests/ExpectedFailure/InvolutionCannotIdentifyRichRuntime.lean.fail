@@ -1,0 +1,8 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+
+example {P : CircularPresentation} {depth : Nat} (real : Real P depth) :
+    Real.neg (Real.neg real) = real :=
+  neg_neg real

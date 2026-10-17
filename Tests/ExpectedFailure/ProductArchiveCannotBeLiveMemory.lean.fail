@@ -1,0 +1,9 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.HeterogeneousRealRuntime
+open RelationalPerimeter.Constitution.Reals.RelationalRealMultiplication
+
+example {P : CircularPresentation} {depth : Nat} (left right : Service P depth)
+    (a : MultiplicationArchive left right) : CompositeMemory left.liveEnvironment right.liveEnvironment :=
+  a

@@ -1,0 +1,8 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RuntimeCorrespondence RelationalRealAddition
+
+example (P : CircularPresentation) (depth : Nat) (presentation : EffectiveDyadicPresentation) : Real P depth :=
+  presentation

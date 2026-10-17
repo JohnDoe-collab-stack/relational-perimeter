@@ -1,0 +1,8 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealMultiplicativeLaws
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+
+example {P : CircularPresentation} {depth : Nat} (left right : Real P depth) :
+    Real.mul left right = Real.mul right left :=
+  mul_comm left right

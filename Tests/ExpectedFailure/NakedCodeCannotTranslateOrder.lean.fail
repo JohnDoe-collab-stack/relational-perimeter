@@ -1,0 +1,9 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealOrderedField
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalRealAddition RelationalRealOrder RelationalRealOrderedField
+
+example {P : CircularPresentation} {d : Nat} (a b shift : Real P d) (code : SignedDyadicCode) :
+    StrictOrder (.add a shift) (.add b shift) :=
+  addOrderRight code shift

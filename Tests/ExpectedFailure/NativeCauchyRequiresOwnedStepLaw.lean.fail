@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RuntimeCorrespondence HeterogeneousRealRuntime RelationalRealAddition RelationalRealCauchy RelationalRealFamilyTransport RelationalRealNativeCauchy
+variable {P : CircularPresentation} {d : Nat}
+example (numeric : EffectiveFamily) : NativeCauchyFamily P d :=
+  numeric

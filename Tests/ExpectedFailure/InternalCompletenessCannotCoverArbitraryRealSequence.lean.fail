@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCauchy
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RelationalRealAddition RelationalRealCauchy
+variable {P : CircularPresentation} {d : Nat}
+example (sequence : Nat → Real P d) :=
+  internalCompleteness sequence

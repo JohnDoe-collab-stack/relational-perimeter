@@ -1,0 +1,12 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealFamilyTransport
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RuntimeCorrespondence HeterogeneousRealRuntime RelationalRealAddition RelationalRealCauchy RelationalRealLimitUniqueness RelationalRealFamilyTransport
+variable {P : CircularPresentation} {d : Nat}
+example (family : ExecutedCauchyFamily P d) (ta : TermArchive (returnedFamily family))
+    (a : (environment (limitReal (returnedFamily family))).Archive)
+    (b : (environment (limitReal family)).Archive)
+    (query : LimitQuery (uniquenessThreshold (returnedAuthoritative family) (returnedCandidate family)))
+    (packet : Mediation (returnedAuthoritative family) (returnedCandidate family) ta a b query) :
+    Step (environment (termReal (returnedFamily family) (family.modulus (Nat.succ query.accuracy))))
+      packet.termStep.next 3 :=
+  executeReal (termReal (returnedFamily family) (family.modulus (Nat.succ query.accuracy))) 3

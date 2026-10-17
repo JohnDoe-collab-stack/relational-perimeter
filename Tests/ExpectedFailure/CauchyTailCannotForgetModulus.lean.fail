@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCauchy
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RelationalRealCauchy
+variable {P : CircularPresentation} {d : Nat} (family : ExecutedCauchyFamily P d)
+example (p n : Nat) : PrecisionExtension (family.modulus p) n :=
+  PrecisionExtension.refl n

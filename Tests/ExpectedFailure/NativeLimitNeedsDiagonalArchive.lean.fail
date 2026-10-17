@@ -1,0 +1,10 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RuntimeCorrespondence HeterogeneousRealRuntime RelationalRealAddition RelationalRealCauchy RelationalRealFamilyTransport RelationalRealNativeCauchy
+variable {P : CircularPresentation} {d : Nat}
+-- The archive is owned by the limit resource, never supplied independently.
+example (family : NativeCauchyFamily P d) (s : Nat) (la : NativeArchive family)
+    (lim : Step (environment (nativeLimit family)) la s)
+    (foreign : (environment (family.terms (family.modulus s))).Archive) :
+    Step (environment (family.terms (family.modulus s))) foreign s :=
+  lim.resource.diagonal

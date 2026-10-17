@@ -1,0 +1,15 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RuntimeCorrespondence HeterogeneousRealRuntime RelationalRealAddition RelationalRealCauchy RelationalRealFamilyTransport RelationalRealNativeCauchy
+variable {P : CircularPresentation} {d : Nat}
+example (terms : Nat → Real P d) (modulus : Nat → Nat)
+    (monotone : {p q : Nat} → PrecisionExtension p q → PrecisionExtension (modulus p) (modulus q))
+    (law : (p n m r s : Nat) → PrecisionExtension (modulus p) n → PrecisionExtension (modulus p) m →
+      PrecisionExtension p r → PrecisionExtension p s → Near p (readout (terms n) r) (readout (terms m) s)) :
+    NativeCauchyFamily P d where
+  terms := terms
+  kernels n := nativeTermKernel (terms n)
+  kernelExact n p := fun {archive} step => nativeStep_liveCode (terms n) p step
+  modulus := modulus
+  modulusMonotone := monotone
+  cauchy := law

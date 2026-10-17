@@ -1,0 +1,8 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.HeterogeneousRealRuntime
+
+example {P : CircularPresentation} {depth : Nat} (environment : Service P depth)
+    (memory : environment.Memory) : Runtime P depth :=
+  memory

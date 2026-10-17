@@ -1,0 +1,8 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RuntimeCorrespondence HeterogeneousRealRuntime RelationalRealAddition RelationalRealCauchy RelationalRealFamilyTransport RelationalRealNativeCauchy
+variable {P : CircularPresentation} {d : Nat}
+example (family : NativeCauchyFamily P d) (p s : Nat)
+    (a : (environment (family.terms (family.modulus s))).Archive) (x y : SignedDyadicCode)
+    (near : Near p x y) : Step (environment (family.terms (family.modulus s))) a s :=
+  near

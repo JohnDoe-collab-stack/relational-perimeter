@@ -1,0 +1,10 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealDensity
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open HeterogeneousRealRuntime RelationalRealAddition RelationalRealDensity ConstitutiveRuntime
+
+example {P : CircularPresentation} {d : Nat} {source : Real P d} {archive : (environment source).Archive}
+    {journal : Journal P d} (packet : NaturalBound source archive journal) :
+    Step (environment source) (environment source).initialArchive 2 :=
+  packet.probe

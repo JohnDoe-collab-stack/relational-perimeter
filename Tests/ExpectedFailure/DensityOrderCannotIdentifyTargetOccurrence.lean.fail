@@ -1,0 +1,9 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealDensity
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalRealAddition RelationalRealOrder RelationalRealDensity ConstitutiveRuntime
+
+example {P : CircularPresentation} {d : Nat} {a b : Real P d} {origin : StrictOrder a b} {journal : Journal P d}
+    (packet : Density origin journal) : a = packet.target :=
+  packet.orders.1

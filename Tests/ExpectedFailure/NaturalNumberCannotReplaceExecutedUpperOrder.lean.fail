@@ -1,0 +1,9 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealDensity
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalRealAddition RelationalRealOrder RelationalRealDensity ConstitutiveRuntime
+
+example {P : CircularPresentation} {d : Nat} {source : Real P d} {archive : (environment source).Archive}
+    {journal : Journal P d} (packet : NaturalBound source archive journal) : StrictOrder source packet.upperTarget :=
+  packet.action.stored.value.upper

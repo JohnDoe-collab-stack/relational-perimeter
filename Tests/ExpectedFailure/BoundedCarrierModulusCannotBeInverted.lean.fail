@@ -1,0 +1,5 @@
+import Tests.RelationalRealFamilyTransport
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Tests.RelationalRealFamilyTransport
+example (p : Nat) : PrecisionExtension 1 (boundedCarrier.modulus p) :=
+  boundedCarrier.modulusMonotone (PrecisionExtension.refl 0)

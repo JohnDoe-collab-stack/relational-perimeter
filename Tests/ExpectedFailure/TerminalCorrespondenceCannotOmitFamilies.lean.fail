@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealEffectiveCorrespondence
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open RuntimeCorrespondence HeterogeneousRealRuntime RelationalRealAddition RelationalRealEffectiveCorrespondence
+example (P : CircularPresentation) (d : Nat) : EffectiveCorrespondence P d :=
+  EffectiveCorrespondence.mk (applicationMaps P d) (operationTransports P d)
+    (relationTransports P d) (orderAndFiniteWitnesses P d) (limitCorrespondence P d)

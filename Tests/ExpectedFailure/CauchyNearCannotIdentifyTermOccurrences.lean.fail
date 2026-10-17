@@ -1,0 +1,7 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCauchy
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ProducedCompleteness RelationalRealAddition RelationalRealCauchy
+variable {P : CircularPresentation} {d : Nat} (family : ExecutedCauchyFamily P d)
+example (n m : Nat) (near : Near 0 (readout (termReal family n) 2) (readout (termReal family m) 2)) :
+    termReal family n = termReal family m :=
+  near

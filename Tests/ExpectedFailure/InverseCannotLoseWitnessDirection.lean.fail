@@ -1,0 +1,11 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealInverseLaws
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open HeterogeneousRealRuntime RelationalRealAddition RelationalRealOrder RelationalRealInverse DyadicReciprocal
+
+example {P : CircularPresentation} {depth p : Nat} (source : Real P depth) (order : Positive source)
+    (archive : (environment (inverse source (.backward order))).Archive)
+    (step : Step (environment (inverse source (.backward order))) archive p) :
+    NonzeroCode .negative (ReciprocalDomain.away (.backward order)) step.resource.sourceStep.code :=
+  step.resource.nonzero

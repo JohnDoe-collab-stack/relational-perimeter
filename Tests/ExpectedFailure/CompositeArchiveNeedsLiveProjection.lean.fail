@@ -1,0 +1,9 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.HeterogeneousRealRuntime
+open RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+
+example {P : CircularPresentation} {depth : Nat} (left right : Service P depth)
+    (archive : AdditionArchive left right) : CompositeMemory left.liveEnvironment right.liveEnvironment :=
+  archive

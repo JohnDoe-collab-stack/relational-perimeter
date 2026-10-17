@@ -1,0 +1,6 @@
+import Tests.RelationalRealFamilyTransport
+open RelationalPerimeter.Tests.RelationalRealFamilyTransport
+example (P : StrongPerimetralTurning.CircularPresentation) (d : Nat) :
+    (directData P d).scale.common = (reconstructedData P d).scale.common := by
+  rw [directScale, reconstructedScale]
+  rfl

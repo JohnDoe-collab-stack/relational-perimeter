@@ -1,0 +1,10 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealOrder
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.HeterogeneousRealRuntime
+open RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+open RelationalPerimeter.Constitution.Reals.RelationalRealOrder
+
+example {P : CircularPresentation} {d : Nat} {a b : Real P d} (order : StrictOrder a b) :
+    Step (environment a) (environment a).initialArchive (order.accuracy + 5) :=
+  (refineHistorical order (order.accuracy + 5) (RelationalPerimeter.Constitution.Reals.PrecisionExtension.refl _)).pair.left

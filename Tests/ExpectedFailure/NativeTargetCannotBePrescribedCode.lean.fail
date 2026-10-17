@@ -1,0 +1,7 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals
+open ConstitutiveRuntime HeterogeneousRealRuntime RelationalRealAddition RelationalRealNativeCauchy
+variable {P : CircularPresentation} {d : Nat}
+example (family : NativeCauchyFamily P d) (bank : ContextBank family) (j : Journal P d) (p : Nat)
+    (source : NativeSourceExecution family bank j p) (target : SignedDyadicCode) : NativeTarget source :=
+  target

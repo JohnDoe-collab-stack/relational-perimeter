@@ -1,0 +1,7 @@
+import Tests.RelationalRealMultiplication
+set_option autoImplicit false
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Tests.RelationalRealMultiplication
+
+example : cancelled.positive + cancelled.negative ≤ probeAmplitude SignedDyadicCode.zero :=
+  cancellationAmplitude.positiveBound

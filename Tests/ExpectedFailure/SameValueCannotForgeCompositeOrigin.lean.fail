@@ -1,0 +1,9 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealAddition
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RuntimeCorrespondence HeterogeneousRealRuntime
+
+example {P : CircularPresentation} {depth : Nat} (real : RuntimeReal P depth) (p : Nat)
+    (same : SameValue (real.readout p) (real.readout p)) : Step (leaf real) (leaf real).initialArchive p :=
+  same

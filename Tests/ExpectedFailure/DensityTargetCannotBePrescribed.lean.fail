@@ -1,0 +1,8 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealDensity
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalRealAddition RelationalRealOrder RelationalRealDensity
+
+example {P : CircularPresentation} {d : Nat} {a b : Real P d} (origin : StrictOrder a b) (target : Real P d) :=
+  produceDensity origin target
