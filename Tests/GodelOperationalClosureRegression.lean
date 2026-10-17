@@ -53,6 +53,37 @@ variable {coding : GodelDiagonalSyntax} {formula : coding.UnaryFormula}
 
 def history_exists_independently := godelAffirmativeConstitution execution
 
+/-- The Godel runtime itself supplies the positive countermodel to an
+event-only obstruction: the two executed close runs share operational memory
+before any readout-preservation law is imposed. -/
+def operational_collision_without_read := godelOperationalGroupingWithoutRead execution
+
+theorem operational_collision_without_read_is_nonempty :
+    (operational_collision_without_read execution).requests ≠ [] :=
+  (operational_collision_without_read execution).nonempty
+
+theorem operational_collision_without_read_is_computed :
+    Grouping.Continuation.run
+        (godelOperationalRealizationWithoutRead execution).reduced.next
+        ((godelOperationalRealizationWithoutRead execution).project (semanticSource execution))
+        [godelCloseRequest execution] =
+      Grouping.Continuation.run
+        (godelOperationalRealizationWithoutRead execution).reduced.next
+        ((godelOperationalRealizationWithoutRead execution).project (syntacticSource execution))
+        [godelCloseRequest execution] :=
+  (operational_collision_without_read execution).terminalCollision
+
+theorem operational_events_do_not_separate_the_poles :
+    (operational_collision_without_read execution).leftEvents =
+      (operational_collision_without_read execution).rightEvents :=
+  godelOperationalGroupingWithoutRead_events_equal execution
+
+def adding_role_blind_read_exact_is_rejected
+    (reducedRead : Nat → Type)
+    (readExact : ∀ source,
+      (godelClosureContract execution).read source = reducedRead source.depth) : Empty :=
+  rejectGodelRoleBlindReadExactToEmpty execution reducedRead readExact
+
 theorem sources_keep_the_same_H1 :
     (semanticSource execution).history = godelPerimetralContinuation execution ∧
       (syntacticSource execution).history = godelPerimetralContinuation execution :=
@@ -119,6 +150,11 @@ end GodelOperationalClosureRegression
 #print axioms GodelOperationalClosureRegression.trivialExecutedGrouping
 #print axioms GodelOperationalClosureRegression.trivial_grouping_read_exact
 #print axioms GodelOperationalClosureRegression.history_exists_independently
+#print axioms GodelOperationalClosureRegression.operational_collision_without_read
+#print axioms GodelOperationalClosureRegression.operational_collision_without_read_is_nonempty
+#print axioms GodelOperationalClosureRegression.operational_collision_without_read_is_computed
+#print axioms GodelOperationalClosureRegression.operational_events_do_not_separate_the_poles
+#print axioms GodelOperationalClosureRegression.adding_role_blind_read_exact_is_rejected
 #print axioms GodelOperationalClosureRegression.sources_keep_the_same_H1
 #print axioms GodelOperationalClosureRegression.continue_constructs_the_next_history
 #print axioms GodelOperationalClosureRegression.identity_preserves_roles

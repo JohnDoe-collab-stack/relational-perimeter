@@ -58,33 +58,42 @@ def godelCloseRequest (_execution : ExecutedGodelProduction coding unprovability
     GodelRuntimeRequest := .close
 
 structure GodelRuntimeEvent where
-  pole : ClosurePole
   beforeDepth : Nat
   request : GodelRuntimeRequest
   afterDepth : Nat
 
+def godelDepthNext (depth : Nat) : GodelRuntimeRequest → Nat
+  | .continue => depth + 1
+  | .close => depth
+
 def godelRuntimeNext (source : GodelClosureSource execution) :
     GodelRuntimeRequest → GodelClosureSource execution
-  | .continue => ⟨source.pole, source.depth + 1⟩
-  | .close => source
+  | request => ⟨source.pole, godelDepthNext source.depth request⟩
 
 def godelRuntimeEvent (source : GodelClosureSource execution) (request : GodelRuntimeRequest) :
     GodelRuntimeEvent :=
-  ⟨source.pole, source.depth, request, (godelRuntimeNext execution source request).depth⟩
+  ⟨source.depth, request, godelDepthNext source.depth request⟩
+
+def GodelDepthAllow (depth : Nat) : GodelRuntimeRequest → Type
+  | .continue => Unit
+  | .close => PLift (depth = 1)
 
 def GodelRuntimeAllow (source : GodelClosureSource execution) : GodelRuntimeRequest → Type
-  | .continue => Unit
-  | .close => PLift (source.depth = 1)
+  | request => GodelDepthAllow source.depth request
+
+def godelDepthDecision (depth : Nat) (request : GodelRuntimeRequest) :
+    PSum (GodelDepthAllow depth request) (GodelDepthAllow depth request → False) :=
+  match request with
+  | .continue => .inl ()
+  | .close =>
+      match decEq depth 1 with
+      | .isTrue yes => .inl ⟨yes⟩
+      | .isFalse no => .inr (fun witness => no witness.down)
 
 def godelRuntimeDecision (source : GodelClosureSource execution) (request : GodelRuntimeRequest) :
     PSum (GodelRuntimeAllow execution source request)
       (GodelRuntimeAllow execution source request → False) :=
-  match request with
-  | .continue => .inl ()
-  | .close =>
-      match decEq source.depth 1 with
-      | .isTrue yes => .inl ⟨yes⟩
-      | .isFalse no => .inr (fun witness => no witness.down)
+  godelDepthDecision source.depth request
 
 def godelClosureContract :
     FutureContract (GodelClosureSource execution) GodelRuntimeRequest
@@ -104,6 +113,53 @@ abbrev GodelReachableRuntime (pole : ClosurePole) :=
   ReachableRuntime (godelClosureContract execution) («initialize» execution pole)
 
 def godelIdentityRealization := identityRealization (godelClosureContract execution)
+
+/-- The executable quotient forgets only the pole. Its read field is a
+placeholder: the operational realization below deliberately imposes no law
+on it. -/
+def godelOperationalReducedContract :
+    FutureContract Nat GodelRuntimeRequest (ULift.{uP+1} GodelRuntimeEvent) (Type uP) where
+  next := godelDepthNext
+  event := fun depth request => ⟨⟨depth, request, godelDepthNext depth request⟩⟩
+  read := fun _ => PUnit
+  Allow := GodelDepthAllow
+  decision := godelDepthDecision
+
+/-- Exact preservation of authorization, transition, and event production for
+the fixed Godel runtime. There is deliberately no readout-preservation field. -/
+structure GodelOperationalRealizationWithoutRead where
+  reduced : FutureContract Nat GodelRuntimeRequest
+    (ULift.{uP+1} GodelRuntimeEvent) (Type uP)
+  project : GodelClosureSource execution → Nat
+  forward : ∀ source request,
+    (godelClosureContract execution).Allow source request →
+      reduced.Allow (project source) request
+  backward : ∀ source request,
+    reduced.Allow (project source) request →
+      (godelClosureContract execution).Allow source request
+  backward_forward : ∀ source request witness,
+    backward source request (forward source request witness) = witness
+  forward_backward : ∀ source request witness,
+    forward source request (backward source request witness) = witness
+  next_exact : ∀ source request,
+    project ((godelClosureContract execution).next source request) =
+      reduced.next (project source) request
+  event_exact : ∀ source request,
+    (godelClosureContract execution).event source request =
+      reduced.event (project source) request
+
+/-- Positive evidence that authorization, transition, and event exactness do
+not distinguish the two poles.  Readout exactness is intentionally absent. -/
+def godelOperationalRealizationWithoutRead :
+    GodelOperationalRealizationWithoutRead execution where
+  reduced := godelOperationalReducedContract
+  project := GodelClosureSource.depth
+  forward := fun _ _ witness => witness
+  backward := fun _ _ witness => witness
+  backward_forward := fun _ _ _ => rfl
+  forward_backward := fun _ _ _ => rfl
+  next_exact := fun _ _ => rfl
+  event_exact := fun _ _ => rfl
 
 theorem godelRuntimeNext_pole (source : GodelClosureSource execution) (request : GodelRuntimeRequest) :
     (godelRuntimeNext execution source request).pole = source.pole := by cases request <;> rfl
@@ -134,6 +190,68 @@ def godelOpenCloseRun (pole : ClosurePole) :
       [(godelClosureContract execution).event («initialize» execution pole) (godelCloseRequest execution)] :=
   .cons (godelRuntimePerform execution _ _ (godelCloseAuthorized execution pole)) (.nil _)
 
+/-- Two actually executed rich runs, indexed by their computed terminals and
+events, together with the collision of their outputs in the role-blind
+operational realization. -/
+structure GodelOperationalGroupingWithoutRead where
+  requests : List GodelRuntimeRequest
+  nonempty : requests ≠ []
+  leftTerminal : GodelClosureSource execution
+  leftEvents : List (ULift.{uP+1} GodelRuntimeEvent)
+  leftRun : ExecutedRun (godelClosureContract execution) (semanticSource execution)
+    requests leftTerminal leftEvents
+  rightTerminal : GodelClosureSource execution
+  rightEvents : List (ULift.{uP+1} GodelRuntimeEvent)
+  rightRun : ExecutedRun (godelClosureContract execution) (syntacticSource execution)
+    requests rightTerminal rightEvents
+  terminalCollision :
+    Grouping.Continuation.run (godelOperationalRealizationWithoutRead execution).reduced.next
+        ((godelOperationalRealizationWithoutRead execution).project (semanticSource execution))
+        requests =
+      Grouping.Continuation.run (godelOperationalRealizationWithoutRead execution).reduced.next
+        ((godelOperationalRealizationWithoutRead execution).project (syntacticSource execution))
+        requests
+
+/-- The same two authorized rich runs collide after the operational projection.
+This is positive data, not a consistency assumption: transition, admission,
+and event exactness coexist with the common terminal memory. -/
+def godelOperationalGroupingWithoutRead :
+    GodelOperationalGroupingWithoutRead execution where
+  requests := [godelCloseRequest execution]
+  nonempty := by intro impossible; cases impossible
+  leftTerminal := semanticSource execution
+  leftEvents :=
+    [(godelClosureContract execution).event (semanticSource execution) (godelCloseRequest execution)]
+  leftRun := godelOpenCloseRun execution .left
+  rightTerminal := syntacticSource execution
+  rightEvents :=
+    [(godelClosureContract execution).event (syntacticSource execution) (godelCloseRequest execution)]
+  rightRun := godelOpenCloseRun execution .right
+  terminalCollision := rfl
+
+theorem godelOperationalGroupingWithoutRead_events_equal :
+    (godelOperationalGroupingWithoutRead execution).leftEvents =
+      (godelOperationalGroupingWithoutRead execution).rightEvents := rfl
+
+/-- Readout preservation is the missing law at the positive operational
+quotient.  Adding it alone forces the truth/proof endpoint equality. -/
+def godelRoleBlindReadExactToEndpointEquality
+    (reducedRead : Nat → Type uP)
+    (readExact : ∀ source,
+      (godelClosureContract execution).read source = reducedRead source.depth) :
+    interpretation.Truth execution.witness.production.sentence =
+      coding.Proof execution.witness.production.sentence :=
+  (readExact (semanticSource execution)).trans
+    (readExact (syntacticSource execution)).symm
+
+def rejectGodelRoleBlindReadExactToEmpty
+    (reducedRead : Nat → Type uP)
+    (readExact : ∀ source,
+      (godelClosureContract execution).read source = reducedRead source.depth) : Empty :=
+  execution.witness.unprovable
+    (Eq.mp (godelRoleBlindReadExactToEndpointEquality execution reducedRead readExact)
+      execution.witness.trueWitness)
+
 def godelOpenContinueRun (pole : ClosurePole) :
     ExecutedRun (godelClosureContract execution) («initialize» execution pole)
       [godelContinueRequest execution] (godelRuntimeNext execution («initialize» execution pole) .continue)
@@ -150,6 +268,22 @@ theorem godelIdentity_close_outputs_distinct :
         ((godelIdentityRealization execution).project (syntacticSource execution)) [godelCloseRequest execution] :=
   semanticSource_ne_syntacticSource execution
 
+/-- Run exactness needed by the critical kernel, factored directly through
+`next_exact`. In particular it does not pass through `event_exact`. -/
+theorem godelExactRunExact {Memory : Type}
+    (realization : ExactRealization (godelClosureContract execution) Memory)
+    (source : GodelClosureSource execution) (requests : List GodelRuntimeRequest) :
+    realization.project
+        (Grouping.Continuation.run (godelClosureContract execution).next source requests) =
+      Grouping.Continuation.run realization.reduced.next
+        (realization.project source) requests := by
+  induction requests generalizing source with
+  | nil => rfl
+  | cons request rest ih =>
+      exact (ih _).trans
+        (congrArg (fun memory => Grouping.Continuation.run realization.reduced.next memory rest)
+          (realization.next_exact source request))
+
 /-- The critical kernel uses executed terminals, run exactness, two read laws,
 and independently proved role stability. It does not inspect historical data. -/
 def godelExecutedGroupingToEndpointEquality {Memory : Type}
@@ -162,7 +296,18 @@ def godelExecutedGroupingToEndpointEquality {Memory : Type}
     grouping.leftRun.terminal_eq_run).trans (read_run execution _ grouping.requests)
   let rightRead := (congrArg (godelClosureContract execution).read
     grouping.rightRun.terminal_eq_run).trans (read_run execution _ grouping.requests)
-  leftRead.symm.trans (grouping.terminalReadEqual.trans rightRead)
+  let leftTerminalExact :=
+    (congrArg realization.project grouping.leftRun.terminal_eq_run).trans
+      (godelExactRunExact execution realization _ grouping.requests)
+  let rightTerminalExact :=
+    (congrArg realization.project grouping.rightRun.terminal_eq_run).trans
+      (godelExactRunExact execution realization _ grouping.requests)
+  let projectedTerminalsEqual := leftTerminalExact.trans
+    (grouping.terminalCollision.trans rightTerminalExact.symm)
+  let terminalReadEqual := (realization.read_exact grouping.leftTerminal).trans
+    ((congrArg realization.reduced.read projectedTerminalsEqual).trans
+      (realization.read_exact grouping.rightTerminal).symm)
+  leftRead.symm.trans (terminalReadEqual.trans rightRead)
 
 /- The following accessors and policy layers carry the historical certificate.
 They are deliberately not dependencies of the preceding kernel. -/
@@ -460,15 +605,21 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.godelContinueRequest
 #print axioms StrongPerimetralTurning.godelCloseRequest
 #print axioms StrongPerimetralTurning.GodelRuntimeEvent
+#print axioms StrongPerimetralTurning.godelDepthNext
 #print axioms StrongPerimetralTurning.godelRuntimeNext
 #print axioms StrongPerimetralTurning.godelRuntimeEvent
+#print axioms StrongPerimetralTurning.GodelDepthAllow
 #print axioms StrongPerimetralTurning.GodelRuntimeAllow
+#print axioms StrongPerimetralTurning.godelDepthDecision
 #print axioms StrongPerimetralTurning.godelRuntimeDecision
 #print axioms StrongPerimetralTurning.godelClosureContract
 #print axioms StrongPerimetralTurning.godelRuntimePerform
 #print axioms StrongPerimetralTurning.godelRuntimeRun
 #print axioms StrongPerimetralTurning.GodelReachableRuntime
 #print axioms StrongPerimetralTurning.godelIdentityRealization
+#print axioms StrongPerimetralTurning.godelOperationalReducedContract
+#print axioms StrongPerimetralTurning.GodelOperationalRealizationWithoutRead
+#print axioms StrongPerimetralTurning.godelOperationalRealizationWithoutRead
 #print axioms StrongPerimetralTurning.godelRuntimeNext_pole
 #print axioms StrongPerimetralTurning.pole_run
 #print axioms StrongPerimetralTurning.read_run
@@ -476,9 +627,15 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.godel_read_syntactic
 #print axioms StrongPerimetralTurning.godelCloseAuthorized
 #print axioms StrongPerimetralTurning.godelOpenCloseRun
+#print axioms StrongPerimetralTurning.GodelOperationalGroupingWithoutRead
+#print axioms StrongPerimetralTurning.godelOperationalGroupingWithoutRead
+#print axioms StrongPerimetralTurning.godelOperationalGroupingWithoutRead_events_equal
+#print axioms StrongPerimetralTurning.godelRoleBlindReadExactToEndpointEquality
+#print axioms StrongPerimetralTurning.rejectGodelRoleBlindReadExactToEmpty
 #print axioms StrongPerimetralTurning.godelOpenContinueRun
 #print axioms StrongPerimetralTurning.godelOpenRuntime
 #print axioms StrongPerimetralTurning.godelIdentity_close_outputs_distinct
+#print axioms StrongPerimetralTurning.godelExactRunExact
 #print axioms StrongPerimetralTurning.godelExecutedGroupingToEndpointEquality
 #print axioms StrongPerimetralTurning.GodelClosureSource.history
 #print axioms StrongPerimetralTurning.GodelClosureSource.endpoint

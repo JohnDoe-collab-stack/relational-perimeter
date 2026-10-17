@@ -15,6 +15,30 @@ theorem ha_open_runtime_keeps_the_role :
     (heytingArithmeticOpenRuntime .left).terminal.pole = .left ∧
       (heytingArithmeticOpenRuntime .right).terminal.pole = .right := ⟨rfl, rfl⟩
 
+theorem ha_operational_layer_allows_common_terminal_memory :
+    Grouping.Continuation.run
+        (godelOperationalRealizationWithoutRead heytingArithmeticGodelExecution).reduced.next
+        ((godelOperationalRealizationWithoutRead heytingArithmeticGodelExecution).project
+          (semanticSource heytingArithmeticGodelExecution))
+        [godelCloseRequest heytingArithmeticGodelExecution] =
+      Grouping.Continuation.run
+        (godelOperationalRealizationWithoutRead heytingArithmeticGodelExecution).reduced.next
+        ((godelOperationalRealizationWithoutRead heytingArithmeticGodelExecution).project
+          (syntacticSource heytingArithmeticGodelExecution))
+        [godelCloseRequest heytingArithmeticGodelExecution] :=
+  heytingArithmeticOperationalGroupingWithoutRead.terminalCollision
+
+theorem ha_operational_events_do_not_separate_the_poles :
+    (heytingArithmeticOperationalGroupingWithoutRead).leftEvents =
+      (heytingArithmeticOperationalGroupingWithoutRead).rightEvents :=
+  godelOperationalGroupingWithoutRead_events_equal heytingArithmeticGodelExecution
+
+def ha_adding_role_blind_read_exact_is_rejected
+    (reducedRead : Nat → Type)
+    (readExact : ∀ source,
+      heytingArithmeticClosureContract.read source = reducedRead source.depth) : Empty :=
+  heytingArithmeticRoleBlindReadExactToEmpty reducedRead readExact
+
 theorem ha_every_exact_realization_separates {Memory : Type}
     (realization : ExactRealization heytingArithmeticClosureContract Memory) :
     Grouping.Continuation.run realization.reduced.next
@@ -35,6 +59,9 @@ end HeytingArithmeticOperationalClosureRegression
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_reuses_the_master_execution
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_open_runtime_continues
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_open_runtime_keeps_the_role
+#print axioms HeytingArithmeticOperationalClosureRegression.ha_operational_layer_allows_common_terminal_memory
+#print axioms HeytingArithmeticOperationalClosureRegression.ha_operational_events_do_not_separate_the_poles
+#print axioms HeytingArithmeticOperationalClosureRegression.ha_adding_role_blind_read_exact_is_rejected
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_every_exact_realization_separates
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_operational_closure_rejected
 /- AXIOM_AUDIT_END -/
