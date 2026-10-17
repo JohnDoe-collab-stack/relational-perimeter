@@ -1532,56 +1532,106 @@
     {
       "id": "GODEL_RELATIONAL_SEQUENTIAL_COMPLETENESS",
       "kind": "causal",
-      "evidence_revision": "5492a85c0108a7889e08451f9fab6c9eebf4a082",
-      "scope": "Pour toute exécution gödelienne effective et toute famille de Cauchy exécutée sur la présentation produite par cette même exécution : construction d'un réel relationnel limite et de sa convergence effective ; producteur maître typé dont toute requête de limite possède l'exécution source–regroupement–limite complète ; regroupement chronologique de toute sélection finie exécutée sans identification des sources ; mêmes futurs finis normalisés pour les sources regroupées à profondeur égale ; persistance des occurrences gödeliennes ; rejet de la boucle totale et de toute fermeture globale du même régime qui conserve les labels antérieurs sous les extensions de profondeur. HA ferme concrètement le côté gödelien. Aucune identification avec les réels extensifs usuels, la complétude par borne supérieure, la densité, AC ou CH, ni aucune revendication d'originalité.",
+      "evidence_revision": "9f48180aa8c2aad43d2bc1cbee7419095d4b43dd",
+      "scope": "Pour toute exécution gödelienne effective et toute famille de Cauchy exécutée reçue sur la présentation produite par cette même exécution à la base H1 : un maître commun contient l'environnement exécutable, réalise exactement l'archive riche et produit le réel relationnel séquentiellement complet ; les regroupements finis consomment chaque chaîne chronologique par transport de la ressource historique normalisée, installent la cible produite et permettent sa réutilisation ; la mémoire commune est caractérisée exactement à environnement fixé ; les occurrences gödeliennes persistent à travers la trace ; la boucle totale et toute fermeture globale cohérente du même régime sont rejetées par le même témoin. HA ferme concrètement le côté gödelien. Aucune identification avec tous les réels classiques, la complétude par borne supérieure, la densité, AC ou CH, ni aucune revendication d'originalité.",
       "anchors": [
         {
           "path": "docs/godel-regroupement-completude-reels.fr.md",
           "heading": "Conclusion formelle du raccord Gödel–regroupement–réels",
           "paragraph": null,
-          "sha256": "27ec984718c0683896b74686a9ceac8cf6f01a186f32b4a179a7eac350cf2db9"
+          "sha256": "a537a79596c669414d6c608fa96b4394c8139e98298de9e0e823377212e3d732"
         },
         {
           "path": "docs/godel-grouping-relational-real-completeness.en.md",
           "heading": "Formal Gödel–grouping–real conclusion",
           "paragraph": null,
-          "sha256": "986438e8d3b36a51c384e9da0a62afdb72e86bb066279abc0dce6cd793c1fdf2"
+          "sha256": "26384b991babaf597c5fb29a567352e7b0c9d32f377f2ab99ea8a3019163e5b5"
         }
       ],
       "proofs": [
         {
-          "module": "RelationalPerimeter.Constitution.Reals.SequentialCompleteness",
-          "name": "RelationalPerimeter.Constitution.Reals.effectiveSequentialCompleteness",
+          "module": "RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime",
+          "name": "RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime.execute",
           "role": "production"
         },
         {
-          "module": "RelationalPerimeter.Constitution.Reals.FiniteGroupingProduction",
-          "name": "RelationalPerimeter.Constitution.Reals.executeFiniteGrouping",
+          "module": "RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime",
+          "name": "RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime.ExecutedRequest.searchResult_is_receivedContextOutput",
           "role": "production"
         },
         {
-          "module": "RelationalPerimeter.Constitution.Reals.LimitProduction",
-          "name": "RelationalPerimeter.Constitution.Reals.executeLimitProduction",
+          "module": "RelationalPerimeter.Constitution.Reals.HistoricalGrouping",
+          "name": "RelationalPerimeter.Constitution.Reals.HistoricalGrouping.advanceBatch",
           "role": "production"
         },
         {
-          "module": "RelationalPerimeter.Constitution.Reals.LimitProduction",
-          "name": "RelationalPerimeter.Constitution.Reals.MasterContinuation.bridge",
+          "module": "RelationalPerimeter.Constitution.Reals.HistoricalGrouping",
+          "name": "RelationalPerimeter.Constitution.Reals.HistoricalGrouping.BatchAdvance.resultFromTransport",
           "role": "production"
         },
         {
-          "module": "RelationalPerimeter.Constitution.Reals.LimitProduction",
-          "name": "RelationalPerimeter.Constitution.Reals.fullyExecutedSequentialCompleteness",
+          "module": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness",
+          "name": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness.ExecutedCauchyFamily.historicalSeed",
           "role": "production"
         },
         {
-          "module": "RelationalPerimeter.Constitution.Reals.LimitProduction",
-          "name": "RelationalPerimeter.Constitution.Reals.FullyExecutedSequentialCompleteness.groupedSourcesSameMasterFuture",
+          "module": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness",
+          "name": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness.ExecutedCauchyFamily.normalizeHistorical",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness",
+          "name": "RelationalPerimeter.Constitution.Reals.ProducedCompleteness.ExecutedCauchyFamily.ExecutedFiniteGrouping.normalizedBatch_consumed_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime",
+          "name": "RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime.performGrouping",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime",
+          "name": "RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime.continueInstalled",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime",
+          "name": "RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime.ExecutedCauchyFamily.completeViaRuntime",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.CommonRealRuntime",
+          "name": "RelationalPerimeter.Constitution.Reals.CommonRealRuntime.performReal",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.CommonRealRuntime",
+          "name": "RelationalPerimeter.Constitution.Reals.CommonRealRuntime.archiveRealization",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.CommonRealRuntime",
+          "name": "RelationalPerimeter.Constitution.Reals.CommonRealRuntime.archiveMemoryMinimality",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.CommonRealRuntime",
+          "name": "RelationalPerimeter.Constitution.Reals.CommonRealRuntime.complete",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.RuntimePersistence",
+          "name": "StrongPerimetralTurning.GodelRuntimePersistence.persistThroughRunFrom",
           "role": "production"
         },
         {
           "module": "RelationalPerimeter.Constitution.Godel.RelationalCompleteness",
           "name": "StrongPerimetralTurning.GodelRelationalCompleteness.GlobalSameRegimeClosure",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.RelationalCompleteness",
+          "name": "StrongPerimetralTurning.GodelRelationalCompleteness.GlobalSameRegimeClosure.closeAlong",
           "role": "production"
         },
         {
@@ -1596,7 +1646,7 @@
         },
         {
           "module": "RelationalPerimeter.Constitution.Godel.RelationalCompleteness",
-          "name": "StrongPerimetralTurning.GodelRelationalCompleteness.firstLimitProduction_is_canonicalProducer",
+          "name": "StrongPerimetralTurning.GodelRelationalCompleteness.firstRun_projects",
           "role": "production"
         },
         {
@@ -1605,40 +1655,188 @@
           "role": "production"
         },
         {
-          "module": "Tests.RelationalRealPrecision",
-          "name": "RelationalPerimeter.Tests.RelationalRealPrecision.composedPrecision_executes",
-          "role": "test"
-        },
-        {
           "module": "Tests.GodelGroupingTowerRegression",
           "name": "RelationalPerimeter.Tests.GodelGroupingTowerRegression.globalClosureRejected",
           "role": "test"
         },
         {
           "module": "Tests.RelationalSequentialCompleteness",
-          "name": "RelationalPerimeter.Tests.RelationalSequentialCompleteness.finiteBatchGroupingConsumesExactChronology",
-          "role": "test"
-        },
-        {
-          "module": "Tests.RelationalSequentialCompleteness",
-          "name": "RelationalPerimeter.Tests.RelationalSequentialCompleteness.parallelGroupedSourcesHaveSameFuture",
-          "role": "test"
-        },
-        {
-          "module": "Tests.RelationalSequentialCompleteness",
           "name": "RelationalPerimeter.Tests.RelationalSequentialCompleteness.completeGodelRaccordUsesCanonicalMaster",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalSequentialCompleteness",
+          "name": "RelationalPerimeter.Tests.RelationalSequentialCompleteness.completeGodelRaccordFirstRunReusesProducedStep",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalSequentialCompleteness",
+          "name": "RelationalPerimeter.Tests.RelationalSequentialCompleteness.completeGodelRaccordUniversalProducerUsesRuntime",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalSequentialCompleteness",
+          "name": "RelationalPerimeter.Tests.RelationalSequentialCompleteness.completeGodelRaccordSourceNearUsesReachableStates",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalSequentialCompleteness",
+          "name": "RelationalPerimeter.Tests.RelationalSequentialCompleteness.persistedThroughOwnedRun",
+          "role": "test"
+        },
+        {
+          "module": "Tests.CommonRealRuntime",
+          "name": "RelationalPerimeter.Tests.CommonRealRuntime.lastNormalizationConsumesTransportedResource",
+          "role": "test"
+        },
+        {
+          "module": "Tests.CommonRealRuntime",
+          "name": "RelationalPerimeter.Tests.CommonRealRuntime.lastNormalizationKeepsTransportedNear",
+          "role": "test"
+        },
+        {
+          "module": "Tests.CommonRealRuntime",
+          "name": "RelationalPerimeter.Tests.CommonRealRuntime.continuationReadsSameTarget",
+          "role": "test"
+        },
+        {
+          "module": "Tests.CommonRealRuntime",
+          "name": "RelationalPerimeter.Tests.CommonRealRuntime.godelSharesMaster",
           "role": "test"
         }
       ],
-      "checks": [],
+      "checks": [
+        "scripts/expected-failures.tsv",
+        "scripts/stratification.tsv"
+      ],
       "dependencies": {
-        "formation": "Le même ExecutedGodelProduction indexe la présentation P, la première continuation, le journal partagé et la famille de Cauchy ; les requêtes typées portent leurs certificats, et les chaînes finies sont formées uniquement de sources effectivement produites.",
-        "execution": "Chaque requête exécute réception, recherche, action relationnelle, autorisation et décomposition, continuation et mémoire. Une requête de limite exécute d'abord la source du module, consomme son readout et son témoin Near dans le regroupement, puis exécute la limite avec la sortie réelle de cette action.",
-        "proof": "Les lois de Cauchy et le module construisent la limite et sa convergence ; les traces de lot prouvent la consommation chronologique complète ; le pont exact prouve les futurs normalisés ; la restriction d'une fermeture globale cohérente au premier préfixe réutilise la conversion Truth(G) vers Proof(G) et la non-prouvabilité du même G.",
-        "transport": "Les extensions conservent les occurrences gödeliennes, les identités sources, les codes et témoins consommés. La projection publique oublie le journal riche seulement sous le contrat exact de futurs ; elle n'identifie pas les sources et ne transforme pas la complétude relationnelle en fermeture du même régime."
+        "formation": "Le même ExecutedGodelProduction indexe la présentation P, Journal retient P et la base 1 dans son type, et la famille terminale est indexée par ces données. Environment contient le producteur et le module comme données exécutables. ExactConsumption et HistoricalNormalization indexent la sélection, la chaîne de journaux, la charge précédente et son résultat transporté. Reachable borne le domaine du producteur riche. GlobalSameRegimeClosure porte la préservation des labels comme contrat de formation et de transport.",
+        "execution": "execute imbrique réception, recherche, action, préservation, autorisation, décomposition, continuation et mémoire. Chaque snoc historique passe le HistoricalSeed précédent à advanceBatch ; normalizeFresh agit sur la charge transportée et non sur une graine reconstruite. performGrouping installe OwnedTarget.batch produit ; continueInstalled relit cette ressource. performArchive exécute une seule ressource riche et archiveProjection la relie à performReal, qui lit l'environnement inclus dans son état. Le premier run du raccord réutilise le pas produit par le même maître.",
+        "proof": "completeViaRuntime applique la loi de Cauchy reçue aux réponses possédées par les pas accessibles. normalizedBatch_consumed_exact établit la totalité finie à partir de la normalisation historique, non de la seule énumération. fixedEnvironmentMinimality et archiveMemoryMinimality caractérisent la mémoire uniquement sous leurs contrats et environnements déclarés. La contradiction globale réutilise la conversion Truth(G) vers Proof(G) et la non-prouvabilité du même G ; preservesPriorLabels n'est pas lu par le terme terminal vers Empty.",
+        "transport": "BatchAdvance.resultFromTransport relie la sortie à la charge historique complète ; consumed_exact et oldCharge_exact conservent le préfixe, les charges et leurs Near. archiveRealization oublie les ressources riches seulement après leur exécution et conserve l'environnement comme donnée. persistThroughRunFrom transporte injectivement le même triplet gödelien à travers chaque phase de la trace et le sépare de chaque occurrence fraîche. Les égalités de readouts et de futurs à environnement fixé n'identifient jamais les occurrences ou les programmes."
       },
       "consumers": [],
-      "source_sha256": "107d38f72ab4be5a3032dc4d6d4a898c5fa102fd2cd9676b61678f8fe8e397eb",
+      "source_sha256": "6b86f9ab2585a97fb3c226ec80b9909508921a86f488567d152a9c0037ece440",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "RUNTIME_EFFECTIVE_CAUCHY_REAL_CORRESPONDENCE",
+      "kind": "behavioral",
+      "evidence_revision": "9f48180aa8c2aad43d2bc1cbee7419095d4b43dd",
+      "scope": "Pour toute présentation dyadique effective ou tout carrier de Cauchy effectif reçu, à présentation périmétrale et profondeur de base fixées : construction d'un RuntimeReal autoritatif, readout obtenu par exécution des pas limites canoniques, aller-retour exact depuis la présentation, aller-retour du runtime et du carrier par équivalence positive de readouts, correspondance avec les futurs limites finis réellement retenus, et réalisation sur le périmètre Gödel H1 avec partage du même runtime. La correspondance numérique n'identifie ni environnements, ni états, ni journaux, ni ressources, ni occurrences ; elle ne couvre pas tous les réels classiques, les opérations de corps, l'ordre, la densité, la complétude d'ordre, AC ou CH.",
+      "anchors": [
+        {
+          "path": "docs/runtime-real-cauchy-effective-correspondence.fr.md",
+          "heading": "Conclusion formelle de correspondance runtime–réel effectif",
+          "paragraph": null,
+          "sha256": "4e8f6c2a87f986decd322032741e1a5317c78a414f8a10e01953eaa7b0a0e4f4"
+        },
+        {
+          "path": "docs/runtime-effective-cauchy-real-correspondence.en.md",
+          "heading": "Formal runtime–effective-real correspondence conclusion",
+          "paragraph": null,
+          "sha256": "74f121b87b547fdcb1c12a1b5a18488fd7fe6378a52310618b89ecb6fed18545"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence",
+          "name": "RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence.RuntimeReal.ReadoutOrigin",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence",
+          "name": "RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence.presentationToRuntime",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence",
+          "name": "RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence.presentation_roundtrip_readout_exact",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence",
+          "name": "RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence.runtimeReadoutCorrespondence",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence",
+          "name": "RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence.limitFutureCorrespondence",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.CommonRealRuntime",
+          "name": "RelationalPerimeter.Constitution.Reals.CommonRealRuntime.numericalFutureCorrespondence",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.EffectiveCauchyReal",
+          "name": "RelationalPerimeter.Constitution.Reals.EffectiveCauchyReal.runtimeCarrierCorrespondence",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.EffectiveCauchyReal",
+          "name": "RelationalPerimeter.Constitution.Reals.EffectiveCauchyReal.carrier_runtime_roundtrip_equivalent",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.RealCorrespondence",
+          "name": "StrongPerimetralTurning.GodelRealCorrespondence.realizePresentation",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.RealCorrespondence",
+          "name": "StrongPerimetralTurning.GodelRealCorrespondence.realizeCarrier",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.RealCorrespondence",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticPresentationCorrespondence",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.RealCorrespondence",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticEffectiveCauchyCorrespondence",
+          "role": "production"
+        },
+        {
+          "module": "Tests.RuntimeRealCorrespondence",
+          "name": "RelationalPerimeter.Tests.RuntimeRealCorrespondence.zeroReadoutRoundtripExact",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RuntimeRealCorrespondence",
+          "name": "RelationalPerimeter.Tests.RuntimeRealCorrespondence.zeroGodelFirstStepUsesRuntime",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RuntimeRealCorrespondence",
+          "name": "RelationalPerimeter.Tests.RuntimeRealCorrespondence.oneLimitFutureTerminalDepthExact",
+          "role": "test"
+        }
+      ],
+      "checks": [
+        "scripts/expected-failures.tsv",
+        "scripts/stratification.tsv"
+      ],
+      "dependencies": {
+        "formation": "EffectiveDyadicPresentation reçoit une approximation calculable et sa cohérence ; EffectiveCauchyReal.Carrier reçoit en plus un module monotone et une loi de Cauchy. RuntimeReal retient la famille exécutée et impose que son producteur soit completeViaRuntime. Sur le périmètre Gödel, la même ExecutedGodelProduction fixe P et la base H1, tandis que la présentation numérique reste une entrée distincte.",
+        "execution": "runtimeToPresentation exécute stepAt puis lit la réponse possédée ; presentationToRuntime construit le producteur et la famille depuis la présentation reçue. toLimitFuture appelle run sur les listes de requêtes limites et conserve les deux RunTrace. NumericalFutureEquivalent apparie séparément les transitions performReal de deux environnements. realizePresentation réutilise l'état initial, le réel produit et le premier pas du raccord Gödel au lieu de juxtaposer une exécution.",
+        "proof": "presentation_roundtrip_readout_exact prouve l'égalité ponctuelle ; runtimeReadoutCorrespondence, limitFutureCorrespondence et runtimeCarrierCorrespondence construisent leurs deux directions positives. carrier_runtime_roundtrip_equivalent compose les correspondances présentation/carrier. Les lois Near et Cauchy établissent la cohérence numérique ; aucune preuve ne dérive les approximations de la contradiction gödelienne.",
+        "transport": "ReadoutOrigin conserve la provenance dirigée d'un readout vers son pas canonique. PairedLimitTrace transporte profondeurs et Near sans égaliser les pas. Les traductions vers les présentations et carriers oublient les histoires riches sous une équivalence numérique explicitement définie ; aucune réciproque ne reconstruit journaux, ressources ou occurrences depuis les valeurs."
+      },
+      "consumers": [],
+      "source_sha256": "f6ab20f3c2a7f5f62aa3ad3cf8bd26348f0aa8fe32c0ee7f0b53543f20ea6783",
       "reviews": {
         "reader": {
           "status": "pending"
