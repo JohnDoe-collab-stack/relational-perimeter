@@ -21,11 +21,22 @@ record. Earlier audits are neither evidence nor authority for this run.
 
 ## Uploaded autonomous input
 
-The uploaded archive is authoritative for this audit. It contains:
+This fresh project was initialized with a source archive containing:
 
 ```text
 relational-perimeter/                       complete checkout and .git history
-audit-toolchain/lean-4.33.1-linux-minimal.tar.zst
+SOURCE_INPUT_MANIFEST.txt
+```
+
+This audit task is additionally supplied with the following six files:
+
+```text
+lean-4.33.1-linux-minimal.tar.zst.part-00
+lean-4.33.1-linux-minimal.tar.zst.part-01
+lean-4.33.1-linux-minimal.tar.zst.part-02
+lean-4.33.1-linux-minimal.tar.zst.part-03
+lean-4.33.1-linux-minimal.tar.zst.part-04
+lean-4.33.1-linux-minimal.tar.zst.part-05
 ```
 
 Do not clone or fetch the repository. Network access is not required. Enter the
@@ -43,19 +54,29 @@ The checkout must be clean and already detached at the exact target. Its
 `.git` directory is included so ancestry and object contents can be checked
 locally.
 
-An exact Linux Lean toolchain is included because the audit environment may
-not have the pinned release and may have no outbound access. Install it only
-into scratch space outside the repository:
+These six files are the ordered parts of an exact Linux Lean toolchain. Locate
+them without using the network, concatenate them in lexical order, verify the
+archive, and install it only into scratch space outside the repository:
 
 ```text
+find .. -type f -name 'lean-4.33.1-linux-minimal.tar.zst.part-*' -print | sort
+cat $(find .. -type f -name 'lean-4.33.1-linux-minimal.tar.zst.part-*' -print | sort) \
+  > /tmp/lean-4.33.1-linux-minimal.tar.zst
+sha256sum /tmp/lean-4.33.1-linux-minimal.tar.zst
 mkdir -p /tmp/relational-perimeter-lean-4.33.1
-tar --zstd -xf ../audit-toolchain/lean-4.33.1-linux-minimal.tar.zst \
+tar --zstd -xf /tmp/lean-4.33.1-linux-minimal.tar.zst \
   -C /tmp/relational-perimeter-lean-4.33.1
 TOOLCHAIN=/tmp/relational-perimeter-lean-4.33.1/lean-minimal
 $TOOLCHAIN/bin/lean --version
 $TOOLCHAIN/bin/lake --version
 export PATH="$TOOLCHAIN/bin:$PATH"
 $TOOLCHAIN/bin/lake build
+```
+
+The required SHA-256 of the reconstructed toolchain archive is:
+
+```text
+e17865e02d7df304e195253516c9a7f7afdb3202e5a13d471a89c032c0621f86
 ```
 
 Expected versions are Lean `4.33.1` at commit
