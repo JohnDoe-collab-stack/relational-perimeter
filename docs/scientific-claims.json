@@ -1421,6 +1421,7 @@
     {
       "id": "GODEL_INTERNAL_CLOSURE_OBSTRUCTION",
       "kind": "causal",
+      "evidence_revision": "e2b75474c8bef91cfb9f24d6fed8d408e38d0269",
       "scope": "Pour toute réalisation de EffectivelyPresentedSoundGodelSystem : production exécutée et certification du même témoin diagonal ; constitution affirmative d'un tout et d'une continuation stricte avec occurrences et provenance conservées ; rejet constructif de l'admission de cette continuation dans le même régime par tentative bilatérale, totalisation, contraction, conversion Truth(G) vers Proof(G), puis non-prouvabilité du même G. HA ferme concrètement les contrats de l'interface mais demeure une instance, non le cadre. Résultat métathéorique conditionnel, sans revendication de renforcement de Gödel, d'unicité architecturale ni de priorité historique.",
       "anchors": [
         {
@@ -1501,48 +1502,58 @@
         "transport": "La correspondance conserve séparément les occurrences, la ressource certifiée et la provenance du même témoin à travers la constitution et la continuation ; le rejet porte uniquement sur l'admission totalisante dans le même régime et n'efface ni le tout ni la continuation positive."
       },
       "consumers": [],
-      "source_sha256": "47d3f338a5abbde35408d279977598e2968c6f9d2bd7ff191211325e046fbb3d",
+      "source_sha256": "5bbe5b0edbf6f932d883d466a0668814afd5dbe895f03da836d4d2cd6fc7dc68",
       "reviews": {
         "reader": {
-          "status": "reviewed",
-          "evidence": "docs/reports/godel-reader-translation-a020dc3.fr.md",
-          "sha256": "90b832b076262b88ce038dba17bf93ff0bf2ef4ebbc2e5f81b9a7c31848d2c7c",
-          "responsible": "Codex (OpenAI), lecture autonome puis confrontation aux énoncés et corps Lean complets",
-          "revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91",
-          "revision_evidence": "Révision examinée : `a020dc3267c0670b1316b2b2f8d5b3259ab40d91`."
+          "status": "pending"
         },
         "translation": {
-          "status": "not_applicable",
-          "evidence": "docs/reports/godel-reader-translation-a020dc3.fr.md",
-          "sha256": "90b832b076262b88ce038dba17bf93ff0bf2ef4ebbc2e5f81b9a7c31848d2c7c",
-          "responsible": "Codex (OpenAI), contrôle du périmètre linguistique enregistré",
-          "revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91",
-          "revision_evidence": "Révision examinée : `a020dc3267c0670b1316b2b2f8d5b3259ab40d91`."
+          "status": "pending"
         },
         "independent": {
-          "status": "reviewed",
-          "evidence": "docs/reports/aristotle-godel-a020dc3.md",
-          "sha256": "80ecc6d954eb6f626970cf73a659f15db57ec62b779f99a34028e4cdc5b13d80",
-          "responsible": "Aristotle (Harmonic), rapport lu et confronté au commit audité",
-          "revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91",
-          "revision_evidence": "Scope: the exact target commit `a020dc3267c0670b1316b2b2f8d5b3259ab40d91` only."
+          "status": "not_recorded"
         }
       }
     },
     {
       "id": "GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION",
       "kind": "causal",
-      "evidence_revision": "869a2a390a90b1753d9795dc1263d5bdb7848297",
-      "scope": "Pour toute production gödelienne exécutée, les sources sémantique et syntaxique sont reçues sur la continuation H1 du même témoin et la requête canonique non vide est autorisée puis exécutée des deux côtés. Une réalisation opérationnelle explicite, dépourvue seulement de loi d'exactitude du readout, préserve admissions, transitions et événements tout en produisant une mémoire terminale commune et des événements égaux : ces couches ne rejettent donc pas la collision. Pour toute réalisation complète du contrat, la même collision force par run_exact et read_exact l'égalité Truth(G) = Proof(G), puis la conversion Truth(G) vers Proof(G) rejetée par la non-prouvabilité du même G. Le noyau de readout et le rejet final ne dépendent pas de event_exact. La collision complète reste une hypothèse de fermeture, non une conséquence de Gödel ; aucun résultat sur tout regroupement, le continuum, AC ou CH, ni aucune revendication de renforcement strict ou de nouveauté.",
+      "evidence_revision": "e2b75474c8bef91cfb9f24d6fed8d408e38d0269",
+      "scope": "Pour une production gödelienne exécutée unique, une ressource positive maître construit H1 sans présentation circulaire et est partagée avec son pont périmétral aval. Deux sources riches distinctes reçoivent ce même H1 ; leurs mémoires opérationnelles actives sont distinctes. La requête close autorisée sur la trace positivement non vide produit une phase terminale et une collision mémoire dans une réalisation préservant autorisations, transitions et événements sans readout exact, tandis que les sources riches restent distinctes. Pour toute réalisation exacte du contrat riche fixée avant la fermeture, l'hypothèse de collision des terminaux calculés force par terminal_eq_run, run_exact et read_exact l'égalité Truth(G) = Proof(G), puis Truth(G) vers Proof(G). Seul le rejet final consomme trueWitness et unprovable du même témoin. Le noyau et le rejet ne dépendent pas de event_exact. La collision sous réalisation exacte reste une hypothèse, non une conséquence de Gödel ; aucun résultat sur tout regroupement, le continuum, AC ou CH, aucune borne de coût, aucun renforcement strict ni revendication de nouveauté.",
       "anchors": [
         {
           "path": "docs/godel-fermeture-runtime.fr.md",
           "heading": "Portée et statut",
           "paragraph": null,
-          "sha256": "cd56ab83fdab984a5eef90473e31a13088f1b425aae33e16567603969a2a3ee9"
+          "sha256": "8b70116f9da19795dcc7c7b5e83669a48fb8145100f325a00319aecc514ff6a8"
         }
       ],
       "proofs": [
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.PositiveExecutionCore",
+          "name": "StrongPerimetralTurning.godelPositiveExecutionCore",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalH1",
+          "name": "StrongPerimetralTurning.godelOperationalH1",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalPerimetralBridge",
+          "name": "StrongPerimetralTurning.godelOperationalPerimetralOccurrenceTransport",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalPerimetralBridge",
+          "name": "StrongPerimetralTurning.godelOperationalPerimetralBridge",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.godelOperational_initial_memories_distinct",
+          "role": "production"
+        },
         {
           "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
           "name": "StrongPerimetralTurning.GodelOperationalRealizationWithoutRead",
@@ -1560,12 +1571,12 @@
         },
         {
           "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
-          "name": "StrongPerimetralTurning.godelRoleBlindReadExactToEndpointEquality",
+          "name": "StrongPerimetralTurning.godelTerminalReadExactToEndpointEquality",
           "role": "production"
         },
         {
           "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
-          "name": "StrongPerimetralTurning.rejectGodelRoleBlindReadExactToEmpty",
+          "name": "StrongPerimetralTurning.rejectGodelTerminalReadExactToEmpty",
           "role": "production"
         },
         {
@@ -1600,7 +1611,7 @@
         },
         {
           "module": "RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure",
-          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticRoleBlindReadExactToEmpty",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticTerminalReadExactToEmpty",
           "role": "production"
         },
         {
@@ -1621,6 +1632,26 @@
         {
           "module": "Tests.GodelOperationalClosureRegression",
           "name": "GodelOperationalClosureRegression.history_exists_independently",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.production_origin_is_executed",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.H1_occurrences_remain_distinct",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.operational_initial_memories_are_distinct",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.bridge_maps_the_three_roles",
           "role": "test"
         },
         {
@@ -1650,7 +1681,7 @@
         },
         {
           "module": "Tests.HeytingArithmeticOperationalClosureRegression",
-          "name": "HeytingArithmeticOperationalClosureRegression.ha_adding_role_blind_read_exact_is_rejected",
+          "name": "HeytingArithmeticOperationalClosureRegression.ha_adding_terminal_read_exact_is_rejected",
           "role": "test"
         },
         {
@@ -1662,16 +1693,20 @@
       "checks": [
         "scripts/expected-failures.tsv",
         "scripts/godel-runtime-core-import-boundaries.txt",
+        "scripts/godel-positive-core-import-boundaries.txt",
+        "scripts/godel-operational-h1-import-boundaries.txt",
+        "scripts/godel-operational-closure-import-boundaries.txt",
+        "scripts/godel-perimetral-import-boundaries.txt",
         "scripts/stratification.tsv"
       ],
       "dependencies": {
-        "formation": "La même ExecutedGodelProduction indexe les deux sources, qui stockent seulement leur rôle et leur profondeur. Leurs histoires, occurrences et provenances sont calculées depuis cette exécution ; GodelInitializedAt reçoit la constitution affirmative et n'habite exactement que la continuation périmétrale H1.",
-        "execution": "Le contexte H1 produit la recherche de la requête close, ses deux autorisations, sa décomposition en étapes et les deux ExecutedRun sur la même liste singleton non vide. Close est une observation terminale exécutée qui conserve l'état riche ; les terminaux et événements proviennent néanmoins des constructeurs exécutés. La réalisation opérationnelle par la profondeur construit positivement leur collision et l'égalité des événements sans loi de readout ; la politique complète reçoit séparément la collision sous ExactRealization.",
-        "proof": "Le noyau compose terminal_eq_run, le run_exact direct, la collision et les deux lois read_exact, puis la stabilité du rôle, pour dériver Truth(G) = Proof(G) sans event_exact, totalisation, présentation circulaire, FutureEquivalent, vérité ou non-prouvabilité. La conversion Truth(G) vers Proof(G) est construite avant que le rejet terminal consomme trueWitness et unprovable du même témoin.",
-        "transport": "GodelOperationalRealizationWithoutRead conserve localement admissions, transitions et événements sans imposer le readout ; son instance fusionne positivement les deux sorties et produit les mêmes événements. ExactRealization ajoute read_exact. Sous cette loi, la mémoire commune force l'égalité des lectures tandis que les sources, rôles et occurrences demeurent distincts. L'équivalence de tous les futurs reste une conséquence parallèle, non une prémisse du pont critique."
+        "formation": "La même ExecutedGodelProduction indexe une ressource positive maître : un repli structurel total de ses préfixes extrait les occurrences exécutées sans relancer la production ni l'ancien extracteur dépendant. H1 est construit par History.extend. Les sources stockent cette même ressource et H1, leur pôle, leur histoire opérationnelle et leur phase. GodelInitializedAt et GodelClosureContextAt ne mentionnent aucune présentation circulaire ; les dépendances propres à l'interface gödelienne reçue sont rapportées séparément des projections négatives.",
+        "execution": "Le contexte partagé produit la recherche de close, deux autorisations, deux étapes puis deux ExecutedRun sur une NonemptyRequestTrace singleton. Close conserve pôle, histoire, provenance et readout mais change la phase active en terminale. Les mémoires actives opérationnelles distinctes deviennent une mémoire grouped commune seulement après cette transition ; les événements sont égaux. La politique complète reçoit séparément la collision sous une ExactRealization fixée.",
+        "proof": "Le noyau compose les deux terminal_eq_run, le godelExactRunExact direct par next_exact, la collision et deux read_exact, puis pole_run/read_run, pour dériver Truth(G) = Proof(G) sans event_exact, totalisation, présentation circulaire, FutureEquivalent ou projections négatives. Eq.mp construit Truth(G) vers Proof(G) avant que le rejet terminal consomme trueWitness et unprovable du même témoin. Les types et corps transitifs des racines positives sont contrôlés.",
+        "transport": "La réalisation opérationnelle transporte à l'identique la famille inductive d'autorisations et préserve transitions et événements. Au terminal, aucune continuation n'est admise et l'oubli du pôle ne prétend pas conserver le readout. ExactRealization impose cette loi supplémentaire ; la collision terminale force alors l'égalité des lectures sans identifier les sources. Un pont aval exact et exhaustif relie les occurrences opérationnelles et périmétrales issues du même core, avec leurs rôles et leur ordre. FutureEquivalent reste une conséquence parallèle."
       },
       "consumers": [],
-      "source_sha256": "ea20c6e5c512bc668f51d6ae63205bcc860f95108f917580f39d7fc09cc08006",
+      "source_sha256": "075ff54c5c20dfe1accbb7459df87bf4e201f2f2f5c74875cba618a738538032",
       "reviews": {
         "reader": {
           "status": "pending"
