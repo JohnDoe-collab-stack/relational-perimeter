@@ -2246,13 +2246,16 @@ espaces finaux des quarante documents passent. Un premier contrôle des C/oleans
 avait rencontré un artefact momentanément absent pendant le build ; le scan
 et les seize contrôles sont relancés et passent après ce build, sans présenter
 cette course d'artefacts comme un défaut scientifique.
-Les gates `--static`, `--lean`, `verify.ps1` et `verify.sh` sont lancées et
-restent chacune en échec, code 1 au premier `STALE_SOURCE:
-GODEL_RELATIONAL_SEQUENTIAL_COMPLETENESS` préexistant. Le recalcul des
-21 empreintes trouve seulement les deux stales préexistants, dont
-`RUNTIME_EFFECTIVE_CAUCHY_REAL_CORRESPONDENCE` derrière ce premier arrêt.
-Aucune empreinte du registre n'est rafraîchie. Ces scripts globaux ne sont
-donc pas présentés comme verts ; leurs autres contrôles sont lancés séparément.
+Après la relecture autonome des passages français et anglais, leur confrontation
+aux énoncés complets et l'extension explicite du passage canonique à la gate 6,
+les empreintes sont recalculées sur la révision d'évidence
+`3313f8db67b84aa67d79a9d6f5721066d5cfbe67`. Les gates `--static` et
+`--lean` passent. `verify.ps1` et `verify.sh`, lancé sous Git Bash, passent
+chacun leur chaîne complète : build de 398 jobs, 182 échecs attendus aux
+diagnostics et sites exacts, seize contrôles codegen et vérification de 396
+fichiers Lean. Le premier lancement de `verify.sh` avec le binaire WSL ne
+trouvait pas le chemin Windows du Python figé ; ce défaut de lanceur est corrigé
+par l'emploi de Git Bash et n'est pas présenté comme un résultat scientifique.
 
 Les commandes comprennent les builds ciblés des modules concernés,
 `lake build`, les seize `scripts/check-*-codegen.py`,
@@ -2277,24 +2280,31 @@ les champs et signatures du prototype natif sont renforcés/remplacés pour port
 la source exacte, et non présentés comme inchangés. Les 44 anciens modules/tests
 des lots antérieurs au prototype natif restent octet-identiques ; aucun ancien
 constructeur `Real`, contrat ni énoncé de ces lots n'est modifié.
-Le registre garde
-`F16DDD58A37BCAAA9F9666D6ED688E5D4EDB14A1E435A4506BAC5A07E9E65C18`.
-Passages canoniques/protégés, figures et statuts de revue restent inchangés.
-La mise à jour d'une affirmation majeure et sa revue ne sont pas réalisées
-par ce document de chantier. Aucun commit, push, fusion ou audit extérieur.
+Le registre est raccordé sémantiquement à la même révision d'évidence. La
+revue primaire consignée dans
+`docs/reports/runtime-real-structural-reader-translation-3313f8d.fr.md`
+contrôle séparément le français, l'anglais, puis leurs dépendances formelles.
+Les passages protégés et les figures restent inchangés. Les statuts `reader`
+et `translation` des deux affirmations raccordées deviennent `reviewed` ; le
+statut `independent` reste `not_recorded` tant qu'un rapport extérieur visant
+exactement cette révision n'a pas été reçu et lu. Aucun push ni fusion n'est
+effectué par cette clôture locale.
 
 Ces six blocs exposent maintenant la production native riche et ses vues
-numériques séparées. La correction est remise à la revue primaire avant
-clôture des gates 4 (extension native) et 6 ; les builds et contrôles ci-dessus
-ne constituent pas ce verdict scientifique. La gate 7 reste ouverte et aucun
-travail de couverture des réels usuels n'est engagé ici.
+numériques séparées. La revue primaire ferme la gate 4 dans son extension
+native et la gate 6 pour la classe effective déclarée, sans transformer les
+builds en verdict de sens et sans identifier les occurrences ou familles
+riches. La validation indépendante de cette clôture reste ouverte. La gate 7
+reste elle aussi ouverte et aucun travail de couverture des réels usuels n'est
+engagé ici.
 
 ### Gates terminales de preuve
 
 Les critères successifs sont conservés ci-dessous. Les lots précédents et
 les réalisations antérieures portent leurs résultats dans leurs portées
-déclarées ; l'extension native de la gate 4 et la gate 6 sont en revue primaire
-de la correction ci-dessus, tandis que la gate 7 reste ouverte. Une accumulation de
+déclarées ; l'extension native de la gate 4 et la gate 6 sont closes par la
+revue primaire ci-dessus, avec revue indépendante encore non enregistrée,
+tandis que la gate 7 reste ouverte. Une accumulation de
 définitions ou un build vert ne remplace aucun de ces critères :
 
 1. **Fermeture algébrique relationnelle.** Chaque opération construit un
