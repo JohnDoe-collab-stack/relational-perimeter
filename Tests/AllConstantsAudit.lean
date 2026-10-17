@@ -20,6 +20,8 @@ import Tests.PerimeterPersistenceRegression
 import Tests.RealizedConstitutionRegression
 import Tests.RelationalRealPrecision
 import Tests.RelationalSequentialCompleteness
+import Tests.RuntimeRealCorrespondence
+import Tests.CommonRealRuntime
 import Tests.RelationalExtensiveIffRegression
 import Tests.RolePolicySpectrum
 import Tests.SemanticImageRegression

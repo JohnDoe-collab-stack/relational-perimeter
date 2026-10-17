@@ -1,0 +1,8 @@
+import RelationalPerimeter.Constitution.Reals.HistoricalGrouping
+set_option autoImplicit false
+open RelationalPerimeter.Constitution.Reals
+open HistoricalGrouping
+example {envelope : LocalGrouping.Specification} {size : Nat}
+    (selection : FiniteSelection envelope size) (fresh : envelope.Source) :
+    BatchAdvance selection fresh (initialBatchCharge selection) :=
+  advanceBatch selection fresh (executeBatch selection)

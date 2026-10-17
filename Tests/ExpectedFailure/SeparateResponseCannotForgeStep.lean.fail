@@ -1,0 +1,13 @@
+import RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+open RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+
+-- A response from an independent producer call cannot forge an authoritative step.
+def forgedStep
+    {P : CircularPresentation}
+    {family : ExecutedCauchyFamily P 1}
+    (state : Runtime family)
+    (request : RuntimeRequest family) : ExecutedStep family state request :=
+  ExecutedStep.mk (executeResponse family state request)

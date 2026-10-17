@@ -1,0 +1,11 @@
+import RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence
+
+-- A bare value is not an effective presentation of a real.
+def runtimeFromBareCode
+    (P : CircularPresentation)
+    (code : SignedDyadicCode) : RuntimeReal P 1 :=
+  presentationToRuntime P 1 code

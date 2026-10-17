@@ -1,0 +1,19 @@
+import RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+
+open StrongPerimetralTurning
+open ConstitutiveSearch.ContinuationSignatures
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+open RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+
+-- Equality observed only after one selected run cannot replace equality of
+-- admission, events, observations and continuation for every finite future.
+example
+    {P : CircularPresentation}
+    {family : ExecutedCauchyFamily P 1}
+    (first second : Runtime family)
+    (requests : List (RuntimeRequest family))
+    (sameFinal :
+      project (run family first requests).finalState =
+        project (run family second requests).finalState) :
+    FutureEquivalent (futureContract family) first second :=
+  (minimality family).1 sameFinal

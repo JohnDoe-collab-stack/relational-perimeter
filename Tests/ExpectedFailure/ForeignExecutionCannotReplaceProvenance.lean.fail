@@ -1,0 +1,13 @@
+import RelationalPerimeter.Constitution.Reals.CommonRealRuntime
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+open RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+open ConstitutiveSearch.ContinuationSignatures
+example {Request : Type} {program : Program Request}
+    {P : CircularPresentation} {baseDepth : Nat} {journal : Journal P baseDepth}
+    {request : Request} (first second : ExecutedRequest program P journal request) :
+    ExecutedRequest.Provenance second :=
+  first.provenance

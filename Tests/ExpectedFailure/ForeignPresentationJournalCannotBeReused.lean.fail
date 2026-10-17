@@ -1,0 +1,12 @@
+import RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+-- A journal retains the presentation whose history constituted it.
+def cannotExecuteOnForeignJournal
+    {P Q : CircularPresentation}
+    (family : ExecutedCauchyFamily P 1)
+    (journal : Journal Q 1) :=
+  executeLimitProduction family journal 0

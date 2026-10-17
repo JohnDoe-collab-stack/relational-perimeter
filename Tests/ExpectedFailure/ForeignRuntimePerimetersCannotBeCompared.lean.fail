@@ -1,0 +1,13 @@
+import RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence
+
+-- Readout equivalence retains the presentation and historical base indices.
+def cannotCompareForeignRuntimePerimeters
+    {P Q : CircularPresentation}
+    {baseDepth : Nat}
+    (first : RuntimeReal P baseDepth)
+    (second : RuntimeReal Q baseDepth) :
+    RuntimeReadoutEquivalent first second :=
+  RuntimeReadoutEquivalent.refl first

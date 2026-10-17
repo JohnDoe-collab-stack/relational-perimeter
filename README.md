@@ -395,18 +395,31 @@ readout facade.
 Le raccord constructif part de l'exécution gödelienne déjà produite, conserve
 sa première continuation comme base d'une tour d'opérations partagée, puis
 construit la limite de toute famille de Cauchy exécutée munie d'un module
-explicite. Un producteur maître conservé dans le résultat exécute toute requête
-publique typée ; une requête de limite possède la source diagonale, son
+explicite. Le producteur terminal agit sur des états riches accessibles et
+retourne le pas autoritatif qui possède sa réponse ; le premier run réutilise
+ce même pas et sa trace. Une requête de limite possède la source diagonale, son
 regroupement et la réponse de limite correspondante au lieu de rejouer un
-payload déjà formé. Une chaîne finie ne retient que des sources
+payload déjà formé. Le journal retient dans son type la présentation qui
+constitue son histoire. La réception produit en outre le contexte exact que la
+recherche consomme, au lieu de le ranger seulement à côté de son résultat. Une
+chaîne finie ne retient que des sources
 réellement exécutées dans un même journal chronologique ; son regroupement de
-lot les énumère de la plus ancienne à la plus récente, prend pour rang le nombre de
-charges restantes et les consomme toutes. Les regroupements finis conservent
+lot les consomme constructeur par constructeur. Son énumération unaire n'est
+qu'un readout de forme ; l'exhaustivité vient de la consommation dépendante de
+la chaîne. Les regroupements finis conservent
 les identités sources, tandis que leur action consomme explicitement le readout
 exécuté et son témoin de proximité avant d'alimenter la réponse de limite. Une
-équivalence relationnelle positive distingue les présentations d'un même réel
-sans quotient. Les codes dyadiques signés restent des readouts aval. La portée
-exacte, la relation local–global et les non-conclusions concernant la
+correspondance locale séparée construit les traductions entre le runtime
+autoritatif, les présentations dyadiques effectives et un carrier sans quotient
+de réels de Cauchy effectifs. Le runtime commun conserve son producteur et son
+module comme données exécutables ; sa caractérisation de mémoire est relative
+à un environnement fixé. La correspondance est biconditionnelle au niveau des
+readouts et des futurs limites retenus, tandis que la provenance riche reste
+dirigée et n'est jamais reconstruite depuis une valeur. Son
+[passage français](docs/runtime-real-cauchy-effective-correspondence.fr.md) et
+sa [version anglaise](docs/runtime-effective-cauchy-real-correspondence.en.md)
+en fixent la portée exacte. Les codes dyadiques signés restent des readouts
+aval. La relation local–global et les non-conclusions concernant la
 complétude d'ordre, la densité, `AC` et `CH` sont fixées dans le
 [passage canonique en français](docs/godel-regroupement-completude-reels.fr.md)
 et sa
@@ -435,7 +448,7 @@ bash scripts/verify.sh
 
 Both gates require Python 3, traverse the declared import boundaries, build
 the library, sweep every repository constant (including private declarations),
-check the generated C dependency graph and then compile all 30 expected-failure fixtures listed in the shared
+check the generated C dependency graph and then compile all 57 expected-failure fixtures listed in the shared
 `scripts/expected-failures.tsv` inventory. Unlisted, missing or duplicate fixtures
 fail both gates. Privacy, dependent-type, semantic-type and termination tests
 are reported separately. Both gates validate the same structured Lean errors at

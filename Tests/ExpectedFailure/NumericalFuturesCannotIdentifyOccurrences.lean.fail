@@ -1,0 +1,15 @@
+import RelationalPerimeter.Constitution.Reals.CommonRealRuntime
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+open RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+open ConstitutiveSearch.ContinuationSignatures
+example {P : CircularPresentation} {baseDepth : Nat}
+    (first second : ExecutedCauchyFamily P baseDepth)
+    (sameReal : CommonRealRuntime.NumericalFutureEquivalent
+      (CommonRealRuntime.environmentOfFamily first) (CommonRealRuntime.environmentOfFamily second))
+    (firstOccurrence secondOccurrence : History.Occurrence (Journal.history (Journal.root P baseDepth)).history) :
+    firstOccurrence = secondOccurrence :=
+  sameReal

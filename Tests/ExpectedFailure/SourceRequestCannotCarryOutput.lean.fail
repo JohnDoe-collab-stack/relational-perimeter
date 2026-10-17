@@ -1,0 +1,10 @@
+import RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+def proposedOutput : SignedDyadicCode :=
+  { positive := 1, negative := 0, scale := 0 }
+
+def forgedSourceRequest : SourceRequest :=
+  proposedOutput

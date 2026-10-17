@@ -1,0 +1,11 @@
+import RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+-- Search output cannot be injected without executing the received producer.
+def forgedSearch
+    (producer : SourceProducer)
+    (request : SourceRequest)
+    (code : SignedDyadicCode) : SourceSearch producer request :=
+  SourceSearch.mk code rfl

@@ -13,14 +13,14 @@ RelationalPerimeter.Constitution.Grouping.ContinuationContract	U	enforced	Separa
 RelationalPerimeter.Constitution.Grouping.HistoricalExtension	U	enforced	Historical operation inclusion and renormalization
 RelationalPerimeter.Constitution.Grouping.ExactImage	K	enforced	Normal target image reusing the existing finite image implementation
 RelationalPerimeter.Constitution.Reals.Precision	U	enforced	Constructive signed dyadic codes exact value transport and positive precision proximity
-RelationalPerimeter.Constitution.Reals.ExecutedApproximations	B	enforced	Six-phase approximation execution with occurrence-bearing provenance and posterior readout
-RelationalPerimeter.Constitution.Reals.ResponseContinuation	B	enforced	Low-level exact projection of formed-payload journal continuations to normalized states events observations and bidirectional admissions
-RelationalPerimeter.Constitution.Reals.LocalGrouping	Q	enforced	Terminating coherent grouping of executed source identities into one exact limit obligation
-RelationalPerimeter.Constitution.Reals.HistoricalGrouping	Q	enforced	Chronological finite cursors with exact consumed evidence rank-exact target normalization and charge-preserving extensions
-RelationalPerimeter.Constitution.Reals.SequentialCompleteness	N	enforced	Constructed relational-real limit convergence typed requests local grouping and executed readout equality
-RelationalPerimeter.Constitution.Reals.RelationalEquivalence	N	enforced	Positive response-modulated equivalence of relational-real presentations with constructive composition
-RelationalPerimeter.Constitution.Reals.FiniteGroupingProduction	N	enforced	Chronological finite source executions consumed by a rank-exact coherent batch grouping action
-RelationalPerimeter.Constitution.Reals.LimitProduction	N	enforced	Retained typed family master: source requests own source executions and limit requests own complete source-grouping-limit production
+RelationalPerimeter.Constitution.Reals.LocalGrouping	K	enforced	Effective local grouping rules preserving distinct sources around a shared target
+RelationalPerimeter.Constitution.Reals.HistoricalGrouping	K	enforced	Historical finite selections extensions normalization and exact chronological batch consumption
+RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime	B	enforced	Six nested semantic phases over one private proof-relevant journal with memory-derived readouts
+RelationalPerimeter.Constitution.Reals.ProducedCompleteness	N	enforced	Producer-first Cauchy sources limit grouping and exact chronological finite consumption
+RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime	N	enforced	Reachable rich runtime and exact reduced projection driven by retained executed responses
+RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence	N	enforced	Execution-derived effective dyadic presentations numerical round trips provenance and paired retained finite-limit futures
+RelationalPerimeter.Constitution.Reals.CommonRealRuntime	N	enforced	Common executable producer environment direct live interpretation and exact fixed-environment memory minimality
+RelationalPerimeter.Constitution.Reals.EffectiveCauchyReal	N	enforced	Quotient-free constructive effective Cauchy carrier and bidirectional numerical correspondence with authoritative runtimes
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CertifiedRoleGrouping	A6	enforced	Certified grouping on actual relational role occurrences and returned transports
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.RoleGroupingSemantics	A7	enforced	All normalizing traces agree on arbitrary continuation payloads
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.HistoricalRoleGrouping	A7	enforced	Historical role inclusion with returned licences and exact renormalization
@@ -212,8 +212,10 @@ RelationalPerimeter.Computation.Machine.MasterRuntime	M17	enforced	One master-in
 RelationalPerimeter.Computation.Machine.MasterContract	M18	enforced	Exact combined core and SAT routing future contract
 RelationalPerimeter.Constitution.Godel.Diagonal	F	enforced	Executed diagonal syntax semantics effective presentation and the shared produced witness
 RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence	F	enforced	Affirmative perimeter constitution and witness-internal rejection of same-regime totalization
-RelationalPerimeter.Constitution.Godel.GroupingTower	F	enforced	Shared generated-history journal with six constitutive phases and persistent Godel occurrences
-RelationalPerimeter.Constitution.Godel.RelationalCompleteness	A0	enforced	Terminal same-presentation raccord between Godel rejection coherent global-closure restriction typed master futures and relational sequential completeness
+RelationalPerimeter.Constitution.Godel.GroupingTower	F	enforced	Positive depth extensions and injective persistence of the one produced Godel occurrence triple
+RelationalPerimeter.Constitution.Godel.RuntimePersistence	A0	enforced	Phase-by-phase injective transport of the one produced Godel occurrence triple through runtime journals
+RelationalPerimeter.Constitution.Godel.RelationalCompleteness	A1	enforced	Terminal same-presentation raccord between Godel rejection extension-coherent global closure operational regrouping and produced relational completeness
+RelationalPerimeter.Constitution.Godel.RealCorrespondence	A2	enforced	Gödel-perimeter realization of effective presentations and constructive Cauchy carriers with readout provenance and retained finite futures
 RelationalPerimeter.Instances.HeytingArithmetic.ArithmeticAxiomChecking	F	enforced	Executable recognition of the six arithmetic schemes and full induction
 RelationalPerimeter.Instances.HeytingArithmetic.ArithmeticFormulaTools	F	enforced	Scoped arithmetic formula constructors, bounds, and coding support
 RelationalPerimeter.Instances.HeytingArithmetic.CodeSubstitution	F	enforced	Numeric substitution program and exact decoded-syntax correspondence
@@ -224,7 +226,8 @@ RelationalPerimeter.Instances.HeytingArithmetic.FormulaRaisingMachine	F	enforced
 RelationalPerimeter.Instances.HeytingArithmetic.GeneralInstantiation	F	enforced	General quantified instantiation and semantic correctness
 RelationalPerimeter.Instances.HeytingArithmetic.GeneralSubstitutionMachine	F	enforced	Executable simultaneous substitution with scoped correctness
 RelationalPerimeter.Instances.HeytingArithmetic.Godel	F	enforced	Named HA realization of the generic effective Godel system and perimetral correspondence
-RelationalPerimeter.Instances.HeytingArithmetic.RelationalCompleteness	A1	enforced	Concrete HA instance of the Godel grouping and relational-real completeness raccord
+RelationalPerimeter.Instances.HeytingArithmetic.RelationalCompleteness	A2	enforced	Concrete HA instance of the Godel grouping and relational-real completeness raccord
+RelationalPerimeter.Instances.HeytingArithmetic.RealCorrespondence	A3	enforced	Concrete HA realization of the runtime and constructive effective-Cauchy-real correspondence
 RelationalPerimeter.Instances.HeytingArithmetic.HASoundness	F	enforced	Constructive standard-model soundness of HA derivations
 RelationalPerimeter.Instances.HeytingArithmetic.HistoryProofArchiveChecking	F	enforced	History-indexed verification and recovery of complete archives
 RelationalPerimeter.Instances.HeytingArithmetic.HistoryProofChecking	F	enforced	Proof-producing checking for arithmetic and added history axioms

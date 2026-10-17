@@ -1,0 +1,13 @@
+import RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+variable (P : CircularPresentation)
+variable (family : ExecutedCauchyFamily P 1)
+variable (journal : Journal P 1)
+
+def forgedLimit : ExecutedLimitProduction family journal 0 :=
+  ExecutedLimitProduction.mk (family.diagonalSourceAt 0) rfl
+    (family.produceSourceAt journal (family.diagonalSourceAt 0))

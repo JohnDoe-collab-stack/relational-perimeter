@@ -1,0 +1,12 @@
+import RelationalPerimeter.Constitution.Reals.CommonRealRuntime
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+open RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+open ConstitutiveSearch.ContinuationSignatures
+example (first second : CommonRealRuntime.Runtime)
+    (sameMemory : first.memory = second.memory) :
+    FutureEquivalent CommonRealRuntime.contract first second :=
+  sameMemory

@@ -2,217 +2,199 @@
 
 ## Status and scope
 
-This is the English canonical counterpart of the formal raccord implemented
-by `RelationalPerimeter.Constitution.Godel.RelationalCompleteness`. It states a
+This is the canonical scientific passage for the raccord formalized by
+`RelationalPerimeter.Constitution.Godel.RelationalCompleteness`. It states a
 constructive theorem internal to this repository's relational framework. It is
-not an originality verdict, an independent audit, or an already proved
-identification with every standard presentation of the real numbers.
+neither an originality verdict, an independent audit, nor an identification
+with the totality of classical real numbers.
 
-The result concerns **relational reals**, defined here as effective modules
-answering finite-precision requests. An executed Cauchy family, its modulus,
-and its positive coherence proofs are inputs. The limit, its executions, and
-its convergence are constructed rather than assumed.
+The relational reals considered here are produced by finite-precision
+executions. An executed Cauchy family, its producer, monotone modulus, and
+Cauchy law are inputs. Limit responses, their coherence, convergence of
+admissible sources, and finite groupings are then constructed. Dyadic codes are
+downstream readouts of these constructions; they constitute neither histories
+nor occurrences.
 
 ## Formal Gödel–grouping–real conclusion
 
 For every effective Gödel execution `execution` and every executed Cauchy
-family on the single presentation `godelPerimetralPresentation execution`, a
-relational-real limit is constructed. It answers every finite precision, and
-every certified source beyond the modulus is near that response at the
-requested precision. Source and limit requests extend the same generated
-history tower. Signed-dyadic readouts are projections made only after the
-corresponding execution.
-
-At each precision, grouping carries the finitely retained, actually executed
-source profiles to one target obligation without identifying their source
-identities. Every finite append extends old operations by real traces. The
-same terminal package rejects both an `ExecutedGodelTotalLoop` and a global
-same-regime closure action. The latter is first restricted to depth one; only
-then is the established Gödel first-prefix admission derived and converted
-through `Truth(G) -> Proof(G)` to `Empty` using the non-provability of the same
-produced diagonal sentence.
-
-The terminal quantification is:
+family `family` on the exact presentation
+`godelPerimetralPresentation execution`, at base depth `1`,
+`raccord execution family` constructs one `Result` package. Its exact terminal
+quantification is:
 
 ```text
 execution : ExecutedGodelProduction ...
-family    : ExecutedCauchyFamily (godelPerimetralPresentation execution)
+family    : ProducedCompleteness.ExecutedCauchyFamily
+              (godelPerimetralPresentation execution) 1
 
 Result execution family
 ```
 
-`Result` jointly contains the earlier Gödel correspondence, effective
-sequential completeness, the master source–grouping–limit producer at every
-starting journal and precision, its finite-grouping producer for every
-actually executed finite source chain, its exact specialization to the first
-complete production, persistence of the three Gödel occurrences through the
-two requests owned by that same production, and the two rejection functions.
-It retains no parallel limit execution reconstructed from the limit code. The
-positive construction does not depend on `Empty`, and the
-rejection functions do not construct the limit.
+The package's `master` field is exactly
+`CommonRealRuntime.complete family`. It retains the rich generic master, the
+directly executable common runtime, the exact realization of the rich archive
+by that runtime, the finite-grouping producer, and installed-target
+continuation. `producedReal` is the relational real produced by authoritative
+runtime steps, and `firstRun` reuses exactly the first limit step supplied by
+that producer. The package also retains persistence of the Gödel occurrences
+and rejects the two specified totalizing closures.
 
-## One shared constitutive chain
+A source request contains an index and a precision, never a result. A limit
+request executes the diagonal source selected by the modulus and then the
+grouping program that consumes that same production. The exposed code belongs
+to the action retained by memory. For a finite batch the caller supplies an
+admissible source-request list, not a target: the rich archive executes the
+sources in order, constructs their dependent chain, groups it, installs the
+produced target, and only then exposes its readout.
 
-The chain begins with the established diagonal execution: coding reception,
-diagonalization, production of `G`, certification of its truth and
-non-provability, and construction of the presentation `P`. The perimeter and
-its first continuation provide `H₀` and `H₁`.
+In the same package every `ExecutedGodelTotalLoop` supplies the forbidden
+conversion `Truth(G) -> Proof(G)`, rejected by the truth and non-provability of
+the same produced diagonal sentence. Every `GlobalSameRegimeClosure` must act
+from its root along the received `DepthExtension`s; restriction to the
+canonical extension `0 -> 1` produces the already rejected Gödel admission.
+The negative branch computes no numerical approximation.
 
-The approximation journal is not a second history family. At depth `n`, its
-history is exactly `ConstitutiveGeneration.iteratedHistory P n`. Each public
-request is decomposed in this constitutive order:
+## Shared constitutive chain
 
-1. context reception;
-2. executed search;
-3. relational action;
-4. authorization and decomposition;
-5. effective continuation;
-6. memory under contract.
+The chain starts with diagonal production, truth and non-provability of `G`,
+and the perimeter presentation `P`. Its affirmative continuation is `H1`.
+`Journal.root P 1` has that history definitionally; its type retains both `P`
+and the base depth. A journal formed over another presentation cannot be
+substituted.
 
-Every phase appends the actual fresh occurrence produced by the free
-generator. The readout follows and adds no occurrence. The raccord seed has
-exactly the established `H₁` history; one complete request reaches `H₇`. The
-master program performs two successive requests — the diagonal source and the
-limit fed by grouping — and reaches exactly `H₁₃`. Gödel's production,
-certification, and continuation occurrences are first carried through the
-owned source request's exact journal extension and then through the owned
-limit request's exact journal extension. Injectivity preserves all three distinctions.
-The terminal obstruction remains that of `P`.
+Every executed program nests, in order, received context, search, relational
+action, separate preservation, authorization and decomposition, continuation,
+and memory. Search consumes the context produced by reception; the action
+consumes that search result; memory retains the continuation and the exact
+action. A witness stored beside an output, code equality, or independent replay
+cannot replace this executed dependency.
 
-## What grouping groups
+Every phase adds a fresh occurrence to the private journal. The three prior
+Gödel occurrences are transported injectively through each phase, remain
+pairwise distinct, and remain distinct from the fresh occurrence. For a limit,
+grouping persistence starts from the terminal transport of the source owned by
+the same response. For a run, `persistThroughRunFrom` follows the already
+executed trace; it does not replay requests.
 
-At a fixed precision, a certified source carries a term index, a readout
-precision, a proof that the index is beyond the modulus, and a proof that the
-readout refines the requested precision. A profile exposed to grouping also
-owns its actual journal and executed approximation package. Its code is read
-from that package. Its provenance records the request, received occurrence,
-produced memory occurrence, and six-phase trace.
+The typed runtime starts at absolute depth `1`. Its first limit request executes
+six source phases and then six grouping phases: the source reaches `H7` and the
+limit response reaches `H13`. Final state, event, observation, and stored
+resource come from the same retained step.
 
-Grouping does not merge sources. Its states are either identity-bearing
-sources or the common target. The unique step consumes a charge containing the
-owned execution readout, its exact relation to the source profile, and the
-positive `Near` witness to the target. The output explicitly retains the
-consumed source code and that same witness, and returns exactly the target
-code. A separate proof establishes the accepted target contract. Distinct
-sources remain distinct states even when `carry` maps them to one normal image.
-The executed limit readout is proved equal to this action output, not to an
-independently reconstructed value.
+## Historical grouping and exact finite consumption
 
-A finite selection retains identities from one fixed envelope.
-`ExecutedSourceChain` does not accept an arbitrary list of values: it chains
-executed packages chronologically, with each new source starting in exactly the
-journal completed by its predecessor. Its finite selection is derived only
-from those owned executions.
+`ExecutedSourceChain` enforces chronological order: every fresh source starts
+at the journal completed by its predecessor. `ExactConsumption` mirrors this
+chain constructor for constructor. Its successor keeps exact prefix
+consumption and consumes the exact fresh source. Omitting, duplicating, or
+replacing a source cannot inhabit the required type.
 
-Finite-batch grouping starts from the complete oldest-first enumeration of that
-selection. One step consumes the next identity and its effective charge;
-`choices` is exactly empty or a singleton, and rank is the number of identities
-still to consume. The terminal trace therefore consumes exactly `size` charges
-and normalizes the cursor to the `target` state, the limit obligation itself.
-`BatchCharge` retains, in chronological order, the read code and the same
-`Near` witness for every consumption, separately from the exact
-target code. The rank-one local rule is thus the source–target atom, while the
-batch rule actually executes the whole finite grouping rather than pretending
-that a multi-source job has rank one.
+Historical normalization does not restart from a fresh seed. At every
+extension, `HistoricalSeed` supplies the previous normalized charge.
+`advanceBatch` transports that complete resource through `liftBatchCharge`,
+then `normalizeFresh` executes only the fresh obligation on that transported
+resource. `BatchAdvance.resultFromTransport`, `consumed_exact`, and
+`oldCharge_exact` connect the result to this transport: the consumed prefix,
+old charges, and their `Near` witnesses are neither reset nor reconstructed
+from code alone. `resources` archives the transported resources;
+`localCharges` is a secondary archive and does not by itself establish the
+historical dependency.
 
-Appending a source injects all old identities, places the fresh identity after
-them, lifts every old step to a real trace, and preserves old source codes and
-the target code. `batchExtension` also extends the batch cursor and rules. Its
-payload transport preserves the already consumed evidence list exactly, and a
-lifted old consumption produces the same consumed evidence. Two successive
-appends compose explicitly. The future contract supplies both local and batch
-extensions for every finite append.
+`BatchGrouping.program` constructs its `ProducedTarget` from that historical
+execution. Its action owns the `ExactConsumption`, the normalized charge, and
+the local groupings derived from that same charge. Memory retains the exact
+action. `ExecutedFiniteGrouping.normalizedBatch_consumed_length` and
+`normalizedBatch_consumed_exact` establish consumption of every and only
+source in the chain, oldest first. `ExactIndexEnumeration` is merely a unary
+shape projection; it is not the exhaustivity proof.
 
-## Local, global, and readout
+Grouping does not identify source profiles. It carries them to a common target
+under a proximity contract while retaining their productions, occurrences,
+and chronological positions. Equality of terminal readouts is a downstream
+projection, not equality of sources.
 
-The local object is one finite-precision request with certified sources. The
-global object is neither a completed list of every request nor a perimeter
-closure. It is the effective response module together with the contract for
-extending every finite context. A typed public request is either a certified
-source request or a constructed limit request, and every finite list of such
-requests is admitted.
+## Live runtime, rich archive, and exact memory
 
-The limit response at precision `p` is the term at index `modulus p`, read at
-precision `p`. Modulus monotonicity and Cauchy data directly prove coherence
-between precisions and convergence of each admitted source. The family-specific
-`MasterContinuation.bridge` relates the occurrence-bearing journal state to a
-public state retaining only journal depth and the latest code. Its transition
-and event are projections of one retained executor. It proves exact finite-run,
-normalized-event, and observation equality and transports admission witnesses
-in both directions for lists of typed family requests. Rich states with the
-same projection therefore have the same authorized and normalized finite
-futures, including a limit request that must execute its source, grouping
-action, and limit response.
-The raccord also establishes this premise for grouped sources themselves.
-`groupedFutureState` reuses the already executed source package and then
-executes the code actually returned by the grouping action as the next
-response. `groupedSources_project_eq` proves that two sources produced at
-equal historical depths then have the same public projection, and
-`FullyExecutedSequentialCompleteness.groupedSourcesSameMasterFuture` derives
-equality of all their normalized finite futures under the retained master.
-Their rich journals and source identities remain distinct.
+`CommonRealRuntime.Environment` contains the `SourceProducer` and modulus as
+executable data. `CommonRealRuntime.Runtime` is a common type not indexed by a
+family: it contains that environment and the live `ReducedState` memory, formed
+by current depth and the last installed observation. `performReal` reads the
+environment stored in the state and executes `source`, `limit`, `group`,
+`continueInstalled`, and refused requests. `runReal` chains the transitions
+actually returned.
 
-`executeLimitProduction` closes the full causal order at every precision. It
-executes the source selected by `modulus p`, groups its proof-relevant charge,
-and executes the limit request with the actual action output. The package owns
-both executions and the intermediate action, records the consumed witnesses,
-and proves that its readout is the constructed limit approximation. The two
-requests add exactly twelve constitutive operations.
-`FullyExecutedSequentialCompleteness` retains one master executor for every
-typed public request. A source request owns its source execution; a limit
-request owns the complete `ExecutedLimitProduction`, rather than replaying an
-already formed limit payload. A pointwise law pins this executor to the
-canonical producer, and `produceLimitCanonical` proves that its `produceLimit`
-projection is exactly `executeLimitProduction`. The package remains tied to
-the same `SequentialCompletenessResult`. It also retains, for every finite
-chronological chain of actually executed sources, the batch program that
-consumes exactly all of them. The terminal raccord projects its first complete
-production from this universal master instead of reconstructing it
-alongside the function.
+This memory is exact for the declared contract, with an essential scope.
+`fixedEnvironmentMinimality` proves, for one fixed executable environment, the
+equivalence between memory equality and equality of all finite futures. It does
+not compare distinct producers after forgetting their environments. For one
+fixed family's rich archive, `archiveRealization` covers raw sources, limits,
+batches, continuations, reads, and refusals; `archiveMemoryMinimality` exactly
+characterizes its common projection. These results are neither physical-cost
+bounds nor identities of rich resources.
 
-Real presentations are not quotiented. `RelationalReal.Equivalent` carries a
-computable response threshold at every precision and positive `Near` witnesses
-for every later pair of responses. Transitivity computes a common threshold at
-the next precision and consumes the constructive triangle law. Constant
-processes anchor signed dyadic codes: exact scale changes yield equivalent
-presentations, including at the executed-readout level.
+The authoritative runtime separately retains the journal and dependent
+execution packages. `projectArchive` forgets those resources only after their
+execution and retains the environment as data. `archiveProjection` proves that
+every rich transition and common transition have the same projected next state
+and event. The direction is therefore rich execution, exact projection, then
+readout.
 
-This is the required local–global form: every precision is finite and
-executed, while one contract covers every finite future. The appearance of
-continuity in the readout comes from coherent responses; it does not turn
-grouping into extensive equality of source identities.
+A rich grouping installs `OwnedTarget.batch grouped`, namely the target
+produced by its action. `continueInstalled` requires that installed target,
+executes `targetContinuationProgram`, and rereads the retained resource itself;
+it does not call the producer to create an independent value. A later source
+request clears the installation, as required by the declared future contract.
 
-## Preserved negative branch and global restriction
+## Real behaviors and numerical correspondence
 
-The positive totality above is not `P.TotalLoop`. A total loop identifies the
-`Truth(G)` and `Proof(G)` endpoints and yields the directed conversion
-`Truth(G) -> Proof(G)`. Certified truth and non-provability of the same `G`
-then produce `Empty`.
+The terminal positive real is a runtime behavior: from every rich `Reachable`
+state and every precision it produces the canonical limit step. Its coherence
+and source proximity consume the responses owned by those steps and the
+received Cauchy law. Reachability restricts the producer's domain; it is not
+replaced by mere equality of readouts.
 
-A `GlobalSameRegimeClosure` acts at every finite depth and preserves the label
-of every prior occurrence along every depth extension; it is not an unrelated
-collection of prefix admissions. Its restriction theorem evaluates that
-action at depth one, definitionally the already established Gödel
-continuation. This derives `GodelPositiveSameRegimeAdmission execution`;
-the terminal package does not assume that admission as a field. The existing
-bilateral-attempt, totalization, contraction-kernel, and truth-to-proof chain
-then rejects the global closure.
+Within one fixed environment, distinct sources grouped from equal depths may
+have equal projections and therefore equal archive-contract futures. They do
+not become the same occurrence. Across environments,
+`NumericalFutureEquivalent` compares only readouts of actually executed limit
+transitions. It identifies neither programs, encodings, depths, nor resources.
 
-Thus the same witness and the same perimeter support two simultaneous
-conclusions: totalizing closure is rejected, while the local–global
-continuation required for sequential completeness is effectively constructed.
+Correspondence with effective dyadic presentations and the effective Cauchy
+carrier is stated separately in the
+[canonical correspondence passage](runtime-effective-cauchy-real-correspondence.en.md).
+It starts from the runtime to produce the numerical readout and never
+reconstructs a rich history from that readout.
 
-## Heyting Arithmetic instance and limits
+## Preserved negative branch
+
+Positive totality of finite requests is not `P.TotalLoop`. A total loop
+identifies `Truth(G)` and `Proof(G)` and supplies the forbidden conversion. Its
+rejection consumes truth and non-provability of the same produced witness.
+
+The forbidden global closure supplies a root admission, an `extendOne`
+operator applied to an already constituted admission, and preservation of
+prior labels. `closeAlong` is derived recursively while consuming the received
+`DepthExtension`. The final term into `Empty` consumes the admission at `H1`
+produced this way; it does not directly inspect `preservesPriorLabels`, which
+belongs to the formation and transport contract.
+
+The same witness and perimeter therefore support two compatible conclusions:
+same-regime totalizing closure is rejected, while every finite future required
+for relational sequential completeness is produced coherently.
+
+## HA instance and limits
 
 `RelationalPerimeter.Instances.HeytingArithmetic.RelationalCompleteness`
-instantiates the raccord with the concrete HA execution already constructed in
-the repository. For every executed Cauchy family on that exact HA presentation,
-it produces the complete terminal package and its universal executable
-producer without adding truth, proof, or closure assumptions.
+instantiates the Gödel side with the repository's concrete HA execution. For
+every executed Cauchy family on that exact presentation at base `H1`, it builds
+the raccord without adding truth, proof, or closure assumptions. The effective
+correspondence instance instead receives the numerical presentation or carrier
+as data; Gödel fixes its perimeter but does not compute its approximations.
 
-The result does not yet prove equivalence with a standard extensive
-construction of the reals, least-upper-bound completeness, order density,
-`AC`, or `CH`. Those require separate definitions and theorems. Treating them
-as automatic consequences would weaken the result actually established here:
-effective sequential completeness of relational reals constituted and
-executed on the shared Gödel perimeter.
+The result does not cover all classical real numbers. It does not prove
+least-upper-bound completeness, density, transport of addition,
+multiplication, order, or apartness, the Archimedean property, `AC`, or `CH`.
+It establishes effective sequential completeness for relational behaviors
+supplied by the received families and executed in the common runtime, with the
+scope limitations above.

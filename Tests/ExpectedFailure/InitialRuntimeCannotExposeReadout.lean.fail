@@ -1,0 +1,13 @@
+import RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+open RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+
+-- The initial state has no fabricated observation.
+example
+    {P : CircularPresentation}
+    {family : ExecutedCauchyFamily P 1}
+    (observation : Observation) :
+    read (initialState family) = some observation := by
+  rfl

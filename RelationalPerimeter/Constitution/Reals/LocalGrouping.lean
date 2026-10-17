@@ -1,6 +1,6 @@
 import RelationalPerimeter.Constitution.Grouping.ExactImage
 import RelationalPerimeter.Constitution.Grouping.ContinuationContract
-import RelationalPerimeter.Constitution.Reals.ExecutedApproximations
+import RelationalPerimeter.Constitution.Reals.Precision
 
 set_option autoImplicit false
 set_option genInjectivity false

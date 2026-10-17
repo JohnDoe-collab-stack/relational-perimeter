@@ -1,0 +1,10 @@
+import RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+
+-- H1 cannot be simulated by inserting an artificial operation into a public journal.
+def artificialSeed
+    (P : CircularPresentation)
+    (entry : Entry) : Journal P 1 :=
+  Journal.mk P 1 [entry]

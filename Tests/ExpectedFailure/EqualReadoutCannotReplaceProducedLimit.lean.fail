@@ -1,0 +1,16 @@
+import RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+-- Equal readouts do not transport a production to a different source journal.
+example
+    {P : CircularPresentation}
+    {family : ExecutedCauchyFamily P 1}
+    {firstJournal secondJournal : Journal P 1}
+    (first : ExecutedLimitProduction family firstJournal 0)
+    (_sameReadout : first.readout =
+      (executeLimitProduction family secondJournal 0).readout) :
+    ExecutedLimitProduction family secondJournal 0 :=
+  first

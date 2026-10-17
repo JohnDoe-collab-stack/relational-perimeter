@@ -1,0 +1,7 @@
+import RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+
+def forgedJournal (P : CircularPresentation) : Journal P 1 :=
+  Journal.mk P 0 []

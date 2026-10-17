@@ -1,0 +1,11 @@
+import RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+open RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+
+variable (P : CircularPresentation)
+variable (family : ExecutedCauchyFamily P 1)
+
+def forgedRuntime : Runtime family :=
+  Runtime.mk family (by exact initialState family |>.journal) [] none

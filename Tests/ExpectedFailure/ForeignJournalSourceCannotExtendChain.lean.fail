@@ -1,0 +1,18 @@
+import RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+-- The next chain node must be produced from the chain's exact current journal.
+example
+    {P : CircularPresentation}
+    {family : ExecutedCauchyFamily P 1}
+    {precision size : Nat}
+    {start current foreign : Journal P 1}
+    (chain : family.ExecutedSourceChain precision start current size)
+    (source : family.SourceAt precision)
+    (produced : family.ProducedSourceAt foreign source) :
+    family.ExecutedSourceChain precision start produced.completedJournal
+      (Nat.succ size) :=
+  .snoc chain source produced

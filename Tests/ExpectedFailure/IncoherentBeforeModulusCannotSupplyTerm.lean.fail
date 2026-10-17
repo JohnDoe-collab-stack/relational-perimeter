@@ -1,0 +1,14 @@
+import RelationalPerimeter.Constitution.Reals.CommonRealRuntime
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+def incoherentBeforeModulus : SourceProducer where
+  calculate request :=
+    match request.term, request.precision with
+    | 0, 2 => { positive := 1, negative := 0, scale := 0 }
+    | _, _ => { positive := 0, negative := 0, scale := 0 }
+example : Near 2
+    (incoherentBeforeModulus.calculate { term := 0, precision := 2 })
+    (incoherentBeforeModulus.calculate { term := 0, precision := 3 }) :=
+  Near.refl 2 (incoherentBeforeModulus.calculate { term := 0, precision := 2 })

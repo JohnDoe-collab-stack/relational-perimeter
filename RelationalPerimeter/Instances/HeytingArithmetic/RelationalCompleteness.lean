@@ -22,29 +22,15 @@ namespace HeytingArithmetic
 open StrongPerimetralTurning
 open StrongPerimetralTurning.GodelRelationalCompleteness
 open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+open RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
 
 abbrev heytingArithmeticGodelPresentation : CircularPresentation :=
   godelPerimetralPresentation heytingArithmeticGodelExecution
 
-/-- Effective sequential completeness on the concrete HA Gödel perimeter. -/
-def heytingArithmeticSequentialCompleteness
-    (family : ExecutedCauchyFamily heytingArithmeticGodelPresentation) :
-    SequentialCompletenessResult family :=
-  effectiveSequentialCompleteness family
-
-/--
-The HA specialization retains the canonical typed master: source requests own
-their executions and every limit request owns the complete executable
-source–grouping–limit producer, not only the logical limit.
--/
-def heytingArithmeticFullyExecutedSequentialCompleteness
-    (family : ExecutedCauchyFamily heytingArithmeticGodelPresentation) :
-    FullyExecutedSequentialCompleteness family :=
-  fullyExecutedSequentialCompleteness family
-
 /-- The complete two-branch raccord for the concrete HA execution. -/
 def heytingArithmeticGodelRelationalRaccord
-    (family : ExecutedCauchyFamily heytingArithmeticGodelPresentation) :
+    (family : ExecutedCauchyFamily heytingArithmeticGodelPresentation 1) :
     Result heytingArithmeticGodelExecution family :=
   raccord heytingArithmeticGodelExecution family
 
@@ -53,14 +39,6 @@ def heytingArithmeticTotalLoopToEmpty
     (loop : ExecutedGodelTotalLoop
       heytingArithmeticGodelExecution.witness) : Empty :=
   totalLoopToEmpty loop
-
-/-- Same-regime closure at the HA first prefix remains impossible. -/
-def heytingArithmeticFirstPrefixClosureToEmpty
-    (admission :
-      GodelPositiveSameRegimeAdmission heytingArithmeticGodelExecution) :
-    Empty :=
-  heytingArithmeticGodelPerimetralCorrespondence.explicitAdmissionToEmpty
-    admission
 
 /-- A global HA closure is rejected only after deriving its first restriction. -/
 def heytingArithmeticGlobalClosureToEmpty
@@ -73,10 +51,7 @@ end RelationalPerimeter
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelPresentation
-#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticSequentialCompleteness
-#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticFullyExecutedSequentialCompleteness
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelRelationalRaccord
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticTotalLoopToEmpty
-#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticFirstPrefixClosureToEmpty
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticGlobalClosureToEmpty
 /- AXIOM_AUDIT_END -/

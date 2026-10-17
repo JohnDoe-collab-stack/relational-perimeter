@@ -543,12 +543,30 @@ structure BatchCharge
   outputCode : SignedDyadicCode
   outputCodeExact : SameValue outputCode envelope.targetCode
 
+/-- The canonical charges follow the same constructive prefix representation as
+historical transport.  This is intensional recursion, not function extensionality. -/
+def initialSourceCharges
+    {envelope : Specification.{uSource}} :
+    {size : Nat} -> (selection : FiniteSelection envelope size) ->
+      (index : PrefixIndex size) ->
+        LocalGrouping.SourceCharge (finiteSpecification selection) index
+  | 0, _ => fun impossible => nomatch impossible
+  | _ + 1, selection => fun index =>
+      match index with
+      | .inl old =>
+          let previous : FiniteSelection envelope _ := { lookup := fun i => selection.lookup (.inl i) }
+          let charge := initialSourceCharges previous old
+          { receivedCode := charge.receivedCode
+            receivedCodeExact := charge.receivedCodeExact
+            receivedNearTarget := charge.receivedNearTarget }
+      | .inr _ =>
+          LocalGrouping.sourceCharge (finiteSpecification selection) (.inr ())
+
 def initialBatchCharge
     {envelope : Specification.{uSource}}
     {size : Nat}
     (selection : FiniteSelection envelope size) : BatchCharge selection where
-  available := fun index =>
-    LocalGrouping.sourceCharge (finiteSpecification selection) index
+  available := initialSourceCharges selection
   consumed := []
   outputCode := envelope.targetCode
   outputCodeExact := SameValue.refl envelope.targetCode
@@ -572,6 +590,13 @@ def liftBatchCharge
   consumed := charge.consumed
   outputCode := charge.outputCode
   outputCodeExact := charge.outputCodeExact
+
+theorem liftBatchCharge_initial
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (fresh : envelope.Source) :
+    liftBatchCharge selection fresh (initialBatchCharge selection) =
+      initialBatchCharge (selection.snoc fresh) := by
+  rfl
 
 def BatchPayload
     {envelope : Specification.{uSource}}
@@ -683,6 +708,25 @@ def transportBatch
     (D := fun _state => BatchCharge selection)
     (fun step => batchAct selection step) trace charge
 
+
+/-- Replacing only the executable code keeps the canonical charge interface. -/
+def initialBatchChargeFromCode
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (code : SignedDyadicCode)
+    (exact : code = envelope.targetCode) : BatchCharge selection where
+  available := (initialBatchCharge selection).available
+  consumed := []
+  outputCode := code
+  outputCodeExact := by rw [exact]; exact SameValue.refl _
+
+theorem initialBatchChargeFromCode_exact
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (code : SignedDyadicCode)
+    (exact : code = envelope.targetCode) :
+    initialBatchChargeFromCode selection code exact = initialBatchCharge selection := by
+  cases exact
+  rfl
+
 /-- Lifting any old consumption preserves the chronological evidence list. -/
 theorem liftedBatchAct_consumed_exact
     {envelope : Specification.{uSource}}
@@ -697,6 +741,21 @@ theorem liftedBatchAct_consumed_exact
       (liftBatchCharge selection fresh charge)).consumed =
         (batchAct selection step charge).consumed := by
   cases step <;> rfl
+
+/-- The complete payload transport commutes with every actual lifted old trace.
+Already consumed prefixes need not be executed a second time after append. -/
+theorem transportBatch_extension
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (fresh : envelope.Source)
+    {source target : BatchState size}
+    (trace : Trace (BatchStep selection) source target) (charge : BatchCharge selection) :
+    transportBatch (selection.snoc fresh) ((batchExtension selection fresh).trace trace)
+        (liftBatchCharge selection fresh charge) =
+      liftBatchCharge selection fresh (transportBatch selection trace charge) := by
+  induction trace generalizing charge with
+  | nil => rfl
+  | cons step tail ih =>
+      cases step <;> exact ih (consumeOne selection _ charge)
 
 theorem batchAction_coherent
     {envelope : Specification.{uSource}}
@@ -732,6 +791,42 @@ theorem batchAction_coherent
           cases step <;> cases secondStep
           all_goals exact inductionHypothesis secondTail _
 
+
+/-- Normalize one retained source charge with the actual local rules. -/
+def normalizeSourceTrace
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (index : PrefixIndex size) :
+    Trace (LocalGrouping.Step (finiteSpecification selection)) (.source index) .target := by
+  rw [← LocalGrouping.normal_source (finiteSpecification selection) index]
+  exact ((LocalGrouping.rules (finiteSpecification selection)).normalize (.source index)).trace
+
+def normalizeSourceCharge
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (index : PrefixIndex size)
+    (charge : LocalGrouping.SourceCharge (finiteSpecification selection) index) :
+    LocalGrouping.GroupedCharge envelope.precision envelope.targetCode :=
+  (LocalGrouping.acceptanceAction (finiteSpecification selection)).transport
+    (normalizeSourceTrace selection index) charge
+
+theorem normalizeSourceCharge_exact
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (index : PrefixIndex size)
+    (charge : LocalGrouping.SourceCharge (finiteSpecification selection) index) :
+    normalizeSourceCharge selection index charge =
+      (LocalGrouping.acceptanceAction (finiteSpecification selection)).transport
+        (Trace.one (LocalGrouping.Step.group (specification := finiteSpecification selection) index)) charge :=
+  LocalGrouping.action_coherent (finiteSpecification selection)
+    (normalizeSourceTrace selection index)
+    (Trace.one (LocalGrouping.Step.group (specification := finiteSpecification selection) index)) charge
+
+theorem normalizeSourceCharge_consumedNear
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (index : PrefixIndex size)
+    (charge : LocalGrouping.SourceCharge (finiteSpecification selection) index) :
+    HEq (normalizeSourceCharge selection index charge).consumedNearTarget charge.receivedNearTarget := by
+  rw [normalizeSourceCharge_exact]
+  rfl
+
 /-- Execute the real finite batch normalization from its enumerated sources. -/
 def executeBatch
     {envelope : Specification.{uSource}}
@@ -740,6 +835,186 @@ def executeBatch
   transportBatch selection
     (consumeTrace selection (allIndices size))
     (initialBatchCharge selection)
+
+
+/-- The raw code is transported unchanged while all source charges are consumed. -/
+theorem transportBatch_outputCode
+    {envelope : Specification.{uSource}}
+    {size : Nat}
+    (selection : FiniteSelection envelope size)
+    {source target : BatchState size}
+    (trace : Trace (BatchStep selection) source target)
+    (charge : BatchCharge selection) :
+    (transportBatch selection trace charge).outputCode = charge.outputCode := by
+  induction trace generalizing charge with
+  | nil => rfl
+  | cons step tail ih =>
+      change (transportBatch selection tail (batchAct selection step charge)).outputCode =
+        charge.outputCode
+      cases step <;> exact ih _
+
+theorem executeBatch_outputCode
+    {envelope : Specification.{uSource}}
+    {size : Nat}
+    (selection : FiniteSelection envelope size) :
+    (executeBatch selection).outputCode = envelope.targetCode :=
+  transportBatch_outputCode selection
+    (consumeTrace selection (allIndices size)) (initialBatchCharge selection)
+
+
+
+/-- Run the actual terminating batch rules, rather than supplying a final state. -/
+def normalizationTrace
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) :
+    Trace (BatchStep selection) (initialBatchState selection) .target := by
+  rw [← normal_initialBatchState selection]
+  exact ((batchRules selection).normalize (initialBatchState selection)).trace
+
+def normalizedBatch
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) : BatchCharge selection :=
+  transportBatch selection (normalizationTrace selection) (initialBatchCharge selection)
+
+/-- Payload coherence connects the executed rule trace to chronological consumption. -/
+theorem normalizedBatch_exact
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) :
+    normalizedBatch selection = executeBatch selection :=
+  batchAction_coherent selection (normalizationTrace selection)
+    (consumeTrace selection (allIndices size)) (initialBatchCharge selection)
+
+/-- Executable chronological fold underlying the rule traces. -/
+def consumeIndices
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) :
+    List (PrefixIndex size) -> BatchCharge selection -> BatchCharge selection
+  | [], charge => charge
+  | head :: tail, charge => consumeIndices selection tail (consumeOne selection head charge)
+
+theorem transportConsumeTrace_eq
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (indices : List (PrefixIndex size))
+    (charge : BatchCharge selection) :
+    transportBatch selection (consumeTrace selection indices) charge =
+      consumeIndices selection indices charge := by
+  induction indices generalizing charge with
+  | nil => rfl
+  | cons head tail ih =>
+      cases tail with
+      | nil => rfl
+      | cons next tail => exact ih (consumeOne selection head charge)
+
+theorem consumeIndices_append
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (first second : List (PrefixIndex size))
+    (charge : BatchCharge selection) :
+    consumeIndices selection (first ++ second) charge =
+      consumeIndices selection second (consumeIndices selection first charge) := by
+  induction first generalizing charge with
+  | nil => rfl
+  | cons head tail ih => exact ih (consumeOne selection head charge)
+
+theorem consumeIndices_lift
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (fresh : envelope.Source)
+    (indices : List (PrefixIndex size)) (charge : BatchCharge selection) :
+    consumeIndices (selection.snoc fresh) (liftIndices indices)
+        (liftBatchCharge selection fresh charge) =
+      liftBatchCharge selection fresh (consumeIndices selection indices charge) := by
+  induction indices generalizing charge with
+  | nil => rfl
+  | cons head tail ih => exact ih (consumeOne selection head charge)
+
+/-- Normalization of precisely the fresh obligation after an already consumed
+historical batch.  Its input is the transported resource, not its readout. -/
+def normalizeFreshTrace
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (fresh : envelope.Source) :
+    Trace (BatchStep (selection.snoc fresh)) (.pending (.inr ()) []) .target := by
+  have target : (batchRules (selection.snoc fresh)).normal (.pending (.inr ()) []) = .target :=
+    ((batchRules (selection.snoc fresh)).normal_trace
+      (Trace.one (BatchStep.consumeLast (selection := selection.snoc fresh)
+        (Sum.inr () : PrefixIndex size ⊕ Unit)))).trans
+      ((batchRules (selection.snoc fresh)).normal_terminal .target
+        (batchTarget_terminal (selection.snoc fresh)))
+  rw [← target]
+  exact ((batchRules (selection.snoc fresh)).normalize (.pending (.inr ()) [])).trace
+
+def normalizeFresh
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (fresh : envelope.Source)
+    (transported : BatchCharge (selection.snoc fresh)) : BatchCharge (selection.snoc fresh) :=
+  transportBatch (selection.snoc fresh) (normalizeFreshTrace selection fresh) transported
+
+theorem normalizeFresh_exact
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (fresh : envelope.Source)
+    (transported : BatchCharge (selection.snoc fresh)) :
+    normalizeFresh selection fresh transported =
+      consumeOne (selection.snoc fresh) (.inr ()) transported :=
+  batchAction_coherent (selection.snoc fresh) (normalizeFreshTrace selection fresh)
+    (Trace.one (BatchStep.consumeLast (selection := selection.snoc fresh)
+      (Sum.inr () : PrefixIndex size ⊕ Unit))) transported
+
+/-- An append owns both the exact transported input and its next normalization.
+The result's type records its dependency on the complete previous resource. -/
+structure BatchAdvance
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (fresh : envelope.Source)
+    (previous : BatchCharge selection) where
+  private mk ::
+  transported : BatchCharge (selection.snoc fresh)
+  transportedExact : transported = liftBatchCharge selection fresh previous
+  result : BatchCharge (selection.snoc fresh)
+  resultFromTransport : result = normalizeFresh selection fresh transported
+
+def advanceBatch
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (fresh : envelope.Source)
+    (previous : BatchCharge selection) : BatchAdvance selection fresh previous :=
+  let transported := liftBatchCharge selection fresh previous
+  { transported := transported, transportedExact := rfl,
+    result := normalizeFresh selection fresh transported, resultFromTransport := rfl }
+
+theorem advanceBatch_executeBatch
+    {envelope : Specification.{uSource}} {size : Nat}
+    (selection : FiniteSelection envelope size) (fresh : envelope.Source) :
+    (advanceBatch selection fresh (executeBatch selection)).result =
+      executeBatch (selection.snoc fresh) := by
+  change normalizeFresh selection fresh (liftBatchCharge selection fresh (executeBatch selection)) = _
+  rw [normalizeFresh_exact]
+  unfold executeBatch
+  rw [transportConsumeTrace_eq, transportConsumeTrace_eq]
+  change _ = consumeIndices (selection.snoc fresh)
+    (appendIndex (liftIndices (allIndices size)) (.inr ())) _
+  erw [appendIndex_eq_appendSingleton, consumeIndices_append]
+  erw [← liftBatchCharge_initial selection fresh, consumeIndices_lift]
+  rfl
+
+theorem BatchAdvance.consumed_exact
+    {envelope : Specification.{uSource}} {size : Nat}
+    {selection : FiniteSelection envelope size} {fresh : envelope.Source}
+    {previous : BatchCharge selection} (advance : BatchAdvance selection fresh previous) :
+    advance.result.consumed = appendIndex previous.consumed
+      (consumedEvidence (selection.snoc fresh) (.inr ()) advance.transported.available) := by
+  rw [advance.resultFromTransport, normalizeFresh_exact]
+  change appendIndex advance.transported.consumed _ = _
+  rw [advance.transportedExact]
+  rfl
+
+theorem BatchAdvance.oldCharge_exact
+    {envelope : Specification.{uSource}} {size : Nat}
+    {selection : FiniteSelection envelope size} {fresh : envelope.Source}
+    {previous : BatchCharge selection} (advance : BatchAdvance selection fresh previous)
+    (index : PrefixIndex size) :
+    advance.result.available (.inl index) =
+      liftSourceCharge selection fresh index (previous.available index) := by
+  rw [advance.resultFromTransport, normalizeFresh_exact]
+  change advance.transported.available (.inl index) = _
+  rw [advance.transportedExact]
+  rfl
+
 
 theorem executeBatchAccepted
     {envelope : Specification.{uSource}}
@@ -997,4 +1272,42 @@ end RelationalPerimeter.Constitution.Reals
 #print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.executeBatch_outputExact
 #print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.FutureContract
 #print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.futureContract
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.transportBatch_outputCode
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.executeBatch_outputCode
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.appendIndex
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.appendIndex_length
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.appendIndex_eq_appendSingleton
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.listAppendNil
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.listAppendAssoc
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.consumeOne
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.liftSourceCharge
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.liftBatchCharge
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.liftedBatchAct_consumed_exact
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.consumedEvidence
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.chargesForIndices
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.consumeTrace_consumed_exact
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.normalizationTrace
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.normalizedBatch
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.normalizedBatch_exact
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.initialBatchChargeFromCode
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.initialBatchChargeFromCode_exact
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.normalizeSourceCharge
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.normalizeSourceCharge_exact
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.normalizeSourceCharge_consumedNear
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.normalizeSourceTrace
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.initialSourceCharges
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.liftBatchCharge_initial
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.consumeIndices
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.transportConsumeTrace_eq
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.consumeIndices_append
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.consumeIndices_lift
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.normalizeFreshTrace
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.normalizeFresh
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.normalizeFresh_exact
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.BatchAdvance
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.advanceBatch
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.advanceBatch_executeBatch
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.BatchAdvance.consumed_exact
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.BatchAdvance.oldCharge_exact
+#print axioms RelationalPerimeter.Constitution.Reals.HistoricalGrouping.transportBatch_extension
 /- AXIOM_AUDIT_END -/

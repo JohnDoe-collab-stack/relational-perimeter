@@ -1,0 +1,12 @@
+import RelationalPerimeter.Constitution.Reals.CommonRealRuntime
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+open RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+open ConstitutiveSearch.ContinuationSignatures
+example {P : CircularPresentation} {baseDepth extra : Nat}
+    {family : ExecutedCauchyFamily P baseDepth} (state : Runtime family) :
+    ContinuedStep family state extra :=
+  ContinuedStep.mk

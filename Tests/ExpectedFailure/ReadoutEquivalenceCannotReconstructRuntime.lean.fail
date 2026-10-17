@@ -1,0 +1,12 @@
+import RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.RuntimeCorrespondence
+
+-- Numerical agreement does not identify rich journals, resources, or traces.
+def cannotReconstructRichRuntime
+    {P : CircularPresentation}
+    {baseDepth : Nat}
+    {first second : RuntimeReal P baseDepth}
+    (equivalent : RuntimeReadoutEquivalent first second) : first = second :=
+  equivalent

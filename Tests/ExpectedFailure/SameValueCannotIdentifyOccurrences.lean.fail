@@ -1,0 +1,15 @@
+import RelationalPerimeter.Constitution.Godel.GroupingTower
+import RelationalPerimeter.Constitution.Reals.Precision
+
+open StrongPerimetralTurning
+open ConstitutiveSearch.PerimeterPersistence.Iterated
+open RelationalPerimeter.Constitution.Reals
+
+-- Numerical equality is not occurrence identity.
+example
+    {P : CircularPresentation}
+    {depth : Nat}
+    (first second : History.Occurrence (iteratedHistory P depth).history)
+    (firstCode secondCode : SignedDyadicCode)
+    (_sameValue : SameValue firstCode secondCode) : first = second :=
+  _sameValue

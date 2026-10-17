@@ -1,0 +1,11 @@
+import RelationalPerimeter.Instances.HeytingArithmetic.RelationalCompleteness
+
+open RelationalPerimeter.HeytingArithmetic
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+open RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+
+-- A journal-level producer does not supply reachable runtime steps.
+def cannotReplaceRuntimeProducer
+    (family : ExecutedCauchyFamily heytingArithmeticGodelPresentation 1) :
+    RuntimeProducedRelationalReal family :=
+  executeLimitProduction family

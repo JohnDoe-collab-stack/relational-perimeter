@@ -1,0 +1,30 @@
+import RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+-- The charge for the prior occurrence cannot be reused for the fresh source.
+example
+    {P : CircularPresentation}
+    {family : ExecutedCauchyFamily P 1}
+    {precision size : Nat}
+    {start current targetJournal : Journal P 1}
+    (target : family.DiagonalAnchor targetJournal precision)
+    (prior : family.ExecutedSourceChain precision start current size)
+    (firstSource : family.SourceAt precision)
+    (firstProduced : family.ProducedSourceAt current firstSource)
+    (secondSource : family.SourceAt precision)
+    (secondProduced :
+      family.ProducedSourceAt firstProduced.completedJournal secondSource)
+    (previous : family.ExactConsumption target
+      (.snoc prior firstSource firstProduced))
+    (duplicate : family.ConsumedSource target
+      { journal := current
+        sourceAt := firstSource
+        produced := firstProduced }) :
+    family.ExactConsumption target
+      (.snoc (.snoc prior firstSource firstProduced)
+        secondSource secondProduced) :=
+  .snoc (.snoc prior firstSource firstProduced)
+    secondSource secondProduced previous duplicate

@@ -1,0 +1,17 @@
+import RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+
+-- A reflexive source--source witness cannot replace the retained
+-- source--produced-target witness.
+example
+    {P : CircularPresentation}
+    {family : ExecutedCauchyFamily P 1}
+    {journal : Journal P 1}
+    {precision : Nat}
+    (produced : ExecutedLimitProduction family journal precision) :
+    Near precision produced.source.readout produced.targetCode :=
+  Near.refl precision produced.source.readout

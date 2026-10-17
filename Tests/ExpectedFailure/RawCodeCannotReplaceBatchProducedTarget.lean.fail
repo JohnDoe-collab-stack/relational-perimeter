@@ -1,0 +1,16 @@
+import RelationalPerimeter.Constitution.Reals.CommonRealRuntime
+set_option autoImplicit false
+open StrongPerimetralTurning
+open RelationalPerimeter.Constitution.Reals
+open RelationalPerimeter.Constitution.Reals.ConstitutiveRuntime
+open RelationalPerimeter.Constitution.Reals.ProducedCompleteness
+open RelationalPerimeter.Constitution.Reals.AuthoritativeRuntime
+open ConstitutiveSearch.ContinuationSignatures
+example {P : CircularPresentation} {baseDepth precision size : Nat}
+    {family : ExecutedCauchyFamily P baseDepth}
+    {start current : Journal P baseDepth}
+    (chain : family.ExecutedSourceChain precision start current size)
+    (anchor : family.DiagonalAnchor current precision)
+    (selection : family.ExactConsumption anchor chain) (prefabricated : SignedDyadicCode) :
+    ExecutedCauchyFamily.BatchGrouping.ProducedTarget chain anchor selection :=
+  prefabricated
