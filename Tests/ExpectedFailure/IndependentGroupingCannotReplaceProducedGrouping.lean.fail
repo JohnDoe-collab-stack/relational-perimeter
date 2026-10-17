@@ -4,7 +4,8 @@ variable {coding : GodelDiagonalSyntax} {formula : coding.UnaryFormula}
   {interpretation : GodelProvabilityInterpretation coding formula}
   (execution : ExecutedGodelProduction coding formula interpretation)
 
-example {context : GodelClosureContextAt execution (godelPerimetralContinuation execution)}
+example {core : GodelPositiveExecutionCore execution} {h1 : GodelOperationalH1 core}
+    {context : GodelClosureContextAt execution core h1}
     {action : GodelSearchedCloseAction context} {authorization : GodelAuthorizedCloseAction action}
     (produced independent : GodelDecomposedCloseAction authorization)
     (grouping : GodelExecutedCloseAction independent) : GodelExecutedCloseAction produced := grouping

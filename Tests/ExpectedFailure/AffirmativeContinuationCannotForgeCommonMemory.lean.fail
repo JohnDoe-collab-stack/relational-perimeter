@@ -1,4 +1,5 @@
 import RelationalPerimeter.Constitution.Godel.OperationalClosure
+import RelationalPerimeter.Constitution.Godel.OperationalPerimetralBridge
 open StrongPerimetralTurning ConstitutiveSearch ConstitutiveSearch.ContinuationSignatures
 variable {coding : GodelDiagonalSyntax} {formula : coding.UnaryFormula}
   {interpretation : GodelProvabilityInterpretation coding formula}

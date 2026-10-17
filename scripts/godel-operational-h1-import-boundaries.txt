@@ -1,0 +1,5 @@
+# The positive H1 is constructed before either perimeter correspondence or runtime policy.
+root RelationalPerimeter.Constitution.Godel.OperationalH1
+forbidden RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence
+forbidden RelationalPerimeter.Constitution.Godel.OperationalClosure
+forbidden RelationalPerimeter.Constitution.Godel.OperationalPerimetralBridge

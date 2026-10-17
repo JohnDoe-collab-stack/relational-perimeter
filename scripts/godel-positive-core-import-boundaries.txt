@@ -1,0 +1,6 @@
+# The affirmative master resource precedes both operational and perimeter consumers.
+root RelationalPerimeter.Constitution.Godel.PositiveExecutionCore
+forbidden RelationalPerimeter.Constitution.Godel.OperationalH1
+forbidden RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence
+forbidden RelationalPerimeter.Constitution.Godel.OperationalClosure
+forbidden RelationalPerimeter.Constitution.Godel.OperationalPerimetralBridge

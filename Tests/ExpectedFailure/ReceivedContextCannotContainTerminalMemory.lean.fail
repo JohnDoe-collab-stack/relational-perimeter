@@ -5,8 +5,8 @@ variable {coding : GodelDiagonalSyntax} {formula : coding.UnaryFormula}
   (execution : ExecutedGodelProduction coding formula interpretation)
 
 example {Memory : Type} (terminalMemory : Memory) :
-    GodelClosureContextAt execution (godelPerimetralContinuation execution) :=
-  ⟨terminalMemory, .fromContinuation (godelAffirmativeConstitution execution) .right⟩
+    GodelClosureContextAt execution (godelPositiveExecutionCore execution)
+      (godelOperationalH1 (godelPositiveExecutionCore execution)) := terminalMemory
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms StrongPerimetralTurning.godelClosureContract

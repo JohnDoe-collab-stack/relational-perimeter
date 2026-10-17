@@ -19,23 +19,37 @@ def identityRealization (contract : FutureContract S I E O) : ExactRealization c
   event_exact := fun _ _ => rfl
   read_exact := fun _ => rfl
 
+structure NonemptyRequestTrace (Request : Type u) where
+  head : Request
+  tail : List Request
+
+def NonemptyRequestTrace.toList (trace : NonemptyRequestTrace I) : List I :=
+  trace.head :: trace.tail
+
 structure ExecutedCommonMemoryGrouping {contract : FutureContract S I E O}
     (realization : ExactRealization contract M) (left right : S) where
-  requests : List I
-  nonempty : requests ≠ []
+  trace : NonemptyRequestTrace I
   leftTerminal : S
   leftEvents : List E
-  leftRun : ExecutedRun contract left requests leftTerminal leftEvents
+  leftRun : ExecutedRun contract left trace.toList leftTerminal leftEvents
   rightTerminal : S
   rightEvents : List E
-  rightRun : ExecutedRun contract right requests rightTerminal rightEvents
+  rightRun : ExecutedRun contract right trace.toList rightTerminal rightEvents
   terminalCollision :
-    Grouping.Continuation.run realization.reduced.next (realization.project left) requests =
-      Grouping.Continuation.run realization.reduced.next (realization.project right) requests
+    Grouping.Continuation.run realization.reduced.next (realization.project left) trace.toList =
+      Grouping.Continuation.run realization.reduced.next (realization.project right) trace.toList
 
 namespace ExecutedCommonMemoryGrouping
 variable {contract : FutureContract S I E O} {realization : ExactRealization contract M}
   {left right : S}
+
+def requests (grouping : ExecutedCommonMemoryGrouping realization left right) : List I :=
+  grouping.trace.toList
+
+theorem nonempty (grouping : ExecutedCommonMemoryGrouping realization left right) :
+    grouping.requests ≠ [] := by
+  intro impossible
+  cases impossible
 
 def producedMemory (grouping : ExecutedCommonMemoryGrouping realization left right) : M :=
   Grouping.Continuation.run realization.reduced.next (realization.project left) grouping.requests
@@ -92,7 +106,11 @@ end ExecutedCommonMemoryGrouping
 end ConstitutiveSearch.ContinuationSignatures
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.ContinuationSignatures.identityRealization
+#print axioms ConstitutiveSearch.ContinuationSignatures.NonemptyRequestTrace
+#print axioms ConstitutiveSearch.ContinuationSignatures.NonemptyRequestTrace.toList
 #print axioms ConstitutiveSearch.ContinuationSignatures.ExecutedCommonMemoryGrouping
+#print axioms ConstitutiveSearch.ContinuationSignatures.ExecutedCommonMemoryGrouping.requests
+#print axioms ConstitutiveSearch.ContinuationSignatures.ExecutedCommonMemoryGrouping.nonempty
 #print axioms ConstitutiveSearch.ContinuationSignatures.ExecutedCommonMemoryGrouping.producedMemory
 #print axioms ConstitutiveSearch.ContinuationSignatures.ExecutedCommonMemoryGrouping.rightProducesMemory
 #print axioms ConstitutiveSearch.ContinuationSignatures.ExecutedCommonMemoryGrouping.leftReducedAdmitted

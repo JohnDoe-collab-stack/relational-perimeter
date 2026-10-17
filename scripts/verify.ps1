@@ -34,6 +34,10 @@ if ($LASTEXITCODE -ne 0) { throw "executed history import-boundary check failed"
 if ($LASTEXITCODE -ne 0) { throw "measured accounting import-boundary check failed" }
 & (Join-Path $PSScriptRoot "check-import-boundaries.ps1") "scripts/godel-runtime-core-import-boundaries.txt"
 if ($LASTEXITCODE -ne 0) { throw "Godel runtime import-boundary check failed" }
+foreach ($boundary in @("godel-positive-core", "godel-operational-h1", "godel-operational-closure", "godel-perimetral")) {
+  & (Join-Path $PSScriptRoot "check-import-boundaries.ps1") "scripts/$boundary-import-boundaries.txt"
+  if ($LASTEXITCODE -ne 0) { throw "$boundary import-boundary check failed" }
+}
 & (Join-Path $PSScriptRoot "check-stratification.ps1") --self-test
 if ($LASTEXITCODE -ne 0) { throw "stratification parser self-test failed" }
 & (Join-Path $PSScriptRoot "check-stratification.ps1")

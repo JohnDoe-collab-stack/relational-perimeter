@@ -4,9 +4,9 @@ variable {coding : GodelDiagonalSyntax} {formula : coding.UnaryFormula}
   {interpretation : GodelProvabilityInterpretation coding formula}
   (execution : ExecutedGodelProduction coding formula interpretation)
 
-example (sameValue : (semanticSource execution).difference = (syntacticSource execution).difference) :
-    (godelAffirmativeConstitution execution).productionOccurrence =
-      (godelAffirmativeConstitution execution).certificationOccurrence := sameValue
+example (sameValue : (semanticSource execution).depth = (syntacticSource execution).depth) :
+    (godelOperationalH1 (godelPositiveExecutionCore execution)).productionOccurrence =
+      (godelOperationalH1 (godelPositiveExecutionCore execution)).certificationOccurrence := sameValue
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms StrongPerimetralTurning.godelClosureContract

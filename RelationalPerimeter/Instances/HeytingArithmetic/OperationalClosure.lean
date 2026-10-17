@@ -14,11 +14,12 @@ def heytingArithmeticClosureContext := godelReceivedClosureContext heytingArithm
 def heytingArithmeticOperationalGroupingWithoutRead :=
   godelOperationalGroupingWithoutRead heytingArithmeticGodelExecution
 
-def heytingArithmeticRoleBlindReadExactToEmpty
-    (reducedRead : Nat → Type)
+def heytingArithmeticTerminalReadExactToEmpty
+    (reducedRead : GodelOperationalMemory heytingArithmeticGodelExecution → Type)
     (readExact : ∀ source,
-      heytingArithmeticClosureContract.read source = reducedRead source.depth) : Empty :=
-  rejectGodelRoleBlindReadExactToEmpty heytingArithmeticGodelExecution reducedRead readExact
+      heytingArithmeticClosureContract.read source =
+        reducedRead (godelOperationalProject heytingArithmeticGodelExecution source)) : Empty :=
+  rejectGodelTerminalReadExactToEmpty heytingArithmeticGodelExecution reducedRead readExact
 
 theorem heytingArithmeticExactRuntimeSeparates {Memory : Type}
     (realization : ExactRealization heytingArithmeticClosureContract Memory) :
@@ -47,7 +48,7 @@ end RelationalPerimeter.HeytingArithmetic
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticIdentityRuntime
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticClosureContext
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalGroupingWithoutRead
-#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticRoleBlindReadExactToEmpty
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticTerminalReadExactToEmpty
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticExactRuntimeSeparates
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalClosureToEmpty
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalClosureRejected

@@ -40,6 +40,10 @@ bash scripts/check-import-boundaries.sh scripts/constitutive-normalizer-core-imp
 bash scripts/check-import-boundaries.sh scripts/executed-history-import-boundaries.txt
 bash scripts/check-import-boundaries.sh scripts/measured-accounting-import-boundaries.txt
 bash scripts/check-import-boundaries.sh scripts/godel-runtime-core-import-boundaries.txt
+bash scripts/check-import-boundaries.sh scripts/godel-positive-core-import-boundaries.txt
+bash scripts/check-import-boundaries.sh scripts/godel-operational-h1-import-boundaries.txt
+bash scripts/check-import-boundaries.sh scripts/godel-operational-closure-import-boundaries.txt
+bash scripts/check-import-boundaries.sh scripts/godel-perimetral-import-boundaries.txt
 bash scripts/check-stratification.sh --self-test
 bash scripts/check-stratification.sh
 

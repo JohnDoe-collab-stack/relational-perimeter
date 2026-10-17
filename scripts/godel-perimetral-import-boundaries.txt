@@ -1,0 +1,5 @@
+# Historical correspondence may consume the master core, never operational H1 or runtime.
+root RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence
+forbidden RelationalPerimeter.Constitution.Godel.OperationalH1
+forbidden RelationalPerimeter.Constitution.Godel.OperationalClosure
+forbidden RelationalPerimeter.Constitution.Godel.OperationalPerimetralBridge

@@ -24,20 +24,28 @@ Tests/ExpectedFailure/RootCannotReplaceProducedTail.lean.fail	dependent-type	9	4
 Tests/ExpectedFailure/MasterCannotUseUnexecutedHistory.lean.fail	semantic-type	16	19	replacement = MasterResources.execute
 Tests/ExpectedFailure/MasterCheckpointCannotPrescribeOutput.lean.fail	semantic-type	7	55	(master.checkpoint profile).output = prescribed
 Tests/ExpectedFailure/AcceptedTargetCannotReplaceProducedOutput.lean.fail	dependent-type	13	2	target = retainedExecutedOperationalTargetProfile reduction → List AnswerTarget
-Tests/ExpectedFailure/AffirmativeContinuationCannotForgeCommonMemory.lean.fail	dependent-type	8	2	OperationalSameRegimeClosureAt execution (godelIdentityRealization execution)
+Tests/ExpectedFailure/AffirmativeContinuationCannotForgeCommonMemory.lean.fail	dependent-type	9	2	OperationalSameRegimeClosureAt execution (godelIdentityRealization execution)
 Tests/ExpectedFailure/EqualReadoutCannotReplaceExecutedGrouping.lean.fail	dependent-type	10	64	ExecutedCommonMemoryGrouping (godelIdentityRealization execution)
 Tests/ExpectedFailure/ForeignWitnessCannotEnterClosureSources.lean.fail	dependent-type	8	76	GodelClosureSource execution
-Tests/ExpectedFailure/IndependentGroupingCannotReplaceProducedGrouping.lean.fail	dependent-type	10	93	GodelExecutedCloseAction produced
+Tests/ExpectedFailure/IndependentGroupingCannotReplaceProducedGrouping.lean.fail	dependent-type	11	93	GodelExecutedCloseAction produced
 Tests/ExpectedFailure/LeftSourceCannotReplaceRightSource.lean.fail	dependent-type	10	64	(syntacticSource execution)
 Tests/ExpectedFailure/RoleIndexedMemoryCannotClaimRoleErasure.lean.fail	semantic-type	8	83	is not definitionally equal to the right-hand side
 Tests/ExpectedFailure/WeakContractCannotReplaceGodelClosureContract.lean.fail	dependent-type	11	64	ExactRealization (godelClosureContract execution) Memory
 Tests/ExpectedFailure/NonExactProjectionCannotYieldReadEquality.lean.fail	semantic-type	10	75	(godelClosureContract execution).read (syntacticSource execution)
-Tests/ExpectedFailure/SameValueCannotIdentifyClosureOccurrences.lean.fail	dependent-type	9	74	(godelAffirmativeConstitution execution).certificationOccurrence
+Tests/ExpectedFailure/SameValueCannotIdentifyClosureOccurrences.lean.fail	dependent-type	9	93	(godelOperationalH1 (godelPositiveExecutionCore execution)).certificationOccurrence
 Tests/ExpectedFailure/EndpointEqualityCannotBeInsertedAsGroupingEvidence.lean.fail	dependent-type	10	64	ExecutedCommonMemoryGrouping (godelIdentityRealization execution)
 Tests/ExpectedFailure/ProducedCompletenessCannotBeAClosureField.lean.fail	semantic-type	12	41	Grouping.Continuation.run realization.reduced.next
 Tests/ExpectedFailure/OpenContinuationCannotBeUsedAsTotalClosure.lean.fail	dependent-type	8	2	OperationalSameRegimeClosureAt execution (godelIdentityRealization execution)
-Tests/ExpectedFailure/EmptyRequestCannotWitnessOperationalClosure.lean.fail	semantic-type	11	14	[] ≠ []
+Tests/ExpectedFailure/EmptyRequestCannotWitnessOperationalClosure.lean.fail	semantic-type	7	54	NonemptyRequestTrace GodelRuntimeRequest
 Tests/ExpectedFailure/ClosureCannotChooseItsOwnContractOrRealization.lean.fail	dependent-type	9	60	OperationalSameRegimeClosureAt execution realization
-Tests/ExpectedFailure/ReceivedContextCannotContainTerminalMemory.lean.fail	dependent-type	9	3	GodelInitializedAt execution (godelPerimetralContinuation execution) ClosurePole.left
+Tests/ExpectedFailure/ReceivedContextCannotContainTerminalMemory.lean.fail	dependent-type	9	69	GodelClosureContextAt execution (godelPositiveExecutionCore execution)
 Tests/ExpectedFailure/RawCollisionCannotReplaceExecutedRuns.lean.fail	dependent-type	12	103	ExecutedCommonMemoryGrouping realization (semanticSource execution) (syntacticSource execution)
-Tests/ExpectedFailure/RebuiltProvenanceCannotReplaceTransportedProvenance.lean.fail	semantic-type	9	2	(semanticSource execution).history.terminalClosureObstruction =
+Tests/ExpectedFailure/RebuiltProvenanceCannotReplaceTransportedProvenance.lean.fail	semantic-type	9	65	GodelClosureSource.provenance (semanticSource execution) = ⟨independent, h1⟩
+Tests/ExpectedFailure/CloseAfterContinuationIsUnauthorized.lean.fail	dependent-type	9	2	GodelRuntimeAllow execution (godelRuntimeNext execution (semanticSource execution) GodelRuntimeRequest.continue)
+Tests/ExpectedFailure/TerminalSourceCannotBeAuthorized.lean.fail	dependent-type	9	2	GodelRuntimeAllow execution (godelRuntimeNext execution (semanticSource execution) GodelRuntimeRequest.close)
+Tests/ExpectedFailure/ForeignExecutionCannotEnterClosureContext.lean.fail	dependent-type	11	69	GodelClosureContextAt execution (godelPositiveExecutionCore execution)
+Tests/ExpectedFailure/DifferentH1CannotEnterClosureContext.lean.fail	dependent-type	10	48	GodelInitializedAt execution core h1 ClosurePole.left
+Tests/ExpectedFailure/RebuiltTerminalCannotReplaceExecutedTarget.lean.fail	dependent-type	12	13	ExecutedRun (godelClosureContract execution) step.target [] rebuilt []
+Tests/ExpectedFailure/OperationalGroupingCannotBeExactRealization.lean.fail	dependent-type	8	2	ExactRealization (godelClosureContract execution) (GodelOperationalMemory execution)
+Tests/ExpectedFailure/PoleEnrichedEventCannotReplaceCanonicalEvent.lean.fail	dependent-type	8	2	GodelRuntimeEvent × ClosurePole
+Tests/ExpectedFailure/HistoricalH1CannotReplaceOperationalH1.lean.fail	dependent-type	9	2	GodelOperationalH1 (godelPositiveExecutionCore execution)

@@ -4,9 +4,9 @@ variable {coding : GodelDiagonalSyntax} {formula : coding.UnaryFormula}
   {interpretation : GodelProvabilityInterpretation coding formula}
   (execution : ExecutedGodelProduction coding formula interpretation)
 
-example : (semanticSource execution).history.terminalClosureObstruction =
-    (godelPerimetralPresentation execution).positiveClosureObstruction :=
-  godelInitialProvenance execution.witness
+example (independent : GodelPositiveExecutionCore execution)
+    (h1 : GodelOperationalH1 independent) :
+    (semanticSource execution).provenance = ⟨independent, h1⟩ := rfl
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms StrongPerimetralTurning.godelClosureContract

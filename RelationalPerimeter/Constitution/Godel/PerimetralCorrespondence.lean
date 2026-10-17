@@ -1,4 +1,4 @@
-import RelationalPerimeter.Constitution.Godel.Diagonal
+import RelationalPerimeter.Constitution.Godel.PositiveExecutionCore
 
 set_option autoImplicit false
 set_option linter.defProp false
@@ -266,19 +266,19 @@ structure ExecutedGodelPerimetralOccurrenceCorrespondence
     (godelCircularPresentation execution.witness).initialNode.explicit =
       ExecutedGodelPerimeterResource.produced executed.production
 
-def executedGodelPerimetralOccurrenceCorrespondence
+def executedGodelPerimetralOccurrenceCorrespondenceFromCore
     {coding : GodelDiagonalSyntax}
     {unprovabilityFormula : coding.UnaryFormula}
     {interpretation :
       GodelProvabilityInterpretation coding unprovabilityFormula}
-    (execution :
-      ExecutedGodelProduction coding unprovabilityFormula interpretation) :
+    {execution :
+      ExecutedGodelProduction coding unprovabilityFormula interpretation}
+    (core : GodelPositiveExecutionCore execution) :
     ExecutedGodelPerimetralOccurrenceCorrespondence execution := by
-  let executed := execution.occurrences
+  let executed := core.occurrences
   have productionExact :
       executed.production = execution.witness.production := by
-    exact (congrArg ExecutedGodelWitness.production
-      executed.witnessIsCertification).symm
+    exact core.productionIsWitnessProduction
   exact
     { executed := executed
       productionIsWitnessProduction := productionExact
@@ -298,6 +298,17 @@ def executedGodelPerimetralOccurrenceCorrespondence
               execution.witness.production =
             ExecutedGodelPerimeterResource.produced executed.production
         rw [productionExact] }
+
+def executedGodelPerimetralOccurrenceCorrespondence
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    (execution :
+      ExecutedGodelProduction coding unprovabilityFormula interpretation) :
+    ExecutedGodelPerimetralOccurrenceCorrespondence execution :=
+  executedGodelPerimetralOccurrenceCorrespondenceFromCore
+    (godelPositiveExecutionCore execution)
 
 abbrev godelPerimetralPresentation
     {coding : GodelDiagonalSyntax}
@@ -505,13 +516,14 @@ structure GodelAffirmativeConstitution
   certificationContinuationDistinct :
     certificationOccurrence ≠ continuationOccurrence
 
-def godelAffirmativeConstitution
+def godelAffirmativeConstitutionFromCore
     {coding : GodelDiagonalSyntax}
     {unprovabilityFormula : coding.UnaryFormula}
     {interpretation :
       GodelProvabilityInterpretation coding unprovabilityFormula}
-    (execution :
-      ExecutedGodelProduction coding unprovabilityFormula interpretation) :
+    {execution :
+      ExecutedGodelProduction coding unprovabilityFormula interpretation}
+    (core : GodelPositiveExecutionCore execution) :
     GodelAffirmativeConstitution execution := by
   let labelled :=
     oneStepFaithfullyLabelledExtension
@@ -524,7 +536,7 @@ def godelAffirmativeConstitution
       positive.path.lastOccurrence
   exact
   { occurrenceCorrespondence :=
-      executedGodelPerimetralOccurrenceCorrespondence execution
+      executedGodelPerimetralOccurrenceCorrespondenceFromCore core
     whole := perimeterRealization (godelPerimetralPresentation execution)
     labelledContinuation := labelled
     positiveContinuation := positive
@@ -564,6 +576,16 @@ def godelAffirmativeConstitution
     certificationContinuationDistinct :=
       labelled.extension.old_new_occurrences_disjoint
         (godelCertificationPosition execution.witness) newInContinuation }
+
+def godelAffirmativeConstitution
+    {coding : GodelDiagonalSyntax}
+    {unprovabilityFormula : coding.UnaryFormula}
+    {interpretation :
+      GodelProvabilityInterpretation coding unprovabilityFormula}
+    (execution :
+      ExecutedGodelProduction coding unprovabilityFormula interpretation) :
+    GodelAffirmativeConstitution execution :=
+  godelAffirmativeConstitutionFromCore (godelPositiveExecutionCore execution)
 
 abbrev GodelPositiveSameRegimeAdmission
     {coding : GodelDiagonalSyntax}
@@ -887,6 +909,7 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.godelInitialProvenance
 #print axioms StrongPerimetralTurning.godelProvenance_retains_witness
 #print axioms StrongPerimetralTurning.ExecutedGodelPerimetralOccurrenceCorrespondence
+#print axioms StrongPerimetralTurning.executedGodelPerimetralOccurrenceCorrespondenceFromCore
 #print axioms StrongPerimetralTurning.executedGodelPerimetralOccurrenceCorrespondence
 #print axioms StrongPerimetralTurning.godelPerimetralPresentation
 #print axioms StrongPerimetralTurning.godelPerimetralContinuation
@@ -899,6 +922,7 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.godelContinuation_compatibility_is_leaveBoundary
 #print axioms StrongPerimetralTurning.godelFinalJunction_is_continuationToProduction
 #print axioms StrongPerimetralTurning.GodelAffirmativeConstitution
+#print axioms StrongPerimetralTurning.godelAffirmativeConstitutionFromCore
 #print axioms StrongPerimetralTurning.godelAffirmativeConstitution
 #print axioms StrongPerimetralTurning.GodelPositiveSameRegimeAdmission
 #print axioms StrongPerimetralTurning.godelFinalInterpretationOf

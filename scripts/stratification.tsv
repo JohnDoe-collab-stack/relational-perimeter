@@ -13,6 +13,9 @@ RelationalPerimeter.Constitution.Grouping.ContinuationContract	U	enforced	Separa
 RelationalPerimeter.Constitution.Continuation.Execution	U	enforced	Authorized inductive runs with computed targets events and admissions
 RelationalPerimeter.Constitution.Continuation.CommonMemoryGrouping	U	enforced	Executed terminal collision under a fixed exact realization and direct readout equality
 RelationalPerimeter.Constitution.Godel.OperationalClosure	F	enforced	Fixed positive Godel runtime and local obstruction to collision of computed exact memories
+RelationalPerimeter.Constitution.Godel.PositiveExecutionCore	F	enforced	Single positive executed resource shared by operational H1 and historical correspondence
+RelationalPerimeter.Constitution.Godel.OperationalH1	F	enforced	Positive proof-relevant H1 and subsequent executed history extensions
+RelationalPerimeter.Constitution.Godel.OperationalPerimetralBridge	F	enforced	Downstream exact occurrence transport from operational to historical H1
 RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure	F	enforced	Specialization of exact runtime separation to the existing HA production
 RelationalPerimeter.Constitution.Grouping.HistoricalExtension	U	enforced	Historical operation inclusion and renormalization
 RelationalPerimeter.Constitution.Grouping.ExactImage	K	enforced	Normal target image reusing the existing finite image implementation

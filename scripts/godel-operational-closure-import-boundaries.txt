@@ -1,0 +1,5 @@
+# The runtime reconstructs its obstruction without the downstream historical bridge.
+root RelationalPerimeter.Constitution.Godel.OperationalClosure
+forbidden RelationalPerimeter.Constitution.Godel.PerimetralCorrespondence
+forbidden RelationalPerimeter.Constitution.Godel.OperationalPerimetralBridge
+forbidden RelationalPerimeter.Computation.ConstitutiveGeneration
