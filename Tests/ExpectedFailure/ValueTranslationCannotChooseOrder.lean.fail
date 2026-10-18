@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (a b shift : Value) (order : SetoidOrder a b) :
+    ExternalOrder (addValue a shift) (addValue b shift) :=
+  setoidTranslateRight order shift

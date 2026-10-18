@@ -36,6 +36,8 @@ if ($LASTEXITCODE -ne 0) { throw "measured accounting import-boundary check fail
 if ($LASTEXITCODE -ne 0) { throw "stratification parser self-test failed" }
 & (Join-Path $PSScriptRoot "check-stratification.ps1")
 if ($LASTEXITCODE -ne 0) { throw "stratification check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-regular-cauchy-reference-imports.py")
+if ($LASTEXITCODE -ne 0) { throw "regular Cauchy reference import DAG check failed" }
 
 $forbiddenTerms =
   '\b(axiom|unsafe|noncomputable|Classical|propext|Quot\.sound|native_decide|implemented_by|sorry|admit)\b'
@@ -117,6 +119,8 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "compiled native Cauchy observations and produced-limit bridge check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-real-carrier-completion-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled carrier completion retained native packet and current-module adapter check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-regular-cauchy-reference-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled regular Cauchy reference route check failed" }
   & (Join-Path $PSScriptRoot "check-expected-failures.ps1")
   if ($LASTEXITCODE -ne 0) { throw "expected-failure check failed" }
 

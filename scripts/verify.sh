@@ -41,6 +41,7 @@ bash scripts/check-import-boundaries.sh scripts/executed-history-import-boundari
 bash scripts/check-import-boundaries.sh scripts/measured-accounting-import-boundaries.txt
 bash scripts/check-stratification.sh --self-test
 bash scripts/check-stratification.sh
+"${python_command[@]}" scripts/check-regular-cauchy-reference-imports.py
 
 for file in "${lean_files[@]}"; do
   begin_count="$(grep -cF -- '/- AXIOM_AUDIT_BEGIN -/' "$file" || true)"
@@ -104,6 +105,7 @@ fi
 "${python_command[@]}" scripts/check-real-family-transport-codegen.py
 "${python_command[@]}" scripts/check-real-native-cauchy-codegen.py
 "${python_command[@]}" scripts/check-real-carrier-completion-codegen.py
+"${python_command[@]}" scripts/check-regular-cauchy-reference-codegen.py
 
 bash scripts/check-expected-failures.sh
 

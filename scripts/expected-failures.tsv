@@ -211,3 +211,42 @@ Tests/ExpectedFailure/CarrierDensityValidityCannotGiveExactReadout.lean.fail	sem
 Tests/ExpectedFailure/PresentedConvergenceCannotBeOpaque.lean.fail	privacy	4	2	Unknown constant `RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion.PresentedDyadicStructure.Converges`
 Tests/ExpectedFailure/PresentedCarrierEquivalentNeedsConvergence.lean.fail	dependent-type	5	35	Converges C (presentCarrierFamily C x) y
 Tests/ExpectedFailure/SevenMarginsCannotUseBinaryBudget.lean.fail	dependent-type	5	24	DirectedUpper (p + 1) a
+Tests/ExpectedFailure/ValueCannotStoreRepresentative.lean.fail	privacy	5	2	Unknown constant `RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.Value.name`
+Tests/ExpectedFailure/ValueCannotExtractInhabited.lean.fail	dependent-type	5	2	Nonempty ((name : RegularDyadicName) × value.Contains name)
+Tests/ExpectedFailure/ValueCannotChooseInverse.lean.fail	dependent-type	5	2	ExternalApartness value zero → Value
+Tests/ExpectedFailure/SetoidApartnessCannotGivePositiveWitness.lean.fail	dependent-type	5	2	ExternalApartness x y
+Tests/ExpectedFailure/SetoidEquivalentCannotGivePositiveTransport.lean.fail	dependent-type	5	2	ExternalEquivalent x y
+Tests/ExpectedFailure/ValueCotransitivityCannotChooseNames.lean.fail	dependent-type	5	2	ExternalOrder zero middle ⊕ ExternalOrder middle one
+Tests/ExpectedFailure/ValueTranslationCannotChooseOrder.lean.fail	dependent-type	6	2	ExternalOrder (addValue a shift) (addValue b shift)
+Tests/ExpectedFailure/NameOrderNeedsThreeGuardBits.lean.fail	dependent-type	7	16	PrecisionExtension (p + 3) response
+Tests/ExpectedFailure/ZeroMemberCannotBeExactZeroCode.lean.fail	semantic-type	6	2	name.approximation response = SignedDyadicCode.zero
+Tests/ExpectedFailure/ThreeFineLinksCannotBeOneCoarserLink.lean.fail	dependent-type	6	27	Near (p + 2) a c
+Tests/ExpectedFailure/ClassInverseCannotReplaceItsWitness.lean.fail	semantic-type	7	2	externalInverse (classOf a) (nameApartnessToExternal first)
+Tests/ExpectedFailure/ValueBoundsCannotEscapeTruncation.lean.fail	dependent-type	5	2	ExternalNaturalBounds value
+Tests/ExpectedFailure/ClassDescentCannotBeChosenFunction.lean.fail	dependent-type	6	2	(name : RegularDyadicName) × ClassDescent (fun name => name) value name
+Tests/ExpectedFailure/SetoidOrderLawsCannotBeUntypedAggregate.lean.fail	privacy	5	2	Unknown constant `RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.SetoidOrderedArchimedeanReadout.orderLaws`
+Tests/ExpectedFailure/SetoidInverseCannotSupplyInverseFunction.lean.fail	dependent-type	5	20	ExternalApartness x zero
+Tests/ExpectedFailure/ExternalCompletionCannotTakeBareSequence.lean.fail	dependent-type	5	19	ExternalPresentedFamily
+Tests/ExpectedFailure/ExternalConvergenceCannotOmitMember.lean.fail	dependent-type	6	2	Value.Contains
+Tests/ExpectedFailure/ExternalCompletionCannotChooseSecondDiagonal.lean.fail	semantic-type	6	2	(externalComplete family).value = classOf chosen
+Tests/ExpectedFailure/RealizationCannotOmitMember.lean.fail	dependent-type	6	2	Realizes P d carrier value
+Tests/ExpectedFailure/CompletionGraphCannotBeIndependentField.lean.fail	privacy	6	2	Unknown constant `RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference.RelationalCompletionMorphism.independentGraph`
+Tests/ExpectedFailure/CompletionUniversalCannotBeBareRelationalMorphism.lean.fail	dependent-type	7	2	RelationalCompletionMorphism Target
+Tests/ExpectedFailure/ClassDescentUniqueCannotOmitExtension.lean.fail	dependent-type	7	2	ExtendsNameMap
+Tests/ExpectedFailure/CarrierCoverageCannotChooseAnotherName.lean.fail	semantic-type	7	2	classOf chosen
+Tests/ExpectedFailure/ReferenceCarrierCannotBeFiniteEnumeration.lean.fail	semantic-type	5	2	ConventionalRegularCauchyReference.Carrier = Nat
+Tests/ExpectedFailure/ValueSaturationCannotBeOmitted.lean.fail	dependent-type	5	2	NameEquivalent a b → contains a → contains b
+Tests/ExpectedFailure/ReferenceRealizationCannotIgnoreMembership.lean.fail	dependent-type	5	2	ReferenceRealizes name value
+Tests/ExpectedFailure/RuntimeCoverageCannotChooseRuntime.lean.fail	dependent-type	6	2	Nonempty ((runtime : RelationalRealAddition.Real P d) × RuntimeRealizes P d runtime value)
+Tests/ExpectedFailure/ValueMembershipCannotBeProposition.lean.fail	dependent-type	5	2	value.Contains name
+Tests/ExpectedFailure/ValueCoherenceCannotBeOmitted.lean.fail	dependent-type	6	2	contains a → contains b → NameEquivalent a b
+Tests/ExpectedFailure/ExternalOperationCannotUseCarrierPrimitive.lean.fail	dependent-type	5	2	EffectiveCauchyReal.Carrier
+Tests/ExpectedFailure/ExternalEquivalentCannotIdentifyPredicates.lean.fail	semantic-type	5	2	x.Contains = y.Contains
+Tests/ExpectedFailure/SetoidReadoutCannotUsePositiveOrderLaws.lean.fail	dependent-type	5	2	SetoidOrderedArchimedeanReadout
+Tests/ExpectedFailure/SetoidInverseCannotExposePositiveDomain.lean.fail	dependent-type	5	2	ExternalApartness x zero
+Tests/ExpectedFailure/NameCannotBeCarrierPrimitive.lean.fail	dependent-type	5	2	RegularDyadicName
+Tests/ExpectedFailure/ReferenceFamilyCannotChooseAnotherModule.lean.fail	semantic-type	6	2	(referenceFamily family).modulus = chosen
+Tests/ExpectedFailure/InverseSourceCannotAssumeOriginResponseBound.lean.fail	dependent-type	6	6	order.response + 0 = DyadicReciprocal.sourcePrecision (order.accuracy + 2) p
+Tests/ExpectedFailure/ValueApartnessCannotBeNegatedEquivalence.lean.fail	dependent-type	5	2	SetoidEquivalent x y → False
+Tests/ExpectedFailure/ExternalDensityCannotReselectCode.lean.fail	semantic-type	6	2	(externalDensity origin).code = chosen
+Tests/ExpectedFailure/ExternalBoundsCannotReselectInteger.lean.fail	semantic-type	6	2	(externalNaturalBoundsFromMember value name member).lower = chosen

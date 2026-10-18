@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (a b : RegularDyadicName) (order : NameOrder a b) (p : Nat) :
+    PrecisionExtension order.response (DyadicReciprocal.sourcePrecision (order.accuracy + 2) p) :=
+  ⟨0, rfl⟩

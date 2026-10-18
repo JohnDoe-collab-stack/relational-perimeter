@@ -1,0 +1,14 @@
+# Exact direct imports for the Gate 7.4 modules; local closures of numeric roots
+# may contain only entries in the numerical allow-list below.
+# External numerical imports are restricted by the checker to Init and Init.*.
+module DyadicOrderTransport DyadicOrder
+module RegularDyadicName DyadicMultiplication
+module RegularDyadicNameOrderedField RegularDyadicName DyadicOrderTransport DyadicDensity
+module RegularDyadicCompletion RegularDyadicNameOrderedField PresentedDyadicOrderedField
+module ExtensiveCauchyReal RegularDyadicNameOrderedField
+module ExtensiveCauchyRealCompletion ExtensiveCauchyReal RegularDyadicCompletion
+module RelationalRealCauchyReference ExtensiveCauchyRealCompletion DyadicCompletionOrderedCharacterization
+numeric-root RegularDyadicName
+numeric-root RegularDyadicNameOrderedField
+numeric-root ExtensiveCauchyReal
+numeric-allow Precision DyadicArithmetic DyadicMultiplication DyadicOrder DyadicOrderTransport DyadicReciprocal DyadicOrderedField DyadicDensity RegularDyadicName RegularDyadicNameOrderedField ExtensiveCauchyReal

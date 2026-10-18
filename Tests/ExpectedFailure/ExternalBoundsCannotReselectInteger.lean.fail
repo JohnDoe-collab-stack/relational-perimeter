@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (value : Value) (name : RegularDyadicName) (member : value.Contains name) (chosen : Nat) :
+    (externalNaturalBoundsFromMember value name member).lower = chosen := by
+  rfl

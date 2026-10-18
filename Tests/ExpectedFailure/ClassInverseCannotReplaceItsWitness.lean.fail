@@ -1,0 +1,7 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (a : RegularDyadicName) (first second : NameApartness a zeroName) :
+    externalInverse (classOf a) (nameApartnessToExternal first) =
+      externalInverse (classOf a) (nameApartnessToExternal second) := by
+  rfl

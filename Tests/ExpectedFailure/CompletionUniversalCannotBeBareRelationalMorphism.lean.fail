@@ -1,0 +1,7 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RelationalRealCauchyReference RegularDyadicCompletion
+example (Target : PresentedDyadicCompletion.PresentedDyadicCompletionObject)
+    (M : RelationalMorphism ValuePositiveSetoid (targetPositiveSetoid Target)) :
+    RelationalCompletionMorphism Target :=
+  M

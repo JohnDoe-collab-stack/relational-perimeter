@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (contains : RegularDyadicName → Type) (inhabited : Nonempty (Σ name, contains name))
+    (saturated : {a b : RegularDyadicName} → NameEquivalent a b → contains a → contains b) : Value :=
+  Value.mk contains inhabited saturated

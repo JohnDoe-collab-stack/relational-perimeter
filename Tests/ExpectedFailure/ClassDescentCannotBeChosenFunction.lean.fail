@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (value : Value) : Σ name : RegularDyadicName,
+    ClassDescent (Y := ConventionalRegularCauchyReference) (fun name => name) value name :=
+  (classDescent (Y := ConventionalRegularCauchyReference) (fun name => name) (fun same => same)).total value

@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RelationalRealCauchyReference RegularDyadicCompletion
+example (P : StrongPerimetralTurning.CircularPresentation) (d : Nat) (value : Value) :
+    Σ runtime : RelationalRealAddition.Real P d, RuntimeRealizes P d runtime value :=
+  valueRuntimeCoverage P d value

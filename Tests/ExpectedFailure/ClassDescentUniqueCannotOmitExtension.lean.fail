@@ -1,0 +1,7 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (M : RelationalMorphism ValuePositiveSetoid ConventionalRegularCauchyReference) :
+    RelationalMorphism.PointwiseEquivalent
+      (classDescent (Y := ConventionalRegularCauchyReference) (fun name => name) (fun same => same)) M :=
+  classDescentUnique (fun same => same) M

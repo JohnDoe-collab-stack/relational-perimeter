@@ -4,20 +4,16 @@
 
 Ce fichier est un document de chantier temporaire. Il ne constitue ni une
 affirmation scientifique, ni une modification de la portée des affirmations
-enregistrées, ni une preuve d'identification avec les réels usuels. Il devra
+enregistrées, ni une preuve de couverture de la référence cauchyenne
+conventionnelle. Il devra
 être retiré avant une intégration finale dans `main`, après transfert des
 résultats établis vers les passages canoniques et le registre.
 
-Point de planification contrôlé : branche `work/runtime-reals-finalization`,
-commit `b3a213eb25165d6daf01e236e7c77e26b57f5524`. L'affirmation scientifique
-actuelle `RUNTIME_EFFECTIVE_CAUCHY_REAL_CORRESPONDENCE` est attachée au commit
-d'évidence `1a2bd65b080fc9eefca60bd91dbb175a9a458862`. Ses revues `reader` et
-`translation` sont enregistrées sur ce SHA ; sa revue `independent` reste
-`not_recorded`. Les étapes 7.1 à 7.3 sont désormais attachées à la révision
-d'évidence `ba549cd03552dd5d0c7f5737305c684bf7d49897` par l'affirmation
-`RUNTIME_PRESENTED_DYADIC_COMPLETION_CHARACTERIZATION`. Ses revues `reader` et
-`translation` sont enregistrées sur ce SHA ; sa revue `independent` reste
-`not_recorded`.
+Point de planification contrôlé : branche `work/runtime-reals-finalization`.
+Les révisions d'évidence, empreintes et statuts de revue courants sont ceux du
+[registre scientifique](../scientific-claims.json) ; ce document de chantier
+ne les duplique pas. Toute modification de 7.4 ou d'une dépendance partagée
+rouvre les revues concernées et exige une nouvelle révision reproductible.
 
 ## Cible générale
 
@@ -36,7 +32,7 @@ relations et contextes reçus
   -> équivalence comportementale
   -> readout dyadique
   -> caractérisation de complétion dyadique présentée
-  -> éventuelle comparaison extensive aval
+  -> comparaison aval avec la référence cauchyenne conventionnelle
 ```
 
 Le premier cycle du chantier a fermé, sans inversion de primitives, la chaîne
@@ -73,7 +69,7 @@ famille de Cauchy dyadique explicitement présentée
   -> exécution et regroupement relationnels
   -> carrier limite réellement produit par le runtime
   -> caractérisation relative de complétion dyadique
-  -> comparaison aval avec une présentation extensive de référence
+  -> comparaison aval avec tous les noms de la référence cauchyenne régulière
 ```
 
 Le premier étage manquant est une complétude **productrice** au niveau du
@@ -111,44 +107,42 @@ allers-retours sont des conclusions dérivées de l'injection dyadique, des lois
 quantitatives de présentation, de la production de limites et de l'unicité ;
 ils ne doivent pas être placés comme hypothèses du contrat générique.
 
-Le troisième étage est strictement aval : une comparaison avec une
-construction extensive de référence. Il n'est pas requis pour le verdict
-« complétion constructive présentée des dyadiques », mais il est obligatoire
-avant tout verdict « tous les réels classiques usuels ». Deux entrées doivent
-y rester distinguées :
+Le troisième étage est strictement aval : une comparaison avec la référence
+cauchyenne régulière conventionnelle fixée en 7.4. Il n'est pas requis pour le
+verdict « complétion constructive présentée des dyadiques », mais il est
+obligatoire avant le verdict « correspondance avec tous les réels de cette
+référence ». Deux entrées doivent y rester distinguées :
 
 ```text
 fromPresented
   : présentation de Cauchy avec producteur et témoins -> réel relationnel
 
-realizesExtensive
-  : valeur extensive nue -> relation avec ses réalisations présentées
+realizesReference
+  : valeur de référence nue -> relation avec ses réalisations présentées
 ```
 
 `fromPresented` est exécutable parce que le contexte reçu porte le producteur
 des approximations et ses témoins. En revanche, aucune fonction exécutable
-`fromExtensive : quotient extensif nu -> réel relationnel` ne sera exigée :
+`fromReference : valeur de référence nue -> réel relationnel` ne sera exigée :
 un quotient nu a précisément oublié le représentant qui permettrait
 l'exécution. Le restaurer demanderait un choix non calculable, perdrait les
-occurrences et inverserait l'ordre des primitives. Une future couche classique
-peut seulement recevoir une présentation explicite, ou exprimer une relation
-ou une fibre de réalisations au-dessus de la valeur extensive.
+occurrences et inverserait l'ordre des primitives. La couche de référence peut
+seulement recevoir une présentation explicite, ou exprimer une relation ou une
+fibre de réalisations au-dessus de la classe nue.
 
-Une telle fibre ne ferme la portée classique que si ses obligations sont
-énoncées séparément : totalité dans les deux directions, correction, fidélité
-à l'équivalence externe, et compatibilité avec les opérations et l'ordre. La
-direction carrier vers valeur externe est un readout aval positif :
-`(c : Carrier) -> (Σ x : E, Realizes c x)`. Dans l'autre direction, il faut
-distinguer une couverture constructive
-`(x : E) -> (Σ c : Carrier, Realizes c x)`, qui produit réellement une réalisation,
-d'une couverture seulement propositionnelle
-`(x : E) -> Nonempty (Σ c : Carrier, Realizes c x)`, qui ne permet pas d'extraire un
-carrier en `Type` sous les règles constructives du dépôt.
-
-`constructiveCoverage` n'est donc admissible que si la référence `E` choisie
-porte elle-même assez de données pour construire la réalisation. Elle n'est
-jamais exigée d'un quotient nu ; dans ce cas, seule une couverture relationnelle
-totale peut être visée, et elle ne devient pas un programme par renommage.
+Une telle fibre ne ferme la couverture de la référence que si ses obligations
+sont énoncées séparément : totalité dans les deux directions, correction,
+fidélité à l'équivalence externe, et compatibilité avec les opérations et
+l'ordre. La référence présentée `RegularDyadicName` permet une comparaison
+constructive dans les deux sens. Après oubli du nom dans `Value`, la direction
+carrier vers classe reste un readout aval positif
+`(c : Carrier) -> (Σ value : Value, Realizes c value)`, tandis que le retour est
+seulement
+`(value : Value) -> Nonempty (Σ c : Carrier, Realizes c value)`. Il ne permet
+pas d'extraire un carrier en `Type` sous les règles constructives du dépôt.
+Cette différence est un effet exact du contrat d'oubli, pas un affaiblissement
+de la couverture : chaque classe possède une fibre, mais aucune fonction de
+choix de représentant n'est réintroduite.
 
 Dans tous les étages, l'équivalence côté runtime compare les comportements et
 les futurs numériques ; elle n'identifie ni occurrences, environnements,
@@ -180,17 +174,29 @@ présuppose pas :
   - les familles de Cauchy internes, leurs limites produites et leur unicité ;
   - la complétude constructive pour les familles explicitement présentées
     dans le contrat.
-- une référence externe `E` explicitement nommée pour le verdict « réels
-  classiques usuels » ;
+- `ConventionalRegularCauchyReference` explicitement fixé avec
+  `Carrier := RegularDyadicName` et `Equivalent := NameEquivalent` pour le
+  verdict « tous les réels de la référence cauchyenne conventionnelle » ;
+- `ReferenceRealizes := Value.Contains`, `referenceCoverage` et
+  `valueReferenceCoverage`, avec correction et fidélité, afin d'établir que
+  `Value` réalise exactement tous les éléments de cette référence modulo
+  `NameEquivalent` ;
 - `carrierCoverage`, effectivement prouvée pour tout carrier, afin que chaque
   comportement relationnel possède bien une valeur externe aval qu'il réalise ;
-- soit `constructiveCoverage`, soit `relationalCoverage`, effectivement prouvée
-  pour tout `x : E`, avec correction, fidélité et transports structurels.
+- `relationalCoverage`, effectivement prouvée pour tout `value : Value`, avec
+  correction, fidélité et transports structurels ; la couverture ne peut pas
+  être remplacée par une simple relation non totale, et aucune
+  `constructiveCoverage : Value -> Carrier` n'est exigée ou annoncée ;
+- `RuntimeRealizes`, `runtimeCoverage` et `valueRuntimeCoverage`, dérivés de la
+  correspondance carrier et des allers-retours de gate 6, afin que le verdict
+  terminal porte bien sur le runtime constitué et pas seulement sur son
+  carrier numérique.
 
 Les étapes 7.1 à 7.3 peuvent être fermées comme **caractérisation interne** si
-ces deux dernières obligations ne le sont pas. Dans ce cas, la gate 7
-terminale et la cible « réels usuels » restent ouvertes : la caractérisation
-interne ne leur est pas substituée.
+ces obligations de référence et de couverture ne le sont pas. Dans ce cas, la
+gate 7 terminale et la cible « tous les réels de la référence cauchyenne
+conventionnelle » restent ouvertes : la caractérisation interne ne leur est pas
+substituée.
 
 Ici, « famille explicitement présentée » signifie exactement une
 `CarrierFamily` : une suite de carriers, un module extérieur monotone et une
@@ -199,7 +205,7 @@ ne couvre ni une fonction nue `Nat -> Carrier`, ni toute suite de Cauchy sans
 module fourni, ni une complétude d'ordre ou par borne supérieure.
 
 L'ordre total décidable, la complétude par borne supérieure pour toute partie,
-la production par un programme fini de tout réel classique sans contexte et
+la production par un programme fini de tout nom régulier reçu sans contexte et
 l'identification des histoires ne font pas partie de ce critère. Une
 collection de théorèmes de readout indépendants ne suffira pas non plus.
 
@@ -807,7 +813,7 @@ réapparaît simplement comme champ supposé de l'interface.
 
 ### Cible extensive autorisée
 
-Le dépôt ne doit pas introduire les réels usuels comme primitive amont. La
+Le dépôt ne doit pas introduire une droite réelle extensive comme primitive amont. La
 cible interne de la gate 7 reste une complétion dyadique présentée, sans
 quotient d'occurrences. Le nom du type, la seule présence d'approximations ou
 une propriété cardinale ne suffisent pas : la caractérisation doit provenir
@@ -819,17 +825,18 @@ Trois sens doivent rester séparés :
   exécutions et témoins produit un runtime limite ; elle est déjà construite ;
 - **complétude du carrier présenté** : toute famille du contrat reçu produit
   un carrier limite provenant de ce runtime ; c'est le premier manque précis ;
-- **complétude classique extensive** : propriété d'une construction externe,
-  éventuellement quotientée, dont la comparaison reste aval et peut nécessiter
-  des principes non calculables étrangers aux producteurs de ce dépôt.
+- **complétude de la référence cauchyenne régulière** : propriété de tous les
+  noms dyadiques réguliers reçus modulo `NameEquivalent`, dont la comparaison
+  reste aval et ne choisit aucun représentant d'une classe nue.
 
 Les étapes 7.1 à 7.3 portent sur les deux premiers points et sur leur
 caractérisation relative parmi les complétions présentées. La gate 7 terminale
-inclut en plus l'étape 7.4 lorsqu'elle revendique les « réels usuels ». Cette
-identification à une construction classique particulière n'est autorisée
-qu'après avoir énoncé exactement ses hypothèses. Elle ne pourra ni définir les
-runtimes, ni fournir rétroactivement leurs actions, mémoires, occurrences ou
-preuves de cohérence.
+inclut en plus l'étape 7.4 lorsqu'elle revendique tous les réels de la référence
+cauchyenne conventionnelle. Cette identification n'est autorisée qu'après avoir
+énoncé et réalisé exactement la référence, son quotient relationnel et sa
+propriété universelle de complétion. Elle ne pourra ni définir les runtimes, ni
+fournir rétroactivement leurs actions, mémoires, occurrences ou preuves de
+cohérence.
 
 ### Trois portées à ne pas confondre
 
@@ -839,14 +846,14 @@ Le plan distingue :
    dépôt ;
 2. les **présentations reçues**, effectives relativement à un contexte qui
    fournit les approximations, le module et les témoins ;
-3. les **valeurs extensives nues**, dont la présentation peut avoir été
-   oubliée par quotient ou par abstraction.
+3. les **valeurs nues de la référence**, c'est-à-dire les classes saturées dont
+   le nom membre a été oublié par la projection setoïdale.
 
 La gate 6 couvre les deux premières dans sa portée déclarée. La gate 7 doit
 caractériser leur complétion constructive sans les confondre avec la troisième.
 Une valeur de la troisième classe ne devient exécutable qu'avec une
 présentation reçue supplémentaire. Aucun théorème sur les deux premières ne
-sera renommé en théorème sur tous les objets classiques nus.
+sera renommé en théorème sur toutes les valeurs nues de la référence.
 
 ### Matrice de la caractérisation terminale
 
@@ -859,7 +866,7 @@ sera renommé en théorème sur tous les objets classiques nus.
 | Apartness et ordre | Témoins positifs obtenus depuis des exécutions finies | Relations numériques positives | Préservation et réflexion, sans décision globale cachée |
 | Famille de Cauchy | Producteur, module, regroupement et runtime limite | Famille et carrier limite présentés | Le carrier est projeté de la limite produite ; le transport ne récupère pas les familles riches |
 | Complétion | Producteur de limite et unicité dans le contrat | Caractérisation relative aux complétions présentées | Les morphismes sont dérivés, pas supposés ; aucune cible n'est fournie à son propre producteur |
-| Valeur extensive nue | Aucune construction native sans contexte reçu | Quotient ou valeur abstraite aval | Relation/fibre de réalisations, ou réalisation depuis une présentation reçue ; pas de `fromExtensive` exécutable général |
+| Valeur nue de la référence | Aucune construction native sans contexte reçu | Classe saturée aval | Relation/fibre de réalisations, ou réalisation depuis une présentation reçue ; pas de `fromReference` exécutable général |
 
 Dans toutes les lignes, la colonne « readout présenté aval » est une
 projection. Elle ne peut jamais servir à fabriquer rétroactivement la
@@ -889,9 +896,10 @@ L'affirmation enregistrée
 applications et allers-retours numériques/comportementaux, opérations,
 inverse sous apartness, ordre constructif, densité dyadique, bornes naturelles,
 familles de Cauchy effectives et natives, limites produites et unicité
-numérique. Elle exclut explicitement la couverture de tous les réels classiques,
-la complétude par borne supérieure et toute récupération des données riches
-oubliées. La caractérisation de complétion de la gate 7 devra recevoir une
+numérique. Elle exclut explicitement la couverture de tous les réels de la
+référence cauchyenne conventionnelle, la complétude par borne supérieure et
+toute récupération des données riches oubliées. La caractérisation de
+complétion de la gate 7 devra recevoir une
 affirmation majeure distincte, avec passage canonique, portée, références
 formelles et revues sur le même SHA ; elle ne sera pas ajoutée mécaniquement à
 l'affirmation actuelle.
@@ -1337,7 +1345,8 @@ la forme concrète du C épinglé, pas sur toutes les fonctions possibles.
 La validation documentaire reste ouverte : `--static` et `--lean` s'arrêtent
 sur `STALE_SOURCE: GODEL_RELATIONAL_SEQUENTIAL_COMPLETENESS`. Cela n'autorise
 ni rafraîchissement du registre ni réétiquetage des revues. Ce résultat de
-chantier n'annonce ni égalité des occurrences ni corps ordonné ni réels usuels.
+chantier n'annonce ni égalité des occurrences ni corps ordonné ni couverture de
+la référence cauchyenne conventionnelle.
 
 ### Lot multiplication — obligations et résultat sur l'arbre de chantier
 
@@ -1683,7 +1692,8 @@ cette présentation par l'aller-retour du runtime inverse déjà produit.
 `CarrierDomain`, `realizeCarrierDomain`, `inverseCarrier`, `toCarrier_inverse`
 et `realization_carrier_inverse` reprennent exactement cette direction via
 le carrier effectif. Ces opérations aval restent attachées au périmètre et
-à la base reçus ; aucune couverture classique supplémentaire n'est annoncée.
+à la base reçus ; aucune couverture de la référence cauchyenne conventionnelle
+n'est annoncée à ce stade.
 
 | Obligation | Déclarations de production/preuve | Tests et verrouillages |
 | --- | --- | --- |
@@ -1751,7 +1761,8 @@ objets restent des occurrences, l'inverse reste défini seulement sous
 `Apartness source zero`, et la monotonie multiplicative reçoit un témoin
 `Positive factor`. Une apartness non orientée ne remplace pas ce signe.
 Le lot ne construit ni densité, ni propriété archimédienne, ni nouvelle
-famille de Cauchy, ni correspondance terminale avec les réels usuels.
+famille de Cauchy, ni correspondance terminale avec la référence cauchyenne
+conventionnelle.
 
 Le noyau dyadique conserve exactement la marge stricte sous `SameValue` et
 translation, même pour des codes non normalisés. `NonzeroCode.mulPositive`
@@ -2287,7 +2298,7 @@ ci-dessous ; les transports individuels d'opérations et d'ordre déjà fermés
 sont réemployés. À cette étape du chantier restaient ensuite le paquet final
 de correspondance avec la classe effective choisie, désormais construit plus
 bas, puis la gate distincte de couverture qui reste ouverte avant toute
-annonce concernant tous les réels usuels.
+annonce concernant tous les réels de la référence cauchyenne conventionnelle.
 
 La couverture des familles générales de comportements composés ne fait pas
 partie de ce seul raccord source. Elle est requise par la correspondance
@@ -2304,7 +2315,8 @@ ont été remplacés par des déclarations auditées et des tests durables.
 Les transports d'addition, opposé, multiplication, inverse sous apartness,
 ordre et apartness déjà fermés doivent être réemployés, non dupliqués.
 Ce lot n'est ni le paquet final de correspondance, ni la gate des
-réels usuels, ni une extension à une séquence arbitraire `Nat → Real`.
+réels de la référence cauchyenne conventionnelle, ni une extension à une
+séquence arbitraire `Nat → Real`.
 
 La cible de famille effective doit recevoir des termes
 `Nat → EffectiveDyadicPresentation`, leur cohérence, un module monotone de
@@ -2649,7 +2661,9 @@ munis de leur module monotone propre. Les équivalences sont respectivement
 `Equivalent` / `NumericalFutureEquivalent`, l'équivalence positive des
 présentations et celle des carriers. Aucun quotient, égalité d'occurrences,
 identité de familles riches ni instance de corps total ne remplace ces relations.
-La gate 7 de couverture des réels usuels reste ouverte.
+La clôture scientifique de la gate 7 de couverture de la référence cauchyenne
+conventionnelle reste ouverte ; son implémentation technique de 7.4 est
+désormais présente et testée dans l'arbre de travail non snapshoté.
 
 Les applications exportées par `ApplicationMaps` sont reliées ponctuellement
 aux fonctions `toPresentation`, `ofPresentation`, `toCarrier` et `ofCarrier`.
@@ -2966,7 +2980,10 @@ postérieures sur le redémarrage du kernel live et la portée d'élaboration de
 [la revue des clarifications](../reports/runtime-real-audit-clarifications-reader-translation-1a2bd65.fr.md) ;
 la revue `independent` reste `not_recorded` jusqu'à réception et lecture d'un
 rapport extérieur visant exactement ce SHA. Aucun push ni fusion n'est
-effectué par cette préparation locale.
+effectué par cette préparation locale. Ce passage décrit l'étape historique
+`1a2bd65`; il ne transfère pas ses revues à l'évidence actuelle `83e797e`, pour
+laquelle le registre porte désormais `reader=pending`, `translation=pending` et
+`independent=not_recorded` après modification des dépendances partagées.
 
 Ces six blocs exposent la production native riche et ses vues numériques
 séparées. Sur `5e69b1b`, les revues primaire et indépendante ferment la gate 4
@@ -2979,7 +2996,9 @@ ouverte. Les étapes internes 7.1 à 7.3 sont désormais implémentées dans
 l'arbre de travail : la section suivante en conserve le contrat, les
 obligations et les frontières. Elles ne seront scientifiquement closes qu'après
 concordance du code, des textes canoniques, du registre et des revues sur une
-même révision. La gate terminale 7.4 reste ouverte.
+même révision. L'implémentation technique et les tests de la gate terminale
+7.4 sont réalisés sur l'arbre de travail ; sa clôture scientifique reste
+ouverte dans l'attente du snapshot autorisé, du registre et des revues.
 
 ### Gate 7 — complétion dyadique produite et caractérisation
 
@@ -2995,13 +3014,13 @@ Le degré de préparation n'est pas identique pour ses quatre étapes :
 | 7.1, complétude carrier produite | Implémentée et enregistrée sur `ba549cd` ; paquet natif retenu, limite projetée ensuite, convergence, unicité et indépendance positive | Audit indépendant encore `not_recorded` |
 | 7.2, contrat abstrait | Implémenté et relu sur `ba549cd` ; noyau numérique séparé de l'enrichissement ordonné, sans morphisme terminal supposé | Audit indépendant encore `not_recorded` |
 | 7.3, caractérisation relative | Implémentée et relue sur `ba549cd` ; morphismes, allers-retours comportementaux et transports dérivés | Audit indépendant encore `not_recorded` |
-| 7.4, référence classique | Étude de faisabilité non commencée ; cible exacte non choisie | Fermer totalité, correction, fidélité et transports ; sinon enregistrer la frontière et laisser la cible terminale ouverte |
+| 7.4, référence cauchyenne conventionnelle | Implémentation technique et tests réalisés dans l'arbre non snapshoté : tous les noms réguliers reçus modulo `NameEquivalent`, contrat ordonné présenté concret, quotient relationnel, complétion, correspondances carrier/runtime et transports | Obtenir un snapshot autorisé, enregistrer la nouvelle portée et les dépendances rouvertes sans réétiqueter les évidences historiques, puis effectuer les revues requises ; la clôture scientifique reste ouverte |
 
 L'implémentation construit donc 7.1 à 7.3 sans décision extérieure. Les textes,
 le registre et les revues de lecture et de traduction concordent sur
 `ba549cd`; la revue indépendante reste ouverte. Il serait incorrect de coder
-un faux `fromExtensive` générique ou de promettre la portée classique de 7.4
-sans cible formellement choisie.
+un faux inverse fonctionnel depuis une classe nue ou de promettre la portée de
+7.4 sans réaliser formellement la référence choisie.
 
 #### 7.1 — Produire la limite au niveau du carrier
 
@@ -3514,25 +3533,890 @@ positive près, **la complétion constructive présentée des dyadiques** décri
 par le contrat. Il ne permet pas encore d'annoncer qu'un programme fini produit
 tout élément d'un quotient classique nu.
 
-#### 7.4 — Comparaison extensive aval requise pour la portée classique
+#### 7.4 — Référence cauchyenne conventionnelle et comparaison aval
 
-Une comparaison avec une construction externe particulière des réels est un
-lot séparé de la caractérisation interne. Avant tout code, il faut choisir et
-documenter exactement la cible : type `E`, équivalence `ExternalEquivalent`,
-injection dyadique, opérations, ordre, notion de famille présentée, principe de
-complétion et hypothèses constructives utilisées.
+La comparaison avec la référence cauchyenne conventionnelle est un lot séparé
+de la caractérisation interne. L'étude de faisabilité retient ici
+une construction autonome et quotient-libre des réels de Cauchy. Elle ne prend
+ni `EffectiveCauchyReal.Carrier`, ni `Real P baseDepth`, ni un quotient
+`Mathlib.Real` comme définition de sa cible. Elle réutilise seulement le noyau
+fini des codes dyadiques et de leurs témoins quantitatifs.
 
-La relation positive `Realizes : Carrier -> E -> Type` doit être accompagnée
-des quatre groupes d'obligations suivants :
+La référence retenue est composée de deux couches distinctes.
+
+La première couche est un nom dyadique régulier reçu, indépendant du runtime :
+
+```text
+RegularDyadicName
+  approximation : Nat -> SignedDyadicCode
+  coherent      : (precision leftResponse rightResponse : Nat) ->
+                  PrecisionExtension precision leftResponse ->
+                  PrecisionExtension precision rightResponse ->
+                  Near precision
+                    (approximation leftResponse)
+                    (approximation rightResponse)
+
+NameEquivalent first second
+  responseThreshold : Nat -> Nat
+  near : (precision leftResponse rightResponse : Nat) ->
+         PrecisionExtension (responseThreshold precision) leftResponse ->
+         PrecisionExtension (responseThreshold precision) rightResponse ->
+         Near precision
+           (first.approximation leftResponse)
+           (second.approximation rightResponse)
+```
+
+Sa fonction `Nat -> SignedDyadicCode` est une donnée reçue arbitraire, et non
+la clôture finie d'un programme énuméré par le dépôt. Sa loi de régularité est
+positive et son calendrier est fixé par la précision. `NameEquivalent` possède
+un seuil partagé exactement comme l'équivalence actuelle des présentations ;
+sa réflexivité prend `responseThreshold p := p`. Pour composer des témoins de
+seuils `leftThreshold` et `rightThreshold`, la transitivité prend exactement
+`responseThreshold p := max (leftThreshold (p + 1))
+(rightThreshold (p + 1))`, spécialise les deux proximités à `p + 1` sur la
+même réponse intermédiaire, puis emploie `Near.compose` pour conclure à `p`.
+La symétrie conserve le seuil. Le nom constant associé à `code` répond par
+`code.raise precision` et conserve un `SameValue` avec `code` à toute
+précision. Ces signatures et ces budgets ne sont pas laissés au choix de
+l'implémentation.
+Le type doit être défini dans une strate numérique qui n'importe aucun runtime.
+Le raccord terminal au runtime passe déjà par le carrier numérique et
+`ofCarrier`; aucun second adaptateur direct avec `EffectiveDyadicPresentation`
+n'est requis pour atteindre la cible et aucun ne doit être ajouté sans usage
+formel précis.
+
+La deuxième couche est la valeur extensive quotient-libre :
+
+```text
+ExtensiveCauchyReal.Value
+  Contains   : RegularDyadicName -> Type
+  inhabited  : Nonempty (Sigma name, Contains name)
+  saturated  : NameEquivalent a b -> Contains a -> Contains b
+  coherent   : Contains a -> Contains b -> NameEquivalent a b
+```
+
+`Contains` est la relation primitive **de cette couche quotient aval** en
+`Type`; elle ne devient jamais une primitive amont du runtime. Ses témoins
+retiennent le nom et les transports positifs réellement utilisés. Ce choix est
+nécessaire pour que `coherent` puisse produire un `NameEquivalent` sans éliminer une preuve de
+`Prop` vers `Type`. Seule l'existence globale d'un membre reste cachée sous
+`Nonempty`; une `Value` ne fournit donc aucun représentant récupérable en
+`Type`. `saturated` et `coherent` imposent que `Contains` décrive exactement
+une classe d'équivalence non vide, et non un sous-ensemble arbitraire ou
+l'union de plusieurs réels.
+
+`Value` vit en `Type 1` parce qu'elle contient un prédicat à valeurs dans
+`Type`, mais elle ne doit précisément **pas** devenir le carrier calculable du
+contrat présenté de 7.2 consommé par 7.3. Le carrier de référence de ce contrat
+est `RegularDyadicName : Type`, qui porte déjà toutes les approximations et
+tous les témoins nécessaires. Il n'est donc ni utile ni autorisé, pour ce lot, de
+généraliser toute la hiérarchie 7.2–7.3 aux univers supérieurs. La valeur nue
+est atteinte ensuite par la descente relationnelle du quotient ; tenter de la
+faire entrer directement dans `PresentedDyadicCompletionObject` compliquerait
+le code, rouvrirait inutilement les preuves antérieures et confondrait de
+nouveau présentation exécutable et classe oubliant son représentant.
+
+L'équivalence externe n'est jamais l'égalité des prédicats :
+
+```text
+ExternalEquivalent x y
+  forward  : (name : RegularDyadicName) -> x.Contains name -> y.Contains name
+  backward : (name : RegularDyadicName) -> y.Contains name -> x.Contains name
+```
+
+Cette forme vit en `Type`, possède réflexivité, symétrie et transitivité sans
+`propext`, et ne choisit aucun nom. Le constructeur `classOf name` forme la
+classe saturée d'un nom. La spécification setoïdale complète comporte les
+obligations suivantes :
+
+```text
+SetoidEquivalent x y := Nonempty (ExternalEquivalent x y)
+```
+
+`ExternalEquivalent` reste la relation positive primitive et transporte les
+témoins. `SetoidEquivalent` est seulement son readout propositionnel aval ;
+c'est lui qui fournit la relation d'équivalence du setoïde extensif. Aucune
+preuve ne doit éliminer ce `Nonempty` pour reconstruire un transport positif.
+
+- `NameEquivalent` et `ExternalEquivalent` sont des équivalences positives ;
+- `classOf` reflète et préserve exactement `NameEquivalent` ;
+- toute `Value` est propositionnellement équivalente à `classOf name` pour un
+  nom qu'elle contient, sous
+  `Nonempty (Sigma name, ExternalEquivalent (classOf name) value)`, sans
+  fonction `Value -> RegularDyadicName` ;
+- toute relation définie sur les noms, compatible avec `NameEquivalent`,
+  descend relationnellement aux valeurs et son résultat est unique à
+  l'équivalence positive de la cible près.
+
+La dernière obligation n'est pas un éliminateur fonctionnel caché. Pour une
+cible relationnelle positive `Y`, une application de noms
+`f : RegularDyadicName -> Y.Carrier` et son respect de `NameEquivalent`, la
+descente a la forme :
+
+```text
+ClassDescent f value y
+  name   : RegularDyadicName
+  member : value.Contains name
+  agrees : Y.Equivalent (f name) y
+```
+
+Elle doit être totale seulement sous
+`Nonempty (Sigma y, ClassDescent f value y)`, stable par
+`ExternalEquivalent`, exacte sur `classOf`, et fonctionnelle à
+`Y.Equivalent` près. Aucun théorème public ne doit en extraire une fonction
+`Value -> Y`. C'est cette propriété universelle relationnelle, avec
+l'exactitude et la surjectivité propositionnelle de `classOf`, qui autorise le
+terme « quotient setoïdal » dans le verdict.
+
+La propriété universelle doit être empaquetée, et pas seulement décrite par un
+lemme terminal. Les objets de cette interface portent explicitement leur
+équivalence positive ; le type du carrier, celui des témoins d'équivalence et
+celui du graphe peuvent vivre dans des univers indépendants :
+
+```text
+PositiveSetoid
+  Carrier        : Type u
+  Equivalent     : Carrier -> Carrier -> Type v
+  equivalentRefl : (x : Carrier) -> Equivalent x x
+  equivalentSymm : Equivalent x y -> Equivalent y x
+  equivalentTrans : Equivalent x y -> Equivalent y z -> Equivalent x z
+
+RelationalMorphism (X : PositiveSetoid.{u,v})
+                    (Y : PositiveSetoid.{w,z})
+  Graph          : X.Carrier -> Y.Carrier -> Type g
+  total          : (x : X.Carrier) ->
+                   Nonempty (Sigma y : Y.Carrier, Graph x y)
+  stableSource   : X.Equivalent x x' -> Graph x y -> Graph x' y
+  stableTarget   : Graph x y -> Y.Equivalent y y' -> Graph x y'
+  singleValued   : Graph x y -> Graph x z -> Y.Equivalent y z
+
+RelationalMorphism.PointwiseEquivalent F G :=
+  (x : X.Carrier) -> (y z : Y.Carrier) ->
+  F.Graph x y -> G.Graph x z -> Y.Equivalent y z
+
+RespectsNameEquivalent f :=
+  NameEquivalent a b -> Y.Equivalent (f a) (f b)
+
+ExtendsNameMap f M :=
+  (name : RegularDyadicName) -> M.Graph (classOf name) (f name)
+```
+
+L'identité prend `Graph := X.Equivalent`; la composition retient le point
+intermédiaire dans un `Sigma` et compose les preuves de totalité sous
+`Nonempty`. `ExtensiveCauchyReal.Value` instancie `PositiveSetoid` avec
+`ExternalEquivalent`, jamais avec son readout tronqué. Une cible `Y` de
+descente est elle aussi un `PositiveSetoid`; l'application de noms a le type
+`f : RegularDyadicName -> Y.Carrier` et reçoit explicitement sa loi de respect
+de `NameEquivalent`. `ClassDescent f` doit former un
+`RelationalMorphism ValuePositiveSetoid Y`, être exact sur `classOf`, et être
+l'unique morphisme compatible avec `f` au sens précis de
+`RelationalMorphism.PointwiseEquivalent`. Cette unicité compare toutes les
+sorties déjà reliées par les deux graphes ; elle n'en choisit aucune. C'est
+cette version relationnelle — et non une application choisie depuis `Value` —
+qui porte la propriété universelle **du quotient des noms**.
+
+Le contrat exact ne doit pas laisser « compatible avec `f` » dans le texte
+informel. Pour tout `f` muni de `RespectsNameEquivalent f`, il faut prouver :
+
+```text
+classDescentExtends : ExtendsNameMap f (classDescent f)
+
+classDescentOnClass :
+  ClassDescent f (classOf name) y -> Y.Equivalent (f name) y
+
+classDescentOnClassBack :
+  Y.Equivalent (f name) y -> ClassDescent f (classOf name) y
+
+classDescentUnique :
+  ExtendsNameMap f M ->
+  RelationalMorphism.PointwiseEquivalent (classDescent f) M
+```
+
+`classDescentOnClass` et sa réciproque expriment l'exactitude, tandis que
+`classDescentUnique` exprime l'unicité relative à la même application de noms.
+Ces théorèmes ne sont pas la propriété universelle de **complétion** des
+dyadiques : ils ne transportent ni injection dyadique, ni limites, ni structure
+ordonnée. Employer `RelationalMorphism` seul pour conclure à la complétion
+déplacerait la cible.
+
+Ces théorèmes constituent la spécification quotient. Ils doivent être prouvés
+avant que `Value` puisse être appelée référence extensive des réels. Cette
+construction n'est donc ni un alias du carrier, ni une copie de la gate 6 : la
+gate 6 compare des présentations reçues en `Type`, tandis que 7.4 forme leurs
+valeurs extensionnelles et rend irréversible l'oubli du représentant.
+
+La référence conventionnelle comparée n'est pas laissée implicite. Elle est le
+setoïde de **tous** les noms de Cauchy dyadiques réguliers reçus, pas une
+énumération de programmes fermés :
+
+```text
+ConventionalRegularCauchyReference : PositiveSetoid
+  Carrier        := RegularDyadicName
+  Equivalent     := NameEquivalent
+  equivalentRefl := NameEquivalent.refl
+  equivalentSymm := NameEquivalent.symm
+  equivalentTrans := NameEquivalent.trans
+
+ReferenceRealizes (name : RegularDyadicName) (value : Value) : Type :=
+  value.Contains name
+
+referenceCoverage (name : RegularDyadicName) :
+  Sigma value : Value, ReferenceRealizes name value :=
+  ⟨classOf name, classOfContains name⟩
+
+valueReferenceCoverage (value : Value) :
+  Nonempty (Sigma name : RegularDyadicName,
+    ReferenceRealizes name value) :=
+  value.inhabited
+```
+
+`referenceCoverage` est constructive dans le sens nom vers classe ; le sens
+classe vers nom reste exactement la totalité propositionnelle déjà contenue
+dans `Value.inhabited`. Les théorèmes `classOf` préservent et reflètent
+`NameEquivalent`; la saturation transporte `ReferenceRealizes` le long de cette
+équivalence, et la cohérence des classes montre que deux noms réalisés dans la
+même valeur sont `NameEquivalent`. Réciproquement, un même nom réalisé dans
+deux valeurs, combiné à saturation et cohérence, donne leur
+`ExternalEquivalent`. Ces lois fournissent correction et fidélité de la
+référence sans former un quotient Lean ni choisir un représentant.
+
+Les constantes, opérations, ordre, apartness et familles de la référence sont
+ceux déjà définis sur `RegularDyadicName`. Les théorèmes d'exactitude de
+`classOf` doivent montrer que `referenceCoverage` transporte ces mêmes
+productions vers `Value`; le nom diagonal de la famille de référence doit être
+exactement celui consommé par `externalComplete`. Ainsi, « tous les réels de la
+référence cauchyenne conventionnelle » quantifie sur toute fonction
+`Nat -> SignedDyadicCode` munie de sa régularité positive, modulo
+`NameEquivalent`, y compris lorsqu'elle est seulement reçue comme paramètre.
+Ce verdict ne se réduit donc pas aux programmes clos ou aux réels effectifs
+antérieurement construits.
+
+Cette référence fixe le sens exact du mot « réels » dans la gate 7.4 : la
+complétion cauchyenne régulière des dyadiques et tous ses éléments modulo
+`NameEquivalent`. Une identification supplémentaire avec `Mathlib.Real`, des
+coupures de Dedekind ou une autre présentation classique n'est ni supposée ni
+obtenue par renommage ; elle constituerait un théorème de comparaison distinct.
+Le plan ne doit donc plus employer l'expression non qualifiée « tous les réels
+classiques usuels » pour désigner simultanément plusieurs constructions.
+
+La référence conventionnelle réalise directement le contrat présenté de 7.2,
+de sorte que 7.3 peut la prendre comme cible sans intermédiaire ; aucune
+couverture artificielle de niveau d'univers supérieur n'est interposée :
+
+```text
+regularPresentedCore : PresentedDyadicStructure
+  Carrier := RegularDyadicName
+  approximation name response := name.approximation response
+  modulus _ precision := precision
+  modulusMonotone _ extension := extension
+  coherent name := name.coherent
+  dyadic := constantName
+  dyadicExact := constantNameSameValue
+  Equivalent := NameEquivalent
+  equivalentRefl := NameEquivalent.refl
+  equivalentSymm := NameEquivalent.symm
+  equivalentTrans := NameEquivalent.trans
+  toApprox same :=
+    -- les deux seuils sont same.responseThreshold
+  fromApprox same :=
+    -- seuil partagé = max same.firstThreshold same.secondThreshold
+
+regularPresentedCompletion : PresentedDyadicCompletion regularPresentedCore
+  complete family :=
+    -- unique producteur : le nom diagonal de cette même famille
+    regularLimitResult family
+
+regularOrderedCompletion : PresentedDyadicOrderedFieldCompletion
+  core := regularPresentedCore
+  completion := regularPresentedCompletion
+  -- opérations, ordre, apartness, densité et bornes sur les mêmes noms
+
+conventionalCompletionObject : PresentedDyadicCompletionObject :=
+  { core := regularPresentedCore
+    completion := regularPresentedCompletion }
+
+regularCharacterization P baseDepth :=
+  relativeOrderedCharacterization P baseDepth regularOrderedCompletion
+```
+
+Le module identité de `regularPresentedCore` est imposé par
+`RegularDyadicName.coherent`. Les prémisses de réponse de
+`PresentedFamily.cauchy` deviennent donc définitionnellement les mêmes
+`PrecisionExtension p r` et `PrecisionExtension p s` que celles des familles
+de noms. `regularLimitResult` prend exactement
+`diagonalName family` comme limite, prouve sa convergence depuis la loi de
+Cauchy reçue et son unicité par `NameEquivalent`; il ne reçoit jamais un
+candidat limite. `regularOrderedCompletion` réutilise exactement les noyaux de
+noms fixés ci-dessous. Dans `toApprox`, le seuil unique de `NameEquivalent` est
+copié dans les deux seuils du contrat. Dans `fromApprox`, le seuil partagé est
+exactement le maximum des deux seuils reçus, puis `same.near` est appelé après
+les deux extensions correspondantes. Cette instance concrète, et non son seul
+nom, est ce qui
+permet à 7.3 de produire :
+
+```text
+carrierToReferenceName := toTarget conventionalCompletionObject
+referenceNameToCarrier := fromTarget regularPresentedCore
+```
+
+avec les deux allers-retours à `EffectiveCauchyReal.Equivalent` et
+`NameEquivalent` près, tous les transports ordonnés, et la préservation des
+limites produites. Puisque le carrier de la cible est **tout**
+`RegularDyadicName`, cette comparaison couvre déjà chaque élément de la
+référence conventionnelle, pas seulement les noms provenant d'un programme du
+dépôt.
+
+La descente de cette comparaison vers les classes n'introduit aucun type de
+présentation parallèle. Elle réutilise exactement la descente universelle du
+quotient :
+
+```text
+DescendedComparison f value y := ClassDescent f value y
+-- donc chaque preuve contient :
+-- name : RegularDyadicName
+-- member : value.Contains name
+-- agrees : Y.Equivalent (f name) y
+
+RelationalCompletionMorphism Target
+  pullback : CompletionMorphism conventionalCompletionObject Target
+
+RelationalCompletionMorphism.Graph M value y :=
+  DescendedComparison M.pullback.map value y
+
+RelationalCompletionMorphism.underlying M :
+  RelationalMorphism
+    ValuePositiveSetoid (targetPositiveSetoid Target)
+```
+
+Le morphisme terminal prend comme `pullback` le `comparisonMorphism` déjà
+dérivé en 7.3. Son graphe n'est jamais stocké : il est définitionnellement le
+`ClassDescent` de `pullback.map`. La totalité élimine `value.inhabited`
+uniquement vers `Nonempty (Sigma y, Graph value y)` et prend, à l'intérieur de
+cette troncature, `y := pullback.map name`. `stableSource` transporte le témoin
+`member` par l'`ExternalEquivalent` reçu ; `stableTarget` compose `agrees` avec
+l'équivalence cible. Deux preuves de graphe fournissent deux noms membres de la
+même `Value`; `value.coherent` donne leur `NameEquivalent`, puis
+`pullback.mapEquivalent` et les deux champs `agrees` donnent
+`singleValued`. Aucun représentant n'est extrait de `Nonempty` vers `Type`.
+
+L'unicité de deux `RelationalCompletionMorphism Target` consomme de même les
+noms déjà présents dans les deux preuves de graphe. `value.coherent` les relie,
+`mapEquivalent` transporte le premier pullback vers le nom du second, puis
+`morphismsPointwiseEquivalent` compare les deux pullbacks sur ce même nom ; les
+champs `agrees` concluent au sens de
+`RelationalMorphism.PointwiseEquivalent`. Les transports de l'injection
+dyadique et des limites proviennent du `CompletionMorphism`; pour une cible
+ordonnée, ceux de `0`, `1`, des opérations, de l'inverse, de l'ordre, de
+l'apartness, de la densité et des bornes proviennent de
+`orderedMorphismTransports`. `ClassDescent` porte ainsi l'universalité du
+quotient et `RelationalCompletionMorphism` l'unicité relative de la complétion,
+sans changer de primitives.
+
+Les opérations externes sont définies sur les classes elles-mêmes. Par exemple,
+un témoin d'appartenance d'un nom à `add x y` contient deux noms, leurs témoins
+d'appartenance respectifs à `x` et `y`, et son équivalence avec leur addition.
+L'existence globale de tels témoins est combinée uniquement sous `Nonempty` ;
+aucun représentant de `x` ou `y` n'est extrait par une fonction en `Type`.
+L'opposé et la multiplication suivent la même discipline.
+L'inverse reçoit un témoin positif d'apartness qui porte les données nécessaires
+à son domaine. L'ordre, l'apartness, la densité et la relation de borne sont
+définis par des témoins de noms et de marges, jamais par une décision globale
+sur les valeurs. La production globale d'une borne depuis une valeur nue reste
+tronquée comme précisé ci-dessous. Les algorithmes sur les noms utilisent
+directement l'arithmétique dyadique ; aucune opération carrier ou runtime ne
+définit une opération externe.
+
+Les opérations sur noms doivent être figées dans une strate numérique basse,
+avant les opérations sur classes. Leurs calendriers canoniques sont ceux-ci :
+
+```text
+negName x .approximation p
+  := (x.approximation p).neg
+
+addName x y .approximation p
+  := (x.approximation (p + 1)).add
+       (y.approximation (p + 1))
+
+mulName x y .approximation p
+  := (x.approximation (p + 1 + probeAmplitude (y.approximation 0))).mul
+       (y.approximation (p + 1 + probeAmplitude (x.approximation 0)))
+
+diagonalName family .approximation p
+  := (family.name (family.modulus p)).approximation p
+```
+
+Pour l'inverse, l'apartness fournit d'abord une direction, une séparation
+`accuracy` et la marge `away := accuracy + 2`. La réponse à la précision `p`
+doit lire exactement la source à
+`sourcePrecision away p := p + 2 + (away + away)`, transporter la séparation
+jusqu'à ce code, puis appeler `computeReciprocal` avec
+`roundingPrecision p := p + 2`. La positivité du dénominateur doit provenir de
+ce transport, jamais d'un test global ni d'une exécution runtime.
+
+Le transport externe n'est pas identique à `ReciprocalDomain.nonzero`. Dans le
+runtime, le Step du zéro est relié exactement au code nul ; dans
+`ExternalOrder source zero` ou `ExternalOrder zero source`, le nom membre de la
+classe zéro peut être seulement `NameEquivalent` au nom nul canonique. La
+normalisation obligatoire est donc :
+
+1. poser `fine := accuracy + 3` et obtenir
+   `PrecisionExtension fine response` depuis `beyond` ;
+2. extraire du témoin d'appartenance à `classOf zeroName` l'équivalence entre
+   le nom zéro reçu et le nom nul canonique ;
+3. choisir une réponse auxiliaire supérieure à `fine` et au
+   `responseThreshold fine` de cette équivalence ;
+4. construire trois liens `Near fine` du code zéro reçu vers le code nul :
+   cohérence interne du nom reçu, `NameEquivalent` vers le nom canonique, puis
+   `SameValue` de l'approximation constante vers `SignedDyadicCode.zero` ;
+5. construire sur l'autre extrémité le lien de cohérence entre la réponse
+   d'origine et `sourcePrecision away p`, et compléter les deux liens restants
+   par les identités quantitatives ;
+6. appeler `strengthenSeparationThreeLinks` dans l'orientation appropriée pour
+   obtenir `StrictSeparation away` entre le code nul exact et le nouveau code
+   source ;
+7. appliquer `fromPositiveMargin` ou `fromNegativeMargin`, puis seulement
+   `computeReciprocal` à `roundingPrecision p`.
+
+Un lemme arithmétique explicite doit certifier
+`PrecisionExtension (accuracy + 3) (sourcePrecision (accuracy + 2) p)`.
+Il n'est ni nécessaire ni permis de supposer que la réponse du témoin est
+inférieure à `sourcePrecision`; les deux réponses sont comparées depuis leurs
+extensions indépendantes. Le plan interdit donc le simple
+`strengthenSeparation` et toute assimilation silencieuse du nom membre de zéro
+au code nul exact.
+
+Le paquet d'ordre externe est fixé, et non laissé au choix de
+l'implémentation :
+
+```text
+ExternalOrder x y
+  leftName    : RegularDyadicName
+  rightName   : RegularDyadicName
+  leftMember  : x.Contains leftName
+  rightMember : y.Contains rightName
+  accuracy    : Nat
+  response    : Nat
+  beyond      : PrecisionExtension (accuracy + 3) response
+  separation  : StrictSeparation accuracy
+                  (leftName.approximation response)
+                  (rightName.approximation response)
+
+ExternalApartness x y := ExternalOrder x y ⊕ ExternalOrder y x
+```
+
+Le budget `accuracy + 3` est obligatoire : il paie les transports quantitatifs
+des représentants et fournit ensuite la marge `away := accuracy + 2` consommée
+par l'inverse. L'ordre sur les classes doit être transportable dans les deux
+directions sous `ExternalEquivalent`; l'apartness est exactement la somme
+orientée ci-dessus, pas une négation propositionnelle de l'équivalence.
+
+La séparation entre relation primitive et lecture extensive est obligatoire :
+
+```text
+SetoidOrder x y     := Nonempty (ExternalOrder x y)
+SetoidApartness x y := Nonempty (ExternalApartness x y)
+
+NameOrder a b
+  accuracy response : Nat
+  beyond            : PrecisionExtension (accuracy + 3) response
+  separation        : StrictSeparation accuracy
+                        (a.approximation response)
+                        (b.approximation response)
+
+NameApartness a b := NameOrder a b ⊕ NameOrder b a
+```
+
+`NameOrder` et `NameApartness` portent les lois positives complètes requises par
+`PresentedConstructiveOrderLaws`, notamment cotransitivité et translations, et
+instancient directement l'ordre de `regularOrderedCompletion`. Un témoin
+`ReferenceRealizes name value` permet de les projeter en `ExternalOrder` en
+ajoutant les appartenances nécessaires. Dans l'autre sens, un `ExternalOrder`
+entre deux classes déjà reliées à des noms choisis se transporte vers ces noms
+au moyen de `coherent`, des `NameEquivalent` obtenus et de
+`strengthenSeparationThreeLinks`. Le transport reste indexé par les témoins de
+réalisation ; il ne choisit jamais un nom depuis une `Value` nue.
+
+En revanche, aucune cotransitivité en `Type` ne doit être déclarée directement
+sur une `Value` nue. Avec `unitPositive : ExternalOrder zero one`, une loi
+
+```text
+(middle : Value) ->
+  ExternalOrder zero middle ⊕ ExternalOrder middle one
+```
+
+donnerait dans chaque branche un nom et un témoin d'appartenance de `middle`,
+donc fabriquerait la fonction interdite
+`Value -> Sigma name, middle.Contains name`. La même discipline vaut pour une
+translation qui reçoit un décalage nu. Sur `Value`, les lois qui introduisent
+un argument sans présentation concluent donc sous `Nonempty`; au niveau aval,
+les lois de corps ordonné portent sur `SetoidEquivalent`, `SetoidOrder` et
+`SetoidApartness`, tous propositionnels. Cette troncature n'est jamais remontée
+pour produire une opération ou un témoin positif. L'inverse reste exclusivement
+indexé par un `ExternalApartness` positif en `Type`, jamais par son seul readout
+`SetoidApartness`.
+
+Le contrat aval doit donc être distinct de
+`PresentedConstructiveOrderLaws`. Il ne peut pas en réutiliser les champs
+`Type` en changeant seulement leurs noms. Les obligations ne doivent pas être
+masquées derrière des champs agrégés tels que `equivalentLaws`, `orderLaws`,
+`apartnessLaws` ou `algebraicLaws`. Le contrat minimal explicite est :
+
+```text
+SetoidInverse x y :=
+  Nonempty (Sigma w : ExternalApartness x zero,
+    SetoidEquivalent (externalInverse x w) y)
+
+SetoidOrderedArchimedeanReadout
+  Equivalent := SetoidEquivalent
+  Order      := SetoidOrder
+  Apartness  := SetoidApartness
+  Inverse    := SetoidInverse
+
+  -- toutes ces lois vivent dans Prop
+  equivalentRefl  : SetoidEquivalent x x
+  equivalentSymm  : SetoidEquivalent x y -> SetoidEquivalent y x
+  equivalentTrans : SetoidEquivalent x y -> SetoidEquivalent y z ->
+    SetoidEquivalent x z
+
+  addCongr : SetoidEquivalent a c -> SetoidEquivalent b d ->
+    SetoidEquivalent (add a b) (add c d)
+  addComm : SetoidEquivalent (add a b) (add b a)
+  addAssoc : SetoidEquivalent (add (add a b) c) (add a (add b c))
+  zeroLeft  : SetoidEquivalent (add zero a) a
+  zeroRight : SetoidEquivalent (add a zero) a
+  negCongr : SetoidEquivalent a b -> SetoidEquivalent (neg a) (neg b)
+  negInvolutive : SetoidEquivalent (neg (neg a)) a
+  addInverseLeft  : SetoidEquivalent (add (neg a) a) zero
+  addInverseRight : SetoidEquivalent (add a (neg a)) zero
+  negSum : SetoidEquivalent (neg (add a b)) (add (neg a) (neg b))
+
+  mulCongr : SetoidEquivalent a c -> SetoidEquivalent b d ->
+    SetoidEquivalent (mul a b) (mul c d)
+  mulComm : SetoidEquivalent (mul a b) (mul b a)
+  mulAssoc : SetoidEquivalent (mul (mul a b) c) (mul a (mul b c))
+  oneLeft  : SetoidEquivalent (mul one a) a
+  oneRight : SetoidEquivalent (mul a one) a
+  mulZeroLeft  : SetoidEquivalent (mul zero a) zero
+  mulZeroRight : SetoidEquivalent (mul a zero) zero
+  distributeLeft :
+    SetoidEquivalent (mul a (add b c)) (add (mul a b) (mul a c))
+  distributeRight :
+    SetoidEquivalent (mul (add a b) c) (add (mul a c) (mul b c))
+  mulNegLeft  : SetoidEquivalent (mul (neg a) b) (neg (mul a b))
+  mulNegRight : SetoidEquivalent (mul a (neg b)) (neg (mul a b))
+
+  unitPositive : SetoidOrder zero one
+  irreflexive   : SetoidOrder x x -> False
+  asymmetric    : SetoidOrder x y -> SetoidOrder y x -> False
+  transitive    : SetoidOrder x y -> SetoidOrder y z -> SetoidOrder x z
+  cotransitive  : SetoidOrder x y -> (middle : Value) ->
+    SetoidOrder x middle ∨ SetoidOrder middle y
+  transportOrder : SetoidOrder a b -> SetoidEquivalent a c ->
+    SetoidEquivalent b d -> SetoidOrder c d
+  translateRight : SetoidOrder a b -> (shift : Value) ->
+    SetoidOrder (add a shift) (add b shift)
+  translateLeft : SetoidOrder a b -> (shift : Value) ->
+    SetoidOrder (add shift a) (add shift b)
+  reflectTranslationRight :
+    SetoidOrder (add a shift) (add b shift) -> SetoidOrder a b
+  positiveProduct : SetoidOrder zero a -> SetoidOrder zero b ->
+    SetoidOrder zero (mul a b)
+  multiplyPositiveRight : SetoidOrder a b -> SetoidOrder zero c ->
+    SetoidOrder (mul a c) (mul b c)
+  multiplyPositiveLeft : SetoidOrder a b -> SetoidOrder zero c ->
+    SetoidOrder (mul c a) (mul c b)
+
+  apartnessSymm : SetoidApartness x y -> SetoidApartness y x
+  transportApartness : SetoidApartness a b -> SetoidEquivalent a c ->
+    SetoidEquivalent b d -> SetoidApartness c d
+  apartnessToOrder : SetoidApartness x y ->
+    SetoidOrder x y ∨ SetoidOrder y x
+  orderToApartness : SetoidOrder x y ∨ SetoidOrder y x ->
+    SetoidApartness x y
+
+  inverseFromWitness : (w : ExternalApartness x zero) ->
+    SetoidInverse x (externalInverse x w)
+  inverseTotal : SetoidApartness x zero ->
+    Nonempty (Sigma y : Value, SetoidInverse x y)
+  inverseSingleValued : SetoidInverse x y -> SetoidInverse x z ->
+    SetoidEquivalent y z
+  inverseWitnessIndependent :
+    (first second : ExternalApartness x zero) ->
+    SetoidEquivalent (externalInverse x first) (externalInverse x second)
+  inverseCongr : SetoidEquivalent x x' -> SetoidInverse x y ->
+    SetoidInverse x' y' -> SetoidEquivalent y y'
+  inverseUnitRight : SetoidInverse x y ->
+    SetoidEquivalent (mul x y) one
+  inverseUnitLeft : SetoidInverse x y ->
+    SetoidEquivalent (mul y x) one
+
+  densityExists      : SetoidOrder x y ->
+    Nonempty (Sigma code : SignedDyadicCode,
+      SetoidOrder x (dyadicValue code) ×
+      SetoidOrder (dyadicValue code) y)
+  naturalBoundsExist : (x : Value) ->
+    Nonempty (Sigma lower upper : Nat,
+      SetoidOrder (negativeNaturalValue lower) x ×
+      SetoidOrder x (naturalValue upper))
+```
+
+Chaque variable libre du schéma est universellement quantifiée avec le même
+domaine `Value` que son homologue de `PresentedAdditiveGroupLaws`,
+`PresentedMultiplicativeLaws` ou `PresentedConstructiveOrderLaws`. Les
+connecteurs exacts sont `Or`, produits propositionnels et `Nonempty`. La
+réflexion de translation à gauche peut être dérivée de
+`reflectTranslationRight`, de la commutativité et des transports, mais ce
+théorème dérivé doit être exposé et audité.
+
+`SetoidInverse` est un graphe propositionnel, pas une fonction. Son témoin
+positif `ExternalApartness` reste enfermé sous `Nonempty`. `inverseTotal`
+élimine `SetoidApartness` uniquement vers un autre `Nonempty` ;
+`inverseSingleValued`, `inverseWitnessIndependent` et `inverseCongr` garantissent
+que le résultat lu ne dépend ni du témoin reçu ni d'un représentant de la
+classe. Aucun champ de ce readout ne renvoie en `Type` un `ExternalOrder`, un
+`ExternalApartness`, un nom membre, un représentant ou un inverse choisi depuis
+une `Value` nue. Les lois positives exécutables restent exclusivement sur
+`RegularDyadicName` ou le long d'une réalisation qui conserve le nom et son
+témoin d'appartenance.
+
+La densité et les bornes gardent elles aussi leurs témoins complets :
+
+```text
+ExternalDensityWitness x y
+  code  : SignedDyadicCode
+  left  : ExternalOrder x (dyadicValue code)
+  right : ExternalOrder (dyadicValue code) y
+
+ExternalNaturalBounds x
+  lower : Nat
+  upper : Nat
+  lowerOrder : ExternalOrder (negativeNaturalValue lower) x
+  upperOrder : ExternalOrder x (naturalValue upper)
+```
+
+`nameDensity` est le producteur autoritatif de densité depuis un `NameOrder`.
+Il suit le calendrier unique suivant. Poser
+`middle := bisect origin.separation`. Les deux ordres produits conservent
+`middle.code`, prennent l'accuracy
+`origin.accuracy + 3`, la réponse `origin.accuracy + 6` et
+`beyond := PrecisionExtension.refl _`. Leur séparation est obtenue par
+`strengthenSeparation` appliqué respectivement à `middle.leftMargin` et
+`middle.rightMargin`; les liens à la précision `origin.accuracy + 3` sont la
+cohérence du nom source entre `origin.response` et la nouvelle réponse, et le
+`SameValue` du nom dyadique constant avec `middle.code`. Ainsi le code de
+densité provient exactement de `bisect origin.separation`, tandis que les trois
+bits supplémentaires paient le transport vers les réponses des noms ; aucune
+nouvelle sélection n'est admise. `externalDensity` extrait de son
+`ExternalOrder` ce même `NameOrder`, appelle `nameDensity` une fois, puis ajoute
+les témoins d'appartenance nécessaires aux classes.
+
+`nameNaturalBounds name` est de même le producteur autoritatif des bornes. Il
+lit exactement `probe := name.approximation 2`, puis
+`bounds := naturalBounds probe`. Les deux `NameOrder` prennent
+`accuracy := 2`, `response := 5` et `beyond := PrecisionExtension.refl _`.
+Leurs séparations proviennent de `strengthenSeparation` appliqué à
+`bounds.lowerMargin` et `bounds.upperMargin`, avec la cohérence de `name` entre
+les réponses `2` et `5` et le `SameValue` des noms naturels constants. Les
+entiers retournés sont définitionnellement `bounds.lower` et `bounds.upper`.
+`externalNaturalBoundsFromMember value name member` appelle exactement
+`nameNaturalBounds name` et ne fait qu'ajouter `member` et les appartenances des
+classes naturelles. Ce calendrier partagé est celui qui permet à
+`lowerBoundExact` et `upperBoundExact` de prouver une identité de readout, pas
+seulement l'existence de bornes équivalentes.
+
+Pour une valeur nue, l'archimédianité a la forme
+`Nonempty (ExternalNaturalBounds x)`; le long de `ReferenceRealizes` ou de
+`Realizes`, le paquet complet reste produit en `Type`.
+
+Les preuves numériques déjà présentes pour addition, multiplication,
+séparation, réciproque et densité doivent être descendues ou factorisées vers
+des modules n'important que `Precision`, `DyadicArithmetic`,
+`DyadicMultiplication`, `DyadicOrder`, `DyadicReciprocal` et les autres noyaux
+dyadiques nécessaires. Les nouveaux noms ne doivent pas importer
+`RuntimeCorrespondence`, `RelationalRealAddition`, `ReciprocalRuntime` ou une
+opération carrier. Les adaptateurs supérieurs réutilisent ensuite cette unique
+strate numérique ; ils ne recréent pas une seconde opération indépendante.
+
+La complétude externe porte elle aussi sur des familles présentées. Les types
+de la famille et de sa convergence sont fixés comme suit :
+
+```text
+ExternalPresentedFamily
+  terms            : Nat -> Value
+  name              : (n : Nat) -> RegularDyadicName
+  member            : (n : Nat) -> (terms n).Contains (name n)
+  modulus           : Nat -> Nat
+  modulusMonotone   : PrecisionExtension p q ->
+                        PrecisionExtension (modulus p) (modulus q)
+  cauchy            : PrecisionExtension (modulus p) n ->
+                      PrecisionExtension (modulus p) m ->
+                      PrecisionExtension p r ->
+                      PrecisionExtension p s ->
+                      Near p
+                        ((name n).approximation r)
+                        ((name m).approximation s)
+
+ExternalConverges family value
+  candidateName   : RegularDyadicName
+  candidateMember : value.Contains candidateName
+  threshold       : Nat -> Nat
+  near            : PrecisionExtension (family.modulus p) n ->
+                    PrecisionExtension p r ->
+                    PrecisionExtension (threshold p) s ->
+                    Near p
+                      ((family.name n).approximation r)
+                      (candidateName.approximation s)
+
+ExternalLimitResult family
+  value       : Value
+  convergence : ExternalConverges family value
+  unique      : ExternalConverges family other ->
+                  ExternalEquivalent value other
+```
+
+Les quantifications implicites `p n m r s` doivent être rendues explicites
+dans les déclarations Lean. Une convergence vers une valeur nue porte donc le
+nom membre qu'elle consomme ; elle ne choisit pas ce nom depuis
+`value.inhabited`. La limite canonique est la classe du nom diagonal
+effectivement construit par la formule fixée plus haut.
+Sa convergence utilise directement le module reçu : à la précision `p`, la
+réponse du candidat à un indice `s >= p` est le terme
+`family.name (family.modulus s)` lu à `s`; la monotonie du module donne
+`family.modulus p <= family.modulus s`, puis `family.cauchy` compare ce terme à
+celui reçu par la convergence. L'unicité entre deux candidats ne compose
+jamais deux erreurs à la même précision finale : pour construire leur
+`NameEquivalent` à la précision `p`, elle appelle les deux convergences à
+`p + 1`, prend comme indice commun `family.modulus (p + 1)`, comme réponse
+commune du terme au moins `p + 1`, et comme seuil partagé le maximum des deux
+seuils candidats à `p + 1`; la symétrie de la première proximité suivie de
+`Near.compose` donne la proximité à `p`. Les appartenances des candidats et la
+cohérence de chaque classe étendent ensuite cette équivalence de noms en
+`ExternalEquivalent` entre les valeurs entières.
+
+La couche de classes ne duplique ni l'arithmétique des noms ni leur
+complétion. Les raccords sont des définitions dirigées depuis la référence :
+
+```text
+externalNaturalBoundsFromMember
+    (value : Value)
+    (name : RegularDyadicName)
+    (member : value.Contains name) :
+  ExternalNaturalBounds value
+
+referenceFamily (family : ExternalPresentedFamily) :
+    PresentedFamily regularPresentedCore :=
+  { terms := family.name
+    modulus := family.modulus
+    modulusMonotone := family.modulusMonotone
+    cauchy := fun p n m r s hn hm hr hs =>
+      family.cauchy p n m r s hn hm hr hs }
+
+externalComplete (family : ExternalPresentedFamily) :
+    ExternalLimitResult family :=
+  let produced := regularPresentedCompletion.complete (referenceFamily family)
+  { value := classOf produced.value
+    convergence :=
+      -- candidateName = produced.value ; member = classOfContains _
+      externalConvergenceFromReference family produced
+    unique := externalUniquenessFromReference family produced }
+```
+
+`referenceFamily` copie exactement les noms, le module et sa monotonie ; son
+champ `cauchy` appelle directement la loi reçue avec les mêmes arguments. Le
+module identité de `regularPresentedCore` rend cet appel définitionnellement
+typable. `externalComplete` appelle une seule fois le producteur déjà installé
+dans `regularPresentedCompletion`; sa valeur est exactement la classe de
+`produced.value`, son candidat est ce même nom, et son témoin d'appartenance est
+`classOfContains produced.value`. `externalConvergenceFromReference` reprend
+`produced.convergence`; `externalUniquenessFromReference` reprend
+`produced.unique`, puis étend le `NameEquivalent` obtenu aux classes par
+saturation et cohérence. Aucun second nom diagonal, aucune seconde classe
+limite et aucune seconde exécution ne sont reconstruits.
+
+Les compatibilités de `classOf` sont des théorèmes dérivés, jamais les champs
+d'une interface reçue :
+
+```text
+classOfPreserves : NameEquivalent a b ->
+  ExternalEquivalent (classOf a) (classOf b)
+classOfReflects : ExternalEquivalent (classOf a) (classOf b) ->
+  NameEquivalent a b
+classOfDyadic : ExternalEquivalent (classOf (constantName code)) (dyadicValue code)
+classOfAdd : ExternalEquivalent (classOf (addName a b))
+  (addValue (classOf a) (classOf b))
+classOfNeg : ExternalEquivalent (classOf (negName a)) (negValue (classOf a))
+classOfMul : ExternalEquivalent (classOf (mulName a b))
+  (mulValue (classOf a) (classOf b))
+nameOrderToExternal : NameOrder a b -> ExternalOrder (classOf a) (classOf b)
+nameApartnessToExternal : NameApartness a b ->
+  ExternalApartness (classOf a) (classOf b)
+classOfInverse : (w : NameApartness a zeroName) ->
+  ExternalEquivalent (classOf (inverseName a w))
+    (externalInverse (classOf a) (nameApartnessToExternal w))
+densityCodeExact : (origin : NameOrder a b) ->
+  (externalDensity (nameOrderToExternal origin)).code =
+    (nameDensity origin).code
+lowerBoundExact : (name : RegularDyadicName) ->
+  (externalNaturalBoundsFromMember (classOf name) name
+    (classOfContains name)).lower = (nameNaturalBounds name).lower
+upperBoundExact : (name : RegularDyadicName) ->
+  (externalNaturalBoundsFromMember (classOf name) name
+    (classOfContains name)).upper = (nameNaturalBounds name).upper
+externalCompleteExact : (family : ExternalPresentedFamily) ->
+  (externalComplete family).value =
+    classOf ((regularPresentedCompletion.complete (referenceFamily family)).value)
+```
+
+L'inverse externe reçoit exactement `nameApartnessToExternal w`; aucun second
+témoin d'apartness, même équivalent, ne remplace ce terme dans
+`classOfInverse`. De même, densité et bornes consomment les producteurs et
+calendriers numériques fixés ci-dessus. Ces égalités identifient les readouts
+finis et la cible de complétion ; elles ne postulent ni égalité de preuves ni
+reconstruction d'un nom depuis une `Value` nue.
+
+Il n'est revendiqué ni choix d'un nom pour une fonction nue
+`Nat -> Value`, ni complétude par borne supérieure. Pour justifier la portée
+« tous les réels de la référence cauchyenne conventionnelle », le dépôt doit
+prouver sur cette référence la spécification quotient, le paquet de corps
+ordonné constructif positif sur `RegularDyadicName`, son readout setoïdal
+ordonné et archimédien sur `Value`, la
+densité dyadique et la complétude des familles de Cauchy présentées, puis sa
+propriété universelle **relationnelle** de complétion des dyadiques parmi les
+réalisations du même contrat. Le paquet ordonné de
+`regularOrderedCompletion`, sa réalisation directe du contrat présenté utilisé
+par 7.3, les troncatures setoïdales aval et la spécification quotient de
+`classOf` forment ensemble la construction
+autonome exacte retenue ; une simple déclaration que les noms « représentent
+les réels » ne suffit pas.
+
+La cible exacte est ainsi la droite des réels de Cauchy dyadiques construite
+autonomement dans le dépôt, avec toutes les fonctions régulières reçues, et non
+la seule sous-classe des programmes fermés. Le théorème terminal doit la
+reconnaître comme complétion relationnelle dont le readout setoïdal est
+archimédien et ordonné, unique relativement au contrat présenté. Il ne doit ni
+transformer cette universalité relationnelle en choix de représentants, ni
+prétendre une égalité définitionnelle avec `Mathlib.Real` ou une construction
+de Dedekind non formalisée, ni réduire la cible aux seuls réels effectifs
+antérieurs.
+
+La propriété archimédienne d'une valeur nue a nécessairement la forme
+propositionnellement tronquée `Nonempty (ExternalNaturalBounds value)` :
+produire directement ses deux entiers depuis `value` choisirait son
+représentant. En revanche, un `Realizes carrier value` porte déjà un nom membre ;
+les bornes carrier exécutées peuvent donc être transportées positivement le
+long de cette réalisation. Cette distinction entre existence extensive et
+production runtime doit rester visible dans les types et dans le verdict.
+
+La relation positive `Realizes : Carrier -> Value -> Type` doit être
+accompagnée des quatre groupes d'obligations suivants :
 
 1. **totalité bidirectionnelle**, avec obligatoirement
-   `carrierCoverage : (c : Carrier) -> (Σ x : E, Realizes c x)` pour le readout
-   aval de chaque carrier, et, dans le sens externe vers carrier, en distinguant
-   explicitement
-   `constructiveCoverage : (x : E) -> (Σ c : Carrier, Realizes c x)`, qui fournit
-   une donnée exploitable, de
-   `relationalCoverage : (x : E) -> Nonempty (Σ c : Carrier, Realizes c x)`, qui
-   ne fournit pas d'inverse en `Type` ;
+   `carrierCoverage : (c : Carrier) -> (Σ value : Value, Realizes c value)` pour
+   le readout aval de chaque carrier, et
+   `relationalCoverage : (value : Value) ->
+   Nonempty (Σ c : Carrier, Realizes c value)` dans l'autre sens. La seconde ne
+   fournit pas d'inverse en `Type` ; aucune `constructiveCoverage` depuis une
+   classe nue n'est exigée ;
 2. **correction** : deux carriers équivalents qui réalisent des valeurs
    externes réalisent des valeurs `ExternalEquivalent` ;
 3. **fidélité** : deux réalisations de valeurs `ExternalEquivalent` ont des
@@ -3541,8 +4425,86 @@ des quatre groupes d'obligations suivants :
    domaine, apartness, ordre et limites sont préservés et, lorsque le verdict
    l'affirme, réfléchis.
 
+La réalisation terminale n'est pas un nouveau graphe parallèle : elle est
+**exactement la descente de l'application retour produite par 7.3**. En posant
+
+```text
+carrierToReferenceName : Carrier -> RegularDyadicName :=
+  (regularCharacterization P baseDepth).forward.map
+
+referenceNameToCarrier : RegularDyadicName -> Carrier :=
+  (regularCharacterization P baseDepth).backward.map
+
+Realizes carrier value :=
+  DescendedComparison referenceNameToCarrier value carrier
+```
+
+Chaque preuve de `Realizes` expose donc exactement son `name`, son `member` et
+son accord carrier ; aucun lift supplémentaire n'existe. Pour
+`carrierCoverage carrier`, poser obligatoirement
+`name := carrierToReferenceName carrier`, `value := classOf name`, prendre
+`classOfContains name`, puis utiliser l'aller-retour `carrierReturn` de
+`regularCharacterization` comme champ `agrees`. Il est interdit de construire
+un autre nom carrier. Dans l'autre sens, `relationalCoverage value` élimine
+`value.inhabited` uniquement vers `Nonempty`; pour le nom membre reçu à
+l'intérieur, il prend `referenceNameToCarrier name` et la réflexivité carrier.
+Aucun nom ni carrier ne s'échappe en `Type`.
+
+La correction utilise les noms et appartenances portés par deux preuves de
+`Realizes`, l'équivalence des carriers réalisés et la réflexion d'équivalence
+de `backwardTransports` pour obtenir `NameEquivalent`, puis la saturation des
+classes pour construire `ExternalEquivalent`. La fidélité transporte le nom
+de la première preuve le long de l'`ExternalEquivalent`, le compare au nom de
+la seconde par `Value.coherent`, applique `backward.mapEquivalent`, puis compose
+les deux champs `agrees`. Les transports factorisent de la même manière par les
+transports de `regularCharacterization` et les théorèmes `classOf...`; aucune
+relation ou opération concurrente n'est reconstruite. Le verdict de classes
+visé est donc une **correspondance relationnelle totale**, tandis que la
+correspondance carrier–noms fournie directement par 7.3 est constructive.
+
+Le théorème terminal ne s'arrête pas au carrier numérique. Il expose aussi la
+composition avec le runtime déjà constituée en gate 6 :
+
+```text
+RuntimeRealizes (runtime : Real P baseDepth) (value : Value) : Type :=
+  Realizes (toCarrier runtime) value
+
+runtimeCoverage (runtime : Real P baseDepth) :
+  Sigma value : Value, RuntimeRealizes runtime value :=
+  carrierCoverage (toCarrier runtime)
+
+valueRuntimeCoverage (value : Value) :
+  Nonempty (Sigma runtime : Real P baseDepth,
+    RuntimeRealizes runtime value)
+
+runtimeOfReferenceName (name : RegularDyadicName) : Real P baseDepth :=
+  ofCarrier P baseDepth (referenceNameToCarrier name)
+
+runtimeOfReferenceNameRealizes (name : RegularDyadicName) :
+  RuntimeRealizes (runtimeOfReferenceName name) (classOf name)
+```
+
+`valueRuntimeCoverage` élimine `relationalCoverage value` uniquement vers
+`Nonempty`, prend à l'intérieur `ofCarrier P baseDepth carrier`, puis transporte
+le champ `agrees : Equivalent (referenceNameToCarrier name) carrier` par
+`(carrier_roundtrip carrier).symm`, afin d'obtenir exactement
+`Equivalent (referenceNameToCarrier name)
+  (toCarrier (ofCarrier P baseDepth carrier))`. La correction et la fidélité
+runtime passent par les deux directions de `equivalentCarrier`; les transports
+d'opérations réutilisent les théorèmes de gate 6 puis ceux de 7.3. Cette couche
+ne choisit aucun runtime depuis une classe nue en `Type`, ne refait aucune
+exécution et ne prétend pas récupérer les histoires oubliées.
+`runtimeOfReferenceNameRealizes` est au contraire constructif parce que le nom
+est explicitement reçu : il réutilise `referenceNameToCarrier`, `ofCarrier`,
+`classOfContains` et `(carrier_roundtrip _).symm` pour orienter le champ
+`agrees`. Il établit directement que **chaque**
+élément présenté de `ConventionalRegularCauchyReference` possède une
+réalisation runtime, sans réduire le carrier de référence aux programmes
+fermés.
+
 Une relation ou une fibre sans ces obligations ne justifie ni « tous les réels
-classiques » ni une correspondance. En particulier, couvrir tous les `x : E`
+de la référence cauchyenne conventionnelle » ni une correspondance. En
+particulier, couvrir toutes les `value : Value`
 sans montrer que tout carrier réalise une valeur externe ne donne qu'une
 surjection vers les carriers couverts, pas une correspondance des deux
 constructions. Une couverture `Nonempty` reste une lecture propositionnelle
@@ -3552,122 +4514,621 @@ externe.
 Trois verdicts doivent être distingués, et aucun ne peut être renommé en un
 autre :
 
-1. **correspondance constructive totale** : la cible fournit le contrat,
-   `carrierCoverage` et `constructiveCoverage`; chaque carrier possède son
-   readout externe et chaque valeur externe reçue produit une réalisation
-   carrier, puis la comparaison relative s'applique ;
-2. **correspondance relationnelle totale** : la cible fournit
-   `carrierCoverage`, `relationalCoverage`, correction, fidélité et tous les
-   transports ; chaque carrier réalise une valeur externe et chaque valeur
-   externe appartient bien à une fibre de réalisations, mais aucune fonction
-   exécutable depuis la valeur nue n'est annoncée ;
+1. **correspondance constructive avec les noms de référence** : 7.3 fournit
+   `carrierToReferenceName`, `referenceNameToCarrier`, leurs allers-retours et
+   leurs transports pour tout `RegularDyadicName` ;
+2. **correspondance relationnelle totale avec les classes** : la descente
+   fournit `carrierCoverage`, `relationalCoverage`, correction, fidélité et
+   tous les transports ; chaque carrier réalise une classe et chaque classe
+   appartient bien à une fibre de réalisations, mais aucune fonction
+   exécutable depuis la classe nue n'est annoncée ;
 3. **frontière formelle** : l'une des obligations précédentes ne peut être
    fermée sous les règles du dépôt. Cette issue est scientifiquement conforme
    comme constat d'échec, mais **elle n'atteint pas** la cible « correspondance
-   avec tous les réels classiques usuels ».
+   avec tous les réels de la référence cauchyenne conventionnelle ».
 
 Les interdictions Lean du dépôt restent en vigueur. Il est donc exclu de fermer
 cette étape par `Classical`, `noncomputable`, `Quot.sound`, `propext`, une
-borne supérieure choisie ou un représentant extrait silencieusement. Si la
-construction extensive retenue exige ces mécanismes, la conclusion correcte
-sera une frontière formelle explicitée et la gate classique restera ouverte,
-pas un affaiblissement du contrat.
-En particulier, l'emploi du `Real` standard de Lean/mathlib, s'il est retenu,
-doit commencer par une étude de faisabilité de ses quotients et de ses
-principes classiques au regard de ces interdictions. Cette étude peut conclure
-que seule une relation de readout est formalisable dans le dépôt actuel ; ce
-serait une limite démontrée de la comparaison choisie, non un échec à masquer
-ni une réussite de la cible classique.
+borne supérieure choisie ou un représentant extrait silencieusement. La couche
+de classes saturées remplace précisément le quotient Lean : ses lois sont des
+transports positifs, et la couverture inverse reste sous `Nonempty`. Toute
+tentative de transformer cette couverture en fonction exécutable est un échec
+de la gate, même si elle compile à l'aide d'un principe classique.
 
-À l'état présent, `lakefile.toml` ne déclare aucune dépendance mathlib et le
-dépôt ne contient pas de type externe déjà validé pouvant être nommé ici
-« réels usuels ». L'étape 7.4 n'est donc pas prête à être implémentée : son
-premier résultat doit être une note de faisabilité qui fixe soit une
-construction constructive autonome de référence, soit une dépendance externe
-explicitement auditée. Tant que ce choix n'est pas fermé, aucune déclaration
-Lean de 7.1 à 7.3 ne peut être comptée comme correspondance avec tous les réels
-classiques. Ce constat maintient la cible ; il ne la remplace pas par la seule
-classe effective déjà construite.
+L'étude directe de `Mathlib.Real` n'est plus la route d'implémentation retenue :
+son quotient nu et ses choix non calculables contredisent le sens constitutif
+requis. La construction autonome ci-dessus fixe désormais la référence exacte
+à implémenter sans ajouter mathlib. Sur l'arbre de chantier, la référence, sa
+spécification quotient, sa structure et sa correspondance carrier/runtime sont
+désormais implémentées avec leurs tests. La clôture scientifique de la gate
+7.4 reste ouverte : les sources nouvelles ne possèdent pas encore de snapshot
+autorisé, leur fiche de registre n'est donc pas figée et les revues de cette
+nouvelle portée restent à faire. Cette distinction ne transforme ni un build
+vert ni un brouillon en évidence scientifique enregistrée.
+
+L'audit constitutif de 7.4 est figé avant l'ordre d'implémentation :
+
+| Passage | Ce qui indexe les types | Ce qui construit réellement | Ce que la preuve consomme | Ce que l'aval oublie |
+| --- | --- | --- | --- | --- |
+| Nom régulier reçu | Précision, réponses et fonction d'approximation reçue | Les réponses dyadiques et les témoins `Near` du nom | Régularité positive et extensions de précision | Aucune histoire runtime n'est encore présente |
+| Complétion des noms | Famille, module extérieur, termes et réponses | `diagonalName family`, une seule fois | Loi de Cauchy reçue, monotonie du module, cohérence et `Near.compose` | Les producteurs éventuels des fonctions reçues ne sont pas reconstruits |
+| Classe `Value` | Relation `Contains` et noms membres explicites | `classOf`, puis opérations saturées à partir de témoins membres | `NameEquivalent`, saturation et cohérence | Le représentant global est caché sous `Nonempty` et ne ressort jamais en `Type` |
+| Comparaison carrier–référence | `P`, `baseDepth`, carrier ou nom reçu | Les maps déjà dérivées par 7.3 et leur descente `ClassDescent` | Limites produites, allers-retours, `mapEquivalent` et unicité | Histoires, occurrences, journaux et témoins riches du runtime |
+| Réalisation runtime | Nom membre, carrier relié et périmètre reçu | `ofCarrier` seulement après la construction du carrier associé au nom | `carrier_roundtrip`, `equivalentCarrier` et les transports de gate 6 | La classe nue ne fournit ni runtime ni représentant choisi |
+
+Cette table interdit deux substitutions symétriques : un nom stocké dans une
+classe ne vaut pas dépendance exécutée, et la production d'un runtime depuis un
+nom explicitement reçu ne transforme pas une `Value` nue en programme. La
+chaîne terminale doit conserver les témoins produits jusqu'à leur consommation,
+puis seulement effectuer le readout ou la troncature annoncée.
+
+#### Chantier Gate 7.4 — archive de travail du transfert canonique
+
+Le code et les tests de ce chantier implémentent la référence régulière et le
+raccord relationnel carrier/runtime décrits ci-dessus. Les vérifications
+globales sont consignées à la fin du lot ; un build seul ne clôt pas la gate
+scientifique. L'identifiant est
+`RUNTIME_CONVENTIONAL_REGULAR_CAUCHY_REFERENCE`. Son passage français
+canonique est [ici](../runtime-conventional-regular-cauchy-reference.fr.md) et
+sa traduction anglaise [ici](../runtime-conventional-regular-cauchy-reference.en.md).
+Les révisions et statuts ne sont pas recopiés dans le plan : le registre en est
+la seule source courante.
+
+Les deux textes suivants sont l'**archive non canonique du brouillon** ayant
+servi au transfert. Ils restent ici seulement pour la traçabilité du chantier ;
+les passages publiables liés ci-dessus ont seuls autorité scientifique.
+La traduction Lean des fibres à second composant propositionnel emploie
+`PSigma` sous `Nonempty`, et celle des produits propositionnels `And` :
+le pseudo-code `Sigma` du plan ne permet aucune extraction supplémentaire.
+
+##### Brouillon français non canonique — pending snapshot
+
+État des contrôles du chantier au HEAD de base
+`77a1d2a0ad0a1a3675ecb3b37cd7f3e146d24bae`, avec diff non commité :
+
+- `lake build` : réussite, 419 jobs ; audit exhaustif de 39 200 constantes,
+  416 modules, 791 exceptions générées classifiées et aucune exception écrite.
+- Scan constructif et unicité/position terminale des audits : 417 fichiers Lean.
+  Le contrôle de schéma vérifie les quatre champs de `Value`, l'unique champ
+  `pullback` et l'absence de fonction nue `Value -> nom/carrier`.
+- Fixtures : 248 fichiers, 251 sites exacts, dont les 39 refus propres à 7.4.
+- Stratification : 344 modules de production ; frontières d'import historiques
+  conformes ; nouveau DAG de sept modules, trois racines numériques, imports
+  externes limités à `Init` et quatre mutations refusées.
+- Les 18 contrôles de code compilé réussissent. Celui de 7.4 vérifie neuf
+  routes exécutables et refuse 21 mutations ; aucune existence tronquée ou
+  classe n'est présentée comme un contrôle C.
+- Les sept autotests documentaires réussissent ; contrôle séparé des liens de
+  51 documents et clients Lean de 149 références publiques/43 références de
+  tests réussis. Ces clients séparés ne valident pas les empreintes.
+- `--static`, `--lean`, `verify.ps1` et `verify.sh` s'arrêtent sur
+  `STALE_SOURCE: GODEL_RELATIONAL_SEQUENTIAL_COMPLETENESS`. Aucune gate globale
+  documentaire n'est donc annoncée réussie.
+- Les autotests des deux wrappers de fixtures ont été lancés avec leurs logs
+  ignorés sous `.lake/gate74-fixture-selftest` ; leur verdict final doit être
+  lu avant de les déclarer réussis.
+
+La fermeture transitive a été recalculée sur toutes les fiches du registre.
+L'extraction de `composeSignedBoundMixed`, `sixFineOneMiddleBudget`,
+`DirectedUpper.align`, `DirectedUpper.composeThreeOneThree` et
+`strengthenSeparationThreeLinks` conserve exactement noms, types et corps.
+Elle touche la seule dépendance Lean de la fiche de complétion. Les contrôles
+partagés rouvrent également les deux fiches ci-dessous :
+
+| Fiche historique | Révision conservée | Sources de la réouverture sur cet arbre |
+| --- | --- | --- |
+| `GODEL_RELATIONAL_SEQUENTIAL_COMPLETENESS` | `83e797e28b9762324e0d9e33675b9be5becf23f0` | `expected-failures.tsv`, `stratification.tsv` ; aucune source Lean Gödel modifiée |
+| `RUNTIME_EFFECTIVE_CAUCHY_REAL_CORRESPONDENCE` | `83e797e28b9762324e0d9e33675b9be5becf23f0` | Ces deux contrôles et `verify.ps1`/`verify.sh` |
+| `RUNTIME_PRESENTED_DYADIC_COMPLETION_CHARACTERIZATION` | `ba549cd03552dd5d0c7f5737305c684bf7d49897` | `CarrierQuantitativeTransport.lean`, le noyau extrait `DyadicOrderTransport.lean` et les quatre contrôles précédents |
+
+Le registre et toutes les empreintes/revues historiques restent inchangés.
+Aucun commit, push, fusion ni audit extérieur n'a été effectué. Le présent
+état ne clôt pas les obligations de snapshot, d'enregistrement et de revue.
+
+
+###### Portée de la référence
+
+La référence est la complétion de Cauchy régulière des dyadiques construite dans
+le dépôt. Elle comprend toute fonction reçue des précisions naturelles vers
+les codes dyadiques signés, accompagnée de sa régularité positive. Deux noms
+représentent la même valeur lorsque leurs réponses suffisamment fines sont
+proches à toute précision demandée, avec un seuil de réponse partagé. Cette
+quantification ne se limite pas aux programmes fermés du dépôt.
+
+Les noms portent une structure positive de corps ordonné, une apartness
+orientée, un inverse sous témoin d'apartness, la densité dyadique et des bornes
+naturelles bilatérales. Une famille de Cauchy explicitement présentée fournit
+ses noms, un module monotone et sa loi de Cauchy. Sa limite est produite par
+la diagonale de cette même famille, puis caractérisée par convergence et
+unicité positive. Aucune limite candidate n'entre dans ce producteur.
+
+La valeur extensive est une classe saturée et cohérente de noms. Son existence
+de membre est cachée sous une troncature propositionnelle. Elle ne fournit
+aucun représentant choisi. L'équivalence de classes transporte positivement
+les appartenances dans les deux sens ; elle n'est pas une égalité de prédicats.
+L'application d'un nom vers sa classe est exacte pour l'équivalence de noms,
+surjective propositionnellement et universelle pour la descente relationnelle
+des applications de noms compatibles avec cette équivalence.
+
+La caractérisation relative de la complétion présentée compare le carrier
+numérique du runtime à tous les noms de cette référence. Ses deux applications
+et leurs retours sont constructifs à équivalence positive près. Leur descente
+vers les classes donne une correspondance relationnelle totale : chaque
+carrier réalise une classe et chaque classe possède propositionnellement un
+carrier qui la réalise. La composition avec le runtime donne les mêmes
+couvertures et chaque nom reçu possède un runtime qui réalise sa classe.
+Le sens classe nue vers carrier ou runtime reste sous troncature.
+
+Il s'agit exactement de cette référence cauchyenne régulière. Aucune identité
+avec `Mathlib.Real`, les coupures de Dedekind ou une autre construction n'est
+supposée. Le résultat n'affirme ni complétude par borne supérieure, ni choix de
+représentants, ni égalité d'occurrences, ni borne de coût physique, ni nouveauté.
+
+###### Constitution et lecture extensive
+
+Les opérations sur noms consomment directement les noyaux dyadiques. L'opposé
+lit la précision demandée ; l'addition lit un cran de plus ; la multiplication
+sonde chaque facteur à zéro et affine l'autre selon cette amplitude. La
+diagonale lit le terme sélectionné par le module à la précision demandée.
+Le module propre d'un nom régulier est l'identité dans le contrat présenté.
+
+Sur les classes, les appartenances aux résultats conservent les noms sources,
+leurs appartenances et leur accord positif avec le nom résultat. L'inverse
+consomme un témoin positif d'apartness. Si son extrémité zéro est un nom membre
+quelconque de la classe zéro, trois liens distincts le relient au code nul :
+cohérence de ce nom, équivalence au nom nul canonique, exactitude de la
+constante. Le transport de séparation consomme ces trois liens et la cohérence
+de l'autre extrémité avant le calcul de réciproque. Il ne suppose aucune
+comparaison entre la réponse d'origine et celle du réciproque.
+
+Les lois positives complètes restent sur les noms. Sur les valeurs, les
+équivalences, ordres, apartness, lois algébriques et lois d'inverse sont des
+lectures propositionnelles explicites. Les lois qui reçoivent une valeur nue,
+comme la cotransitivité, la translation et l'existence de bornes, ne produisent
+aucun membre choisi en `Type`. En Lean, une fibre dont le second composant est
+une proposition utilise `PSigma` sous `Nonempty`, et les produits
+propositionnels utilisent `And`. Cela précise le pseudo-code `Sigma` du plan
+sans modifier sa troncature.
+
+La complétion externe reçoit un nom membre pour chaque terme. Elle copie
+structurellement la famille de référence, appelle une seule fois son
+producteur de complétion, puis utilise le même nom produit pour la classe, la
+convergence et l'unicité. Elle ne complète aucune fonction nue des naturels
+vers les classes dépourvue de noms membres et de module.
+
+###### Comparaison et ressources conservées
+
+La propriété universelle du quotient est distincte de celle de la complétion.
+La première descend une application compatible de noms en un graphe total,
+stable et fonctionnel à équivalence cible près. La seconde possède un unique
+champ de pullback, un morphisme de complétion présenté. Son graphe sur les
+classes est définitionnellement la descente de ce pullback. L'existence et
+l'unicité de ces morphismes sont toutes deux construites.
+
+La réalisation d'un carrier par une classe est exactement la descente de
+l'application retour de la caractérisation relative. La couverture carrier
+utilise l'application aller de cette même caractérisation et son retour
+prouvé. La correction et la fidélité utilisent les noms déjà contenus dans
+les preuves de réalisation. Les transports préservent et réfléchissent les
+opérations, l'ordre, l'apartness et les témoins finis dans les types indiqués.
+L'inverse conserve le candidat de l'inverse externe et compare sa loi d'unité.
+
+Les transports de densité et de bornes consomment les paquets riches reçus et
+gardent exactement leurs codes ou entiers. Leurs réflexions transportent le
+témoin reçu sans relancer un sélecteur. Pour les limites, une route conserve
+les termes de la famille carrier, son module et les noms de sa couverture ;
+l'autre est le transport diagonal explicite de la caractérisation relative,
+dont le module change comme annoncé par cette interface. Ces routes ne sont
+pas identifiées silencieusement. Deux paquets de complétion déjà produits sont
+comparés par la convergence du candidat externe et l'unicité carrier. Le
+raccord runtime consomme la limite du même paquet natif, avec son égalité de
+projection ; il ne fabrique aucun runtime limite indépendant.
+
+La projection reste aval. Les noms et classes ne récupèrent ni histoires,
+occurrences, archives, banques, journaux, producteurs ou témoins oubliés. Les
+égalités des readouts des deux applications de comparaison sont indépendantes
+du périmètre et de la profondeur ; cette indépendance ne rend pas identiques
+les exécutions qui ont fourni leurs sources.
+
+###### Références formelles et vérification
+
+Les modules sont [RegularDyadicName](../../RelationalPerimeter/Constitution/Reals/RegularDyadicName.lean),
+[RegularDyadicNameOrderedField](../../RelationalPerimeter/Constitution/Reals/RegularDyadicNameOrderedField.lean),
+[RegularDyadicCompletion](../../RelationalPerimeter/Constitution/Reals/RegularDyadicCompletion.lean),
+[ExtensiveCauchyReal](../../RelationalPerimeter/Constitution/Reals/ExtensiveCauchyReal.lean),
+[ExtensiveCauchyRealCompletion](../../RelationalPerimeter/Constitution/Reals/ExtensiveCauchyRealCompletion.lean)
+et [RelationalRealCauchyReference](../../RelationalPerimeter/Constitution/Reals/RelationalRealCauchyReference.lean).
+Le dernier construit `recognizesConventionalCauchyReference` à partir des
+quatre paquets `QuotientRecognition`, `CompletionRecognition`,
+`CarrierValueCorrespondence` et `RuntimeValueCorrespondence` ; aucun n'est une
+hypothèse terminale de la production.
+
+Les tests correspondants sont [noms](../../Tests/RegularDyadicName.lean),
+[structure ordonnée](../../Tests/RegularDyadicNameOrderedField.lean),
+[classes](../../Tests/ExtensiveCauchyReal.lean) et
+[raccord terminal](../../Tests/RelationalRealCauchyReference.lean). Les contrôles
+d'[imports](../../scripts/check-regular-cauchy-reference-imports.py) et de
+[code compilé](../../scripts/check-regular-cauchy-reference-codegen.py) sont
+intégrés aux deux gates de vérification. Le contrôle C porte uniquement sur
+neuf routes exécutables de noms et de comparaison ; il ne certifie pas les
+existences tronquées ou le sens du texte.
+
+Identifiant : `RUNTIME_CONVENTIONAL_REGULAR_CAUCHY_REFERENCE`. La révision
+d'évidence, les empreintes et les revues sont enregistrées uniquement dans le
+registre, après lecture effective des preuves et des passages canoniques.
+Aucun verdict historique n'est réétiqueté. Voir la
+[procédure scientifique](../methode-de-travail-scientifique.fr.md).
+
+##### English noncanonical draft — pending snapshot
+
+
+###### Scope of the reference
+
+The reference is the regular Cauchy completion of the dyadics constructed in
+this repository. It includes every received function from natural precisions
+to signed dyadic codes, equipped with positive regularity. Two names represent
+the same value when all sufficiently fine replies are near at each requested
+precision, using a shared response threshold. This quantification includes
+arbitrary received names and is not restricted to closed repository programs.
+
+Names carry positive ordered field laws, oriented apartness, inversion under
+a positive apartness witness, dyadic density and bilateral natural bounds.
+An explicitly presented Cauchy family supplies its names, monotone modulus and
+Cauchy law. Its limit is produced by that family's diagonal and characterized
+by convergence and positive uniqueness. The producer receives no candidate
+limit.
+
+An extensive value is a saturated coherent class of names. The existence of a
+member is propositionally truncated, so the value supplies no selected
+representative. Class equivalence positively transports membership in both
+directions and does not identify predicates by equality. The map from a name
+to its class preserves and reflects name equivalence, is propositionally
+surjective, and supports universal relational descent of name maps respecting
+that equivalence.
+
+The relative characterization of presented completion compares the runtime's
+numerical carrier with every name of this reference. Both maps and their
+round trips are constructive modulo positive equivalence. Descent to classes
+gives a total relational correspondence: every carrier realizes a class and
+every class propositionally has a realizing carrier. Composition with the
+runtime gives the corresponding coverages, and every received name has a
+runtime realizing its class. The direction from a bare class to a carrier or
+runtime remains truncated.
+
+The result concerns exactly this regular Cauchy reference. No identity with
+`Mathlib.Real`, Dedekind cuts or another construction is assumed. It claims no
+least upper bound completeness, representative choice, occurrence equality,
+physical cost bound or novelty.
+
+###### Constitution and extensive readout
+
+Name operations directly consume the dyadic kernels. Negation reads the
+requested precision, addition reads one extra bit, and multiplication probes
+each factor at zero before refining the other by the resulting amplitude.
+The diagonal reads the modulus-selected term at the requested precision.
+A regular name's own modulus is the identity in the presented contract.
+
+Result membership on classes retains source names, their membership witnesses
+and positive agreement with the result name. Inversion receives positive
+apartness. When the zero endpoint is an arbitrary member name of the zero
+class, three distinct links connect it to the exact zero code: its own
+coherence, equivalence to the canonical zero name, and exactness of the
+constant approximation. Separation transport consumes these links and the
+other endpoint's coherence before reciprocal computation. It assumes no
+ordering between the original response and the reciprocal source response.
+
+Complete positive laws remain on names. On values, equivalence, order,
+apartness, algebraic laws and inverse laws are explicit propositional
+readouts. Laws receiving a bare value, including cotransitivity, translation
+and the existence of bounds, produce no selected member in `Type`. In Lean,
+a dependent pair whose second component is a proposition uses `PSigma` under
+`Nonempty`, and propositional products use `And`. This makes the plan's
+`Sigma` pseudocode well typed without changing its truncation.
+
+External completion receives a member name for every term. It copies the
+reference family structurally, calls its completion producer once, and uses
+the same produced name for the class, convergence and uniqueness. It does not
+complete a bare function from naturals to classes without member names and a
+modulus.
+
+###### Comparison and retained resources
+
+The quotient and completion universal properties are separate. The former
+descends a compatible name map to a total stable graph that is single valued
+modulo target equivalence. The latter stores exactly one pullback field, a
+presented completion morphism. Its class graph is definitionally the descent
+of that pullback. Both existence and uniqueness of these morphisms are
+constructed.
+
+Realization of a carrier by a class is exactly descent of the reverse map
+from relative characterization. Carrier coverage uses the forward map and
+its proved round trip from that same characterization. Correctness and
+faithfulness consume the names already present in realization witnesses.
+Transports preserve and reflect operations, order, apartness and finite
+witnesses in their stated types. Inverse transport retains the external
+inverse candidate and compares its unit law.
+
+Density and bound transports consume received rich production packets and
+retain their exact codes or natural numbers. Their reflections transport the
+received witness without running a selector. For limits, one route retains
+the carrier family's terms, modulus and coverage names; the other uses the
+explicit diagonal transport from relative characterization, with the modulus
+change declared by that interface. These routes are not silently identified.
+Two already produced completion packets are compared using the external
+candidate's convergence and carrier uniqueness. Runtime transport consumes
+the limit of that same native packet and its projection equality; it does not
+produce an independent runtime limit.
+
+Projection remains downstream. Names and classes recover no erased histories,
+occurrences, archives, banks, journals, producers or witnesses. The code
+readouts of the comparison maps are independent of perimeter and depth. This
+does not identify the executions that supplied their sources.
+
+###### Formal references and verification
+
+The modules are [RegularDyadicName](../../RelationalPerimeter/Constitution/Reals/RegularDyadicName.lean),
+[RegularDyadicNameOrderedField](../../RelationalPerimeter/Constitution/Reals/RegularDyadicNameOrderedField.lean),
+[RegularDyadicCompletion](../../RelationalPerimeter/Constitution/Reals/RegularDyadicCompletion.lean),
+[ExtensiveCauchyReal](../../RelationalPerimeter/Constitution/Reals/ExtensiveCauchyReal.lean),
+[ExtensiveCauchyRealCompletion](../../RelationalPerimeter/Constitution/Reals/ExtensiveCauchyRealCompletion.lean)
+and [RelationalRealCauchyReference](../../RelationalPerimeter/Constitution/Reals/RelationalRealCauchyReference.lean).
+The last constructs `recognizesConventionalCauchyReference` from
+`QuotientRecognition`, `CompletionRecognition`, `CarrierValueCorrespondence`
+and `RuntimeValueCorrespondence`; none is a terminal production assumption.
+
+The corresponding tests cover [names](../../Tests/RegularDyadicName.lean),
+[ordered structure](../../Tests/RegularDyadicNameOrderedField.lean),
+[classes](../../Tests/ExtensiveCauchyReal.lean) and
+[terminal comparison](../../Tests/RelationalRealCauchyReference.lean). The
+[import](../../scripts/check-regular-cauchy-reference-imports.py) and
+[compiled code](../../scripts/check-regular-cauchy-reference-codegen.py) checks
+are integrated into both verification gates. The C check covers only nine
+executable name and comparison routes; it certifies neither truncated
+existence nor the interpretation of this text.
+
+Identifier: `RUNTIME_CONVENTIONAL_REGULAR_CAUCHY_REFERENCE`. Its evidence
+revision, fingerprints, and reviews are recorded only in the scientific
+registry after an actual reading of the proofs and canonical passages. No
+historical verdict is relabelled. See the
+[scientific procedure](../methode-de-travail-scientifique.fr.md).
 
 #### Ordre d'implémentation de la gate 7
 
-1. Figer la matrice de non-perte des déclarations de gate 6 et les signatures
-   exactes de `CarrierFamily`, `CarrierLimit`, `NativeCompleteness` et
-   `EffectiveCauchyReal.Carrier`.
-2. Ouvrir l'étude de faisabilité de la cible terminale 7.4 : nommer le type
-   externe candidat `E`, son équivalence, ses opérations, son ordre et la forme
-   de couverture visée, puis verrouiller cette référence si elle est compatible
-   avec les règles constructives. L'absence de référence compatible ne bloque
-   pas 7.1 à 7.3, mais interdit de commencer 7.4 et laisse la cible « réels
-   usuels » explicitement non prête.
-3. Implémenter `carrierNativeFamily`, `carrierReturnedFamily`,
-   `carrierLimitNativeCandidate` et les deux transports de `CarrierLimit` ;
-   vérifier séparément leurs indexations, exécutions, preuves et oublis.
-4. Prouver `CarrierCompletionResult` en conservant le paquet
-   `NativeCompleteness`, sans modifier les types ni théorèmes antérieurs.
-5. Prouver l'indépendance positive vis-à-vis de `P` et `baseDepth` pour une
-   même famille carrier, sans identifier les runtimes correspondants.
-6. Ajouter des tests positifs avec famille non constante, module extérieur non
-   trivial, modules intérieurs non identité, archives non initiales et deux
-   candidats carriers structurellement distincts mais équivalents.
-7. Ajouter les fixtures négatives qui refusent cible reçue, présentation
-   substituée, perte du producteur, module intérieur ou extérieur ignoré,
-   réinitialisation de l'archive et égalité d'occurrences ou de fonctions.
-8. Définir le noyau abstrait non circulaire, puis construire
-   `numericalCarrier`, `ownFamily`, `presentCarrierFamily`,
-     `diagonalTransportFamily`, `selfConvergence`,
-     `presentedCarrierEquivalent`, `carrierPresentedCore` et
-     `carrierCompletionStructure`, sans prémisse concrète ouverte. Vérifier
-     séparément le cran de composition et les deux seuils du théorème
-     `presentedCarrierEquivalent`.
-9. Dériver les deux applications de comparaison, leurs allers-retours et
-   l'unicité point par point par convergence et unicité ; dériver ensuite la
-   préservation des limites via `diagonalTransportFamily`, sans l'ajouter comme
-   champ reçu du morphisme.
-10. Définir les familles canoniques d'addition, d'opposé et de multiplication
-     avec leurs calendriers fixés, puis construire
-     `normalizedEquivalentNear`, `carrierMulComparisonPrecisions` et
-     `mulCarrierCongr`. Vérifier que les deux crans du rapprochement normalisé,
-     les deux amplitudes croisées de `Near.mul` et tous les seuils figurent dans
-     les types ou dans les témoins `PrecisionMember`. Construire ensuite les
-     trois paquets de lois typés et `PresentedDyadicOrderedFieldData`, sans
-     morphisme terminal reçu.
-11. Construire `composeSignedBoundMixed` et
-     `sixFineOneMiddleBudget`, puis `DirectedUpper.composeThreeOneThree` sans
-     affaiblissement séquentiel des sept segments,
-     `strengthenSeparationThreeLinks`, et
-     `transportCarrierOrder`, `transportCarrierApartness`, les
-     constantes et domaines carrier canoniques, `CarrierOrderedFieldLaws`, les
-     paquets riches `CarrierDensityResult` et `CarrierNaturalBoundResult`, puis
-     `carrierOrderedData` et `carrierOrderedCompletion`. Prouver séparément
-     l'équivalence des résultats mathématiques et l'égalité des codes de
-     densité et bornes réellement lus, envers `P` et `baseDepth`, sans égalité
-     des producteurs.
-12. Dériver l'extension ordonnée de la comparaison : préservation et réflexion
-     des opérations, de l'ordre, de l'apartness, de la densité et des bornes,
-     sans importer une opération extensive dans un producteur runtime.
-13. Ajouter des tests positifs avec carriers de modules non identité pour les
-     trois familles canoniques et avec deux périmètres distincts pour l'inverse,
-     la densité et les bornes. Ajouter des fixtures négatives refusant un
-     calendrier d'opération libre, un transport d'ordre sans modules et une
-     prétendue indépendance qui ne compare que l'existence de témoins.
-14. Ajouter le codegen uniquement sur les nouvelles routes exécutables :
-    adaptateur de famille, producteur natif, production unique de limite,
-    partage de la cible et continuation d'archives. Les lois logiques de
-    comparaison, d'unicité et de morphisme relèvent de clients Lean et des
-    audits d'axiomes, pas d'une prétendue observation codegen.
-15. Si une référence externe a été verrouillée à l'étape 2, la réaliser et
-    fermer `carrierCoverage`, la couverture externe choisie, la correction, la
-    fidélité et tous les transports. Si aucune référence compatible n'existe ou
-    si cette fermeture échoue, enregistrer la frontière et garder la cible
-    classique ouverte.
-16. Rejouer build, audits d'axiomes, scan constructif, frontières d'import,
-    stratification, fixtures, codegen et contrôles documentaires.
-17. Écrire séparément les passages canoniques français et anglais, créer les
-    affirmations distinctes correspondant aux portées effectivement fermées,
-    les inscrire au registre et effectuer les revues sur un SHA exact.
-18. Ne fusionner dans `main` qu'après validation de l'ensemble demandé et
-    revérification du commit fusionné.
+Les étapes 7.1 à 7.3 étant implémentées, l'ordre restant est désormais celui-ci :
+
+Le graphe de modules suivant est imposé avant l'écriture des preuves. Les noms
+de fichiers font partie du plan afin qu'une factorisation ultérieure ne crée
+pas silencieusement un cycle ou une inversion de primitive :
+
+```text
+RegularDyadicName.lean
+  imports : noyaux dyadiques bas seulement
+  contient : nom, équivalence, constantes, opérations et familles numériques
+      |
+      +--> RegularDyadicNameOrderedField.lean
+             imports : RegularDyadicName + ordre/réciproque/densité dyadiques
+             contient : ordre, apartness, inverse, densité, bornes et lois
+
+RegularDyadicCompletion.lean
+  imports : RegularDyadicNameOrderedField + PresentedDyadicOrderedField
+  contient : regularPresentedCore, regularPresentedCompletion,
+             regularOrderedCompletion, conventionalCompletionObject
+
+ExtensiveCauchyReal.lean
+  imports : RegularDyadicNameOrderedField
+  contient : Value, classOf, ExternalEquivalent, PositiveSetoid,
+             RelationalMorphism, ClassDescent, opérations de classes,
+             ordre/apartness positifs et readout setoïdal
+
+ExtensiveCauchyRealCompletion.lean
+  imports : ExtensiveCauchyReal + RegularDyadicCompletion
+  contient : ExternalPresentedFamily, referenceFamily, externalComplete
+
+RelationalRealCauchyReference.lean
+  imports : ExtensiveCauchyRealCompletion +
+            DyadicCompletionOrderedCharacterization
+  contient : regularCharacterization, RelationalCompletionMorphism,
+             Realizes et RuntimeRealizes
+```
+
+`RegularDyadicName.lean`, `RegularDyadicNameOrderedField.lean` et
+`ExtensiveCauchyReal.lean` ne doivent importer aucun module de runtime, de
+carrier ou de caractérisation. `RegularDyadicCompletion.lean` peut importer le
+contrat présenté existant, qui possède actuellement des dépendances runtime,
+mais aucune définition numérique basse ne doit remonter par cet import. Le
+seul bord vers le runtime est le théorème terminal, au travers de la chaîne déjà
+prouvée `RegularDyadicName -> EffectiveCauchyReal.Carrier -> ofCarrier`. Les
+tests de frontière d'import doivent figer ce DAG, et non seulement vérifier
+l'absence d'un import particulier à l'instant initial.
+
+1. Refiger la matrice de non-perte de 7.1 à 7.3, puis calculer dans le registre
+   la fermeture transitive des sources réellement modifiées. Conserver les
+   évidences historiques sur leurs SHA exacts, notamment le statut d'audit
+   indépendant encore `not_recorded` de `ba549cd`, sans les réétiqueter ni les
+   rafraîchir. Le plan n'exige plus de généralisation d'univers : les
+   déclarations 7.1–7.3 ne sont rouvertes que si leur code ou une dépendance
+   transitive change effectivement.
+2. Créer la strate numérique `RegularDyadicName` sans import runtime : nom,
+   équivalence positive, réflexivité, symétrie, transitivité, constantes et
+   opérations sur noms avec les calendriers canoniques fixés ci-dessus, ainsi
+   que les familles présentées et leur nom diagonal. Construire ensuite, encore
+   sans import runtime, `RegularDyadicNameOrderedField` : `NameOrder`,
+   `NameApartness`, inverse sous témoin positif, densité, bornes et toutes les
+   lois de corps ordonné constructif consommées par
+   `regularOrderedCompletion`. Factoriser les preuves dyadiques nécessaires
+   vers cette strate au lieu d'importer ou de recopier une opération runtime.
+   Avant chaque déplacement, confronter le graphe
+   d'imports et les `source_sha256` du registre : le déplacement ne doit ni
+   affaiblir gate 6, ni rendre silencieusement périmée une affirmation Gödel.
+3. Construire directement `regularPresentedCore`,
+   `regularPresentedCompletion`, `regularOrderedCompletion` et
+   `conventionalCompletionObject`. Le carrier est exactement
+   `RegularDyadicName`; son module est l'identité ; `regularLimitResult` produit
+   exactement `diagonalName family`. Fermer concrètement toutes les lois de
+   `PresentedDyadicOrderedFieldCompletion`, sans hypothèse terminale et sans
+   importer une opération carrier ou runtime.
+4. Construire `ExtensiveCauchyReal.Value`, `classOf` et
+   `ExternalEquivalent`; définir `SetoidEquivalent := Nonempty
+   ExternalEquivalent` seulement comme readout aval. Prouver la spécification
+   quotient relationnelle complète : équivalences positives, classe non vide,
+   saturation, cohérence, exactitude de `classOf`, surjectivité seulement
+   propositionnelle, `PositiveSetoid`, `RelationalMorphism`, identité,
+   composition et `RelationalMorphism.PointwiseEquivalent`, puis descente
+   universelle avec les contrats exacts `RespectsNameEquivalent`,
+   `ExtendsNameMap`, exactitude sur `classOf` et unicité à l'équivalence cible
+   près. Identifier explicitement cette universalité comme celle du quotient,
+   pas comme celle de la complétion. Les univers des carriers, des équivalences
+   positives et des graphes restent indépendants. Instancier explicitement
+   `ConventionalRegularCauchyReference` sur **tous** les
+   `RegularDyadicName`, définir `ReferenceRealizes := Value.Contains`, puis
+   prouver `referenceCoverage`, `valueReferenceCoverage`, correction, fidélité
+   et stabilité par `NameEquivalent`. Une énumération de programmes fermés ne
+   réalise pas cette obligation.
+5. Définir indépendamment sur les classes l'injection dyadique, `0`, `1`,
+   addition, opposé et multiplication. Prouver les congruences et les lois
+   algébriques positives à `ExternalEquivalent` près à partir des témoins
+   d'appartenance effectivement reçus. Aucune de ces définitions ne doit
+   importer `addCarrier`, `mulCarrier`, `negCarrier` ou un runtime.
+6. À partir de `NameOrder` et `NameApartness` déjà construits dans la strate
+   numérique, définir l'apartness et l'ordre externes par témoins positifs de
+   noms, d'appartenance et de marges.
+   Définir séparément `SetoidOrder` et `SetoidApartness` sous `Nonempty`.
+   Construire l'inverse seulement depuis l'apartness positive.
+   Normaliser le nom membre de la classe zéro par ses trois liens quantitatifs,
+   appeler `strengthenSeparationThreeLinks`, puis employer exactement `away`,
+   `sourcePrecision` et `roundingPrecision`. Prouver les transports d'ordre, la
+   densité dyadique et les bornes archimédiennes. Toute loi qui reçoit une
+   `Value` nue sans nom et doit produire un nouveau témoin conclut sous
+   `Nonempty`. Construire le paquet propositionnel distinct
+   `SetoidOrderedArchimedeanReadout` avec chaque loi d'équivalence, d'addition,
+   de multiplication, d'ordre, d'apartness et de translation explicitement
+   typée. Définir `SetoidInverse` comme le graphe sous `Nonempty` du même
+   `externalInverse`; prouver sa totalité propositionnelle, sa fonctionnalité,
+   son indépendance envers le témoin, sa congruence et ses unités. Ne pas
+   réutiliser les lois positives de `PresentedConstructiveOrderLaws`,
+   introduire de décision globale d'ordre ou produire un inverse en `Type`
+   depuis `SetoidApartness`. Pour `nameDensity` et `nameNaturalBounds`, employer
+   exactement les calendriers `bisect`/`accuracy + 3`/`accuracy + 6` et
+   `approximation 2`/`accuracy 2`/`response 5` fixés ci-dessus ; les producteurs
+   externes les réutilisent et aucune autre sélection numériquement équivalente
+   ne les remplace.
+7. Définir les familles externes présentées avec un nom membre par terme, leur
+   module et leur loi de Cauchy. Définir `referenceFamily` structurellement avec
+   ces mêmes noms, module, monotonie et loi. Construire `externalComplete` en
+   appelant une seule fois
+   `regularPresentedCompletion.complete (referenceFamily family)` ; sa classe,
+   son candidat, sa convergence et son unicité dérivent de ce résultat unique.
+   Ne pas annoncer de complétude d'une fonction nue `Nat -> Value`.
+8. Instancier `relativeOrderedCharacterization` directement avec
+   `regularOrderedCompletion`. Exposer `carrierToReferenceName` et
+   `referenceNameToCarrier` comme les maps produites, leurs deux allers-retours,
+   leurs transports ordonnés et leurs théorèmes de limite. Aucun nouveau
+   morphisme terminal n'est reçu comme hypothèse.
+9. Regrouper la référence et prouver son théorème de reconnaissance : tous les
+    `RegularDyadicName` modulo `NameEquivalent`, extension dyadique, corps
+    ordonné positif, densité, archimédianité, complétude par
+    `regularLimitResult` et caractérisation relative de 7.3. Prouver ensuite les
+    théorèmes `classOf...`, le readout setoïdal sur `Value` et les exactitudes de
+    densité, bornes et complétion ; aucun de ces raccords n'est un champ libre.
+10. Définir `RelationalCompletionMorphism` avec pour seul champ le
+    `CompletionMorphism` de pullback depuis `conventionalCompletionObject`.
+    Définir son graphe exactement par `ClassDescent pullback.map`, dériver son
+    `RelationalMorphism`, puis son unicité par `value.coherent`, `mapEquivalent`
+    et `morphismsPointwiseEquivalent`. Ne jamais extraire un nom de
+    `value.inhabited` vers `Type`.
+11. Définir `Realizes carrier value` comme
+    `DescendedComparison referenceNameToCarrier value carrier`. Construire
+    `carrierCoverage` depuis **le** `carrierToReferenceName` de 7.3,
+    `classOfContains` et `carrierReturn`; construire `relationalCoverage` depuis
+    le même graphe en éliminant `value.inhabited` uniquement vers `Nonempty`.
+    Contrôler qu'aucune constante publique de type `Value -> Carrier` ou
+    `Value -> RegularDyadicName` n'existe.
+12. Prouver correction et fidélité, puis préserver et réfléchir exactement les
+    constantes, opérations, inverse sous apartness, équivalence, apartness,
+    ordre, densité, bornes, familles présentées et limites produites, en
+    distinguant les témoins positifs sur les noms des lectures propositionnelles
+    setoïdales sur `Value`. Toutes ces preuves doivent factoriser par la même
+    comparaison 7.3, le même `Realizes` descendu et les mêmes théorèmes
+    `classOf...` ; aucune route de transport indépendante n'est admise.
+13. Définir `RuntimeRealizes := Realizes (toCarrier runtime)`, dériver
+    `runtimeCoverage` de `carrierCoverage` et `valueRuntimeCoverage` de
+    `relationalCoverage`, `ofCarrier` et `carrier_roundtrip`. Transporter
+    correction, fidélité et structure par `equivalentCarrier` et les théorèmes
+    de gate 6. Construire en plus `runtimeOfReferenceName` et
+    `runtimeOfReferenceNameRealizes` pour chaque nom régulier reçu ; ne jamais
+    introduire une seconde réalisation runtime.
+14. Prouver que le trajet runtime–carrier–nom–valeur est aval : les histoires,
+    occurrences, banques, journaux, producteurs, modules et témoins oubliés ne
+    sont reconstruits par aucun transport. Prouver séparément que les codes lus
+    ne dépendent pas de `P` ou `baseDepth` lorsque cette indépendance est
+    revendiquée.
+15. Ajouter des tests positifs avec plusieurs noms d'une même valeur, plusieurs
+    classes extensionnellement équivalentes, modules non identité, familles non
+    constantes et deux périmètres runtime distincts. Vérifier sur deux noms
+    distincts d'une même valeur que les résultats de `DescendedComparison` sont
+    équivalents. Vérifier que `Realizes` est ce même graphe, que
+    `carrierCoverage` suit `carrierToReferenceName`, et que chaque constante,
+    opération et limite de noms rejoint l'unique résultat externe correspondant.
+    Tester l'inverse avec un membre de la classe zéro non définitionnellement
+    égal au nom nul et contrôler les trois liens de normalisation. Tester deux
+    témoins d'apartness distincts du même `x` et vérifier
+    `inverseWitnessIndependent`, puis deux preuves de
+    `RelationalCompletionMorphism.Graph` utilisant des noms distincts de la
+    même `Value` et vérifier leur unicité cible.
+    Ajouter un nom régulier reçu qui n'est pas présenté comme programme fermé,
+    vérifier `referenceCoverage` vers `classOf`, puis vérifier
+    `valueReferenceCoverage` sur une classe possédant deux noms distincts et la
+    correction/fidélité dans les deux sens. Ces tests doivent quantifier sur le
+    carrier entier de `ConventionalRegularCauchyReference`, pas sur une liste
+    finie d'exemples. Tester aussi `runtimeCoverage` sur un runtime composite et
+    `valueRuntimeCoverage` sous `Nonempty`, avec consommation explicite de
+    `carrier_roundtrip`. Tester `runtimeOfReferenceNameRealizes` sur un nom reçu
+    non issu d'un constructeur fermé du dépôt.
+16. Ajouter des fixtures négatives refusant : représentant stocké en `Type`
+    dans `Value`, inverse exécutable depuis une valeur nue, extraction de
+    `Nonempty` vers `Type`, égalité de relations par `propext`, opération externe
+    définie via une opération carrier, classe non saturée, classe incohérente,
+    fausse descente fonctionnelle depuis `Value`, réalisation sans appartenance,
+    couverture non totale, ordre sans budget `accuracy + 3`, convergence sans
+    nom membre, cotransitivité en `Type` sur `Value`, translation positive d'un
+    décalage nu, inverse qui traite un membre de zéro comme le code nul, simple
+    `strengthenSeparation` à la place des trois liens, et complétude d'une famille
+    nue dépourvue de noms ou de module. Refuser aussi un
+    `RelationalMorphism` nu présenté comme propriété universelle de complétion,
+    une compatibilité avec l'application de noms sans `ExtendsNameMap`, un
+    paquet setoïdal qui extrait un inverse ou un témoin positif en `Type`, une
+    seconde diagonale distincte de `regularLimitResult`, des lois setoïdales cachées dans
+    des champs agrégés non typés, un `RelationalCompletionMorphism` qui stocke
+    un graphe indépendant de son `pullback`, une preuve d'unicité qui choisit un
+    nom depuis `value.inhabited`, un `classOfInverse` qui reconstruit son témoin
+    externe, un `Realizes` indépendant de `DescendedComparison`, et une
+    couverture carrier reconstruite hors de `carrierToReferenceName`. Refuser enfin
+    une référence limitée aux seuls programmes fermés, une couverture qui
+    omet `valueReferenceCoverage`, ou un verdict « tous les réels » dont le
+    carrier de référence n'est pas exactement nommé.
+17. Étendre la stratification et les frontières d'import. Le codegen ne couvre
+    que les nouvelles routes exécutables sur noms, le readout carrier vers nom
+    et la réalisation reçue nom–carrier–runtime de
+    `runtimeOfReferenceName`; les existences tronquées par `Nonempty`, la
+    spécification des classes et les lois d'équivalence sont contrôlées par
+    clients Lean et audits d'axiomes, pas par une observation C. Le contrôle C
+    doit refuser une seconde production numérique ou runtime parallèle à ces
+    routes autoritatives.
+18. Rejouer build, audits exhaustifs, scan constructif, frontières d'import,
+    stratification, fixtures, codegen et contrôles documentaires. Pour chaque
+    affirmation touchée selon l'étape 1, produire une nouvelle évidence sur un
+    SHA reproductible et refaire les revues réellement rouvertes ; ne pas
+    limiter cette opération à 7.1–7.3 et ne jamais réétiqueter un ancien
+    rapport. Préparer séparément l'audit encore absent de 7.1–7.3 ; le lancer
+    seulement après autorisation et ne remplacer `not_recorded` qu'après lecture
+    d'un rapport visant exactement la nouvelle révision.
+19. Écrire séparément les passages canoniques français et anglais, créer une
+    affirmation de registre propre à 7.4 avec sa portée relationnelle exacte,
+    mettre à jour seulement les affirmations antérieures effectivement
+    affectées, puis effectuer lecture, traduction et audit indépendant sur le
+    même SHA pour chaque portée concernée.
+20. Ne fusionner dans `main` qu'après validation de l'ensemble demandé et
+    revérification du commit effectivement fusionné.
 
 #### Gates d'acceptation propres à ce lot
 
@@ -3740,9 +5201,122 @@ Le lot échoue si l'un des constats suivants est vrai :
 - aucune référence externe exacte n'est fixée, `carrierCoverage` manque, la
   couverture externe choisie manque, ou une simple relation non totale dans
   l'un des deux sens est appelée correspondance avec tous ses éléments ;
-- une frontière formelle est comptée comme réussite de la cible classique ;
-- « complétion constructive présentée » est renommé en « tous les réels
-  classiques » sans comparaison séparée effectivement prouvée.
+- `regularPresentedCore` n'a pas exactement `Carrier := RegularDyadicName`, le
+  module identité et `Equivalent := NameEquivalent`, ou l'implémentation modifie
+  toute la hiérarchie 7.2–7.3 pour faire entrer `Value : Type 1` dans un
+  contrat qui doit rester porté directement par les noms ;
+- `RegularDyadicName` ou `NameEquivalent` ne possède pas les signatures
+  quantitatives fixées dans ce plan, emploie deux seuils indépendants au lieu
+  d'un seuil de réponse partagé, ou définit le nom constant sans conserver par
+  `SameValue` la valeur du code reçu ;
+- `Value.Contains` est ramené à `Prop`, de sorte que la cohérence ne peut plus
+  produire un `NameEquivalent` positif sans élimination interdite ;
+- `Value` stocke un représentant choisi en `Type`, ou son champ `inhabited` est
+  utilisé pour définir publiquement `Value -> RegularDyadicName` ;
+- une `Value` n'est pas prouvée saturée et cohérente, ou la spécification de
+  `classOf` ne montre pas qu'elle représente exactement le quotient setoïdal ;
+- la propriété universelle du quotient est remplacée par un éliminateur
+  fonctionnel depuis `Value`, ou inversement le vocabulaire de quotient complet
+  est employé sans descente relationnelle totale et unicité positive ;
+- la propriété universelle est énoncée avec des fonctions choisies ou une
+  catégorie standard non réalisée dans le dépôt, au lieu d'instancier le
+  paquet exact `PositiveSetoid`/`RelationalMorphism`, son identité, sa
+  composition et l'unicité relationnelle de `ClassDescent` au sens de
+  `RelationalMorphism.PointwiseEquivalent` ;
+- l'extension de l'application de noms reste informelle, sans
+  `ExtendsNameMap`, exactitude dans les deux sens sur `classOf` et unicité parmi
+  les morphismes qui étendent exactement cette même application ;
+- le seul `RelationalMorphism` de descente est présenté comme propriété
+  universelle de complétion, sans `CompletionMorphism` de pullback, ou
+  `RelationalCompletionMorphism` stocke un graphe indépendant au lieu de définir
+  son graphe exactement par `DescendedComparison pullback.map` ;
+- la totalité de ce graphe extrait un nom depuis `value.inhabited` vers `Type`,
+  ou son unicité n'emploie pas les noms déjà portés par les deux preuves de
+  graphe, `value.coherent`, `mapEquivalent`,
+  `morphismsPointwiseEquivalent` et les champs `agrees` ;
+- `regularPresentedCompletion` reçoit son candidat, emploie un nom autre que
+  `diagonalName family`, ou `regularOrderedCompletion` ne ferme pas concrètement
+  le contrat ordonné complet sur les noms ;
+- `referenceFamily` reconstruit des noms, un module ou une preuve de Cauchy au
+  lieu de copier exactement ceux de `ExternalPresentedFamily`, ou son corps
+  n'appelle pas directement la loi reçue avec les mêmes arguments ;
+- `externalNaturalBoundsFromMember` ne consomme pas exactement `value`, `name`
+  et `member`, `classOfInverse` reconstruit un autre témoin externe, ou les
+  théorèmes de densité, bornes et complétion ne prouvent pas l'exactitude des
+  codes, entiers, modules et cibles produits ;
+- `nameDensity` n'emploie pas exactement `bisect origin.separation`, les
+  réponses `origin.accuracy + 6` et les accuracies `origin.accuracy + 3`, ou
+  `externalDensity` ne délègue pas à ce producteur ; `nameNaturalBounds` ne lit
+  pas exactement la réponse `2` puis ne transporte pas les deux marges vers
+  les ordres d'accuracy `2` à la réponse `5`, ou
+  `externalNaturalBoundsFromMember` recalcule d'autres bornes ;
+- une opération sur noms importe un runtime, une opération carrier, ou duplique
+  une seconde fois un calcul numérique au lieu de réutiliser la strate dyadique
+  commune et ses calendriers canoniques ;
+- l'ordre externe ne porte pas les deux noms membres, la réponse et
+  `PrecisionExtension (accuracy + 3) response`, ou l'apartness est remplacée
+  par la négation propositionnelle de l'équivalence ;
+- une cotransitivité, une translation ou une autre loi positive reçoit une
+  `Value` nue et renvoie directement un `ExternalOrder` ou un
+  `ExternalApartness` en `Type`, de sorte qu'elle permet de construire un
+  sélecteur `Value -> Sigma name, value.Contains name` ; les lois complètes en
+  `Type` doivent rester sur `RegularDyadicName`, et les lois aval sur `Value`
+  doivent conclure sous `Nonempty` ;
+- un `SetoidEquivalent`, `SetoidOrder` ou `SetoidApartness` est éliminé depuis
+  `Nonempty` pour construire un transport, une opération, un inverse ou un
+  autre témoin positif en `Type` ;
+- le readout setoïdal réutilise `PresentedConstructiveOrderLaws`, renvoie un
+  inverse choisi depuis `SetoidApartness`, ou fournit en `Type` un ordre, une
+  apartness, un nom membre ou une borne depuis une `Value` nue ;
+- le readout setoïdal cache ses obligations derrière des champs non typés tels
+  que `equivalentLaws`, `orderLaws`, `apartnessLaws` ou `algebraicLaws`, ou son
+  inverse n'est pas le graphe `SetoidInverse` du même `externalInverse` avec
+  totalité propositionnelle, unicité, indépendance du témoin, congruence et
+  unités gauche et droite ;
+- l'inverse externe assimile un nom membre de la classe zéro au nom nul exact,
+  suppose que la réponse d'ordre est inférieure à `sourcePrecision`, ou appelle
+  le simple `strengthenSeparation` au lieu de construire les trois liens à
+  `accuracy + 3` et d'appeler `strengthenSeparationThreeLinks` ;
+- l'addition, l'opposé, la multiplication, l'inverse, l'ordre ou la complétion
+  externes sont définis par passage au carrier ou par exécution d'un runtime ;
+- une convergence externe reçoit une `Value` nue sans `candidateName` et son
+  témoin `candidateMember`, ou la complétude est annoncée pour une fonction
+  `Nat -> Value` dépourvue de noms membres et de module explicite ;
+- `externalComplete` construit une seconde diagonale ou appelle un autre
+  producteur au lieu de reprendre l'unique résultat
+  `regularPresentedCompletion.complete (referenceFamily family)`, ou sa valeur
+  n'est pas définitionnellement `classOf produced.value` ;
+- l'archimédianité tronquée d'une valeur nue est présentée comme production
+  exécutable d'une borne, ou inversement les bornes positives disponibles le
+  long de `Realizes` sont remplacées par leur seule existence ;
+- le paquet de reconnaissance de la référence externe, la réalisation du
+  contrat présenté consommé par 7.3 via `regularOrderedCompletion` ou la
+  descente quotient-libre vers `Value` manque, tout en employant le verdict
+  « tous les réels de la référence cauchyenne conventionnelle » ;
+- `Realizes` est défini par un graphe indépendant de `DescendedComparison`,
+  `carrierCoverage` reconstruit directement un nom et sa classe au lieu de
+  suivre `carrierToReferenceName`, ou correction, fidélité et transports
+  n'empruntent pas cette même route de comparaison ;
+- le théorème terminal s'arrête au carrier, `RuntimeRealizes` n'est pas
+  exactement `Realizes (toCarrier runtime)`, ou `valueRuntimeCoverage`
+  reconstruit un runtime autrement que par `relationalCoverage`, `ofCarrier` et
+  le transport le long de `carrier_roundtrip`, ou la réalisation constructive
+  `runtimeOfReferenceNameRealizes` manque pour un nom régulier reçu ;
+- le théorème de reconnaissance ne prouve pas la propriété universelle de
+  complétion des dyadiques, réduit la cible aux programmes fermés, ou prétend
+  sans preuve une identité avec `Mathlib.Real` ou une construction de Dedekind ;
+- `ConventionalRegularCauchyReference` n'a pas exactement
+  `Carrier := RegularDyadicName` et `Equivalent := NameEquivalent`, sa
+  réalisation n'est pas exactement `Value.Contains`, ou les deux couvertures
+  `referenceCoverage` et `valueReferenceCoverage` ne sont pas prouvées avec
+  leurs troncatures respectives ;
+- l'analyse d'impact du registre est bornée mécaniquement à 7.1–7.3, une
+  dépendance transitive modifiée conserve ses anciennes revues, ou une
+  empreinte est rafraîchie sans nouvelle lecture de la portée affectée ;
+- une frontière formelle est comptée comme réussite de la cible cauchyenne ;
+- « complétion constructive présentée » est renommé en « tous les réels de la
+  référence cauchyenne conventionnelle » sans comparaison séparée
+  effectivement prouvée.
 
 Le lot peut être déclaré scientifiquement fermé seulement après concordance du
 code, des tests, du texte, du registre et des revues sur la même révision. Un
@@ -3754,11 +5328,13 @@ Les critères successifs sont conservés ci-dessous. Les lots précédents et
 les réalisations antérieures portent leurs résultats dans leurs portées
 déclarées ; l'extension native de la gate 4 et la gate 6 sont closes sur
 `5e69b1b` par les revues primaire et indépendante enregistrées. Sur la nouvelle
-évidence `1a2bd65`, les revues de lecture et de traduction sont enregistrées,
-mais la revue indépendante reste ouverte. Les étapes 7.1 à 7.3 sont
+évidence `83e797e`, les revues de lecture et de traduction sont `pending`, et
+la revue indépendante reste `not_recorded`. Les étapes 7.1 à 7.3 sont
 implémentées et enregistrées sur `ba549cd`; leurs revues de lecture française
 et de traduction anglaise sont `reviewed`, tandis que leur revue indépendante
-reste `not_recorded`. La gate 7.4 reste ouverte.
+reste `not_recorded`. La gate 7.4 est implémentée techniquement et testée sur
+l'arbre de travail non snapshoté ; sa clôture scientifique reste ouverte dans
+l'attente du snapshot autorisé, de la fiche de registre et des revues.
 Une accumulation de
 définitions ou un build vert ne remplace aucun de ces critères :
 
@@ -3766,13 +5342,22 @@ définitions ou un build vert ne remplace aucun de ces critères :
    runtime fermé, conserve les ressources effectivement consommées et satisfait
    ses lois à équivalence comportementale près. Les constantes et opérations
    correspondantes sur les présentations restent des readouts aval.
-2. **Corps ordonné constructif.** L'apartness est positive ; l'inverse exige un
-   témoin d'apartness à zéro ; l'ordre est défini et manipulé sans décision
-   globale cachée. Les compatibilités ordre–addition–multiplication sont
-   prouvées sur les actions produites.
+2. **Corps ordonné constructif et descente setoïdale.** Sur les runtimes et sur
+   les couvertures présentées, l'apartness est positive ; l'inverse exige un
+   témoin positif d'apartness à zéro ; l'ordre est défini et manipulé sans
+   décision globale cachée. Les compatibilités ordre–addition–multiplication
+   sont prouvées sur les actions produites et, pour 7.4, le paquet positif
+   complet est porté par `RegularDyadicName`. Une `Value` nue ne reçoit aucun
+   sélecteur caché : elle porte seulement les readouts propositionnels
+   `SetoidEquivalent`, `SetoidOrder` et `SetoidApartness`, avec des lois
+   descendues sous `Nonempty` qui ne sont jamais rééliminées vers `Type`.
 3. **Archimédianité et densité.** Les témoins dyadiques sont construits à partir
    de demandes finies et consommés dans les preuves. Une existence
-   propositionnelle seule ne ferme pas cette gate.
+   propositionnelle seule ne ferme pas la strate constitutive ou présentée qui
+   doit produire le paquet complet. Après descente vers la `Value` extensive,
+   son oubli sous `Nonempty` est admis uniquement parce que
+   `ReferenceRealizes` et `Realizes` conservent les noms et témoins positifs, et
+   que ce contrat d'oubli est prouvé explicitement.
 4. **Complétude interne effective.** Une famille de Cauchy interne contient ses
    comportements, son module et ses exécutions. Le regroupement consomme leurs
    sorties, produit une cible limite, l'installe dans une mémoire et fournit le
@@ -3791,16 +5376,49 @@ définitions ou un build vert ne remplace aucun de ces critères :
    antérieurs ; elles ne redéfinissent pas des opérations extensives pour les
    réimporter. Les références canoniques en preuve et les appels compilés sont
    contrôlés séparément.
-7. **Complétion dyadique produite et caractérisation.** Toute famille carrier
+7. **Complétion dyadique produite et couverture de la référence.** Toute famille carrier
    explicitement présentée produit, par la route native, un carrier limite avec
    convergence et unicité. Le dépôt réalise ensuite le contrat de complétion
    dyadique présentée et dérive la comparaison avec toute autre réalisation de
-   ce contrat. Pour fermer la cible « réels usuels », une référence externe
-   exacte doit en outre recevoir le readout de chaque carrier et être couverte
-   pour chacun de ses éléments par une réalisation constructive ou une fibre
-   relationnelle totale, correcte, fidèle et compatible avec la structure.
-   Une comparaison avec un quotient classique nu reste une couche aval : elle
-   ne devient jamais un inverse exécutable fabriqué par choix caché.
+   ce contrat. Pour fermer la cible « tous les réels de la référence cauchyenne
+   conventionnelle », `ConventionalRegularCauchyReference` doit en outre être
+   fixé exactement par `Carrier := RegularDyadicName` et
+   `Equivalent := NameEquivalent`; chaque carrier doit recevoir un readout dans
+   `Value`, et chaque élément de la référence doit être couvert par
+   `ReferenceRealizes := Value.Contains`. Les couvertures constructive
+   `referenceCoverage` et propositionnelle `valueReferenceCoverage`, la
+   correction, la fidélité et les transports doivent être prouvés. La référence
+   autonome doit satisfaire la spécification quotient relationnelle
+   et la propriété universelle de complétion des dyadiques. La première est
+   formalisée par `RelationalMorphism` et `ClassDescent`; la seconde par
+   `RelationalCompletionMorphism`, qui ne stocke que le `CompletionMorphism`
+   depuis `conventionalCompletionObject` et définit son graphe exactement par
+   `DescendedComparison pullback.map`. Son `RelationalMorphism` sous-jacent est
+   dérivé des noms et appartenances portés par les preuves de graphe ; son
+   unicité dérive de `value.coherent`, `mapEquivalent` et
+   `morphismsPointwiseEquivalent` sans choisir une fonction de représentants.
+   Le paquet positif de corps ordonné et la complétion constructive vivent sur
+   `RegularDyadicName`; les théorèmes `classOf...` montrent que constantes,
+   opérations, ordre, familles et limites sont les mêmes productions après
+   descente vers `Value`. La limite externe provient de l'unique résultat
+   `regularPresentedCompletion.complete (referenceFamily family)`, et le même
+   témoin d'apartness alimente `classOfInverse` et l'inverse externe.
+   La descente donne sur `Value` le quotient relationnel, le graphe
+   `SetoidInverse` et son readout setoïdal explicitement ordonné et
+   archimédien. La comparaison carrier–`RegularDyadicName` est l'instance
+   directe de 7.3 ; elle redescend ensuite sur `Value` par une relation totale
+   sous `Nonempty`, stable et unique à équivalence près, sans transformer cette
+   totalité en fonction `Value -> Carrier`. Cette relation est exactement
+   `DescendedComparison referenceNameToCarrier`; `carrierCoverage`, correction,
+   fidélité et transports dérivent de la même comparaison 7.3.
+   Enfin `RuntimeRealizes := Realizes (toCarrier runtime)` compose ce résultat
+   avec gate 6 ; `runtimeCoverage` et `valueRuntimeCoverage` dérivent
+   respectivement de `carrierCoverage` et de
+   `relationalCoverage`/`ofCarrier`/`carrier_roundtrip`, sans autre producteur.
+   Pour chaque `RegularDyadicName` reçu, `runtimeOfReferenceNameRealizes`
+   construit en outre directement sa réalisation runtime.
+   La comparaison avec la classe nue reste une couche aval : elle ne devient
+   jamais un inverse exécutable fabriqué par choix caché.
 
 ### Critère terminal de succès et verdicts interdits
 
@@ -3810,19 +5428,24 @@ présentations couverte et l'équivalence comportementale/numérique retenue,
 sans récupération des données riches oubliées par ce transport. Après les
 étapes 7.1 à 7.3, et après leur revue sur une révision d'évidence exacte, il
 pourra annoncer « caractérisation comme complétion constructive présentée des
-dyadiques ». Il ne pourra annoncer « correspondance
-avec tous les réels classiques usuels » qu'après une étape 7.4 séparée qui
-nomme une référence classique exacte et prouve soit la couverture constructive
-totale, soit la couverture relationnelle totale, avec correction, fidélité et
-transports. Énoncer une relation, documenter une frontière ou constater une
-incompatibilité ne ferme pas cette cible. Les verdicts sont donc, par portée :
+dyadiques ». Il ne pourra annoncer « correspondance avec tous les réels de la
+référence cauchyenne conventionnelle » qu'après une étape 7.4 séparée qui fixe
+exactement `ConventionalRegularCauchyReference`, couvre tous ses noms réguliers
+reçus modulo `NameEquivalent`, prouve la couverture relationnelle totale de
+`Value` et de chaque carrier, avec correction, fidélité et transports, ainsi
+que la reconnaissance universelle de cette référence comme complétion
+setoïdale ordonnée et archimédienne des dyadiques. Énoncer une
+relation, documenter une frontière ou constater une incompatibilité ne ferme
+pas cette cible. Les verdicts sont donc, par portée :
 
 - addition relationnelle fermée ;
-- structure de corps ordonné relationnel ;
+- structure de corps ordonné relationnel positive sur les runtimes et les
+  couvertures présentées, avec readout setoïdal aval sur les valeurs nues ;
 - complétude de Cauchy effective ;
 - correspondance structurelle effective comportementale ;
 - complétion dyadique constructive caractérisée, après 7.1 à 7.3 ;
-- couverture classique extensive encore ouverte tant que 7.4 ne l'est pas.
+- couverture de tous les réels de la référence cauchyenne conventionnelle
+  encore ouverte tant que 7.4 ne l'est pas.
 
 Il sera interdit de remplacer une gate manquante par un renommage, une
 surjection de readout, une cardinalité, une propriété seulement propositionnelle
@@ -3845,6 +5468,27 @@ Pour chaque gate, les tests négatifs devront notamment empêcher :
   définir une réalisation ;
 - que les morphismes de comparaison ou leurs allers-retours soient placés parmi
   les hypothèses du contrat censé les faire dériver.
+- qu'une loi d'ordre positive sur une `Value` nue fournisse indirectement son
+  nom membre ;
+- qu'un readout sous `Nonempty` soit éliminé pour reconstruire un témoin en
+  `Type` ;
+- que l'inverse externe emploie le zéro définitionnel ou deux liens seulement,
+  au lieu de normaliser le membre arbitraire de la classe zéro par les trois
+  liens quantitatifs requis ;
+- que l'universalité du quotient soit annoncée sans instance et lois du paquet
+  `RelationalMorphism`, ou que l'universalité de complétion soit annoncée sans
+  `RelationalCompletionMorphism`, `CompletionMorphism` de pullback et graphe
+  définitionnellement descendu de `pullback.map` ;
+- qu'une preuve d'unicité de complétion sélectionne un nom depuis une `Value`
+  nue au lieu de consommer les noms des deux preuves de graphe ;
+- que le readout setoïdal dissimule les lois algébriques, d'ordre, d'apartness
+  ou d'inverse derrière un champ agrégé, ou que son inverse ne soit pas la
+  troncature du même `externalInverse` ;
+- que `classOfInverse` ou `externalComplete` emploie un autre témoin, une autre
+  famille ou un autre résultat de complétion que les termes let-liés prescrits ;
+- que `Value : Type 1` soit utilisé comme prétexte pour modifier les contrats
+  déjà fermés de 7.2–7.3 au lieu d'instancier celui-ci directement sur
+  `RegularDyadicName : Type`.
 
 `AC` et `CH` ne font pas partie de ce cycle. Leur étude exigera ensuite une
 théorie relationnelle explicite des collections, des fonctions de choix, des

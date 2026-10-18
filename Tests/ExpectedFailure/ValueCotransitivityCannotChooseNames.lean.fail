@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (middle : Value) : ExternalOrder zero middle ⊕ ExternalOrder middle one :=
+  setoidCotransitive setoidUnitPositive middle

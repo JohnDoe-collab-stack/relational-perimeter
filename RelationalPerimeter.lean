@@ -46,6 +46,7 @@ import RelationalPerimeter.Constitution.Reals.CarrierOrderedFieldLaws
 import RelationalPerimeter.Constitution.Reals.CarrierOrderedCompletion
 import RelationalPerimeter.Constitution.Reals.DyadicCompletionCharacterization
 import RelationalPerimeter.Constitution.Reals.DyadicCompletionOrderedCharacterization
+import RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference
 import RelationalPerimeter.Constitution.Godel.RuntimePersistence
 import RelationalPerimeter.Constitution.Godel.RelationalCompleteness
 import RelationalPerimeter.Constitution.Godel.RealCorrespondence
@@ -67,6 +68,10 @@ reals on that same constitutive perimeter.
 -/
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.Constitution.Reals.RegularDyadicCompletion.regularOrderedCompletion
+#print axioms RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.setoidOrderedArchimedeanReadout
+#print axioms RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.externalComplete
+#print axioms RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference.recognizesConventionalCauchyReference
 #print axioms ConstitutiveSearch.PerimeterPersistence.localExactnessReconstructsPerimeter
 #print axioms ConstitutiveSearch.PerimeterPersistence.exactPerimeterAndFaithfulExit
 #print axioms ConstitutiveSearch.PerimeterPersistence.finiteConstitutivePersistence

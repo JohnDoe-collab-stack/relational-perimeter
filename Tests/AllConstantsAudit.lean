@@ -35,6 +35,10 @@ import Tests.RelationalRealNativeCauchy
 import Tests.RelationalRealEffectiveCorrespondence
 import Tests.RelationalRealCarrierCompleteness
 import Tests.PresentedDyadicCompletion
+import Tests.RegularDyadicName
+import Tests.RegularDyadicNameOrderedField
+import Tests.ExtensiveCauchyReal
+import Tests.RelationalRealCauchyReference
 import Tests.RelationalSequentialCompleteness
 import Tests.RuntimeRealCorrespondence
 import Tests.CommonRealRuntime
@@ -117,6 +121,31 @@ run_cmd Lean.Elab.Command.liftTermElabM do
               (← Lean.Meta.isDefEq result.getAppArgs[0]! (Lean.mkConst `ConstitutiveSearch.Agent.AnswerTarget)) do
             throwError "Agent register must store produced targets, not source archives: {result}"
   logInfo "RESTART_SCHEMA_OK: produced memory and nested live-state fields checked"
+
+/- These are interface checks, not a choice principle or a scientific premise. -/
+run_cmd Lean.Elab.Command.liftTermElabM do
+  let env ← Lean.getEnv
+  for (record, fields) in [
+      (`RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.Value,
+        ["Contains", "inhabited", "saturated", "coherent"]),
+      (`RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference.RelationalCompletionMorphism,
+        ["pullback"])] do
+    let some schema := Lean.getStructureInfo? env record
+      | throwError "Cauchy reference schema missing: {record}"
+    unless schema.fieldNames.toList.map Name.getString! == fields do
+      throwError "Cauchy reference schema changed: {record}: {schema.fieldNames}"
+  let valueType := Lean.mkConst `RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.Value
+  let nameType := Lean.mkConst `RelationalPerimeter.Constitution.Reals.RegularDyadicName
+  let carrierType := Lean.mkConst `RelationalPerimeter.Constitution.Reals.EffectiveCauchyReal.Carrier
+  for (name, info) in env.constants.toList do
+    unless name.toString.startsWith "RelationalPerimeter.Constitution.Reals." do continue
+    Lean.Meta.forallTelescope info.type fun arguments result => do
+      unless arguments.size == 1 do return
+      let input ← Lean.Meta.inferType arguments[0]!
+      unless ← Lean.Meta.isDefEq input valueType do return
+      if (← Lean.Meta.isDefEq result nameType) || (← Lean.Meta.isDefEq result carrierType) then
+        throwError "Bare extensive value selector is forbidden: {name}"
+  logInfo "CAUCHY_REFERENCE_SCHEMA_OK: membership and pullback fields exact; no bare value-to-name/carrier function"
 
 run_cmd do
   let env ← Lean.getEnv

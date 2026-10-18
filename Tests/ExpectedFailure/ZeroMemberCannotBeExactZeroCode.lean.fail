@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (name : RegularDyadicName) (member : zero.Contains name) (response : Nat) :
+    name.approximation response = SignedDyadicCode.zero := by
+  rfl

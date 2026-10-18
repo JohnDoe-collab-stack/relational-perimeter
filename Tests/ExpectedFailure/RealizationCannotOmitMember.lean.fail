@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RelationalRealCauchyReference RegularDyadicCompletion
+example (P : StrongPerimetralTurning.CircularPresentation) (d : Nat)
+    (carrier : EffectiveCauchyReal.Carrier) (value : Value) (name : RegularDyadicName) : Realizes P d carrier value :=
+  ClassDescent.mk name

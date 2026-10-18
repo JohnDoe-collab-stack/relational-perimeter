@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (x y : Value) (same : ExternalEquivalent x y) : x.Contains = y.Contains := by
+  rfl

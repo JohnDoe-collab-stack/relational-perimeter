@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (p : Nat) (a b c d : SignedDyadicCode) (gap : StrictSeparation p a b)
+    (left : Near (p + 3) a c) (right : Near (p + 3) b d) : StrictSeparation (p + 2) c d :=
+  strengthenSeparation gap left right

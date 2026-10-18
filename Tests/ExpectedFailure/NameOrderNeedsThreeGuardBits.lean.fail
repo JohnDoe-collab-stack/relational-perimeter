@@ -1,0 +1,7 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (a b : RegularDyadicName) (p response : Nat)
+    (beyond : PrecisionExtension p response)
+    (gap : StrictSeparation p (a.approximation response) (b.approximation response)) : NameOrder a b :=
+  ⟨p, response, beyond, gap⟩

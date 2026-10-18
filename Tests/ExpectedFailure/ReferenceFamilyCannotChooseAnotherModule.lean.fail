@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (family : ExternalPresentedFamily) (chosen : Nat → Nat) :
+    (referenceFamily family).modulus = chosen := by
+  rfl

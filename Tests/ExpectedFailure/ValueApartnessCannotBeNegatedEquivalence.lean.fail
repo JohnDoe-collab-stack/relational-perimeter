@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (x y : Value) (different : SetoidEquivalent x y → False) : ExternalApartness x y :=
+  different

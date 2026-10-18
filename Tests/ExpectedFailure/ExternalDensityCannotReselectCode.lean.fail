@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (x y : Value) (origin : ExternalOrder x y) (chosen : SignedDyadicCode) :
+    (externalDensity origin).code = chosen := by
+  rfl

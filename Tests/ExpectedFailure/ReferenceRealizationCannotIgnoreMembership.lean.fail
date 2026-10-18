@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion
+open RelationalPerimeter.Constitution.Reals RegularDyadicName ExtensiveCauchyReal
+open RegularDyadicCompletion
+example (name : RegularDyadicName) (value : Value) : ReferenceRealizes name value :=
+  NameEquivalent.refl name
