@@ -58,3 +58,18 @@ La [note de réouverture de la correspondance effective](runtime-effective-revie
 consigne séparément les quatre contrôles partagés modifiés depuis `1a2bd65...`.
 Ses anciennes revues restent historiques ; les revues courantes sont rouvertes
 sur `83e797e...`.
+
+## Audit incomplet de la complétion dyadique présentée au commit `ba549cd`
+
+Le [rapport Aristotle sur les gates 7.1–7.3](aristotle-runtime-presented-dyadic-completion-audit-ba549cd-incomplete.md)
+vise exactement le commit
+`ba549cd03552dd5d0c7f5737305c684bf7d49897`. Son verdict explicite est
+`AUDIT INCOMPLETE` : la lecture statique, constitutive et documentaire ne
+relève aucun défaut essentiel de la cible, mais l'environnement extérieur n'a
+pas pu obtenir Lean 4.33.1 et n'a donc pas reproduit le build, les audits
+d'axiomes, les fixtures ni le contrôle du code compilé.
+
+Le rapport est conservé avec son verdict et ses qualifications. Il ne constitue
+pas une validation indépendante et le registre garde
+`independent=not_recorded`. Les vérifications locales réussies sur le même
+arbre ne sont pas substituées à la reproduction extérieure manquante.
