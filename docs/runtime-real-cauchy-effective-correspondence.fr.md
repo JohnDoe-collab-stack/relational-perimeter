@@ -141,10 +141,23 @@ de la banque d'archives courante, exécute le terme diagonal choisi par le
 module, fait consommer ce même `Step` par le regroupement, installe la cible
 produite et poursuit le journal. La banque suivante ne remplace que l'entrée
 effectivement visitée. La projection live conserve le code installé ; elle
-n'exécute pas à nouveau la production riche. Les constructeurs des archives
-riches sont privés : les fabriques publiques peuvent recevoir les contextes
-enfants ou la banque courante, mais ne permettent pas de prescrire un dernier
-code, une cible installée ou un historique retenu.
+n'exécute pas à nouveau la production riche. À chaque requête numérique,
+`nativeLiveStep` ignore la mémoire live courante et exécute le
+`LiveEnvironment` du kernel sélectionné depuis son champ `initial`. La fabrique
+`ofTerms` forme ce champ par projection de l'archive initiale riche ; pour une
+famille générique reçue, c'est la loi reçue `kernelExact`, et non l'origine du
+champ à elle seule, qui raccorde cette réponse au code de tout `Step` riche
+courant du même terme et de la même précision. Ce contrat d'uniformité, et non
+une identification des archives, autorise l'oubli de la banque et de l'histoire.
+
+Les constructeurs des archives riches sont `private` : par l'interface Lean
+ordinaire, les fabriques publiques peuvent recevoir les contextes enfants ou
+la banque courante, mais ne permettent pas de prescrire un dernier code, une
+cible installée ou un historique retenu. Cette confidentialité est une
+frontière d'élaboration, pas un théorème d'inforgeabilité contre un
+métaprogramme visant volontairement le nom interne compilé. Les fixtures
+négatives contrôlent l'usage ordinaire de l'interface publique dans cette
+portée exacte.
 
 `nativeCompleteness` construit le candidat autoritatif, sa convergence, le
 readout effectif, la correspondance avec la limite produite de la famille

@@ -139,9 +139,22 @@ the current archive bank, executes the diagonal term selected by the modulus,
 has grouping consume that same `Step`, installs the produced target, and
 continues the journal. The next bank replaces only the entry actually visited.
 The live projection retains the installed code; it does not execute the rich
-production again. Rich archive constructors are private: public seed functions
-may receive current child contexts or the current bank, but they cannot
-prescribe a last code, an installed target, or retained history.
+production again. At every numerical request, `nativeLiveStep` ignores the
+current live memory and runs the selected kernel's `LiveEnvironment` from its
+`initial` field. The `ofTerms` factory forms this field by projecting the rich
+initial archive; for a generic received family, the received `kernelExact` law,
+rather than the field's origin alone, connects this response to the code of
+every current rich `Step` of the same term and precision. This uniformity
+contract, rather than any identification of archives, authorizes forgetting
+the bank and history.
+
+Rich archive constructors are `private`: through the ordinary Lean interface,
+public seed functions may receive current child contexts or the current bank,
+but they cannot prescribe a last code, an installed target, or retained
+history. This privacy is an elaboration boundary, not an unforgeability theorem
+against a metaprogram deliberately targeting the compiled internal name. The
+negative fixtures check ordinary use of the public interface within this exact
+scope.
 
 `nativeCompleteness` constructs the authoritative candidate, its convergence,
 the effective readout, correspondence with the produced limit of the realized

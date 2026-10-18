@@ -2302,31 +2302,42 @@ les champs et signatures du prototype natif sont renforcés/remplacés pour port
 la source exacte, et non présentés comme inchangés. Les 44 anciens modules/tests
 des lots antérieurs au prototype natif restent octet-identiques ; aucun ancien
 constructeur `Real`, contrat ni énoncé de ces lots n'est modifié.
-Le registre est raccordé sémantiquement à la même révision d'évidence. La
-revue primaire consignée dans
-`docs/reports/runtime-real-structural-reader-translation-3313f8d.fr.md`
+Le registre est raccordé sémantiquement à la révision d'évidence
+`5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc`. La revue primaire consignée dans
+[le rapport de lecture et de traduction](../reports/runtime-real-native-correction-reader-translation-5e69b1b.fr.md)
 contrôle séparément le français, l'anglais, puis leurs dépendances formelles.
-Les passages protégés et les figures restent inchangés. Les statuts `reader`
-et `translation` des deux affirmations raccordées deviennent `reviewed` ; le
-statut `independent` reste `not_recorded` tant qu'un rapport extérieur visant
-exactement cette révision n'a pas été reçu et lu. Aucun push ni fusion n'est
-effectué par cette clôture locale.
+[Le rapport indépendant](../reports/aristotle-runtime-real-structural-audit-5e69b1b.md) vise cette
+même révision et conclut `VALIDATED` dans la portée effective déclarée. Sa
+suggestion n° 4 affirme à tort que le bloc `AXIOM_AUDIT` de
+`Tests/RelationalRealEffectiveCorrespondence.lean` serait vide ; la
+[note de rectification](../reports/aristotle-runtime-real-structural-audit-5e69b1b-erratum.fr.md)
+consigne la vérification du snapshot sans réécrire le rapport reçu. Les
+statuts `reader`, `translation` et `independent` des deux affirmations
+raccordées sont `reviewed` sur cette révision. Les clarifications canoniques
+postérieures sur le redémarrage du kernel live et la portée d'élaboration de
+`private` devront toutefois recevoir une nouvelle révision d'évidence : elles
+rouvrent les trois revues de l'affirmation de correspondance jusqu'à leur
+enregistrement sur le même nouveau SHA. Aucun push ni fusion n'est effectué
+par cette préparation locale.
 
-Ces six blocs exposent maintenant la production native riche et ses vues
-numériques séparées. La revue primaire ferme la gate 4 dans son extension
-native et la gate 6 pour la classe effective déclarée, sans transformer les
-builds en verdict de sens et sans identifier les occurrences ou familles
-riches. La validation indépendante de cette clôture reste ouverte. La gate 7
-reste elle aussi ouverte et aucun travail de couverture des réels usuels n'est
-engagé ici.
+Ces six blocs exposent la production native riche et ses vues numériques
+séparées. Sur `5e69b1b`, les revues primaire et indépendante ferment la gate 4
+dans son extension native et la gate 6 pour la classe effective déclarée, sans
+transformer les builds en verdict de sens et sans identifier les occurrences
+ou familles riches. Les clarifications documentaires ne modifient aucun terme
+Lean ni cette portée, mais leur clôture documentaire exige la nouvelle évidence
+et les revues exactes annoncées ci-dessus. La gate 7 reste ouverte et aucun
+travail de couverture des réels usuels n'est engagé ici.
 
 ### Gates terminales de preuve
 
 Les critères successifs sont conservés ci-dessous. Les lots précédents et
 les réalisations antérieures portent leurs résultats dans leurs portées
-déclarées ; l'extension native de la gate 4 et la gate 6 sont closes par la
-revue primaire ci-dessus, avec revue indépendante encore non enregistrée,
-tandis que la gate 7 reste ouverte. Une accumulation de
+déclarées ; l'extension native de la gate 4 et la gate 6 sont closes sur
+`5e69b1b` par les revues primaire et indépendante enregistrées. La nouvelle
+clarification de leur texte rouvre seulement sa traçabilité documentaire
+jusqu'à l'enregistrement d'une nouvelle évidence commune ; la gate 7 reste
+ouverte. Une accumulation de
 définitions ou un build vert ne remplace aucun de ces critères :
 
 1. **Fermeture algébrique relationnelle.** Chaque opération construit un
