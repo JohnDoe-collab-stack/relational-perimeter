@@ -1518,14 +1518,14 @@
     {
       "id": "GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION",
       "kind": "causal",
-      "evidence_revision": "da4daecc4af81739646c03981c87e959719e09cd",
-      "scope": "Pour une production gödelienne exécutée unique, une ressource positive maître construit H1 sans présentation circulaire et est partagée avec son pont périmétral aval. Deux sources constitutives distinctes reçoivent ce même H1 ; leurs mémoires opérationnelles actives sont distinctes. La requête close autorisée sur la trace positivement non vide produit une phase terminale et une collision mémoire dans une réalisation préservant autorisations, transitions et événements sans readout exact, tandis que les sources restent distinctes. Les deux runs non vides produisent aussi deux terminaux dont trueWitness et unprovable certifient la séparation immédiate des readouts : la liste vide n'exécute pas close de nouveau, elle observe les terminaux déjà calculés. Toute ExactRealization doit donc conserver cette distinction dans ses mémoires projetées. Ce dernier résultat utilise seulement même mémoire projetée → mêmes futurs et sa contraposée constructive ; il n'établit ni la réciproque ni un quotient canonique de la mémoire. Une préservation terminale dirigée fixée sur la réalisation opérationnelle et la collision calculée dérivent directement Truth(G) → Proof(G), sans égalité de types, transport inverse, read_exact global ni fait négatif. L'ancienne réalisation exacte dérive en outre Truth(G) = Proof(G). Seul le rejet final consomme trueWitness et unprovable du même témoin. Le noyau dirigé et le rejet ne dépendent pas de event_exact. La collision sous correspondance de readout reste une hypothèse, non une conséquence de Gödel ; aucun résultat sur tout regroupement, le continuum, AC ou CH, aucune borne de coût, aucun renforcement strict ni revendication de nouveauté.",
+      "evidence_revision": "953c6ad0b5621e306c3329085590905439916123",
+      "scope": "Pour une production gödelienne exécutée unique, une ressource positive maître construit H1 sans présentation circulaire et est partagée avec son pont périmétral aval. Deux sources constitutives distinctes reçoivent ce même H1 ; leurs mémoires opérationnelles actives sont distinctes. La requête close autorisée sur la trace positivement non vide produit une phase terminale et une collision mémoire dans une réalisation préservant autorisations, transitions et événements sans readout exact, tandis que les sources restent distinctes. Les deux runs non vides produisent aussi deux terminaux dont trueWitness et unprovable certifient la séparation immédiate des readouts : la liste vide n'exécute pas close de nouveau, elle observe les terminaux déjà calculés. Toute ExactRealization doit donc conserver cette distinction dans ses mémoires projetées. Ce dernier résultat utilise seulement même mémoire projetée → mêmes futurs et sa contraposée constructive ; il n'établit ni la réciproque ni un quotient canonique de la mémoire. La collision est calculée dans GodelOperationalGroupingWithoutRead sous godelOperationalRealizationWithoutRead, puis exposée sans reconstruction des runs ni de la collision comme ExecutedOperationalGrouping sous l’adaptateur godelOperationalRealization. Une préservation terminale dirigée fixée sur cet adaptateur concret et ce regroupement calculé dérive directement Truth(G) → Proof(G), sans égalité de types, transport inverse, read_exact global ni fait négatif. L’ancienne réalisation exacte dérive en outre Truth(G) = Proof(G). Dans les chaînes dirigée et historique, seul le rejet final consomme trueWitness et unprovable du même témoin ; le chemin du séparateur les consomme séparément pour certifier l’inégalité des readouts. Le noyau dirigé et le rejet ne dépendent pas de event_exact. La collision sous correspondance de readout reste une hypothèse, non une conséquence de Gödel ; aucun résultat sur tout regroupement, le continuum, AC ou CH, aucune borne de coût, aucun renforcement strict ni revendication de nouveauté.",
       "anchors": [
         {
           "path": "docs/godel-fermeture-runtime.fr.md",
           "heading": "Portée et statut",
           "paragraph": null,
-          "sha256": "5e083191f50c54dfd9245e97db2b6edf37e66b16d235e3a21be0e0af3ac18f52"
+          "sha256": "95961eccffd656c135759680a696e6352d97528592dfa4cf3cd7f21608c0de59"
         }
       ],
       "proofs": [
@@ -1758,6 +1758,96 @@
           "module": "Tests.HeytingArithmeticOperationalClosureRegression",
           "name": "HeytingArithmeticOperationalClosureRegression.ha_every_exact_realization_separates_produced_terminals",
           "role": "test"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Continuation.DirectedIncompatibility",
+          "name": "ConstitutiveSearch.ContinuationSignatures.rejectDirectedTransport",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.GodelOperationalRealizationWithoutRead.toOperational",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.godelOperationalRealization",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.GodelOperationalGroupingWithoutRead.toExecutedOperationalGrouping",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.godelExecutedOperationalGrouping",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.godelComputedGroupingToProducedCompleteness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.rejectGodelComputedGroupingToEmpty",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalRealization",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticExecutedOperationalGrouping",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticComputedGroupingToProducedCompleteness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticRejectsDirectedTerminalPreservation",
+          "role": "production"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.computed_operational_grouping_reuses_both_runs",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.computed_operational_grouping_keeps_the_collision",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.computed_grouping_directed_bridge",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.computed_grouping_directed_rejection",
+          "role": "test"
+        },
+        {
+          "module": "Tests.HeytingArithmeticOperationalClosureRegression",
+          "name": "HeytingArithmeticOperationalClosureRegression.ha_generic_grouping_reuses_the_concrete_runs",
+          "role": "test"
+        },
+        {
+          "module": "Tests.HeytingArithmeticOperationalClosureRegression",
+          "name": "HeytingArithmeticOperationalClosureRegression.ha_computed_grouping_directed_bridge",
+          "role": "test"
+        },
+        {
+          "module": "Tests.HeytingArithmeticOperationalClosureRegression",
+          "name": "HeytingArithmeticOperationalClosureRegression.ha_computed_grouping_directed_rejection",
+          "role": "test"
         }
       ],
       "checks": [
@@ -1769,16 +1859,18 @@
         "scripts/godel-perimetral-import-boundaries.txt",
         "scripts/continuation-exact-separation-import-boundaries.txt",
         "scripts/tarski-continuation-import-boundaries.txt",
-        "scripts/stratification.tsv"
+        "scripts/stratification.tsv",
+        "scripts/continuation-directed-incompatibility-import-boundaries.txt",
+        "scripts/continuation-directed-obstruction-import-boundaries.txt"
       ],
       "dependencies": {
         "formation": "La même ExecutedGodelProduction indexe une ressource positive maître : un repli structurel total de ses préfixes extrait les occurrences exécutées sans relancer la production ni l'ancien extracteur dépendant. H1 est construit par History.extend. Les sources stockent cette même ressource et H1, leur pôle, leur histoire opérationnelle et leur phase. GodelInitializedAt et GodelClosureContextAt ne mentionnent aucune présentation circulaire ; les dépendances propres à l'interface gödelienne reçue sont rapportées séparément des projections négatives.",
-        "execution": "Le contexte partagé produit la recherche de close, deux autorisations, deux étapes puis deux ExecutedRun sur une NonemptyRequestTrace singleton. Close conserve pôle, histoire, provenance et readout mais change la phase active en terminale. Les mémoires actives opérationnelles distinctes deviennent une mémoire grouped commune seulement après cette transition ; les événements sont égaux. La collision est portée par l'ExecutedOperationalGrouping calculé sous une OperationalRealization fixée. Le séparateur reçoit les terminaux de ces deux runs non vides ; sa liste de requêtes vide n'exécute pas une nouvelle fermeture et observe directement leurs readouts.",
-        "proof": "Les témoins trueWitness et unprovable réfutent d'abord l'égalité des deux types de readout. Le séparateur terminal transforme une égalité hypothétique des issues vides en cette égalité interdite. Génériquement, equal_memory_same_futures et FutureSeparator.not_equivalent imposent alors constructivement la distinction des projections dans toute ExactRealization. Séparément, le noyau dirigé compose la collision des terminaux projetés avec une DirectedTerminalReadoutPreservation pour dériver directement Truth(G) → Proof(G), sans égalité de types, transport inverse, read_exact global, event_exact, présentation circulaire, FutureEquivalent ni projection négative. Le rejet terminal consomme ensuite trueWitness et unprovable du même témoin. La factorisation historique par ExactRealization reste disponible et dérive Truth(G) = Proof(G). Les types et corps transitifs des racines positives sont contrôlés.",
+        "execution": "Le contexte partagé produit la recherche de close, deux autorisations, deux étapes puis deux ExecutedRun sur une NonemptyRequestTrace singleton. Close conserve pôle, histoire, provenance et readout mais change la phase active en terminale. Les mémoires actives opérationnelles distinctes deviennent une mémoire grouped commune seulement après cette transition ; les événements sont égaux. La collision est calculée dans GodelOperationalGroupingWithoutRead sous godelOperationalRealizationWithoutRead, puis exposée sans reconstruction des runs ni de la collision comme ExecutedOperationalGrouping sous l’adaptateur godelOperationalRealization. Le séparateur reçoit les terminaux de ces deux runs non vides ; sa liste de requêtes vide n'exécute pas une nouvelle fermeture et observe directement leurs readouts.",
+        "proof": "Les témoins trueWitness et unprovable réfutent d’abord l’égalité des deux types de readout et certifient ainsi le séparateur terminal. Génériquement, equal_memory_same_futures et FutureSeparator.not_equivalent imposent constructivement la distinction des projections dans toute ExactRealization. Séparément, GodelOperationalRealizationWithoutRead.toOperational expose le contrat opérationnel sans son readout réduit constant et GodelOperationalGroupingWithoutRead.toExecutedOperationalGrouping réutilise les deux runs, événements, terminaux et la collision déjà calculés. Sur cet adaptateur et ce regroupement concrets, directedReadout compose une DirectedTerminalReadoutPreservation pour dériver Truth(G) → Proof(G), sans égalité de types, transport inverse, read_exact global, event_exact, présentation circulaire, FutureEquivalent ni projection négative. Cette production positive ne consomme ni trueWitness ni unprovable. Le rejet dirigé les ajoute ensuite depuis le même témoin. La factorisation historique par ExactRealization reste disponible et dérive Truth(G) = Proof(G). Les types et corps transitifs des racines positives sont contrôlés.",
         "transport": "ExactRealization fournit le seul sens même mémoire projetée → mêmes futurs ; par contraposition constructive, un séparateur impose des mémoires projetées distinctes. La réciproque n'est pas établie et aucune mémoire quotient canonique n'est revendiquée. La réalisation opérationnelle transporte à l'identique la famille inductive d'autorisations et préserve transitions et événements. Au terminal, aucune continuation n'est admise et l'oubli du pôle ne prétend pas conserver le readout. L'interface dirigée ne fournit que les conversions nécessaires autour d'une même mémoire observée et n'introduit ni égalité de types ni loi inverse. Un pont aval exact et exhaustif relie les occurrences opérationnelles et périmétrales issues du même core, avec leurs rôles et leur ordre."
       },
       "consumers": [],
-      "source_sha256": "0ed370b4d06ded94c9bd425821adf4e69880049a212e5181e8ef4735edd7756f",
+      "source_sha256": "204dbad0af71c6810308b93e4aec9da7a60c5a0d386c62d31884cc17946de60b",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1794,7 +1886,7 @@
     {
       "id": "TARSKI_RELATIONAL_OPERATIONAL_CLOSURE_OBSTRUCTION",
       "kind": "causal",
-      "evidence_revision": "da4daecc4af81739646c03981c87e959719e09cd",
+      "evidence_revision": "953c6ad0b5621e306c3329085590905439916123",
       "scope": "Pour tout prédicat arithmétique candidat de l'instance HA, une production syntaxique exécutée unique calcule le corps, la substitution à son propre code, la phrase diagonale et leurs occurrences avant tout readout. La certification issue de diagonal_spec rejette constructivement l'adéquation globale bilatérale sans cohérence, preuve ni tiers exclu. Elle réfute aussi l'égalité des deux types de readout terminaux et construit un séparateur fini dont la liste de requêtes est vide ; toute ExactRealization du contrat fixé doit donc projeter les deux terminaux vers des mémoires distinctes. Ce résultat utilise seulement même mémoire projetée → mêmes futurs et sa contraposée constructive ; il n'établit ni la réciproque ni un quotient canonique de la mémoire. Le séparateur ne consomme ni regroupement opérationnel, ni collision, ni correspondance terminale, ni événement ; le corollaire sur toute ExactRealization utilise seulement les lois génériques de cette réalisation. Deux sources issues de la même production exécutent par ailleurs close et collisionnent dans une mémoire opérationnelle commune sans loi de préservation du readout ; une correspondance terminale bilatérale sur la même réalisation dérive l'adéquation locale et donc Empty. Chaque direction seule produit seulement les conséquences partielles formalisées, qui expriment au seul diagonal produit une cohérence locale minimale et ne construisent pas un prédicat de vérité partiel global non trivial. Une réalisation identité conserve positivement les readouts mais garde les terminaux distincts. La cécité au pôle sert uniquement à l'égalité des traces observées : une réalisation alternative à événements polaires conserve event_exact et la collision, avec traces distinctes. Portée limitée à la sémantique constructive HA et à ce runtime ; aucune hiérarchie tarskienne, théorie de Kripke ou de la révision, aucun résultat sur les réels, AC, CH, le coût ou la nouveauté.",
       "anchors": [
         {
@@ -1965,6 +2057,21 @@
           "module": "Tests.TarskiOperationalClosureRegression",
           "name": "TarskiOperationalClosureRegression.PolefulObservation.exactClosureRejected",
           "role": "test"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Continuation.DirectedIncompatibility",
+          "name": "ConstitutiveSearch.ContinuationSignatures.BilateralNegationCertificate",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Continuation.DirectedIncompatibility",
+          "name": "ConstitutiveSearch.ContinuationSignatures.rejectBilateralTransport",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Tarski.Diagonal",
+          "name": "StrongPerimetralTurning.TarskiDiagonalCertification.toBilateralNegationCertificate",
+          "role": "production"
         }
       ],
       "checks": [
@@ -1974,7 +2081,9 @@
         "scripts/tarski-diagonal-import-boundaries.txt",
         "scripts/tarski-ha-import-boundaries.txt",
         "scripts/tarski-operational-closure-import-boundaries.txt",
-        "scripts/stratification.tsv"
+        "scripts/stratification.tsv",
+        "scripts/continuation-directed-incompatibility-import-boundaries.txt",
+        "scripts/continuation-directed-obstruction-import-boundaries.txt"
       ],
       "dependencies": {
         "formation": "Le candidat est reçu avant toute diagonalisation. Une seule ExecutedTarskiProduction, issue de l'exécution certifiée de la substitution, porte le corps, le code calculé, la phrase diagonale, l'histoire et quatre occurrences successives. Les deux positions constitutives partagent exactement cette production ; le readout sémantique est ajouté ensuite et n'est pas une primitive de la syntaxe exécutée.",
@@ -1983,7 +2092,243 @@
         "transport": "ExactRealization préserve exactement les futurs, dont le readout terminal observé par la liste vide ; elle doit donc garder distinctes les mémoires de terminaux séparés par le contrat. Le sens inverse, mêmes futurs → même mémoire, n'est pas établi et aucun quotient canonique n'est revendiqué. DirectedTerminalReadoutPreservation transporte séparément une observation source vers une observation cible à travers l'égalité des mémoires calculées, sans égalité de types, loi inverse ni propext. TerminalReadoutCorrespondence regroupe deux directions indépendantes. La réalisation identité fournit positivement la correspondance exacte tout en gardant les terminaux distincts. Une réalisation de test dont l'événement actif expose le pôle satisfait event_exact et conserve la collision terminale, mais ses traces close restent distinctes ; la cécité au pôle n'est donc nécessaire qu'à l'égalité des traces observées."
       },
       "consumers": [],
-      "source_sha256": "9f65ff785303412ab4d68d9b4cd1e8e8837d8a32331f489d3b0a35274bf41d89",
+      "source_sha256": "253a39a076524736a45e0349bd3b71b4af1a81ad85be1cfbad881bd385e91c44",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "DIRECTED_OPERATIONAL_READOUT_COMPOSITION",
+      "kind": "behavioral",
+      "evidence_revision": "953c6ad0b5621e306c3329085590905439916123",
+      "scope": "Deux noyaux constructifs purs rejettent respectivement un transport dirigé incompatible avec des témoins d’extrémité et deux transports opposés incompatibles avec un certificat bilatéral de négation. Leurs wrappers opérationnels ne reçoivent pas ces transports transversaux : ils les dérivent de factorisations locales le long de la collision terminale portée par un ExecutedOperationalGrouping. Une instance positive non diagonale complète utilise deux sources acceptées distinctes déjà constituées dans un même rôle et un même run maître, exécute deux close non vides aux traces distinctes, calcule l’égalité de leurs bits par la chaîne de production existante, regroupe leurs mémoires terminales et transporte un témoin entre deux readouts dépendants par encodage et décodage explicites. Elle ne construit aucun terme de type Empty ni aucune preuve de False. Le résultat ne fournit ni réciproque futurs–mémoire, ni quotient canonique, ni minimalité universelle, ni impossibilité de tout regroupement, ni raccord automatique aux régimes abstraits de totalisation. Il ne porte ni sur tous les réels, ni sur AC ou CH, ni sur un coût physique ou une nouveauté bibliographique.",
+      "anchors": [
+        {
+          "path": "docs/composition-dirigee-regroupement-operationnel.fr.md",
+          "heading": "Portée et statut",
+          "paragraph": null,
+          "sha256": "628d76ce6207d80f3dbf49c9eea58f5004ebe2f1f4ba415e2e37020066af138b"
+        },
+        {
+          "path": "docs/directed-operational-grouping-composition.en.md",
+          "heading": "Scope and status",
+          "paragraph": null,
+          "sha256": "34b9164a37452a42687cf5ef239e84cc32a1ca9c1b8b674b803aa05f9c99b726"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Constitution.Continuation.DirectedIncompatibility",
+          "name": "ConstitutiveSearch.ContinuationSignatures.BilateralNegationCertificate",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Continuation.DirectedIncompatibility",
+          "name": "ConstitutiveSearch.ContinuationSignatures.rejectDirectedTransport",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Continuation.DirectedIncompatibility",
+          "name": "ConstitutiveSearch.ContinuationSignatures.rejectBilateralTransport",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Continuation.DirectedObstruction",
+          "name": "ConstitutiveSearch.ContinuationSignatures.ExecutedOperationalGrouping.rejectDirectedEndpointIncompatibility",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Continuation.DirectedObstruction",
+          "name": "ConstitutiveSearch.ContinuationSignatures.ExecutedOperationalGrouping.rejectBilateralEndpointIncompatibility",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedSourceAccepted",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedTargetAccepted",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedAcceptedSources_ne",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedIndexedAcceptedSources_ne",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedContract",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedRealization",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedInitialSources_ne",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedTerminals_ne",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedActiveMemories_ne",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedCloseChangesPhase",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedSourceRun",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedTargetRun",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedProducedBitsEqual",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedTerminalProjectionsEqual",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedGrouping",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedEventTracesDistinct",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.decodePositiveDirectedBit_encode",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedReadoutPreservation",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedTerminalTransport",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedSourceWitness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedTransportedWitness",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition",
+          "name": "ConstitutiveSearch.ContinuationSignatures.positiveDirectedTransportedWitness_exact",
+          "role": "production"
+        },
+        {
+          "module": "Tests.DirectedObstructionRegression",
+          "name": "DirectedObstructionRegression.directed_incompatibility_client",
+          "role": "test"
+        },
+        {
+          "module": "Tests.DirectedObstructionRegression",
+          "name": "DirectedObstructionRegression.bilateral_incompatibility_client",
+          "role": "test"
+        },
+        {
+          "module": "Tests.DirectedObstructionRegression",
+          "name": "DirectedObstructionRegression.executed_directed_incompatibility_client",
+          "role": "test"
+        },
+        {
+          "module": "Tests.DirectedObstructionRegression",
+          "name": "DirectedObstructionRegression.executed_bilateral_incompatibility_client",
+          "role": "test"
+        },
+        {
+          "module": "Tests.PositiveDirectedCompositionRegression",
+          "name": "PositiveDirectedCompositionRegression.source_occurrences_remain_distinct",
+          "role": "test"
+        },
+        {
+          "module": "Tests.PositiveDirectedCompositionRegression",
+          "name": "PositiveDirectedCompositionRegression.grouping_is_nonempty",
+          "role": "test"
+        },
+        {
+          "module": "Tests.PositiveDirectedCompositionRegression",
+          "name": "PositiveDirectedCompositionRegression.terminal_memory_collision_is_computed",
+          "role": "test"
+        },
+        {
+          "module": "Tests.PositiveDirectedCompositionRegression",
+          "name": "PositiveDirectedCompositionRegression.event_traces_preserve_the_positions",
+          "role": "test"
+        },
+        {
+          "module": "Tests.PositiveDirectedCompositionRegression",
+          "name": "PositiveDirectedCompositionRegression.selected_readout_equality_is_produced",
+          "role": "test"
+        },
+        {
+          "module": "Tests.PositiveDirectedCompositionRegression",
+          "name": "PositiveDirectedCompositionRegression.transported_witness_is_exact",
+          "role": "test"
+        }
+      ],
+      "checks": [
+        "scripts/expected-failures.tsv",
+        "scripts/continuation-directed-incompatibility-import-boundaries.txt",
+        "scripts/continuation-directed-obstruction-import-boundaries.txt",
+        "scripts/positive-directed-composition-import-boundaries.txt",
+        "scripts/stratification.tsv"
+      ],
+      "dependencies": {
+        "formation": "Un même RelationalConstitutiveRoleStage, déjà indexé par son CausalConstitutiveStageExecution maître, fournit variedLeftSource et leftSource comme AcceptedRoleSource avant l’introduction des positions source et target. Leur distinction dépend de la constitution à trois sources et non des étiquettes du runtime.",
+        "execution": "La seule requête close est autorisée exactement en phase active. Deux ExecutedRun non vides calculent des terminaux sources distincts et des événements actifs portant leur position. La projection conserve cette position en phase active puis produit au terminal une mémoire grouped du bit effectivement lu à run.selected. L’égalité de ces bits traverse same_sources_other_resource_agree, produceRoleSignature_exact et FutureEquivalent.read avant de produire la collision terminale.",
+        "proof": "Les noyaux B1 et B2 sont indépendants des runtimes et des branches diagonales. Les wrappers génériques obtiennent leurs transports seulement par ExecutedOperationalGrouping.directedReadout et reverseDirectedReadout. Dans l’instance positive, positiveDirectedTerminalTransport applique directedReadout au regroupement calculé et à la préservation locale, puis transporte un témoin source vers un témoin cible dont l’observation est exactement le bit cible produit.",
+        "transport": "La mémoire active et les événements conservent la position, tandis que la mémoire terminale oublie cette position relativement au contrat fixé sur run.selected. La lecture source encode explicitement le booléen produit en naturel et la lecture cible le décode avec decodePositiveDirectedBit_encode. Aucune loi inverse générale, égalité de types, identification des sources, réciproque des futurs ou propriété de quotient n’est dérivée."
+      },
+      "consumers": [
+        "GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION",
+        "TARSKI_RELATIONAL_OPERATIONAL_CLOSURE_OBSTRUCTION"
+      ],
+      "source_sha256": "d4cf404f444135fc4a4c25083878a8132bbe2a2a20da5b799a5239160eb88254",
       "reviews": {
         "reader": {
           "status": "pending"
