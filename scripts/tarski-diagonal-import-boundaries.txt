@@ -1,0 +1,6 @@
+# The semantic diagonal rejection is independent of every runtime.
+root RelationalPerimeter.Constitution.Tarski.Diagonal
+forbidden RelationalPerimeter.Constitution.Tarski.OperationalClosure
+forbidden RelationalPerimeter.Constitution.Tarski.ClosureObstruction
+forbidden RelationalPerimeter.Constitution.Godel.OperationalClosure
+forbidden RelationalPerimeter.Instances.HeytingArithmetic.Tarski

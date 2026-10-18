@@ -14,6 +14,8 @@ import Tests.GodelPerimetralCorrespondenceRegression
 import Tests.HeytingArithmeticGodelInstanceRegression
 import Tests.GodelOperationalClosureRegression
 import Tests.HeytingArithmeticOperationalClosureRegression
+import Tests.TarskiOperationalClosureRegression
+import Tests.TarskiOperationalClosureDependencies
 import Tests.ProducedContinuation
 import Tests.ProductionTimelineRegression
 import Tests.PublicRootImport

@@ -129,8 +129,17 @@ totalisation, aucun rejet circulaire, `event_exact` ou équivalence de tous les
 futurs ne fournit ce passage.
 
 `godelTerminalReadExactToEndpointEquality` localise la même frontière pour la
-réalisation opérationnelle construite : l'adjonction d'un readout exact doit
-passer par ses deux runs et leur collision terminale. L'ancien raccourci qui
+réalisation opérationnelle construite. Dans sa preuve empaquetée, l'adjonction
+d'un readout exact est composée avec les deux runs exécutés et leur collision
+terminale. Ces runs certifient et conservent la chaîne constitutive effectivement
+construite ; ils ne sont pas revendiqués comme les prémisses logiquement
+minimales de toute dérivation de l'égalité. Dans cette preuve empaquetée, le
+passage critique suit la transition `close`, sa préservation par `next_exact`,
+la collision terminale et la préservation des lectures par `read_exact`. Pour
+la projection opérationnelle construite, ces étapes ne sont toutefois pas les
+prémisses logiquement minimales : l'hypothèse globale `readExact` identifie déjà
+les lectures de sources terminales de même mémoire projetée, même lorsque ces
+sources sont construites indépendamment des runs. L'ancien raccourci qui
 identifiait déjà les projections initiales par leur seule profondeur a été
 remplacé, sans alias de compatibilité.
 
@@ -140,6 +149,40 @@ physique d'un code de preuve. Enfin, et seulement alors, `trueWitness` fournit
 l'entrée et `unprovable` rejette la preuve ainsi obtenue du même énoncé.
 L'équivalence de tous les futurs des terminaux reste une conséquence parallèle
 sous réalisation exacte ; elle n'est pas une prémisse du noyau critique.
+
+## Localisation fondationnelle exacte
+
+Le témoin gödelien fixe déjà l'incompatibilité entre l'habitation de
+`Truth(G)` et la vacuité de `Proof(G)`. L'exécution de `close` ne crée donc pas
+cette incompatibilité. Son rôle propre est de construire positivement, dans la
+réalisation opérationnelle sans exactitude du readout, la mémoire terminale
+commune qui n'existait pas entre les mémoires actives distinctes.
+
+Sous une réalisation exacte arbitraire, `next_exact` transporte la collision
+supposée des sorties réduites de `close` vers les projections des terminaux
+riches calculés, et `read_exact` force alors l'égalité de leurs lectures.
+L'exécution produit et localise ainsi la collision terminale étudiée ;
+l'obstruction à sa conservation exacte provient des readouts gödeliens
+incompatibles que le contrat exige de préserver.
+
+La frontière démontrée ne constitue pas un principe général suffisant pour
+toute constitution relationnelle. Elle porte sur le runtime gödelien construit
+et sur son contrat fixé. Chacune de ses deux possibilités positives est
+réalisée : le regroupement terminal sous le contrat opérationnel sans readout
+exact, et la réalisation exacte qui conserve des terminaux riches distincts.
+L'ajout à une réalisation exacte de l'hypothèse identifiant ses deux sorties
+terminales calculées est rejeté.
+
+La conclusion exacte est donc :
+
+> **Pour le runtime gödelien construit, `close` produit une collision
+> opérationnelle terminale sous une réalisation qui préserve autorisations,
+> transitions et événements sans préserver le readout. Pour toute réalisation
+> exacte du contrat riche, `next_exact`, cette collision terminale supposée et
+> `read_exact` imposent `Truth(G) = Proof(G)`, puis la vérité et la
+> non-prouvabilité du même énoncé produisent `Empty`. L'exécution construit et
+> localise la collision ; elle ne crée pas l'incompatibilité gödelienne qui la
+> rend impossible sous exactitude.**
 
 ## Dépendances et contrôles
 

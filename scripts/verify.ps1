@@ -38,6 +38,10 @@ foreach ($boundary in @("godel-positive-core", "godel-operational-h1", "godel-op
   & (Join-Path $PSScriptRoot "check-import-boundaries.ps1") "scripts/$boundary-import-boundaries.txt"
   if ($LASTEXITCODE -ne 0) { throw "$boundary import-boundary check failed" }
 }
+foreach ($boundary in @("tarski-continuation", "tarski-diagonal", "tarski-operational-closure", "tarski-ha")) {
+  & (Join-Path $PSScriptRoot "check-import-boundaries.ps1") "scripts/$boundary-import-boundaries.txt"
+  if ($LASTEXITCODE -ne 0) { throw "$boundary import-boundary check failed" }
+}
 & (Join-Path $PSScriptRoot "check-stratification.ps1") --self-test
 if ($LASTEXITCODE -ne 0) { throw "stratification parser self-test failed" }
 & (Join-Path $PSScriptRoot "check-stratification.ps1")

@@ -12,11 +12,19 @@ RelationalPerimeter.Constitution.Grouping.Reindexing	U	enforced	Exact transport 
 RelationalPerimeter.Constitution.Grouping.ContinuationContract	U	enforced	Separate acceptance actions and exact future continuation contracts
 RelationalPerimeter.Constitution.Continuation.Execution	U	enforced	Authorized inductive runs with computed targets events and admissions
 RelationalPerimeter.Constitution.Continuation.CommonMemoryGrouping	U	enforced	Executed terminal collision under a fixed exact realization and direct readout equality
+RelationalPerimeter.Constitution.Continuation.OperationalRealization	U	enforced	Readout-free exact operational projection with executed nonempty grouping
+RelationalPerimeter.Constitution.Continuation.ReadoutCorrespondence	U	enforced	Directed terminal readout transports factored from operational grouping
 RelationalPerimeter.Constitution.Godel.OperationalClosure	F	enforced	Fixed positive Godel runtime and local obstruction to collision of computed exact memories
+RelationalPerimeter.Constitution.Tarski.SyntaxExecution	F	enforced	Executed diagonal syntax production with one computed substitution output and ordered occurrences
+RelationalPerimeter.Constitution.Tarski.Readout	F	enforced	Separate semantic readout family and local bidirectional adequacy
+RelationalPerimeter.Constitution.Tarski.Diagonal	F	enforced	Constructive local and global semantic Tarski rejection without runtime imports
+RelationalPerimeter.Constitution.Tarski.OperationalClosure	F	enforced	Pole-preserving sources pole-blind observed events and affirmative grouping-to-adequacy bridge
+RelationalPerimeter.Constitution.Tarski.ClosureObstruction	F	enforced	Final composition of derived adequacy with the independently certified diagonal rejection
 RelationalPerimeter.Constitution.Godel.PositiveExecutionCore	F	enforced	Single positive executed resource shared by operational H1 and historical correspondence
 RelationalPerimeter.Constitution.Godel.OperationalH1	F	enforced	Positive proof-relevant H1 and subsequent executed history extensions
 RelationalPerimeter.Constitution.Godel.OperationalPerimetralBridge	F	enforced	Downstream exact occurrence transport from operational to historical H1
 RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure	F	enforced	Specialization of exact runtime separation to the existing HA production
+RelationalPerimeter.Instances.HeytingArithmetic.Tarski	F	enforced	Executed HA diagonal substitution semantic Tarski theorem and operational specialization
 RelationalPerimeter.Constitution.Grouping.HistoricalExtension	U	enforced	Historical operation inclusion and renormalization
 RelationalPerimeter.Constitution.Grouping.ExactImage	K	enforced	Normal target image reusing the existing finite image implementation
 RelationalPerimeter.Computation.ConstitutiveSearch.EndogenousDecomposition.CertifiedRoleGrouping	A6	enforced	Certified grouping on actual relational role occurrences and returned transports

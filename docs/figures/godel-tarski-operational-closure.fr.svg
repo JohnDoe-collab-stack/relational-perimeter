@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1800" height="1660" viewBox="0 0 1800 1660"
+     role="img" aria-labelledby="title desc">
+  <title id="title">Architecture relationnelle commune et obstructions diagonales de Gödel et Tarski</title>
+  <desc id="desc">Figure comparative éditable. Elle distingue le noyau opérationnel commun, deux constructions positives séparées, la dérivation d’un transport local dirigé depuis une collision de mémoires et une préservation des readouts, puis les conclusions différentes de Gödel et de Tarski. Le transport est unidirectionnel pour Gödel et bilatéral pour Tarski. L’égalité des traces événementielles est présentée comme un renforcement distinct de l’obstruction minimale.</desc>
+
+  <metadata>
+    Figure comparative de l’implémentation relationnelle Gödel–Tarski.
+    La hiérarchie tarskienne, Kripke, les réels, AC et CH sont hors portée
+    de cette figure.
+  </metadata>
+
+  <defs>
+    <style>
+      .title { font-family: Georgia, 'Times New Roman', serif }
+      .title { font-size: 34px }
+      .title { font-weight: 700 }
+      .title { fill: #173b74 }
+      .subtitle { font-family: Georgia, 'Times New Roman', serif }
+      .subtitle { font-size: 19px }
+      .subtitle { font-weight: 600 }
+      .subtitle { fill: #51627a }
+      .section-title { font-family: Georgia, 'Times New Roman', serif }
+      .section-title { font-size: 21px }
+      .section-title { font-weight: 700 }
+      .panel-title { font-family: Georgia, 'Times New Roman', serif }
+      .panel-title { font-size: 18px }
+      .panel-title { font-weight: 700 }
+      .body { font-family: Georgia, 'Times New Roman', serif }
+      .body { font-size: 14px }
+      .body { fill: #222 }
+      .body-center { font-family: Georgia, 'Times New Roman', serif }
+      .body-center { font-size: 14px }
+      .body-center { fill: #222 }
+      .body-center { text-anchor: middle }
+      .small { font-family: Georgia, 'Times New Roman', serif }
+      .small { font-size: 12px }
+      .small { fill: #3e4652 }
+      .small-center { font-family: Georgia, 'Times New Roman', serif }
+      .small-center { font-size: 12px }
+      .small-center { fill: #3e4652 }
+      .small-center { text-anchor: middle }
+      .note { font-family: Georgia, 'Times New Roman', serif }
+      .note { font-size: 12px }
+      .note { fill: #555 }
+      .note { font-style: italic }
+      .note-center { font-family: Georgia, 'Times New Roman', serif }
+      .note-center { font-size: 12px }
+      .note-center { fill: #555 }
+      .note-center { font-style: italic }
+      .note-center { text-anchor: middle }
+      .white-center { font-family: Georgia, 'Times New Roman', serif }
+      .white-center { font-size: 14px }
+      .white-center { font-weight: 700 }
+      .white-center { fill: white }
+      .white-center { text-anchor: middle }
+      .outer { stroke-width: 3 }
+      .outer { rx: 18 }
+      .outer { ry: 18 }
+      .inner { stroke-width: 1.8 }
+      .inner { rx: 11 }
+      .inner { ry: 11 }
+      .callout { stroke-width: 1.6 }
+      .callout { rx: 10 }
+      .callout { ry: 10 }
+      .center { text-anchor: middle }
+      .center { dominant-baseline: middle }
+    </style>
+
+    <marker id="arrow-blue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L12,6 L0,12 z" fill="#174a8b"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L12,6 L0,12 z" fill="#1c7b3b"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L12,6 L0,12 z" fill="#bd2d2d"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L12,6 L0,12 z" fill="#6846bd"/>
+    </marker>
+    <marker id="arrow-gray" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L12,6 L0,12 z" fill="#687585"/>
+    </marker>
+
+    <linearGradient id="gCommon" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#edf5ff"/>
+      <stop offset="100%" stop-color="#dce9f8"/>
+    </linearGradient>
+    <linearGradient id="gGreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#effbf3"/>
+      <stop offset="100%" stop-color="#dcf2e4"/>
+    </linearGradient>
+    <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eff6ff"/>
+      <stop offset="100%" stop-color="#dceaff"/>
+    </linearGradient>
+    <linearGradient id="gBridge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff9ed"/>
+      <stop offset="100%" stop-color="#ffebc5"/>
+    </linearGradient>
+    <linearGradient id="gGodel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff0f0"/>
+      <stop offset="100%" stop-color="#ffdddd"/>
+    </linearGradient>
+    <linearGradient id="gTarski" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f5f0ff"/>
+      <stop offset="100%" stop-color="#e8ddff"/>
+    </linearGradient>
+    <linearGradient id="gFooter" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eff2f7"/>
+      <stop offset="100%" stop-color="#e3e8f0"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1800" height="1660" fill="white"/>
+
+  <!-- En-tête -->
+  <g id="en-tete">
+    <text x="900" y="43" class="title center">Architecture relationnelle commune et obstructions diagonales</text>
+    <text x="900" y="78" class="subtitle center">Gödel et Tarski : regroupement opérationnel, préservation dirigée des readouts et séparation</text>
+  </g>
+
+  <!-- Noyau commun -->
+  <g id="noyau-relationnel-commun">
+    <rect x="80" y="145" width="1640" height="335" fill="url(#gCommon)" stroke="#174a8b" class="outer"/>
+    <text x="900" y="177" class="section-title center" fill="#173b74">Noyau relationnel commun — avant toute conclusion diagonale</text>
+
+    <rect x="510" y="205" width="780" height="70" fill="#f9fcff" stroke="#356ca8" class="inner"/>
+    <text x="900" y="229" class="panel-title center" fill="#173b74">Dans chaque branche : une production diagonale exécutée maître</text>
+    <text x="900" y="254" class="body-center">phrase, code calculé, histoire, occurrences et provenance issus d’une même exécution au sein de la branche</text>
+
+    <path d="M900 275 L900 300" stroke="#174a8b" stroke-width="2.7" fill="none" marker-end="url(#arrow-blue)"/>
+
+    <rect x="620" y="300" width="560" height="58" fill="#f7f8fa" stroke="#697789" class="inner"/>
+    <text x="900" y="322" class="panel-title center" fill="#344458">Contrat de futurs fixé avant la fermeture</text>
+    <text x="900" y="344" class="small-center">les readouts sont attachés aux positions constitutives, non reconstruits après coup</text>
+
+    <path d="M620 329 L430 329 L430 380" stroke="#174a8b" stroke-width="2.7" fill="none" marker-end="url(#arrow-blue)"/>
+    <path d="M1180 329 L1370 329 L1370 380" stroke="#174a8b" stroke-width="2.7" fill="none" marker-end="url(#arrow-blue)"/>
+
+    <rect x="190" y="380" width="480" height="72" fill="#f2fbf5" stroke="#2c8250" class="inner"/>
+    <text x="430" y="402" class="panel-title center" fill="#1f6b39">Position constitutive A — valeur externe</text>
+    <text x="430" y="426" class="body-center">Gödel : Truth(G)  •  Tarski : Truth(L)</text>
+    <text x="430" y="445" class="small-center">la mémoire active conserve cette position</text>
+
+    <rect x="1130" y="380" width="480" height="72" fill="#f3f7ff" stroke="#2d6bc5" class="inner"/>
+    <text x="1370" y="402" class="panel-title center" fill="#1d5cb5">Position constitutive B — représentation interne</text>
+    <text x="1370" y="426" class="body-center">Gödel : Proof(G)  •  Tarski : Truth(Cand(⌜L⌝))</text>
+    <text x="1370" y="445" class="small-center">le même code diagonal exécuté est consommé</text>
+
+    <path d="M670 416 L1130 416" stroke="#687585" stroke-width="2" stroke-dasharray="8 6" fill="none"
+          marker-start="url(#arrow-gray)" marker-end="url(#arrow-gray)"/>
+    <text x="900" y="403" class="small-center">positions distinctes issues de la même production maître</text>
+  </g>
+
+  <!-- Deux constructions positives -->
+  <g id="constructions-positives">
+    <path d="M430 480 L430 510" stroke="#1c7b3b" stroke-width="2.8" fill="none" marker-end="url(#arrow-green)"/>
+    <path d="M1370 480 L1370 510" stroke="#174a8b" stroke-width="2.8" fill="none" marker-end="url(#arrow-blue)"/>
+
+    <rect x="80" y="515" width="790" height="300" fill="url(#gGreen)" stroke="#1c7b3b" class="outer"/>
+    <text x="475" y="547" class="section-title center" fill="#1f6b39">Construction positive A — regroupement opérationnel</text>
+
+    <rect x="225" y="575" width="500" height="42" fill="#fbfefc" stroke="#4a8e61" class="inner"/>
+    <text x="475" y="596" class="body-center">close autorisé → deux ExecutedStep → deux ExecutedRun</text>
+    <path d="M475 617 L475 637" stroke="#1c7b3b" stroke-width="2.3" fill="none" marker-end="url(#arrow-green)"/>
+    <rect x="225" y="637" width="500" height="52" fill="#fbfefc" stroke="#4a8e61" class="inner"/>
+    <text x="475" y="657" class="body-center">projection terminale vers la mémoire opérationnelle</text>
+    <text x="475" y="676" class="small-center">occurrences maîtres conservées, position oubliée au terminal</text>
+    <path d="M475 689 L475 709" stroke="#1c7b3b" stroke-width="2.3" fill="none" marker-end="url(#arrow-green)"/>
+    <rect x="225" y="709" width="500" height="46" fill="#238743" stroke="#176c31" class="inner"/>
+    <text x="475" y="732" class="white-center">collision calculée : mémoire terminale commune</text>
+
+    <rect x="160" y="770" width="630" height="31" fill="#eef8f1" stroke="#77a887" class="callout"/>
+    <text x="475" y="786" class="small-center">construit sans correspondance exacte des readouts</text>
+
+    <rect x="930" y="515" width="790" height="300" fill="url(#gBlue)" stroke="#1f69d2" class="outer"/>
+    <text x="1325" y="547" class="section-title center" fill="#1d5cb5">Construction positive B — réalisation exacte ouverte</text>
+
+    <rect x="1075" y="575" width="500" height="42" fill="#fbfdff" stroke="#4c7dca" class="inner"/>
+    <text x="1325" y="596" class="body-center">réalisation identité du contrat relationnel</text>
+    <path d="M1325 617 L1325 637" stroke="#1f69d2" stroke-width="2.3" fill="none" marker-end="url(#arrow-blue)"/>
+    <rect x="1075" y="637" width="500" height="71" fill="#fbfdff" stroke="#4c7dca" class="inner"/>
+    <text x="1325" y="657" class="body-center">préserve autorisations, transitions et événements</text>
+    <text x="1325" y="678" class="body-center">et préserve les readouts selon l’interface exacte de la branche</text>
+    <text x="1325" y="697" class="small-center">close est effectivement exécuté</text>
+    <path d="M1325 708 L1325 728" stroke="#1f69d2" stroke-width="2.3" fill="none" marker-end="url(#arrow-blue)"/>
+    <rect x="1075" y="728" width="500" height="46" fill="#2479d6" stroke="#155aaa" class="inner"/>
+    <text x="1325" y="751" class="white-center">deux terminaux constitutifs distincts</text>
+
+    <text x="900" y="839" class="note-center">Constructions séparées : aucune sortie de A n’est identifiée à une sortie de B.</text>
+  </g>
+
+  <!-- Pont opérationnel minimal -->
+  <g id="pont-operationnel-minimal">
+    <rect x="80" y="865" width="1160" height="300" fill="url(#gBridge)" stroke="#c88716" class="outer"/>
+    <text x="660" y="897" class="section-title center" fill="#9b6200">Pont conditionnel — une seule et même réalisation arbitraire</text>
+    <text x="660" y="922" class="small-center">la réalisation, ses deux terminaux calculés et son contrat sont fixés avant l’hypothèse de collision</text>
+
+    <rect x="245" y="946" width="830" height="42" fill="#fffdf8" stroke="#ce9638" class="inner"/>
+    <text x="660" y="967" class="body-center" font-weight="700">collision des mémoires terminales calculées par les deux runs</text>
+    <path d="M660 988 L660 1008" stroke="#a76b08" stroke-width="2.4" fill="none" marker-end="url(#arrow-gray)"/>
+    <rect x="245" y="1008" width="830" height="52" fill="#fffdf8" stroke="#ce9638" class="inner"/>
+    <text x="660" y="1028" class="body-center" font-weight="700">+ préservation terminale dirigée des readouts de cette réalisation</text>
+    <text x="660" y="1048" class="small-center">interface commune : une direction pour Gödel  •  deux directions pour Tarski, sans propext</text>
+    <path d="M660 1060 L660 1080" stroke="#a76b08" stroke-width="2.4" fill="none" marker-end="url(#arrow-gray)"/>
+    <rect x="245" y="1080" width="830" height="55" fill="#f2ad36" stroke="#b47710" class="inner"/>
+    <text x="660" y="1099" class="white-center">transport local dirigé dérivé entre les deux readouts terminaux</text>
+    <text x="660" y="1120" class="small-center" fill="white">la conclusion diagonale n’est pas utilisée pour construire ce pont affirmatif</text>
+
+    <rect x="1280" y="865" width="440" height="300" fill="#f5f7fa" stroke="#778596" class="outer"/>
+    <text x="1500" y="897" class="panel-title center" fill="#3f4d5f">Renforcement événementiel distinct</text>
+    <rect x="1320" y="930" width="360" height="72" fill="#fbfcfd" stroke="#96a1af" class="inner"/>
+    <text x="1500" y="951" class="body-center">l’événement canonique ne copie pas la position</text>
+    <text x="1500" y="973" class="small-center">cette cécité permet l’égalité des traces</text>
+    <text x="1500" y="991" class="small-center">du regroupement observationnel commun</text>
+    <rect x="1320" y="1021" width="360" height="92" fill="#fbfcfd" stroke="#96a1af" class="inner"/>
+    <text x="1500" y="1037" class="small-center" font-weight="700">Test positif Tarski :</text>
+    <text x="1500" y="1054" class="small-center">si l’événement actif expose la position,</text>
+    <text x="1500" y="1072" class="small-center">event_exact peut encore être satisfait,</text>
+    <text x="1500" y="1089" class="small-center">la collision terminale reste calculée,</text>
+    <text x="1500" y="1106" class="small-center">mais les traces close sont distinctes</text>
+    <text x="1500" y="1141" class="note-center">La fixture négative rejette seulement leur égalité.</text>
+  </g>
+
+  <!-- Bifurcation Gödel / Tarski -->
+  <g id="deux-obstructions-diagonales">
+    <path d="M660 1165 L660 1184 L450 1184 L450 1205" stroke="#bd2d2d" stroke-width="2.7" fill="none" marker-end="url(#arrow-red)"/>
+    <path d="M660 1165 L660 1184 L1350 1184 L1350 1205" stroke="#6846bd" stroke-width="2.7" fill="none" marker-end="url(#arrow-purple)"/>
+
+    <rect x="80" y="1210" width="790" height="280" fill="url(#gGodel)" stroke="#bd2d2d" class="outer"/>
+    <text x="475" y="1242" class="section-title center" fill="#ad2020">Branche Gödel — obstruction avec témoins produits</text>
+    <rect x="205" y="1270" width="540" height="44" fill="#fffafa" stroke="#ca6565" class="inner"/>
+    <text x="475" y="1292" class="body-center" font-weight="700">transport dirigé : Truth(G) → Proof(G)</text>
+    <path d="M475 1314 L475 1334" stroke="#bd2d2d" stroke-width="2.3" fill="none" marker-end="url(#arrow-red)"/>
+    <rect x="205" y="1334" width="540" height="52" fill="#fffafa" stroke="#ca6565" class="inner"/>
+    <text x="475" y="1354" class="body-center">conversion produite depuis collision + contrat</text>
+    <text x="475" y="1374" class="small-center">sans égalité de types ni transport inverse</text>
+    <path d="M475 1386 L475 1406" stroke="#bd2d2d" stroke-width="2.3" fill="none" marker-end="url(#arrow-red)"/>
+    <rect x="205" y="1406" width="540" height="52" fill="#cf2929" stroke="#991717" class="inner"/>
+    <text x="475" y="1426" class="white-center">t : Truth(G)  +  u : Proof(G) → Empty</text>
+    <text x="475" y="1447" class="white-center">→ Empty</text>
+    <text x="475" y="1476" class="note-center">La vérité et la non-prouvabilité concernent le même témoin gödelien exécuté.</text>
+
+    <rect x="930" y="1210" width="790" height="280" fill="url(#gTarski)" stroke="#6846bd" class="outer"/>
+    <text x="1325" y="1242" class="section-title center" fill="#55349e">Branche Tarski — obstruction sémantique constructive</text>
+    <rect x="1055" y="1270" width="540" height="44" fill="#fdfbff" stroke="#8c6bc6" class="inner"/>
+    <text x="1325" y="1292" class="body-center" font-weight="700">adéquation locale : Truth(L) ↔ Truth(Cand(⌜L⌝))</text>
+    <text x="1325" y="1308" class="small-center">Une seule direction : fermeture partielle, sans contradiction</text>
+    <path d="M1325 1314 L1325 1334" stroke="#6846bd" stroke-width="2.3" fill="none" marker-end="url(#arrow-purple)"/>
+    <rect x="1055" y="1334" width="540" height="52" fill="#fdfbff" stroke="#8c6bc6" class="inner"/>
+    <text x="1325" y="1354" class="body-center">certification diagonale : Truth(L) ↔ ¬Truth(Cand(⌜L⌝))</text>
+    <text x="1325" y="1374" class="small-center">issue de la production diagonale exécutée</text>
+    <path d="M1325 1386 L1325 1406" stroke="#6846bd" stroke-width="2.3" fill="none" marker-end="url(#arrow-purple)"/>
+    <rect x="1055" y="1406" width="540" height="52" fill="#6846bd" stroke="#4c2e8f" class="inner"/>
+    <text x="1325" y="1426" class="white-center">composition constructive</text>
+    <text x="1325" y="1447" class="white-center">→ Empty</text>
+    <text x="1325" y="1476" class="note-center">Aucun prédicat de preuve, aucune cohérence supposée, aucun tiers exclu.</text>
+  </g>
+
+  <!-- Conclusion -->
+  <g id="frontiere-et-portee">
+    <rect x="80" y="1515" width="1640" height="75" fill="url(#gFooter)" stroke="#52657d" class="outer"/>
+    <text x="125" y="1541" class="panel-title" fill="#31465f">Frontière établie :</text>
+    <text x="990" y="1541" class="body-center">le regroupement opérationnel et la préservation exacte sont chacun constructibles</text>
+    <text x="990" y="1565" class="body-center">leur combinaison devient impossible lorsque la collision efface une distinction que les readouts doivent préserver.</text>
+
+    <text x="900" y="1617" class="note-center">Gödel et Tarski partagent l’architecture de localisation, mais non la dernière raison diagonale de la contradiction.</text>
+    <text x="900" y="1640" class="note-center">La mémoire opérationnelle est un transport relationnel aval sous contrat, elle n’est pas la primitive extensive de la constitution.</text>
+  </g>
+</svg>

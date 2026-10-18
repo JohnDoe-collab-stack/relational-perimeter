@@ -1,0 +1,39 @@
+import RelationalPerimeter.Instances.HeytingArithmetic.Tarski
+open StrongPerimetralTurning
+open ConstitutiveSearch.ContinuationSignatures
+open RelationalPerimeter.HeytingArithmetic
+
+variable {candidate : Predicate} (execution : HATarskiExecution candidate)
+
+structure OneWayTarskiReadout where
+  memoryRead : TarskiOperationalMemory execution → Type
+  leftForward :
+    (tarskiClosureContract heytingArithmeticTarskiReadout execution).read
+        (tarskiValueTerminal execution) →
+      memoryRead ((tarskiOperationalRealization heytingArithmeticTarskiReadout execution).project
+        (tarskiValueTerminal execution))
+  leftBackward :
+    memoryRead ((tarskiOperationalRealization heytingArithmeticTarskiReadout execution).project
+        (tarskiValueTerminal execution)) →
+      (tarskiClosureContract heytingArithmeticTarskiReadout execution).read
+        (tarskiValueTerminal execution)
+  rightForward :
+    (tarskiClosureContract heytingArithmeticTarskiReadout execution).read
+        (tarskiCandidateTerminal execution) →
+      memoryRead ((tarskiOperationalRealization heytingArithmeticTarskiReadout execution).project
+        (tarskiCandidateTerminal execution))
+
+example (oneWay : OneWayTarskiReadout execution) :
+    TerminalReadoutCorrespondence
+      (tarskiOperationalRealization heytingArithmeticTarskiReadout execution)
+      (tarskiValueTerminal execution) (tarskiCandidateTerminal execution) where
+  memoryRead := oneWay.memoryRead
+  leftForward := oneWay.leftForward
+  leftBackward := oneWay.leftBackward
+  rightForward := oneWay.rightForward
+  rightBackward := oneWay.rightForward
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.ContinuationSignatures.TerminalReadoutCorrespondence
+#print axioms StrongPerimetralTurning.tarskiExecutedGroupingToLocalAdequacy
+/- AXIOM_AUDIT_END -/

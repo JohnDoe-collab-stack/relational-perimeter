@@ -84,6 +84,7 @@ run_cmd do
     `StrongPerimetralTurning.OperationalSameRegimeClosureAt,
     `StrongPerimetralTurning.godelOperationalClosureOfTerminalCollision,
     `StrongPerimetralTurning.godelExecutedGroupingToEndpointEquality,
+    `StrongPerimetralTurning.godelExecutedOperationalGroupingToProducedCompleteness,
     `StrongPerimetralTurning.godelExecutedGroupingProjectedTerminalsEqual,
     `StrongPerimetralTurning.godelOperationalRunExact,
     `StrongPerimetralTurning.godelOperationalClosureToEndpointEquality,
@@ -123,6 +124,27 @@ run_cmd do
         `StrongPerimetralTurning.read_run] do
       unless visited.contains required do
         throwError "Readout bridge {root} no longer consumes {required}"
+  let directedBridge ← closure
+    [`StrongPerimetralTurning.godelExecutedOperationalGroupingToProducedCompleteness]
+  for required in [
+      `ConstitutiveSearch.ContinuationSignatures.ExecutedOperationalGrouping.leftRun,
+      `ConstitutiveSearch.ContinuationSignatures.ExecutedOperationalGrouping.rightRun,
+      `ConstitutiveSearch.ContinuationSignatures.ExecutedRun.terminal_eq_run,
+      `ConstitutiveSearch.ContinuationSignatures.ExecutedOperationalGrouping.projectedTerminalsEqual,
+      `ConstitutiveSearch.ContinuationSignatures.DirectedTerminalReadoutPreservation.transport,
+      `ConstitutiveSearch.ContinuationSignatures.ExecutedOperationalGrouping.directedReadout,
+      `StrongPerimetralTurning.pole_run,
+      `StrongPerimetralTurning.read_run] do
+    unless directedBridge.contains required do
+      throwError "Directed Gödel readout bridge no longer consumes {required}"
+  for forbidden in [
+      `StrongPerimetralTurning.ExecutedGodelWitness.trueWitness,
+      `StrongPerimetralTurning.ExecutedGodelWitness.unprovable,
+      `ConstitutiveSearch.ContinuationSignatures.ExactRealization.read_exact,
+      `ConstitutiveSearch.ContinuationSignatures.ExactRealization.event_exact,
+      `StrongPerimetralTurning.TarskiDiagonalCertification] do
+    if directedBridge.contains forbidden then
+      throwError "Directed Gödel readout bridge depends on forbidden {forbidden}"
   let operational ← closure [`StrongPerimetralTurning.godelOperationalGroupingWithoutRead]
   for required in [
       `StrongPerimetralTurning.GodelOperationalRealizationWithoutRead,
@@ -151,6 +173,7 @@ run_cmd do
     unless terminalBridge.contains required do
       throwError "Terminal readout bridge no longer consumes {required}"
   for root in [
+      `StrongPerimetralTurning.rejectGodelExecutedOperationalGroupingToEmpty,
       `StrongPerimetralTurning.rejectGodelOperationalClosureToEmpty,
       `StrongPerimetralTurning.rejectGodelTerminalReadExactToEmpty,
       `StrongPerimetralTurning.godelExactRuntimeRejectsCommonTerminalMemory] do

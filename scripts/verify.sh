@@ -44,6 +44,9 @@ bash scripts/check-import-boundaries.sh scripts/godel-positive-core-import-bound
 bash scripts/check-import-boundaries.sh scripts/godel-operational-h1-import-boundaries.txt
 bash scripts/check-import-boundaries.sh scripts/godel-operational-closure-import-boundaries.txt
 bash scripts/check-import-boundaries.sh scripts/godel-perimetral-import-boundaries.txt
+for boundary in tarski-continuation tarski-diagonal tarski-operational-closure tarski-ha; do
+  bash scripts/check-import-boundaries.sh "scripts/$boundary-import-boundaries.txt"
+done
 bash scripts/check-stratification.sh --self-test
 bash scripts/check-stratification.sh
 

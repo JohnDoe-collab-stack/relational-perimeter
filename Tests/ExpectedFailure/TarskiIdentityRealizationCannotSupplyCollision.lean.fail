@@ -1,0 +1,24 @@
+import RelationalPerimeter.Instances.HeytingArithmetic.Tarski
+open StrongPerimetralTurning
+open ConstitutiveSearch.ContinuationSignatures
+open RelationalPerimeter.HeytingArithmetic
+
+variable {candidate : Predicate} (execution : HATarskiExecution candidate)
+
+example : ExecutedOperationalGrouping
+    (tarskiIdentityRealization heytingArithmeticTarskiReadout execution).toOperational
+    (tarskiValueSource execution) (tarskiCandidateSource execution)
+    (tarskiValueTerminal execution) (tarskiCandidateTerminal execution) where
+  trace := ⟨.close, []⟩
+  leftEvents := [(tarskiClosureContract heytingArithmeticTarskiReadout execution).event
+    (tarskiValueSource execution) .close]
+  leftRun := tarskiExecuteClose heytingArithmeticTarskiReadout execution .value
+  rightEvents := [(tarskiClosureContract heytingArithmeticTarskiReadout execution).event
+    (tarskiCandidateSource execution) .close]
+  rightRun := tarskiExecuteClose heytingArithmeticTarskiReadout execution .candidate
+  terminalCollision := by rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms StrongPerimetralTurning.tarskiIdentityTerminalsDistinct
+#print axioms StrongPerimetralTurning.tarskiExecutedGroupingToLocalAdequacy
+/- AXIOM_AUDIT_END -/

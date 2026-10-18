@@ -1,0 +1,14 @@
+import RelationalPerimeter.Instances.HeytingArithmetic.Tarski
+open StrongPerimetralTurning
+open RelationalPerimeter.HeytingArithmetic
+
+variable {candidate : Predicate} (execution : HATarskiExecution candidate)
+
+example :
+    (tarskiRuntimeNext (tarskiValueSource execution) (.close)).phase = .active := by
+  rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms StrongPerimetralTurning.tarskiClose_changes_phase
+#print axioms StrongPerimetralTurning.tarskiExecutedOperationalGrouping
+/- AXIOM_AUDIT_END -/

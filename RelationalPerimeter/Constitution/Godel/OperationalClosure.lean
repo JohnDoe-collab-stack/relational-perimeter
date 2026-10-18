@@ -1,5 +1,6 @@
 import RelationalPerimeter.Constitution.Godel.OperationalH1
 import RelationalPerimeter.Constitution.Continuation.CommonMemoryGrouping
+import RelationalPerimeter.Constitution.Continuation.ReadoutCorrespondence
 
 /-! Close creates a terminal phase and a computed common operational memory.
 Readout preservation remains a separate, conditional specification. -/
@@ -400,6 +401,35 @@ def godelExecutedGroupingToEndpointEquality {Memory : Type (max uA uC uP uV)}
   let terminalReadEqual := (realization.read_exact grouping.leftTerminal).trans
     ((congrArg realization.reduced.read projectedEqual).trans (realization.read_exact grouping.rightTerminal).symm)
   leftRead.symm.trans (terminalReadEqual.trans rightRead)
+def godelExecutedOperationalGroupingToProducedCompleteness
+    {Memory : Type (max uA uC uP uV)}
+    (realization : OperationalRealization (godelClosureContract execution) Memory)
+    {leftTerminal rightTerminal : GodelClosureSource execution}
+    (grouping : ExecutedOperationalGrouping realization
+      (semanticSource execution) (syntacticSource execution)
+      leftTerminal rightTerminal)
+    (preservation : DirectedTerminalReadoutPreservation
+      realization leftTerminal rightTerminal) :
+    ExecutedGodelProducedCompleteness execution.witness := by
+  have leftRead := (congrArg (godelClosureContract execution).read
+    grouping.leftRun.terminal_eq_run).trans (read_run execution _ grouping.requests)
+  have rightRead := (congrArg (godelClosureContract execution).read
+    grouping.rightRun.terminal_eq_run).trans (read_run execution _ grouping.requests)
+  exact fun truthWitness =>
+    Eq.mp rightRead
+      (grouping.directedReadout preservation (Eq.mp leftRead.symm truthWitness))
+def rejectGodelExecutedOperationalGroupingToEmpty
+    {Memory : Type (max uA uC uP uV)}
+    (realization : OperationalRealization (godelClosureContract execution) Memory)
+    {leftTerminal rightTerminal : GodelClosureSource execution}
+    (grouping : ExecutedOperationalGrouping realization
+      (semanticSource execution) (syntacticSource execution)
+      leftTerminal rightTerminal)
+    (preservation : DirectedTerminalReadoutPreservation
+      realization leftTerminal rightTerminal) : Empty :=
+  execution.witness.unprovable
+    (godelExecutedOperationalGroupingToProducedCompleteness execution realization
+      grouping preservation execution.witness.trueWitness)
 theorem godelOperationalRunExact
     (source : GodelClosureSource execution) (requests : List GodelRuntimeRequest) :
     godelOperationalProject execution (godelRuntimeRun execution source requests) =
@@ -736,6 +766,8 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.godelExactRunExact
 #print axioms StrongPerimetralTurning.godelExecutedGroupingProjectedTerminalsEqual
 #print axioms StrongPerimetralTurning.godelExecutedGroupingToEndpointEquality
+#print axioms StrongPerimetralTurning.godelExecutedOperationalGroupingToProducedCompleteness
+#print axioms StrongPerimetralTurning.rejectGodelExecutedOperationalGroupingToEmpty
 #print axioms StrongPerimetralTurning.godelTerminalReadExactToEndpointEquality
 #print axioms StrongPerimetralTurning.rejectGodelTerminalReadExactToEmpty
 #print axioms StrongPerimetralTurning.GodelInitializedAt

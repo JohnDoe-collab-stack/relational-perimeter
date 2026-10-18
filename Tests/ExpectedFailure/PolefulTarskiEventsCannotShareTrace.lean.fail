@@ -1,0 +1,91 @@
+import RelationalPerimeter.Instances.HeytingArithmetic.Tarski
+
+open StrongPerimetralTurning
+open ConstitutiveSearch
+open ConstitutiveSearch.ContinuationSignatures
+open RelationalPerimeter.HeytingArithmetic
+
+namespace PolefulTarskiEventsCannotShareTrace
+
+structure PolefulTarskiEvent where
+  event : TarskiRuntimeEvent
+  activePole : Option TarskiClosurePole
+
+variable {candidate : Predicate} (execution : HATarskiExecution candidate)
+
+def sourceEvent (source : TarskiClosureSource execution)
+    (request : TarskiRuntimeRequest) : PolefulTarskiEvent where
+  event := tarskiRuntimeEvent source request
+  activePole := match source.phase with
+    | .active => some source.pole
+    | .terminal => none
+
+def reducedEvent (memory : TarskiOperationalMemory execution)
+    (request : TarskiRuntimeRequest) : PolefulTarskiEvent where
+  event := tarskiOperationalEvent memory request
+  activePole := match memory with
+    | .active _ pole _ => some pole
+    | .grouped _ _ => none
+
+def sourceContract : FutureContract (TarskiClosureSource execution) TarskiRuntimeRequest
+    (ULift.{1} PolefulTarskiEvent) (Type) where
+  next := tarskiRuntimeNext
+  event := fun source request => ⟨sourceEvent execution source request⟩
+  read := fun source => tarskiEndpointAt heytingArithmeticTarskiReadout execution source.pole
+  Allow := fun source request => TarskiOperationalAllow source.phase request
+  decision := fun source request => tarskiOperationalDecision source.phase request
+
+def reducedContract : OperationalContract (TarskiOperationalMemory execution)
+    TarskiRuntimeRequest (ULift.{1} PolefulTarskiEvent) where
+  next := tarskiOperationalNext
+  event := fun memory request => ⟨reducedEvent execution memory request⟩
+  Allow := fun memory request => TarskiOperationalAllow memory.phase request
+  decision := fun memory request => tarskiOperationalDecision memory.phase request
+
+def realization : OperationalRealization (sourceContract execution)
+    (TarskiOperationalMemory execution) where
+  reduced := reducedContract execution
+  project := tarskiOperationalProject
+  forward := by
+    intro source request witness
+    cases source with
+    | mk occurrences pole history phase => cases phase <;> exact witness
+  backward := by
+    intro source request witness
+    cases source with
+    | mk occurrences pole history phase => cases phase <;> exact witness
+  backward_forward := by
+    intro source request witness
+    cases source with
+    | mk occurrences pole history phase => cases phase <;> rfl
+  forward_backward := by
+    intro source request witness
+    cases source with
+    | mk occurrences pole history phase => cases phase <;> rfl
+  next_exact := by
+    intro source request
+    cases source with
+    | mk occurrences pole history phase => cases phase <;> cases request <;> rfl
+  event_exact := by
+    intro source request
+    cases source with
+    | mk occurrences pole history phase => cases phase <;> cases request <;> rfl
+
+example (source : TarskiClosureSource execution) (request : TarskiRuntimeRequest) :
+    (sourceContract execution).event source request =
+      (realization execution).reduced.event ((realization execution).project source) request :=
+  (realization execution).event_exact source request
+
+example :
+    Grouping.Continuation.events (sourceContract execution).next
+        (sourceContract execution).event (tarskiValueSource execution) [.close] =
+      Grouping.Continuation.events (sourceContract execution).next
+        (sourceContract execution).event (tarskiCandidateSource execution) [.close] := by
+  rfl
+
+end PolefulTarskiEventsCannotShareTrace
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms PolefulTarskiEventsCannotShareTrace.realization
+#print axioms StrongPerimetralTurning.tarskiObservedOperationalGrouping
+/- AXIOM_AUDIT_END -/

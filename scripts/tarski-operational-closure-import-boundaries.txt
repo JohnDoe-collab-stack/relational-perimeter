@@ -1,0 +1,7 @@
+# The affirmative operational bridge cannot import the diagonal rejection.
+root RelationalPerimeter.Constitution.Tarski.OperationalClosure
+forbidden RelationalPerimeter.Constitution.Tarski.Diagonal
+forbidden RelationalPerimeter.Constitution.Tarski.ClosureObstruction
+forbidden RelationalPerimeter.Constitution.Godel.Diagonal
+forbidden RelationalPerimeter.Constitution.Godel.OperationalClosure
+forbidden RelationalPerimeter.Instances.HeytingArithmetic.Tarski

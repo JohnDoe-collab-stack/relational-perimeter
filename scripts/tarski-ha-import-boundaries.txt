@@ -1,0 +1,6 @@
+# The concrete Tarski instance may use HA diagonalization, never the Godel witness.
+root RelationalPerimeter.Instances.HeytingArithmetic.Tarski
+forbidden RelationalPerimeter.Constitution.Godel.Diagonal
+forbidden RelationalPerimeter.Constitution.Godel.OperationalClosure
+forbidden RelationalPerimeter.Instances.HeytingArithmetic.Godel
+forbidden RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure

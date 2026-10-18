@@ -49,3 +49,9 @@ Tests/ExpectedFailure/RebuiltTerminalCannotReplaceExecutedTarget.lean.fail	depen
 Tests/ExpectedFailure/OperationalGroupingCannotBeExactRealization.lean.fail	dependent-type	8	2	ExactRealization (godelClosureContract execution) (GodelOperationalMemory execution)
 Tests/ExpectedFailure/PoleEnrichedEventCannotReplaceCanonicalEvent.lean.fail	dependent-type	8	2	GodelRuntimeEvent × ClosurePole
 Tests/ExpectedFailure/HistoricalH1CannotReplaceOperationalH1.lean.fail	dependent-type	9	2	GodelOperationalH1 (godelPositiveExecutionCore execution)
+Tests/ExpectedFailure/PolefulTarskiEventsCannotShareTrace.lean.fail	semantic-type	84	2	Tactic `rfl` failed
+Tests/ExpectedFailure/TarskiIdentityRealizationCannotSupplyCollision.lean.fail	semantic-type	19	26	tarskiIdentityRealization heytingArithmeticTarskiReadout execution
+Tests/ExpectedFailure/TarskiOneWayReadoutCannotSupplyCorrespondence.lean.fail	semantic-type	34	19	oneWay.rightForward
+Tests/ExpectedFailure/TarskiGroupingCannotCrossRealizations.lean.fail	dependent-type	20	17	grouping
+Tests/ExpectedFailure/TarskiCloseCannotRemainActive.lean.fail	semantic-type	9	2	TarskiRuntimePhase.active
+Tests/ExpectedFailure/TarskiSentenceEqualityCannotReplaceExecutedProduction.lean.fail	semantic-type	12	35	SentenceOnlyTarskiProduction candidate

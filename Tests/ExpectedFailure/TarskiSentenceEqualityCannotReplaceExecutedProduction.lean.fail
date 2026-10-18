@@ -1,0 +1,17 @@
+import RelationalPerimeter.Instances.HeytingArithmetic.Tarski
+open StrongPerimetralTurning
+open RelationalPerimeter.HeytingArithmetic
+
+structure SentenceOnlyTarskiProduction (candidate : Predicate) where
+  sentence : Sentence
+  diagonalExact : sentence = diagonal candidate
+
+variable {candidate : Predicate}
+
+example (production : SentenceOnlyTarskiProduction candidate) :
+    HATarskiExecution candidate := production
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms StrongPerimetralTurning.ExecutedTarskiProduction
+#print axioms RelationalPerimeter.HeytingArithmetic.executeHATarskiProduction
+/- AXIOM_AUDIT_END -/
