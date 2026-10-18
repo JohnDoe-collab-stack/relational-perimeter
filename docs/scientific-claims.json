@@ -1518,7 +1518,7 @@
     {
       "id": "GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION",
       "kind": "causal",
-      "evidence_revision": "8d9b21ff39a64db7b8c8d9a047c18cd583db0f77",
+      "evidence_revision": "ecbb72c0e0ba00b0d1c6bc7bf102cc668a8f90cc",
       "scope": "Pour une production gödelienne exécutée unique, une ressource positive maître construit H1 sans présentation circulaire et est partagée avec son pont périmétral aval. Deux sources constitutives distinctes reçoivent ce même H1 ; leurs mémoires opérationnelles actives sont distinctes. La requête close autorisée sur la trace positivement non vide produit une phase terminale et une collision mémoire dans une réalisation préservant autorisations, transitions et événements sans readout exact, tandis que les sources restent distinctes. Une préservation terminale dirigée fixée sur cette même réalisation et la collision calculée dérivent directement Truth(G) → Proof(G), sans égalité de types, transport inverse, read_exact global ni fait négatif. L'ancienne réalisation exacte dérive en outre Truth(G) = Proof(G). Seul le rejet final consomme trueWitness et unprovable du même témoin. Le noyau dirigé et le rejet ne dépendent pas de event_exact. La collision sous correspondance de readout reste une hypothèse, non une conséquence de Gödel ; aucun résultat sur tout regroupement, le continuum, AC ou CH, aucune borne de coût, aucun renforcement strict ni revendication de nouveauté.",
       "anchors": [
         {
@@ -1732,7 +1732,7 @@
         "transport": "La réalisation opérationnelle transporte à l'identique la famille inductive d'autorisations et préserve transitions et événements. Au terminal, aucune continuation n'est admise et l'oubli du pôle ne prétend pas conserver le readout. L'interface dirigée ne fournit que les deux conversions nécessaires autour d'une même mémoire observée et n'introduit ni égalité de types ni loi inverse. ExactRealization fournit séparément une correspondance bilatérale. Un pont aval exact et exhaustif relie les occurrences opérationnelles et périmétrales issues du même core, avec leurs rôles et leur ordre. FutureEquivalent reste une conséquence parallèle."
       },
       "consumers": [],
-      "source_sha256": "43a717fa3a2bdb3c94c5436b682ae34fb0e0a78e964af7a1b7ee53669e67422f",
+      "source_sha256": "1310944648d11d61315d0163edc66c10276e76116614906b4a4cfc8558abdbf5",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1748,23 +1748,33 @@
     {
       "id": "TARSKI_RELATIONAL_OPERATIONAL_CLOSURE_OBSTRUCTION",
       "kind": "causal",
-      "evidence_revision": "8d9b21ff39a64db7b8c8d9a047c18cd583db0f77",
-      "scope": "Pour tout prédicat arithmétique candidat de l'instance HA, une production syntaxique exécutée unique calcule le corps, la substitution à son propre code, la phrase diagonale et leurs occurrences avant tout readout. La certification issue de diagonal_spec rejette constructivement l'adéquation globale bilatérale sans cohérence, preuve ni tiers exclu. Deux sources issues de la même production exécutent close et collisionnent dans une mémoire opérationnelle commune sans correspondance de readout ; une correspondance terminale bilatérale sur la même réalisation dérive l'adéquation locale et donc Empty. Chaque direction seule produit seulement les conséquences partielles formalisées. Une réalisation identité conserve positivement les readouts mais garde les terminaux distincts. La cécité au pôle sert uniquement à l'égalité des traces observées : une réalisation alternative à événements polaires conserve event_exact et la collision, avec traces distinctes. Portée limitée à la sémantique constructive HA et à ce runtime ; aucune hiérarchie tarskienne, théorie de Kripke ou de la révision, aucun résultat sur les réels, AC, CH, le coût ou la nouveauté.",
+      "evidence_revision": "ecbb72c0e0ba00b0d1c6bc7bf102cc668a8f90cc",
+      "scope": "Pour tout prédicat arithmétique candidat de l'instance HA, une production syntaxique exécutée unique calcule le corps, la substitution à son propre code, la phrase diagonale et leurs occurrences avant tout readout. La certification issue de diagonal_spec rejette constructivement l'adéquation globale bilatérale sans cohérence, preuve ni tiers exclu. Elle réfute aussi l'égalité des deux types de readout terminaux et construit un séparateur fini dont la liste de requêtes est vide ; toute ExactRealization du contrat fixé doit donc projeter les deux terminaux vers des mémoires distinctes. Cette séparation ne consomme ni regroupement opérationnel, ni collision, ni correspondance terminale, ni événement. Deux sources issues de la même production exécutent par ailleurs close et collisionnent dans une mémoire opérationnelle commune sans loi de préservation du readout ; une correspondance terminale bilatérale sur la même réalisation dérive l'adéquation locale et donc Empty. Chaque direction seule produit seulement les conséquences partielles formalisées. Une réalisation identité conserve positivement les readouts mais garde les terminaux distincts. La cécité au pôle sert uniquement à l'égalité des traces observées : une réalisation alternative à événements polaires conserve event_exact et la collision, avec traces distinctes. Portée limitée à la sémantique constructive HA et à ce runtime ; aucune hiérarchie tarskienne, théorie de Kripke ou de la révision, aucun résultat sur les réels, AC, CH, le coût ou la nouveauté.",
       "anchors": [
         {
           "path": "docs/tarski-indefinissabilite-runtime.fr.md",
           "heading": "Portée et statut",
           "paragraph": null,
-          "sha256": "4f7fff865feeb638393d1442fc4cf23b6a102c76b2997757be5aa43e65e581c4"
+          "sha256": "af772ced893d76e76cd7e5bd73119b54f177aea18073dfdd287a3fbcce90ec4a"
         },
         {
           "path": "docs/tarski-indefinability-runtime.en.md",
           "heading": "Scope and status",
           "paragraph": null,
-          "sha256": "ebcae20aea2976f79924ab90b86428aad05a8737eac1df67f62dcc82d5e25fac"
+          "sha256": "323777786cca97e4c45cf5165a372113f51cda9e15a81450b926bc696591df15"
         }
       ],
       "proofs": [
+        {
+          "module": "RelationalPerimeter.Constitution.Continuation.ExactSeparation",
+          "name": "ConstitutiveSearch.ContinuationSignatures.ExactRealization.distinct_memory_of_not_future_equivalent",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Continuation.ExactSeparation",
+          "name": "ConstitutiveSearch.ContinuationSignatures.ExactRealization.distinct_memory_of_separator",
+          "role": "production"
+        },
         {
           "module": "RelationalPerimeter.Constitution.Tarski.SyntaxExecution",
           "name": "StrongPerimetralTurning.executeTarskiProduction",
@@ -1783,6 +1793,11 @@
         {
           "module": "RelationalPerimeter.Constitution.Tarski.Diagonal",
           "name": "StrongPerimetralTurning.tarskiCandidateToValueConsequences",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Tarski.Diagonal",
+          "name": "StrongPerimetralTurning.tarskiDiagonalReadouts_ne",
           "role": "production"
         },
         {
@@ -1822,6 +1837,16 @@
         },
         {
           "module": "RelationalPerimeter.Constitution.Tarski.ClosureObstruction",
+          "name": "StrongPerimetralTurning.tarskiTerminalSeparator",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Tarski.ClosureObstruction",
+          "name": "StrongPerimetralTurning.tarskiEveryExactRealizationSeparatesTerminals",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Tarski.ClosureObstruction",
           "name": "StrongPerimetralTurning.tarskiExactClosureRejected",
           "role": "production"
         },
@@ -1842,8 +1867,18 @@
         },
         {
           "module": "RelationalPerimeter.Instances.HeytingArithmetic.Tarski",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticEveryExactRealizationSeparatesTarskiTerminals",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.Tarski",
           "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticTarskiExactClosureRejected",
           "role": "production"
+        },
+        {
+          "module": "Tests.ContinuationSignatureMinimality",
+          "name": "Tests.ContinuationSignatureMinimality.necessary_distinction_from_separator",
+          "role": "test"
         },
         {
           "module": "Tests.TarskiOperationalClosureRegression",
@@ -1853,6 +1888,16 @@
         {
           "module": "Tests.TarskiOperationalClosureRegression",
           "name": "TarskiOperationalClosureRegression.identity_terminals_are_distinct",
+          "role": "test"
+        },
+        {
+          "module": "Tests.TarskiOperationalClosureRegression",
+          "name": "TarskiOperationalClosureRegression.terminal_separator_is_immediate",
+          "role": "test"
+        },
+        {
+          "module": "Tests.TarskiOperationalClosureRegression",
+          "name": "TarskiOperationalClosureRegression.every_exact_realization_separates_terminals",
           "role": "test"
         },
         {
@@ -1878,6 +1923,7 @@
       ],
       "checks": [
         "scripts/expected-failures.tsv",
+        "scripts/continuation-exact-separation-import-boundaries.txt",
         "scripts/tarski-continuation-import-boundaries.txt",
         "scripts/tarski-diagonal-import-boundaries.txt",
         "scripts/tarski-ha-import-boundaries.txt",
@@ -1886,12 +1932,12 @@
       ],
       "dependencies": {
         "formation": "Le candidat est reçu avant toute diagonalisation. Une seule ExecutedTarskiProduction, issue de l'exécution certifiée de la substitution, porte le corps, le code calculé, la phrase diagonale, l'histoire et quatre occurrences successives. Les deux positions constitutives partagent exactement cette production ; le readout sémantique est ajouté ensuite et n'est pas une primitive de la syntaxe exécutée.",
-        "execution": "La recherche, l'autorisation, la décomposition et l'action close sont exécutées séparément pour les deux sources. Close change réellement la phase active en phase terminale. Les deux runs non vides calculent des terminaux dont les projections collisionnent dans une OperationalRealization sans readout. L'ObservedOperationalGrouping ajoute l'égalité des traces uniquement quand le contrat d'événements l'autorise ; cette égalité n'est pas requise par l'obstruction minimale.",
-        "proof": "La certification diagonale fournit Truth(L) → ¬Truth(Cand(⌜L⌝)) et la réciproque. Une direction de préservation terminale donne seulement les conséquences partielles correspondantes. Les deux directions, appliquées à la même collision calculée et à la même réalisation, dérivent TarskiLocalAdequacy ; rejectTarskiLocalAdequacy produit alors Empty. L'instance HA ferme la certification par diagonal_spec et le graphe de substitution de la même exécution, sans importer la branche Gödel.",
-        "transport": "DirectedTerminalReadoutPreservation transporte une observation source vers une observation cible à travers l'égalité des mémoires calculées, sans égalité de types, loi inverse ni propext. TerminalReadoutCorrespondence regroupe deux directions indépendantes. La réalisation identité fournit positivement la correspondance exacte tout en gardant les terminaux distincts. Une réalisation de test dont l'événement actif expose le pôle satisfait event_exact et conserve la collision terminale, mais ses traces close restent distinctes ; la cécité au pôle n'est donc nécessaire qu'à l'égalité des traces observées."
+        "execution": "La recherche, l'autorisation, la décomposition et l'action close sont exécutées séparément pour les deux sources. Close change réellement la phase active en phase terminale. Les deux runs non vides calculent des terminaux dont les projections collisionnent dans une OperationalRealization sans loi de préservation du readout. Le séparateur exact reçoit ces terminaux déjà calculés ; sa liste vide n'exécute pas un autre close et observe immédiatement leurs readouts. L'ObservedOperationalGrouping ajoute l'égalité des traces uniquement quand le contrat d'événements l'autorise ; cette égalité n'est pas requise par l'obstruction minimale.",
+        "proof": "La certification diagonale fournit Truth(L) → ¬Truth(Cand(⌜L⌝)) et la réciproque. Elle rejette l'égalité des types de readout en transformant cette égalité en deux transports dirigés, puis le séparateur terminal applique Outcome.read à l'égalité hypothétique des issues vides. Génériquement, equal_memory_same_futures et FutureSeparator.not_equivalent imposent constructivement la distinction des projections dans toute ExactRealization. Une direction de préservation terminale donne seulement les conséquences partielles correspondantes. Les deux directions, appliquées à la même collision calculée et à la même réalisation, dérivent TarskiLocalAdequacy ; rejectTarskiLocalAdequacy produit alors Empty. L'instance HA ferme la certification et la séparation universelle par diagonal_spec et le graphe de substitution de la même exécution, sans importer la branche Gödel.",
+        "transport": "ExactRealization préserve exactement les futurs, dont le readout terminal observé par la liste vide ; elle doit donc garder distinctes les mémoires de terminaux séparés par le contrat. DirectedTerminalReadoutPreservation transporte séparément une observation source vers une observation cible à travers l'égalité des mémoires calculées, sans égalité de types, loi inverse ni propext. TerminalReadoutCorrespondence regroupe deux directions indépendantes. La réalisation identité fournit positivement la correspondance exacte tout en gardant les terminaux distincts. Une réalisation de test dont l'événement actif expose le pôle satisfait event_exact et conserve la collision terminale, mais ses traces close restent distinctes ; la cécité au pôle n'est donc nécessaire qu'à l'égalité des traces observées."
       },
       "consumers": [],
-      "source_sha256": "8c7d9a68da2caad8bc36748ef3898fe7eaa9c477ab2332c9ff326f8fccff5a01",
+      "source_sha256": "9f65ff785303412ab4d68d9b4cd1e8e8837d8a32331f489d3b0a35274bf41d89",
       "reviews": {
         "reader": {
           "status": "pending"
