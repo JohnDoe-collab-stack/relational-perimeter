@@ -1518,14 +1518,14 @@
     {
       "id": "GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION",
       "kind": "causal",
-      "evidence_revision": "ecbb72c0e0ba00b0d1c6bc7bf102cc668a8f90cc",
-      "scope": "Pour une production gödelienne exécutée unique, une ressource positive maître construit H1 sans présentation circulaire et est partagée avec son pont périmétral aval. Deux sources constitutives distinctes reçoivent ce même H1 ; leurs mémoires opérationnelles actives sont distinctes. La requête close autorisée sur la trace positivement non vide produit une phase terminale et une collision mémoire dans une réalisation préservant autorisations, transitions et événements sans readout exact, tandis que les sources restent distinctes. Une préservation terminale dirigée fixée sur cette même réalisation et la collision calculée dérivent directement Truth(G) → Proof(G), sans égalité de types, transport inverse, read_exact global ni fait négatif. L'ancienne réalisation exacte dérive en outre Truth(G) = Proof(G). Seul le rejet final consomme trueWitness et unprovable du même témoin. Le noyau dirigé et le rejet ne dépendent pas de event_exact. La collision sous correspondance de readout reste une hypothèse, non une conséquence de Gödel ; aucun résultat sur tout regroupement, le continuum, AC ou CH, aucune borne de coût, aucun renforcement strict ni revendication de nouveauté.",
+      "evidence_revision": "1a16beca503338041eda8567ce42a5b1a96daa50",
+      "scope": "Pour une production gödelienne exécutée unique, une ressource positive maître construit H1 sans présentation circulaire et est partagée avec son pont périmétral aval. Deux sources constitutives distinctes reçoivent ce même H1 ; leurs mémoires opérationnelles actives sont distinctes. La requête close autorisée sur la trace positivement non vide produit une phase terminale et une collision mémoire dans une réalisation préservant autorisations, transitions et événements sans readout exact, tandis que les sources restent distinctes. Les deux runs non vides produisent aussi deux terminaux dont trueWitness et unprovable certifient la séparation immédiate des readouts : la liste vide n'exécute pas close de nouveau, elle observe les terminaux déjà calculés. Toute ExactRealization doit donc conserver cette distinction dans ses mémoires projetées. Ce dernier résultat utilise seulement même mémoire projetée → mêmes futurs et sa contraposée constructive ; il n'établit ni la réciproque ni un quotient canonique de la mémoire. Une préservation terminale dirigée fixée sur la réalisation opérationnelle et la collision calculée dérivent directement Truth(G) → Proof(G), sans égalité de types, transport inverse, read_exact global ni fait négatif. L'ancienne réalisation exacte dérive en outre Truth(G) = Proof(G). Seul le rejet final consomme trueWitness et unprovable du même témoin. Le noyau dirigé et le rejet ne dépendent pas de event_exact. La collision sous correspondance de readout reste une hypothèse, non une conséquence de Gödel ; aucun résultat sur tout regroupement, le continuum, AC ou CH, aucune borne de coût, aucun renforcement strict ni revendication de nouveauté.",
       "anchors": [
         {
           "path": "docs/godel-fermeture-runtime.fr.md",
           "heading": "Portée et statut",
           "paragraph": null,
-          "sha256": "8b70116f9da19795dcc7c7b5e83669a48fb8145100f325a00319aecc514ff6a8"
+          "sha256": "6d16a8511dc82bed91653b2c8b36218c97aff53a607c46fb835fd70f46e9f11b"
         }
       ],
       "proofs": [
@@ -1567,6 +1567,21 @@
         {
           "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
           "name": "StrongPerimetralTurning.godelOperationalGroupingWithoutRead",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.godelWitnessReadouts_ne",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.godelTerminalSeparator",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Godel.OperationalClosure",
+          "name": "StrongPerimetralTurning.godelEveryExactRealizationSeparatesTerminals",
           "role": "production"
         },
         {
@@ -1636,6 +1651,16 @@
         },
         {
           "module": "RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelTerminalSeparator",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure",
+          "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticEveryExactRealizationSeparatesGodelTerminals",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure",
           "name": "RelationalPerimeter.HeytingArithmetic.heytingArithmeticTerminalReadExactToEmpty",
           "role": "production"
         },
@@ -1686,6 +1711,16 @@
         },
         {
           "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.terminal_separator_is_immediate",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
+          "name": "GodelOperationalClosureRegression.every_exact_realization_separates_produced_terminals",
+          "role": "test"
+        },
+        {
+          "module": "Tests.GodelOperationalClosureRegression",
           "name": "GodelOperationalClosureRegression.operational_events_do_not_separate_the_poles",
           "role": "test"
         },
@@ -1713,6 +1748,16 @@
           "module": "Tests.HeytingArithmeticOperationalClosureRegression",
           "name": "HeytingArithmeticOperationalClosureRegression.ha_every_exact_realization_separates",
           "role": "test"
+        },
+        {
+          "module": "Tests.HeytingArithmeticOperationalClosureRegression",
+          "name": "HeytingArithmeticOperationalClosureRegression.ha_terminal_separator_is_immediate",
+          "role": "test"
+        },
+        {
+          "module": "Tests.HeytingArithmeticOperationalClosureRegression",
+          "name": "HeytingArithmeticOperationalClosureRegression.ha_every_exact_realization_separates_produced_terminals",
+          "role": "test"
         }
       ],
       "checks": [
@@ -1722,17 +1767,18 @@
         "scripts/godel-operational-h1-import-boundaries.txt",
         "scripts/godel-operational-closure-import-boundaries.txt",
         "scripts/godel-perimetral-import-boundaries.txt",
+        "scripts/continuation-exact-separation-import-boundaries.txt",
         "scripts/tarski-continuation-import-boundaries.txt",
         "scripts/stratification.tsv"
       ],
       "dependencies": {
         "formation": "La même ExecutedGodelProduction indexe une ressource positive maître : un repli structurel total de ses préfixes extrait les occurrences exécutées sans relancer la production ni l'ancien extracteur dépendant. H1 est construit par History.extend. Les sources stockent cette même ressource et H1, leur pôle, leur histoire opérationnelle et leur phase. GodelInitializedAt et GodelClosureContextAt ne mentionnent aucune présentation circulaire ; les dépendances propres à l'interface gödelienne reçue sont rapportées séparément des projections négatives.",
-        "execution": "Le contexte partagé produit la recherche de close, deux autorisations, deux étapes puis deux ExecutedRun sur une NonemptyRequestTrace singleton. Close conserve pôle, histoire, provenance et readout mais change la phase active en terminale. Les mémoires actives opérationnelles distinctes deviennent une mémoire grouped commune seulement après cette transition ; les événements sont égaux. La collision est portée par l'ExecutedOperationalGrouping calculé sous une OperationalRealization fixée.",
-        "proof": "Le noyau dirigé compose la collision des terminaux projetés avec une DirectedTerminalReadoutPreservation pour dériver directement Truth(G) → Proof(G), sans égalité de types, transport inverse, read_exact global, event_exact, présentation circulaire, FutureEquivalent ni projection négative. Le rejet terminal consomme ensuite trueWitness et unprovable du même témoin. La factorisation historique par ExactRealization reste disponible et dérive Truth(G) = Proof(G). Les types et corps transitifs des racines positives sont contrôlés.",
-        "transport": "La réalisation opérationnelle transporte à l'identique la famille inductive d'autorisations et préserve transitions et événements. Au terminal, aucune continuation n'est admise et l'oubli du pôle ne prétend pas conserver le readout. L'interface dirigée ne fournit que les deux conversions nécessaires autour d'une même mémoire observée et n'introduit ni égalité de types ni loi inverse. ExactRealization fournit séparément une correspondance bilatérale. Un pont aval exact et exhaustif relie les occurrences opérationnelles et périmétrales issues du même core, avec leurs rôles et leur ordre. FutureEquivalent reste une conséquence parallèle."
+        "execution": "Le contexte partagé produit la recherche de close, deux autorisations, deux étapes puis deux ExecutedRun sur une NonemptyRequestTrace singleton. Close conserve pôle, histoire, provenance et readout mais change la phase active en terminale. Les mémoires actives opérationnelles distinctes deviennent une mémoire grouped commune seulement après cette transition ; les événements sont égaux. La collision est portée par l'ExecutedOperationalGrouping calculé sous une OperationalRealization fixée. Le séparateur reçoit les terminaux de ces deux runs non vides ; sa liste de requêtes vide n'exécute pas une nouvelle fermeture et observe directement leurs readouts.",
+        "proof": "Les témoins trueWitness et unprovable réfutent d'abord l'égalité des deux types de readout. Le séparateur terminal transforme une égalité hypothétique des issues vides en cette égalité interdite. Génériquement, equal_memory_same_futures et FutureSeparator.not_equivalent imposent alors constructivement la distinction des projections dans toute ExactRealization. Séparément, le noyau dirigé compose la collision des terminaux projetés avec une DirectedTerminalReadoutPreservation pour dériver directement Truth(G) → Proof(G), sans égalité de types, transport inverse, read_exact global, event_exact, présentation circulaire, FutureEquivalent ni projection négative. Le rejet terminal consomme ensuite trueWitness et unprovable du même témoin. La factorisation historique par ExactRealization reste disponible et dérive Truth(G) = Proof(G). Les types et corps transitifs des racines positives sont contrôlés.",
+        "transport": "ExactRealization fournit le seul sens même mémoire projetée → mêmes futurs ; par contraposition constructive, un séparateur impose des mémoires projetées distinctes. La réciproque n'est pas établie et aucune mémoire quotient canonique n'est revendiquée. La réalisation opérationnelle transporte à l'identique la famille inductive d'autorisations et préserve transitions et événements. Au terminal, aucune continuation n'est admise et l'oubli du pôle ne prétend pas conserver le readout. L'interface dirigée ne fournit que les conversions nécessaires autour d'une même mémoire observée et n'introduit ni égalité de types ni loi inverse. Un pont aval exact et exhaustif relie les occurrences opérationnelles et périmétrales issues du même core, avec leurs rôles et leur ordre."
       },
       "consumers": [],
-      "source_sha256": "1310944648d11d61315d0163edc66c10276e76116614906b4a4cfc8558abdbf5",
+      "source_sha256": "0ed370b4d06ded94c9bd425821adf4e69880049a212e5181e8ef4735edd7756f",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1748,8 +1794,8 @@
     {
       "id": "TARSKI_RELATIONAL_OPERATIONAL_CLOSURE_OBSTRUCTION",
       "kind": "causal",
-      "evidence_revision": "ecbb72c0e0ba00b0d1c6bc7bf102cc668a8f90cc",
-      "scope": "Pour tout prédicat arithmétique candidat de l'instance HA, une production syntaxique exécutée unique calcule le corps, la substitution à son propre code, la phrase diagonale et leurs occurrences avant tout readout. La certification issue de diagonal_spec rejette constructivement l'adéquation globale bilatérale sans cohérence, preuve ni tiers exclu. Elle réfute aussi l'égalité des deux types de readout terminaux et construit un séparateur fini dont la liste de requêtes est vide ; toute ExactRealization du contrat fixé doit donc projeter les deux terminaux vers des mémoires distinctes. Cette séparation ne consomme ni regroupement opérationnel, ni collision, ni correspondance terminale, ni événement. Deux sources issues de la même production exécutent par ailleurs close et collisionnent dans une mémoire opérationnelle commune sans loi de préservation du readout ; une correspondance terminale bilatérale sur la même réalisation dérive l'adéquation locale et donc Empty. Chaque direction seule produit seulement les conséquences partielles formalisées. Une réalisation identité conserve positivement les readouts mais garde les terminaux distincts. La cécité au pôle sert uniquement à l'égalité des traces observées : une réalisation alternative à événements polaires conserve event_exact et la collision, avec traces distinctes. Portée limitée à la sémantique constructive HA et à ce runtime ; aucune hiérarchie tarskienne, théorie de Kripke ou de la révision, aucun résultat sur les réels, AC, CH, le coût ou la nouveauté.",
+      "evidence_revision": "1a16beca503338041eda8567ce42a5b1a96daa50",
+      "scope": "Pour tout prédicat arithmétique candidat de l'instance HA, une production syntaxique exécutée unique calcule le corps, la substitution à son propre code, la phrase diagonale et leurs occurrences avant tout readout. La certification issue de diagonal_spec rejette constructivement l'adéquation globale bilatérale sans cohérence, preuve ni tiers exclu. Elle réfute aussi l'égalité des deux types de readout terminaux et construit un séparateur fini dont la liste de requêtes est vide ; toute ExactRealization du contrat fixé doit donc projeter les deux terminaux vers des mémoires distinctes. Ce résultat utilise seulement même mémoire projetée → mêmes futurs et sa contraposée constructive ; il n'établit ni la réciproque ni un quotient canonique de la mémoire. Cette séparation ne consomme ni regroupement opérationnel, ni collision, ni correspondance terminale, ni événement. Deux sources issues de la même production exécutent par ailleurs close et collisionnent dans une mémoire opérationnelle commune sans loi de préservation du readout ; une correspondance terminale bilatérale sur la même réalisation dérive l'adéquation locale et donc Empty. Chaque direction seule produit seulement les conséquences partielles formalisées, qui expriment au seul diagonal produit une cohérence locale minimale et ne construisent pas un prédicat de vérité partiel global non trivial. Une réalisation identité conserve positivement les readouts mais garde les terminaux distincts. La cécité au pôle sert uniquement à l'égalité des traces observées : une réalisation alternative à événements polaires conserve event_exact et la collision, avec traces distinctes. Portée limitée à la sémantique constructive HA et à ce runtime ; aucune hiérarchie tarskienne, théorie de Kripke ou de la révision, aucun résultat sur les réels, AC, CH, le coût ou la nouveauté.",
       "anchors": [
         {
           "path": "docs/tarski-indefinissabilite-runtime.fr.md",
@@ -1933,8 +1979,8 @@
       "dependencies": {
         "formation": "Le candidat est reçu avant toute diagonalisation. Une seule ExecutedTarskiProduction, issue de l'exécution certifiée de la substitution, porte le corps, le code calculé, la phrase diagonale, l'histoire et quatre occurrences successives. Les deux positions constitutives partagent exactement cette production ; le readout sémantique est ajouté ensuite et n'est pas une primitive de la syntaxe exécutée.",
         "execution": "La recherche, l'autorisation, la décomposition et l'action close sont exécutées séparément pour les deux sources. Close change réellement la phase active en phase terminale. Les deux runs non vides calculent des terminaux dont les projections collisionnent dans une OperationalRealization sans loi de préservation du readout. Le séparateur exact reçoit ces terminaux déjà calculés ; sa liste vide n'exécute pas un autre close et observe immédiatement leurs readouts. L'ObservedOperationalGrouping ajoute l'égalité des traces uniquement quand le contrat d'événements l'autorise ; cette égalité n'est pas requise par l'obstruction minimale.",
-        "proof": "La certification diagonale fournit Truth(L) → ¬Truth(Cand(⌜L⌝)) et la réciproque. Elle rejette l'égalité des types de readout en transformant cette égalité en deux transports dirigés, puis le séparateur terminal applique Outcome.read à l'égalité hypothétique des issues vides. Génériquement, equal_memory_same_futures et FutureSeparator.not_equivalent imposent constructivement la distinction des projections dans toute ExactRealization. Une direction de préservation terminale donne seulement les conséquences partielles correspondantes. Les deux directions, appliquées à la même collision calculée et à la même réalisation, dérivent TarskiLocalAdequacy ; rejectTarskiLocalAdequacy produit alors Empty. L'instance HA ferme la certification et la séparation universelle par diagonal_spec et le graphe de substitution de la même exécution, sans importer la branche Gödel.",
-        "transport": "ExactRealization préserve exactement les futurs, dont le readout terminal observé par la liste vide ; elle doit donc garder distinctes les mémoires de terminaux séparés par le contrat. DirectedTerminalReadoutPreservation transporte séparément une observation source vers une observation cible à travers l'égalité des mémoires calculées, sans égalité de types, loi inverse ni propext. TerminalReadoutCorrespondence regroupe deux directions indépendantes. La réalisation identité fournit positivement la correspondance exacte tout en gardant les terminaux distincts. Une réalisation de test dont l'événement actif expose le pôle satisfait event_exact et conserve la collision terminale, mais ses traces close restent distinctes ; la cécité au pôle n'est donc nécessaire qu'à l'égalité des traces observées."
+        "proof": "La certification diagonale fournit Truth(L) → ¬Truth(Cand(⌜L⌝)) et la réciproque. Elle rejette l'égalité des types de readout en transformant cette égalité en deux transports dirigés, puis le séparateur terminal applique Outcome.read à l'égalité hypothétique des issues vides. Génériquement, equal_memory_same_futures et FutureSeparator.not_equivalent imposent constructivement la distinction des projections dans toute ExactRealization. Aucune réciproque n'est dérivée. Une direction de préservation terminale donne seulement les conséquences partielles correspondantes au seul diagonal produit ; elle ne construit pas un prédicat de vérité partiel global non trivial. Les deux directions, appliquées à la même collision calculée et à la même réalisation, dérivent TarskiLocalAdequacy ; rejectTarskiLocalAdequacy produit alors Empty. L'instance HA ferme la certification et la séparation universelle par diagonal_spec et le graphe de substitution de la même exécution, sans importer la branche Gödel.",
+        "transport": "ExactRealization préserve exactement les futurs, dont le readout terminal observé par la liste vide ; elle doit donc garder distinctes les mémoires de terminaux séparés par le contrat. Le sens inverse, mêmes futurs → même mémoire, n'est pas établi et aucun quotient canonique n'est revendiqué. DirectedTerminalReadoutPreservation transporte séparément une observation source vers une observation cible à travers l'égalité des mémoires calculées, sans égalité de types, loi inverse ni propext. TerminalReadoutCorrespondence regroupe deux directions indépendantes. La réalisation identité fournit positivement la correspondance exacte tout en gardant les terminaux distincts. Une réalisation de test dont l'événement actif expose le pôle satisfait event_exact et conserve la collision terminale, mais ses traces close restent distinctes ; la cécité au pôle n'est donc nécessaire qu'à l'égalité des traces observées."
       },
       "consumers": [],
       "source_sha256": "9f65ff785303412ab4d68d9b4cd1e8e8837d8a32331f489d3b0a35274bf41d89",
