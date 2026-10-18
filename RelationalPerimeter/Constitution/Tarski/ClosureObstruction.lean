@@ -1,5 +1,6 @@
 import RelationalPerimeter.Constitution.Tarski.Diagonal
 import RelationalPerimeter.Constitution.Tarski.OperationalClosure
+import RelationalPerimeter.Constitution.Continuation.ExactSeparation
 
 /-! Final composition: the operational layer first produces local adequacy;
 only then does the independently certified diagonal law reject it. -/
@@ -13,6 +14,30 @@ universe uC uB uS uK uX uT
 variable {coding : TarskiDiagonalSyntax.{uC,uS,uK}}
   {refinement : TarskiExecutionRefinement.{uC,uB,uS,uK,uX} coding}
   {candidate : coding.Candidate}
+
+def tarskiTerminalSeparator
+    (readout : TarskiReadout.{uC,uS,uK,uT} coding)
+    (execution : ExecutedTarskiProduction refinement candidate)
+    (certification : TarskiDiagonalCertification readout execution) :
+    FutureSeparator (tarskiClosureContract readout execution)
+      (tarskiValueTerminal execution) (tarskiCandidateTerminal execution) where
+  requests := []
+  different := by
+    intro sameOutcome
+    exact tarskiDiagonalReadouts_ne certification
+      (congrArg Outcome.read sameOutcome)
+
+theorem tarskiEveryExactRealizationSeparatesTerminals
+    (readout : TarskiReadout.{uC,uS,uK,uT} coding)
+    (execution : ExecutedTarskiProduction refinement candidate)
+    (certification : TarskiDiagonalCertification readout execution)
+    {Memory : Type (max uB uS uK uX)}
+    (realization : ExactRealization
+      (tarskiClosureContract readout execution) Memory) :
+    realization.project (tarskiValueTerminal execution) ≠
+      realization.project (tarskiCandidateTerminal execution) :=
+  realization.distinct_memory_of_separator
+    (tarskiTerminalSeparator readout execution certification)
 
 def tarskiValueToCandidateClosureConsequences
     (readout : TarskiReadout.{uC,uS,uK,uT} coding)
@@ -103,6 +128,8 @@ def tarskiObservedExactClosureRejected
 
 end StrongPerimetralTurning
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms StrongPerimetralTurning.tarskiTerminalSeparator
+#print axioms StrongPerimetralTurning.tarskiEveryExactRealizationSeparatesTerminals
 #print axioms StrongPerimetralTurning.tarskiValueToCandidateClosureConsequences
 #print axioms StrongPerimetralTurning.tarskiCandidateToValueClosureConsequences
 #print axioms StrongPerimetralTurning.tarskiExactClosureRejected

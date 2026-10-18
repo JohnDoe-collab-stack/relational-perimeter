@@ -1,4 +1,5 @@
 import RelationalPerimeter.Agents.ContinuationSignatures.Production
+import RelationalPerimeter.Constitution.Continuation.ExactSeparation
 
 set_option genInjectivity false
 namespace Tests.ContinuationSignatureMinimality
@@ -16,6 +17,15 @@ theorem necessary_distinction (role : RelationalConstitutiveRoleStage run)
     {Memory : Type} (realization : ExactRealization (roleReadContract role (freeVariable run)) Memory) :
     realization.project (variedLeftSource role) ≠ realization.project (leftSource role) :=
   varied_cannot_be_forgotten role realization
+
+theorem necessary_distinction_from_separator
+    (role : RelationalConstitutiveRoleStage run)
+    {Memory : Type}
+    (realization : ExactRealization
+      (roleReadContract role (freeVariable run)) Memory) :
+    realization.project (variedLeftSource role) ≠
+      realization.project (leftSource role) :=
+  realization.distinct_memory_of_separator (varied_separator role)
 
 theorem no_constantly_projected_exact_realization (role : RelationalConstitutiveRoleStage run)
     {Memory : Type} (realization : ExactRealization (roleReadContract role (freeVariable run)) Memory)
@@ -37,6 +47,7 @@ end Tests.ContinuationSignatureMinimality
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms Tests.ContinuationSignatureMinimality.real_sources_forgotten
 #print axioms Tests.ContinuationSignatureMinimality.necessary_distinction
+#print axioms Tests.ContinuationSignatureMinimality.necessary_distinction_from_separator
 #print axioms Tests.ContinuationSignatureMinimality.no_constantly_projected_exact_realization
 #print axioms Tests.ContinuationSignatureMinimality.changed_partition_on_same_carrier
 #print axioms Tests.ContinuationSignatureMinimality.preserved_acceptance

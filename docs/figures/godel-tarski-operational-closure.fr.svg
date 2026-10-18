@@ -3,7 +3,7 @@
      width="1800" height="1660" viewBox="0 0 1800 1660"
      role="img" aria-labelledby="title desc">
   <title id="title">Architecture relationnelle commune et obstructions diagonales de Gödel et Tarski</title>
-  <desc id="desc">Figure comparative éditable. Elle distingue le noyau opérationnel commun, deux constructions positives séparées, la dérivation d’un transport local dirigé depuis une collision de mémoires et une préservation des readouts, puis les conclusions différentes de Gödel et de Tarski. Le transport est unidirectionnel pour Gödel et bilatéral pour Tarski. L’égalité des traces événementielles est présentée comme un renforcement distinct de l’obstruction minimale.</desc>
+  <desc id="desc">Figure comparative éditable. Elle distingue le noyau opérationnel commun, deux constructions positives séparées, la dérivation d’un transport local dirigé depuis une collision de mémoires et une préservation des readouts, puis les conclusions différentes de Gödel et de Tarski. Le transport est unidirectionnel pour Gödel et bilatéral pour Tarski. La certification Tarski fournit aussi un séparateur terminal immédiat qui impose à toute réalisation exacte de séparer les terminaux. L’égalité des traces événementielles est présentée comme un renforcement distinct de l’obstruction minimale.</desc>
 
   <metadata>
     Figure comparative de l’implémentation relationnelle Gödel–Tarski.
@@ -189,6 +189,9 @@
     <path d="M1325 708 L1325 728" stroke="#1f69d2" stroke-width="2.3" fill="none" marker-end="url(#arrow-blue)"/>
     <rect x="1075" y="728" width="500" height="46" fill="#2479d6" stroke="#155aaa" class="inner"/>
     <text x="1325" y="751" class="white-center">deux terminaux constitutifs distincts</text>
+
+    <rect x="1010" y="781" width="630" height="25" fill="#f4f0ff" stroke="#7957b5" class="callout"/>
+    <text x="1325" y="797" class="small-center">Tarski certifié : séparateur [] → toute ExactRealization sépare les terminaux</text>
 
     <text x="900" y="839" class="note-center">Constructions séparées : aucune sortie de A n’est identifiée à une sortie de B.</text>
   </g>

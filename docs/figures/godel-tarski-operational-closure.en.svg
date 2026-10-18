@@ -3,7 +3,7 @@
      width="1800" height="1660" viewBox="0 0 1800 1660"
      role="img" aria-labelledby="title desc">
   <title id="title">Common relational architecture and Gödel–Tarski diagonal obstructions</title>
-  <desc id="desc">Editable comparative figure. It distinguishes the common operational core, two separate positive constructions, the derivation of a directed local transport from memory collision and readout preservation, and the different Gödel and Tarski conclusions. Transport is one-way for Gödel and bilateral for Tarski. Event-trace equality is presented as a strengthening separate from the minimal obstruction.</desc>
+  <desc id="desc">Editable comparative figure. It distinguishes the common operational core, two separate positive constructions, the derivation of a directed local transport from memory collision and readout preservation, and the different Gödel and Tarski conclusions. Transport is one-way for Gödel and bilateral for Tarski. Tarski certification also supplies an immediate terminal separator that forces every exact realization to separate the terminals. Event-trace equality is presented as a strengthening separate from the minimal obstruction.</desc>
 
   <metadata>
     Comparative figure for the relational Gödel–Tarski implementation.
@@ -189,6 +189,9 @@
     <path d="M1325 708 L1325 728" stroke="#1f69d2" stroke-width="2.3" fill="none" marker-end="url(#arrow-blue)"/>
     <rect x="1075" y="728" width="500" height="46" fill="#2479d6" stroke="#155aaa" class="inner"/>
     <text x="1325" y="751" class="white-center">two distinct constitutive terminals</text>
+
+    <rect x="1010" y="781" width="630" height="25" fill="#f4f0ff" stroke="#7957b5" class="callout"/>
+    <text x="1325" y="797" class="small-center">Certified Tarski: separator [] → every ExactRealization separates the terminals</text>
 
     <text x="900" y="839" class="note-center">Separate constructions: no output of A is identified with an output of B.</text>
   </g>

@@ -181,6 +181,7 @@ RelationalPerimeter.Constitution.Continuation.Behavior	U	enforced	Independent ri
 RelationalPerimeter.Constitution.Continuation.FiniteBasis	U	enforced	Conditional complete basis interface and executable positive separator
 RelationalPerimeter.Constitution.Continuation.Signature	U	enforced	Finite evaluated signature, behavioral exactness, and transition stability
 RelationalPerimeter.Constitution.Continuation.Minimality	U	enforced	Exact realization, admission return laws, and positive factorization
+RelationalPerimeter.Constitution.Continuation.ExactSeparation	U	enforced	Generic separation of memories forced by an explicit finite future separator
 RelationalPerimeter.Constitution.Continuation.Composition	U	enforced	Constructed signature dynamics and closed read-only contract basis
 RelationalPerimeter.Constitution.Continuation.CostModel	U	enforced	Faithful contract-API operation accounting, without claiming implementation or total-chain cost
 RelationalPerimeter.Agents.ContinuationSignatures.RolePayloadFamily	P	enforced	Actual accepted role payload variants from fresh formula and history variables

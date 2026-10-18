@@ -76,6 +76,24 @@ theorem identity_terminals_are_distinct :
       tarskiCandidateTerminal (master candidate).execution :=
   tarskiIdentityTerminalsDistinct (master candidate).execution
 
+theorem terminal_separator_is_immediate :
+    (tarskiTerminalSeparator heytingArithmeticTarskiReadout
+      (master candidate).execution
+      (certifyHATarskiDiagonal (master candidate).execution)).requests = [] :=
+  rfl
+
+theorem every_exact_realization_separates_terminals
+    {Memory : Type}
+    (realization : ExactRealization
+      (tarskiClosureContract heytingArithmeticTarskiReadout
+        (master candidate).execution) Memory) :
+    realization.project
+        (tarskiValueTerminal (master candidate).execution) ≠
+      realization.project
+        (tarskiCandidateTerminal (master candidate).execution) :=
+  heytingArithmeticEveryExactRealizationSeparatesTarskiTerminals
+    (master candidate).execution realization
+
 def positiveIdentityCorrespondence :=
   heytingArithmeticPositiveIdentityCorrespondence (master candidate).execution
 
@@ -262,6 +280,8 @@ end TarskiOperationalClosureRegression
 #print axioms TarskiOperationalClosureRegression.source_positions_are_preserved
 #print axioms TarskiOperationalClosureRegression.terminal_occurrences_are_the_master_occurrences
 #print axioms TarskiOperationalClosureRegression.identity_terminals_are_distinct
+#print axioms TarskiOperationalClosureRegression.terminal_separator_is_immediate
+#print axioms TarskiOperationalClosureRegression.every_exact_realization_separates_terminals
 #print axioms TarskiOperationalClosureRegression.positiveIdentityCorrespondence
 #print axioms TarskiOperationalClosureRegression.PolefulObservation.Event
 #print axioms TarskiOperationalClosureRegression.PolefulObservation.sourceEvent

@@ -116,6 +116,18 @@ def heytingArithmeticRejectsSemanticTruthCandidate (candidate : Predicate)
       candidateToValue := fun sentence candidateValue =>
         ⟨candidateToValue sentence candidateValue.down⟩ }
 
+theorem heytingArithmeticEveryExactRealizationSeparatesTarskiTerminals
+    {candidate : Predicate}
+    (execution : HATarskiExecution candidate)
+    {Memory : Type}
+    (realization : ExactRealization
+      (tarskiClosureContract heytingArithmeticTarskiReadout execution) Memory) :
+    realization.project (tarskiValueTerminal execution) ≠
+      realization.project (tarskiCandidateTerminal execution) :=
+  tarskiEveryExactRealizationSeparatesTerminals
+    heytingArithmeticTarskiReadout execution
+    (certifyHATarskiDiagonal execution) realization
+
 def heytingArithmeticTarskiGroupingToLocalAdequacy
     {candidate : Predicate} (execution : HATarskiExecution candidate)
     {Memory : Type}
@@ -219,6 +231,7 @@ end RelationalPerimeter
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticRejectsTarskiLocalAdequacy
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticRejectsTotalTruthCandidate
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticRejectsSemanticTruthCandidate
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticEveryExactRealizationSeparatesTarskiTerminals
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticTarskiGroupingToLocalAdequacy
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticTarskiValueToCandidateClosureConsequences
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticTarskiCandidateToValueClosureConsequences

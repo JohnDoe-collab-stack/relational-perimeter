@@ -1,0 +1,10 @@
+# Generic exact separation must remain independent of every diagonal instance.
+root RelationalPerimeter.Constitution.Continuation.ExactSeparation
+forbidden RelationalPerimeter.Constitution.Tarski.SyntaxExecution
+forbidden RelationalPerimeter.Constitution.Tarski.Readout
+forbidden RelationalPerimeter.Constitution.Tarski.Diagonal
+forbidden RelationalPerimeter.Constitution.Tarski.OperationalClosure
+forbidden RelationalPerimeter.Constitution.Tarski.ClosureObstruction
+forbidden RelationalPerimeter.Constitution.Godel.Diagonal
+forbidden RelationalPerimeter.Constitution.Godel.OperationalClosure
+forbidden RelationalPerimeter.Instances.HeytingArithmetic.Tarski

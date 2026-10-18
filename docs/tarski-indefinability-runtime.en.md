@@ -6,6 +6,9 @@ This passage is the canonical text of a distinct scientific claim. Its
 registration counts neither as reader review, translation review, nor
 independent audit. It separates a constructive semantic Tarski theorem, its
 factorization through a relational runtime, and two positive constructions.
+It also establishes that the immediate terminal separator derived from the
+certification forces every exact realization of the contract to separate the
+two terminals.
 It claims neither historical novelty, nor an
 already constructed Tarskian hierarchy, nor a result about Kripke, revision
 theories, or every language equipped with truth.
@@ -102,6 +105,14 @@ blindness is therefore excluded by construction, not merely by inspecting the
 body of the canonical theorem.
 
 ## Localization of the exact obstruction
+
+Diagonal certification also constructs a finite separator of the two
+terminals for the already fixed contract. Its request list is empty because
+the outcome associated with the empty list immediately reads the received
+terminal. Every `ExactRealization` of this contract must therefore project the
+two terminals to distinct memories. This separation comes from the terminal
+readout rather than from hidden dynamics. It does not contradict positive
+grouping, which concerns an operational realization with no readout-preservation law.
 
 The minimal common interface is directed terminal readout preservation. It
 completes a given operational realization with a `memoryRead` family, one

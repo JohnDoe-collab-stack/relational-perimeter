@@ -80,6 +80,21 @@ def rejectTarskiLocalAdequacy
       (fun candidateValue => rejectValue (adequacy.candidateToValue candidateValue))
   exact rejectValue value
 
+theorem tarskiDiagonalReadouts_ne
+    {coding : TarskiDiagonalSyntax.{uC,uS,uK}}
+    {refinement : TarskiExecutionRefinement.{uC,uB,uS,uK,uX} coding}
+    {candidate : coding.Candidate}
+    {readout : TarskiReadout.{uC,uS,uK,uT} coding}
+    {execution : ExecutedTarskiProduction refinement candidate}
+    (certification : TarskiDiagonalCertification readout execution) :
+    readout.Truth execution.production.sentence ≠
+      readout.Truth
+        (coding.applyCandidate candidate execution.production.computedOutput) := by
+  intro same
+  exact nomatch rejectTarskiLocalAdequacy certification
+    { valueToCandidate := fun value => Eq.mp same value
+      candidateToValue := fun candidateValue => Eq.mp same.symm candidateValue }
+
 structure TarskiGlobalAdequacy
     (coding : TarskiDiagonalSyntax.{uC,uS,uK})
     (readout : TarskiReadout.{uC,uS,uK,uT} coding)
@@ -129,6 +144,7 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.tarskiValueToCandidateConsequences
 #print axioms StrongPerimetralTurning.tarskiCandidateToValueConsequences
 #print axioms StrongPerimetralTurning.rejectTarskiLocalAdequacy
+#print axioms StrongPerimetralTurning.tarskiDiagonalReadouts_ne
 #print axioms StrongPerimetralTurning.TarskiGlobalAdequacy
 #print axioms StrongPerimetralTurning.TarskiGlobalAdequacy.atExecutedProduction
 #print axioms StrongPerimetralTurning.rejectTarskiGlobalAdequacy

@@ -76,6 +76,57 @@ run_cmd do
             throwError "Positive Tarski layer {root} introduces {elimination} in {name}"
     logInfo m!"TARSKI_POSITIVE_DEPENDENCIES_OK {root} constants={visited.size}"
 
+  let genericSeparation ← closure [
+    `ConstitutiveSearch.ContinuationSignatures.ExactRealization.distinct_memory_of_separator]
+  for required in [
+      `ConstitutiveSearch.ContinuationSignatures.ExactRealization.distinct_memory_of_not_future_equivalent,
+      `ConstitutiveSearch.ContinuationSignatures.ExactRealization.equal_memory_same_futures,
+      `ConstitutiveSearch.ContinuationSignatures.FutureSeparator.not_equivalent] do
+    unless genericSeparation.contains required do
+      throwError "Generic exact-realization separation no longer consumes {required}"
+  for forbidden in [
+      `StrongPerimetralTurning.TarskiDiagonalCertification,
+      `StrongPerimetralTurning.tarskiTerminalSeparator,
+      `StrongPerimetralTurning.ExecutedGodelWitness.trueWitness,
+      `StrongPerimetralTurning.ExecutedGodelWitness.unprovable] do
+    if genericSeparation.contains forbidden then
+      throwError "Generic exact-realization separation depends on specialized {forbidden}"
+
+  let terminalSeparator ← closure [`StrongPerimetralTurning.tarskiTerminalSeparator]
+  for required in [
+      `StrongPerimetralTurning.tarskiDiagonalReadouts_ne,
+      `StrongPerimetralTurning.rejectTarskiLocalAdequacy,
+      `StrongPerimetralTurning.TarskiDiagonalCertification.diagonalForward,
+      `StrongPerimetralTurning.TarskiDiagonalCertification.diagonalBackward,
+      `ConstitutiveSearch.ContinuationSignatures.FutureContract.outcome,
+      `ConstitutiveSearch.ContinuationSignatures.Outcome.read] do
+    unless terminalSeparator.contains required do
+      throwError "Terminal Tarski separator no longer consumes {required}"
+
+  let universalSeparation ← closure [
+    `StrongPerimetralTurning.tarskiEveryExactRealizationSeparatesTerminals]
+  for required in [
+      `StrongPerimetralTurning.tarskiTerminalSeparator,
+      `ConstitutiveSearch.ContinuationSignatures.ExactRealization.distinct_memory_of_separator,
+      `ConstitutiveSearch.ContinuationSignatures.ExactRealization.equal_memory_same_futures,
+      `ConstitutiveSearch.ContinuationSignatures.FutureSeparator.not_equivalent] do
+    unless universalSeparation.contains required do
+      throwError "Universal exact-realization separation no longer consumes {required}"
+
+  for inspected in [
+      (`StrongPerimetralTurning.tarskiTerminalSeparator, terminalSeparator),
+      (`StrongPerimetralTurning.tarskiEveryExactRealizationSeparatesTerminals,
+        universalSeparation)] do
+    for forbidden in [
+        `ConstitutiveSearch.ContinuationSignatures.ExecutedOperationalGrouping,
+        `StrongPerimetralTurning.tarskiExecutedOperationalGrouping,
+        `ConstitutiveSearch.ContinuationSignatures.TerminalReadoutCorrespondence,
+        `StrongPerimetralTurning.ExecutedGodelWitness.trueWitness,
+        `StrongPerimetralTurning.ExecutedGodelWitness.unprovable] do
+      if inspected.2.contains forbidden then
+        throwError "Exact Tarski separation {inspected.1} depends on forbidden {forbidden}"
+  logInfo m!"TARSKI_SEPARATOR_DEPENDENCIES_OK separator={terminalSeparator.size} universal={universalSeparation.size} generic={genericSeparation.size}"
+
   let affirmative ← closure [`StrongPerimetralTurning.tarskiExecutedGroupingToLocalAdequacy]
   for forbidden in [
       `StrongPerimetralTurning.TarskiDiagonalCertification,

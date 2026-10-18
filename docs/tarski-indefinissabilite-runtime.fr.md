@@ -6,6 +6,8 @@ Ce passage est le texte canonique d’une affirmation scientifique distincte.
 Son enregistrement ne vaut ni revue de lecture, ni revue de traduction, ni
 audit indépendant. Il sépare un théorème sémantique constructif de Tarski,
 sa factorisation par un runtime relationnel et deux constructions positives.
+Il établit aussi que le séparateur terminal immédiat dérivé de la certification
+impose à toute réalisation exacte du contrat de séparer les deux terminaux.
 Il ne revendique ni nouveauté historique, ni hiérarchie tarskienne déjà
 construite, ni résultat sur Kripke, les théories de la révision ou tous les
 langages munis d’une vérité.
@@ -105,6 +107,14 @@ la cécité événementielle est ainsi écartée par construction, et pas seulem
 par inspection du corps du théorème canonique.
 
 ## Localisation de l’obstruction exacte
+
+La certification diagonale construit aussi un séparateur fini des deux
+terminaux pour le contrat déjà fixé. Sa liste de requêtes est vide parce que
+l’issue associée à la liste vide lit immédiatement le terminal reçu. Toute
+`ExactRealization` de ce contrat doit donc projeter les deux terminaux vers des
+mémoires distinctes. Cette séparation provient du readout terminal et non
+d’une dynamique cachée. Elle ne contredit pas le regroupement positif, qui
+porte sur une réalisation opérationnelle sans loi de préservation du readout.
 
 L’interface commune minimale est une préservation terminale dirigée. Elle
 complète une réalisation opérationnelle donnée par une famille `memoryRead`,
