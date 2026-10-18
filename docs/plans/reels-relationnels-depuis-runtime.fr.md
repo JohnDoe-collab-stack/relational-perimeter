@@ -2315,29 +2315,33 @@ consigne la vérification du snapshot sans réécrire le rapport reçu. Les
 statuts `reader`, `translation` et `independent` des deux affirmations
 raccordées sont `reviewed` sur cette révision. Les clarifications canoniques
 postérieures sur le redémarrage du kernel live et la portée d'élaboration de
-`private` devront toutefois recevoir une nouvelle révision d'évidence : elles
-rouvrent les trois revues de l'affirmation de correspondance jusqu'à leur
-enregistrement sur le même nouveau SHA. Aucun push ni fusion n'est effectué
-par cette préparation locale.
+`private` ont pour nouvelle révision d'évidence
+`1a2bd65b080fc9eefca60bd91dbb175a9a458862`. Les revues `reader` et
+`translation` sont consignées dans
+[la revue des clarifications](../reports/runtime-real-audit-clarifications-reader-translation-1a2bd65.fr.md) ;
+la revue `independent` reste `not_recorded` jusqu'à réception et lecture d'un
+rapport extérieur visant exactement ce SHA. Aucun push ni fusion n'est
+effectué par cette préparation locale.
 
 Ces six blocs exposent la production native riche et ses vues numériques
 séparées. Sur `5e69b1b`, les revues primaire et indépendante ferment la gate 4
 dans son extension native et la gate 6 pour la classe effective déclarée, sans
 transformer les builds en verdict de sens et sans identifier les occurrences
 ou familles riches. Les clarifications documentaires ne modifient aucun terme
-Lean ni cette portée, mais leur clôture documentaire exige la nouvelle évidence
-et les revues exactes annoncées ci-dessus. La gate 7 reste ouverte et aucun
-travail de couverture des réels usuels n'est engagé ici.
+Lean ni cette portée ; leur lecture française et leur traduction sont revues
+sur la nouvelle évidence, tandis que leur validation indépendante reste
+ouverte. La gate 7 reste ouverte et aucun travail de couverture des réels
+usuels n'est engagé ici.
 
 ### Gates terminales de preuve
 
 Les critères successifs sont conservés ci-dessous. Les lots précédents et
 les réalisations antérieures portent leurs résultats dans leurs portées
 déclarées ; l'extension native de la gate 4 et la gate 6 sont closes sur
-`5e69b1b` par les revues primaire et indépendante enregistrées. La nouvelle
-clarification de leur texte rouvre seulement sa traçabilité documentaire
-jusqu'à l'enregistrement d'une nouvelle évidence commune ; la gate 7 reste
-ouverte. Une accumulation de
+`5e69b1b` par les revues primaire et indépendante enregistrées. Sur la nouvelle
+évidence `1a2bd65`, les revues de lecture et de traduction sont enregistrées,
+mais la revue indépendante reste ouverte ; la gate 7 reste également ouverte.
+Une accumulation de
 définitions ou un build vert ne remplace aucun de ces critères :
 
 1. **Fermeture algébrique relationnelle.** Chaque opération construit un

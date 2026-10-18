@@ -2018,10 +2018,20 @@
       "source_sha256": "3abe2b41ea36a5438c640b616375bed78a785b8d4c1f6db22a2924f3b0d15795",
       "reviews": {
         "reader": {
-          "status": "pending"
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-real-audit-clarifications-reader-translation-1a2bd65.fr.md",
+          "sha256": "ce9fd49d9c792442218542382b58f7a2e6d31719ebe96b1522dd6bb998fb7740",
+          "responsible": "Codex (OpenAI), lecture française autonome puis confrontation aux définitions Lean concernées",
+          "revision": "1a2bd65b080fc9eefca60bd91dbb175a9a458862",
+          "revision_evidence": "Révision examinée : `1a2bd65b080fc9eefca60bd91dbb175a9a458862`."
         },
         "translation": {
-          "status": "pending"
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-real-audit-clarifications-reader-translation-1a2bd65.fr.md",
+          "sha256": "ce9fd49d9c792442218542382b58f7a2e6d31719ebe96b1522dd6bb998fb7740",
+          "responsible": "Codex (OpenAI), lecture anglaise autonome puis confrontation FR/EN et aux définitions Lean concernées",
+          "revision": "1a2bd65b080fc9eefca60bd91dbb175a9a458862",
+          "revision_evidence": "Révision examinée : `1a2bd65b080fc9eefca60bd91dbb175a9a458862`."
         },
         "independent": {
           "status": "not_recorded"
