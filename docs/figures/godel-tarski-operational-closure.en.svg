@@ -146,7 +146,7 @@
     <text x="430" y="445" class="small-center">active memory preserves this position</text>
 
     <rect x="1130" y="380" width="480" height="72" fill="#f3f7ff" stroke="#2d6bc5" class="inner"/>
-    <text x="1370" y="402" class="panel-title center" fill="#1d5cb5">Constitutive position B — internal representation</text>
+    <text x="1370" y="402" class="panel-title center" fill="#1d5cb5">Position B — internal representation</text>
     <text x="1370" y="426" class="body-center">Gödel: Proof(G)  •  Tarski: Truth(Cand(⌜L⌝))</text>
     <text x="1370" y="445" class="small-center">the same executed diagonal code is consumed</text>
 
@@ -192,7 +192,7 @@
 
     <rect x="1010" y="774" width="630" height="36" fill="#f4f0ff" stroke="#7957b5" class="callout"/>
     <text x="1325" y="788" class="small-center">Gödel from t and u  •  Tarski from diagonal certification</text>
-    <text x="1325" y="803" class="small-center">separator [] → every ExactRealization separates the terminals</text>
+    <text x="1325" y="803" class="small-center">[] reads these produced terminals → every ExactRealization separates them</text>
 
     <text x="900" y="839" class="note-center">Separate constructions: no output of A is identified with an output of B.</text>
   </g>

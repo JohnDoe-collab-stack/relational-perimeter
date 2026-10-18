@@ -39,10 +39,10 @@ première et la vacuité de la seconde. Aucune nouveauté mathématique ni aucun
 renforcement strict d'un résultat antérieur n'est revendiqué.
 
 L'affirmation `GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION` conserve son
-identifiant. Les modifications rouvrent ses revues. Les empreintes et la
-révision d'évidence antérieures ne certifient pas cet arbre modifié et ne sont
-pas réétiquetées comme une nouvelle évidence. Aucun audit indépendant nouveau
-n'est revendiqué ; aucune traduction anglaise n'est publiée dans ce lot.
+identifiant. Les modifications rouvrent ses revues. Cette correction
+administrative ne modifie ni les énoncés Lean, ni leurs preuves, ni la portée
+de l'affirmation. Aucun audit indépendant nouveau n'est revendiqué ; aucune
+traduction anglaise n'est publiée dans ce lot.
 
 ## H1 positif et contrat reçu
 

@@ -146,7 +146,7 @@
     <text x="430" y="445" class="small-center">la mémoire active conserve cette position</text>
 
     <rect x="1130" y="380" width="480" height="72" fill="#f3f7ff" stroke="#2d6bc5" class="inner"/>
-    <text x="1370" y="402" class="panel-title center" fill="#1d5cb5">Position constitutive B — représentation interne</text>
+    <text x="1370" y="402" class="panel-title center" fill="#1d5cb5">Position B — représentation interne</text>
     <text x="1370" y="426" class="body-center">Gödel : Proof(G)  •  Tarski : Truth(Cand(⌜L⌝))</text>
     <text x="1370" y="445" class="small-center">le même code diagonal exécuté est consommé</text>
 
@@ -192,7 +192,7 @@
 
     <rect x="1010" y="774" width="630" height="36" fill="#f4f0ff" stroke="#7957b5" class="callout"/>
     <text x="1325" y="788" class="small-center">Gödel par t et u  •  Tarski par certification diagonale</text>
-    <text x="1325" y="803" class="small-center">séparateur [] → toute ExactRealization sépare les terminaux</text>
+    <text x="1325" y="803" class="small-center">[] lit ces terminaux produits → toute ExactRealization les sépare</text>
 
     <text x="900" y="839" class="note-center">Constructions séparées : aucune sortie de A n’est identifiée à une sortie de B.</text>
   </g>
