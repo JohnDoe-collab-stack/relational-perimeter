@@ -40,3 +40,21 @@ externe avec empreintes conserve également leurs octets d'origine.
 
 Un rapport historique n'est pas transférable à une nouvelle révision. Les
 revues ouvertes du registre scientifique restent ouvertes.
+
+## Audit historique runtime–réels du commit `5e69b1b`
+
+L'[audit structurel indépendant](aristotle-runtime-real-structural-audit-5e69b1b.md)
+et sa [rectification factuelle](aristotle-runtime-real-structural-audit-5e69b1b-erratum.fr.md)
+restent attachés exclusivement au commit
+`5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc`.
+
+La [note de réouverture](godel-review-reopening-83e797e.fr.md) établit que les
+modules de preuve Gödel et leurs imports locaux sont inchangés, mais que deux
+manifestes de contrôle partagés ont reçu des ajouts pour les lots ultérieurs.
+L'affirmation courante est donc rattachée à `83e797e...` avec ses revues
+rouvertes ; l'audit historique est conservé, sans transfert de verdict.
+
+La [note de réouverture de la correspondance effective](runtime-effective-review-reopening-83e797e.fr.md)
+consigne séparément les quatre contrôles partagés modifiés depuis `1a2bd65...`.
+Ses anciennes revues restent historiques ; les revues courantes sont rouvertes
+sur `83e797e...`.
