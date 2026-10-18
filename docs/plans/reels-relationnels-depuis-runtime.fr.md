@@ -13,7 +13,11 @@ commit `b3a213eb25165d6daf01e236e7c77e26b57f5524`. L'affirmation scientifique
 actuelle `RUNTIME_EFFECTIVE_CAUCHY_REAL_CORRESPONDENCE` est attachée au commit
 d'évidence `1a2bd65b080fc9eefca60bd91dbb175a9a458862`. Ses revues `reader` et
 `translation` sont enregistrées sur ce SHA ; sa revue `independent` reste
-`not_recorded`. Le présent plan ne modifie aucun de ces statuts.
+`not_recorded`. Les étapes 7.1 à 7.3 sont désormais attachées à la révision
+d'évidence `ba549cd03552dd5d0c7f5737305c684bf7d49897` par l'affirmation
+`RUNTIME_PRESENTED_DYADIC_COMPLETION_CHARACTERIZATION`. Ses revues `reader` et
+`translation` sont enregistrées sur ce SHA ; sa revue `independent` reste
+`not_recorded`.
 
 ## Cible générale
 
@@ -2986,18 +2990,18 @@ comparaison extensive pourra ensuite être une conséquence aval.
 
 Le degré de préparation n'est pas identique pour ses quatre étapes :
 
-| Étape | État avant implémentation | Condition de passage |
+| Étape | État contrôlé | Condition de passage |
 | --- | --- | --- |
-| 7.1, complétude carrier produite | Implémentée ; paquet natif retenu, limite projetée ensuite, convergence, unicité et indépendance positive | Vérifier et enregistrer sur une révision d'évidence sans modifier la gate 6 |
-| 7.2, contrat abstrait | Implémenté ; noyau numérique séparé de l'enrichissement ordonné, sans morphisme terminal supposé | Vérifier la réalisation carrier et les lois quantitatives, algébriques, d'ordre, de densité et de bornes |
-| 7.3, caractérisation relative | Implémentée ; morphismes, allers-retours comportementaux et transports dérivés | Confronter séparément les textes FR/EN aux déclarations complètes et enregistrer les revues |
+| 7.1, complétude carrier produite | Implémentée et enregistrée sur `ba549cd` ; paquet natif retenu, limite projetée ensuite, convergence, unicité et indépendance positive | Audit indépendant encore `not_recorded` |
+| 7.2, contrat abstrait | Implémenté et relu sur `ba549cd` ; noyau numérique séparé de l'enrichissement ordonné, sans morphisme terminal supposé | Audit indépendant encore `not_recorded` |
+| 7.3, caractérisation relative | Implémentée et relue sur `ba549cd` ; morphismes, allers-retours comportementaux et transports dérivés | Audit indépendant encore `not_recorded` |
 | 7.4, référence classique | Étude de faisabilité non commencée ; cible exacte non choisie | Fermer totalité, correction, fidélité et transports ; sinon enregistrer la frontière et laisser la cible terminale ouverte |
 
-L'implémentation construit donc 7.1 à 7.3 sans décision extérieure. Sa clôture
-scientifique dans la portée interne exacte reste soumise aux textes, au
-registre et aux revues sur le même SHA. Il serait incorrect de coder un faux
-`fromExtensive` générique ou de promettre la portée classique de 7.4 sans cible
-formellement choisie.
+L'implémentation construit donc 7.1 à 7.3 sans décision extérieure. Les textes,
+le registre et les revues de lecture et de traduction concordent sur
+`ba549cd`; la revue indépendante reste ouverte. Il serait incorrect de coder
+un faux `fromExtensive` générique ou de promettre la portée classique de 7.4
+sans cible formellement choisie.
 
 #### 7.1 — Produire la limite au niveau du carrier
 
@@ -3751,9 +3755,10 @@ les réalisations antérieures portent leurs résultats dans leurs portées
 déclarées ; l'extension native de la gate 4 et la gate 6 sont closes sur
 `5e69b1b` par les revues primaire et indépendante enregistrées. Sur la nouvelle
 évidence `1a2bd65`, les revues de lecture et de traduction sont enregistrées,
-mais la revue indépendante reste ouverte. Les étapes 7.1 à 7.3 possèdent
-désormais une implémentation candidate ; elles doivent encore être enregistrées
-et revues sur leur propre révision d'évidence. La gate 7.4 reste ouverte.
+mais la revue indépendante reste ouverte. Les étapes 7.1 à 7.3 sont
+implémentées et enregistrées sur `ba549cd`; leurs revues de lecture française
+et de traduction anglaise sont `reviewed`, tandis que leur revue indépendante
+reste `not_recorded`. La gate 7.4 reste ouverte.
 Une accumulation de
 définitions ou un build vert ne remplace aucun de ces critères :
 

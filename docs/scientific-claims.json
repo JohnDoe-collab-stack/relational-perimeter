@@ -2037,6 +2037,185 @@
           "status": "not_recorded"
         }
       }
+    },
+    {
+      "id": "RUNTIME_PRESENTED_DYADIC_COMPLETION_CHARACTERIZATION",
+      "kind": "behavioral",
+      "evidence_revision": "ba549cd03552dd5d0c7f5737305c684bf7d49897",
+      "scope": "Pour toute présentation périmétrale P, toute profondeur de base et toute CarrierFamily explicitement présentée : la route native produit un paquet de complétude conservé avant projection de son carrier limite, avec convergence, unicité positive et indépendance numérique envers le périmètre. Le dépôt réalise un contrat non circulaire de complétion dyadique constructive, l'enrichit d'une structure de corps ordonné constructif avec densité et bornes finies produites, puis dérive pour toute autre réalisation du même contrat les morphismes de comparaison, leurs retours comportementaux, les transports des opérations, de l'ordre, de l'apartness, de l'inverse, des témoins finis et des limites. Aucune égalité d'occurrences, récupération des histoires ou témoins oubliés, couverture de tous les réels classiques, complétude par borne supérieure, AC, CH ou revendication d'originalité.",
+      "anchors": [
+        {
+          "path": "docs/runtime-presented-dyadic-completion-characterization.fr.md",
+          "heading": "Conclusion formelle de complétion dyadique présentée",
+          "paragraph": null,
+          "sha256": "521b78dce5c044b8555bb20af361107e373d9efaefc678fa8ce915fff7d00202"
+        },
+        {
+          "path": "docs/runtime-presented-dyadic-completion-characterization.en.md",
+          "heading": "Formal presented-dyadic-completion conclusion",
+          "paragraph": null,
+          "sha256": "fa03a20b830fe20a867e5e2d552d1108646947bc73bd9eb6060d7e5510bbaadf"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RelationalRealCarrierCompleteness",
+          "name": "RelationalPerimeter.Constitution.Reals.RelationalRealCarrierCompleteness.CarrierCompletionResult",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RelationalRealCarrierCompleteness",
+          "name": "RelationalPerimeter.Constitution.Reals.RelationalRealCarrierCompleteness.carrierCompletion",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RelationalRealCarrierCompleteness",
+          "name": "RelationalPerimeter.Constitution.Reals.RelationalRealCarrierCompleteness.carrierCompletion_perimeterIndependent",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion",
+          "name": "RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion.PresentedDyadicStructure",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion",
+          "name": "RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion.PresentedDyadicCompletion",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion",
+          "name": "RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion.carrierCompletionStructure",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.CarrierQuantitativeTransport",
+          "name": "RelationalPerimeter.Constitution.Reals.mulCarrierCongr",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.CarrierQuantitativeTransport",
+          "name": "RelationalPerimeter.Constitution.Reals.DirectedUpper.composeThreeOneThree",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.CarrierQuantitativeTransport",
+          "name": "RelationalPerimeter.Constitution.Reals.transportCarrierOrder",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.PresentedDyadicOrderedField",
+          "name": "RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion.PresentedDyadicOrderedFieldCompletion",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.CarrierOrderedFieldLaws",
+          "name": "RelationalPerimeter.Constitution.Reals.CarrierOrderedField.carrierOrderedFieldLaws",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.CarrierOrderedCompletion",
+          "name": "RelationalPerimeter.Constitution.Reals.CarrierOrderedField.produceCarrierDensity",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.CarrierOrderedCompletion",
+          "name": "RelationalPerimeter.Constitution.Reals.CarrierOrderedField.produceCarrierNaturalBounds",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.CarrierOrderedCompletion",
+          "name": "RelationalPerimeter.Constitution.Reals.CarrierOrderedField.carrierOrderedCompletionIndependent",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.DyadicCompletionCharacterization",
+          "name": "RelationalPerimeter.Constitution.Reals.DyadicCompletionCharacterization.comparisonMorphism",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.DyadicCompletionCharacterization",
+          "name": "RelationalPerimeter.Constitution.Reals.DyadicCompletionCharacterization.mapProducedLimit",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.DyadicCompletionOrderedCharacterization",
+          "name": "RelationalPerimeter.Constitution.Reals.DyadicCompletionCharacterization.relativeOrderedCharacterization",
+          "role": "production"
+        },
+        {
+          "module": "Tests.RelationalRealCarrierCompleteness",
+          "name": "RelationalPerimeter.Tests.RelationalRealCarrierCompleteness.productionOrigin",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalRealCarrierCompleteness",
+          "name": "RelationalPerimeter.Tests.RelationalRealCarrierCompleteness.candidatesDistinct",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalRealCarrierCompleteness",
+          "name": "RelationalPerimeter.Tests.RelationalRealCarrierCompleteness.twoPerimeterCompletion",
+          "role": "test"
+        },
+        {
+          "module": "Tests.PresentedDyadicCompletion",
+          "name": "RelationalPerimeter.Tests.PresentedDyadicCompletion.noTagIdentity",
+          "role": "test"
+        },
+        {
+          "module": "Tests.PresentedDyadicCompletion",
+          "name": "RelationalPerimeter.Tests.PresentedDyadicCompletion.terminalProducedLimit",
+          "role": "test"
+        },
+        {
+          "module": "Tests.PresentedDyadicCompletion",
+          "name": "RelationalPerimeter.Tests.PresentedDyadicCompletion.densityProduced",
+          "role": "test"
+        },
+        {
+          "module": "Tests.PresentedDyadicCompletion",
+          "name": "RelationalPerimeter.Tests.PresentedDyadicCompletion.boundsProduced",
+          "role": "test"
+        }
+      ],
+      "checks": [
+        "scripts/check-real-carrier-completion-codegen.py",
+        "scripts/expected-failures.tsv",
+        "scripts/stratification.tsv",
+        "scripts/test-expected-failure-gates.py",
+        "scripts/verify.ps1",
+        "scripts/verify.sh"
+      ],
+      "dependencies": {
+        "formation": "CarrierFamily reçoit ses termes, un module extérieur monotone et une loi de Cauchy qui consomme aussi les modules propres des termes. PresentedDyadicStructure reçoit approximations, modules, cohérence, injection dyadique et équivalence quantitative positive ; PresentedDyadicCompletion ne reçoit que la famille à compléter. L'enrichissement ordonné reçoit ses opérations, relations et lois positives sans morphisme terminal. CompletionMorphism ne contient ni inverse, ni aller-retour, ni préservation des limites. La cible classique de l'étape 7.4 n'est pas un paramètre caché de ces interfaces.",
+        "execution": "carrierNativeFamily forme les comportements natifs depuis la famille reçue et raccorde chaque Step courant aux approximations normalisées. carrierCompletion appelle nativeCompleteness une fois, conserve le paquet produit puis projette son carrier. produceCarrierDensity et produceCarrierNaturalBounds exécutent sondages et actions, conservent leurs paquets riches et ne projettent codes ou bornes qu'ensuite. Les opérations carrier restent des readouts raccordés aux opérations runtime déjà constituées ; aucun carrier extensif n'est réimporté pour fabriquer ces producteurs.",
+        "proof": "La convergence carrier est transportée depuis le candidat natif produit et l'unicité compare tout candidat reçu en consommant les Steps terme et candidat. Les lois quantitatives paient deux pertes de normalisation, les amplitudes croisées de la multiplication et l'alignement de sept certificats pour l'ordre. La réalisation ordonnée ferme concrètement les lois algébriques, d'ordre, d'inverse, de densité et de bornes. comparisonMorphism est produit par la complétude cible ; mapProducedLimit et les transports ordonnés sont dérivés par présentation, congruence et unicité, non supposés.",
+        "transport": "toCarrier et numericalCarrier sont des projections aval qui oublient archives, banques, journaux, programmes et témoins Cauchy sous un contrat d'équivalence explicite. Les allers-retours de relativeOrderedCharacterization sont comportementaux et point par point, jamais des égalités de fonctions ou d'occurrences. Les transports de densité et de bornes conservent le témoin fini reçu sans exécuter le sélecteur cible. L'indépendance envers P et baseDepth porte sur l'équivalence des limites et l'égalité des readouts sélectionnés, pas sur l'identité des producteurs."
+      },
+      "consumers": [],
+      "source_sha256": "94c53c2b8fa952ce9911a3f4cb33240057af5867282e65bc443cabdf1a579dd9",
+      "reviews": {
+        "reader": {
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-presented-dyadic-completion-reader-translation-ba549cd.fr.md",
+          "sha256": "5111b010e987763d4a7c4902cba2f7ea625a1bb13f244ecfafbda252e8e48e9d",
+          "responsible": "Codex (OpenAI), lecture française autonome puis confrontation aux types et corps Lean complets",
+          "revision": "ba549cd03552dd5d0c7f5737305c684bf7d49897",
+          "revision_evidence": "Révision examinée : `ba549cd03552dd5d0c7f5737305c684bf7d49897`."
+        },
+        "translation": {
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-presented-dyadic-completion-reader-translation-ba549cd.fr.md",
+          "sha256": "5111b010e987763d4a7c4902cba2f7ea625a1bb13f244ecfafbda252e8e48e9d",
+          "responsible": "Codex (OpenAI), lecture anglaise autonome puis confrontation FR/EN et aux preuves Lean",
+          "revision": "ba549cd03552dd5d0c7f5737305c684bf7d49897",
+          "revision_evidence": "Révision examinée : `ba549cd03552dd5d0c7f5737305c684bf7d49897`."
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
     }
   ]
 }
