@@ -21,6 +21,12 @@ exacte du contrat riche, les lois d'exécution et de readout imposent
 cette conversion à la vérité certifiée et consomme la non-prouvabilité du même
 témoin produit.
 
+Ces deux témoins certifient aussi un séparateur terminal immédiat. Les deux runs
+non vides sur `[close]` calculent d'abord leurs terminaux. La liste vide `[]`
+n'exécute ensuite aucune nouvelle fermeture : elle observe les readouts de ces
+terminaux déjà produits. Toute `ExactRealization` du contrat doit donc conserver
+leur distinction dans ses mémoires projetées.
+
 La collision sous réalisation exacte reste une hypothèse de fermeture, non une
 conséquence de Gödel. L'action est autorisée et exécutable indépendamment de
 cette hypothèse. Le résultat quantifie sur toute réalisation exacte du contrat
@@ -150,6 +156,14 @@ l'entrée et `unprovable` rejette la preuve ainsi obtenue du même énoncé.
 L'équivalence de tous les futurs des terminaux reste une conséquence parallèle
 sous réalisation exacte ; elle n'est pas une prémisse du noyau critique.
 
+Le théorème générique `distinct_memory_of_separator` utilise seulement le sens
+« même mémoire projetée implique mêmes futurs » de
+`equal_memory_same_futures`, puis sa contraposée constructive. Il n'établit pas
+la réciproque « mêmes futurs implique même mémoire » et ne caractérise donc pas
+la mémoire comme un quotient canonique. `godelTerminalSeparator` applique cette
+borne aux deux terminaux effectivement produits par les runs de fermeture. Sa
+différence est certifiée par `trueWitness` et `unprovable` du même témoin.
+
 ## Localisation fondationnelle exacte
 
 Le témoin gödelien fixe déjà l'incompatibilité entre l'habitation de
@@ -178,11 +192,14 @@ La conclusion exacte est donc :
 > **Pour le runtime gödelien construit, `close` produit une collision
 > opérationnelle terminale sous une réalisation qui préserve autorisations,
 > transitions et événements sans préserver le readout. Pour toute réalisation
-> exacte du contrat riche, `next_exact`, cette collision terminale supposée et
-> `read_exact` imposent `Truth(G) = Proof(G)`, puis la vérité et la
-> non-prouvabilité du même énoncé produisent `Empty`. L'exécution construit et
-> localise la collision ; elle ne crée pas l'incompatibilité gödelienne qui la
-> rend impossible sous exactitude.**
+> exacte du contrat riche, le séparateur vide certifié par les témoins impose
+> déjà la distinction des mémoires projetées de ces terminaux. De façon
+> complémentaire, le rejet de collision historique compose `next_exact`, la
+> collision terminale supposée et `read_exact` pour imposer
+> `Truth(G) = Proof(G)`, puis la
+> vérité et la non-prouvabilité du même énoncé produisent `Empty`. L'exécution
+> construit et localise la collision ; elle ne crée pas l'incompatibilité
+> gödelienne qui la rend impossible sous exactitude.**
 
 ## Dépendances et contrôles
 

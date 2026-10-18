@@ -87,6 +87,9 @@ theorem ha_operational_events_do_not_separate_the_poles :
       (heytingArithmeticOperationalGroupingWithoutRead).rightEvents :=
   godelOperationalGroupingWithoutRead_events_equal heytingArithmeticGodelExecution
 
+theorem ha_terminal_separator_is_immediate :
+    heytingArithmeticGodelTerminalSeparator.requests = [] := rfl
+
 def ha_adding_terminal_read_exact_is_rejected
     (reducedRead : GodelOperationalMemory heytingArithmeticGodelExecution → Type)
     (readExact : ∀ source,
@@ -122,6 +125,12 @@ theorem ha_every_exact_realization_separates {Memory : Type}
         [godelCloseRequest heytingArithmeticGodelExecution] :=
   heytingArithmeticExactRuntimeSeparates realization
 
+theorem ha_every_exact_realization_separates_produced_terminals {Memory : Type}
+    (realization : ExactRealization heytingArithmeticClosureContract Memory) :
+    realization.project heytingArithmeticOperationalGroupingWithoutRead.leftTerminal ≠
+      realization.project heytingArithmeticOperationalGroupingWithoutRead.rightTerminal :=
+  heytingArithmeticEveryExactRealizationSeparatesGodelTerminals realization
+
 theorem ha_operational_closure_rejected {Memory : Type}
     {realization : ExactRealization heytingArithmeticClosureContract Memory}
     (closure : OperationalSameRegimeClosureAt heytingArithmeticGodelExecution realization) : False :=
@@ -140,7 +149,9 @@ def ha_conversion_precedes_rejection {Memory : Type}
 #check RelationalPerimeter.HeytingArithmetic.heytingArithmeticIdentityRuntime
 #check RelationalPerimeter.HeytingArithmetic.heytingArithmeticClosureContext
 #check RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalGroupingWithoutRead
+#check RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelTerminalSeparator
 #check RelationalPerimeter.HeytingArithmetic.heytingArithmeticExactRuntimeSeparates
+#check RelationalPerimeter.HeytingArithmetic.heytingArithmeticEveryExactRealizationSeparatesGodelTerminals
 #check RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalClosureToEmpty
 #check RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalClosureRejected
 
@@ -257,6 +268,17 @@ run_cmd do
       if visited.contains bad then
         throwError "HA rejection {root} reaches event separation {bad}"
     logInfo m!"HA_RUNTIME_REJECTION_DEPENDENCIES_OK {root} constants={visited.size}"
+  let exactTerminalSeparation ← closure [
+    `RelationalPerimeter.HeytingArithmetic.heytingArithmeticEveryExactRealizationSeparatesGodelTerminals]
+  for required in [
+      `StrongPerimetralTurning.godelTerminalSeparator,
+      `StrongPerimetralTurning.ExecutedGodelWitness.trueWitness,
+      `StrongPerimetralTurning.ExecutedGodelWitness.unprovable,
+      `ConstitutiveSearch.ContinuationSignatures.ExactRealization.distinct_memory_of_separator,
+      `ConstitutiveSearch.ContinuationSignatures.ExactRealization.equal_memory_same_futures,
+      `ConstitutiveSearch.ContinuationSignatures.FutureSeparator.not_equivalent] do
+    unless exactTerminalSeparation.contains required do
+      throwError "HA universal Gödel terminal separation no longer consumes {required}"
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_reuses_the_master_execution
@@ -274,12 +296,14 @@ run_cmd do
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_identity_terminals_remain_distinct
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_operational_layer_allows_common_terminal_memory
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_operational_events_do_not_separate_the_poles
+#print axioms HeytingArithmeticOperationalClosureRegression.ha_terminal_separator_is_immediate
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_adding_terminal_read_exact_is_rejected
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_positive_execution
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_historical_bridge
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_bridge_is_exhaustive
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_bridge_preserves_both_orders
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_every_exact_realization_separates
+#print axioms HeytingArithmeticOperationalClosureRegression.ha_every_exact_realization_separates_produced_terminals
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_operational_closure_rejected
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_conversion_precedes_rejection
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticClosureContract
@@ -287,7 +311,9 @@ run_cmd do
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticIdentityRuntime
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticClosureContext
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalGroupingWithoutRead
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelTerminalSeparator
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticExactRuntimeSeparates
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticEveryExactRealizationSeparatesGodelTerminals
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalClosureToEmpty
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalClosureRejected
 /- AXIOM_AUDIT_END -/

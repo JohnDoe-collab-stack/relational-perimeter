@@ -153,6 +153,9 @@ theorem rich_terminal_sources_remain_distinct :
   have poles := congrArg GodelClosureSource.pole same
   cases poles
 
+theorem terminal_separator_is_immediate :
+    (godelTerminalSeparator execution).requests = [] := rfl
+
 theorem continue_constructs_the_next_history :
     (godelOpenRuntime execution .left).terminal.history =
       (semanticSource execution).history.extend := rfl
@@ -216,6 +219,12 @@ theorem every_exact_realization_separates
       Grouping.Continuation.run realization.reduced.next
         (realization.project (syntacticSource execution)) [godelCloseRequest execution] :=
   godelExactRuntimeRejectsCommonTerminalMemory execution realization
+
+theorem every_exact_realization_separates_produced_terminals
+    (realization : ExactRealization (godelClosureContract execution) Memory) :
+    realization.project (operational_collision_without_read execution).leftTerminal ≠
+      realization.project (operational_collision_without_read execution).rightTerminal :=
+  godelEveryExactRealizationSeparatesTerminals execution realization
 
 variable (execution)
 def historical_bridge_consumes_the_same_core :=
@@ -282,6 +291,9 @@ theorem bridge_maps_the_three_roles :
 #check godelOperationalClosureToProducedCompleteness
 #check rejectGodelOperationalClosureToEmpty
 #check godelExactRuntimeRejectsCommonTerminalMemory
+#check godelWitnessReadouts_ne
+#check godelTerminalSeparator
+#check godelEveryExactRealizationSeparatesTerminals
 #check GodelClosureSource.depth
 #check GodelClosureSource.history
 #check GodelClosureSource.provenance
@@ -473,6 +485,7 @@ end GodelOperationalClosureRegression
 #print axioms GodelOperationalClosureRegression.operational_initial_memories_are_distinct
 #print axioms GodelOperationalClosureRegression.close_changes_the_phase
 #print axioms GodelOperationalClosureRegression.rich_terminal_sources_remain_distinct
+#print axioms GodelOperationalClosureRegression.terminal_separator_is_immediate
 #print axioms GodelOperationalClosureRegression.continue_constructs_the_next_history
 #print axioms GodelOperationalClosureRegression.identity_preserves_roles
 #print axioms GodelOperationalClosureRegression.positiveExecution
@@ -483,6 +496,7 @@ end GodelOperationalClosureRegression
 #print axioms GodelOperationalClosureRegression.historical_wrapper_keeps_singleton
 #print axioms GodelOperationalClosureRegression.produced_completeness_precedes_rejection
 #print axioms GodelOperationalClosureRegression.every_exact_realization_separates
+#print axioms GodelOperationalClosureRegression.every_exact_realization_separates_produced_terminals
 #print axioms GodelOperationalClosureRegression.historical_bridge_consumes_the_same_core
 #print axioms GodelOperationalClosureRegression.bridge_is_exhaustive_forward
 #print axioms GodelOperationalClosureRegression.bridge_is_exhaustive_backward
@@ -523,6 +537,9 @@ end GodelOperationalClosureRegression
 #print axioms StrongPerimetralTurning.GodelOperationalGroupingWithoutRead
 #print axioms StrongPerimetralTurning.godelOperationalGroupingWithoutRead
 #print axioms StrongPerimetralTurning.godelOperationalGroupingWithoutRead_events_equal
+#print axioms StrongPerimetralTurning.godelWitnessReadouts_ne
+#print axioms StrongPerimetralTurning.godelTerminalSeparator
+#print axioms StrongPerimetralTurning.godelEveryExactRealizationSeparatesTerminals
 #print axioms StrongPerimetralTurning.godelOpenContinueRun
 #print axioms StrongPerimetralTurning.godelOpenRuntime
 #print axioms StrongPerimetralTurning.godelIdentity_close_outputs_distinct

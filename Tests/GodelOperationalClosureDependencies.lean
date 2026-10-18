@@ -160,6 +160,43 @@ run_cmd do
       throwError "Positive operational grouping no longer consumes {required}"
   if operational.contains `ConstitutiveSearch.ContinuationSignatures.ExactRealization.read_exact then
     throwError "Positive operational grouping already requires readout exactness"
+  let terminalSeparator ← closure [`StrongPerimetralTurning.godelTerminalSeparator]
+  for required in [
+      `StrongPerimetralTurning.godelOperationalGroupingWithoutRead,
+      `StrongPerimetralTurning.GodelOperationalGroupingWithoutRead.leftRun,
+      `StrongPerimetralTurning.GodelOperationalGroupingWithoutRead.rightRun,
+      `ConstitutiveSearch.ContinuationSignatures.ExecutedRun.terminal_eq_run,
+      `StrongPerimetralTurning.read_run,
+      `StrongPerimetralTurning.godelWitnessReadouts_ne,
+      `StrongPerimetralTurning.ExecutedGodelWitness.trueWitness,
+      `StrongPerimetralTurning.ExecutedGodelWitness.unprovable,
+      `ConstitutiveSearch.ContinuationSignatures.FutureContract.outcome,
+      `ConstitutiveSearch.ContinuationSignatures.Outcome.read] do
+    unless terminalSeparator.contains required do
+      throwError "Terminal Gödel separator no longer consumes {required}"
+  for forbiddenSeparator in [
+      `StrongPerimetralTurning.godelExactRuntimeRejectsCommonTerminalMemory,
+      `StrongPerimetralTurning.rejectGodelOperationalClosureToEmpty,
+      `StrongPerimetralTurning.godelTerminalReadExactToEndpointEquality,
+      `ConstitutiveSearch.ContinuationSignatures.ExactRealization.read_exact,
+      `ConstitutiveSearch.ContinuationSignatures.ExactRealization.event_exact] do
+    if terminalSeparator.contains forbiddenSeparator then
+      throwError "Terminal Gödel separator depends on forbidden {forbiddenSeparator}"
+  let universalTerminalSeparation ← closure [
+    `StrongPerimetralTurning.godelEveryExactRealizationSeparatesTerminals]
+  for required in [
+      `StrongPerimetralTurning.godelTerminalSeparator,
+      `ConstitutiveSearch.ContinuationSignatures.ExactRealization.distinct_memory_of_separator,
+      `ConstitutiveSearch.ContinuationSignatures.ExactRealization.equal_memory_same_futures,
+      `ConstitutiveSearch.ContinuationSignatures.FutureSeparator.not_equivalent] do
+    unless universalTerminalSeparation.contains required do
+      throwError "Universal Gödel terminal separation no longer consumes {required}"
+  for forbiddenSeparation in [
+      `StrongPerimetralTurning.godelExactRuntimeRejectsCommonTerminalMemory,
+      `StrongPerimetralTurning.rejectGodelOperationalClosureToEmpty] do
+    if universalTerminalSeparation.contains forbiddenSeparation then
+      throwError "Universal Gödel terminal separation depends on forbidden {forbiddenSeparation}"
+  logInfo m!"GODEL_TERMINAL_SEPARATOR_DEPENDENCIES_OK separator={terminalSeparator.size} universal={universalTerminalSeparation.size}"
   let terminalBridge ← closure [`StrongPerimetralTurning.godelTerminalReadExactToEndpointEquality]
   for required in [
       `StrongPerimetralTurning.GodelOperationalGroupingWithoutRead.leftRun,

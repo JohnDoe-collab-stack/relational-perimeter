@@ -114,6 +114,11 @@ two terminals to distinct memories. This separation comes from the terminal
 readout rather than from hidden dynamics. It does not contradict positive
 grouping, which concerns an operational realization with no readout-preservation law.
 
+The formal dependence is directed only: equal projected memory forces equal
+futures, so a future separator forces distinct projected memories. The converse
+claim that equal futures force equal memory is not established. The result
+therefore does not present memory as a canonical quotient of futures.
+
 The minimal common interface is directed terminal readout preservation. It
 completes a given operational realization with a `memoryRead` family, one
 function from the source readout to memory, and one function from memory to the
@@ -143,7 +148,9 @@ Writing `C = Truth(Cand(⌜L⌝))`, diagonal certification gives
 
 These consequences are proved separately in Lean and specialized to the HA
 instance. Neither partial theorem depends on the opposite bridge or on the
-bilateral rejection.
+bilateral rejection. At the level of the single produced diagonal, they express
+only minimal local consistency. By themselves they do not construct a
+nontrivial global partial truth predicate.
 
 The final rejection is then a separate composition:
 

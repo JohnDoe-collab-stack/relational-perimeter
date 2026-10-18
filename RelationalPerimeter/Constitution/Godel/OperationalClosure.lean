@@ -1,5 +1,6 @@
 import RelationalPerimeter.Constitution.Godel.OperationalH1
 import RelationalPerimeter.Constitution.Continuation.CommonMemoryGrouping
+import RelationalPerimeter.Constitution.Continuation.ExactSeparation
 import RelationalPerimeter.Constitution.Continuation.ReadoutCorrespondence
 
 /-! Close creates a terminal phase and a computed common operational memory.
@@ -580,6 +581,47 @@ def godelOperationalGroupingWithoutRead : GodelOperationalGroupingWithoutRead ex
 theorem godelOperationalGroupingWithoutRead_events_equal :
     (godelOperationalGroupingWithoutRead execution).leftEvents =
       (godelOperationalGroupingWithoutRead execution).rightEvents := rfl
+theorem godelWitnessReadouts_ne :
+    interpretation.Truth execution.witness.production.sentence ≠
+      coding.Proof execution.witness.production.sentence := by
+  intro same
+  exact nomatch execution.witness.unprovable
+    (Eq.mp same execution.witness.trueWitness)
+/-- The nonempty close runs calculate both terminals.  The empty request list
+then observes those already produced terminals without executing another step. -/
+def godelTerminalSeparator :
+    FutureSeparator (godelClosureContract execution)
+      (godelOperationalGroupingWithoutRead execution).leftTerminal
+      (godelOperationalGroupingWithoutRead execution).rightTerminal where
+  requests := []
+  different := by
+    intro sameOutcome
+    let grouping := godelOperationalGroupingWithoutRead execution
+    have leftRead :
+        (godelClosureContract execution).read grouping.leftTerminal =
+          interpretation.Truth execution.witness.production.sentence :=
+      (congrArg (godelClosureContract execution).read
+        grouping.leftRun.terminal_eq_run).trans
+          ((read_run execution _ grouping.requests).trans
+            (godel_read_semantic execution))
+    have rightRead :
+        (godelClosureContract execution).read grouping.rightTerminal =
+          coding.Proof execution.witness.production.sentence :=
+      (congrArg (godelClosureContract execution).read
+        grouping.rightRun.terminal_eq_run).trans
+          ((read_run execution _ grouping.requests).trans
+            (godel_read_syntactic execution))
+    exact godelWitnessReadouts_ne execution
+      (leftRead.symm.trans ((congrArg Outcome.read sameOutcome).trans rightRead))
+
+theorem godelEveryExactRealizationSeparatesTerminals
+    {Memory : Type (max uA uC uP uV)}
+    (realization : ExactRealization (godelClosureContract execution) Memory) :
+    realization.project
+        (godelOperationalGroupingWithoutRead execution).leftTerminal ≠
+      realization.project
+        (godelOperationalGroupingWithoutRead execution).rightTerminal :=
+  realization.distinct_memory_of_separator (godelTerminalSeparator execution)
 /-- This direct bridge consumes the executed close runs and calculated
 collision. Its proof does not project any event-preservation law. -/
 def godelTerminalReadExactToEndpointEquality
@@ -760,6 +802,9 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.GodelOperationalGroupingWithoutRead.nonempty
 #print axioms StrongPerimetralTurning.godelOperationalGroupingWithoutRead
 #print axioms StrongPerimetralTurning.godelOperationalGroupingWithoutRead_events_equal
+#print axioms StrongPerimetralTurning.godelWitnessReadouts_ne
+#print axioms StrongPerimetralTurning.godelTerminalSeparator
+#print axioms StrongPerimetralTurning.godelEveryExactRealizationSeparatesTerminals
 #print axioms StrongPerimetralTurning.godelOpenContinueRun
 #print axioms StrongPerimetralTurning.godelOpenRuntime
 #print axioms StrongPerimetralTurning.godelIdentity_close_outputs_distinct

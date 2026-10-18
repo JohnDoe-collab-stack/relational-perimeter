@@ -116,6 +116,12 @@ mémoires distinctes. Cette séparation provient du readout terminal et non
 d’une dynamique cachée. Elle ne contredit pas le regroupement positif, qui
 porte sur une réalisation opérationnelle sans loi de préservation du readout.
 
+La dépendance formelle est seulement dirigée : une même mémoire projetée impose
+les mêmes futurs, donc un séparateur de futurs impose des mémoires projetées
+distinctes. La réciproque « mêmes futurs implique même mémoire » n’est pas
+établie. Le résultat ne présente donc pas la mémoire comme un quotient canonique
+des futurs.
+
 L’interface commune minimale est une préservation terminale dirigée. Elle
 complète une réalisation opérationnelle donnée par une famille `memoryRead`,
 une fonction de la lecture source vers la mémoire et une fonction de la mémoire
@@ -145,7 +151,9 @@ partielle. En posant `C = Truth(Cand(⌜L⌝))`, la certification diagonale donn
 
 Ces conséquences sont démontrées séparément dans Lean et spécialisées à
 l’instance HA. Aucun des deux théorèmes partiels ne dépend du pont opposé ni du
-rejet bilatéral.
+rejet bilatéral. Au niveau du seul diagonal produit, elles expriment une
+cohérence locale minimale. Elles ne construisent pas à elles seules un prédicat
+de vérité partiel global non trivial.
 
 Le rejet final est ensuite une composition séparée :
 

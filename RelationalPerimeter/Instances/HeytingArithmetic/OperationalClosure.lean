@@ -13,6 +13,8 @@ def heytingArithmeticIdentityRuntime := godelIdentityRealization heytingArithmet
 def heytingArithmeticClosureContext := godelReceivedClosureContext heytingArithmeticGodelExecution
 def heytingArithmeticOperationalGroupingWithoutRead :=
   godelOperationalGroupingWithoutRead heytingArithmeticGodelExecution
+def heytingArithmeticGodelTerminalSeparator :=
+  godelTerminalSeparator heytingArithmeticGodelExecution
 
 def heytingArithmeticTerminalReadExactToEmpty
     (reducedRead : GodelOperationalMemory heytingArithmeticGodelExecution → Type)
@@ -31,6 +33,13 @@ theorem heytingArithmeticExactRuntimeSeparates {Memory : Type}
         [godelCloseRequest heytingArithmeticGodelExecution] :=
   godelExactRuntimeRejectsCommonTerminalMemory heytingArithmeticGodelExecution realization
 
+theorem heytingArithmeticEveryExactRealizationSeparatesGodelTerminals
+    {Memory : Type}
+    (realization : ExactRealization heytingArithmeticClosureContract Memory) :
+    realization.project heytingArithmeticOperationalGroupingWithoutRead.leftTerminal ≠
+      realization.project heytingArithmeticOperationalGroupingWithoutRead.rightTerminal :=
+  godelEveryExactRealizationSeparatesTerminals heytingArithmeticGodelExecution realization
+
 def heytingArithmeticOperationalClosureToEmpty {Memory : Type}
     {realization : ExactRealization heytingArithmeticClosureContract Memory}
     (closure : OperationalSameRegimeClosureAt heytingArithmeticGodelExecution realization) : Empty :=
@@ -48,8 +57,10 @@ end RelationalPerimeter.HeytingArithmetic
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticIdentityRuntime
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticClosureContext
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalGroupingWithoutRead
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelTerminalSeparator
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticTerminalReadExactToEmpty
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticExactRuntimeSeparates
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticEveryExactRealizationSeparatesGodelTerminals
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalClosureToEmpty
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalClosureRejected
 /- AXIOM_AUDIT_END -/

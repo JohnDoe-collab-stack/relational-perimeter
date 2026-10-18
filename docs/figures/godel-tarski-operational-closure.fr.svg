@@ -3,7 +3,7 @@
      width="1800" height="1660" viewBox="0 0 1800 1660"
      role="img" aria-labelledby="title desc">
   <title id="title">Architecture relationnelle commune et obstructions diagonales de Gödel et Tarski</title>
-  <desc id="desc">Figure comparative éditable. Elle distingue le noyau opérationnel commun, deux constructions positives séparées, la dérivation d’un transport local dirigé depuis une collision de mémoires et une préservation des readouts, puis les conclusions différentes de Gödel et de Tarski. Le transport est unidirectionnel pour Gödel et bilatéral pour Tarski. La certification Tarski fournit aussi un séparateur terminal immédiat qui impose à toute réalisation exacte de séparer les terminaux. L’égalité des traces événementielles est présentée comme un renforcement distinct de l’obstruction minimale.</desc>
+  <desc id="desc">Figure comparative éditable. Elle distingue le noyau opérationnel commun, deux constructions positives séparées, la dérivation d’un transport local dirigé depuis une collision de mémoires et une préservation des readouts, puis les conclusions différentes de Gödel et de Tarski. Le transport est unidirectionnel pour Gödel et bilatéral pour Tarski. Les témoins gödeliens et la certification diagonale de Tarski fournissent chacun un séparateur terminal immédiat qui impose à toute réalisation exacte de séparer les terminaux. L’égalité des traces événementielles est présentée comme un renforcement distinct de l’obstruction minimale.</desc>
 
   <metadata>
     Figure comparative de l’implémentation relationnelle Gödel–Tarski.
@@ -190,8 +190,9 @@
     <rect x="1075" y="728" width="500" height="46" fill="#2479d6" stroke="#155aaa" class="inner"/>
     <text x="1325" y="751" class="white-center">deux terminaux constitutifs distincts</text>
 
-    <rect x="1010" y="781" width="630" height="25" fill="#f4f0ff" stroke="#7957b5" class="callout"/>
-    <text x="1325" y="797" class="small-center">Tarski certifié : séparateur [] → toute ExactRealization sépare les terminaux</text>
+    <rect x="1010" y="774" width="630" height="36" fill="#f4f0ff" stroke="#7957b5" class="callout"/>
+    <text x="1325" y="788" class="small-center">Gödel par t et u  •  Tarski par certification diagonale</text>
+    <text x="1325" y="803" class="small-center">séparateur [] → toute ExactRealization sépare les terminaux</text>
 
     <text x="900" y="839" class="note-center">Constructions séparées : aucune sortie de A n’est identifiée à une sortie de B.</text>
   </g>
@@ -251,7 +252,7 @@
     <text x="1325" y="1242" class="section-title center" fill="#55349e">Branche Tarski — obstruction sémantique constructive</text>
     <rect x="1055" y="1270" width="540" height="44" fill="#fdfbff" stroke="#8c6bc6" class="inner"/>
     <text x="1325" y="1292" class="body-center" font-weight="700">adéquation locale : Truth(L) ↔ Truth(Cand(⌜L⌝))</text>
-    <text x="1325" y="1308" class="small-center">Une seule direction : fermeture partielle, sans contradiction</text>
+    <text x="1325" y="1308" class="small-center">Au seul diagonal : une direction reste partielle, sans contradiction</text>
     <path d="M1325 1314 L1325 1334" stroke="#6846bd" stroke-width="2.3" fill="none" marker-end="url(#arrow-purple)"/>
     <rect x="1055" y="1334" width="540" height="52" fill="#fdfbff" stroke="#8c6bc6" class="inner"/>
     <text x="1325" y="1354" class="body-center">certification diagonale : Truth(L) ↔ ¬Truth(Cand(⌜L⌝))</text>
