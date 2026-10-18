@@ -60,7 +60,7 @@ producteur runtime et ne choisissent pas une famille reçue arbitraire.
 
 ## Réalisation ordonnée et témoins finis
 
-`PresentedDyadicOrderedFieldData` enrichit une complétion présentée par zéro,
+`PresentedDyadicOrderedFieldData` enrichit une structure présentée par zéro,
 unité, addition, opposé, multiplication, inverse sous apartness, ordre
 constructif, lois algébriques, lois d'ordre, densité dyadique et bornes
 naturelles. Les convergences des opérations vers leurs familles canoniques font

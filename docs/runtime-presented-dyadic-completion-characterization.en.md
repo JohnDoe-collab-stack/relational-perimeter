@@ -57,7 +57,7 @@ and do not choose an arbitrary received family.
 
 ## Ordered realization and finite witnesses
 
-`PresentedDyadicOrderedFieldData` enriches a presented completion with zero,
+`PresentedDyadicOrderedFieldData` enriches a presented structure with zero,
 one, addition, negation, multiplication, inversion under apartness, constructive
 order, algebraic laws, order laws, dyadic density, and natural bounds.
 Convergence of the operations to their canonical families belongs to the
