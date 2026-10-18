@@ -3,29 +3,38 @@
 ## Portée et statut
 
 Une production diagonale exécutée unique fournit une ressource positive maître,
-puis une histoire H1 partagée par deux sources riches distinctes. Le pôle
+puis une histoire H1 partagée par deux sources constitutives distinctes. Le pôle
 sémantique lit le type de vérité de la phrase produite ; le pôle syntaxique lit
 son type de preuve. Le contrat de futurs et, pour le résultat conditionnel, sa
 réalisation exacte sont fixés avant la politique de fermeture. Les deux sources
 exécutent la même requête autorisée `close` : leur phase passe d'active à
 terminale, tandis que leur pôle, leur histoire, leur provenance positive et leur
-readout riche sont conservés.
+readout indexé par le pôle sont conservés.
 
 Une réalisation opérationnelle sans loi d'exactitude du readout conserve les
 autorisations, les transitions et les événements. Ses mémoires actives sont
 distinctes ; l'exécution de `close` produit ensuite une mémoire terminale
-commune et les mêmes événements. Les deux sources riches demeurent distinctes.
-Si une collision des deux terminaux calculés est exigée sous une réalisation
-exacte du contrat riche, les lois d'exécution et de readout imposent
-`Truth(G) = Proof(G)`, puis `Truth(G) → Proof(G)`. Seul le rejet final applique
-cette conversion à la vérité certifiée et consomme la non-prouvabilité du même
-témoin produit.
+commune et les mêmes événements. Les deux sources constitutives demeurent
+distinctes.
+Le regroupement ainsi calculé est exposé, sans reconstruire ses runs, ses
+événements, ses terminaux ni sa collision, sous l'interface opérationnelle
+générique. Une préservation terminale dirigée fournit seulement ses deux
+factorisations locales. Leur composition le long de la collision calculée
+produit alors `Truth(G) → Proof(G)`, sans égalité de types, transport inverse ni
+`read_exact` global. Cette production ne consomme ni `trueWitness` ni
+`unprovable`. Le rejet dirigé les ajoute ensuite depuis le même témoin produit.
 
-Ces deux témoins certifient aussi un séparateur terminal immédiat. Les deux runs
-non vides sur `[close]` calculent d'abord leurs terminaux. La liste vide `[]`
+Séparément, si une collision des deux terminaux calculés est exigée sous une
+réalisation exacte du contrat fixé, les lois d'exécution et de readout imposent
+`Truth(G) = Proof(G)`, puis `Truth(G) → Proof(G)`. Ce chemin historique par
+égalité reste disponible sans devenir une prémisse du chemin dirigé.
+
+Ces deux témoins certifient par ailleurs un séparateur terminal immédiat. Les
+deux runs non vides sur `[close]` calculent d'abord leurs terminaux. La liste vide `[]`
 n'exécute ensuite aucune nouvelle fermeture : elle observe les readouts de ces
 terminaux déjà produits. Toute `ExactRealization` du contrat doit donc conserver
-leur distinction dans ses mémoires projetées.
+leur distinction dans ses mémoires projetées. Cette consommation des témoins
+appartient au chemin de séparation finie et reste distincte du rejet dirigé.
 
 La collision sous réalisation exacte reste une hypothèse de fermeture, non une
 conséquence de Gödel. L'action est autorisée et exécutable indépendamment de
@@ -39,10 +48,11 @@ première et la vacuité de la seconde. Aucune nouveauté mathématique ni aucun
 renforcement strict d'un résultat antérieur n'est revendiqué.
 
 L'affirmation `GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION` conserve son
-identifiant. Les modifications rouvrent ses revues. Cette correction
-administrative ne modifie ni les énoncés Lean, ni leurs preuves, ni la portée
-de l'affirmation. Aucun audit indépendant nouveau n'est revendiqué ; aucune
-traduction anglaise n'est publiée dans ce lot.
+identifiant. L'adaptateur opérationnel concret, l'exposition générique du
+regroupement déjà calculé et le rejet dirigé complètent ses preuves sans
+remplacer les chemins historiques. Ces modifications rouvrent ses revues.
+Aucun audit indépendant nouveau n'est revendiqué ; aucune traduction anglaise
+de ce passage n'est publiée dans ce lot.
 
 ## H1 positif et contrat reçu
 
@@ -72,13 +82,13 @@ avec ces mêmes valeurs. Les continuations postérieures prolongent leur propre
 `History` par `History.extend`.
 
 Une famille inductive d'autorisations est partagée à l'identique par le contrat
-riche et la réalisation opérationnelle. `continue` est autorisé en phase
+de futurs et la réalisation opérationnelle. `continue` est autorisé en phase
 active ; `close` est autorisé uniquement au H1 actif reçu. Une source terminale
 n'admet plus aucune requête. Les transitions totales sur les requêtes non
 autorisées restent stables. Les événements donnent la phase et la profondeur
 avant et après la requête, sans consulter le pôle.
 
-Le readout riche est fixé directement depuis la phrase produite et le pôle.
+Le readout constitutif est fixé directement depuis la phrase produite et le pôle.
 Le [pont périmétral aval](../RelationalPerimeter/Constitution/Godel/OperationalPerimetralBridge.lean)
 consomme la même ressource maître. Il établit un transport exact et exhaustif
 entre les occurrences des deux H1, identifie leurs trois rôles et conserve les
@@ -113,11 +123,33 @@ contrat sans imposer de readout exact. Cette justification ne prétend pas
 `godelOperationalGroupingWithoutRead` construit les deux runs sur la trace
 canonique, leur collision terminale et leurs événements égaux. Le regroupement
 ne vaut donc pas avant l'exécution : les mémoires actives distinguent encore
-les pôles. La réalisation identité demeure exacte pour le contrat riche ; elle
-permet les continuations ouvertes et conserve des terminaux riches distincts
+les pôles. `GodelOperationalRealizationWithoutRead.toOperational` expose les
+transitions, événements, autorisations, décisions, projection et lois de cette
+réalisation sous `OperationalRealization`, sans transporter son readout réduit
+constant. `GodelOperationalGroupingWithoutRead.toExecutedOperationalGrouping`
+réutilise directement les deux runs, leurs listes d'événements, leurs terminaux
+et leur collision ; seule l'enveloppe générique de la trace non vide est
+reconstruite. La réalisation identité demeure exacte pour le contrat fixé ; elle
+permet les continuations ouvertes et conserve des terminaux constitutifs distincts
 après `close`.
 
 ## Exactitude du readout et rejet
+
+`DirectedTerminalReadoutPreservation` reçoit une famille de lecture mémoire,
+une factorisation locale du readout gauche vers cette famille et une
+factorisation locale de cette famille vers le readout droit. Elle ne reçoit ni
+`Truth(G) → Proof(G)`, ni égalité de types, ni loi inverse. Sur
+`godelExecutedOperationalGrouping`, `directedReadout` compose ces deux
+factorisations le long de l'égalité des mémoires terminales déjà calculée.
+`godelComputedGroupingToProducedCompleteness` raccorde les lectures terminales
+aux pôles conservés par les deux runs et produit ainsi `Truth(G) → Proof(G)`.
+Sa fermeture transitive ne contient ni `trueWitness` ni `unprovable`.
+`rejectGodelComputedGroupingToEmpty` applique ensuite le noyau constructif
+unidirectionnel à ce transport et aux deux projections du même témoin.
+
+L'instance HA expose séparément la réalisation opérationnelle, le regroupement
+calculé, le transport positif conditionnel et son rejet. Elle n'ajoute aucune
+hypothèse arithmétique à la production gödelienne déjà exécutée.
 
 Une politique de fermeture sous réalisation exacte reçoit seulement la collision
 des deux sorties réduites calculées de `close`. Toutes ses autres couches sont
@@ -127,7 +159,7 @@ ni troisième mémoire, ni égalité de readouts, ni conversion vérité–preuv
 
 Le noyau utilise `ExecutedRun.terminal_eq_run`, puis le `godelExactRunExact`
 direct, prouvé par induction avec `next_exact`. Composées avec la collision,
-ces lois produisent l'égalité des projections des terminaux riches. Deux
+ces lois produisent l'égalité des projections des terminaux constitutifs. Deux
 applications de `read_exact` donnent alors l'égalité de leurs lectures.
 La stabilité du pôle et du readout au cours du run ramène cette égalité à
 `Truth(G) = Proof(G)`. Aucun fait de vérité ou de non-prouvabilité, aucune
@@ -174,7 +206,7 @@ commune qui n'existait pas entre les mémoires actives distinctes.
 
 Sous une réalisation exacte arbitraire, `next_exact` transporte la collision
 supposée des sorties réduites de `close` vers les projections des terminaux
-riches calculés, et `read_exact` force alors l'égalité de leurs lectures.
+constitutifs calculés, et `read_exact` force alors l'égalité de leurs lectures.
 L'exécution produit et localise ainsi la collision terminale étudiée ;
 l'obstruction à sa conservation exacte provient des readouts gödeliens
 incompatibles que le contrat exige de préserver.
@@ -183,7 +215,7 @@ La frontière démontrée ne constitue pas un principe général suffisant pour
 toute constitution relationnelle. Elle porte sur le runtime gödelien construit
 et sur son contrat fixé. Chacune de ses deux possibilités positives est
 réalisée : le regroupement terminal sous le contrat opérationnel sans readout
-exact, et la réalisation exacte qui conserve des terminaux riches distincts.
+exact, et la réalisation exacte qui conserve des terminaux constitutifs distincts.
 L'ajout à une réalisation exacte de l'hypothèse identifiant ses deux sorties
 terminales calculées est rejeté.
 
@@ -192,9 +224,12 @@ La conclusion exacte est donc :
 > **Pour le runtime gödelien construit, `close` produit une collision
 > opérationnelle terminale sous une réalisation qui préserve autorisations,
 > transitions et événements sans préserver le readout. Pour toute réalisation
-> exacte du contrat riche, le séparateur vide certifié par les témoins impose
+> exacte du contrat fixé, le séparateur vide certifié par les témoins impose
 > déjà la distinction des mémoires projetées de ces terminaux. De façon
-> complémentaire, le rejet de collision historique compose `next_exact`, la
+> complémentaire, la collision opérationnelle calculée et une préservation
+> dirigée produisent `Truth(G) → Proof(G)` avant toute consommation des témoins,
+> puis leur incompatibilité produit `Empty`. Le rejet historique compose
+> séparément `next_exact`, la
 > collision terminale supposée et `read_exact` pour imposer
 > `Truth(G) = Proof(G)`, puis la
 > vérité et la non-prouvabilité du même énoncé produisent `Empty`. L'exécution
@@ -206,8 +241,9 @@ La conclusion exacte est donc :
 La formation conserve l'exécution, la ressource maître et H1 dans les types,
 ainsi que les données reçues stockées par les sources. L'exécution consomme
 successivement recherche, autorisations, étapes, runs et terminaux calculés.
-La preuve consomme collision et exactitude de transition/readout ; le rejet
-ajoute les deux faits gödeliens. Le transport opérationnel oublie le pôle
+La preuve dirigée consomme le regroupement calculé et deux factorisations
+locales ; le rejet ajoute les deux faits gödeliens. La preuve historique
+consomme collision et exactitude de transition/readout. Le transport opérationnel oublie le pôle
 seulement au terminal sous son contrat sans lecture exacte ; le pont historique
 conserve séparément l'identité des occurrences et leur provenance.
 

@@ -14,6 +14,8 @@ RelationalPerimeter.Constitution.Continuation.Execution	U	enforced	Authorized in
 RelationalPerimeter.Constitution.Continuation.CommonMemoryGrouping	U	enforced	Executed terminal collision under a fixed exact realization and direct readout equality
 RelationalPerimeter.Constitution.Continuation.OperationalRealization	U	enforced	Readout-free exact operational projection with executed nonempty grouping
 RelationalPerimeter.Constitution.Continuation.ReadoutCorrespondence	U	enforced	Directed terminal readout transports factored from operational grouping
+RelationalPerimeter.Constitution.Continuation.DirectedIncompatibility	U	enforced	Constructive endpoint incompatibility signatures independent of operational and diagonal instances
+RelationalPerimeter.Constitution.Continuation.DirectedObstruction	U	enforced	Generic composition of executed directed readout transports with endpoint incompatibilities
 RelationalPerimeter.Constitution.Godel.OperationalClosure	F	enforced	Fixed positive Godel runtime and local obstruction to collision of computed exact memories
 RelationalPerimeter.Constitution.Tarski.SyntaxExecution	F	enforced	Executed diagonal syntax production with one computed substitution output and ordered occurrences
 RelationalPerimeter.Constitution.Tarski.Readout	F	enforced	Separate semantic readout family and local bidirectional adequacy
@@ -186,6 +188,7 @@ RelationalPerimeter.Constitution.Continuation.Composition	U	enforced	Constructed
 RelationalPerimeter.Constitution.Continuation.CostModel	U	enforced	Faithful contract-API operation accounting, without claiming implementation or total-chain cost
 RelationalPerimeter.Agents.ContinuationSignatures.RolePayloadFamily	P	enforced	Actual accepted role payload variants from fresh formula and history variables
 RelationalPerimeter.Agents.ContinuationSignatures.Production	A10	enforced	Typed resource producers for actual action, preserved acceptance, and local signature
+RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition	A11	enforced	Positive non-diagonal computed grouping and directed terminal readout composition
 RelationalPerimeter.Agents.ContinuationSignatures.RoleComposition	A11	enforced	Dependent role-history composition with source-free finite read memory
 RelationalPerimeter.Agents.ContinuationSignatures.FusedExecution	A12	enforced	Prefix-local signature operation inside resource execution and exact erasure
 RelationalPerimeter.Agents.ContinuationSignatures.ExistingAgent	A16	enforced	Conservative initial-domain agreement without replacing the existing agent memory

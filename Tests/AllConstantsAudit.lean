@@ -7,6 +7,8 @@ import Tests.ConstitutiveExecutionRegression
 import Tests.ConstitutiveNormalizerSuccinctnessRegression
 import Tests.ConstitutiveObjectiveRegression
 import Tests.DeepPreservationRegression
+import Tests.DirectedObstructionRegression
+import Tests.DirectedObstructionDependencies
 import Tests.EndogenousOperationalStabilityRegression
 import Tests.EndogenousWidthBridgeRegression
 import Tests.GodelImplicitAdmissionRegression
@@ -20,6 +22,8 @@ import Tests.ProducedContinuation
 import Tests.ProductionTimelineRegression
 import Tests.PublicRootImport
 import Tests.PerimeterPersistenceRegression
+import Tests.PositiveDirectedCompositionRegression
+import Tests.PositiveDirectedCompositionDependencies
 import Tests.RealizedConstitutionRegression
 import Tests.RelationalExtensiveIffRegression
 import Tests.RolePolicySpectrum

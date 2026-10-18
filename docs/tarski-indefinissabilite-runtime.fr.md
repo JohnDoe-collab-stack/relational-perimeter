@@ -155,6 +155,14 @@ rejet bilatéral. Au niveau du seul diagonal produit, elles expriment une
 cohérence locale minimale. Elles ne construisent pas à elles seules un prédicat
 de vérité partiel global non trivial.
 
+`TarskiDiagonalCertification.toBilateralNegationCertificate` adapte la
+certification au noyau bilatéral pur en réutilisant exactement ses deux
+directions. Dans `tarskiExactClosureRejected`, l’adéquation locale est d’abord
+produite depuis les runs, la collision et les deux préservations dirigées. Le
+noyau `rejectBilateralTransport` consomme seulement ensuite ses deux transports
+et le certificat adapté. La certification ne participe donc pas à la
+construction positive des transports.
+
 Le rejet final est ensuite une composition séparée :
 
 ```text

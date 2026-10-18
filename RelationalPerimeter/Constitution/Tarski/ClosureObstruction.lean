@@ -88,8 +88,11 @@ def tarskiExactClosureRejected
       leftTerminal rightTerminal)
     (correspondence : TerminalReadoutCorrespondence realization leftTerminal rightTerminal) :
     Empty :=
-  rejectTarskiLocalAdequacy certification
-    (tarskiExecutedGroupingToLocalAdequacy readout execution realization grouping correspondence)
+  let adequacy := tarskiExecutedGroupingToLocalAdequacy readout execution realization
+    grouping correspondence
+  ConstitutiveSearch.ContinuationSignatures.rejectBilateralTransport
+    adequacy.valueToCandidate adequacy.candidateToValue
+    certification.toBilateralNegationCertificate
 
 def tarskiExactRealizationClosureRejected
     (readout : TarskiReadout.{uC,uS,uK,uT} coding)

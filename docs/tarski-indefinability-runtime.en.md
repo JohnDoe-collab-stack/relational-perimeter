@@ -152,6 +152,14 @@ bilateral rejection. At the level of the single produced diagonal, they express
 only minimal local consistency. By themselves they do not construct a
 nontrivial global partial truth predicate.
 
+`TarskiDiagonalCertification.toBilateralNegationCertificate` adapts the
+certification to the pure bilateral kernel by reusing exactly its two
+directions. In `tarskiExactClosureRejected`, local adequacy is first produced
+from the runs, the collision, and the two directed preservations. Only then
+does `rejectBilateralTransport` consume its two transports and the adapted
+certificate. The certification therefore does not participate in the positive
+construction of the transports.
+
 The final rejection is then a separate composition:
 
 ```text

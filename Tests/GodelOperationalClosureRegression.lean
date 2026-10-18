@@ -92,6 +92,58 @@ event-only obstruction: the two executed close runs share operational memory
 before any readout-preservation law is imposed. -/
 def operational_collision_without_read := godelOperationalGroupingWithoutRead execution
 
+theorem operational_adapter_reuses_the_computed_contract :
+    (godelOperationalRealization execution).reduced.next =
+        (godelOperationalRealizationWithoutRead execution).reduced.next ∧
+      (godelOperationalRealization execution).reduced.event =
+        (godelOperationalRealizationWithoutRead execution).reduced.event ∧
+      (godelOperationalRealization execution).reduced.Allow =
+        (godelOperationalRealizationWithoutRead execution).reduced.Allow ∧
+      (godelOperationalRealization execution).reduced.decision =
+        (godelOperationalRealizationWithoutRead execution).reduced.decision :=
+  ⟨rfl, rfl, rfl, rfl⟩
+
+theorem operational_adapter_reuses_the_projection :
+    (godelOperationalRealization execution).project =
+      (godelOperationalRealizationWithoutRead execution).project :=
+  rfl
+
+/-- The concrete operational collision is exposed through the generic
+readout-free grouping API without rebuilding either run. -/
+def computed_operational_grouping := godelExecutedOperationalGrouping execution
+
+theorem computed_operational_grouping_keeps_the_executed_request :
+    (computed_operational_grouping execution).requests =
+      [godelCloseRequest execution] :=
+  rfl
+
+theorem computed_operational_grouping_reuses_both_runs :
+    (computed_operational_grouping execution).leftRun =
+        (operational_collision_without_read execution).leftRun ∧
+      (computed_operational_grouping execution).rightRun =
+        (operational_collision_without_read execution).rightRun :=
+  ⟨rfl, rfl⟩
+
+theorem computed_operational_grouping_keeps_the_collision :
+    (computed_operational_grouping execution).terminalCollision =
+      (operational_collision_without_read execution).terminalCollision :=
+  rfl
+
+def computed_grouping_directed_bridge
+    (preservation : DirectedTerminalReadoutPreservation
+      (godelOperationalRealization execution)
+      (operational_collision_without_read execution).leftTerminal
+      (operational_collision_without_read execution).rightTerminal) :
+    ExecutedGodelProducedCompleteness execution.witness :=
+  godelComputedGroupingToProducedCompleteness execution preservation
+
+def computed_grouping_directed_rejection
+    (preservation : DirectedTerminalReadoutPreservation
+      (godelOperationalRealization execution)
+      (operational_collision_without_read execution).leftTerminal
+      (operational_collision_without_read execution).rightTerminal) : Empty :=
+  rejectGodelComputedGroupingToEmpty execution preservation
+
 theorem operational_collision_without_read_is_nonempty :
     (operational_collision_without_read execution).requests ≠ [] :=
   (operational_collision_without_read execution).nonempty
@@ -346,6 +398,12 @@ theorem bridge_maps_the_three_roles :
 #check StrongPerimetralTurning.godelOpenCloseRun
 #check StrongPerimetralTurning.GodelOperationalGroupingWithoutRead
 #check StrongPerimetralTurning.godelOperationalGroupingWithoutRead
+#check StrongPerimetralTurning.GodelOperationalRealizationWithoutRead.toOperational
+#check StrongPerimetralTurning.godelOperationalRealization
+#check StrongPerimetralTurning.GodelOperationalGroupingWithoutRead.toExecutedOperationalGrouping
+#check StrongPerimetralTurning.godelExecutedOperationalGrouping
+#check StrongPerimetralTurning.godelComputedGroupingToProducedCompleteness
+#check StrongPerimetralTurning.rejectGodelComputedGroupingToEmpty
 #check StrongPerimetralTurning.godelOperationalGroupingWithoutRead_events_equal
 #check StrongPerimetralTurning.godelOpenContinueRun
 #check StrongPerimetralTurning.godelOpenRuntime
@@ -474,6 +532,14 @@ end GodelOperationalClosureRegression
 #print axioms GodelOperationalClosureRegression.H1_occurrences_remain_distinct
 #print axioms GodelOperationalClosureRegression.H1_has_exactly_the_three_roles
 #print axioms GodelOperationalClosureRegression.operational_collision_without_read
+#print axioms GodelOperationalClosureRegression.operational_adapter_reuses_the_computed_contract
+#print axioms GodelOperationalClosureRegression.operational_adapter_reuses_the_projection
+#print axioms GodelOperationalClosureRegression.computed_operational_grouping
+#print axioms GodelOperationalClosureRegression.computed_operational_grouping_keeps_the_executed_request
+#print axioms GodelOperationalClosureRegression.computed_operational_grouping_reuses_both_runs
+#print axioms GodelOperationalClosureRegression.computed_operational_grouping_keeps_the_collision
+#print axioms GodelOperationalClosureRegression.computed_grouping_directed_bridge
+#print axioms GodelOperationalClosureRegression.computed_grouping_directed_rejection
 #print axioms GodelOperationalClosureRegression.operational_collision_without_read_is_nonempty
 #print axioms GodelOperationalClosureRegression.operational_collision_without_read_is_computed
 #print axioms GodelOperationalClosureRegression.operational_events_do_not_separate_the_poles

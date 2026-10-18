@@ -248,6 +248,7 @@ end PolefulObservation
 #check TarskiReadout
 #check TarskiLocalAdequacy
 #check TarskiDiagonalCertification
+#check TarskiDiagonalCertification.toBilateralNegationCertificate
 #check tarskiExecutedGroupingToLocalAdequacy
 #check tarskiExecutedGroupingValueToCandidate
 #check tarskiExecutedGroupingCandidateToValue
@@ -270,6 +271,7 @@ end TarskiOperationalClosureRegression
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms TarskiOperationalClosureRegression.master_graph_is_same_execution
 #print axioms TarskiOperationalClosureRegression.master_output_is_the_produced_sentence_quote
+#print axioms StrongPerimetralTurning.TarskiDiagonalCertification.toBilateralNegationCertificate
 #print axioms TarskiOperationalClosureRegression.production_occurrences_are_successive
 #print axioms TarskiOperationalClosureRegression.positiveGrouping
 #print axioms TarskiOperationalClosureRegression.positiveObservedGrouping

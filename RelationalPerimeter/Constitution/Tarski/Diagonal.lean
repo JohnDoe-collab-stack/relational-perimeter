@@ -1,4 +1,5 @@
 import RelationalPerimeter.Constitution.Tarski.Readout
+import RelationalPerimeter.Constitution.Continuation.DirectedIncompatibility
 
 /-! Semantic certification and the local Tarski rejection.  Neither the
 runtime nor operational grouping is imported here. -/
@@ -23,6 +24,20 @@ structure TarskiDiagonalCertification
     (readout.Truth
         (coding.applyCandidate candidate execution.production.computedOutput) → Empty) →
       readout.Truth execution.production.sentence
+
+def TarskiDiagonalCertification.toBilateralNegationCertificate
+    {coding : TarskiDiagonalSyntax.{uC,uS,uK}}
+    {refinement : TarskiExecutionRefinement.{uC,uB,uS,uK,uX} coding}
+    {candidate : coding.Candidate}
+    {readout : TarskiReadout.{uC,uS,uK,uT} coding}
+    {execution : ExecutedTarskiProduction refinement candidate}
+    (certification : TarskiDiagonalCertification readout execution) :
+    ConstitutiveSearch.ContinuationSignatures.BilateralNegationCertificate
+      (readout.Truth execution.production.sentence)
+      (readout.Truth
+        (coding.applyCandidate candidate execution.production.computedOutput)) where
+  forward := certification.diagonalForward
+  backward := certification.diagonalBackward
 
 def tarskiValueToCandidateConsequences
     {coding : TarskiDiagonalSyntax.{uC,uS,uK}}
@@ -141,6 +156,7 @@ def rejectTarskiGlobalAdequacy
 end StrongPerimetralTurning
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms StrongPerimetralTurning.TarskiDiagonalCertification
+#print axioms StrongPerimetralTurning.TarskiDiagonalCertification.toBilateralNegationCertificate
 #print axioms StrongPerimetralTurning.tarskiValueToCandidateConsequences
 #print axioms StrongPerimetralTurning.tarskiCandidateToValueConsequences
 #print axioms StrongPerimetralTurning.rejectTarskiLocalAdequacy

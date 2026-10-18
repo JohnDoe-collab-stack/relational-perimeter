@@ -87,6 +87,28 @@ theorem ha_operational_events_do_not_separate_the_poles :
       (heytingArithmeticOperationalGroupingWithoutRead).rightEvents :=
   godelOperationalGroupingWithoutRead_events_equal heytingArithmeticGodelExecution
 
+theorem ha_generic_grouping_reuses_the_concrete_runs :
+    heytingArithmeticExecutedOperationalGrouping.leftRun =
+        heytingArithmeticOperationalGroupingWithoutRead.leftRun ∧
+      heytingArithmeticExecutedOperationalGrouping.rightRun =
+        heytingArithmeticOperationalGroupingWithoutRead.rightRun :=
+  ⟨rfl, rfl⟩
+
+def ha_computed_grouping_directed_bridge
+    (preservation : DirectedTerminalReadoutPreservation
+      heytingArithmeticOperationalRealization
+      heytingArithmeticOperationalGroupingWithoutRead.leftTerminal
+      heytingArithmeticOperationalGroupingWithoutRead.rightTerminal) :
+    ExecutedGodelProducedCompleteness heytingArithmeticGodelExecution.witness :=
+  heytingArithmeticComputedGroupingToProducedCompleteness preservation
+
+def ha_computed_grouping_directed_rejection
+    (preservation : DirectedTerminalReadoutPreservation
+      heytingArithmeticOperationalRealization
+      heytingArithmeticOperationalGroupingWithoutRead.leftTerminal
+      heytingArithmeticOperationalGroupingWithoutRead.rightTerminal) : Empty :=
+  heytingArithmeticRejectsDirectedTerminalPreservation preservation
+
 theorem ha_terminal_separator_is_immediate :
     heytingArithmeticGodelTerminalSeparator.requests = [] := rfl
 
@@ -149,6 +171,10 @@ def ha_conversion_precedes_rejection {Memory : Type}
 #check RelationalPerimeter.HeytingArithmetic.heytingArithmeticIdentityRuntime
 #check RelationalPerimeter.HeytingArithmetic.heytingArithmeticClosureContext
 #check RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalGroupingWithoutRead
+#check RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalRealization
+#check RelationalPerimeter.HeytingArithmetic.heytingArithmeticExecutedOperationalGrouping
+#check RelationalPerimeter.HeytingArithmetic.heytingArithmeticComputedGroupingToProducedCompleteness
+#check RelationalPerimeter.HeytingArithmetic.heytingArithmeticRejectsDirectedTerminalPreservation
 #check RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelTerminalSeparator
 #check RelationalPerimeter.HeytingArithmetic.heytingArithmeticExactRuntimeSeparates
 #check RelationalPerimeter.HeytingArithmetic.heytingArithmeticEveryExactRealizationSeparatesGodelTerminals
@@ -296,6 +322,9 @@ run_cmd do
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_identity_terminals_remain_distinct
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_operational_layer_allows_common_terminal_memory
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_operational_events_do_not_separate_the_poles
+#print axioms HeytingArithmeticOperationalClosureRegression.ha_generic_grouping_reuses_the_concrete_runs
+#print axioms HeytingArithmeticOperationalClosureRegression.ha_computed_grouping_directed_bridge
+#print axioms HeytingArithmeticOperationalClosureRegression.ha_computed_grouping_directed_rejection
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_terminal_separator_is_immediate
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_adding_terminal_read_exact_is_rejected
 #print axioms HeytingArithmeticOperationalClosureRegression.ha_positive_execution

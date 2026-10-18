@@ -1,0 +1,21 @@
+import RelationalPerimeter.Constitution.Continuation.DirectedObstruction
+open ConstitutiveSearch.ContinuationSignatures
+
+universe u w
+variable {S I M : Type u} {E : Type (w + 1)}
+  {contract : FutureContract S I E (Type w)}
+  {realization : OperationalRealization contract M}
+  {left right sourceTerminal targetTerminal : S}
+
+example
+    (collision : realization.project sourceTerminal = realization.project targetTerminal)
+    (preservation : DirectedTerminalReadoutPreservation
+      realization sourceTerminal targetTerminal)
+    (sourceWitness : contract.read sourceTerminal)
+    (rejectTarget : contract.read targetTerminal → Empty) : Empty :=
+  ExecutedOperationalGrouping.rejectDirectedEndpointIncompatibility
+    collision preservation sourceWitness rejectTarget
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.ContinuationSignatures.ExecutedOperationalGrouping.rejectDirectedEndpointIncompatibility
+/- AXIOM_AUDIT_END -/

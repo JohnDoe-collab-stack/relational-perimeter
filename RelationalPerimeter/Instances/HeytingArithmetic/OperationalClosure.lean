@@ -13,6 +13,24 @@ def heytingArithmeticIdentityRuntime := godelIdentityRealization heytingArithmet
 def heytingArithmeticClosureContext := godelReceivedClosureContext heytingArithmeticGodelExecution
 def heytingArithmeticOperationalGroupingWithoutRead :=
   godelOperationalGroupingWithoutRead heytingArithmeticGodelExecution
+def heytingArithmeticOperationalRealization :=
+  godelOperationalRealization heytingArithmeticGodelExecution
+def heytingArithmeticExecutedOperationalGrouping :=
+  godelExecutedOperationalGrouping heytingArithmeticGodelExecution
+def heytingArithmeticComputedGroupingToProducedCompleteness
+    (preservation : DirectedTerminalReadoutPreservation
+      heytingArithmeticOperationalRealization
+      heytingArithmeticOperationalGroupingWithoutRead.leftTerminal
+      heytingArithmeticOperationalGroupingWithoutRead.rightTerminal) :
+    ExecutedGodelProducedCompleteness heytingArithmeticGodelExecution.witness :=
+  godelComputedGroupingToProducedCompleteness
+    heytingArithmeticGodelExecution preservation
+def heytingArithmeticRejectsDirectedTerminalPreservation
+    (preservation : DirectedTerminalReadoutPreservation
+      heytingArithmeticOperationalRealization
+      heytingArithmeticOperationalGroupingWithoutRead.leftTerminal
+      heytingArithmeticOperationalGroupingWithoutRead.rightTerminal) : Empty :=
+  rejectGodelComputedGroupingToEmpty heytingArithmeticGodelExecution preservation
 def heytingArithmeticGodelTerminalSeparator :=
   godelTerminalSeparator heytingArithmeticGodelExecution
 
@@ -57,6 +75,10 @@ end RelationalPerimeter.HeytingArithmetic
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticIdentityRuntime
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticClosureContext
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalGroupingWithoutRead
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticOperationalRealization
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticExecutedOperationalGrouping
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticComputedGroupingToProducedCompleteness
+#print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticRejectsDirectedTerminalPreservation
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticGodelTerminalSeparator
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticTerminalReadExactToEmpty
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticExactRuntimeSeparates

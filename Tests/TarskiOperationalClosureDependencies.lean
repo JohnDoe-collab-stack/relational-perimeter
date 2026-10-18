@@ -187,11 +187,14 @@ run_cmd do
   let rejection ← closure [`StrongPerimetralTurning.tarskiExactClosureRejected]
   for required in [
       `StrongPerimetralTurning.tarskiExecutedGroupingToLocalAdequacy,
-      `StrongPerimetralTurning.rejectTarskiLocalAdequacy,
+      `ConstitutiveSearch.ContinuationSignatures.rejectBilateralTransport,
+      `StrongPerimetralTurning.TarskiDiagonalCertification.toBilateralNegationCertificate,
       `StrongPerimetralTurning.TarskiDiagonalCertification.diagonalForward,
       `StrongPerimetralTurning.TarskiDiagonalCertification.diagonalBackward] do
     unless rejection.contains required do
       throwError "Final Tarski rejection no longer consumes {required}"
+  if rejection.contains `StrongPerimetralTurning.rejectTarskiLocalAdequacy then
+    throwError "Final Tarski rejection bypasses the generic bilateral incompatibility API"
 
   let ha ← closure
     [`RelationalPerimeter.HeytingArithmetic.heytingArithmeticTarskiExactClosureRejected]

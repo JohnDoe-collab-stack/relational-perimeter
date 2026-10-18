@@ -1,0 +1,9 @@
+# The positive instance demonstrates composition without importing either incompatibility or diagonal branch.
+root RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition
+forbidden RelationalPerimeter.Constitution.Continuation.DirectedIncompatibility
+forbidden RelationalPerimeter.Constitution.Continuation.DirectedObstruction
+forbidden RelationalPerimeter.Constitution.Godel.OperationalClosure
+forbidden RelationalPerimeter.Constitution.Tarski.Diagonal
+forbidden RelationalPerimeter.Constitution.Tarski.OperationalClosure
+forbidden RelationalPerimeter.Constitution.Tarski.ClosureObstruction
+forbidden RelationalPerimeter.Instances.HeytingArithmetic.OperationalClosure

@@ -1,0 +1,18 @@
+import RelationalPerimeter.Agents.ContinuationSignatures.PositiveDirectedComposition
+open ConstitutiveSearch ConstitutiveSearch.ContinuationSignatures
+open SAT EndogenousDecomposition
+
+variable {state : CausalConstitutiveState}
+  {run : CausalConstitutiveStageExecution state}
+  (role : RelationalConstitutiveRoleStage run)
+
+example : TerminalReadoutCorrespondence
+    (positiveDirectedRealization role)
+    (positiveDirectedSourceTerminal role)
+    (positiveDirectedTargetTerminal role) :=
+  positiveDirectedReadoutPreservation role
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.ContinuationSignatures.DirectedTerminalReadoutPreservation
+#print axioms ConstitutiveSearch.ContinuationSignatures.TerminalReadoutCorrespondence
+/- AXIOM_AUDIT_END -/

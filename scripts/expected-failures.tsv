@@ -55,3 +55,6 @@ Tests/ExpectedFailure/TarskiOneWayReadoutCannotSupplyCorrespondence.lean.fail	se
 Tests/ExpectedFailure/TarskiGroupingCannotCrossRealizations.lean.fail	dependent-type	20	17	grouping
 Tests/ExpectedFailure/TarskiCloseCannotRemainActive.lean.fail	semantic-type	9	2	TarskiRuntimePhase.active
 Tests/ExpectedFailure/TarskiSentenceEqualityCannotReplaceExecutedProduction.lean.fail	semantic-type	12	35	SentenceOnlyTarskiProduction candidate
+Tests/ExpectedFailure/DirectedWrapperRequiresExecutedGrouping.lean.fail	dependent-type	17	4	ExecutedOperationalGrouping.rejectDirectedEndpointIncompatibility collision
+Tests/ExpectedFailure/DirectedPreservationCannotBecomeCorrespondence.lean.fail	semantic-type	13	2	positiveDirectedReadoutPreservation role
+Tests/ExpectedFailure/PositiveTerminalCollisionCannotIdentifySources.lean.fail	semantic-type	10	2	(positiveDirectedGrouping role).terminalCollision

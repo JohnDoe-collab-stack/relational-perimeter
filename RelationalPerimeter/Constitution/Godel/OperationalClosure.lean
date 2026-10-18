@@ -2,6 +2,7 @@ import RelationalPerimeter.Constitution.Godel.OperationalH1
 import RelationalPerimeter.Constitution.Continuation.CommonMemoryGrouping
 import RelationalPerimeter.Constitution.Continuation.ExactSeparation
 import RelationalPerimeter.Constitution.Continuation.ReadoutCorrespondence
+import RelationalPerimeter.Constitution.Continuation.DirectedIncompatibility
 
 /-! Close creates a terminal phase and a computed common operational memory.
 Readout preservation remains a separate, conditional specification. -/
@@ -249,6 +250,26 @@ def godelOperationalRealizationWithoutRead : GodelOperationalRealizationWithoutR
     | mk core h1 pole history phase =>
       cases history with
       | mk depth continuation => cases phase <;> cases request <;> cases depth <;> rfl
+def GodelOperationalRealizationWithoutRead.toOperational
+    (realization : GodelOperationalRealizationWithoutRead execution) :
+    OperationalRealization (godelClosureContract execution)
+      (GodelOperationalMemory execution) where
+  reduced :=
+    { next := realization.reduced.next
+      event := realization.reduced.event
+      Allow := realization.reduced.Allow
+      decision := realization.reduced.decision }
+  project := realization.project
+  forward := realization.forward
+  backward := realization.backward
+  backward_forward := realization.backward_forward
+  forward_backward := realization.forward_backward
+  next_exact := realization.next_exact
+  event_exact := realization.event_exact
+def godelOperationalRealization :
+    OperationalRealization (godelClosureContract execution)
+      (GodelOperationalMemory execution) :=
+  (godelOperationalRealizationWithoutRead execution).toOperational
 theorem godelOperational_initial_memories_distinct :
     godelOperationalProject execution (semanticSource execution) ≠
       godelOperationalProject execution (syntacticSource execution) := by
@@ -428,9 +449,10 @@ def rejectGodelExecutedOperationalGroupingToEmpty
       leftTerminal rightTerminal)
     (preservation : DirectedTerminalReadoutPreservation
       realization leftTerminal rightTerminal) : Empty :=
-  execution.witness.unprovable
+  rejectDirectedTransport
     (godelExecutedOperationalGroupingToProducedCompleteness execution realization
-      grouping preservation execution.witness.trueWitness)
+      grouping preservation)
+    execution.witness.trueWitness execution.witness.unprovable
 theorem godelOperationalRunExact
     (source : GodelClosureSource execution) (requests : List GodelRuntimeRequest) :
     godelOperationalProject execution (godelRuntimeRun execution source requests) =
@@ -578,6 +600,36 @@ def godelOperationalGroupingWithoutRead : GodelOperationalGroupingWithoutRead ex
     rightEvents := [decomposition.rightStep.producedEvent]
     rightRun := executed.rightRun
     terminalCollision := rfl }
+def GodelOperationalGroupingWithoutRead.toExecutedOperationalGrouping
+    (grouping : GodelOperationalGroupingWithoutRead execution) :
+    ExecutedOperationalGrouping (godelOperationalRealization execution)
+      (semanticSource execution) (syntacticSource execution)
+      grouping.leftTerminal grouping.rightTerminal where
+  trace := ⟨grouping.trace.head, grouping.trace.tail⟩
+  leftEvents := grouping.leftEvents
+  leftRun := grouping.leftRun
+  rightEvents := grouping.rightEvents
+  rightRun := grouping.rightRun
+  terminalCollision := grouping.terminalCollision
+def godelExecutedOperationalGrouping :=
+  (godelOperationalGroupingWithoutRead execution).toExecutedOperationalGrouping
+def godelComputedGroupingToProducedCompleteness
+    (preservation : DirectedTerminalReadoutPreservation
+      (godelOperationalRealization execution)
+      (godelOperationalGroupingWithoutRead execution).leftTerminal
+      (godelOperationalGroupingWithoutRead execution).rightTerminal) :
+    ExecutedGodelProducedCompleteness execution.witness :=
+  godelExecutedOperationalGroupingToProducedCompleteness execution
+    (godelOperationalRealization execution)
+    (godelExecutedOperationalGrouping execution) preservation
+def rejectGodelComputedGroupingToEmpty
+    (preservation : DirectedTerminalReadoutPreservation
+      (godelOperationalRealization execution)
+      (godelOperationalGroupingWithoutRead execution).leftTerminal
+      (godelOperationalGroupingWithoutRead execution).rightTerminal) : Empty :=
+  rejectDirectedTransport
+    (godelComputedGroupingToProducedCompleteness execution preservation)
+    execution.witness.trueWitness execution.witness.unprovable
 theorem godelOperationalGroupingWithoutRead_events_equal :
     (godelOperationalGroupingWithoutRead execution).leftEvents =
       (godelOperationalGroupingWithoutRead execution).rightEvents := rfl
@@ -779,6 +831,8 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.godelOperationalReducedContract
 #print axioms StrongPerimetralTurning.GodelOperationalRealizationWithoutRead
 #print axioms StrongPerimetralTurning.godelOperationalRealizationWithoutRead
+#print axioms StrongPerimetralTurning.GodelOperationalRealizationWithoutRead.toOperational
+#print axioms StrongPerimetralTurning.godelOperationalRealization
 #print axioms StrongPerimetralTurning.godelOperational_initial_memories_distinct
 #print axioms StrongPerimetralTurning.godelRuntimeNext_pole
 #print axioms StrongPerimetralTurning.pole_run
@@ -801,6 +855,10 @@ end StrongPerimetralTurning
 #print axioms StrongPerimetralTurning.GodelOperationalGroupingWithoutRead.requests
 #print axioms StrongPerimetralTurning.GodelOperationalGroupingWithoutRead.nonempty
 #print axioms StrongPerimetralTurning.godelOperationalGroupingWithoutRead
+#print axioms StrongPerimetralTurning.GodelOperationalGroupingWithoutRead.toExecutedOperationalGrouping
+#print axioms StrongPerimetralTurning.godelExecutedOperationalGrouping
+#print axioms StrongPerimetralTurning.godelComputedGroupingToProducedCompleteness
+#print axioms StrongPerimetralTurning.rejectGodelComputedGroupingToEmpty
 #print axioms StrongPerimetralTurning.godelOperationalGroupingWithoutRead_events_equal
 #print axioms StrongPerimetralTurning.godelWitnessReadouts_ne
 #print axioms StrongPerimetralTurning.godelTerminalSeparator

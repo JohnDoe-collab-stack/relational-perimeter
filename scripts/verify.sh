@@ -48,6 +48,9 @@ for boundary in tarski-continuation tarski-diagonal tarski-operational-closure t
   bash scripts/check-import-boundaries.sh "scripts/$boundary-import-boundaries.txt"
 done
 bash scripts/check-import-boundaries.sh scripts/continuation-exact-separation-import-boundaries.txt
+for boundary in continuation-directed-incompatibility continuation-directed-obstruction positive-directed-composition; do
+  bash scripts/check-import-boundaries.sh "scripts/$boundary-import-boundaries.txt"
+done
 bash scripts/check-stratification.sh --self-test
 bash scripts/check-stratification.sh
 
