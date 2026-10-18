@@ -1532,7 +1532,7 @@
     {
       "id": "GODEL_RELATIONAL_SEQUENTIAL_COMPLETENESS",
       "kind": "causal",
-      "evidence_revision": "83e797e28b9762324e0d9e33675b9be5becf23f0",
+      "evidence_revision": "323bb2d72724804dc38a93316127a1efcba3042a",
       "scope": "Pour toute exécution gödelienne effective et toute famille de Cauchy exécutée reçue sur la présentation produite par cette même exécution à la base H1 : un maître commun contient l'environnement exécutable, réalise exactement l'archive riche et produit le réel relationnel séquentiellement complet ; les regroupements finis consomment chaque chaîne chronologique par transport de la ressource historique normalisée, installent la cible produite et permettent sa réutilisation ; le témoin source–cible de la limite est transporté depuis la charge normalisée et consommé sans rejeu indépendant ; la mémoire commune est caractérisée exactement à environnement fixé ; les occurrences gödeliennes persistent à travers la trace ; la boucle totale et toute fermeture globale cohérente du même régime sont rejetées par le même témoin. HA ferme concrètement le côté gödelien. Aucune identification avec tous les réels classiques, la complétude par borne supérieure, la densité, AC ou CH, ni aucune revendication d'originalité.",
       "anchors": [
         {
@@ -1741,13 +1741,23 @@
         "transport": "BatchAdvance.resultFromTransport relie la sortie à la charge historique complète ; consumed_exact et oldCharge_exact conservent le préfixe, les charges et leurs Near. ProducedTarget.sourceNearTarget transporte le témoin source–cible depuis NormalizedHistory.nearSourceTarget au lieu de le reconstruire. archiveRealization oublie les ressources riches seulement après leur exécution et conserve l'environnement comme donnée. persistThroughRunFrom transporte injectivement le même triplet gödelien à travers chaque phase de la trace et le sépare de chaque occurrence fraîche. Les égalités de readouts et de futurs à environnement fixé n'identifient jamais les occurrences ou les programmes."
       },
       "consumers": [],
-      "source_sha256": "a5cfc2db1265661e7c8b3eb48de24767a7161971002be09067c9784d397c279a",
+      "source_sha256": "108ca8da93ae810251d68b31d8d5a12d0530f33e72e5eefc6c615bd406033377",
       "reviews": {
         "reader": {
-          "status": "pending"
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-shared-gates-rereview-323bb2d.fr.md",
+          "sha256": "e8905af1659fb3796bb0272d71e68890ed41015ef6b822569ed19c90e8858af3",
+          "responsible": "Codex (OpenAI), lecture française autonome puis confrontation aux types et corps Lean complets",
+          "revision": "323bb2d72724804dc38a93316127a1efcba3042a",
+          "revision_evidence": "Révision examinée : `323bb2d72724804dc38a93316127a1efcba3042a`."
         },
         "translation": {
-          "status": "pending"
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-shared-gates-rereview-323bb2d.fr.md",
+          "sha256": "e8905af1659fb3796bb0272d71e68890ed41015ef6b822569ed19c90e8858af3",
+          "responsible": "Codex (OpenAI), lecture anglaise autonome puis confrontation FR/EN et aux preuves Lean",
+          "revision": "323bb2d72724804dc38a93316127a1efcba3042a",
+          "revision_evidence": "Révision examinée : `323bb2d72724804dc38a93316127a1efcba3042a`."
         },
         "independent": {
           "status": "not_recorded"
@@ -1757,7 +1767,7 @@
     {
       "id": "RUNTIME_EFFECTIVE_CAUCHY_REAL_CORRESPONDENCE",
       "kind": "behavioral",
-      "evidence_revision": "83e797e28b9762324e0d9e33675b9be5becf23f0",
+      "evidence_revision": "323bb2d72724804dc38a93316127a1efcba3042a",
       "scope": "À présentation périmétrale P et profondeur de base fixées : le porteur relationnel fermé Real P baseDepth et chaque présentation dyadique, carrier ou famille de Cauchy effective reçue sont reliés par une correspondance structurelle construite. Le paquet concret fournit applications et allers-retours numériques/comportementaux ; constantes, addition, opposé, multiplication et inverse sous apartness à zéro ; ordre constructif, densité dyadique et bornes naturelles exécutées ; familles-source et familles natives de comportements ; limites produites, complétude de Cauchy effective et unicité numérique. Les productions riches précèdent leurs readouts ; les transports ne reconstruisent ni environnements, états, journaux, témoins Cauchy, ressources ou occurrences. La réalisation au périmètre Gödel H1 partage le même runtime mais ne calcule aucune approximation. Aucune couverture de tous les réels classiques, complétude par borne supérieure, décision globale d'ordre, AC, CH, borne de coût physique ou revendication d'originalité.",
       "anchors": [
         {
@@ -2000,13 +2010,23 @@
         "transport": "ReadoutOrigin, toPresentation et toCarrier conservent la provenance dirigée jusqu'aux pas exécutés puis oublient les données riches sous Equivalent, NumericalFutureEquivalent ou les équivalences positives de présentations/carriers. NativeUniquenessTrace.toNumerical projette la trace native possédée sans reconstruire les Steps ou les lois ; toEffectiveFamily, realizedFamily et asExecutedCandidate restent confinés à la correspondance numérique aval. Les transports préservent et réfléchissent équivalence, ordre et apartness sur les images déclarées ; ils ne rendent pas l'ordre globalement décidable. Les familles retournées conservent producteur et module mais les allers-retours numériques ne récupèrent ni témoins Cauchy, banques, journaux, programmes, ressources ou occurrences. La minimalité mémoire reste relative à l'environnement et au contrat de futurs fixés."
       },
       "consumers": [],
-      "source_sha256": "98a786325c26f609f3b7a64b18ad3959aa3faab94c53481675f43145aeeab82a",
+      "source_sha256": "6bd8a7bd9ca3e092c3171e2c84a085373b1dc975d1df9cc16fe23f7606f97736",
       "reviews": {
         "reader": {
-          "status": "pending"
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-shared-gates-rereview-323bb2d.fr.md",
+          "sha256": "e8905af1659fb3796bb0272d71e68890ed41015ef6b822569ed19c90e8858af3",
+          "responsible": "Codex (OpenAI), lecture française autonome puis confrontation aux types et corps Lean complets",
+          "revision": "323bb2d72724804dc38a93316127a1efcba3042a",
+          "revision_evidence": "Révision examinée : `323bb2d72724804dc38a93316127a1efcba3042a`."
         },
         "translation": {
-          "status": "pending"
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-shared-gates-rereview-323bb2d.fr.md",
+          "sha256": "e8905af1659fb3796bb0272d71e68890ed41015ef6b822569ed19c90e8858af3",
+          "responsible": "Codex (OpenAI), lecture anglaise autonome puis confrontation FR/EN et aux preuves Lean",
+          "revision": "323bb2d72724804dc38a93316127a1efcba3042a",
+          "revision_evidence": "Révision examinée : `323bb2d72724804dc38a93316127a1efcba3042a`."
         },
         "independent": {
           "status": "not_recorded"
@@ -2016,7 +2036,7 @@
     {
       "id": "RUNTIME_PRESENTED_DYADIC_COMPLETION_CHARACTERIZATION",
       "kind": "behavioral",
-      "evidence_revision": "ba549cd03552dd5d0c7f5737305c684bf7d49897",
+      "evidence_revision": "323bb2d72724804dc38a93316127a1efcba3042a",
       "scope": "Pour toute présentation périmétrale P, toute profondeur de base et toute CarrierFamily explicitement présentée : la route native produit un paquet de complétude conservé avant projection de son carrier limite, avec convergence, unicité positive et indépendance numérique envers le périmètre. Le dépôt réalise un contrat non circulaire de complétion dyadique constructive, l'enrichit d'une structure de corps ordonné constructif avec densité et bornes finies produites, puis dérive pour toute autre réalisation du même contrat les morphismes de comparaison, leurs retours comportementaux, les transports des opérations, de l'ordre, de l'apartness, de l'inverse, des témoins finis et des limites. Aucune égalité d'occurrences, récupération des histoires ou témoins oubliés, couverture de tous les réels classiques, complétude par borne supérieure, AC, CH ou revendication d'originalité.",
       "anchors": [
         {
@@ -2069,7 +2089,7 @@
           "role": "production"
         },
         {
-          "module": "RelationalPerimeter.Constitution.Reals.CarrierQuantitativeTransport",
+          "module": "RelationalPerimeter.Constitution.Reals.DyadicOrderTransport",
           "name": "RelationalPerimeter.Constitution.Reals.DirectedUpper.composeThreeOneThree",
           "role": "production"
         },
@@ -2169,23 +2189,229 @@
         "transport": "toCarrier et numericalCarrier sont des projections aval qui oublient archives, banques, journaux, programmes et témoins Cauchy sous un contrat d'équivalence explicite. Les allers-retours de relativeOrderedCharacterization sont comportementaux et point par point, jamais des égalités de fonctions ou d'occurrences. Les transports de densité et de bornes conservent le témoin fini reçu sans exécuter le sélecteur cible. L'indépendance envers P et baseDepth porte sur l'équivalence des limites et l'égalité des readouts sélectionnés, pas sur l'identité des producteurs."
       },
       "consumers": [],
-      "source_sha256": "94c53c2b8fa952ce9911a3f4cb33240057af5867282e65bc443cabdf1a579dd9",
+      "source_sha256": "28b1f93ecab32d70cfd5decbd9857f5b3c880c26caf41b6fffe4fd57a9e6bfd4",
       "reviews": {
         "reader": {
           "status": "reviewed",
-          "evidence": "docs/reports/runtime-presented-dyadic-completion-reader-translation-ba549cd.fr.md",
-          "sha256": "5111b010e987763d4a7c4902cba2f7ea625a1bb13f244ecfafbda252e8e48e9d",
+          "evidence": "docs/reports/runtime-shared-gates-rereview-323bb2d.fr.md",
+          "sha256": "e8905af1659fb3796bb0272d71e68890ed41015ef6b822569ed19c90e8858af3",
           "responsible": "Codex (OpenAI), lecture française autonome puis confrontation aux types et corps Lean complets",
-          "revision": "ba549cd03552dd5d0c7f5737305c684bf7d49897",
-          "revision_evidence": "Révision examinée : `ba549cd03552dd5d0c7f5737305c684bf7d49897`."
+          "revision": "323bb2d72724804dc38a93316127a1efcba3042a",
+          "revision_evidence": "Révision examinée : `323bb2d72724804dc38a93316127a1efcba3042a`."
         },
         "translation": {
           "status": "reviewed",
-          "evidence": "docs/reports/runtime-presented-dyadic-completion-reader-translation-ba549cd.fr.md",
-          "sha256": "5111b010e987763d4a7c4902cba2f7ea625a1bb13f244ecfafbda252e8e48e9d",
+          "evidence": "docs/reports/runtime-shared-gates-rereview-323bb2d.fr.md",
+          "sha256": "e8905af1659fb3796bb0272d71e68890ed41015ef6b822569ed19c90e8858af3",
           "responsible": "Codex (OpenAI), lecture anglaise autonome puis confrontation FR/EN et aux preuves Lean",
-          "revision": "ba549cd03552dd5d0c7f5737305c684bf7d49897",
-          "revision_evidence": "Révision examinée : `ba549cd03552dd5d0c7f5737305c684bf7d49897`."
+          "revision": "323bb2d72724804dc38a93316127a1efcba3042a",
+          "revision_evidence": "Révision examinée : `323bb2d72724804dc38a93316127a1efcba3042a`."
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "RUNTIME_CONVENTIONAL_REGULAR_CAUCHY_REFERENCE",
+      "kind": "behavioral",
+      "evidence_revision": "323bb2d72724804dc38a93316127a1efcba3042a",
+      "scope": "Pour toute présentation périmétrale P et toute profondeur baseDepth : la référence autonome dont le carrier est exactement RegularDyadicName et l'équivalence exactement NameEquivalent couvre tout nom régulier reçu ; sa diagonale, sa complétion, ses lois positives de corps ordonné constructif, sa densité et ses bornes sont construites. Les Value extensives sont des classes relationnelles saturées et cohérentes sans représentant choisi ; leur descente quotient et la propriété universelle de complétion restent relationnelles. Les correspondances carrier–classes et runtime–classes sont totales dans le sens carrier ou nom reçu vers classe ; le sens partant d'une Value nue reste sous Nonempty. Les transports d'opérations, d'ordre, d'apartness, d'inverse, de témoins finis et de limites sont dérivés des mêmes productions. Aucune identité avec Mathlib.Real, les coupures de Dedekind ou un autre modèle extérieur non formalisé, aucune complétude par borne supérieure, aucun choix de représentants, aucune égalité d'occurrences, aucune conclusion sur AC, CH, le coût physique ou l'originalité.",
+      "anchors": [
+        {
+          "path": "docs/runtime-conventional-regular-cauchy-reference.fr.md",
+          "heading": "Verdict exact et non-conclusions",
+          "paragraph": null,
+          "sha256": "c29575a46323efba291a2fe04789ef990dea1768507aed3adf98b5017bcbe5b9"
+        },
+        {
+          "path": "docs/runtime-conventional-regular-cauchy-reference.en.md",
+          "heading": "Exact verdict and non-conclusions",
+          "paragraph": null,
+          "sha256": "1b714a31cc46d3fbb317f0ca3722e971e061dcb2ec19ec84182ed4a43131a716"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RegularDyadicName",
+          "name": "RelationalPerimeter.Constitution.Reals.RegularDyadicName",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RegularDyadicName",
+          "name": "RelationalPerimeter.Constitution.Reals.NameEquivalent",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RegularDyadicName",
+          "name": "RelationalPerimeter.Constitution.Reals.RegularDyadicName.regularLimitResult",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RegularDyadicNameOrderedField",
+          "name": "RelationalPerimeter.Constitution.Reals.RegularDyadicName.nameDensity",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RegularDyadicNameOrderedField",
+          "name": "RelationalPerimeter.Constitution.Reals.RegularDyadicName.nameNaturalBounds",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RegularDyadicCompletion",
+          "name": "RelationalPerimeter.Constitution.Reals.RegularDyadicCompletion.regularPresentedCompletion",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RegularDyadicCompletion",
+          "name": "RelationalPerimeter.Constitution.Reals.RegularDyadicCompletion.regularOrderedCompletion",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal",
+          "name": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.Value",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal",
+          "name": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.ConventionalRegularCauchyReference",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal",
+          "name": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.referenceCoverage",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal",
+          "name": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.valueReferenceCoverage",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal",
+          "name": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.classDescent",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal",
+          "name": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.setoidOrderedArchimedeanReadout",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyRealCompletion",
+          "name": "RelationalPerimeter.Constitution.Reals.ExtensiveCauchyReal.externalComplete",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference",
+          "name": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference.regularCharacterization",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference",
+          "name": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference.relationalCompletionComparison",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference",
+          "name": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference.carrierCoverage",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference",
+          "name": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference.relationalCoverage",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference",
+          "name": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference.runtimeCoverage",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference",
+          "name": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference.valueRuntimeCoverage",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference",
+          "name": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference.runtimeOfReferenceNameRealizes",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference",
+          "name": "RelationalPerimeter.Constitution.Reals.RelationalRealCauchyReference.recognizesConventionalCauchyReference",
+          "role": "production"
+        },
+        {
+          "module": "Tests.RegularDyadicName",
+          "name": "RelationalPerimeter.Tests.RegularDyadicName.distinctZeroReplies",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RegularDyadicNameOrderedField",
+          "name": "RelationalPerimeter.Tests.RegularDyadicNameOrderedField.receivedInverseUnits",
+          "role": "test"
+        },
+        {
+          "module": "Tests.ExtensiveCauchyReal",
+          "name": "RelationalPerimeter.Tests.ExtensiveCauchyReal.receivedReferenceCoverage",
+          "role": "test"
+        },
+        {
+          "module": "Tests.ExtensiveCauchyReal",
+          "name": "RelationalPerimeter.Tests.ExtensiveCauchyReal.decayingProducedValueIsZero",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalRealCauchyReference",
+          "name": "RelationalPerimeter.Tests.RelationalRealCauchyReference.receivedNameRuntime",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalRealCauchyReference",
+          "name": "RelationalPerimeter.Tests.RelationalRealCauchyReference.distinctZeroGraphNamesUnique",
+          "role": "test"
+        },
+        {
+          "module": "Tests.RelationalRealCauchyReference",
+          "name": "RelationalPerimeter.Tests.RelationalRealCauchyReference.completeRecognition",
+          "role": "test"
+        }
+      ],
+      "checks": [
+        "scripts/check-regular-cauchy-reference-codegen.py",
+        "scripts/check-regular-cauchy-reference-imports.py",
+        "scripts/expected-failures.tsv",
+        "scripts/regular-cauchy-reference-import-boundaries.txt",
+        "scripts/stratification.tsv",
+        "scripts/test-expected-failure-gates.py",
+        "scripts/verify.ps1",
+        "scripts/verify.sh"
+      ],
+      "dependencies": {
+        "formation": "RegularDyadicName reçoit toute approximation Nat vers SignedDyadicCode avec sa régularité positive ; RegularPresentedFamily reçoit ses noms, son module monotone et sa loi de Cauchy. Value est une relation de membres en Type, saturée et cohérente, dont l'inhabitation reste sous Nonempty sans représentant choisi. L'ordre et l'apartness portent des marges positives ; l'inverse exige un témoin d'apartness à zéro. Les contrats de complétion et de morphisme ne contiennent ni candidat limite, ni choix de représentant, ni conclusion terminale.",
+        "execution": "Les opérations sur noms lisent les précisions requises et la multiplication sonde les amplitudes reçues. diagonalName lit le terme sélectionné par le module ; regularLimitResult produit cette diagonale, sa convergence et son unicité. externalComplete appelle une seule complétion régulière et réutilise sa valeur pour la classe et ses lois. runtimeOfReferenceName construit un runtime seulement lorsqu'un nom est explicitement reçu. Les transports de limites runtime consomment la limite native et l'exactitude du même paquet produit.",
+        "proof": "NameEquivalent et les lois ordonnées sont construites positivement, avec sept bornes dirigées alignées pour le transport de l'ordre. classDescent consomme un nom membre, son appartenance et son accord ; totalité et couvertures depuis une Value nue restent propositionnellement tronquées. La propriété universelle de complétion dérive les morphismes depuis la complétude cible et leur unicité. regularCharacterization réutilise la caractérisation relative précédente ; recognizesConventionalCauchyReference assemble uniquement les paquets déjà construits.",
+        "transport": "classOf, ExternalEquivalent et ClassDescent fournissent des graphes relationnels, jamais une égalité de prédicats ni une fonction de représentants. Les directions depuis un carrier ou un nom reçu sont constructives ; relationalCoverage et valueRuntimeCoverage restent sous Nonempty. Les transports d'opérations, d'ordre, d'apartness, d'inverse, de densité, de bornes et de limites passent par la même caractérisation et les mêmes paquets riches. Les readouts oublient fonctions, occurrences, familles, programmes, mémoires et preuves et ne les reconstruisent pas."
+      },
+      "consumers": [],
+      "source_sha256": "1f8515cc97cd2d0f982e7001123985aade2ef5bcce93894e639d7071236c7d8e",
+      "reviews": {
+        "reader": {
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-conventional-regular-cauchy-reference-reader-translation-323bb2d.fr.md",
+          "sha256": "9e02c2041242fc4e0175a90bb045bc485829a510db86a81bfb2c00fb3acf0df9",
+          "responsible": "Codex (OpenAI), lecture française autonome puis confrontation aux types et corps Lean complets",
+          "revision": "323bb2d72724804dc38a93316127a1efcba3042a",
+          "revision_evidence": "Révision examinée : `323bb2d72724804dc38a93316127a1efcba3042a`."
+        },
+        "translation": {
+          "status": "reviewed",
+          "evidence": "docs/reports/runtime-conventional-regular-cauchy-reference-reader-translation-323bb2d.fr.md",
+          "sha256": "9e02c2041242fc4e0175a90bb045bc485829a510db86a81bfb2c00fb3acf0df9",
+          "responsible": "Codex (OpenAI), lecture anglaise autonome puis confrontation FR/EN et aux preuves Lean",
+          "revision": "323bb2d72724804dc38a93316127a1efcba3042a",
+          "revision_evidence": "Révision examinée : `323bb2d72724804dc38a93316127a1efcba3042a`."
         },
         "independent": {
           "status": "not_recorded"

@@ -73,3 +73,15 @@ Le rapport est conservé avec son verdict et ses qualifications. Il ne constitue
 pas une validation indépendante et le registre garde
 `independent=not_recorded`. Les vérifications locales réussies sur le même
 arbre ne sont pas substituées à la reproduction extérieure manquante.
+
+## Relectures de la gate 7.4 au commit `323bb2d`
+
+La [revue de la référence cauchyenne régulière conventionnelle](runtime-conventional-regular-cauchy-reference-reader-translation-323bb2d.fr.md)
+valide séparément la lecture française et la traduction anglaise, puis les
+confronte aux formations, constructions, preuves et transports Lean du commit
+exact `323bb2d72724804dc38a93316127a1efcba3042a`.
+
+La [relecture des trois affirmations partagées](runtime-shared-gates-rereview-323bb2d.fr.md)
+explique leurs empreintes rouvertes, revalide leurs textes FR/EN sur le même
+commit et distingue l'extraction de module de toute modification de théorème.
+Ces revues documentaires ne se substituent pas à un audit indépendant.
