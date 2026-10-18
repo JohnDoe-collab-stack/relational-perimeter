@@ -1760,7 +1760,12 @@
           "revision_evidence": "Révision examinée : `5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc`."
         },
         "independent": {
-          "status": "not_recorded"
+          "status": "reviewed",
+          "evidence": "docs/reports/aristotle-runtime-real-structural-audit-5e69b1b.md",
+          "sha256": "3c31c7e06ecee0360d817747bbaaa1a52556bba9f00f5d490cfa20d493d67a75",
+          "responsible": "Aristotle (Harmonic), rapport indépendant lu et confronté à la révision auditée",
+          "revision": "5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc",
+          "revision_evidence": "Révision auditée : `5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc`."
         }
       }
     },
@@ -2029,7 +2034,12 @@
           "revision_evidence": "Révision examinée : `5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc`."
         },
         "independent": {
-          "status": "not_recorded"
+          "status": "reviewed",
+          "evidence": "docs/reports/aristotle-runtime-real-structural-audit-5e69b1b.md",
+          "sha256": "3c31c7e06ecee0360d817747bbaaa1a52556bba9f00f5d490cfa20d493d67a75",
+          "responsible": "Aristotle (Harmonic), rapport indépendant lu et confronté à la révision auditée",
+          "revision": "5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc",
+          "revision_evidence": "Révision auditée : `5e69b1bae964bd2aa2de0a6c53a2cebea959f6fc`."
         }
       }
     }
