@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCarrierCompleteness
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals RelationalRealFamilyTransport RelationalRealCarrierCompleteness
+example (P : CircularPresentation) (d : Nat) (family : CarrierFamily) :
+    EffectiveCauchyReal.Carrier → CarrierCompletionResult P d family :=
+  carrierCompletion P d family

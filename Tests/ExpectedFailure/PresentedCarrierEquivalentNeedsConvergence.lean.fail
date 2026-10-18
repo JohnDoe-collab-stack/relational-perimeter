@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion
+open RelationalPerimeter.Constitution.Reals PresentedDyadicCompletion
+example (C : PresentedDyadicStructure) (x : EffectiveCauchyReal.Carrier) (y : C.Carrier)
+    (same : ApproxEquivalent C.toPresentedDyadicData y y) :=
+  presentedCarrierEquivalent C x y same

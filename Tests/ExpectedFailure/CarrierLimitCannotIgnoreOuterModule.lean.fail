@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCarrierCompleteness
+open RelationalPerimeter.Constitution.Reals RelationalRealFamilyTransport
+example (family : CarrierFamily) (value : EffectiveCauchyReal.Carrier) (law : CarrierLimit family value)
+    (p n r s : Nat) (hr : PrecisionExtension p r) (hs : PrecisionExtension (law.threshold p) s) :=
+  law.converges p n r s (PrecisionExtension.refl n) hr hs

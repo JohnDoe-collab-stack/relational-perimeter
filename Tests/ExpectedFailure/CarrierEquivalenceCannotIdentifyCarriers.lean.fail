@@ -1,0 +1,4 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCarrierCompleteness
+open RelationalPerimeter.Constitution.Reals
+example (x y : EffectiveCauchyReal.Carrier) (same : EffectiveCauchyReal.Equivalent x y) : x = y :=
+  same

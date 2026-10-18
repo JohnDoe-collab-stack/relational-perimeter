@@ -8,10 +8,12 @@ enregistrées, ni une preuve d'identification avec les réels usuels. Il devra
 être retiré avant une intégration finale dans `main`, après transfert des
 résultats établis vers les passages canoniques et le registre.
 
-Point de départ contrôlé : branche `work/runtime-reals-finalization`, commit
-`b0870530d79c7cbe80da97cfb4cefb123331cc96`. Le code scientifique auquel les
-revues actuelles sont attachées demeure le commit d'évidence
-`ffeae501f4425e80705a1b23903dadaf3a3b7937`.
+Point de planification contrôlé : branche `work/runtime-reals-finalization`,
+commit `b3a213eb25165d6daf01e236e7c77e26b57f5524`. L'affirmation scientifique
+actuelle `RUNTIME_EFFECTIVE_CAUCHY_REAL_CORRESPONDENCE` est attachée au commit
+d'évidence `1a2bd65b080fc9eefca60bd91dbb175a9a458862`. Ses revues `reader` et
+`translation` sont enregistrées sur ce SHA ; sa revue `independent` reste
+`not_recorded`. Le présent plan ne modifie aucun de ces statuts.
 
 ## Cible générale
 
@@ -29,11 +31,12 @@ relations et contextes reçus
   -> futurs finis sous contrat
   -> équivalence comportementale
   -> readout dyadique
-  -> correspondance avec une présentation extensive
+  -> caractérisation de complétion dyadique présentée
+  -> éventuelle comparaison extensive aval
 ```
 
-Le premier lot implémentable ne vise pas immédiatement tout le corps réel. Il
-doit fermer, sans inversion de primitives, la chaîne suivante :
+Le premier cycle du chantier a fermé, sans inversion de primitives, la chaîne
+suivante :
 
 ```text
 deux comportements réels exécutables
@@ -43,186 +46,820 @@ deux comportements réels exécutables
   -> théorème de readout de la somme
 ```
 
-Dans ce premier cycle, les deux opérandes vivent sur la même
-`CircularPresentation P` et la même `baseDepth`. Le transport entre périmètres,
-les opérations multiplicatives, l'ordre et la complétude interne restent hors
-portée jusqu'à fermeture de cette chaîne additive.
+Dans ce premier cycle, les deux opérandes vivaient sur la même
+`CircularPresentation P` et la même `baseDepth`. Les lots ultérieurs consignés
+ci-dessous ont depuis ajouté les opérations multiplicatives, l'ordre, la
+densité dyadique, l'archimédianité exécutée, les familles de Cauchy et la
+correspondance effective. Ces résultats ne ferment pas encore la gate 7.
 
-## Cible terminale : correspondance avec les réels usuels
+## Cible terminale : caractériser les réels depuis le runtime
 
-Le chantier complet vise une correspondance de structures à leurs équivalences
-comportementales déclarées, pas une simple fonction de lecture numérique ni
-une isomorphie des histoires riches. Il devra construire deux applications :
+La gate 6 a déjà construit une correspondance comportementale dans les deux
+sens entre le porteur relationnel et les **présentations effectives reçues**.
+La gate 7 ne doit ni refaire ce paquet, ni partir d'un type extensif nommé
+`Real` pour emballer ses valeurs dans des runtimes. Elle doit établir que la
+structure déjà constituée est une complétion constructive des dyadiques, puis
+en dériver sa comparaison avec toute autre complétion présentée satisfaisant
+le même contrat.
 
-```text
-toExtensive
-  : réel relationnel -> présentation extensive d'un réel
-
-fromExtensive
-  : présentation extensive d'un réel -> réel relationnel
-```
-
-La première est un readout : elle exécute les demandes de précision et projette
-leurs réponses. La seconde est une réalisation : elle reçoit une présentation
-et construit le runtime qui l'exécute. Elles devront satisfaire deux lois
-positives, sans quotient et sans égalité des histoires :
+La cible exacte se décompose en trois étages, dans cet ordre :
 
 ```text
-fromExtensive (toExtensive relational)
-  ≈runtime relational
-
-toExtensive (fromExtensive extensive)
-  ≈extensive extensive
+famille de Cauchy dyadique explicitement présentée
+  -> exécution et regroupement relationnels
+  -> carrier limite réellement produit par le runtime
+  -> caractérisation relative de complétion dyadique
+  -> comparaison aval avec une présentation extensive de référence
 ```
 
-`≈runtime` compare les comportements et futurs de précision ; il n'identifie
-ni les occurrences, ni les environnements, ni les journaux. `≈extensive`
-compare les présentations par leurs approximations cohérentes, pas par égalité
-de leurs fonctions brutes.
+Le premier étage manquant est une complétude **productrice** au niveau du
+carrier. Le résultat ne reçoit pas son candidat limite. Il doit contenir le
+carrier lu depuis la limite native produite, le lien à cette production, la
+convergence de la famille vers ce carrier et son unicité à l'équivalence
+positive près. La forme attendue est conceptuellement :
 
-La correspondance structurelle effective visée est donc comportementale et
-numérique, pour la classe effective explicitement définie, non une égalité ou
-une isomorphie des familles riches. Le readout extensif reste aval et appauvri :
-ses allers-retours ne conservent ni ne récupèrent par ce transport les histoires,
-les occurrences ou la donnée positive des témoins de Cauchy. Les constructions
-relationnelles primitives et leurs garanties propres restent distinctes de
-ce qui est conservé par cette projection.
+```text
+CarrierCompletionResult P baseDepth family
+  native      : NativeCompleteness
+                  (carrierNativeFamily P baseDepth family)
+  limit       : EffectiveCauchyReal.Carrier
+  limitExact  : limit = toCarrier native.limit
+  convergence : CarrierLimit family limit
+  uniqueness  : (other : Carrier) -> CarrierLimit family other ->
+                  EffectiveCauchyReal.Equivalent limit other
+```
 
-Ces deux allers-retours existent déjà à un niveau numérique pour
-`RuntimeReal`, `EffectiveDyadicPresentation` et `EffectiveCauchyReal.Carrier`.
-Les transports individuels déjà fermés couvrent aussi l'addition, l'opposé,
-la multiplication, l'inverse sous apartness, l'ordre et l'apartness, ainsi que
-leurs raccords carrier, dans leurs portées respectives. Le lot de transport
-des familles et de leurs limites est implémenté ci-dessous dans sa portée
-comportementale/numérique. Le paquet de la gate 6 agrège ces transports ;
-son premier raccord natif avait un défaut constitutif. La correction riche
-ci-dessous est implémentée et passe les contrôles locaux, puis revient en
-revue primaire avant tout verdict de clôture. Voir la section
-« Correspondance structurelle effective comportementale — gate 6 ».
-La gate distincte de couverture des réels usuels reste ouverte.
+Le champ `native` conserve le paquet produit entier : famille réalisée, limite
+native, service riche, candidat, convergence et unicité. Un simple champ
+d'égalité avec `nativeLimit` ne suffirait pas, car il ferait disparaître la
+chaîne constitutive que la preuve terminale doit consommer.
+
+Cette construction doit corriger la limite actuelle de `CarrierLimit` et de
+`realizeCarrierLimit` : ces déclarations vérifient ou réalisent un `value`
+déjà fourni ; elles ne produisent pas ce carrier. Le nouveau producteur doit
+partir de la famille, appeler la complétude native, puis projeter sa limite.
+La projection est aval de la production et ne devient jamais son origine.
+
+Le deuxième étage est un théorème de caractérisation. Il doit définir un
+contrat de **complétion dyadique présentée**, puis construire les morphismes
+vers et depuis toute réalisation de ce contrat. Les applications et leurs
+allers-retours sont des conclusions dérivées de l'injection dyadique, des lois
+quantitatives de présentation, de la production de limites et de l'unicité ;
+ils ne doivent pas être placés comme hypothèses du contrat générique.
+
+Le troisième étage est strictement aval : une comparaison avec une
+construction extensive de référence. Il n'est pas requis pour le verdict
+« complétion constructive présentée des dyadiques », mais il est obligatoire
+avant tout verdict « tous les réels classiques usuels ». Deux entrées doivent
+y rester distinguées :
+
+```text
+fromPresented
+  : présentation de Cauchy avec producteur et témoins -> réel relationnel
+
+realizesExtensive
+  : valeur extensive nue -> relation avec ses réalisations présentées
+```
+
+`fromPresented` est exécutable parce que le contexte reçu porte le producteur
+des approximations et ses témoins. En revanche, aucune fonction exécutable
+`fromExtensive : quotient extensif nu -> réel relationnel` ne sera exigée :
+un quotient nu a précisément oublié le représentant qui permettrait
+l'exécution. Le restaurer demanderait un choix non calculable, perdrait les
+occurrences et inverserait l'ordre des primitives. Une future couche classique
+peut seulement recevoir une présentation explicite, ou exprimer une relation
+ou une fibre de réalisations au-dessus de la valeur extensive.
+
+Une telle fibre ne ferme la portée classique que si ses obligations sont
+énoncées séparément : totalité dans les deux directions, correction, fidélité
+à l'équivalence externe, et compatibilité avec les opérations et l'ordre. La
+direction carrier vers valeur externe est un readout aval positif :
+`(c : Carrier) -> (Σ x : E, Realizes c x)`. Dans l'autre direction, il faut
+distinguer une couverture constructive
+`(x : E) -> (Σ c : Carrier, Realizes c x)`, qui produit réellement une réalisation,
+d'une couverture seulement propositionnelle
+`(x : E) -> Nonempty (Σ c : Carrier, Realizes c x)`, qui ne permet pas d'extraire un
+carrier en `Type` sous les règles constructives du dépôt.
+
+`constructiveCoverage` n'est donc admissible que si la référence `E` choisie
+porte elle-même assez de données pour construire la réalisation. Elle n'est
+jamais exigée d'un quotient nu ; dans ce cas, seule une couverture relationnelle
+totale peut être visée, et elle ne devient pas un programme par renommage.
+
+Dans tous les étages, l'équivalence côté runtime compare les comportements et
+les futurs numériques ; elle n'identifie ni occurrences, environnements,
+journaux ou histoires. L'équivalence côté présentation compare positivement
+les approximations cohérentes ; elle ne prétend pas restituer le producteur,
+le module, les témoins Cauchy ou les occurrences oubliées par le readout.
 
 ### Critère exact de réussite
 
-La correspondance finale ne pourra être déclarée obtenue que si les deux sens
-préservent et reflètent, à leurs équivalences respectives :
+La gate 7 ne pourra être déclarée obtenue que si le résultat construit et ne
+présuppose pas :
 
-- les constantes dyadiques, puis `0` et `1` ;
-- l'addition, l'opposé, la multiplication et l'inverse sous apartness ;
-- l'égalité réelle comportementale ;
-- l'apartness et l'ordre ;
-- les lois de corps ordonné ;
-- la densité des dyadiques et la propriété archimédienne ;
-- les familles de Cauchy internes, leurs limites produites et leur unicité ;
-- la complétude pertinente de la construction choisie.
+- un carrier limite pour chaque famille de Cauchy explicitement présentée ;
+- sa provenance depuis la limite native réellement produite par le runtime ;
+- sa convergence et son unicité positive ;
+- une instance concrète du contrat de complétion pour le porteur relationnel ;
+- les morphismes de comparaison et leurs lois, dérivés de l'injection
+  dyadique, des approximations, de la convergence et de l'unicité des limites ;
+- la préservation et la réflexion, à leurs équivalences respectives, de :
 
-Le théorème final devra donc être un paquet de correspondance contenant les
-deux applications, les deux allers-retours et les preuves de transport. Une
-collection de théorèmes de readout indépendants ne suffira pas.
+  - les constantes dyadiques, puis `0` et `1` ;
+  - l'addition, l'opposé, la multiplication et l'inverse sous apartness ;
+  - l'égalité réelle comportementale ;
+  - l'apartness et l'ordre ;
+  - les lois de corps ordonné ;
+  - la densité des dyadiques et la propriété archimédienne ;
+  - l'indépendance envers `P` et `baseDepth` des codes de densité et des bornes
+    effectivement produits, sans identification des producteurs ;
+  - les familles de Cauchy internes, leurs limites produites et leur unicité ;
+  - la complétude constructive pour les familles explicitement présentées
+    dans le contrat.
+- une référence externe `E` explicitement nommée pour le verdict « réels
+  classiques usuels » ;
+- `carrierCoverage`, effectivement prouvée pour tout carrier, afin que chaque
+  comportement relationnel possède bien une valeur externe aval qu'il réalise ;
+- soit `constructiveCoverage`, soit `relationalCoverage`, effectivement prouvée
+  pour tout `x : E`, avec correction, fidélité et transports structurels.
 
-### Forme minimale du paquet final
+Les étapes 7.1 à 7.3 peuvent être fermées comme **caractérisation interne** si
+ces deux dernières obligations ne le sont pas. Dans ce cas, la gate 7
+terminale et la cible « réels usuels » restent ouvertes : la caractérisation
+interne ne leur est pas substituée.
 
-Sans figer prématurément les noms Lean, l'interface terminale devra exposer au
-moins les rôles suivants :
+Ici, « famille explicitement présentée » signifie exactement une
+`CarrierFamily` : une suite de carriers, un module extérieur monotone et une
+loi de Cauchy qui consomme aussi le module propre de chaque terme. Ce critère
+ne couvre ni une fonction nue `Nat -> Carrier`, ni toute suite de Cauchy sans
+module fourni, ni une complétude d'ordre ou par borne supérieure.
+
+L'ordre total décidable, la complétude par borne supérieure pour toute partie,
+la production par un programme fini de tout réel classique sans contexte et
+l'identification des histoires ne font pas partie de ce critère. Une
+collection de théorèmes de readout indépendants ne suffira pas non plus.
+
+### Forme minimale du contrat de caractérisation
+
+Le noyau du contrat doit être typé avant l'implémentation. Les noms Lean
+pourront être ajustés, mais pas les dépendances suivantes :
 
 ```text
-CorrespondanceRéelleEffective
-  RéelRelationnel
-  PrésentationExtensive
-  équivRuntime
-  équivExtensive
-  toExtensive
-  fromExtensive
-  fromTo                   -- aller-retour côté runtime, à équivRuntime près
-  toFrom                   -- aller-retour côté présentation, à équivExtensive près
-  préserve_0, préserve_1
-  préserve_add, préserve_neg, préserve_mul
-  préserve_inv_sous_apartness
-  préserve_et_reflète_apartness_et_ordre
-  transporte_les_familles_de_Cauchy
-  préserve_et_reflète_les_limites_produites
+PresentedDyadicData
+  Carrier : Type
+  approximation : Carrier -> Nat -> SignedDyadicCode
+  modulus : Carrier -> Nat -> Nat
+  modulusMonotone : (x : Carrier) -> PrecisionExtension p q ->
+    PrecisionExtension (modulus x p) (modulus x q)
+  coherent : (x : Carrier) -> (precision leftResponse rightResponse : Nat) ->
+    PrecisionExtension (modulus x precision) leftResponse ->
+    PrecisionExtension (modulus x precision) rightResponse ->
+    Near precision
+      (approximation x leftResponse)
+      (approximation x rightResponse)
+  dyadic : SignedDyadicCode -> Carrier
+  dyadicExact : (code : SignedDyadicCode) -> (response : Nat) ->
+    SameValue (approximation (dyadic code) response) code
+
+ApproxEquivalent D x y
+  firstThreshold : Nat -> Nat
+  secondThreshold : Nat -> Nat
+  near : (precision firstResponse secondResponse : Nat) ->
+    PrecisionExtension (firstThreshold precision) firstResponse ->
+    PrecisionExtension (secondThreshold precision) secondResponse ->
+    Near precision
+      (D.approximation x firstResponse)
+      (D.approximation y secondResponse)
+
+PresentedDyadicStructure extends PresentedDyadicData
+  Equivalent : Carrier -> Carrier -> Type
+  equivalentRefl : (x : Carrier) -> Equivalent x x
+  equivalentSymm : Equivalent x y -> Equivalent y x
+  equivalentTrans : Equivalent x y -> Equivalent y z -> Equivalent x z
+  toApprox : Equivalent x y -> ApproxEquivalent toPresentedDyadicData x y
+  fromApprox : ApproxEquivalent toPresentedDyadicData x y -> Equivalent x y
+
+PresentedFamily C
+  terms : Nat -> C.Carrier
+  modulus : Nat -> Nat
+  modulusMonotone : PrecisionExtension p q ->
+    PrecisionExtension (modulus p) (modulus q)
+  cauchy : (p n m r s : Nat) ->
+    PrecisionExtension (modulus p) n ->
+    PrecisionExtension (modulus p) m ->
+    PrecisionExtension (C.modulus (terms n) p) r ->
+    PrecisionExtension (C.modulus (terms m) p) s ->
+    Near p (C.approximation (terms n) r)
+      (C.approximation (terms m) s)
+
+Converges C family value
+  threshold : Nat -> Nat
+  near : (p n r s : Nat) ->
+    PrecisionExtension (family.modulus p) n ->
+    PrecisionExtension p r ->
+    PrecisionExtension (threshold p) s ->
+    Near p
+      (C.approximation (family.terms n)
+        (C.modulus (family.terms n) r))
+      (C.approximation value (C.modulus value s))
+
+LimitResult C family
+  value : C.Carrier
+  convergence : Converges C family value
+  unique : (other : C.Carrier) -> Converges C family other ->
+             C.Equivalent value other
+
+PresentedDyadicCompletion (C : PresentedDyadicStructure)
+  complete : (family : PresentedFamily C) -> LimitResult C family
+
+PresentedDyadicCompletionObject
+  core : PresentedDyadicStructure
+  completion : PresentedDyadicCompletion core
+
+numericalCarrier (C : PresentedDyadicData) (x : C.Carrier)
+  : EffectiveCauchyReal.Carrier
+  -- définition formée uniquement avec approximation, modulus,
+  -- modulusMonotone et coherent
+
+ownFamily (C : PresentedDyadicStructure) (x : C.Carrier)
+  : PresentedFamily C
+  terms n  = C.dyadic (C.approximation x n)
+  modulus  = C.modulus x
+
+presentCarrierFamily
+  (C : PresentedDyadicStructure) (x : EffectiveCauchyReal.Carrier)
+  : PresentedFamily C
+  terms n = C.dyadic (x.approximation n)
+  modulus = x.modulus
+
+diagonalTransportFamily
+  (Source Target : PresentedDyadicStructure)
+  (family : PresentedFamily Source)
+  : PresentedFamily Target
+  terms n = Target.dyadic
+    (Source.approximation (family.terms n)
+      (Source.modulus (family.terms n) n))
+  modulus p = Nat.succ p + family.modulus (Nat.succ p)
+
+selfConvergence (C : PresentedDyadicStructure) (x : C.Carrier)
+  : Converges C (ownFamily C x) x
+
+presentedCarrierEquivalent
+  (C : PresentedDyadicStructure)
+  (x : EffectiveCauchyReal.Carrier) (y : C.Carrier)
+  (convergence : Converges C (presentCarrierFamily C x) y) :
+  EffectiveCauchyReal.Equivalent (numericalCarrier C y) x
+
+canonicalAddCode C x y n :=
+  (C.approximation x (C.modulus x (Nat.succ n))).add
+    (C.approximation y (C.modulus y (Nat.succ n)))
+
+canonicalNegCode C x n :=
+  (C.approximation x (C.modulus x n)).neg
+
+canonicalMulCode C x y n :=
+  (C.approximation x
+      (C.modulus x
+        (n + 1 + probeAmplitude
+          (C.approximation y (C.modulus y 0))))).mul
+    (C.approximation y
+      (C.modulus y
+        (n + 1 + probeAmplitude
+          (C.approximation x (C.modulus x 0)))))
+
+canonicalAdditiveFamily C x y :=
+  presentCarrierFamily C
+    (addCarrier (numericalCarrier C x) (numericalCarrier C y))
+  -- terms n = C.dyadic (canonicalAddCode C x y n)
+  -- modulus p = p
+
+canonicalNegativeFamily C x :=
+  presentCarrierFamily C (negCarrier (numericalCarrier C x))
+  -- terms n = C.dyadic (canonicalNegCode C x n)
+  -- modulus p = p
+
+canonicalMultiplicativeFamily C x y :=
+  presentCarrierFamily C
+    (mulCarrier (numericalCarrier C x) (numericalCarrier C y))
+  -- terms n = C.dyadic (canonicalMulCode C x y n)
+  -- modulus p = p
+
+normalizedEquivalentNear
+  {x y : EffectiveCauchyReal.Carrier}
+  (same : EffectiveCauchyReal.Equivalent x y)
+  (p leftIndex rightIndex : Nat)
+  (leftBeyond : PrecisionExtension (p + 2) leftIndex)
+  (rightBeyond : PrecisionExtension (p + 2) rightIndex) :
+  Near p
+    ((EffectiveCauchyReal.toPresentation x).approximation leftIndex)
+    ((EffectiveCauchyReal.toPresentation y).approximation rightIndex)
+
+carrierMulComparisonPrecisions
+  (x y c d : EffectiveCauchyReal.Carrier) (p : Nat) : List Nat :=
+  let rightBound := probeAmplitude
+    ((EffectiveCauchyReal.toPresentation y).approximation 0)
+  let leftBound := probeAmplitude
+    ((EffectiveCauchyReal.toPresentation c).approximation 0)
+  [p + 1 + rightBound + 2, p + 1 + leftBound + 2]
+
+mulCarrierCongr
+  {x y c d : EffectiveCauchyReal.Carrier}
+  (left : EffectiveCauchyReal.Equivalent x c)
+  (right : EffectiveCauchyReal.Equivalent y d) :
+  EffectiveCauchyReal.Equivalent
+    (mulCarrier x y) (mulCarrier c d)
+  -- les deux seuils de réponse sont le precisionPool de
+  -- carrierMulComparisonPrecisions x y c d p
 ```
 
-Ce schéma est une obligation de contenu, pas une prescription de syntaxe. Un
-champ ne pourra être supprimé que si un théorème déjà présent fournit
-exactement le même transport dans les deux sens.
+`ApproxEquivalent`, `numericalCarrier`, `ownFamily`, `presentCarrierFamily`,
+`diagonalTransportFamily`, `selfConvergence`, `presentedCarrierEquivalent` et les trois familles
+algébriques canoniques sont des définitions ou théorèmes extérieurs dérivés
+des données précédentes ; ils ne sont pas des
+champs reçus. En particulier, le contrat abstrait ne contient aucune application vers
+`EffectiveCauchyReal.Carrier`. Les deux fonctions entre
+`ApproxEquivalent C x y` et
+`EffectiveCauchyReal.Equivalent (numericalCarrier C x)
+(numericalCarrier C y)` sont ensuite démontrées par les définitions, pas
+supposées par l'interface.
 
-Une interface générique portant ces lois ne constituera pas, à elle seule, le
-résultat. Le dépôt devra construire une instance concrète pour les runtimes et
-présentations retenus, puis dériver le paquet depuis ses réalisations. Les lois
-d'aller-retour, de transport et de complétude ne devront pas être réintroduites
-comme hypothèses finales de la cible qu'elles sont censées établir.
+`presentCarrierFamily` injecte exactement les approximations et le module d'un
+carrier reçu dans n'importe quelle cible présentée ; sa loi de Cauchy est
+dérivée de celle du carrier et de `dyadicExact`. `Converges` est une définition
+positive de la forme affichée, et non une
+relation opaque librement choisie. `ownFamily` fixe définitionnellement ses
+termes **et** son module extérieur : aucune autre suite ni aucun autre module
+ne peut y être caché. `selfConvergence` est dérivé de `coherent` et de
+`dyadicExact`. La famille, son module et ses témoins sont des données en
+`Type`, pas une fonction nue ni une existence propositionnelle.
 
-`fromExtensive` ne recevra pas une valeur numérique opaque. Pour la portée
-effective, son entrée devra comprendre le producteur exécutable des
-approximations et les témoins constructifs de cohérence ; le runtime construit
-devra appeler ce producteur et conserver le pas qui possède sa réponse. Pour
-une portée classique plus large, toute donnée non calculable devra être reçue
-comme contexte relationnel explicite : elle ne pourra pas être attribuée au
-programme seul.
+`presentedCarrierEquivalent` consomme réellement la convergence affichée. À
+la précision `p`, il l'emploie à `p + 1`, choisit intérieurement une réponse de
+valeur dépassant à la fois `p + 1` et `convergence.threshold (p + 1)`, puis
+compose cette proximité avec `C.coherent y` entre la diagonale ainsi obtenue et
+la réponse brute reçue. Ses seuils extérieurs sont
+`C.modulus y (p + 1)` et `x.modulus (p + 1)`. Ce calendrier donne exactement
+les deux `Near (p + 1)` consommés par `Near.compose`; il n'extrait aucune
+fonction de choix depuis la convergence et ne suppose la cofinalité d'aucun
+module.
+
+Les trois familles algébriques affichées sont elles aussi des définitions
+extérieures, jamais des champs libres. Leurs réponses sont exactement celles
+des présentations numériques existantes : un cran pour l'addition, le module
+direct pour l'opposé, et le cran plus la sonde d'amplitude croisée pour la
+multiplication. Leur loi de Cauchy est dérivée de `coherent`, de
+`dyadicExact`, de `Near.add`, de `Near.neg`, de `Near.mul` et des témoins
+d'amplitude obtenus depuis la cohérence à la précision zéro. Ainsi, aucun
+calendrier constant ou non cofinal ne peut être caché dans une instance. Le
+champ ordonné recevra seulement la convergence du résultat d'opération vers
+ces familles canoniques. L'inverse n'a pas de famille numérique libre : sa
+préservation sera dérivée de ses deux lois d'unité, de la préservation de la
+multiplication et de l'unicité algébrique sous apartness.
+
+Le recours à `addCarrier`, `negCarrier` et `mulCarrier` dans ces trois
+définitions est strictement aval : leurs opérandes sont les
+`numericalCarrier` dérivés des approximations et modules reçus, et les
+réductions affichées fixent les codes et calendriers exacts. Ces fonctions ne
+définissent jamais `add`, `neg` ou `mul` dans la structure présentée ; les
+champs `*Converges` doivent prouver que les opérations reçues réalisent cette
+spécification numérique. Cette orientation empêche de réimporter une opération
+extensive comme primitive tout en rendant les termes et modules des familles
+définitionnellement identiques à ceux de `presentCarrierFamily`.
+
+`normalizedEquivalentNear` est un lemme dérivé, pas un champ. Pour chaque
+opérande, il relie une diagonale normalisée source à une diagonale normalisée
+cible par exactement trois rapprochements à la précision `p + 2` : cohérence
+source vers une réponse brute dépassant à la fois le module et le premier
+seuil, équivalence entre deux réponses brutes, puis cohérence cible vers sa
+diagonale. Deux applications de `Near.compose` rendent un `Near p`. Les indices
+bruts intermédiaires sont construits par somme ou `precisionPool` des seuils et
+modules requis ; aucun module n'est supposé cofinal.
+
+`mulCarrierCongr` fixe ensuite le budget qui ne peut pas rester implicite. Pour
+comparer `mulCarrier x y` à `mulCarrier c d` à la précision `p`, `Near.mul`
+demande le rapprochement des facteurs gauches à
+`p + 1 + probeAmplitude ((toPresentation y).approximation 0)` et celui des
+facteurs droits à
+`p + 1 + probeAmplitude ((toPresentation c).approximation 0)`. Les deux crans
+supplémentaires de `carrierMulComparisonPrecisions` sont exactement ceux que
+consomme `normalizedEquivalentNear`. Les deux réponses du produit dépassent le
+`precisionPool` de cette liste. Les témoins d'amplitude viennent de la
+cohérence à zéro de `y` et de `c`, comme dans `Near.mul`; les sondes de `y` et
+de `d`, ou de `x` et de `c`, ne sont jamais supposées égales. Ce lemme permet
+de comparer les limites numériques des familles multiplicatives source et
+cible ; il ne prétend pas que ces familles, leurs calendriers ou leurs termes
+sont égaux.
+
+`diagonalTransportFamily` est le transport numérique canonique d'une famille
+entre deux présentations. Son module renforcé
+`Nat.succ p + family.modulus (Nat.succ p)` garantit à la fois que l'indice de
+terme reçu dépasse la précision renforcée et qu'il dépasse le module extérieur
+source à cette précision. Le cran supplémentaire est consommé par
+`Near.compose` lors du transport d'une limite ; il ne peut pas être retiré par
+une simplification de notation. La monotonie des modules propres donne alors
+les réponses intérieures requises, et `dyadicExact` ferme la loi de Cauchy
+cible. Ce transport ne prétend pas conserver l'identité des termes sources :
+il expose précisément la diagonale numérique qu'il garde et l'oubli des
+profils, producteurs et témoins riches qu'il effectue.
+
+`PresentedDyadicCompletionObject` n'ajoute aucune loi : il ne fait qu'empaqueter
+un noyau avec la complétion qui est indexée par ce même noyau. Cette indexation
+évite de devoir transporter une `PresentedFamily` le long d'une égalité de
+structures cachée. Dans les schémas suivants, `Source.Carrier`,
+`Source.Equivalent` et `Source.complete` abrègent respectivement
+`Source.core.Carrier`, `Source.core.Equivalent` et
+`Source.completion.complete` ; ces notations ne sont pas de nouveaux champs.
+
+Les opérations et l'ordre forment une extension distincte,
+`PresentedDyadicOrderedFieldData`, indexée seulement par le noyau dont elle
+emploie le carrier. `PresentedDyadicOrderedFieldCompletion` empaquette ensuite
+ce noyau, une complétion indexée par lui et ces données ordonnées. Cette
+séparation évite un paramètre de complétion fantôme dans les lois algébriques et
+empêche de faire passer l'existence actuelle des opérations de carrier pour un
+paquet de lois déjà fermé : le dépôt possède un
+`ConstructiveOrderedFieldLaws` sur `Real P baseDepth`, mais pas encore son
+homologue complet sur `EffectiveCauchyReal.Carrier`.
+
+Cette extension doit elle aussi recevoir une forme typée et non une liste
+verbale :
+
+```text
+StrictSeparationWitness C x y
+  accuracy response : Nat
+  beyond : PrecisionExtension (accuracy + 3) response
+  separation : StrictSeparation accuracy
+    (C.approximation x (C.modulus x response))
+    (C.approximation y (C.modulus y response))
+
+PresentedDensityWitness C Order x y :=
+  Σ code : SignedDyadicCode,
+    Order x (C.dyadic code) × Order (C.dyadic code) y
+
+PresentedNaturalBoundsWitness C Order x :=
+  Σ lower upper : Nat,
+    Order (C.dyadic (negativeNaturalCode lower)) x ×
+    Order x (C.dyadic (naturalCode upper))
+
+PresentedDyadicOrderedFieldData (C : PresentedDyadicStructure)
+  zero one : C.Carrier
+  zeroExact : C.Equivalent zero (C.dyadic SignedDyadicCode.zero)
+  oneExact : C.Equivalent one (C.dyadic SignedDyadicCode.one)
+  add mul : C.Carrier -> C.Carrier -> C.Carrier
+  neg : C.Carrier -> C.Carrier
+  Order Apartness : C.Carrier -> C.Carrier -> Type
+  inverse : (x : C.Carrier) -> Apartness x zero -> C.Carrier
+
+  additiveConverges : (x y : C.Carrier) ->
+    Converges C (canonicalAdditiveFamily C x y) (add x y)
+
+  negativeConverges : (x : C.Carrier) ->
+    Converges C (canonicalNegativeFamily C x) (neg x)
+
+  multiplicativeConverges : (x y : C.Carrier) ->
+    Converges C (canonicalMultiplicativeFamily C x y) (mul x y)
+
+  additiveLaws : PresentedAdditiveGroupLaws C zero add neg
+  multiplicativeLaws :
+    PresentedMultiplicativeLaws C zero one add neg mul
+  orderedLaws : PresentedConstructiveOrderLaws
+    C zero one add neg mul inverse Order Apartness
+  orderToSeparation : Order x y -> StrictSeparationWitness C x y
+  separationToOrder : StrictSeparationWitness C x y -> Order x y
+  apartnessToOrder : Apartness x y -> Order x y ⊕ Order y x
+  orderToApartness : Order x y ⊕ Order y x -> Apartness x y
+  density : Order x y -> PresentedDensityWitness C Order x y
+  naturalBounds : (x : C.Carrier) ->
+    PresentedNaturalBoundsWitness C Order x
+
+PresentedDyadicOrderedFieldCompletion
+  core : PresentedDyadicStructure
+  completion : PresentedDyadicCompletion core
+  ordered : PresentedDyadicOrderedFieldData core
+```
+
+Les familles canoniques d'opérations portent les budgets exacts de leurs
+présentations : elles ne supposent pas que l'addition, l'opposé ou la
+multiplication utilisent le même indice brut. Les trois champs de convergence
+sont les seuls raccords reçus. Les termes, modules et réponses de ces familles
+sont déjà fixés par le noyau et ne peuvent donc pas masquer un calendrier trop
+faible. La préservation de l'addition, de l'opposé et de la multiplication est
+alors dérivée par transport de ces familles et unicité de limite. Celle de
+l'inverse est dérivée algébriquement des unités d'inverse, de la
+multiplication et de l'indépendance du témoin. `density` et `naturalBounds`
+ferment explicitement les deux propriétés annoncées par le critère terminal.
+
+Dans l'instance carrier, ces deux derniers champs ne doivent pas être remplis
+par une nouvelle recherche numérique qui oublierait sa provenance. Deux paquets
+concrets supplémentaires conservent la chaîne riche :
+
+```text
+composeSignedBoundMixed
+  (xy : xPositive + yNegative <=
+    yPositive + xNegative + firstTolerance)
+  (yz : yPositive + zNegative <=
+    zPositive + yNegative + secondTolerance) :
+  xPositive + zNegative <=
+    zPositive + xNegative +
+      (firstTolerance + secondTolerance)
+
+sixFineOneMiddleBudget (extra : Nat) :
+  6 * powerOfTwo extra + powerOfTwo (extra + 1) =
+    powerOfTwo (extra + 3)
+
+DirectedUpper.composeThreeOneThree
+  (right1 : DirectedUpper (p + 3) b b1)
+  (right2 : DirectedUpper (p + 3) b1 b2)
+  (right3 : DirectedUpper (p + 3) b2 d)
+  (middle : DirectedUpper (p + 2) d c)
+  (left3 : DirectedUpper (p + 3) c a2)
+  (left2 : DirectedUpper (p + 3) a2 a1)
+  (left1 : DirectedUpper (p + 3) a1 a) :
+  DirectedUpper p b a
+
+strengthenSeparationThreeLinks
+  {p : Nat}
+  {a a1 a2 c b b1 b2 d : SignedDyadicCode}
+  (gap : StrictSeparation p a b)
+  (left1 : Near (p + 3) a a1)
+  (left2 : Near (p + 3) a1 a2)
+  (left3 : Near (p + 3) a2 c)
+  (right1 : Near (p + 3) b b1)
+  (right2 : Near (p + 3) b1 b2)
+  (right3 : Near (p + 3) b2 d) :
+  StrictSeparation (p + 2) c d
+
+transportCarrierOrder
+  {a b c d : EffectiveCauchyReal.Carrier}
+  (origin : CarrierOrder a b)
+  (left : EffectiveCauchyReal.Equivalent a c)
+  (right : EffectiveCauchyReal.Equivalent b d) :
+  CarrierOrder c d
+
+transportCarrierApartness
+  {a b c d : EffectiveCauchyReal.Carrier}
+  (origin : CarrierApartness a b)
+  (left : EffectiveCauchyReal.Equivalent a c)
+  (right : EffectiveCauchyReal.Equivalent b d) :
+  CarrierApartness c d
+
+dyadicCarrier code :=
+  EffectiveCauchyReal.ofPresentation
+    (EffectiveDyadicPresentation.constant code)
+
+CarrierDensityResult P baseDepth x y origin
+  realizedOrigin : StrictOrder (ofCarrier P baseDepth x)
+                               (ofCarrier P baseDepth y)
+  realizedOriginExact : realizedOrigin =
+    realizeCarrierOrder x y origin
+      (environment (ofCarrier P baseDepth x)).initialArchive
+      (environment (ofCarrier P baseDepth y)).initialArchive
+  packet         : Density realizedOrigin (Journal.root P baseDepth)
+  code           : SignedDyadicCode
+  codeExact      : code = packet.action.readout
+  target         : EffectiveCauchyReal.Carrier
+  targetExact    : target = toCarrier packet.target
+  targetDyadic   : EffectiveCauchyReal.Equivalent target (dyadicCarrier code)
+  left           : CarrierOrder x (dyadicCarrier code)
+  right          : CarrierOrder (dyadicCarrier code) y
+
+CarrierNaturalBoundResult P baseDepth x
+  realized       : Real P baseDepth
+  realizedExact  : realized = ofCarrier P baseDepth x
+  packet         : NaturalBound realized
+                    (environment realized).initialArchive
+                    (Journal.root P baseDepth)
+  lower upper    : Nat
+  lowerExact     : lower = packet.action.stored.value.lower
+  upperExact     : upper = packet.action.stored.value.upper
+  lowerOrder     : CarrierOrder (dyadicCarrier (negativeNaturalCode lower)) x
+  upperOrder     : CarrierOrder x (dyadicCarrier (naturalCode upper))
+
+produceCarrierDensity P baseDepth
+  (origin : CarrierOrder x y) :
+  CarrierDensityResult P baseDepth x y origin
+
+produceCarrierNaturalBounds P baseDepth x :
+  CarrierNaturalBoundResult P baseDepth x
+
+carrierDensityReadout_perimeterIndependent
+  (P Q) (baseDepth otherDepth) (origin : CarrierOrder x y) :
+  (produceCarrierDensity P baseDepth origin).code =
+    (produceCarrierDensity Q otherDepth origin).code
+
+carrierNaturalBoundsReadout_perimeterIndependent
+  (P Q) (baseDepth otherDepth) (x : EffectiveCauchyReal.Carrier) :
+  (produceCarrierNaturalBounds P baseDepth x).lower =
+      (produceCarrierNaturalBounds Q otherDepth x).lower ×
+    (produceCarrierNaturalBounds P baseDepth x).upper =
+      (produceCarrierNaturalBounds Q otherDepth x).upper
+```
+
+Ces deux transports précèdent les paquets riches et ne sont pas déduits d'eux.
+Leur preuve conserve le témoin dirigé reçu. Pour une précision d'origine `p`,
+elle construit la nouvelle séparation à `p + 2` et choisit comme réponse cible
+`p + 5`, qui satisfait définitionnellement le décalage de trois crans de
+`CarrierOrder`. Sur chaque extrémité, elle choisit deux réponses brutes
+intermédiaires dépassant séparément le module à `p + 3` et le seuil de
+l'équivalence à `p + 3`, puis forme les trois rapprochements suivants, tous à
+la précision `p + 3` : diagonale source vers réponse brute source, réponse
+brute source vers réponse brute cible, réponse brute cible vers diagonale
+cible. La réponse d'origine dépasse déjà `p + 3` et la réponse cible `p + 5` ;
+les deux lois `modulusMonotone` suffisent donc aux raccords de cohérence.
+
+Il est incorrect de composer ces trois liens pour invoquer directement
+`strengthenSeparation`, qui exige deux `Near (p + 2)`. Le lemme dédié
+`strengthenSeparationThreeLinks` ferme exactement le budget global : les six
+erreurs valent au plus
+`6 * 2^(-(p + 3)) = 3/4 * 2^(-p)`, laissant la marge
+`2^(-(p + 2))`. Il ne faut pas non plus obtenir cette borne en affaiblissant
+successivement les sept segments : cette association perdrait des bits. Le
+lemme auxiliaire `DirectedUpper.composeThreeOneThree` relève les sept
+certificats à une échelle commune. Il emploie
+`composeSignedBoundMixed` pour éliminer successivement les six numérateurs
+intermédiaires sans modifier leurs tolérances, puis
+`sixFineOneMiddleBudget` pour réécrire la somme des six tolérances à `p + 3`
+et de la tolérance centrale à `p + 2` en exactement une tolérance à `p`.
+L'alignement commun doit prouver par annulation que les extras des codes
+intermédiaires coïncident et que l'extra central vaut l'extra fin plus un ; il
+ne peut pas être remplacé par sept appels binaires à `DirectedUpper.compose`.
+`strengthenSeparationThreeLinks` procède
+alors par `inspectGap (p + 2)` et réfute sa branche supérieure avec ce certificat
+dirigé. Cette preuve reste dans l'arithmétique constructive des codes et ne fait
+appel ni à l'arithmétique réelle ni à un choix classique. Ainsi, la preuve ne
+suppose jamais qu'un module est cofinal et ne réalise aucun nouveau `Real`. Le
+transport d'apartness procède branche par branche. Ces théorèmes sont ensuite
+les seuls outils autorisés pour remplacer les extrémités
+`toCarrier (ofCarrier ... x)` et `toCarrier packet.target` par `x` et la
+constante dyadique canonique dans les champs `left`, `right`, `lowerOrder` et
+`upperOrder`.
+
+Les égalités et transports exacts requis par les types Lean peuvent remplacer
+les égalités schématiques affichées, mais le paquet riche ne peut pas être
+supprimé. `dyadicCarrier` est la constante carrier canonique, indépendante de
+`P` et de `baseDepth`. Les champs abstraits `density` et `naturalBounds` sont
+les projections aval de ces paquets. Leur réalisation pour des carriers
+arbitraires passe par `ofCarrier`, les producteurs exécutés déjà présents, puis
+le retour carrier et ses transports ; elle ne part jamais d'une cible dyadique
+préchoisie. De même, les convergences des familles canoniques d'opérations sont
+dérivées des correspondances déjà prouvées `toCarrier_add`, `toCarrier_neg`,
+`toCarrier_mul`, `realization_carrier_add`, `realization_carrier_neg` et
+`realization_carrier_mul`, donc des opérations relationnelles de la gate 6 ;
+elles ne sont pas obtenues en redéfinissant une opération depuis une cible
+extensive. L'inverse concret reste `inverseCarrier`, lui-même défini comme le
+readout de l'inverse relationnel exécuté et raccordé par
+`realization_carrier_inverse`. Le théorème dérivé par unicité relie ensuite
+chaque résultat d'opération directe à la limite produite de sa famille
+canonique ; cette relation n'est pas un champ circulaire reçu par le noyau.
+
+Les trois paquets de lois sont eux-mêmes des structures typées. Les variables
+`a`, `b`, `c`, `d` et `shift` ci-dessous sont toutes explicitement quantifiées
+dans les véritables signatures Lean :
+
+```text
+PresentedAdditiveGroupLaws C zero add neg
+  addCongr : C.Equivalent a c -> C.Equivalent b d ->
+    C.Equivalent (add a b) (add c d)
+  addComm : C.Equivalent (add a b) (add b a)
+  addAssoc : C.Equivalent (add (add a b) c) (add a (add b c))
+  zeroLeft : C.Equivalent (add zero a) a
+  zeroRight : C.Equivalent (add a zero) a
+  negCongr : C.Equivalent a b -> C.Equivalent (neg a) (neg b)
+  negInvolutive : C.Equivalent (neg (neg a)) a
+  inverseLeft : C.Equivalent (add (neg a) a) zero
+  inverseRight : C.Equivalent (add a (neg a)) zero
+  negSum : C.Equivalent (neg (add a b)) (add (neg a) (neg b))
+
+PresentedMultiplicativeLaws C zero one add neg mul
+  mulCongr : C.Equivalent a c -> C.Equivalent b d ->
+    C.Equivalent (mul a b) (mul c d)
+  mulComm : C.Equivalent (mul a b) (mul b a)
+  mulAssoc : C.Equivalent (mul (mul a b) c) (mul a (mul b c))
+  oneLeft : C.Equivalent (mul one a) a
+  oneRight : C.Equivalent (mul a one) a
+  zeroLeft : C.Equivalent (mul zero a) zero
+  zeroRight : C.Equivalent (mul a zero) zero
+  distributeLeft :
+    C.Equivalent (mul a (add b c)) (add (mul a b) (mul a c))
+  distributeRight :
+    C.Equivalent (mul (add a b) c) (add (mul a c) (mul b c))
+  negLeft : C.Equivalent (mul (neg a) b) (neg (mul a b))
+  negRight : C.Equivalent (mul a (neg b)) (neg (mul a b))
+
+PresentedConstructiveOrderLaws
+    C zero one add neg mul inverse Order Apartness
+  unitPositive : Order zero one
+  irreflexive : Order a a -> Empty
+  asymmetric : Order a b -> Order b a -> Empty
+  transitive : Order a b -> Order b c -> Order a c
+  cotransitive : Order a b -> (middle : C.Carrier) ->
+    Order a middle ⊕ Order middle b
+  transportOrder : Order a b -> C.Equivalent a c -> C.Equivalent b d ->
+    Order c d
+  transportApartness : Apartness a b ->
+    C.Equivalent a c -> C.Equivalent b d -> Apartness c d
+  translateRight : Order a b -> Order (add a shift) (add b shift)
+  translateLeft : Order a b -> Order (add shift a) (add shift b)
+  reflectTranslationRight :
+    Order (add a shift) (add b shift) -> Order a b
+  positiveProduct : Order zero a -> Order zero b -> Order zero (mul a b)
+  multiplyPositiveRight :
+    Order a b -> Order zero c -> Order (mul a c) (mul b c)
+  multiplyPositiveLeft :
+    Order a b -> Order zero c -> Order (mul c a) (mul c b)
+  inverseUnitRight : (w : Apartness a zero) ->
+    C.Equivalent (mul a (inverse a w)) one
+  inverseUnitLeft : (w : Apartness a zero) ->
+    C.Equivalent (mul (inverse a w) a) one
+  inverseWitnessIndependent : (first second : Apartness a zero) ->
+    C.Equivalent (inverse a first) (inverse a second)
+  inverseCongr : (same : C.Equivalent a b) ->
+    (first : Apartness a zero) -> (second : Apartness b zero) ->
+    C.Equivalent (inverse a first) (inverse b second)
+```
+
+Chaque loi quantifie explicitement ses carriers et retourne le témoin
+`Equivalent`, `Order` ou `Empty` correspondant ; « lois de corps ordonné »
+n'est jamais un champ opaque. Les congruences d'addition, d'opposé, de
+multiplication et d'inverse sont donc présentes dans les paquets exacts, et non
+résumées par une phrase ou supposées par le théorème terminal.
+
+Ni le noyau ni son extension ne reçoivent les applications terminales entre
+deux complétions, leurs allers-retours, ou leur unicité : ces objets sont à
+construire. L'unicité d'applications sera toujours point par point sous
+`Equivalent`, jamais une égalité de fonctions obtenue par extensionalité.
+
+Une interface générique seule ne constitue pas le résultat. Le dépôt doit :
+
+1. construire l'instance concrète du carrier/runtime existant ;
+2. dériver les morphismes depuis l'injection dyadique, les présentations
+   propres et `produitLimite` ;
+3. prouver leurs allers-retours à l'équivalence près par unicité ;
+4. transporter les opérations, l'apartness, l'ordre et les limites produites ;
+5. vérifier que chaque hypothèse du théorème générique est fermée par une
+   déclaration concrète du dépôt.
+
+La gate échoue si la correspondance, l'aller-retour ou la complétude à établir
+réapparaît simplement comme champ supposé de l'interface.
 
 ### Cible extensive autorisée
 
 Le dépôt ne doit pas introduire les réels usuels comme primitive amont. La
-cible extensive doit d'abord être formulée par des présentations de Cauchy et
-leur équivalence positive, déjà amorcées par `EffectiveCauchyReal.Carrier`.
-Elle restera sans quotient tant que les règles du dépôt interdisent les
-mécanismes quotientant les occurrences.
+cible interne de la gate 7 reste une complétion dyadique présentée, sans
+quotient d'occurrences. Le nom du type, la seule présence d'approximations ou
+une propriété cardinale ne suffisent pas : la caractérisation doit provenir
+du producteur de limites et de son unicité.
 
-Pour justifier que cette cible mérite le nom de « réels usuels », il faudra
-ensuite prouver qu'elle porte la caractérisation attendue d'un corps ordonné
-archimédien complet. Cette caractérisation est une obligation formelle ; le
-nom du type ou la présence d'approximations dyadiques ne la remplace pas.
+Trois sens doivent rester séparés :
 
-Deux sens de « complétude » doivent être séparés pendant la preuve :
+- **complétude native relationnelle** : toute famille native munie de ses
+  exécutions et témoins produit un runtime limite ; elle est déjà construite ;
+- **complétude du carrier présenté** : toute famille du contrat reçu produit
+  un carrier limite provenant de ce runtime ; c'est le premier manque précis ;
+- **complétude classique extensive** : propriété d'une construction externe,
+  éventuellement quotientée, dont la comparaison reste aval et peut nécessiter
+  des principes non calculables étrangers aux producteurs de ce dépôt.
 
-- **complétude de Cauchy effective** : toute famille de Cauchy interne munie de
-  son exécution, de son module et de ses témoins produit un runtime limite ;
-- **complétude d'ordre ou portée classique** : la propriété de complétude
-  retenue pour caractériser les réels usuels s'applique à la classe plus large
-  annoncée, avec les données relationnelles positives nécessaires.
+Les étapes 7.1 à 7.3 portent sur les deux premiers points et sur leur
+caractérisation relative parmi les complétions présentées. La gate 7 terminale
+inclut en plus l'étape 7.4 lorsqu'elle revendique les « réels usuels ». Cette
+identification à une construction classique particulière n'est autorisée
+qu'après avoir énoncé exactement ses hypothèses. Elle ne pourra ni définir les
+runtimes, ni fournir rétroactivement leurs actions, mémoires, occurrences ou
+preuves de cohérence.
 
-La première ne sera pas présentée comme impliquant la seconde tant qu'un
-théorème constructif séparé n'aura pas été prouvé sous les hypothèses exactes
-du dépôt. Le plan doit donc fermer d'abord les réels relationnels effectifs,
-puis franchir une gate explicite de couverture avant toute affirmation sur
-les réels usuels sans restriction.
+### Trois portées à ne pas confondre
 
-Si une comparaison directe avec un type `ℝ` extérieur est ajoutée plus tard,
-elle sera une couche aval séparée. Elle ne pourra ni définir les runtimes, ni
-fournir rétroactivement leurs actions, leurs mémoires ou leurs preuves de
-cohérence.
+Le plan distingue :
 
-### Deux portées à ne pas confondre
+1. les **termes effectifs fermés**, dont le producteur est du code fini du
+   dépôt ;
+2. les **présentations reçues**, effectives relativement à un contexte qui
+   fournit les approximations, le module et les témoins ;
+3. les **valeurs extensives nues**, dont la présentation peut avoir été
+   oubliée par quotient ou par abstraction.
 
-Le plan distingue dès maintenant :
+La gate 6 couvre les deux premières dans sa portée déclarée. La gate 7 doit
+caractériser leur complétion constructive sans les confondre avec la troisième.
+Une valeur de la troisième classe ne devient exécutable qu'avec une
+présentation reçue supplémentaire. Aucun théorème sur les deux premières ne
+sera renommé en théorème sur tous les objets classiques nus.
 
-1. la correspondance **effective**, pour les présentations munies d'un
-   producteur exécutable et de leurs témoins constructifs ;
-2. la comparaison avec **tous les réels classiques**, y compris les
-   présentations non calculables.
+### Matrice de la caractérisation terminale
 
-La première est la cible directe du code actuel. La seconde exige une entrée
-relationnelle supplémentaire — par exemple une présentation reçue comme
-contexte — et ne peut pas être attribuée à un programme fini qui ne la reçoit
-pas. Le registre devra donc annoncer séparément la portée effectivement
-fermée. Aucun théorème sur les réels effectifs ne sera renommé en théorème sur
-tous les réels classiques.
-
-### Matrice de la correspondance terminale
-
-| Structure | Construction relationnelle primitive | Readout extensif aval | Obligation de retour ou de réflexion |
+| Structure | Construction relationnelle primitive | Readout présenté aval | Retour ou comparaison autorisé |
 | --- | --- | --- | --- |
-| Équivalence réelle | Futurs finis exécutés et témoins de proximité | Équivalence des présentations | Chaque équivalence extensive annoncée induit l'équivalence comportementale, sans égalité d'occurrences |
-| Constantes | Runtime constant exécuté depuis un code reçu | Présentation dyadique constante | Le retour produit un comportement équivalent au runtime constant |
-| Addition | Deux sous-pas possédés, action unique, cible installée | Addition des approximations | `toExtensive (addRuntime x y) ≈ addExtensive (toExtensive x) (toExtensive y)` et loi réciproque pour `fromExtensive` |
-| Opposé, multiplication, inverse | Actions relationnelles avec budgets et témoin d'apartness pour l'inverse | Opérations sur les présentations | Même double compatibilité, sous les domaines de définition exacts |
-| Apartness et ordre | Témoins positifs obtenus depuis des exécutions finies | Relations numériques correspondantes | Préservation et réflexion, sans décision globale cachée |
-| Famille de Cauchy | Famille interne exécutée, module reçu, regroupement et runtime limite | Famille et limite de présentations | Les deux sens conservent le comportement numérique des termes et comparent les limites à leurs équivalences près ; ils ne récupèrent pas par ce transport les familles riches ni leurs témoins Cauchy |
-| Complétude | Producteur de limite et mémoire sous contrat | Énoncé de complétude de la cible extensive | Toute portée extensive revendiquée doit être couverte ; aucun objet absent de l'entrée ne peut être inventé |
+| Équivalence réelle | Futurs finis exécutés et témoins de proximité | Équivalence positive des présentations | Réflexion comportementale sans égalité d'occurrences |
+| Constantes | Runtime constant exécuté depuis un code reçu | Présentation dyadique constante | La réalisation présentée produit un comportement équivalent |
+| Addition | Deux sous-pas possédés, action unique, cible installée | Addition des approximations | Diagrammes à l'équivalence près ; aucune opération extensive ne construit le runtime |
+| Opposé, multiplication, inverse | Actions avec budgets et témoin d'apartness pour l'inverse | Opérations présentées | Même double compatibilité sous les domaines exacts |
+| Apartness et ordre | Témoins positifs obtenus depuis des exécutions finies | Relations numériques positives | Préservation et réflexion, sans décision globale cachée |
+| Famille de Cauchy | Producteur, module, regroupement et runtime limite | Famille et carrier limite présentés | Le carrier est projeté de la limite produite ; le transport ne récupère pas les familles riches |
+| Complétion | Producteur de limite et unicité dans le contrat | Caractérisation relative aux complétions présentées | Les morphismes sont dérivés, pas supposés ; aucune cible n'est fournie à son propre producteur |
+| Valeur extensive nue | Aucune construction native sans contexte reçu | Quotient ou valeur abstraite aval | Relation/fibre de réalisations, ou réalisation depuis une présentation reçue ; pas de `fromExtensive` exécutable général |
 
-Dans toutes les lignes, la colonne « readout extensif » est une projection. Elle
-ne peut jamais servir à fabriquer rétroactivement la construction de la colonne
-relationnelle ni ses occurrences.
+Dans toutes les lignes, la colonne « readout présenté aval » est une
+projection. Elle ne peut jamais servir à fabriquer rétroactivement la
+construction de la colonne relationnelle ni ses occurrences.
 
 ## Base déjà disponible et à ne pas reconstruire
 
@@ -245,11 +882,15 @@ couche d'opérations fermée sous composition, pas les remplacer ni les affaibli
 
 L'affirmation enregistrée
 `RUNTIME_EFFECTIVE_CAUCHY_REAL_CORRESPONDENCE` conserve sa portée actuelle :
-correspondance numérique effective, sans opérations de corps, ordre ni
-complétude d'ordre. Elle ne sera pas élargie avant les preuves correspondantes.
-La correspondance structurelle terminale devra recevoir une affirmation
-majeure distincte, ou une révision explicitement rouverte de cette affirmation,
-avec passage canonique, portée, références formelles et revues sur le même SHA.
+applications et allers-retours numériques/comportementaux, opérations,
+inverse sous apartness, ordre constructif, densité dyadique, bornes naturelles,
+familles de Cauchy effectives et natives, limites produites et unicité
+numérique. Elle exclut explicitement la couverture de tous les réels classiques,
+la complétude par borne supérieure et toute récupération des données riches
+oubliées. La caractérisation de complétion de la gate 7 devra recevoir une
+affirmation majeure distincte, avec passage canonique, portée, références
+formelles et revues sur le même SHA ; elle ne sera pas ajoutée mécaniquement à
+l'affirmation actuelle.
 
 ## Décision d'architecture obligatoire
 
@@ -2330,8 +2971,778 @@ transformer les builds en verdict de sens et sans identifier les occurrences
 ou familles riches. Les clarifications documentaires ne modifient aucun terme
 Lean ni cette portée ; leur lecture française et leur traduction sont revues
 sur la nouvelle évidence, tandis que leur validation indépendante reste
-ouverte. La gate 7 reste ouverte et aucun travail de couverture des réels
-usuels n'est engagé ici.
+ouverte. Les étapes internes 7.1 à 7.3 sont désormais implémentées dans
+l'arbre de travail : la section suivante en conserve le contrat, les
+obligations et les frontières. Elles ne seront scientifiquement closes qu'après
+concordance du code, des textes canoniques, du registre et des revues sur une
+même révision. La gate terminale 7.4 reste ouverte.
+
+### Gate 7 — complétion dyadique produite et caractérisation
+
+Cette gate est le seul lot scientifique restant pour la cible « réels » du
+présent plan. Elle ne part pas d'un `ℝ` extérieur. Elle prolonge la production
+native déjà obtenue jusqu'à une caractérisation de complétion dont une
+comparaison extensive pourra ensuite être une conséquence aval.
+
+Le degré de préparation n'est pas identique pour ses quatre étapes :
+
+| Étape | État avant implémentation | Condition de passage |
+| --- | --- | --- |
+| 7.1, complétude carrier produite | Implémentée ; paquet natif retenu, limite projetée ensuite, convergence, unicité et indépendance positive | Vérifier et enregistrer sur une révision d'évidence sans modifier la gate 6 |
+| 7.2, contrat abstrait | Implémenté ; noyau numérique séparé de l'enrichissement ordonné, sans morphisme terminal supposé | Vérifier la réalisation carrier et les lois quantitatives, algébriques, d'ordre, de densité et de bornes |
+| 7.3, caractérisation relative | Implémentée ; morphismes, allers-retours comportementaux et transports dérivés | Confronter séparément les textes FR/EN aux déclarations complètes et enregistrer les revues |
+| 7.4, référence classique | Étude de faisabilité non commencée ; cible exacte non choisie | Fermer totalité, correction, fidélité et transports ; sinon enregistrer la frontière et laisser la cible terminale ouverte |
+
+L'implémentation construit donc 7.1 à 7.3 sans décision extérieure. Sa clôture
+scientifique dans la portée interne exacte reste soumise aux textes, au
+registre et aux revues sur le même SHA. Il serait incorrect de coder un faux
+`fromExtensive` générique ou de promettre la portée classique de 7.4 sans cible
+formellement choisie.
+
+#### 7.1 — Produire la limite au niveau du carrier
+
+Le manque technique immédiat est localisé. Dans
+`RelationalRealFamilyTransport`, `CarrierLimit family value` décrit la
+convergence vers un `value` reçu et `realizeCarrierLimit` consomme ce même
+`value`. Ces déclarations sont correctes comme transport, mais elles ne sont
+pas un opérateur de complétion du carrier.
+
+Créer un module dédié, prévu sous le nom
+`RelationalRealCarrierCompleteness.lean`, qui construit depuis une seule
+`CarrierFamily` un résultat positif de la forme :
+
+```text
+CarrierCompletionResult P baseDepth family
+  native      : NativeCompleteness
+                  (carrierNativeFamily P baseDepth family)
+  limit       : EffectiveCauchyReal.Carrier
+  limitExact  : limit = toCarrier native.limit
+  convergence : CarrierLimit family limit
+  uniqueness  : (other : Carrier) -> CarrierLimit family other ->
+                  EffectiveCauchyReal.Equivalent limit other
+```
+
+Le résultat conserve `NativeCompleteness` lui-même, et donc la famille réalisée,
+la limite, le service riche, le candidat, les observations de convergence et
+l'unicité. Remplacer ce paquet par une égalité isolée avec `nativeLimit`
+affaiblirait la traçabilité de la production.
+
+Avant ce résultat, le module doit exposer les adaptateurs et ponts suivants.
+Leurs noms exacts peuvent varier, mais pas leurs domaines, codomaines ni sens :
+
+```text
+carrierNativeFamily
+  (P) (baseDepth) (family : CarrierFamily)
+  : NativeCauchyFamily P baseDepth
+
+carrierReturnedFamily
+  (P) (baseDepth) (family : CarrierFamily)
+  : CarrierFamily
+
+carrierLimitNativeCandidate
+  (family : CarrierFamily) (value : Carrier)
+  (h : CarrierLimit family value)
+  : NativeCandidate (carrierNativeFamily P baseDepth family)
+
+originalCarrierLimitToReturned
+  : CarrierLimit family value ->
+      CarrierLimit (carrierReturnedFamily P baseDepth family) value
+
+returnedCarrierLimitToOriginal
+  : CarrierLimit (carrierReturnedFamily P baseDepth family) value ->
+      CarrierLimit family value
+```
+
+`carrierNativeFamily` est construit avec `NativeCauchyFamily.ofTerms` et les
+termes `ofCarrier P baseDepth (family.terms n)`. Sa loi de Cauchy consomme les
+`Step` reçus ; elle utilise `currentReadout` et `ofPresentation_readout` pour
+raccorder leurs codes, puis `modulusMonotone` pour convertir les extensions de
+réponse en extensions sous les modules propres des termes. Aucun nouveau code
+de terme n'est calculé indépendamment du `Step` reçu.
+
+`carrierReturnedFamily` est précisément la vue carrier de
+`realizedFamily (carrierNativeFamily P baseDepth family)`. Les deux ponts de
+limite sont obligatoires :
+`preserveCarrierLimit` conclut actuellement sur `readoutCarrierFamily family`,
+donc sur cette famille retournée, et non définitionnellement sur la
+`CarrierFamily` originale. Le pont aller expose la compatibilité de la
+convergence reçue avec la normalisation ; `carrierLimitNativeCandidate` forme
+le candidat natif ; le pont retour transporte la convergence produite vers la
+famille reçue. Tous transportent les mêmes témoins `Near` par les égalités des
+readouts normalisés et les lois de roundtrip des termes ; ils ne reconstruisent
+ni une famille ni une limite.
+
+La construction suit alors ce chemin unique :
+
+```text
+CarrierFamily reçue
+  -> réalisation relationnelle de chacun de ses termes
+  -> NativeCauchyFamily avec producteur, module et témoins conservés
+  -> nativeCompleteness
+  -> limite Real produite par son runtime
+  -> toCarrier de cette limite
+  -> convergence et unicité du carrier projeté
+```
+
+Il est interdit de placer le carrier final, sa présentation ou un code cible
+dans la requête du producteur. `preserveCarrierLimit` peut projeter la limite
+native après sa production ; il ne peut pas servir à fabriquer la production.
+La convergence du résultat passe par le candidat autoritatif natif, sa
+projection par `preserveCarrierLimit`, puis
+`returnedCarrierLimitToOriginal`. L'unicité reçoit un `other` et un témoin
+`CarrierLimit family other`, construit avec
+`carrierLimitNativeCandidate` un candidat natif portant `ofCarrier ... other`,
+consomme `native.uniqueness`, puis transporte l'équivalence obtenue aux deux
+carriers. Elle n'utilise ni égalité de fonctions, ni égalité de représentants.
+
+Comme le carrier final ne dépend conceptuellement ni du périmètre `P` ni de
+`baseDepth`, le module doit fermer cette dépendance paramétrique :
+
+```text
+carrierCompletion_perimeterIndependent
+  (P Q) (baseDepth otherDepth) (family : CarrierFamily) :
+  EffectiveCauchyReal.Equivalent
+    (carrierCompletion P baseDepth family).limit
+    (carrierCompletion Q otherDepth family).limit
+```
+
+La preuve vient de l'unicité pour la même `CarrierLimit family`; elle
+n'identifie pas les runtimes, services, archives ou occurrences des deux
+réalisations.
+
+La revue de cette étape doit distinguer :
+
+| Question | Obligation |
+| --- | --- |
+| Indexation | Les termes, modules, précisions, archives et candidats restent indexés par la famille reçue |
+| Construction | Le runtime natif produit réellement la limite ; le carrier n'est créé qu'ensuite par readout |
+| Preuve consommée | Convergence Cauchy de la famille, exactitude des termes réalisés, convergence et unicité natives |
+| Oubli | Le carrier oublie archives, journaux, occurrences et témoins riches ; aucune loi ne prétend les restaurer |
+
+La portée de 7.1 est exactement `CarrierFamily`. Elle exige le module extérieur
+de la famille et le module intérieur de chacun de ses termes. Elle n'affirme
+pas que toute fonction `Nat -> Carrier` converge, ni qu'un module absent peut
+être choisi, ni que le carrier est complet pour les bornes supérieures.
+
+#### 7.2 — Fermer la caractérisation interne
+
+Créer ensuite `PresentedDyadicCompletion.lean`. Son noyau reprend exactement
+le schéma typé « Forme minimale du contrat de caractérisation » : carrier en
+`Type`, équivalence positive raccordée dans les deux sens à
+`ApproxEquivalent`, approximations, module monotone, cohérence, injection
+dyadique exacte, `PresentedFamily`, `Converges`, `LimitResult` et `complete`.
+Le module définit ensuite `numericalCarrier`, `ownFamily`,
+`presentCarrierFamily`, `diagonalTransportFamily`, `selfConvergence` et les
+familles canoniques d'addition, d'opposé et de multiplication ; aucun de ces
+objets n'est un champ libre de l'interface.
+
+Les définitions de famille et de convergence ne doivent pas être remplacées
+par des prédicats opaques. `PresentedFamily.cauchy` consomme le module extérieur
+et les modules propres des deux termes. `Converges` compare les codes après ces
+modules sous des extensions explicites. `LimitResult.unique` quantifie sur tout
+candidat reçu avec son témoin de convergence.
+
+Le théorème dérivé « un élément converge vers sa famille propre
+d'approximations » est une loi de présentation interne, obtenue de `coherent`
+et de `dyadicExact` ; ce n'est ni une donnée supplémentaire du contrat, ni une
+application vers le runtime, et il ne restitue aucune histoire. L'opérateur de
+limite doit produire sa cible. Un champ qui recevrait le candidat final ou
+supposerait directement l'aller-retour recherché rendrait l'interface
+circulaire et doit être refusé.
+
+Construire d'abord `carrierPresentedCore`, instance concrète du noyau pour
+`EffectiveCauchyReal.Carrier`, puis
+`carrierCompletionStructure P baseDepth`, instance de
+`PresentedDyadicCompletion carrierPresentedCore`, en utilisant :
+
+- ses approximations, son module monotone et sa loi `cauchy` ;
+- l'injection des constantes dyadiques déjà présente ;
+- le nouveau `CarrierCompletionResult` pour l'opérateur de limite ;
+- les opérations carrier, leurs projections, l'apartness, l'ordre et les
+  producteurs riches de densité et de bornes déjà établis dans la portée de la
+  gate 6 ; ces déclarations alimentent la nouvelle instance, mais ne valent pas
+  encore paquet de lois ordonné complet au niveau carrier ;
+- l'unicité carrier dérivée de l'unicité native.
+
+Ces instances doivent être complètes : aucune hypothèse générique ne peut
+rester ouverte dans la réalisation concrète requise.
+
+Construire ensuite, dans un sous-lot distinct,
+`PresentedDyadicOrderedFieldData`, puis l'empaqueter avec le noyau et sa
+complétion dans `PresentedDyadicOrderedFieldCompletion`. Les opérations
+carrier, leurs readouts et leurs transports existent déjà, mais le paquet
+complet de lois de corps ordonné est actuellement
+`ConstructiveOrderedFieldLaws P baseDepth` sur `Real P baseDepth`. Il faut donc produire un véritable
+`transportCarrierOrder`, son transport d'apartness, puis un véritable
+`CarrierOrderedFieldLaws`, avec lois sous
+`EffectiveCauchyReal.Equivalent`, apartness positive, ordre et inverse sous
+témoin. Les preuves peuvent consommer les correspondances avec `Real`; elles
+ne redéfinissent jamais les opérations carrier par une opération extensive ou
+par un carrier cible reçu.
+
+Cette fermeture doit traiter explicitement la dépendance actuelle de
+`CarrierDomain` et `inverseCarrier` envers `P` et `baseDepth`. Deux stratégies
+seulement sont admises :
+
+1. définir les constantes et domaines carrier canoniques depuis les codes
+   dyadiques, réaliser l'inverse par le runtime `P, baseDepth`, puis prouver que
+   son readout est indépendant de cette réalisation sous
+   `EffectiveCauchyReal.Equivalent` ;
+2. garder `CarrierOrderedFieldLaws P baseDepth`, puis fournir, pour tous
+   `P`, `Q`, `baseDepth` et `otherDepth`, les transports d'apartness et les
+   équivalences point par point des constantes, opérations, inverses, témoins
+   de densité et bornes produits, ainsi que l'égalité des codes et bornes
+   effectivement lus par les producteurs correspondants.
+
+Le plan retient la première stratégie comme cible d'implémentation : le carrier
+numérique possède zéro, unité, ordre et domaine d'inverse canoniques ; le
+runtime reste le producteur constitutif de l'inverse, de la densité et des
+bornes, et les théorèmes d'indépendance montrent que changer de périmètre ou de
+profondeur ne change que la réalisation riche, pas le réel présenté. Revenir à
+la seconde stratégie exige une justification documentée et les mêmes lois
+d'indépendance terminales.
+
+La première stratégie est fixée par les signatures suivantes ; elle ne laisse
+pas le domaine de l'inverse implicite :
+
+```text
+canonicalZeroCarrier := dyadicCarrier SignedDyadicCode.zero
+canonicalOneCarrier  := dyadicCarrier SignedDyadicCode.one
+
+CanonicalCarrierDomain x := CarrierApartness x canonicalZeroCarrier
+
+runtimeZeroEquivalent P baseDepth :
+  EffectiveCauchyReal.Equivalent
+    canonicalZeroCarrier (toCarrier (zero P baseDepth))
+
+runtimeCarrierDomain P baseDepth x
+  (w : CanonicalCarrierDomain x) : CarrierDomain P baseDepth x :=
+  transportCarrierApartness w
+    (EffectiveCauchyReal.Equivalent.refl x)
+    (runtimeZeroEquivalent P baseDepth)
+
+carrierInverse P baseDepth x (w : CanonicalCarrierDomain x) :=
+  inverseCarrier x (runtimeCarrierDomain P baseDepth x w)
+
+carrierInverse_perimeterIndependent
+  (P Q) (baseDepth otherDepth) (x : EffectiveCauchyReal.Carrier)
+  (w : CanonicalCarrierDomain x) :
+  EffectiveCauchyReal.Equivalent
+    (carrierInverse P baseDepth x w)
+    (carrierInverse Q otherDepth x w)
+```
+
+La dernière preuve ne compare pas les deux témoins historiques de domaine.
+Elle transporte leurs deux lois d'unité vers la multiplication carrier
+canonique et applique l'unicité algébrique de l'inverse. Elle dépend donc de
+`CarrierOrderedFieldLaws` et doit être construite après ses lois
+multiplicatives, mais avant `carrierOrderedCompletionIndependent`.
+
+Concrètement, l'instance reste explicitement paramétrée au moment de la
+production et son indépendance est un théorème, pas une égalité
+définitionnelle :
+
+```text
+carrierPresentedCore
+  : PresentedDyadicStructure
+
+carrierCompletionStructure P baseDepth
+  : PresentedDyadicCompletion carrierPresentedCore
+
+carrierOrderedData P baseDepth
+  : PresentedDyadicOrderedFieldData carrierPresentedCore
+
+carrierOrderedCompletion P baseDepth
+  : PresentedDyadicOrderedFieldCompletion
+  -- core = carrierPresentedCore
+  -- completion = carrierCompletionStructure P baseDepth
+  -- ordered = carrierOrderedData P baseDepth
+
+carrierOrderedCompletionIndependent
+  (P Q) (baseDepth otherDepth) :
+  OrderedCompletionPointwiseEquivalent
+    carrierPresentedCore
+    (carrierCompletionStructure P baseDepth)
+    (carrierCompletionStructure Q otherDepth)
+    (carrierOrderedData P baseDepth)
+    (carrierOrderedData Q otherDepth)
+```
+
+`OrderedCompletionPointwiseEquivalent` compare uniquement deux réalisations
+paramétrées qui ont déjà été ramenées au même carrier, aux mêmes approximations
+et aux relations canoniques carrier. Il contient les équivalences de zéro,
+unité, addition, opposé, multiplication et inverse après transport du domaine,
+ainsi que l'équivalence point par point des limites produites et les transports
+aller-retour d'apartness, d'ordre, de densité et de bornes. Il compare en plus
+les codes effectivement choisis par les producteurs de densité et de bornes ;
+le simple transport d'un témoin valide ne remplace pas cette comparaison. L'équivalence
+positive est celle de l'unique noyau `C` partagé, pas une relation à transporter. Il
+n'identifie ni les fonctions productrices ni leurs runtimes. Cette forme évite
+de choisir silencieusement un périmètre
+« canonique » qui redeviendrait une primitive cachée.
+
+```text
+densityCode
+  (w : PresentedDensityWitness C Order x y) : SignedDyadicCode := w.1
+
+lowerNatural
+  (w : PresentedNaturalBoundsWitness C Order x) : Nat := w.1
+
+upperNatural
+  (w : PresentedNaturalBoundsWitness C Order x) : Nat := w.2.1
+
+OrderedCompletionPointwiseEquivalent C KA KB A B
+  -- KA KB : PresentedDyadicCompletion C
+  -- A B : PresentedDyadicOrderedFieldData C
+  zeroEquivalent : C.Equivalent A.zero B.zero
+  oneEquivalent : C.Equivalent A.one B.one
+  addEquivalent : (x y : C.Carrier) ->
+    C.Equivalent (A.add x y) (B.add x y)
+  negEquivalent : (x : C.Carrier) ->
+    C.Equivalent (A.neg x) (B.neg x)
+  mulEquivalent : (x y : C.Carrier) ->
+    C.Equivalent (A.mul x y) (B.mul x y)
+  completeEquivalent : (family : PresentedFamily C) ->
+    C.Equivalent (KA.complete family).value (KB.complete family).value
+  preserveApartness : A.Apartness x y -> B.Apartness x y
+  reflectApartness : B.Apartness x y -> A.Apartness x y
+  transportInverseDomain : A.Apartness x A.zero -> B.Apartness x B.zero
+  reflectInverseDomain : B.Apartness x B.zero -> A.Apartness x A.zero
+  inverse : C.Equivalent (A.inverse x w)
+    (B.inverse x (transportInverseDomain w))
+  preserveOrder : A.Order x y -> B.Order x y
+  reflectOrder : B.Order x y -> A.Order x y
+  preserveDensity : PresentedDensityWitness C A.Order x y ->
+    PresentedDensityWitness C B.Order x y
+  reflectDensity : PresentedDensityWitness C B.Order x y ->
+    PresentedDensityWitness C A.Order x y
+  preserveBounds : PresentedNaturalBoundsWitness C A.Order x ->
+    PresentedNaturalBoundsWitness C B.Order x
+  reflectBounds : PresentedNaturalBoundsWitness C B.Order x ->
+    PresentedNaturalBoundsWitness C A.Order x
+  densityReadoutExact : (origin : A.Order x y) ->
+    densityCode (A.density origin) =
+      densityCode (B.density (preserveOrder origin))
+  lowerBoundReadoutExact : (x : C.Carrier) ->
+    lowerNatural (A.naturalBounds x) =
+      lowerNatural (B.naturalBounds x)
+  upperBoundReadoutExact : (x : C.Carrier) ->
+    upperNatural (A.naturalBounds x) =
+      upperNatural (B.naturalBounds x)
+```
+
+Le carrier numérique commun ne signifie pas que deux occurrences sont égales.
+Les lois sur les résultats produits restent les véritables comparaisons. Les
+transports de densité et de bornes ne déclarent pas égales deux occurrences de
+producteurs ni deux choix valides différents ; ils transportent le témoin reçu
+et son code. Les trois champs `*ReadoutExact` ont une autre fonction : ils
+comparent les résultats effectivement choisis par les deux producteurs
+concrets lancés avec le même témoin carrier. Ils imposent l'égalité de leurs
+codes ou bornes numériques, jamais l'égalité des paquets `Density`,
+`NaturalBound`, des journaux, des archives ou des occurrences. Leur instance
+carrier doit être fournie par des théorèmes dédiés
+`carrierDensityReadout_perimeterIndependent` et
+`carrierNaturalBoundsReadout_perimeterIndependent`, obtenus de l'exactitude des
+recherches exécutées, et non de la seule existence d'un autre témoin valide.
+
+La notion `CompletionMorphism` entre deux noyaux doit être explicite, mais ne
+doit pas recevoir la conclusion qu'elle sert à établir. Elle contient une
+application, la préservation de l'injection dyadique et de l'équivalence, et la
+preuve positive que l'image d'un élément converge vers la présentation cible
+canonique des approximations de cet élément. Aucun champ ne contient une
+application dans le sens opposé, un aller-retour ou l'équivalence à la limite
+produite.
+
+```text
+CompletionMorphism Source Target
+  map : Source.Carrier -> Target.Carrier
+  mapEquivalent : Source.Equivalent x y ->
+    Target.Equivalent (map x) (map y)
+  mapDyadic : (code : SignedDyadicCode) ->
+    Target.Equivalent (map (Source.dyadic code)) (Target.dyadic code)
+  presents : (x : Source.Carrier) ->
+    Converges Target
+      (presentCarrierFamily Target (numericalCarrier Source x))
+      (map x)
+
+mapAsProducedLimit (f : CompletionMorphism Source Target) x :
+  Target.Equivalent
+    (f.map x)
+    (Target.complete
+      (presentCarrierFamily Target (numericalCarrier Source x))).value
+  -- théorème dérivé de f.presents et de LimitResult.unique
+
+preservePresentedLimit
+  (f : CompletionMorphism Source Target)
+  (convergence : Converges Source family value) :
+  Converges Target
+    (diagonalTransportFamily Source Target family)
+    (f.map value)
+  -- théorème dérivé ; aucun champ supplémentaire
+
+mapProducedLimit (f : CompletionMorphism Source Target) family :
+  Target.Equivalent
+    (f.map (Source.complete family).value)
+    (Target.complete
+      (diagonalTransportFamily Source Target family)).value
+  -- dérivé de preservePresentedLimit et de l'unicité cible
+```
+
+Le transport d'une famille source arbitraire n'est pas un champ libre du
+morphisme. Il est `diagonalTransportFamily Source Target family`, construit
+avant tout morphisme avec les codes sources réellement demandés. Il conserve
+explicitement la diagonale
+`Source.approximation (family.terms n)
+(Source.modulus (family.terms n) n)` et renforce le module extérieur en
+`Nat.succ p + family.modulus (Nat.succ p)`. Le paquet de preuve expose les
+extensions vers `Nat.succ p`, vers le module source et vers l'indice reçu,
+ainsi que la monotonie utilisée ; il ne prétend ni à une égalité des familles
+ni à une conservation des producteurs et témoins oubliés. La
+préservation d'une limite présentée est ensuite un théorème obtenu de ce
+transport, de `presents`, de la convergence source reçue, des cohérences et de
+l'unicité. Elle n'est pas supposée dans le noyau ni dans
+`CompletionMorphism`.
+
+Deux morphismes sont équivalents seulement si leurs valeurs sont reliées pour
+chaque entrée :
+
+```text
+PointwiseEquivalent f g := (x : Source.Carrier) ->
+  Target.Equivalent (f.map x) (g.map x)
+```
+
+Aucune preuve ne demande `f = g`, `funext` ou une identification de leurs
+occurrences. L'extension ordonnée ajoute ensuite les lois quantitatives qui
+permettent de dériver la préservation de `0`, `1`, des opérations, de
+l'apartness et de l'ordre, ainsi que le transport des témoins de densité et de
+bornes naturelles. Pour l'addition, l'opposé et la multiplication, la preuve
+compare précisément les familles canoniques fixées plus haut ; elle ne peut
+pas invoquer une réponse choisie par l'instance. Pour l'inverse, elle utilise
+les unités multiplicatives et `inverseCongr`, après transport explicite des
+deux domaines d'apartness. Une structure de corps abstraite sans raccord aux
+approximations et aux limites est insuffisante.
+
+La multiplication suit obligatoirement la chaîne quantitative suivante. De
+`f.presents x` et `f.presents y`, on dérive d'abord, par la définition de
+`Converges` et `presentedCarrierEquivalent`, les équivalences entre les
+`numericalCarrier` des images et ceux des sources. Les termes et modules de la
+famille multiplicative canonique se réduisent définitionnellement à ceux de
+`presentCarrierFamily` appliquée au `mulCarrier` des deux carriers numériques ;
+aucune égalité de leurs champs de preuve Cauchy n'est demandée. On applique
+ensuite `mulCarrierCongr`, avec le
+`precisionPool (carrierMulComparisonPrecisions ...)`, pour comparer leurs
+produits numériques. Enfin, `Source.ordered.multiplicativeConverges`,
+`Target.ordered.multiplicativeConverges` et `f.presents (Source.mul x y)`
+relient ces deux produits aux résultats d'opération, et l'unicité des limites
+donne l'équivalence cible. Il est interdit de remplacer cette chaîne par une
+égalité de familles, une égalité des sondes d'amplitude, ou un appel abstrait à
+`mulCongr` qui ne montrerait pas comment les présentations sont raccordées.
+
+Le mot « universel » est limité dans ce plan à cette catégorie explicitement
+présentée et à cette notion de morphisme. Tant qu'une propriété universelle
+catégorique plus générale n'est pas formalisée, le théorème et le texte
+canonique doivent employer « caractérisation relative aux complétions
+dyadiques présentées » ou « unicité parmi ces complétions », pas revendiquer
+une universalité non typée.
+
+#### 7.3 — Dériver la comparaison relative
+
+Dans un module prévu sous le nom `DyadicCompletionCharacterization.lean`,
+construire pour toute seconde instance du contrat :
+
+```text
+versCible
+  : CarrierRelationnel -> CarrierCible
+
+depuisCible
+  : CarrierCible -> CarrierRelationnel
+```
+
+`versCible x` doit être la limite **produite dans la cible** de la famille des
+approximations dyadiques de `x`. `depuisCible y` a une seule définition
+autorisée : `numericalCarrier Cible.core.toPresentedDyadicData y`, définition
+extérieure construite directement avec l'approximation, le module monotone et
+la cohérence reçus avec `y`. Cette application n'est donc pas une prémisse du
+contrat. Il n'existe pas de seconde branche qui choisirait entre cette
+présentation et une limite normalisée.
+
+Schématiquement :
+
+```text
+depuisCible y := numericalCarrier Cible.core.toPresentedDyadicData y
+versCible x   :=
+  (Cible.completion.complete
+    (presentCarrierFamily Cible.core x)).value
+```
+
+L'aller-retour `depuisCible (versCible x)` est prouvé par la convergence de la
+limite cible et la cohérence de `x`. L'aller-retour
+`versCible (depuisCible y)` compare deux convergences distinctes vers la même
+famille propre : celle du résultat de `complete` et celle qui présente déjà
+`y`; l'unicité de la cible donne leur équivalence. Aucun des deux n'est défini
+par choix d'un représentant extensif.
+
+Le paquet dérivé doit préciser :
+
+- les deux applications et leur calcul sur les dyadiques ;
+- les deux allers-retours à l'équivalence positive près ;
+- la préservation et la réflexion de l'équivalence ;
+- le transport de `0`, `1`, addition, opposé, multiplication et inverse sous
+  apartness ;
+- la préservation et la réflexion de l'apartness et de l'ordre positif ;
+- le transport de la densité dyadique et des bornes archimédiennes produites ;
+- le transport des familles présentées et des limites produites ;
+- la perte irréversible des producteurs, modules, témoins, histoires,
+  journaux et occurrences après projection numérique.
+
+L'unicité de la comparaison est elle aussi point par point : tout
+`CompletionMorphism` qui préserve les dyadiques et les limites produites est
+relié à `versCible` sous `PointwiseEquivalent`. Il n'est jamais conclu que les
+fonctions, les producteurs ou leurs traces sont égaux.
+
+Il faut contrôler séparément deux convergences qui peuvent avoir le même
+readout : la convergence vers la limite produite dans la cible et la
+convergence de l'élément reçu vers sa propre présentation. Leur confusion
+rendrait l'aller-retour circulaire.
+
+Ce théorème permet d'annoncer que le carrier relationnel est, à l'équivalence
+positive près, **la complétion constructive présentée des dyadiques** décrite
+par le contrat. Il ne permet pas encore d'annoncer qu'un programme fini produit
+tout élément d'un quotient classique nu.
+
+#### 7.4 — Comparaison extensive aval requise pour la portée classique
+
+Une comparaison avec une construction externe particulière des réels est un
+lot séparé de la caractérisation interne. Avant tout code, il faut choisir et
+documenter exactement la cible : type `E`, équivalence `ExternalEquivalent`,
+injection dyadique, opérations, ordre, notion de famille présentée, principe de
+complétion et hypothèses constructives utilisées.
+
+La relation positive `Realizes : Carrier -> E -> Type` doit être accompagnée
+des quatre groupes d'obligations suivants :
+
+1. **totalité bidirectionnelle**, avec obligatoirement
+   `carrierCoverage : (c : Carrier) -> (Σ x : E, Realizes c x)` pour le readout
+   aval de chaque carrier, et, dans le sens externe vers carrier, en distinguant
+   explicitement
+   `constructiveCoverage : (x : E) -> (Σ c : Carrier, Realizes c x)`, qui fournit
+   une donnée exploitable, de
+   `relationalCoverage : (x : E) -> Nonempty (Σ c : Carrier, Realizes c x)`, qui
+   ne fournit pas d'inverse en `Type` ;
+2. **correction** : deux carriers équivalents qui réalisent des valeurs
+   externes réalisent des valeurs `ExternalEquivalent` ;
+3. **fidélité** : deux réalisations de valeurs `ExternalEquivalent` ont des
+   carriers équivalents ;
+4. **transport** : injection dyadique, `0`, `1`, opérations, inverse sous son
+   domaine, apartness, ordre et limites sont préservés et, lorsque le verdict
+   l'affirme, réfléchis.
+
+Une relation ou une fibre sans ces obligations ne justifie ni « tous les réels
+classiques » ni une correspondance. En particulier, couvrir tous les `x : E`
+sans montrer que tout carrier réalise une valeur externe ne donne qu'une
+surjection vers les carriers couverts, pas une correspondance des deux
+constructions. Une couverture `Nonempty` reste une lecture propositionnelle
+aval et ne peut pas être présentée comme un runtime calculable de chaque valeur
+externe.
+
+Trois verdicts doivent être distingués, et aucun ne peut être renommé en un
+autre :
+
+1. **correspondance constructive totale** : la cible fournit le contrat,
+   `carrierCoverage` et `constructiveCoverage`; chaque carrier possède son
+   readout externe et chaque valeur externe reçue produit une réalisation
+   carrier, puis la comparaison relative s'applique ;
+2. **correspondance relationnelle totale** : la cible fournit
+   `carrierCoverage`, `relationalCoverage`, correction, fidélité et tous les
+   transports ; chaque carrier réalise une valeur externe et chaque valeur
+   externe appartient bien à une fibre de réalisations, mais aucune fonction
+   exécutable depuis la valeur nue n'est annoncée ;
+3. **frontière formelle** : l'une des obligations précédentes ne peut être
+   fermée sous les règles du dépôt. Cette issue est scientifiquement conforme
+   comme constat d'échec, mais **elle n'atteint pas** la cible « correspondance
+   avec tous les réels classiques usuels ».
+
+Les interdictions Lean du dépôt restent en vigueur. Il est donc exclu de fermer
+cette étape par `Classical`, `noncomputable`, `Quot.sound`, `propext`, une
+borne supérieure choisie ou un représentant extrait silencieusement. Si la
+construction extensive retenue exige ces mécanismes, la conclusion correcte
+sera une frontière formelle explicitée et la gate classique restera ouverte,
+pas un affaiblissement du contrat.
+En particulier, l'emploi du `Real` standard de Lean/mathlib, s'il est retenu,
+doit commencer par une étude de faisabilité de ses quotients et de ses
+principes classiques au regard de ces interdictions. Cette étude peut conclure
+que seule une relation de readout est formalisable dans le dépôt actuel ; ce
+serait une limite démontrée de la comparaison choisie, non un échec à masquer
+ni une réussite de la cible classique.
+
+À l'état présent, `lakefile.toml` ne déclare aucune dépendance mathlib et le
+dépôt ne contient pas de type externe déjà validé pouvant être nommé ici
+« réels usuels ». L'étape 7.4 n'est donc pas prête à être implémentée : son
+premier résultat doit être une note de faisabilité qui fixe soit une
+construction constructive autonome de référence, soit une dépendance externe
+explicitement auditée. Tant que ce choix n'est pas fermé, aucune déclaration
+Lean de 7.1 à 7.3 ne peut être comptée comme correspondance avec tous les réels
+classiques. Ce constat maintient la cible ; il ne la remplace pas par la seule
+classe effective déjà construite.
+
+#### Ordre d'implémentation de la gate 7
+
+1. Figer la matrice de non-perte des déclarations de gate 6 et les signatures
+   exactes de `CarrierFamily`, `CarrierLimit`, `NativeCompleteness` et
+   `EffectiveCauchyReal.Carrier`.
+2. Ouvrir l'étude de faisabilité de la cible terminale 7.4 : nommer le type
+   externe candidat `E`, son équivalence, ses opérations, son ordre et la forme
+   de couverture visée, puis verrouiller cette référence si elle est compatible
+   avec les règles constructives. L'absence de référence compatible ne bloque
+   pas 7.1 à 7.3, mais interdit de commencer 7.4 et laisse la cible « réels
+   usuels » explicitement non prête.
+3. Implémenter `carrierNativeFamily`, `carrierReturnedFamily`,
+   `carrierLimitNativeCandidate` et les deux transports de `CarrierLimit` ;
+   vérifier séparément leurs indexations, exécutions, preuves et oublis.
+4. Prouver `CarrierCompletionResult` en conservant le paquet
+   `NativeCompleteness`, sans modifier les types ni théorèmes antérieurs.
+5. Prouver l'indépendance positive vis-à-vis de `P` et `baseDepth` pour une
+   même famille carrier, sans identifier les runtimes correspondants.
+6. Ajouter des tests positifs avec famille non constante, module extérieur non
+   trivial, modules intérieurs non identité, archives non initiales et deux
+   candidats carriers structurellement distincts mais équivalents.
+7. Ajouter les fixtures négatives qui refusent cible reçue, présentation
+   substituée, perte du producteur, module intérieur ou extérieur ignoré,
+   réinitialisation de l'archive et égalité d'occurrences ou de fonctions.
+8. Définir le noyau abstrait non circulaire, puis construire
+   `numericalCarrier`, `ownFamily`, `presentCarrierFamily`,
+     `diagonalTransportFamily`, `selfConvergence`,
+     `presentedCarrierEquivalent`, `carrierPresentedCore` et
+     `carrierCompletionStructure`, sans prémisse concrète ouverte. Vérifier
+     séparément le cran de composition et les deux seuils du théorème
+     `presentedCarrierEquivalent`.
+9. Dériver les deux applications de comparaison, leurs allers-retours et
+   l'unicité point par point par convergence et unicité ; dériver ensuite la
+   préservation des limites via `diagonalTransportFamily`, sans l'ajouter comme
+   champ reçu du morphisme.
+10. Définir les familles canoniques d'addition, d'opposé et de multiplication
+     avec leurs calendriers fixés, puis construire
+     `normalizedEquivalentNear`, `carrierMulComparisonPrecisions` et
+     `mulCarrierCongr`. Vérifier que les deux crans du rapprochement normalisé,
+     les deux amplitudes croisées de `Near.mul` et tous les seuils figurent dans
+     les types ou dans les témoins `PrecisionMember`. Construire ensuite les
+     trois paquets de lois typés et `PresentedDyadicOrderedFieldData`, sans
+     morphisme terminal reçu.
+11. Construire `composeSignedBoundMixed` et
+     `sixFineOneMiddleBudget`, puis `DirectedUpper.composeThreeOneThree` sans
+     affaiblissement séquentiel des sept segments,
+     `strengthenSeparationThreeLinks`, et
+     `transportCarrierOrder`, `transportCarrierApartness`, les
+     constantes et domaines carrier canoniques, `CarrierOrderedFieldLaws`, les
+     paquets riches `CarrierDensityResult` et `CarrierNaturalBoundResult`, puis
+     `carrierOrderedData` et `carrierOrderedCompletion`. Prouver séparément
+     l'équivalence des résultats mathématiques et l'égalité des codes de
+     densité et bornes réellement lus, envers `P` et `baseDepth`, sans égalité
+     des producteurs.
+12. Dériver l'extension ordonnée de la comparaison : préservation et réflexion
+     des opérations, de l'ordre, de l'apartness, de la densité et des bornes,
+     sans importer une opération extensive dans un producteur runtime.
+13. Ajouter des tests positifs avec carriers de modules non identité pour les
+     trois familles canoniques et avec deux périmètres distincts pour l'inverse,
+     la densité et les bornes. Ajouter des fixtures négatives refusant un
+     calendrier d'opération libre, un transport d'ordre sans modules et une
+     prétendue indépendance qui ne compare que l'existence de témoins.
+14. Ajouter le codegen uniquement sur les nouvelles routes exécutables :
+    adaptateur de famille, producteur natif, production unique de limite,
+    partage de la cible et continuation d'archives. Les lois logiques de
+    comparaison, d'unicité et de morphisme relèvent de clients Lean et des
+    audits d'axiomes, pas d'une prétendue observation codegen.
+15. Si une référence externe a été verrouillée à l'étape 2, la réaliser et
+    fermer `carrierCoverage`, la couverture externe choisie, la correction, la
+    fidélité et tous les transports. Si aucune référence compatible n'existe ou
+    si cette fermeture échoue, enregistrer la frontière et garder la cible
+    classique ouverte.
+16. Rejouer build, audits d'axiomes, scan constructif, frontières d'import,
+    stratification, fixtures, codegen et contrôles documentaires.
+17. Écrire séparément les passages canoniques français et anglais, créer les
+    affirmations distinctes correspondant aux portées effectivement fermées,
+    les inscrire au registre et effectuer les revues sur un SHA exact.
+18. Ne fusionner dans `main` qu'après validation de l'ensemble demandé et
+    revérification du commit fusionné.
+
+#### Gates d'acceptation propres à ce lot
+
+Le lot échoue si l'un des constats suivants est vrai :
+
+- la limite carrier est un argument de la production qui prétend la produire ;
+- la preuve reconstruit une limite indépendante au lieu de consommer celle du
+  runtime natif ;
+- l'interface générique suppose les morphismes ou allers-retours recherchés ;
+- `CompletionMorphism` reçoit `mapProducedLimit`, la préservation d'une limite
+  arbitraire ou l'équivalence à la limite cible au lieu de les faire dériver de
+  `presents`, du transport diagonal et de l'unicité ;
+- l'interface contient un champ vers `EffectiveCauchyReal.Carrier` ou toute
+  autre application terminale, même présentée verbalement comme « dérivée » ;
+- la famille propre d'un élément reçoit librement ses termes ou son module au
+  lieu de les définir depuis ses approximations et son module propres ;
+- `presentedCarrierEquivalent` traite une convergence comme une équivalence
+  déjà donnée, omet son seuil de réponse ou compose ses deux proximités sans le
+  cran `p + 1` requis ;
+- une famille d'opération reçoit librement ses réponses ou emploie un
+  calendrier dont les extensions vers les modules des opérandes ne sont pas
+  dérivables ; les trois familles directes doivent être les familles
+  canoniques fixées dans ce plan ;
+- la congruence multiplicative suppose égales les sondes d'amplitude des deux
+  côtés, omet un des deux crans de `normalizedEquivalentNear`, ou n'exhibe pas
+  les extensions depuis le `precisionPool` de
+  `carrierMulComparisonPrecisions` ;
+- le transport d'une famille omet le cran de précision consommé par
+  `Near.compose`, change silencieusement son module, ou prétend conserver les
+  producteurs et profils qu'il diagonalise ;
+- la réalisation concrète laisse une loi de complétion comme hypothèse ;
+- `preserveCarrierLimit` sur la famille retournée est utilisé comme s'il
+  concluait définitionnellement sur la famille originale ;
+- la limite carrier dépend de `P` ou de `baseDepth` sans équivalence prouvée ;
+- le paquet natif riche est remplacé par sa seule limite ou une égalité ;
+- les lois de corps sur `Real` sont annoncées comme lois de carrier sans paquet
+  et transports effectivement prouvés ;
+- zéro, unité, inverse, densité ou bornes carrier restent dépendants de `P` ou
+  `baseDepth` sans équivalence de leurs readouts et transport de leurs domaines ;
+- la densité ou l'archimédianité figurent dans le verdict terminal sans champ,
+  producteur et transport correspondants dans l'extension ordonnée ;
+- les champs carrier de densité ou de bornes sont remplis par un témoin
+  numérique reconstruit sans conserver les paquets runtime riches dont ils
+  doivent être les projections ;
+- l'indépendance de la densité ou des bornes envers `P` et `baseDepth` se borne
+  à transporter l'existence d'un témoin sans comparer les codes effectivement
+  produits par les deux exécutions ;
+- un ordre ou un domaine d'inverse carrier est transporté comme si
+  `EffectiveCauchyReal.Equivalent` induisait définitionnellement une égalité
+  des présentations, au lieu de consommer séparément cohérence, modules,
+  seuils et le budget de `strengthenSeparationThreeLinks` ;
+- `transportCarrierOrder` compose naïvement ses trois rapprochements par
+  extrémité avant d'appeler `strengthenSeparation`, ou réclame une réponse
+  d'origine au-delà de `accuracy + 3` que le témoin reçu ne fournit pas ;
+- `DirectedUpper.composeThreeOneThree` est remplacé par une association binaire
+  qui affaiblit des segments à une précision commune et dépasse ainsi la
+  tolérance totale exacte disponible ;
+- la composition exacte des sept segments ne fournit pas séparément la
+  composition de bornes à tolérances mixtes, l'alignement des extras communs et
+  l'identité entière `sixFineOneMiddleBudget` ;
+- l'unicité d'un morphisme est une égalité de fonctions plutôt qu'une loi
+  point par point sous l'équivalence positive ;
+- un quotient ou un réel extensif nu est utilisé comme primitive amont ;
+- un readout numérique est présenté comme récupération des occurrences ou des
+  témoins Cauchy ;
+- une couverture propositionnelle `Nonempty` est présentée comme une fonction
+  constructive vers les runtimes ;
+- la complétude des `CarrierFamily` est élargie aux suites sans module ou à la
+  complétude d'ordre ;
+- aucune référence externe exacte n'est fixée, `carrierCoverage` manque, la
+  couverture externe choisie manque, ou une simple relation non totale dans
+  l'un des deux sens est appelée correspondance avec tous ses éléments ;
+- une frontière formelle est comptée comme réussite de la cible classique ;
+- « complétion constructive présentée » est renommé en « tous les réels
+  classiques » sans comparaison séparée effectivement prouvée.
+
+Le lot peut être déclaré scientifiquement fermé seulement après concordance du
+code, des tests, du texte, du registre et des revues sur la même révision. Un
+build vert seul ne constitue pas ce verdict.
 
 ### Gates terminales de preuve
 
@@ -2340,7 +3751,9 @@ les réalisations antérieures portent leurs résultats dans leurs portées
 déclarées ; l'extension native de la gate 4 et la gate 6 sont closes sur
 `5e69b1b` par les revues primaire et indépendante enregistrées. Sur la nouvelle
 évidence `1a2bd65`, les revues de lecture et de traduction sont enregistrées,
-mais la revue indépendante reste ouverte ; la gate 7 reste également ouverte.
+mais la revue indépendante reste ouverte. Les étapes 7.1 à 7.3 possèdent
+désormais une implémentation candidate ; elles doivent encore être enregistrées
+et revues sur leur propre révision d'évidence. La gate 7.4 reste ouverte.
 Une accumulation de
 définitions ou un build vert ne remplace aucun de ces critères :
 
@@ -2373,28 +3786,38 @@ définitions ou un build vert ne remplace aucun de ces critères :
    antérieurs ; elles ne redéfinissent pas des opérations extensives pour les
    réimporter. Les références canoniques en preuve et les appels compilés sont
    contrôlés séparément.
-7. **Gate de couverture des réels usuels.** Il faut soit une identification
-   directe, dans les deux sens et sous une équivalence explicite, avec la
-   construction extensive retenue comme référence, soit un théorème de
-   caractérisation et d'unicité dont toutes les hypothèses sont prouvées dans
-   le dépôt. Cette gate enregistre séparément la portée effective et toute
-   portée classique plus large.
+7. **Complétion dyadique produite et caractérisation.** Toute famille carrier
+   explicitement présentée produit, par la route native, un carrier limite avec
+   convergence et unicité. Le dépôt réalise ensuite le contrat de complétion
+   dyadique présentée et dérive la comparaison avec toute autre réalisation de
+   ce contrat. Pour fermer la cible « réels usuels », une référence externe
+   exacte doit en outre recevoir le readout de chaque carrier et être couverte
+   pour chacun de ses éléments par une réalisation constructive ou une fibre
+   relationnelle totale, correcte, fidèle et compatible avec la structure.
+   Une comparaison avec un quotient classique nu reste une couche aval : elle
+   ne devient jamais un inverse exécutable fabriqué par choix caché.
 
 ### Critère terminal de succès et verdicts interdits
 
-Le chantier pourra annoncer « correspondance avec les réels effectifs de la
+Le chantier peut annoncer « correspondance avec les réels effectifs de la
 construction choisie » après la gate 6, en nommant exactement la classe de
 présentations couverte et l'équivalence comportementale/numérique retenue,
-sans récupération des données riches oubliées par ce transport. Il ne pourra
-annoncer « correspondance avec tous les réels usuels » qu'après la gate 7.
-Avant cela, les verdicts autorisés seront
-respectivement :
+sans récupération des données riches oubliées par ce transport. Après les
+étapes 7.1 à 7.3, et après leur revue sur une révision d'évidence exacte, il
+pourra annoncer « caractérisation comme complétion constructive présentée des
+dyadiques ». Il ne pourra annoncer « correspondance
+avec tous les réels classiques usuels » qu'après une étape 7.4 séparée qui
+nomme une référence classique exacte et prouve soit la couverture constructive
+totale, soit la couverture relationnelle totale, avec correction, fidélité et
+transports. Énoncer une relation, documenter une frontière ou constater une
+incompatibilité ne ferme pas cette cible. Les verdicts sont donc, par portée :
 
 - addition relationnelle fermée ;
 - structure de corps ordonné relationnel ;
 - complétude de Cauchy effective ;
 - correspondance structurelle effective comportementale ;
-- couverture classique encore ouverte.
+- complétion dyadique constructive caractérisée, après 7.1 à 7.3 ;
+- couverture classique extensive encore ouverte tant que 7.4 ne l'est pas.
 
 Il sera interdit de remplacer une gate manquante par un renommage, une
 surjection de readout, une cardinalité, une propriété seulement propositionnelle
@@ -2412,7 +3835,11 @@ Pour chaque gate, les tests négatifs devront notamment empêcher :
   compilé supplémentaire, ou que l'absence de celui-ci soit affirmée sans
   contrôle de la route compilée ;
 - qu'une couverture des présentations effectives soit généralisée aux objets
-  non reçus et non exécutables.
+  non reçus et non exécutables ;
+- qu'un représentant d'un quotient extensif soit choisi silencieusement pour
+  définir une réalisation ;
+- que les morphismes de comparaison ou leurs allers-retours soient placés parmi
+  les hypothèses du contrat censé les faire dériver.
 
 `AC` et `CH` ne font pas partie de ce cycle. Leur étude exigera ensuite une
 théorie relationnelle explicite des collections, des fonctions de choix, des

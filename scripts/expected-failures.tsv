@@ -191,3 +191,23 @@ Tests/ExpectedFailure/PrivateReciprocalArchive.lean.fail	privacy	12	2	Unknown co
 Tests/ExpectedFailure/PrivateNativeArchive.lean.fail	privacy	10	2	Unknown constant `RelationalPerimeter.Constitution.Reals.RelationalRealNativeCauchy.NativeArchive.mk`
 Tests/ExpectedFailure/PrivateAdditionArchiveUpdate.lean.fail	privacy	10	2	invalid {...} notation, constructor for `AdditionArchive` is marked as private
 Tests/ExpectedFailure/PrivateNativeArchiveUpdate.lean.fail	privacy	9	2	invalid {...} notation, constructor for `NativeArchive` is marked as private
+Tests/ExpectedFailure/CarrierCompletionCannotReceiveLimit.lean.fail	semantic-type	5	2	EffectiveCauchyReal.Carrier → CarrierCompletionResult P d family
+Tests/ExpectedFailure/CarrierCompletionCannotDropNativePacket.lean.fail	dependent-type	5	2	NativeCompleteness (carrierNativeFamily P d family)
+Tests/ExpectedFailure/CarrierCompletionRequiresFamily.lean.fail	dependent-type	4	24	RelationalRealFamilyTransport.CarrierFamily
+Tests/ExpectedFailure/CarrierFamilyCannotIgnoreInnerModule.lean.fail	dependent-type	5	32	PrecisionExtension ((family.terms n).modulus p) r
+Tests/ExpectedFailure/CarrierLimitCannotIgnoreOuterModule.lean.fail	dependent-type	5	24	PrecisionExtension ((normalizeCarrierFamily family).modulus p) n
+Tests/ExpectedFailure/CarrierReturnedLimitNeedsBridge.lean.fail	dependent-type	5	2	CarrierLimit (carrierReturnedFamily P d family) value
+Tests/ExpectedFailure/CarrierEquivalenceCannotIdentifyCarriers.lean.fail	semantic-type	4	2	x = y
+Tests/ExpectedFailure/CarrierNativeCannotResetArchive.lean.fail	dependent-type	6	2	Step (environment (ofCarrier P d (family.terms 0))) old.next p
+Tests/ExpectedFailure/PresentedCoreCannotReceiveTerminalMap.lean.fail	privacy	4	2	Unknown constant `RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion.PresentedDyadicStructure.toCarrier`
+Tests/ExpectedFailure/CompletionCannotReceiveCandidate.lean.fail	semantic-type	5	2	C.core.Carrier → LimitResult C.core family
+Tests/ExpectedFailure/CompletionMorphismCannotReceiveLimitPreservation.lean.fail	privacy	7	2	Unknown constant `RelationalPerimeter.Constitution.Reals.DyadicCompletionCharacterization.CompletionMorphism.mapProducedLimit`
+Tests/ExpectedFailure/PointwiseComparisonCannotIdentifyFunctions.lean.fail	semantic-type	5	2	f.map = g.map
+Tests/ExpectedFailure/CanonicalOperationCannotChooseFamily.lean.fail	semantic-type	5	2	⊢ family = canonicalMultiplicativeFamily C x y
+Tests/ExpectedFailure/OwnFamilyCannotChooseModule.lean.fail	semantic-type	4	2	⊢ (ownFamily C x).modulus p = chosen
+Tests/ExpectedFailure/NormalizedComparisonNeedsTwoLosses.lean.fail	dependent-type	5	38	PrecisionExtension (p + 2) r
+Tests/ExpectedFailure/CarrierOrderTransportNeedsEquivalence.lean.fail	dependent-type	5	31	EffectiveCauchyReal.Equivalent x
+Tests/ExpectedFailure/CarrierDensityValidityCannotGiveExactReadout.lean.fail	semantic-type	6	2	(produceCarrierDensity P d origin).code = (produceCarrierDensity Q e origin).code
+Tests/ExpectedFailure/PresentedConvergenceCannotBeOpaque.lean.fail	privacy	4	2	Unknown constant `RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion.PresentedDyadicStructure.Converges`
+Tests/ExpectedFailure/PresentedCarrierEquivalentNeedsConvergence.lean.fail	dependent-type	5	35	Converges C (presentCarrierFamily C x) y
+Tests/ExpectedFailure/SevenMarginsCannotUseBinaryBudget.lean.fail	dependent-type	5	24	DirectedUpper (p + 1) a

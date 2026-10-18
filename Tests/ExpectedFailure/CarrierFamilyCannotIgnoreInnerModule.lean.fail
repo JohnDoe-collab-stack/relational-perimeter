@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCarrierCompleteness
+open RelationalPerimeter.Constitution.Reals RelationalRealFamilyTransport
+example (family : CarrierFamily) (p n m r s : Nat) (hn : PrecisionExtension (family.modulus p) n)
+    (hm : PrecisionExtension (family.modulus p) m) (hr : PrecisionExtension p r) (hs : PrecisionExtension p s) :=
+  family.cauchy p n m r s hn hm hr hs

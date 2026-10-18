@@ -1,0 +1,7 @@
+import RelationalPerimeter.Constitution.Reals.DyadicCompletionCharacterization
+open RelationalPerimeter.Constitution.Reals PresentedDyadicCompletion DyadicCompletionCharacterization
+example (Source Target : PresentedDyadicCompletionObject) (f : CompletionMorphism Source Target) :
+    (family : PresentedFamily Source.core) → Target.core.Equivalent
+      (f.map (Source.completion.complete family).value)
+      (Target.completion.complete (diagonalTransportFamily Source.core Target.core family)).value :=
+  CompletionMorphism.mapProducedLimit f

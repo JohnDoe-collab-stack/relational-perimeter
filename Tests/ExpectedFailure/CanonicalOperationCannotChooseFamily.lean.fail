@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion
+open RelationalPerimeter.Constitution.Reals PresentedDyadicCompletion
+example (C : PresentedDyadicStructure) (x y : C.Carrier) (family : PresentedFamily C) :
+    family = canonicalMultiplicativeFamily C x y := by
+  rfl

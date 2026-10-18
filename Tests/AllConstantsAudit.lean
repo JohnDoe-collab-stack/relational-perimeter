@@ -33,6 +33,8 @@ import Tests.RelationalRealLimitUniqueness
 import Tests.RelationalRealFamilyTransport
 import Tests.RelationalRealNativeCauchy
 import Tests.RelationalRealEffectiveCorrespondence
+import Tests.RelationalRealCarrierCompleteness
+import Tests.PresentedDyadicCompletion
 import Tests.RelationalSequentialCompleteness
 import Tests.RuntimeRealCorrespondence
 import Tests.CommonRealRuntime

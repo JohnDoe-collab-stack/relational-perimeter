@@ -103,6 +103,7 @@ fi
 "${python_command[@]}" scripts/check-real-limit-uniqueness-codegen.py
 "${python_command[@]}" scripts/check-real-family-transport-codegen.py
 "${python_command[@]}" scripts/check-real-native-cauchy-codegen.py
+"${python_command[@]}" scripts/check-real-carrier-completion-codegen.py
 
 bash scripts/check-expected-failures.sh
 

@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCarrierCompleteness
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals RelationalRealFamilyTransport RelationalRealNativeCauchy RelationalRealCarrierCompleteness
+example (P : CircularPresentation) (d : Nat) (family : CarrierFamily) (produced : CarrierCompletionResult P d family) :
+    NativeCompleteness (carrierNativeFamily P d family) :=
+  produced.native.limit

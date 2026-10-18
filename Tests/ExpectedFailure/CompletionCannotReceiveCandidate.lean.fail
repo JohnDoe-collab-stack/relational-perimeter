@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion
+open RelationalPerimeter.Constitution.Reals PresentedDyadicCompletion
+example (C : PresentedDyadicCompletionObject) (family : PresentedFamily C.core) :
+    C.core.Carrier → LimitResult C.core family :=
+  C.completion.complete family

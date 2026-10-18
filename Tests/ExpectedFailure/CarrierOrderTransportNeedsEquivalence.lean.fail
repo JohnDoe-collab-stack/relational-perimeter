@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.CarrierQuantitativeTransport
+open RelationalPerimeter.Constitution.Reals RelationalRealOrder
+example (x y c d : EffectiveCauchyReal.Carrier) (origin : CarrierOrder x y)
+    (left : SameValue (x.approximation 0) (c.approximation 0)) (right : EffectiveCauchyReal.Equivalent y d) :=
+  transportCarrierOrder origin left right

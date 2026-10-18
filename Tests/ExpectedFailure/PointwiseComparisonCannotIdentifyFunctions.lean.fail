@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.DyadicCompletionCharacterization
+open RelationalPerimeter.Constitution.Reals PresentedDyadicCompletion DyadicCompletionCharacterization
+example (Source Target : PresentedDyadicCompletionObject) (f g : CompletionMorphism Source Target)
+    (same : PointwiseEquivalent f g) : f.map = g.map :=
+  same

@@ -115,6 +115,8 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "compiled effective-family current-resource and limit transport check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-real-native-cauchy-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled native Cauchy observations and produced-limit bridge check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-real-carrier-completion-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "compiled carrier completion retained native packet and current-module adapter check failed" }
   & (Join-Path $PSScriptRoot "check-expected-failures.ps1")
   if ($LASTEXITCODE -ne 0) { throw "expected-failure check failed" }
 

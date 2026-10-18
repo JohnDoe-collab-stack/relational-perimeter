@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.CarrierQuantitativeTransport
+open RelationalPerimeter.Constitution.Reals
+example (p : Nat) (a b c : SignedDyadicCode) (first : DirectedUpper (p + 3) a b)
+    (second : DirectedUpper (p + 3) b c) : DirectedUpper p a c :=
+  DirectedUpper.compose first second

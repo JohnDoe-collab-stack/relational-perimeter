@@ -1,0 +1,4 @@
+import RelationalPerimeter.Constitution.Reals.PresentedDyadicCompletion
+open RelationalPerimeter.Constitution.Reals PresentedDyadicCompletion
+example (C : PresentedDyadicStructure) :=
+  PresentedDyadicStructure.Converges C

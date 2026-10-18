@@ -1,0 +1,5 @@
+import RelationalPerimeter.Constitution.Reals.CarrierQuantitativeTransport
+open RelationalPerimeter.Constitution.Reals
+example (x y : EffectiveCauchyReal.Carrier) (same : EffectiveCauchyReal.Equivalent x y)
+    (p r s : Nat) (hr : PrecisionExtension (p + 1) r) (hs : PrecisionExtension (p + 1) s) :=
+  normalizedEquivalentNear same p r s hr hs

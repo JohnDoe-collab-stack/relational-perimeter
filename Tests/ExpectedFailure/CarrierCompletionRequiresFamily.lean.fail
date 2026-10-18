@@ -1,0 +1,4 @@
+import RelationalPerimeter.Constitution.Reals.RelationalRealCarrierCompleteness
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals RelationalRealCarrierCompleteness
+example (P : CircularPresentation) (d : Nat) (terms : Nat → EffectiveCauchyReal.Carrier) :=
+  carrierCompletion P d terms

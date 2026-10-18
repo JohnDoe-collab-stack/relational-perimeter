@@ -1,0 +1,6 @@
+import RelationalPerimeter.Constitution.Reals.CarrierOrderedCompletion
+open StrongPerimetralTurning RelationalPerimeter.Constitution.Reals RelationalRealOrder CarrierOrderedField PresentedDyadicCompletion
+example (P Q : CircularPresentation) (d e : Nat) (x y : EffectiveCauchyReal.Carrier) (origin : CarrierOrder x y)
+    (valid : PresentedDensityWitness carrierPresentedCore CarrierOrder x y) :
+    (produceCarrierDensity P d origin).code = (produceCarrierDensity Q e origin).code :=
+  valid
