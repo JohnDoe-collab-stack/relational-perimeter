@@ -1,0 +1,12 @@
+import RelationalPerimeter.Instances.HeytingArithmetic.GodelTheoryProgression
+open RelationalPerimeter.HeytingArithmetic
+
+variable {history : TheoryHistory} (sound : SoundTheoryHistory history)
+  (sentence : Sentence)
+
+example : SoundTheoryHistory (.extend history sentence) :=
+  sound
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.HeytingArithmetic.SoundTheoryHistory.extend
+/- AXIOM_AUDIT_END -/

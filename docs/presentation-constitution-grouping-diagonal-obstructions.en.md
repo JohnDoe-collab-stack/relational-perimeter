@@ -121,13 +121,17 @@ two nonempty runs
   ↓
 two computed terminals
   ↓
-equality of their projected memories
+instance-specific proof that the two reduced-memory runs collide
 ```
 
 An `ExecutedOperationalGrouping` contains the two runs, their terminals, and
-the terminal collision. The collision reused by the directed bridge is
-therefore the one produced by these executions. It is neither reconstructed
-from the readouts nor replaced by an abstract equality of the sources.
+the terminal collision. The runs compute the terminals, but do not by
+themselves prove equality of their projections. `terminalCollision` records,
+with an instance-specific proof, equality of the two reduced-memory runs. The
+terminal equations of the runs and `run_exact` then derive
+`projectedTerminalsEqual`. The directed bridge reuses this equality produced by
+the executed grouping. It is neither reconstructed from the readouts nor
+replaced by an abstract equality of the sources.
 
 This organization strictly separates four responsibilities:
 
@@ -167,6 +171,12 @@ equality of the produced Booleans
   ↓
 equality of the grouped memories
 ```
+
+`positiveDirectedProducedBitsEqual` establishes equality of the produced
+Booleans. Its image under `PositiveDirectedMemory.grouped` supplies the proof
+recorded as `terminalCollision` in `positiveDirectedGrouping`. The generic
+lemma `projectedTerminalsEqual` then derives equality of the terminal
+projections.
 
 The terminal readouts remain dependent on the produced Booleans. The source
 factorization encodes the Boolean as a natural number. The target factorization
@@ -379,6 +389,13 @@ distinguishes the terminals.
 An identity realization can preserve the readouts and futures exactly. It then
 keeps the terminals in distinct memories.
 
+These two possibilities are not attributed unconditionally to a single
+realization. The positive grouping is constructed in an
+`OperationalRealization`, which preserves authorizations, transitions, and
+events without a global `read_exact` law. The separation obligation quantifies
+over an `ExactRealization`, which adds that law. Combining them on the same
+terminals therefore requires an additional collision hypothesis.
+
 ### Proved boundary
 
 The obstruction concerns the following combination on the same computed
@@ -492,11 +509,11 @@ tests, and formulations.
 The development constructs an operational theory of distinction, grouping,
 and preservation.
 
-It shows how separately constituted occurrences can produce a common memory
-without losing their relational identity. It shows how this common memory makes
-local readouts composable. It constructs a case in which this composition
-positively transports a witness. Finally, it proves two different ways in
-which a diagonal requirement can make the same form of composition impossible.
+It shows how distinct constitutive sources can produce a common memory without
+being identified. It shows how this common memory makes local readouts
+composable. It constructs a case in which this composition positively
+transports a witness. Finally, it proves two different ways in which a diagonal
+requirement can make the same form of composition impossible.
 
 The conclusion consists of four propositions:
 

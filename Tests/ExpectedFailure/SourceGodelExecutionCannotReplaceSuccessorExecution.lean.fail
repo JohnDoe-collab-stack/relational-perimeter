@@ -1,0 +1,13 @@
+import RelationalPerimeter.Instances.HeytingArithmetic.GodelTheoryProgression
+open StrongPerimetralTurning RelationalPerimeter.HeytingArithmetic
+set_option maxRecDepth 1000000
+
+variable {history : TheoryHistory} {sound : SoundTheoryHistory history}
+  (step : ExecutedGodelTheoryProgression sound)
+
+example : HistoryGodelExecution step.targetSound :=
+  step.sourceExecution
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.HeytingArithmetic.ExecutedGodelTheoryProgression.targetExecution_is_master
+/- AXIOM_AUDIT_END -/

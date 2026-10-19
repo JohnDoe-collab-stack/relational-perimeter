@@ -58,3 +58,12 @@ Tests/ExpectedFailure/TarskiSentenceEqualityCannotReplaceExecutedProduction.lean
 Tests/ExpectedFailure/DirectedWrapperRequiresExecutedGrouping.lean.fail	dependent-type	17	4	ExecutedOperationalGrouping.rejectDirectedEndpointIncompatibility collision
 Tests/ExpectedFailure/DirectedPreservationCannotBecomeCorrespondence.lean.fail	semantic-type	13	2	positiveDirectedReadoutPreservation role
 Tests/ExpectedFailure/PositiveTerminalCollisionCannotIdentifySources.lean.fail	semantic-type	10	2	(positiveDirectedGrouping role).terminalCollision
+Tests/ExpectedFailure/SourceProofCannotEnterGodelSuccessorWithoutTranslation.lean.fail	dependent-type	12	2	Type mismatch
+Tests/ExpectedFailure/SourceNonprovabilityCannotConsumeSuccessorProof.lean.fail	dependent-type	9	24	Application type mismatch
+Tests/ExpectedFailure/EqualTruthValueCannotReplaceProducedGodelSentence.lean.fail	dependent-type	14	2	Type mismatch
+Tests/ExpectedFailure/SentenceEqualityCannotReplaceMasterGodelExecution.lean.fail	dependent-type	13	2	Type mismatch
+Tests/ExpectedFailure/GodelHistoryExtensionRequiresTruthWitness.lean.fail	dependent-type	8	2	Type mismatch
+Tests/ExpectedFailure/SourceGodelExecutionCannotReplaceSuccessorExecution.lean.fail	dependent-type	9	2	Type mismatch
+Tests/ExpectedFailure/SuccessorProofCannotReturnWithoutReverseTransport.lean.fail	dependent-type	9	2	Type mismatch
+Tests/ExpectedFailure/SourceRuntimeContractCannotReplaceSuccessorContract.lean.fail	dependent-type	10	6	Type mismatch
+Tests/ExpectedFailure/SuccessorProofIsNotSourceTheoryProof.lean.fail	dependent-type	10	2	Type mismatch

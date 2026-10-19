@@ -232,7 +232,9 @@ RelationalPerimeter.Instances.HeytingArithmetic.FormulaRaisingMachine	F	enforced
 RelationalPerimeter.Instances.HeytingArithmetic.GeneralInstantiation	F	enforced	General quantified instantiation and semantic correctness
 RelationalPerimeter.Instances.HeytingArithmetic.GeneralSubstitutionMachine	F	enforced	Executable simultaneous substitution with scoped correctness
 RelationalPerimeter.Instances.HeytingArithmetic.Godel	F	enforced	Named HA realization of the generic effective Godel system and perimetral correspondence
+RelationalPerimeter.Instances.HeytingArithmetic.GodelTheoryProgression	F	enforced	Executed finite progression of positively sound Godel theory histories
 RelationalPerimeter.Instances.HeytingArithmetic.HASoundness	F	enforced	Constructive standard-model soundness of HA derivations
+RelationalPerimeter.Instances.HeytingArithmetic.HistoryGodel	F	enforced	Effective Godel production for positively sound finite theory histories
 RelationalPerimeter.Instances.HeytingArithmetic.HistoryProofArchiveChecking	F	enforced	History-indexed verification and recovery of complete archives
 RelationalPerimeter.Instances.HeytingArithmetic.HistoryProofChecking	F	enforced	Proof-producing checking for arithmetic and added history axioms
 RelationalPerimeter.Instances.HeytingArithmetic.HistoryProofRuleChecking	F	enforced	History-indexed verification of non-leaf intuitionistic rules
@@ -307,3 +309,4 @@ RelationalPerimeter.Instances.HeytingArithmetic.Substitution	F	enforced	Capture-
 RelationalPerimeter.Instances.HeytingArithmetic.SubstitutionMachine	F	enforced	Executable capture-avoiding substitution machine
 RelationalPerimeter.Instances.HeytingArithmetic.Syntax	F	enforced	First-order arithmetic syntax, constructive equality, and natural-number coding
 RelationalPerimeter.Instances.HeytingArithmetic.TheoryHistoryCoding	F	enforced	Finite arithmetic-theory histories and their injective codes
+RelationalPerimeter.Instances.HeytingArithmetic.TheoryHistorySoundness	F	enforced	Positive standard-model soundness certificates for finite theory histories

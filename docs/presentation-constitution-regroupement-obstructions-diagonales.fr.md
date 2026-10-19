@@ -124,13 +124,17 @@ deux runs non vides
   ↓
 deux terminaux calculés
   ↓
-égalité de leurs mémoires projetées
+preuve propre à l'instance de la collision des deux runs en mémoire réduite
 ```
 
 Un `ExecutedOperationalGrouping` contient les deux runs, leurs terminaux et la
-collision terminale. La collision réutilisée par le pont dirigé est donc celle
-produite par ces exécutions. Elle n'est ni reconstruite à partir des readouts,
-ni remplacée par une égalité abstraite des sources.
+collision terminale. Les runs calculent les terminaux, mais ne suffisent pas à
+eux seuls à démontrer l'égalité de leurs projections. `terminalCollision`
+enregistre, avec une preuve propre à l'instance, l'égalité des deux runs en
+mémoire réduite. Les équations terminales des runs et `run_exact` en dérivent
+ensuite `projectedTerminalsEqual`. C'est cette égalité produite par le
+regroupement exécuté que le pont dirigé réutilise. Elle n'est ni reconstruite à
+partir des readouts, ni remplacée par une égalité abstraite des sources.
 
 Cette organisation sépare strictement quatre responsabilités :
 
@@ -170,6 +174,12 @@ FutureEquivalent.read
   ↓
 égalité des mémoires grouped
 ```
+
+`positiveDirectedProducedBitsEqual` établit l'égalité des booléens produits.
+Son image par `PositiveDirectedMemory.grouped` fournit la preuve enregistrée
+comme `terminalCollision` dans `positiveDirectedGrouping`. Le lemme générique
+`projectedTerminalsEqual` en déduit ensuite l'égalité des projections
+terminales.
 
 Les readouts terminaux restent dépendants des booléens produits. La
 factorisation source encode le booléen en nombre naturel. La factorisation
@@ -385,6 +395,13 @@ le readout qui distingue les terminaux.
 Une réalisation identité peut préserver exactement les readouts et les futurs.
 Elle conserve alors les terminaux dans des mémoires distinctes.
 
+Ces deux possibilités ne sont pas attribuées sans condition à une seule
+réalisation. Le regroupement positif est construit dans une
+`OperationalRealization`, qui préserve les autorisations, les transitions et
+les événements sans loi globale `read_exact`. L'obligation de séparation
+quantifie sur une `ExactRealization`, qui ajoute cette loi. Leur combinaison
+sur les mêmes terminaux exige donc une hypothèse supplémentaire de collision.
+
 ### Frontière démontrée
 
 L'obstruction concerne la combinaison suivante sur les mêmes terminaux
@@ -501,12 +518,11 @@ les formulations correspondantes.
 Le développement construit une théorie opérationnelle de la distinction, du
 regroupement et de la préservation.
 
-Il montre comment des occurrences constituées séparément peuvent produire une
-mémoire commune sans perdre leur identité relationnelle. Il montre comment
-cette mémoire commune rend composables des lectures locales. Il construit un
-cas où cette composition transporte positivement un témoin. Il démontre enfin
-deux façons différentes dont une exigence diagonale peut rendre la même forme
-de composition impossible.
+Il montre comment des sources constitutives distinctes peuvent produire une
+mémoire commune sans être identifiées. Il montre comment cette mémoire commune
+rend composables des lectures locales. Il construit un cas où cette composition
+transporte positivement un témoin. Il démontre enfin deux façons différentes
+dont une exigence diagonale peut rendre la même forme de composition impossible.
 
 La conclusion tient en quatre propositions :
 
