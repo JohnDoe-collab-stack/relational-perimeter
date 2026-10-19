@@ -39,8 +39,11 @@ des deux runs et de leur collision calculée.
 Pour un même rôle constitutif et le même run maître, l’instance utilise les
 deux sources acceptées déjà construites `variedLeftSource role` et
 `leftSource role`. Leur distinction est prouvée avant la construction du
-runtime. Les positions `source` et `target` servent uniquement à les indexer et
-ne remplacent pas cette distinction constitutive.
+runtime. Les positions `source` et `target` indexent ces sources acceptées par
+`positiveDirectedAcceptedSource` et portent seules les distinctions du runtime
+entre états, mémoires actives et traces. La distinction constitutive des
+sources acceptées est prouvée séparément et n'est consommée ni par le runtime,
+ni par le regroupement, ni par le transport.
 
 La requête `close` est autorisée uniquement en phase active et calcule une
 phase terminale. Les deux runs sont non vides. Les événements actifs exposent

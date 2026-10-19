@@ -20,11 +20,13 @@ reconstructing its runs, events, terminals, or collision. A directed terminal
 preservation supplies only its two local factorizations. Their composition
 along the computed collision then produces `Truth(G) → Proof(G)` without
 assuming or deriving an equality between `Truth(G)` and `Proof(G)`, without
-reverse transport, and without global `read_exact`. Only the read equalities
-`read terminal = Truth(G)` and `read terminal = Proof(G)` supplied by the runs
-are used as conversions. This production consumes neither `trueWitness` nor
-`unprovable`. The directed rejection adds them afterward from the same produced
-witness.
+reverse transport, and without global `read_exact`. The `Eq.mp` conversions
+used are the read equalities `read terminal = Truth(G)` and
+`read terminal = Proof(G)` supplied by the runs, together with the conversion
+inside `directedReadout` along the `memoryRead` equality induced by the
+computed collision. No `Truth(G) = Proof(G)` equality is assumed or derived.
+This production consumes neither `trueWitness` nor `unprovable`. The directed
+rejection adds them afterward from the same produced witness.
 
 Separately, if a collision of the two computed terminals is required under an
 exact realization of the fixed contract, the execution and readout laws impose

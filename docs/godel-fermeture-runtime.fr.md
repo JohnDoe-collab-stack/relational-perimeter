@@ -21,10 +21,13 @@ Le regroupement ainsi calculé est exposé, sans reconstruire ses runs, ses
 générique. Une préservation terminale dirigée fournit seulement ses deux
 factorisations locales. Leur composition le long de la collision calculée
 produit alors `Truth(G) → Proof(G)` sans supposer ni dériver d'égalité entre
-`Truth(G)` et `Proof(G)`, sans transport inverse ni `read_exact` global. Seules
-les égalités de lecture `read terminal = Truth(G)` et
-`read terminal = Proof(G)` fournies par les runs sont utilisées comme
-conversions. Cette production ne consomme ni `trueWitness` ni `unprovable`.
+`Truth(G)` et `Proof(G)`, sans transport inverse ni `read_exact` global. Les
+conversions `Eq.mp` utilisées sont les égalités de lecture
+`read terminal = Truth(G)` et `read terminal = Proof(G)` fournies par les
+runs, ainsi que la conversion interne à `directedReadout` le long de l'égalité
+`memoryRead` induite par la collision calculée. Aucune égalité
+`Truth(G) = Proof(G)` n'est supposée ni dérivée. Cette production ne consomme
+ni `trueWitness` ni `unprovable`.
 Le rejet dirigé les ajoute ensuite depuis le même témoin produit.
 
 Séparément, si une collision des deux terminaux calculés est exigée sous une

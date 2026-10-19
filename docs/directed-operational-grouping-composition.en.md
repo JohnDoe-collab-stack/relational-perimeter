@@ -38,8 +38,11 @@ runs and their computed collision.
 For one constitutive role and the same master run, the instance uses the two
 already constructed accepted sources `variedLeftSource role` and
 `leftSource role`. Their distinction is proved before the runtime is built.
-The `source` and `target` positions only index them and do not replace that
-underlying constitutive distinction.
+The `source` and `target` positions index those accepted sources through
+`positiveDirectedAcceptedSource` and alone carry the runtime distinctions
+between states, active memories, and traces. The constitutive distinction of
+the accepted sources is proved separately and is consumed by neither the
+runtime, the grouping, nor the transport.
 
 The `close` request is authorized only in the active phase and computes a
 terminal phase. Both runs are nonempty. Active events expose the position, so

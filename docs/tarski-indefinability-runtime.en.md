@@ -79,8 +79,9 @@ readout correspondence.
 
 The canonical contract computes events from phase, history, and request,
 without copying the position into them. This pole blindness is an explicit
-design hypothesis. It is exactly what constructs the equality of traces
-recorded in `TarskiObservedOperationalGrouping`. The sources and active memory
+design hypothesis. It is exactly what makes it possible to construct the
+equality of traces recorded in `TarskiObservedOperationalGrouping`. The sources
+and active memory
 continue to distinguish the two positions.
 
 This hypothesis must not be overstated. If the position were added to the
