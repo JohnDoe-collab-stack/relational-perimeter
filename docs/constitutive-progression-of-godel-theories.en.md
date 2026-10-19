@@ -273,5 +273,4 @@ their preservation boundaries.
 The result concerns the unprovability supplied by the formal interface. It
 does not automatically assert unrefutability of every sentence, a complete
 final theory, a transversal runtime comparing the same `G_T` before and after
-extension, or bibliographic priority. It concerns neither the real numbers,
-AC or CH, nor any temporal, memory or physical cost bound.
+extension, or bibliographic priority.

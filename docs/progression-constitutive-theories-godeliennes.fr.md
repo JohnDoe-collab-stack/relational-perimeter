@@ -275,5 +275,4 @@ préservation.
 Le résultat porte sur la non-prouvabilité fournie par l’interface formelle. Il
 n’affirme pas automatiquement la non-réfutabilité de chaque phrase, une théorie
 complète finale, un runtime transversal comparant le même `G_T` avant et après
-l’extension, ni une priorité bibliographique. Il ne porte ni sur les réels, ni
-sur AC ou CH, ni sur une borne de coût temporel, mémoire ou physique.
+l’extension, ni une priorité bibliographique.
