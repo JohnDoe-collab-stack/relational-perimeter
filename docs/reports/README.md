@@ -1,5 +1,19 @@
 # Rapports scientifiques
 
+## Audit indépendant de la composition opérationnelle dirigée du commit `80b4bbb`
+
+[Rapport exhaustif Aristotle sur la composition opérationnelle dirigée](aristotle-directed-operational-composition-80b4bbb.md),
+réalisé le 19 octobre 2026 sur le commit exact
+`80b4bbb9220c0a002df5d8f9d6dcbe7e990a7fce` et l’arbre
+`7e55f3f2620524d07f7dc274f1465a3b32483072`.
+
+Verdict : `VALIDATED`. Les sept critères sont `PASS`. Le rapport vérifie les
+noyaux dirigés B1 et B2, les chemins Gödel et Tarski, l’instance positive non
+diagonale, les dépendances transitives, la constructivité, les régressions,
+les textes FR/EN et les figures. L’état de service `COMPLETE_WITH_ERRORS`
+provient uniquement du rejet HTTP 413 du push optionnel du projet d’audit
+volumineux et ne modifie pas le verdict scientifique.
+
 ## Audit indépendant Gödel du commit `a020dc3`
 
 [Rapport indépendant sur l’obstruction gödelienne interne](aristotle-godel-a020dc3.md),
