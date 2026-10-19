@@ -89,9 +89,9 @@ Proof_T⁺(G_T⁺) → Empty
 The first conversion does not manufacture the target proof from its truth
 argument. The `Truth(G_T)` witness has already been consumed to certify the
 soundness of the extension, while `Proof_T⁺(G_T)` is constructed separately
-from the exact occurrence added to the history. The function then exposes
-their available composition at the new stage without conflating those two
-productions.
+from the exact occurrence added to the history. The function is constant: it
+ignores its truth argument and returns the target proof already constructed
+from the added occurrence. It performs no truth-to-proof computation.
 
 Old proofs are transported through the complete executed chain:
 
@@ -143,6 +143,75 @@ At every stage:
 Theory extension is not a hidden runtime effect. It is the explicit
 constitutive action between two stages. Each runtime remains indexed by the
 production of its own stage.
+
+## Specific gain of the connection
+
+A theory progression alone establishes the displacement of the proof regime:
+
+```text
+Tₙ → Tₙ₊₁ = Tₙ + {Gₙ}
+```
+
+The present connection additionally establishes a universal conclusion about
+the admissible representations at every effectively produced stage. For every
+exact realization `A` of the contract at stage `n`:
+
+```text
+project_A(truth_terminal(Gₙ))
+  ≠ project_A(proof_terminal(Gₙ))
+```
+
+This formula concerns the memory projections of the two terminals actually
+computed by the runs. It does not directly compare an abstract truth with a
+proof object presumed to exist. The readouts attached to the terminals and the
+contract laws provide the observable distinction that every exact realization
+must retain.
+
+This separation obligation does not arise from a general impossibility of
+grouping. At the same stage, the development positively constructs an
+operational grouping that computes a common terminal memory. What is
+impossible is to combine that collision with the directed preservation that
+would produce `Truth(Gₙ) → Proof_Tₙ(Gₙ)`.
+
+The transition to `Tₙ₊₁` then incorporates exactly `Gₙ`. The former
+unprovability remains a fact indexed by `Proof_Tₙ`, while the new occurrence
+constructs `Proof_Tₙ₊₁(Gₙ)`. Execution of the resulting regime then
+produces `Gₙ₊₁`, with its own unprovability and its own universal
+separation obligation relative to the new contract.
+
+The result therefore does not merely follow a sequence of theories. At every
+stage, it determines:
+
+- the grouping that remains constructible
+- the preservation requirement that makes this grouping impossible
+- the distinction that every exact representation must retain
+- the new localization of this constraint after extension of the regime
+
+The specific gain of the connection is thus to turn every proof boundary into
+a universal rule on admissible representations, and then constructively track
+the reappearance of that rule around the new production of the next regime.
+
+### Scope of the certification rule
+
+The rule provides a rejection certificate:
+
+```text
+certified finite separator
+  → rejection of every exact fusion of the relevant terminals
+```
+
+It does not turn the absence of a known separator into a positive certificate:
+
+```text
+no separator found
+  ⇏ exact fusion is admissible
+```
+
+Positive certification of a grouping requires construction of its runs, its
+collision, and the preservation laws actually promised by its contract. The
+positive grouping exposed here satisfies its operational contract without
+claiming global readout exactness. The universal separation obligation instead
+concerns every realization that claims this exactness.
 
 ## Finite iteration
 
@@ -204,4 +273,5 @@ their preservation boundaries.
 The result concerns the unprovability supplied by the formal interface. It
 does not automatically assert unrefutability of every sentence, a complete
 final theory, a transversal runtime comparing the same `G_T` before and after
-extension, or bibliographic priority.
+extension, or bibliographic priority. It concerns neither the real numbers,
+AC or CH, nor any temporal, memory or physical cost bound.

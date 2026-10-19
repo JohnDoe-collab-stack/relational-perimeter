@@ -105,5 +105,5 @@ run_cmd do
   logInfo "POSITIVE_DIRECTED_COMPOSITION_DEPENDENCIES_OK"
 
 /- AXIOM_AUDIT_BEGIN -/
-#print axioms Nat
+#print axioms ConstitutiveSearch.ContinuationSignatures.positiveDirectedTransportedWitness_exact
 /- AXIOM_AUDIT_END -/

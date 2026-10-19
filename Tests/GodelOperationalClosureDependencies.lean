@@ -252,5 +252,5 @@ run_cmd do
   logInfo "GODEL_RUNTIME_SCHEMAS_OK: positive H1 stored; dynamic phase; events omit pole; nonempty trace constructed"
 
 /- AXIOM_AUDIT_BEGIN -/
-#print axioms Nat
+#print axioms StrongPerimetralTurning.godelOperationalGroupingWithoutRead
 /- AXIOM_AUDIT_END -/

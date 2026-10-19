@@ -170,5 +170,5 @@ run_cmd do
   logInfo "DIRECTED_OBSTRUCTION_DEPENDENCIES_OK"
 
 /- AXIOM_AUDIT_BEGIN -/
-#print axioms Nat
+#print axioms ConstitutiveSearch.ContinuationSignatures.ExecutedOperationalGrouping.rejectDirectedEndpointIncompatibility
 /- AXIOM_AUDIT_END -/

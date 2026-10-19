@@ -246,5 +246,5 @@ run_cmd do
   logInfo "TARSKI_RUNTIME_SCHEMAS_OK: readout-free memory; pole-free event; indexed terminals"
 
 /- AXIOM_AUDIT_BEGIN -/
-#print axioms Nat
+#print axioms StrongPerimetralTurning.tarskiExecutedOperationalGrouping
 /- AXIOM_AUDIT_END -/

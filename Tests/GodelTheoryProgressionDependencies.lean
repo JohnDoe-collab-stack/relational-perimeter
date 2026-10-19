@@ -387,5 +387,5 @@ run_cmd do
   logInfo m!"GODEL_THEORY_PROGRESSION_DEPENDENCIES_OK stepFromDirect={executedStepFrom.size} firstStepDirect={executedStep.size} stageStepDirect={stageProgression.size} preservationClosure={preservationClosure.1.size} distinctionDirect={sentenceDifference.size} reverseDirect={reverseRejection.size} traceClosure={traceClosure.1.size} traceProofClosure={traceProofTransport.1.size} finiteTransportDirect={finiteTransport.size} finiteTransportClosure={finiteTransportClosure.1.size}"
 
 /- AXIOM_AUDIT_BEGIN -/
-#print axioms Nat
+#print axioms RelationalPerimeter.HeytingArithmetic.SoundGodelTheoryStage.preserveProof
 /- AXIOM_AUDIT_END -/

@@ -170,5 +170,5 @@ run_cmd do
   logInfo m!"ALL_CONSTANTS_OK constants={checked} modules={modules.size} generatedExceptions={generated} writtenExceptions=0"
 
 /- AXIOM_AUDIT_BEGIN -/
-#print axioms Nat
+#print axioms ConstitutiveSearch.ContinuationSignatures.ExactRealization.distinct_memory_of_separator
 /- AXIOM_AUDIT_END -/

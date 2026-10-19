@@ -88,8 +88,9 @@ Proof_T⁺(G_T⁺) → Empty
 La première conversion ne fabrique pas la preuve cible à partir de son
 argument de vérité. Le témoin `Truth(G_T)` a déjà été consommé pour certifier
 la correction de l'extension, et `Proof_T⁺(G_T)` est construit séparément par
-l'occurrence exacte ajoutée à l'histoire. La fonction expose ensuite leur
-composition disponible au nouvel étage sans confondre ces deux productions.
+l'occurrence exacte ajoutée à l'histoire. La fonction est constante : elle
+ignore son argument de vérité et renvoie la preuve cible déjà construite par
+l'occurrence ajoutée. Elle n'effectue aucun calcul de la vérité vers la preuve.
 
 Le transport des anciennes preuves est exécuté par la chaîne complète :
 
@@ -141,6 +142,76 @@ l’exécution source puis à l’exécution cible.
 L’extension de théorie n’est pas un effet caché du runtime. Elle est l’action
 constitutive explicite entre deux étages. Chaque runtime reste indexé par la
 production de son propre étage.
+
+## Gain propre du raccord
+
+Une progression théorique seule établit le déplacement du régime de preuve :
+
+```text
+Tₙ → Tₙ₊₁ = Tₙ + {Gₙ}
+```
+
+Le présent raccord établit en plus une conclusion universelle sur les
+représentations admissibles à chaque étage effectivement produit. Pour toute
+réalisation exacte `A` du contrat de l’étage `n` :
+
+```text
+project_A(terminal_vérité(Gₙ))
+  ≠ project_A(terminal_preuve(Gₙ))
+```
+
+Cette formule porte sur les projections mémoire des deux terminaux effectivement
+calculés par les runs. Elle ne compare pas directement une vérité abstraite à
+un objet-preuve supposé exister. Les readouts attachés aux terminaux et les lois
+du contrat fournissent la distinction observable que toute réalisation exacte
+doit conserver.
+
+Cette obligation de séparation ne vient pas d’une impossibilité générale de
+regrouper. Au même étage, le développement construit positivement un
+regroupement opérationnel qui calcule une mémoire terminale commune. Ce qui est
+impossible est de combiner cette collision avec la préservation dirigée qui
+produirait `Truth(Gₙ) → Proof_Tₙ(Gₙ)`.
+
+La transition vers `Tₙ₊₁` incorpore ensuite exactement `Gₙ`. L’ancienne
+non-prouvabilité reste un fait indexé par `Proof_Tₙ`, tandis que la nouvelle
+occurrence construit `Proof_Tₙ₊₁(Gₙ)`. L’exécution du régime obtenu produit
+alors `Gₙ₊₁`, avec sa propre non-prouvabilité et sa propre obligation
+universelle de séparation relativement au nouveau contrat.
+
+Le résultat ne suit donc pas seulement une suite de théories. Il détermine, à
+chaque étage :
+
+- le regroupement qui reste constructible
+- la préservation qui rend ce regroupement impossible
+- la distinction que toute représentation exacte doit conserver
+- la nouvelle localisation de cette contrainte après l’extension du régime
+
+Le gain propre du raccord est ainsi de transformer chaque frontière de preuve
+en une règle universelle sur les représentations admissibles, puis de suivre
+constructivement la réapparition de cette règle sur la nouvelle production du
+régime suivant.
+
+### Portée de la règle de certification
+
+La règle fournit un certificat de rejet :
+
+```text
+séparateur fini certifié
+  → rejet de toute fusion exacte des terminaux concernés
+```
+
+Elle ne transforme pas l’absence d’un séparateur connu en certificat positif :
+
+```text
+aucun séparateur trouvé
+  ⇏ fusion exacte autorisée
+```
+
+Pour certifier positivement un regroupement, il faut construire ses runs, sa
+collision et les lois de préservation effectivement promises par son contrat.
+Le regroupement positif exposé ici satisfait son contrat opérationnel sans
+revendiquer l’exactitude globale des readouts. L’obligation universelle de
+séparation concerne, elle, toute réalisation qui revendique cette exactitude.
 
 ## Itération finie
 
@@ -204,4 +275,5 @@ préservation.
 Le résultat porte sur la non-prouvabilité fournie par l’interface formelle. Il
 n’affirme pas automatiquement la non-réfutabilité de chaque phrase, une théorie
 complète finale, un runtime transversal comparant le même `G_T` avant et après
-l’extension, ni une priorité bibliographique.
+l’extension, ni une priorité bibliographique. Il ne porte ni sur les réels, ni
+sur AC ou CH, ni sur une borne de coût temporel, mémoire ou physique.
