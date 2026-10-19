@@ -1885,7 +1885,12 @@
           "status": "pending"
         },
         "independent": {
-          "status": "not_recorded"
+          "status": "reviewed",
+          "evidence": "docs/reports/aristotle-directed-operational-composition-80b4bbb.md",
+          "sha256": "33b322fcead201e8574cdc4f93aa3fafe12869540b891e6b5f7d485f9854aa91",
+          "responsible": "Aristotle (Harmonic)",
+          "revision": "360fa13ef5035c51c9ff2b00f0e3ec5fa38161a6",
+          "revision_evidence": "Audited claim evidence revision (Gödel): `360fa13ef5035c51c9ff2b00f0e3ec5fa38161a6`"
         }
       }
     },
@@ -2107,7 +2112,12 @@
           "status": "pending"
         },
         "independent": {
-          "status": "not_recorded"
+          "status": "reviewed",
+          "evidence": "docs/reports/aristotle-directed-operational-composition-80b4bbb.md",
+          "sha256": "33b322fcead201e8574cdc4f93aa3fafe12869540b891e6b5f7d485f9854aa91",
+          "responsible": "Aristotle (Harmonic)",
+          "revision": "31748dcf7b6879a345c2b0b8c28b4a382a816984",
+          "revision_evidence": "Audited claim evidence revision (Tarski): `31748dcf7b6879a345c2b0b8c28b4a382a816984`"
         }
       }
     },
@@ -2343,7 +2353,12 @@
           "status": "pending"
         },
         "independent": {
-          "status": "not_recorded"
+          "status": "reviewed",
+          "evidence": "docs/reports/aristotle-directed-operational-composition-80b4bbb.md",
+          "sha256": "33b322fcead201e8574cdc4f93aa3fafe12869540b891e6b5f7d485f9854aa91",
+          "responsible": "Aristotle (Harmonic)",
+          "revision": "31748dcf7b6879a345c2b0b8c28b4a382a816984",
+          "revision_evidence": "Audited claim evidence revision (directed composition): `31748dcf7b6879a345c2b0b8c28b4a382a816984`"
         }
       }
     }
