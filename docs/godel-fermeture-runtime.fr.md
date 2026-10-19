@@ -20,9 +20,12 @@ Le regroupement ainsi calculé est exposé, sans reconstruire ses runs, ses
 événements, ses terminaux ni sa collision, sous l'interface opérationnelle
 générique. Une préservation terminale dirigée fournit seulement ses deux
 factorisations locales. Leur composition le long de la collision calculée
-produit alors `Truth(G) → Proof(G)`, sans égalité de types, transport inverse ni
-`read_exact` global. Cette production ne consomme ni `trueWitness` ni
-`unprovable`. Le rejet dirigé les ajoute ensuite depuis le même témoin produit.
+produit alors `Truth(G) → Proof(G)` sans supposer ni dériver d'égalité entre
+`Truth(G)` et `Proof(G)`, sans transport inverse ni `read_exact` global. Seules
+les égalités de lecture `read terminal = Truth(G)` et
+`read terminal = Proof(G)` fournies par les runs sont utilisées comme
+conversions. Cette production ne consomme ni `trueWitness` ni `unprovable`.
+Le rejet dirigé les ajoute ensuite depuis le même témoin produit.
 
 Séparément, si une collision des deux terminaux calculés est exigée sous une
 réalisation exacte du contrat fixé, les lois d'exécution et de readout imposent
@@ -51,8 +54,9 @@ L'affirmation `GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION` conserve son
 identifiant. L'adaptateur opérationnel concret, l'exposition générique du
 regroupement déjà calculé et le rejet dirigé complètent ses preuves sans
 remplacer les chemins historiques. Ces modifications rouvrent ses revues.
-Aucun audit indépendant nouveau n'est revendiqué ; aucune traduction anglaise
-de ce passage n'est publiée dans ce lot.
+Aucun audit indépendant nouveau n'est revendiqué avant lecture d'un rapport
+achevé sur cette nouvelle révision. Une traduction anglaise de ce passage est
+publiée dans ce lot et demeure elle aussi en attente de revue.
 
 ## H1 positif et contrat reçu
 

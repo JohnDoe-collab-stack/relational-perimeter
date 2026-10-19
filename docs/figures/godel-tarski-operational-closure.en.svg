@@ -241,7 +241,7 @@
     <path d="M475 1314 L475 1334" stroke="#bd2d2d" stroke-width="2.3" fill="none" marker-end="url(#arrow-red)"/>
     <rect x="205" y="1334" width="540" height="52" fill="#fffafa" stroke="#ca6565" class="inner"/>
     <text x="475" y="1354" class="body-center">conversion produced from collision + contract</text>
-    <text x="475" y="1374" class="small-center">without type equality or reverse transport</text>
+    <text x="475" y="1374" class="small-center">without Truth(G) = Proof(G) or reverse transport</text>
     <path d="M475 1386 L475 1406" stroke="#bd2d2d" stroke-width="2.3" fill="none" marker-end="url(#arrow-red)"/>
     <rect x="205" y="1406" width="540" height="52" fill="#cf2929" stroke="#991717" class="inner"/>
     <text x="475" y="1426" class="white-center">t : Truth(G)  +  u : Proof(G) → Empty</text>
@@ -272,6 +272,6 @@
     <text x="990" y="1565" class="body-center">their combination becomes impossible when collision erases a distinction that readouts must preserve.</text>
 
     <text x="900" y="1617" class="note-center">Gödel and Tarski share the localization architecture, but not the final diagonal reason for contradiction.</text>
-    <text x="900" y="1640" class="note-center">Operational memory is a downstream relational transport under contract, it is not the extensive primitive of constitution.</text>
+    <text x="900" y="1640" class="note-center">In this repository, operational memory is introduced after constitution, as a projection under contract.</text>
   </g>
 </svg>

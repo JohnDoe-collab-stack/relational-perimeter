@@ -107,7 +107,5 @@ request. It does not provide the converse that equal futures force equal
 memory.
 
 The directed kernels do not automatically replace the repository's abstract
-totalization regimes. Such an application would require an instance-specific
-adapter extracting the executions, grouping, local factorizations, and
-incompatibility data from an attempt. No such additional connection is claimed
-here.
+totalization regimes. No adapter to these regimes is constructed. The form it
+would need is not established. No additional connection is claimed here.

@@ -110,7 +110,6 @@ requête finie. Elle ne fournit pas la réciproque selon laquelle les mêmes
 futurs imposeraient la même mémoire.
 
 Les noyaux dirigés ne remplacent pas automatiquement les régimes abstraits de
-totalisation du dépôt. Une telle application demanderait un adaptateur propre
-à l’instance qui extraie d’une tentative les exécutions, le regroupement, les
-factorisations locales et les données d’incompatibilité requises. Aucun tel
-raccord supplémentaire n’est revendiqué ici.
+totalisation du dépôt. Aucun adaptateur vers ces régimes n’est construit. La
+forme qu’il devrait prendre n’est pas établie. Aucun raccord supplémentaire
+n’est revendiqué ici.

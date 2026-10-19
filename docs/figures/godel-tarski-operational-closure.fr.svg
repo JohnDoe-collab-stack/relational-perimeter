@@ -241,7 +241,7 @@
     <path d="M475 1314 L475 1334" stroke="#bd2d2d" stroke-width="2.3" fill="none" marker-end="url(#arrow-red)"/>
     <rect x="205" y="1334" width="540" height="52" fill="#fffafa" stroke="#ca6565" class="inner"/>
     <text x="475" y="1354" class="body-center">conversion produite depuis collision + contrat</text>
-    <text x="475" y="1374" class="small-center">sans égalité de types ni transport inverse</text>
+    <text x="475" y="1374" class="small-center">sans égalité Truth(G) = Proof(G) ni transport inverse</text>
     <path d="M475 1386 L475 1406" stroke="#bd2d2d" stroke-width="2.3" fill="none" marker-end="url(#arrow-red)"/>
     <rect x="205" y="1406" width="540" height="52" fill="#cf2929" stroke="#991717" class="inner"/>
     <text x="475" y="1426" class="white-center">t : Truth(G)  +  u : Proof(G) → Empty</text>
@@ -272,6 +272,6 @@
     <text x="990" y="1565" class="body-center">leur combinaison devient impossible lorsque la collision efface une distinction que les readouts doivent préserver.</text>
 
     <text x="900" y="1617" class="note-center">Gödel et Tarski partagent l’architecture de localisation, mais non la dernière raison diagonale de la contradiction.</text>
-    <text x="900" y="1640" class="note-center">La mémoire opérationnelle est un transport relationnel aval sous contrat, elle n’est pas la primitive extensive de la constitution.</text>
+    <text x="900" y="1640" class="note-center">Dans ce dépôt, la mémoire opérationnelle est introduite après la constitution, comme projection sous contrat.</text>
   </g>
 </svg>
