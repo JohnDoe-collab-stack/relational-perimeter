@@ -158,11 +158,16 @@ L'instance HA expose séparément la réalisation opérationnelle, le regroupeme
 calculé, le transport positif conditionnel et son rejet. Elle n'ajoute aucune
 hypothèse arithmétique à la production gödelienne déjà exécutée.
 
-Une politique de fermeture sous réalisation exacte reçoit seulement la collision
-des deux sorties réduites calculées de `close`. Toutes ses autres couches sont
-construites à partir du contexte reçu. La mémoire commune est la sortie gauche ;
-la collision raccorde la sortie droite à cette mémoire. La fermeture ne reçoit
-ni troisième mémoire, ni égalité de readouts, ni conversion vérité–preuve.
+Une fois l'exécution et la réalisation exacte fixées, le constructeur
+`godelOperationalClosureOfTerminalCollision` reçoit comme seul argument de
+fermeture supplémentaire la collision des deux sorties réduites calculées de
+`close`. Son corps construit le contexte canonique, l'action recherchée, son
+autorisation, sa décomposition et son exécution. Cette propriété concerne ce
+constructeur, non un habitant arbitraire de `OperationalSameRegimeClosureAt`,
+dont la structure empaquette explicitement ces cinq couches avec la collision.
+La mémoire commune est la sortie gauche ; la collision raccorde la sortie
+droite à cette mémoire. Le constructeur ne reçoit ni troisième mémoire, ni
+égalité de readouts, ni conversion vérité–preuve.
 
 Le noyau utilise `ExecutedRun.terminal_eq_run`, puis le `godelExactRunExact`
 direct, prouvé par induction avec `next_exact`. Composées avec la collision,

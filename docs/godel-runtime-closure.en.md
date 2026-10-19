@@ -155,11 +155,16 @@ The HA instance separately exposes the operational realization, the computed
 grouping, the conditional positive transport, and its rejection. It adds no
 arithmetic hypothesis to the already executed Gödelian production.
 
-A closure policy under exact realization receives only the collision of the two
-computed reduced outputs of `close`. All its other layers are constructed from
-the received context. The common memory is the left output. The collision
-connects the right output to that memory. Closure receives neither a third
-memory, nor an equality of readouts, nor a truth-to-proof conversion.
+Once the execution and exact realization are fixed, the constructor
+`godelOperationalClosureOfTerminalCollision` receives as its only additional
+closure argument the collision of the two computed reduced outputs of `close`.
+Its body constructs the canonical context, searched action, authorization,
+decomposition, and execution. This property concerns that constructor, not an
+arbitrary inhabitant of `OperationalSameRegimeClosureAt`, whose structure
+explicitly packages those five layers together with the collision. The common
+memory is the left output. The collision connects the right output to that
+memory. The constructor receives neither a third memory, nor an equality of
+readouts, nor a truth-to-proof conversion.
 
 The kernel uses `ExecutedRun.terminal_eq_run`, then the direct
 `godelExactRunExact`, proved by induction with `next_exact`. Composed with the
