@@ -233,6 +233,8 @@ end RelationalPerimeter
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms RelationalPerimeter.HeytingArithmetic.SoundTheoryHistory
+#print axioms RelationalPerimeter.HeytingArithmetic.SoundTheoryHistory.root
+#print axioms RelationalPerimeter.HeytingArithmetic.SoundTheoryHistory.extend
 #print axioms RelationalPerimeter.HeytingArithmetic.SoundTheoryHistory.containsTruth
 #print axioms RelationalPerimeter.HeytingArithmetic.Sentence.atBound_holds_iff_models
 #print axioms RelationalPerimeter.HeytingArithmetic.SoundTheoryHistory.axiomSound

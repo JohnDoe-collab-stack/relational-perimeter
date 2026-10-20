@@ -193,10 +193,31 @@ end HeytingArithmetic
 end RelationalPerimeter
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms RelationalPerimeter.HeytingArithmetic.Sentence.atBound
+#print axioms RelationalPerimeter.HeytingArithmetic.Sentence.atBound_zero
+#print axioms RelationalPerimeter.HeytingArithmetic.Sentence.atBound_succ
 #print axioms RelationalPerimeter.HeytingArithmetic.TheoryHistory
+#print axioms RelationalPerimeter.HeytingArithmetic.TheoryHistory.root
+#print axioms RelationalPerimeter.HeytingArithmetic.TheoryHistory.extend
+#print axioms RelationalPerimeter.HeytingArithmetic.TheoryHistory.Contains
+#print axioms RelationalPerimeter.HeytingArithmetic.TheoryHistory.Contains.newest
+#print axioms RelationalPerimeter.HeytingArithmetic.TheoryHistory.Contains.earlier
+#print axioms RelationalPerimeter.HeytingArithmetic.TheoryHistory.rootContainsElim
+#print axioms RelationalPerimeter.HeytingArithmetic.TheoryHistory.Contains.preserve
 #print axioms RelationalPerimeter.HeytingArithmetic.HistoryAxiom
+#print axioms RelationalPerimeter.HeytingArithmetic.HistoryAxiom.arithmetic
+#print axioms RelationalPerimeter.HeytingArithmetic.HistoryAxiom.added
 #print axioms RelationalPerimeter.HeytingArithmetic.HistoryAxiom.preserve
 #print axioms RelationalPerimeter.HeytingArithmetic.TheoryHistory.theory
+#print axioms RelationalPerimeter.HeytingArithmetic.HistoryProvable
+#print axioms RelationalPerimeter.HeytingArithmetic.rootAxiomToStandard
+#print axioms RelationalPerimeter.HeytingArithmetic.standardAxiomToRoot
+#print axioms RelationalPerimeter.HeytingArithmetic.TheoryHistory.quote
+#print axioms RelationalPerimeter.HeytingArithmetic.decodeSentence
+#print axioms RelationalPerimeter.HeytingArithmetic.decodeSentence_quote
+#print axioms RelationalPerimeter.HeytingArithmetic.decodeTheoryHistoryFuel
+#print axioms RelationalPerimeter.HeytingArithmetic.decodeTheoryHistory
+#print axioms RelationalPerimeter.HeytingArithmetic.decodeTheoryHistoryFuel_quote
 #print axioms RelationalPerimeter.HeytingArithmetic.decodeTheoryHistory_quote
 #print axioms RelationalPerimeter.HeytingArithmetic.TheoryHistory.eq_of_quote_eq
 /- AXIOM_AUDIT_END -/

@@ -82,6 +82,8 @@ def old_checked_proofs_are_preserved
 end HeytingArithmeticHistoryGodelRegression
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms HeytingArithmeticHistoryGodelRegression.TestHistoryProof
+#print axioms HeytingArithmeticHistoryGodelRegression.TestHistoryExecution
 #print axioms HeytingArithmeticHistoryGodelRegression.rootSound
 #print axioms HeytingArithmeticHistoryGodelRegression.rootSystem
 #print axioms HeytingArithmeticHistoryGodelRegression.rootExecution
