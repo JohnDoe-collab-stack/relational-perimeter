@@ -2,6 +2,10 @@
 
 Date : 21 octobre 2026, Europe/Paris.
 
+État ultérieur : l’envoi scientifique a été accepté dans le nouveau projet.
+Le [reçu de soumission](ARISTOTLE_THREE_LINKS_SUBMISSION.fr.md) fait foi pour
+ses identifiants et son état d’envoi ; la préparation ci-dessous est conservée.
+
 La publication et l’envoi dans un **nouveau projet Aristotle** sont autorisés.
 Ce document prépare cet envoi ; il ne constate encore ni acceptation API ni
 verdict. Aucun ancien projet ou historique de conversation ne sera réutilisé.
