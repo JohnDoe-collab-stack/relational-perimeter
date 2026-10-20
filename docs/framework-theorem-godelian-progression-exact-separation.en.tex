@@ -1,0 +1,173 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\Truth}{\operatorname{Truth}}
+\newcommand{\Proof}{\operatorname{Proof}}
+\newcommand{\ExactRealization}{\operatorname{ExactRealization}}
+\newcommand{\Empty}{\mathsf{Empty}}
+
+\title{Framework theorem for Gödelian progression\\
+and exact separation}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\paragraph{Status.}
+This document summarizes, without extending, the registered claim
+\texttt{GODEL\_CONSTITUTIVE\_THEORY\_PROGRESSION}. The canonical passage
+remains the English Markdown document on the constitutive progression of
+Gödelian theories.
+
+Let $T_0$ be a certified arithmetic stage. For every natural number $n$, the
+executed progression constructs a stage $T_n$, a Gödelian production $G_n$,
+and two computed terminals:
+
+\begin{itemize}
+  \item $t^{\mathrm{truth}}_n$, carrying the readout $\Truth(G_n)$;
+  \item $t^{\mathrm{proof}}_n$, carrying the readout $\Proof_{T_n}(G_n)$.
+\end{itemize}
+
+The same executed production provides the witnesses
+
+\[
+  \Truth(G_n)
+\]
+
+and
+
+\[
+  \Proof_{T_n}(G_n) \longrightarrow \Empty.
+\]
+
+The following results then hold. In what follows, $C_n$ denotes the Gödelian
+contract of the execution at stage $n$, and $q_A$ denotes the memory projection
+of realization $A$.
+
+\section{Positive operational grouping}
+
+There exists an operational realization that computes a common terminal
+memory for $t^{\mathrm{truth}}_n$ and $t^{\mathrm{proof}}_n$, without requiring
+global exactness of their readouts.
+
+The grouping of the terminal memories is therefore constructible. It
+identifies neither the constitutive sources nor their readings.
+
+\section{Universal separation under exactness}
+
+For every memory type $M$ and every exact realization $A$ of the Gödelian
+contract $C_n$,
+
+\[
+  \boxed{
+    q_A\!\left(t^{\mathrm{truth}}_n\right)
+    \neq
+    q_A\!\left(t^{\mathrm{proof}}_n\right)
+  }.
+\]
+
+Equivalently,
+
+\[
+  \boxed{
+    \forall M,\;
+    \forall A : \ExactRealization(C_n,M),\quad
+    q_A\!\left(t^{\mathrm{truth}}_n\right)
+    \neq
+    q_A\!\left(t^{\mathrm{proof}}_n\right)
+  }.
+\]
+
+No exact realization of the contract can therefore merge the memories of the
+two computed terminals.
+
+The two certified components of the same executed Gödelian witness --- truth
+and unprovability of $G_n$ --- thus yield an additional consequence that
+applies universally to the admissible exact representations of the regime.
+
+\section{Constitutive progression}
+
+The next stage is effectively constructed by the extension
+
+\[
+  T_{n+1} = T_n + \{G_n\}.
+\]
+
+This notation denotes the addition of the exact occurrence of $G_n$ to the
+constituted history of $T_n$. At the new stage,
+
+\[
+  \Proof_{T_{n+1}}(G_n),
+\]
+
+while a new Gödelian production provides $G_{n+1}$ with
+
+\[
+  \Truth(G_{n+1})
+\]
+
+and
+
+\[
+  \Proof_{T_{n+1}}(G_{n+1}) \longrightarrow \Empty.
+\]
+
+The development also proves
+
+\[
+  G_n \neq G_{n+1}.
+\]
+
+Universal separation then applies again to the computed terminals of
+$G_{n+1}$, relative to the contract of the new regime.
+
+\section{Conclusion}
+
+\begin{center}
+  \fbox{%
+    \begin{minipage}{0.82\linewidth}
+      \centering
+      At every effectively produced finite stage, the Gödelian production of
+      that stage provides a new proof boundary and imposes, for its contract,
+      a new universal separation obligation on every exact realization.
+    \end{minipage}%
+  }
+\end{center}
+
+The result therefore goes beyond the unprovability of $G_n$. It turns the
+executed Gödelian witness into a universal constraint on every exact
+realization covered by the contract of the stage.
+
+At the same time, the positive construction of the operational grouping shows
+exactly what remains possible when global readout exactness is not required.
+
+The progression is finite for every requested natural height. The result
+constructs neither an infinite tower, a limit union, a complete final theory,
+nor a runtime spanning two stages.
+
+\section{Lean core of the universal conclusion}
+
+\small
+\begin{verbatim}
+theorem everyExactRealizationSeparatesCurrentTerminals
+    (stage : SoundGodelTheoryStage)
+    {Memory : Type}
+    (realization : ExactRealization
+      (godelClosureContract stage.execution) Memory) :
+    realization.project
+        stage.currentOperationalGroupingWithoutRead.leftTerminal ≠
+      realization.project
+        stage.currentOperationalGroupingWithoutRead.rightTerminal
+\end{verbatim}
+\normalsize
+
+\end{document}

@@ -1,0 +1,175 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\Truth}{\operatorname{Truth}}
+\newcommand{\Proof}{\operatorname{Proof}}
+\newcommand{\ExactRealization}{\operatorname{ExactRealization}}
+\newcommand{\Empty}{\mathsf{Empty}}
+
+\title{Théorème-cadre de progression gödelienne\\
+et de séparation exacte}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\paragraph{Statut.}
+Ce document synthétise, sans l'étendre, l'affirmation enregistrée
+\texttt{GODEL\_CONSTITUTIVE\_THEORY\_PROGRESSION}. Le passage canonique reste
+le document Markdown français consacré à la progression constitutive des
+théories gödeliennes.
+
+Soit $T_0$ un étage arithmétique certifié. Pour tout entier naturel $n$,
+la progression exécutée construit un étage $T_n$, une production gödelienne
+$G_n$ et deux terminaux calculés :
+
+\begin{itemize}
+  \item $t^{\mathrm{vérité}}_n$, portant le readout $\Truth(G_n)$ ;
+  \item $t^{\mathrm{preuve}}_n$, portant le readout $\Proof_{T_n}(G_n)$.
+\end{itemize}
+
+La même production exécutée fournit les témoins
+
+\[
+  \Truth(G_n)
+\]
+
+et
+
+\[
+  \Proof_{T_n}(G_n) \longrightarrow \Empty.
+\]
+
+Les résultats suivants sont alors établis. Dans la suite, $C_n$ désigne le
+contrat gödelien de l'exécution à l'étage $n$ et $q_A$ la projection mémoire
+de la réalisation $A$.
+
+\section{Regroupement opérationnel positif}
+
+Il existe une réalisation opérationnelle qui calcule une mémoire terminale
+commune pour $t^{\mathrm{vérité}}_n$ et $t^{\mathrm{preuve}}_n$, sans exiger
+l'exactitude globale de leurs readouts.
+
+Le regroupement des mémoires terminales est donc constructible. Il n'identifie
+ni les sources constitutives ni leurs lectures.
+
+\section{Séparation universelle sous exactitude}
+
+Pour tout type de mémoire $M$ et toute réalisation exacte $A$ du contrat
+gödelien $C_n$,
+
+\[
+  \boxed{
+    q_A\!\left(t^{\mathrm{vérité}}_n\right)
+    \neq
+    q_A\!\left(t^{\mathrm{preuve}}_n\right)
+  }.
+\]
+
+Autrement dit,
+
+\[
+  \boxed{
+    \forall M,\;
+    \forall A : \ExactRealization(C_n,M),\quad
+    q_A\!\left(t^{\mathrm{vérité}}_n\right)
+    \neq
+    q_A\!\left(t^{\mathrm{preuve}}_n\right)
+  }.
+\]
+
+Aucune réalisation exacte du contrat ne peut donc fusionner les mémoires des
+deux terminaux calculés.
+
+Les deux composantes certifiées du même témoin gödelien exécuté --- vérité et
+non-prouvabilité de $G_n$ --- produisent ainsi une conséquence supplémentaire
+portant universellement sur les représentations exactes admissibles du régime.
+
+\section{Progression constitutive}
+
+L'étage suivant est effectivement construit par l'extension
+
+\[
+  T_{n+1} = T_n + \{G_n\}.
+\]
+
+Cette notation désigne l'ajout de l'occurrence exacte de $G_n$ à l'histoire
+constituée de $T_n$. Dans le nouvel étage,
+
+\[
+  \Proof_{T_{n+1}}(G_n),
+\]
+
+tandis qu'une nouvelle production gödelienne fournit $G_{n+1}$ avec
+
+\[
+  \Truth(G_{n+1})
+\]
+
+et
+
+\[
+  \Proof_{T_{n+1}}(G_{n+1}) \longrightarrow \Empty.
+\]
+
+Le développement établit également
+
+\[
+  G_n \neq G_{n+1}.
+\]
+
+La séparation universelle s'applique alors de nouveau aux terminaux calculés
+de $G_{n+1}$, relativement au contrat du nouveau régime.
+
+\section{Conclusion}
+
+\begin{center}
+  \fbox{%
+    \begin{minipage}{0.82\linewidth}
+      \centering
+      À chaque étage fini effectivement produit, la production gödelienne de
+      cet étage fournit une nouvelle frontière de preuve et impose, pour son
+      contrat, une nouvelle obligation universelle de séparation à toute
+      réalisation exacte.
+    \end{minipage}%
+  }
+\end{center}
+
+Le résultat ne se limite donc pas à la non-prouvabilité de $G_n$. Il transforme
+le témoin gödelien exécuté en une contrainte universelle sur toutes les
+réalisations exactes couvertes par le contrat de l'étage.
+
+En parallèle, la construction positive du regroupement opérationnel montre
+exactement ce qui reste possible lorsque l'exactitude globale des readouts
+n'est pas exigée.
+
+La progression est finie pour toute hauteur naturelle demandée. Le résultat
+ne construit ni tour infinie, ni union limite, ni théorie finale complète, ni
+runtime transversal entre deux étages.
+
+\section{Noyau Lean de la conclusion universelle}
+
+\small
+\begin{verbatim}
+theorem everyExactRealizationSeparatesCurrentTerminals
+    (stage : SoundGodelTheoryStage)
+    {Memory : Type}
+    (realization : ExactRealization
+      (godelClosureContract stage.execution) Memory) :
+    realization.project
+        stage.currentOperationalGroupingWithoutRead.leftTerminal ≠
+      realization.project
+        stage.currentOperationalGroupingWithoutRead.rightTerminal
+\end{verbatim}
+\normalsize
+
+\end{document}
