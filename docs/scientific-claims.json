@@ -1421,7 +1421,7 @@
     {
       "id": "GODEL_INTERNAL_CLOSURE_OBSTRUCTION",
       "kind": "causal",
-      "evidence_revision": "e2b75474c8bef91cfb9f24d6fed8d408e38d0269",
+      "evidence_revision": "7812298003f433c9eb87c0fd9223bfd4edd38fcf",
       "scope": "Pour toute réalisation de EffectivelyPresentedSoundGodelSystem : production exécutée et certification du même témoin diagonal ; constitution affirmative d'un tout et d'une continuation stricte avec occurrences et provenance conservées ; rejet constructif de l'admission de cette continuation dans le même régime par tentative bilatérale, totalisation, contraction, conversion Truth(G) vers Proof(G), puis non-prouvabilité du même G. HA ferme concrètement les contrats de l'interface mais demeure une instance, non le cadre. Résultat métathéorique conditionnel, sans revendication de renforcement de Gödel, d'unicité architecturale ni de priorité historique.",
       "anchors": [
         {
@@ -1502,7 +1502,7 @@
         "transport": "La correspondance conserve séparément les occurrences, la ressource certifiée et la provenance du même témoin à travers la constitution et la continuation ; le rejet porte uniquement sur l'admission totalisante dans le même régime et n'efface ni le tout ni la continuation positive."
       },
       "consumers": [],
-      "source_sha256": "5bbe5b0edbf6f932d883d466a0668814afd5dbe895f03da836d4d2cd6fc7dc68",
+      "source_sha256": "cc0639c95304f2d989e1d015c8e1cd2b952816fe37b116130248383f94eec539",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1518,7 +1518,7 @@
     {
       "id": "GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION",
       "kind": "causal",
-      "evidence_revision": "9ac167358e626d6999485218ef39a76e0f4a8eea",
+      "evidence_revision": "7812298003f433c9eb87c0fd9223bfd4edd38fcf",
       "scope": "Pour une production gödelienne exécutée unique, une ressource positive maître construit H1 sans présentation circulaire et est partagée avec son pont périmétral aval. Deux sources constitutives distinctes reçoivent ce même H1 ; leurs mémoires opérationnelles actives sont distinctes. La requête close autorisée sur la trace positivement non vide produit une phase terminale et une collision mémoire dans une réalisation préservant autorisations, transitions et événements sans readout exact, tandis que les sources restent distinctes. Les deux runs non vides produisent aussi deux terminaux dont trueWitness et unprovable certifient la séparation immédiate des readouts : la liste vide n'exécute pas close de nouveau, elle observe les terminaux déjà calculés. Toute ExactRealization doit donc conserver cette distinction dans ses mémoires projetées. Ce dernier résultat utilise seulement même mémoire projetée → mêmes futurs et sa contraposée constructive ; il n'établit ni la réciproque ni un quotient canonique de la mémoire. La collision est calculée dans GodelOperationalGroupingWithoutRead sous godelOperationalRealizationWithoutRead, puis exposée sans reconstruction des runs ni de la collision comme ExecutedOperationalGrouping sous l’adaptateur godelOperationalRealization. Une préservation terminale dirigée fixée sur cet adaptateur concret et ce regroupement calculé dérive directement Truth(G) → Proof(G) sans supposer ni dériver Truth(G) = Proof(G), sans transport inverse, read_exact global ni fait négatif ; les conversions utilisées sont les égalités de lecture des terminaux fournies par les runs et la conversion memoryRead le long de la collision calculée, interne à directedReadout. L’ancienne réalisation exacte dérive en outre Truth(G) = Proof(G). Dans les chaînes dirigée et historique, seul le rejet final consomme trueWitness et unprovable du même témoin ; le chemin du séparateur les consomme séparément pour certifier l’inégalité des readouts. Le noyau dirigé ne dépend pas de event_exact ; le transport et le rejet gödeliens ne projettent pas event_exact, qui n’apparaît que comme champ copié de la réalisation adaptée indexant le regroupement. La collision sous correspondance de readout reste une hypothèse, non une conséquence de Gödel ; aucun résultat sur tout regroupement, le continuum, AC ou CH, aucune borne de coût, aucun renforcement strict ni revendication de nouveauté.",
       "anchors": [
         {
@@ -1878,7 +1878,7 @@
       "consumers": [
         "GODEL_CONSTITUTIVE_THEORY_PROGRESSION"
       ],
-      "source_sha256": "4e7e3fcda8df78a4e3896c6da1a0c9a090eef7bd97541cd208597d3194baab6f",
+      "source_sha256": "cf9e60a0839a47109fbc3913a3de0893cf8ff5b4a51eb0b7dea3f60a06c49e21",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -2353,7 +2353,7 @@
     {
       "id": "GODEL_CONSTITUTIVE_THEORY_PROGRESSION",
       "kind": "causal",
-      "evidence_revision": "9ac167358e626d6999485218ef39a76e0f4a8eea",
+      "evidence_revision": "7812298003f433c9eb87c0fd9223bfd4edd38fcf",
       "scope": "À partir d’une histoire arithmétique finie munie d’un certificat positif de correction standard, un vérificateur effectif indexé par cette histoire réalise le système gödelien générique et en exécute la production canonique. Une étape conserve l’exécution source maîtresse, ajoute exactement la phrase G_T qu’elle produit, consomme le témoin Truth(G_T) de cette même exécution pour certifier l’histoire étendue T⁺, construit Proof_T⁺(G_T) depuis l’occurrence newest ajoutée, puis exécute une nouvelle production maîtresse G_T⁺ dans T⁺. Elle établit simultanément Proof_T(G_T) → Empty, Proof_T⁺(G_T), le transport dirigé des anciennes preuves, G_T ≠ G_T⁺ et le rejet d’un transport uniforme inverse. Les contraintes runtime de regroupement positif, d’incompatibilité dirigée et de séparation exacte sont instanciées séparément pour les exécutions source et cible. Une trace dépendante finie retient chaque étape effectivement produite et transporte les preuves anciennes en consommant récursivement ces étapes avant toute comparaison avec l’itérateur simplifié. La conversion exposée Truth(G_T) → Proof_T⁺(G_T) est constante en son argument : la vérité certifie l’extension et la preuve cible provient séparément de l’occurrence ajoutée ; aucun calcul vérité-vers-preuve transversal n’est revendiqué. Le résultat ne construit ni limite infinie, ni union extensive, ni théorie finale complète, ni non-réfutabilité automatique, ni runtime transversal entre Proof_T et Proof_T⁺, ni priorité bibliographique.",
       "anchors": [
         {
@@ -2541,7 +2541,7 @@
         "transport": "L’extension transporte uniquement les anciennes preuves dans le sens source vers cible. Aucun transport uniforme inverse n’est disponible. Les runtimes source et cible réutilisent séparément les constructions génériques de regroupement, d’incompatibilité dirigée et de séparation exacte, chacun avec son ExecutedGodelProduction propre. Aucun runtime n’identifie Proof_T et Proof_T⁺, et aucune limite infinie des histoires finies n’est formée."
       },
       "consumers": [],
-      "source_sha256": "f97bbc7283ce2b1fef9be765133c298ad51431a92be434275137a0e59909b5af",
+      "source_sha256": "5415b5fa22233f1b04c2d8418831f8f68c4a42b14fb4e72af729a7e547e86698",
       "reviews": {
         "reader": {
           "status": "pending"
