@@ -342,6 +342,13 @@ and transitive closure applications, with exact `[1,1]` live-production bounds
 at `step` and zero extra production outside it, within its bounded unfolding
 scope; it is not a general time or physical-memory theorem.
 
+The agent certificate requires exact engine references at every followed node
+and precise reply/refusal facts, including actual handle absence and the exact
+proposed value. Its rich/runtime bridge is pinned to the rich operation carried
+by the certificate; the compiled check examines the closures installed in its
+actual source fields, not merely an unused rich helper. `followed_chain` composes
+these guarantees on the same history, including all finite future interactions.
+
 All Lean sources are constructive: they contain no `sorry`, `axiom`, or
 `noncomputable` declaration, and their final axiom-audit blocks report no axiom
 dependency for the audited declarations. The default build includes the public

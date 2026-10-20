@@ -75,6 +75,79 @@ inductive ResponseEvidence (requirement : Requirement) (register : List AnswerTa
       (proposed : candidate = some value) (different : value ≠ occurrence.1.read var) :
       ResponseEvidence requirement register handle var candidate (.refused handle var .incorrectValue)
 
+def ResponseEvidence.missingPermission {requirement : Requirement} {register : List AnswerTarget}
+    {handle : Nat} {var : Var} {candidate : Option Bool} :
+    ResponseEvidence requirement register handle var candidate (.refused handle var .missingHandle) →
+      Ref requirement.realizedScope var
+  | .missing permission _ => permission
+
+theorem ResponseEvidence.missing_absent {requirement : Requirement} {register : List AnswerTarget}
+    {handle : Nat} {var : Var} {candidate : Option Bool}
+    (evidence : ResponseEvidence requirement register handle var candidate (.refused handle var .missingHandle)) :
+    resolveHandle register handle = none := by
+  cases evidence with
+  | missing _ absent => exact absent
+
+theorem ResponseEvidence.outside_absent {requirement : Requirement} {register : List AnswerTarget}
+    {handle : Nat} {var : Var} {candidate : Option Bool}
+    (evidence : ResponseEvidence requirement register handle var candidate (.refused handle var .outsideScope)) :
+    requirement.permission var = none := by
+  cases evidence with
+  | outside absent => exact absent
+
+def ResponseEvidence.incorrectPermission {requirement : Requirement} {register : List AnswerTarget}
+    {handle : Nat} {var : Var} {candidate : Option Bool} :
+    ResponseEvidence requirement register handle var candidate (.refused handle var .incorrectValue) →
+      Ref requirement.realizedScope var
+  | .incorrect permission _ _ _ _ _ => permission
+
+def ResponseEvidence.incorrectOccurrence {requirement : Requirement} {register : List AnswerTarget}
+    {handle : Nat} {var : Var} {candidate : Option Bool} :
+    ResponseEvidence requirement register handle var candidate (.refused handle var .incorrectValue) → Located register
+  | .incorrect _ occurrence _ _ _ _ => occurrence
+
+def ResponseEvidence.incorrectValue {requirement : Requirement} {register : List AnswerTarget}
+    {handle : Nat} {var : Var} {candidate : Option Bool} :
+    ResponseEvidence requirement register handle var candidate (.refused handle var .incorrectValue) → Bool
+  | .incorrect _ _ _ value _ _ => value
+
+theorem ResponseEvidence.incorrect_facts {requirement : Requirement} {register : List AnswerTarget}
+    {handle : Nat} {var : Var} {candidate : Option Bool}
+    (evidence : ResponseEvidence requirement register handle var candidate (.refused handle var .incorrectValue)) :
+    resolveHandle register handle = some evidence.incorrectOccurrence ∧
+      candidate = some evidence.incorrectValue ∧
+      evidence.incorrectValue ≠ evidence.incorrectOccurrence.1.read var := by
+  cases evidence with
+  | incorrect _ _ located _ proposed different => exact ⟨located, proposed, different⟩
+
+/-- Factual specification independent of the responder, including exact request
+indices, the proposed value and each refusal's precise scope. Positive witnesses
+remain in ResponseEvidence and are not reconstructed from this proposition. -/
+def ResponseSpecification (requirement : Requirement) (register : List AnswerTarget)
+    (handle : Nat) (var : Var) (candidate : Option Bool) : Message → Prop
+  | .advanced _ => False
+  | .answer actualHandle actualVar value => actualHandle = handle ∧ actualVar = var ∧
+      ∃ _authorization : Authorization requirement register handle var value,
+        candidate = none ∨ candidate = some value
+  | .refused actualHandle actualVar reason => actualHandle = handle ∧ actualVar = var ∧
+      match reason with
+      | .outsideScope => requirement.permission var = none
+      | .missingHandle => Nonempty (Ref requirement.realizedScope var) ∧ resolveHandle register handle = none
+      | .incorrectValue => Nonempty (Ref requirement.realizedScope var) ∧
+          ∃ occurrence : Located register, resolveHandle register handle = some occurrence ∧
+            ∃ value : Bool, candidate = some value ∧ value ≠ occurrence.1.read var
+
+theorem ResponseEvidence.specification {requirement : Requirement} {register : List AnswerTarget}
+    {handle : Nat} {var : Var} {candidate : Option Bool} {message : Message}
+    (evidence : ResponseEvidence requirement register handle var candidate message) :
+    ResponseSpecification requirement register handle var candidate message := by
+  cases evidence with
+  | answer _ authorization exact => exact ⟨rfl, rfl, authorization, exact⟩
+  | outside absent => exact ⟨rfl, rfl, absent⟩
+  | missing permission absent => exact ⟨rfl, rfl, ⟨permission⟩, absent⟩
+  | incorrect permission occurrence located value proposed different =>
+      exact ⟨rfl, rfl, ⟨permission⟩, occurrence, located, value, proposed, different⟩
+
 def Decision.evidence {requirement : Requirement} {register : List AnswerTarget}
     {handle : Nat} {var : Var} {candidate : Option Bool}
     (decision : Decision requirement register handle var candidate) :
@@ -94,6 +167,23 @@ def RequestEvidence (memory : Memory) : (request : Request) → (Memory × Event
       ResponseEvidence memory.requirement memory.register handle var (some value) result.2.message
   | .obtain handle var, result =>
       ResponseEvidence result.1.requirement result.1.register handle var none result.2.message
+
+def RequestSpecification (memory : Memory) : Request → Memory × Event → Prop
+  | .advance count, result => result.2.message = .advanced count
+  | .inspect handle var, result =>
+      ResponseSpecification memory.requirement memory.register handle var none result.2.message
+  | .propose handle var value, result =>
+      ResponseSpecification memory.requirement memory.register handle var (some value) result.2.message
+  | .obtain handle var, result =>
+      ResponseSpecification result.1.requirement result.1.register handle var none result.2.message
+
+theorem RequestEvidence.specification {memory : Memory} {request : Request} {result : Memory × Event}
+    (evidence : RequestEvidence memory request result) : RequestSpecification memory request result := by
+  cases request with
+  | advance _ => exact evidence.down.down
+  | inspect _ _ => exact ResponseEvidence.specification evidence
+  | propose _ _ _ => exact ResponseEvidence.specification evidence
+  | obtain _ _ => exact ResponseEvidence.specification evidence
 
 def step (memory : Memory) : Memory × LiveContinuation.Event :=
   let production := LiveContinuation.produce memory.live
@@ -292,6 +382,17 @@ end ConstitutiveSearch.Agent
 #print axioms ConstitutiveSearch.Agent.performCertified
 #print axioms ConstitutiveSearch.Agent.perform_obtain
 #print axioms ConstitutiveSearch.Agent.ResponseEvidence
+#print axioms ConstitutiveSearch.Agent.ResponseEvidence.missingPermission
+#print axioms ConstitutiveSearch.Agent.ResponseEvidence.missing_absent
+#print axioms ConstitutiveSearch.Agent.ResponseEvidence.outside_absent
+#print axioms ConstitutiveSearch.Agent.ResponseEvidence.incorrectPermission
+#print axioms ConstitutiveSearch.Agent.ResponseEvidence.incorrectOccurrence
+#print axioms ConstitutiveSearch.Agent.ResponseEvidence.incorrectValue
+#print axioms ConstitutiveSearch.Agent.ResponseEvidence.incorrect_facts
+#print axioms ConstitutiveSearch.Agent.ResponseSpecification
+#print axioms ConstitutiveSearch.Agent.ResponseEvidence.specification
+#print axioms ConstitutiveSearch.Agent.RequestSpecification
+#print axioms ConstitutiveSearch.Agent.RequestEvidence.specification
 #print axioms ConstitutiveSearch.Agent.Decision.evidence
 #print axioms ConstitutiveSearch.Agent.RequestEvidence
 #print axioms ConstitutiveSearch.Agent.executeProducedInput

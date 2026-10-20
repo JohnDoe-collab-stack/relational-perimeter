@@ -193,6 +193,72 @@ theorem cached_handle_has_no_internal_stage :
       (sourceStart (UnifiedMaster.publicInstance 0) (singletonRequirement 0)
         (UnifiedMaster.publicInstance 0).distinctPair.left) (.obtain 0 0) = 0 := rfl
 
+/-- Consume the all-node field of the certificate, not just its head pin. -/
+theorem certified_all_node_references {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (profile : RoleOccurrenceProfile master.roles) (requests : List Request) :
+    (certificate.followed profile requests).ExactReferences := certificate.followedAllReferences profile requests
+
+theorem certified_suffix_references {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (profile : RoleOccurrenceProfile master.roles) (prior : List Request) (request : Request) (rest : List Request) :
+    (Followed.afterPrefix prior (certificate.followed profile (prior ++ request :: rest))).references =
+      (sourcePerform
+        (ConstitutiveSearch.Grouping.Continuation.run
+          (fun state asked => (sourcePerform state asked).1) (sourceStart master requirement profile) prior)
+        request).1.history.references :=
+  Followed.references_of_exact _ (certificate.suffix_references profile prior (request :: rest))
+
+theorem certified_second_references {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (profile : RoleOccurrenceProfile master.roles) (first second : Request) (rest : List Request) :
+    (Followed.afterPrefix [first] (certificate.followed profile (first :: second :: rest))).references =
+      (sourcePerform (sourcePerform (sourceStart master requirement profile) first).1 second).1.history.references :=
+  certified_suffix_references certificate profile [first] second rest
+
+theorem certified_third_references {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (profile : RoleOccurrenceProfile master.roles) (first second third : Request) (rest : List Request) :
+    (Followed.afterPrefix [first, second] (certificate.followed profile (first :: second :: third :: rest))).references =
+      (sourcePerform
+        (sourcePerform (sourcePerform (sourceStart master requirement profile) first).1 second).1 third).1.history.references :=
+  certified_suffix_references certificate profile [first, second] third rest
+
+theorem certified_rich_operation {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (source : Source master) (request : Request) :
+    ((bridge master).sourceNext source request, (bridge master).sourceEvent source request) =
+      (certificate.richOperations source request).result := certificate.bridgeRichResult source request
+
+theorem independent_rich_future_events {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (source : Source master) (requests : List Request) :
+    ConstitutiveSearch.Grouping.Continuation.events (fun state asked => (sourcePerform state asked).1)
+      (fun state asked => (sourcePerform state asked).2) source requests =
+      (executeRequests (project source) requests).2 := certificate.rich_events source requests
+
+theorem complete_chain_is_one_following (input : Nat)
+    (profile : RoleOccurrenceProfile (UnifiedMaster.publicInstance input).roles) (requests : List Request) :
+    let certificate := concrete_certificate input
+    Followed.ChainAgreement certificate.richOperations (certificate.followed profile requests) ∧
+      (certificate.followed profile requests).ExactReferences ∧
+      FiniteResponseCriterion (start (UnifiedMaster.publicInstance input) (singletonRequirement 0) profile) requests :=
+  (concrete_certificate input).followed_chain profile requests
+
+/-- The finite contract really constrains a later response in its produced state. -/
+theorem finite_criterion_reaches_second (memory : Memory) (first second : Request) (rest : List Request)
+    (holds : FiniteResponseCriterion memory (first :: second :: rest)) :
+    RequestSpecification (executeInput memory first).1 second
+      (executeInput (executeInput memory first).1 second) := holds.2.1.specification
+
+theorem certified_third_response (input : Nat)
+    (profile : RoleOccurrenceProfile (UnifiedMaster.publicInstance input).roles)
+    (first second third : Request) (rest : List Request) :
+    let initial := start (UnifiedMaster.publicInstance input) (singletonRequirement 0) profile
+    let afterTwo := (executeInput (executeInput initial first).1 second).1
+    RequestSpecification afterTwo third (executeInput afterTwo third) :=
+  ((concrete_certificate input).satisfaction profile (first :: second :: third :: rest)).2.2.1.specification
+
 end Tests.ConstitutiveAgentPersistence
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms Tests.ConstitutiveAgentPersistence.distinct_sources_same_complete_memory
@@ -223,4 +289,13 @@ end Tests.ConstitutiveAgentPersistence
 #print axioms Tests.ConstitutiveAgentPersistence.certified_realized_return
 #print axioms Tests.ConstitutiveAgentPersistence.missing_handle_has_two_internal_stages
 #print axioms Tests.ConstitutiveAgentPersistence.cached_handle_has_no_internal_stage
+#print axioms Tests.ConstitutiveAgentPersistence.certified_all_node_references
+#print axioms Tests.ConstitutiveAgentPersistence.certified_suffix_references
+#print axioms Tests.ConstitutiveAgentPersistence.certified_second_references
+#print axioms Tests.ConstitutiveAgentPersistence.certified_third_references
+#print axioms Tests.ConstitutiveAgentPersistence.certified_rich_operation
+#print axioms Tests.ConstitutiveAgentPersistence.independent_rich_future_events
+#print axioms Tests.ConstitutiveAgentPersistence.complete_chain_is_one_following
+#print axioms Tests.ConstitutiveAgentPersistence.finite_criterion_reaches_second
+#print axioms Tests.ConstitutiveAgentPersistence.certified_third_response
 /- AXIOM_AUDIT_END -/

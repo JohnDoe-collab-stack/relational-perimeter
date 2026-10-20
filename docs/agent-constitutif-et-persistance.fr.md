@@ -101,12 +101,27 @@ simples projettent ses données, sans exécuter un second décideur.
 une permission, une occurrence et un accord avec sa valeur, ou les faits précis
 justifiant un refus. Elle n’est pas définie comme « la réponse choisie est correcte ».
 
+Ses éliminateurs restituent la permission et l’absence réelle de handle pour
+`missingHandle`, l’absence de permission pour `outsideScope`, et l’occurrence,
+la proposition exacte et son inégalité avec la lecture pour `incorrectValue`.
+`ResponseSpecification` exprime ces faits avec les indices de la demande ;
+sa preuve est extraite du témoin produit, sans second appel au décideur.
+`RequestSpecification` vérifie `obtain` sur son registre effectivement prolongé.
+
 ## Raccord avec l’histoire riche
 
 La source scientifique conserve le profil initial et l’histoire des ressources.
 Son interprète lit les cibles de cette histoire, non les réponses projetées du
 runtime. Les lois de transition, d’événement, de lecture et d’admission sont
 démontrées séparément, puis composées pour toute liste finie de demandes.
+
+`Certificate.bridgeRichResult` fixe les deux projections sources du pont au
+résultat de l’opération riche portée par ce même certificat. `rich_futures`
+et `rich_events` en déduisent les accords finis directement exprimés sur
+`sourcePerform`, non sur un répondeur choisi comme sa propre référence.
+Le contrôle compilé examine aussi les fermetures effectivement installées
+dans les champs riches du pont ; l’égalité des valeurs ne prouve pas, à elle
+seule, l’indépendance de leur chemin de calcul.
 
 Les lectures et autorisations riches consomment les valeurs du support réalisé,
 puis leur accord avec les entrées réduites. `FollowedStages` suit aussi chaque
@@ -134,6 +149,23 @@ l'acceptation de sa cible dans son contexte propre. `FiniteResponseCriterion`
 applique cette exigence à chaque réponse de l'exécuteur réel. Le suivi fini
 implique ce contrat ; le champ `Certificate.satisfaction` consomme cette
 démonstration. Aucune prémisse extérieure d'acceptation n'est demandée au client.
+
+Le contrat complet `RequestCriterion` exige en plus `RequestSpecification` :
+les refus ne sont pas justifiés par le seul critère positif. Leur précision
+se compose dans `FiniteResponseCriterion` sur les vrais états successifs.
+`Certificate.replySpecifications` consomme les témoins de `replies`.
+
+`Followed.ExactReferences` exige l’extension exacte à chaque nœud de l’histoire
+portée, et non seulement à sa tête. `Followed.afterPrefix` en extrait la queue
+réellement stockée ; `Certificate.followedAllReferences` et `suffix_references`
+en ferment les raccords. Le constructeur `Followed.cons` porte douze champs
+explicites, dont `referencesExact`, qui fixe son extension moteur à celle de
+l’histoire produite. Il ne s’agit pas du transport historique des cibles.
+
+`Certificate.followed_chain` réunit les références, l’opération riche, l’accord
+avec son résultat runtime et la justification des réponses sur ce même suivi.
+`certify` utilise un seul suivi pour ses champs et sa satisfaction ;
+`Prepared.certificate` ferme ce paquet sur les entrées publiques admises.
 
 ## Oubli et portée
 
@@ -218,12 +250,17 @@ Tous les modules sont accessibles depuis `import RelationalPerimeter`.
 | Réponses admises et erronées | `candidate_authorization_exact`, `admitted_inspection_returns`, `correct_candidate_returns`, `incorrect_candidate_refused` |
 | Obtention effective | `obtain_produces_and_returns`, `obtain_register_exact`, `obtain_work_exact` |
 | Refus sans modification de mémoire | `refusal_preserves_memory` |
+| Justification précise des réponses et refus | `ResponseSpecification`, `RequestSpecification`, `ResponseEvidence.specification`, `ResponseEvidence.missing_absent`, `ResponseEvidence.incorrect_facts`, `Certificate.replySpecifications` |
 | Handles et références | `History.realization`, `History.handle_transport`, `RegisterRealization.advance_position`, `RegisterRealization.injective`, `runSteps_old_read` |
 | Lois locales indépendantes | `sourcePerform_exact`, `bridge` |
+| Pont ancré à l’opération riche et ses futurs | `Certificate.bridgeRichResult`, `Certificate.rich_futures`, `Certificate.rich_events` |
 | Formation et lecture riches | `HistoricalFormation`, `HistoricalFormation.not_given`, `MaterialReading`, `RichOperation`, `sourceProduced` |
 | Deux transports internes composés | `InternalStepAgreement`, `FollowedStages.engineTransport`, `FollowedStages.historicalTransport`, `FollowedStages.execution_exact` |
 | Critère d'acceptation de toutes les réponses | `ReplyCriterion`, `FiniteResponseCriterion`, `Followed.satisfies`, `Certificate.satisfaction` |
 | Toutes les interactions finies et leurs étapes internes | `FollowedStages`, `all_executed_determinations_followed`, `all_future_requests_exact`, `all_future_events_exact`, `all_future_reads_exact` |
+| Références exactes de tous les nœuds | `Followed.references_exact`, `Followed.all_references_exact`, `Followed.afterPrefix`, `Certificate.followedAllReferences`, `Certificate.suffix_references` |
+| Raccords fermés des cibles et étapes internes | `Certificate.targetsAccepted`, `targetReads`, `resumedOrigin`, `followedStages`, `followedReferences`, `internalStages`, `request_stages_exact` |
+| Composition de toute la chaîne sur le même suivi | `Followed.ChainAgreement`, `Certificate.followed_chain` |
 | Admissions dans les deux sens | `admissions_forward`, `admissions_reflected`, `admission_received_return`, `admission_realized_return` |
 | Mémoire entière et oubli | `agent_memory_factors_through_output`, `initial_profile_not_recoverable`, `forgotten_sources_same_future` |
 | Paquet fermé | `certify`, `Prepared.certificate` |
@@ -246,9 +283,26 @@ positives et les petits contrôles de calculabilité. Le scénario public obtien
 une cible absente, la réutilise sans nouvelle étape et distingue les refus. Ces
 évaluations finies ne sont pas une campagne confirmatoire de complexité.
 
+`python scripts/test-agent-contract-links.py --output <répertoire neuf extérieur>`
+rejoue les cinq contrôles ciblés de ces raccords dans un clone détaché, avec
+artefacts copiés physiquement : deux pertes de témoins doivent échouer en
+preuve, deux substitutions runtime doivent échouer au contrôle compilé même
+si leurs accords de valeurs sont rétablis, et un auxiliaire riche correct
+doit réussir. Le protocole, les patches, leurs empreintes, les commandes et
+les résultats sont enregistrés sans modifier la référence. Ces contrôles
+complètent les preuves ; ils ne démontrent pas une résistance à toute
+réécriture simultanée de la spécification et de ses consommateurs.
+
 L'audit du commit `f6c6d2c051ae0886056d47cf5357253c137a1319` conclut
 `AGENT TARGET REQUIRES CORRECTIONS` et `NO REGRESSION VERIFIED`. Les raccords
 ci-dessus constituent la correction de ses sept constats ; leur vérification
 locale est distincte d'un nouveau verdict indépendant.
+
+Le réaudit du commit `f039bdf3d822441e9e8b976ea54cf0177f58cffe` conclut aussi
+`AGENT TARGET REQUIRES CORRECTIONS` et `NO REGRESSION VERIFIED` : il vérifie
+la construction et relève trois défauts de consommation des garanties.
+Les raccords de tous les nœuds, du pont indépendant et des refus précis
+décrits ici sont leur correction ; ils ne constituent pas un nouveau verdict
+d’audit indépendant sur cette version.
 
 [English version](constitutive-agent-and-persistence.en.md)

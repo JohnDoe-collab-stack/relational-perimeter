@@ -292,6 +292,24 @@ def bridge {input : Nat} (master : UnifiedMaster.Instance input) :
       source.history.realization.materialRegister_exact).trans
         (congrArg (table source.history.targets) source.requirement.scope_exact.symm)
 
+/-- Apply the actual rich fields of the bridge. These entries also expose
+the selected compiled closures without traversing the unrelated reduced side. -/
+def bridgeSourceNext {input : Nat} (master : UnifiedMaster.Instance input)
+    (source : Source master) (request : Request) : Source master :=
+  (bridge master).sourceNext source request
+
+def bridgeSourceEvent {input : Nat} (master : UnifiedMaster.Instance input)
+    (source : Source master) (request : Request) : Event :=
+  (bridge master).sourceEvent source request
+
+theorem bridge_source_next {input : Nat} (master : UnifiedMaster.Instance input)
+    (source : Source master) (request : Request) :
+    bridgeSourceNext master source request = (sourcePerform source request).1 := rfl
+
+theorem bridge_source_event {input : Nat} (master : UnifiedMaster.Instance input)
+    (source : Source master) (request : Request) :
+    bridgeSourceEvent master source request = (sourcePerform source request).2 := rfl
+
 theorem permission_present (requirement : Requirement) (var : Var)
     (witness : Ref requirement.realizedScope var) :
     ∃ permission, requirement.permission var = some permission := by
@@ -518,7 +536,7 @@ theorem authorized_target_accepted {requirement : Requirement} {register : List 
     GeneratedStructuralBranchAccept authorization.occurrence.1.context
       authorization.occurrence.1.continuation := authorization.occurrence.1.accepted
 
-/-- The criterion required of an actual reply, independent of the responder.
+/-- The positive acceptance projection of the full response contract.
 Acceptance is a conclusion about the authorized occurrence, not a premise
 supplied by its caller. -/
 def ReplyCriterion (requirement : Requirement) (register : List AnswerTarget) : Message → Prop
@@ -537,14 +555,33 @@ theorem ResponseEvidence.criterion {requirement : Requirement} {register : List 
   | missing _ _ => exact True.intro
   | incorrect _ _ _ _ _ _ => exact True.intro
 
-def RequestCriterion (memory : Memory) : Request → Memory × Event → Prop
-  | .advance _, _ => True
-  | .inspect _ _, result => ReplyCriterion memory.requirement memory.register result.2.message
-  | .propose _ _ _, result => ReplyCriterion memory.requirement memory.register result.2.message
-  | .obtain _ _, result => ReplyCriterion result.1.requirement result.1.register result.2.message
+/-- The actual request requires both precise response facts and contextual
+acceptance. Neither the proposed value nor refusal reasons are forgotten. -/
+def RequestCriterion (memory : Memory) (request : Request) (result : Memory × Event) : Prop :=
+  RequestSpecification memory request result ∧
+    match request with
+    | .advance _ => True
+    | .inspect _ _ => ReplyCriterion memory.requirement memory.register result.2.message
+    | .propose _ _ _ => ReplyCriterion memory.requirement memory.register result.2.message
+    | .obtain _ _ => ReplyCriterion result.1.requirement result.1.register result.2.message
+
+theorem RequestCriterion.specification {memory : Memory} {request : Request} {result : Memory × Event}
+    (holds : RequestCriterion memory request result) : RequestSpecification memory request result := holds.1
+
+/-- Preserve the entire earlier positive contract as a consequence, not a
+second selectable runtime contract. -/
+theorem RequestCriterion.positive {memory : Memory} {request : Request} {result : Memory × Event}
+    (holds : RequestCriterion memory request result) :
+    (match request with
+    | .advance _ => True
+    | .inspect _ _ => ReplyCriterion memory.requirement memory.register result.2.message
+    | .propose _ _ _ => ReplyCriterion memory.requirement memory.register result.2.message
+    | .obtain _ _ => ReplyCriterion result.1.requirement result.1.register result.2.message) := by
+  cases request <;> exact holds.2
 
 theorem RequestEvidence.criterion {memory : Memory} {request : Request} {result : Memory × Event}
     (evidence : RequestEvidence memory request result) : RequestCriterion memory request result := by
+  refine ⟨evidence.specification, ?_⟩
   cases request with
   | advance _ => exact True.intro
   | inspect _ _ => exact ResponseEvidence.criterion evidence
@@ -564,6 +601,10 @@ end ConstitutiveSearch.Agent
 #print axioms ConstitutiveSearch.Agent.sourceProduced
 #print axioms ConstitutiveSearch.Agent.sourcePerform_obtain
 #print axioms ConstitutiveSearch.Agent.sourcePerform_exact
+#print axioms ConstitutiveSearch.Agent.bridgeSourceNext
+#print axioms ConstitutiveSearch.Agent.bridgeSourceEvent
+#print axioms ConstitutiveSearch.Agent.bridge_source_next
+#print axioms ConstitutiveSearch.Agent.bridge_source_event
 #print axioms ConstitutiveSearch.Agent.table
 #print axioms ConstitutiveSearch.Agent.Admission
 #print axioms ConstitutiveSearch.Agent.RichAuthorization.realize
@@ -605,6 +646,8 @@ end ConstitutiveSearch.Agent
 #print axioms ConstitutiveSearch.Agent.ReplyCriterion
 #print axioms ConstitutiveSearch.Agent.ResponseEvidence.criterion
 #print axioms ConstitutiveSearch.Agent.RequestCriterion
+#print axioms ConstitutiveSearch.Agent.RequestCriterion.specification
+#print axioms ConstitutiveSearch.Agent.RequestCriterion.positive
 #print axioms ConstitutiveSearch.Agent.RequestEvidence.criterion
 #print axioms ConstitutiveSearch.Agent.executed_reply_criterion
 /- AXIOM_AUDIT_END -/

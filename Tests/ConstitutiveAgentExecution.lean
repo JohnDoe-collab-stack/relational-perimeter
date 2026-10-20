@@ -61,6 +61,57 @@ theorem every_future_preserves_old_read (memory : Memory) (requests : List Reque
     readRegister (executeRequests memory requests).1.register handle var = readRegister memory.register handle var :=
   all_future_old_reads memory requests handle var within
 
+def missing_refusal_permission {requirement : Requirement} {register : List AnswerTarget}
+    {handle var : Nat} {candidate : Option Bool}
+    (evidence : ResponseEvidence requirement register handle var candidate (.refused handle var .missingHandle)) :
+    ConstitutiveSearch.Resources.Ref requirement.realizedScope var := evidence.missingPermission
+
+theorem missing_refusal_proves_absence {requirement : Requirement} {register : List AnswerTarget}
+    {handle var : Nat} {candidate : Option Bool}
+    (evidence : ResponseEvidence requirement register handle var candidate (.refused handle var .missingHandle)) :
+    resolveHandle register handle = none := evidence.missing_absent
+
+theorem outside_refusal_proves_scope {requirement : Requirement} {register : List AnswerTarget}
+    {handle var : Nat} {candidate : Option Bool}
+    (evidence : ResponseEvidence requirement register handle var candidate (.refused handle var .outsideScope)) :
+    requirement.permission var = none := evidence.outside_absent
+
+theorem incorrect_refusal_proves_actual_value {requirement : Requirement} {register : List AnswerTarget}
+    {handle var : Nat} {candidate : Option Bool}
+    (evidence : ResponseEvidence requirement register handle var candidate (.refused handle var .incorrectValue)) :
+    resolveHandle register handle = some evidence.incorrectOccurrence ∧
+      candidate = some evidence.incorrectValue ∧
+      evidence.incorrectValue ≠ evidence.incorrectOccurrence.1.read var := evidence.incorrect_facts
+
+theorem inspection_cannot_claim_incorrect_proposal {requirement : Requirement} {register : List AnswerTarget}
+    {handle var : Nat}
+    (evidence : ResponseEvidence requirement register handle var none (.refused handle var .incorrectValue)) : False := by
+  cases evidence.incorrect_facts.2.1
+
+theorem every_executed_reply_has_precise_facts (memory : Memory) (request : Request) :
+    RequestSpecification memory request (executeInput memory request) :=
+  (executed_reply_criterion memory request).specification
+
+theorem certified_missing_refusal_absent {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (memory : Memory) (handle var : Nat)
+    (refused : (executeInput memory (.inspect handle var)).2.message = .refused handle var .missingHandle) :
+    resolveHandle memory.register handle = none := by
+  have facts := certificate.replySpecifications memory (.inspect handle var)
+  change ResponseSpecification memory.requirement memory.register handle var none _ at facts
+  rw [refused] at facts
+  exact facts.2.2.2
+
+theorem certified_outside_refusal_absent {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (memory : Memory) (handle var : Nat)
+    (refused : (executeInput memory (.inspect handle var)).2.message = .refused handle var .outsideScope) :
+    memory.requirement.permission var = none := by
+  have facts := certificate.replySpecifications memory (.inspect handle var)
+  change ResponseSpecification memory.requirement memory.register handle var none _ at facts
+  rw [refused] at facts
+  exact facts.2.2
+
 def scenario : List Request := [.inspect 0 0, .obtain 2 0, .inspect 2 0,
   .inspect 200 0, .inspect 0 1, .advance 1]
 
@@ -92,5 +143,13 @@ end Tests.ConstitutiveAgentExecution
 #print axioms Tests.ConstitutiveAgentExecution.same_head_different_future
 #print axioms Tests.ConstitutiveAgentExecution.cached_obtain_does_not_replay
 #print axioms Tests.ConstitutiveAgentExecution.every_future_preserves_old_read
+#print axioms Tests.ConstitutiveAgentExecution.missing_refusal_permission
+#print axioms Tests.ConstitutiveAgentExecution.missing_refusal_proves_absence
+#print axioms Tests.ConstitutiveAgentExecution.outside_refusal_proves_scope
+#print axioms Tests.ConstitutiveAgentExecution.incorrect_refusal_proves_actual_value
+#print axioms Tests.ConstitutiveAgentExecution.inspection_cannot_claim_incorrect_proposal
+#print axioms Tests.ConstitutiveAgentExecution.every_executed_reply_has_precise_facts
+#print axioms Tests.ConstitutiveAgentExecution.certified_missing_refusal_absent
+#print axioms Tests.ConstitutiveAgentExecution.certified_outside_refusal_absent
 #print axioms Tests.ConstitutiveAgentExecution.scenario
 /- AXIOM_AUDIT_END -/

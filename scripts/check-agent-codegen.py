@@ -93,6 +93,77 @@ def bodies_with_objects(text):
     return result
 
 
+def bridge_fields(functions, compiled_parameters, entry, rich, forbidden):
+    """Inspect the actual returned bridge, not an unconsumed rich observer.
+
+    Continuation.Exact's full Lean schema is pinned by AllConstantsAudit.
+    In this pinned toolchain the two type families and three proof fields
+    erase; the nine remaining fields retain declaration order. Inspect the
+    actual selected closures, not the reduced closures allocated beside them.
+    """
+    normalized = {name: re.sub(r'\(\(lean_object\*\)\(((?:l|lp)_\w+)\)\)', r'\1', body)
+                  for name, body in functions.items()}
+    analysis = AgentAnalysis(normalized, compiled_parameters, shared['reachable'], capture=True)
+    record, _, _ = analysis.run(entry, [Value() for _ in compiled_parameters[entry]])
+    if set(record.fields) != set(range(9)):
+        raise ValueError('AGENT_BRIDGE_FAILED: unresolved or changed Exact runtime record')
+    for label, slot in (('sourceNext', 1), ('sourceEvent', 5)):
+        closure = record.fields[slot]
+        if closure.function not in functions or closure.function not in compiled_parameters:
+            raise ValueError('AGENT_BRIDGE_FAILED: unresolved selected ' + label + ' closure')
+        try:
+            applications(functions, compiled_parameters, closure.function, rich, 1, minimum=1)
+            for target in forbidden:
+                applications(functions, compiled_parameters, closure.function, target, 0)
+        except ValueError as error:
+            raise ValueError(f'AGENT_BRIDGE_FAILED: {label}: {error}') from error
+        print('AGENT_BRIDGE_FIELD_OK ' + label + ': actual rich operation, no projected responder')
+
+
+def bridge_self_test():
+    """Finite checks of record/closure selection; no scientific execution."""
+    import contextlib
+    import io
+
+    prelude = '''LEAN_EXPORT lean_object* l_rich(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_runtime(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_helper(lean_object* x){ return l_rich(x); }
+static const lean_closure_object l_static_value = {.m_fun = (void*)l_helper, .m_num_fixed = 0};
+static const lean_object* l_static = (const lean_object*)&l_static_value;
+'''
+    for name, next_field, event_field, permitted in (
+            ('rich-fields-reduced-runtime', 'good', 'good', True),
+            ('rich-helper', 'helper', 'helper', True),
+            ('rich-static-closure', 'l_static', 'l_static', True),
+            ('event-runtime-only', 'good', 'bad', False),
+            ('next-runtime-only', 'bad', 'good', False),
+            ('both-runtime', 'bad', 'bad', False),
+            ('partial-record', 'good', 'good', False),
+            ('unknown-event-field', 'good', 'x', False)):
+        body = '''LEAN_EXPORT lean_object* l_bridge(lean_object* x){
+lean_object* out; lean_object* good; lean_object* bad; lean_object* helper;
+good = lean_alloc_closure((void*)l_rich, 1, 0);
+bad = lean_alloc_closure((void*)l_runtime, 1, 0);
+helper = lean_alloc_closure((void*)l_helper, 1, 0);
+out = lean_alloc_ctor(0, 9, 0);
+'''
+        for slot in range(8 if name == 'partial-record' else 9):
+            value = next_field if slot == 1 else event_field if slot == 5 else 'bad'
+            body += f'lean_ctor_set(out, {slot}, {value});\n'
+        text = prelude + body + 'return out;\n}\n'
+        functions, params = bodies_with_objects(text), parameters([text])
+        try:
+            with contextlib.redirect_stdout(io.StringIO()):
+                bridge_fields(functions, params, 'l_bridge', 'l_rich', ('l_runtime',))
+        except ValueError as error:
+            if permitted or 'AGENT_BRIDGE_FAILED' not in str(error):
+                raise
+        else:
+            if not permitted:
+                raise ValueError('Substituted bridge accepted: ' + name)
+    print('AGENT_BRIDGE_SELFTEST_OK: actual fields, helpers, static closures and substituted sides')
+
+
 def self_test():
     """Finite C-IR regressions of this checker, not runtime experiments."""
     base = 'LEAN_EXPORT lean_object* l_target(lean_object* x){ return x; }\n'
@@ -207,6 +278,7 @@ def self_test():
 
 def main():
     self_test()
+    bridge_self_test()
     probe = bodies_with_objects("""
 static const lean_closure_object l_operation_value = {.m_fun = (void*)l_bad};
 static const lean_ctor_object l_packet_value = {.m_objs = {&l_operation_value}};
@@ -217,11 +289,14 @@ LEAN_EXPORT lean_object* l_bad(){ return 0; }
     if "l_bad" not in shared["reachable"](probe, "l_entry"):
         raise ValueError("Static producer/constructor/closure reachability self-test failed")
     functions = {}
+    owners = {}
     texts = []
     for path in sorted((ROOT / ".lake/build/ir").rglob("*.c")):
         text = path.read_text(encoding="utf-8")
         texts.append(text)
         functions.update(bodies_with_objects(text))
+        for symbol in parameters([text]):
+            owners.setdefault(symbol, set()).add(path.relative_to(ROOT / '.lake/build/ir').as_posix())
     compiled_parameters = parameters(texts)
     select, absent, calls = (shared[name] for name in ("select", "absent", "calls"))
     executor = select(functions, "Agent_executeRequests")
@@ -254,6 +329,16 @@ LEAN_EXPORT lean_object* l_bad(){ return 0; }
     for entry in (select(functions, 'Agent_sourceProduced'), select(functions, 'Agent_sourcePerform')):
         absent(functions, entry, ['Agent_project', 'Agent_executeInput', 'Agent_executeProducedInput',
                                   'Agent_performCertified'])
+    bridge_entry = select(functions, 'ConstitutiveSearch_Agent_bridge')
+    symbol_prefix = bridge_entry[:-len('ConstitutiveSearch_Agent_bridge')]
+    for declaration in ('bridge', 'sourcePerform'):
+        shared['owned_symbol'](functions, compiled_parameters, owners, symbol_prefix,
+            'ConstitutiveSearch.Agent.' + declaration,
+            'RelationalPerimeter/Agents/Constitutive/Agreement.c')
+    bridge_fields(functions, compiled_parameters, bridge_entry,
+        select(functions, 'Agent_sourcePerform'),
+        tuple(select(functions, suffix) for suffix in
+            ('Agent_project', 'Agent_executeInput', 'Agent_executeProducedInput', 'Agent_performCertified')))
     support_read = select(functions, 'Resources_Support_read___redArg')
     for entry in (select(functions, 'Agent_MaterialReading_values___redArg'),
                   select(functions, 'Agent_RegisterRealization_materialRegister___redArg')):

@@ -64,6 +64,19 @@ theorem initialized_memory_keeps_finite_contract {input : Nat} {scope : List Nat
     FiniteResponseCriterion prepared.memory requests :=
   prepared.certificate.continuation.satisfaction prepared.profile requests
 
+theorem initialized_agent_keeps_same_complete_chain {input : Nat} {scope : List Nat} {code : List Bool}
+    (prepared : Prepared input scope code) (requests : List Request) :
+    let certificate := prepared.certificate.continuation
+    Followed.ChainAgreement certificate.richOperations (certificate.followed prepared.profile requests) ∧
+      (certificate.followed prepared.profile requests).ExactReferences ∧
+      FiniteResponseCriterion prepared.memory requests :=
+  prepared.certificate.continuation.followed_chain prepared.profile requests
+
+theorem initialized_agent_precisely_justifies_replies {input : Nat} {scope : List Nat} {code : List Bool}
+    (prepared : Prepared input scope code) (request : Request) :
+    RequestSpecification prepared.memory request (executeInput prepared.memory request) :=
+  prepared.certificate.continuation.replySpecifications prepared.memory request
+
 -- Finite code-generation checks, not a confirmatory complexity experiment.
 #eval (publicAgent 0 [] [false]).map (fun session => session.memory.register.length)
 #eval (publicAgent 0 [0] []).map (fun session => session.memory.register.length)
@@ -80,4 +93,6 @@ end Tests.ConstitutiveAgentRequirements
 #print axioms Tests.ConstitutiveAgentRequirements.initialization_pins_decoded_profile
 #print axioms Tests.ConstitutiveAgentRequirements.initialization_pins_actual_prepare
 #print axioms Tests.ConstitutiveAgentRequirements.initialized_memory_keeps_finite_contract
+#print axioms Tests.ConstitutiveAgentRequirements.initialized_agent_keeps_same_complete_chain
+#print axioms Tests.ConstitutiveAgentRequirements.initialized_agent_precisely_justifies_replies
 /- AXIOM_AUDIT_END -/

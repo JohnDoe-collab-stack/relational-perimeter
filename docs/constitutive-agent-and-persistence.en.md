@@ -99,12 +99,26 @@ data without running a second decision procedure.
 permission, an occurrence and agreement with its value, or the precise facts
 justifying a refusal. It is not defined as “the selected reply is correct”.
 
+Its eliminators return the permission and actual handle absence for
+`missingHandle`, the absence of permission for `outsideScope`, and the occurrence,
+exact proposed value and its disagreement with the read for `incorrectValue`.
+`ResponseSpecification` states these facts with the request's own indices;
+its proof is extracted from the produced witness without a second decision.
+`RequestSpecification` checks `obtain` against its actually extended register.
+
 ## Agreement with the rich history
 
 The scientific source retains the initial profile and resource history. Its
 interpreter reads that history's targets, not projected runtime replies.
 Transition, event, read and admission laws are proved separately and composed
 over every finite request sequence.
+
+`Certificate.bridgeRichResult` pins both source projections of the bridge to
+the result of the rich operation carried by that same certificate. `rich_futures`
+and `rich_events` derive finite agreements stated directly about `sourcePerform`,
+not a responder used as its own reference. The compiled check also examines the
+closures actually installed in the bridge's rich fields: equality of values
+alone does not prove that their computational paths are independent.
 
 Rich reads and authorizations consume the realized support values and then
 their agreement with the reduced entries. `FollowedStages` also follows every
@@ -131,6 +145,23 @@ its target in its own context. `FiniteResponseCriterion` applies this requiremen
 to every reply of the real executor. Finite following implies this contract;
 `Certificate.satisfaction` consumes that proof. No external acceptance premise
 is required from the client.
+
+The full `RequestCriterion` additionally requires `RequestSpecification`:
+the positive acceptance criterion alone does not justify refusals. Their
+precision composes in `FiniteResponseCriterion` on the actual successive
+states. `Certificate.replySpecifications` consumes the `replies` witnesses.
+
+`Followed.ExactReferences` requires the exact extension at every node of the
+carried history, not only its head. `Followed.afterPrefix` extracts its stored
+tail; `Certificate.followedAllReferences` and `suffix_references` close those
+agreements. `Followed.cons` carries twelve explicit fields, including
+`referencesExact`, which pins its engine extension to that of the produced
+history. This is distinct from the historical target-support transport.
+
+`Certificate.followed_chain` combines references, the rich operation, agreement
+with its runtime result and precise response justification on that same
+following. `certify` uses one following for its fields and satisfaction;
+`Prepared.certificate` closes the package on admitted public inputs.
 
 ## Forgetting and scope
 
@@ -212,12 +243,17 @@ All modules are reachable from `import RelationalPerimeter`.
 | Admitted and incorrect replies | `candidate_authorization_exact`, `admitted_inspection_returns`, `correct_candidate_returns`, `incorrect_candidate_refused` |
 | Effective obtaining | `obtain_produces_and_returns`, `obtain_register_exact`, `obtain_work_exact` |
 | Refusal without a memory change | `refusal_preserves_memory` |
+| Precise reply and refusal justification | `ResponseSpecification`, `RequestSpecification`, `ResponseEvidence.specification`, `ResponseEvidence.missing_absent`, `ResponseEvidence.incorrect_facts`, `Certificate.replySpecifications` |
 | Handles and references | `History.realization`, `History.handle_transport`, `RegisterRealization.advance_position`, `RegisterRealization.injective`, `runSteps_old_read` |
 | Independent local laws | `sourcePerform_exact`, `bridge` |
+| Bridge pinned to the rich operation and its futures | `Certificate.bridgeRichResult`, `Certificate.rich_futures`, `Certificate.rich_events` |
 | Rich formation and reading | `HistoricalFormation`, `HistoricalFormation.not_given`, `MaterialReading`, `RichOperation`, `sourceProduced` |
 | Two composed internal transports | `InternalStepAgreement`, `FollowedStages.engineTransport`, `FollowedStages.historicalTransport`, `FollowedStages.execution_exact` |
 | Acceptance criterion for all replies | `ReplyCriterion`, `FiniteResponseCriterion`, `Followed.satisfies`, `Certificate.satisfaction` |
 | All finite interactions and their internal stages | `FollowedStages`, `all_executed_determinations_followed`, `all_future_requests_exact`, `all_future_events_exact`, `all_future_reads_exact` |
+| Exact references at every node | `Followed.references_exact`, `Followed.all_references_exact`, `Followed.afterPrefix`, `Certificate.followedAllReferences`, `Certificate.suffix_references` |
+| Closed target and internal-stage agreements | `Certificate.targetsAccepted`, `targetReads`, `resumedOrigin`, `followedStages`, `followedReferences`, `internalStages`, `request_stages_exact` |
+| Complete chain composed on one following | `Followed.ChainAgreement`, `Certificate.followed_chain` |
 | Two-way admissions | `admissions_forward`, `admissions_reflected`, `admission_received_return`, `admission_realized_return` |
 | Whole memory and forgetting | `agent_memory_factors_through_output`, `initial_profile_not_recoverable`, `forgotten_sources_same_future` |
 | Closed package | `certify`, `Prepared.certificate` |
@@ -240,9 +276,25 @@ and small code-generation checks. The public scenario obtains a missing target,
 reuses it without another stage and distinguishes refusal reasons. These finite
 evaluations are not a confirmatory complexity experiment.
 
+`python scripts/test-agent-contract-links.py --output <new external directory>`
+replays five focused checks in a detached clone with physically copied build
+artifacts: two witness-content losses must fail in proofs, two runtime
+substitutions must fail the compiled check even with their value agreements
+restored, and a legitimate rich helper must succeed. The protocol, patches,
+hashes, commands and results are recorded without changing the reference.
+These checks complement the proofs; they do not establish resistance to
+arbitrary simultaneous rewriting of the specification and its consumers.
+
 The audit of commit `f6c6d2c051ae0886056d47cf5357253c137a1319` concludes
 `AGENT TARGET REQUIRES CORRECTIONS` and `NO REGRESSION VERIFIED`. The agreements
 above implement corrections to its seven findings; local verification is
 distinct from a new independent verdict.
+
+The re-audit of commit `f039bdf3d822441e9e8b976ea54cf0177f58cffe` also concludes
+`AGENT TARGET REQUIRES CORRECTIONS` and `NO REGRESSION VERIFIED`: it verifies
+the construction and identifies three gaps in consuming its guarantees.
+The all-node reference, independent-bridge and precise-refusal agreements
+described here correct those gaps; they do not constitute a new independent
+audit verdict on this version.
 
 [Version française](agent-constitutif-et-persistance.fr.md)

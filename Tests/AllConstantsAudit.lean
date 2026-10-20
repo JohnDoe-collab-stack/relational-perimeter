@@ -28,6 +28,17 @@ the constructor/definition metadata; an unclassified exception fails closed.
 The selected declarations printed in each module remain independently audited. -/
 set_option maxHeartbeats 0
 open Lean
+/- Pin the source projection layout used by the compiled bridge checker.
+Type families and proof fields erase; all other fields retain this order. -/
+run_cmd do
+  let env ← Lean.getEnv
+  let some info := Lean.getStructureInfo? env `ConstitutiveSearch.Grouping.Continuation.Exact
+    | throwError "Bridge schema: missing Continuation.Exact"
+  unless info.fieldNames.toList.map Name.getString! ==
+      ["project", "sourceNext", "reducedNext", "sourceAllow", "reducedAllow", "toReduced", "toSource",
+       "sourceEvent", "reducedEvent", "sourceRead", "reducedRead", "nextLaw", "eventLaw", "readLaw"] do
+    throwError "Bridge schema changed: {info.fieldNames}"
+  logInfo "BRIDGE_SCHEMA_OK: sourceNext/sourceEvent selected from the actual Exact record"
 /- Check the dependent restart record schema, including the nested live record.
 Counting top-level C fields alone would permit an archive hidden in `live`.
 This is a build-time interface check, not a heap-size theorem. -/

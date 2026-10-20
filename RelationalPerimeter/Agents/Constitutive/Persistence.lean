@@ -243,7 +243,8 @@ def all_executed_determinations_followed {input : Nat} (master : UnifiedMaster.I
     (source : Source master) → (requests : List Request) → Followed master source requests
   | source, [] => .nil source
   | source, request :: rest =>
-      .cons (executedEvidence (project source) request) (executed_reply_criterion (project source) request)
+      let response := executedEvidence (project source) request
+      .cons response response.criterion
         (sourceProduced source request) rfl (sourcePerform_exact source request)
         (executeInput_requirement (project source) request)
         (sourcePerform source request).1.history.references rfl
@@ -292,6 +293,62 @@ theorem Followed.references_exact {input : Nat} {master : UnifiedMaster.Instance
     followed.references = (sourcePerform source request).1.history.references := by
   cases followed with
   | cons _ _ _ _ _ _ _ referencesExact _ _ _ _ => exact referencesExact
+
+/-- Exact engine extensions at every node of this very followed history. -/
+def Followed.ExactReferences {input : Nat} {master : UnifiedMaster.Instance input} :
+    {source : Source master} → {requests : List Request} → Followed master source requests → Prop
+  | _, [], .nil _ => True
+  | source, request :: _, node@(.cons _ _ _ _ _ _ _ _ _ _ _ tail) =>
+      node.references = (sourcePerform source request).1.history.references ∧ tail.ExactReferences
+
+theorem Followed.all_references_exact {input : Nat} {master : UnifiedMaster.Instance input}
+    {source : Source master} {requests : List Request} (followed : Followed master source requests) :
+    followed.ExactReferences := by
+  induction followed with
+  | nil _ => exact True.intro
+  | cons response criterion rich richExact nextExact requirementExact references referencesExact stages
+      memoryExact eventsExact tail ih =>
+      exact ⟨Followed.references_exact _, ih⟩
+
+theorem Followed.references_of_exact {input : Nat} {master : UnifiedMaster.Instance input}
+    {source : Source master} {request : Request} {rest : List Request}
+    (followed : Followed master source (request :: rest)) (holds : followed.ExactReferences) :
+    followed.references = (sourcePerform source request).1.history.references := by
+  cases followed with
+  | cons _ _ _ _ _ _ _ _ _ _ _ _ => exact holds.1
+
+/-- Take the stored suffix, rather than reconstructing another history. -/
+def Followed.afterPrefix {input : Nat} {master : UnifiedMaster.Instance input} :
+    (prior : List Request) → {source : Source master} → {suffix : List Request} →
+    Followed master source (prior ++ suffix) →
+    Followed master
+      (Continuation.run (fun state request => (sourcePerform state request).1) source prior) suffix
+  | [], _, _, followed => followed
+  | _ :: prior, _, _, .cons _ _ _ _ _ _ _ _ _ _ _ tail => Followed.afterPrefix prior tail
+
+theorem Followed.afterPrefix_exact {input : Nat} {master : UnifiedMaster.Instance input}
+    (prior : List Request) {source : Source master} {suffix : List Request}
+    (followed : Followed master source (prior ++ suffix)) (holds : followed.ExactReferences) :
+    (Followed.afterPrefix prior followed).ExactReferences := by
+  induction prior generalizing source with
+  | nil => exact holds
+  | cons request prior ih =>
+      cases followed with
+      | cons _ _ _ _ _ _ _ _ _ _ _ tail => exact ih tail holds.2
+
+/-- All three agreements concern each actual node, its operation, response,
+engine extension and stored successor. This is not a second execution trace. -/
+def Followed.ChainAgreement {input : Nat} {master : UnifiedMaster.Instance input}
+    (operations : (source : Source master) → (request : Request) → RichOperation source request) :
+    {source : Source master} → {requests : List Request} → Followed master source requests → Prop
+  | _, [], .nil _ => True
+  | source, request :: _, node@(.cons _ _ rich _ _ _ _ _ _ _ _ tail) =>
+      node.references = (sourcePerform source request).1.history.references ∧
+      rich = operations source request ∧
+      ((bridge master).sourceNext source request, (bridge master).sourceEvent source request) = rich.result ∧
+      (project rich.result.1, rich.result.2) = executeInput (project source) request ∧
+      RequestSpecification (project source) request (executeInput (project source) request) ∧
+      Followed.ChainAgreement operations tail
 
 /-- Every internal stage of one request, followed in producer order, is the
 actual worker execution of that request. -/
@@ -366,6 +423,9 @@ structure Certificate {input : Nat} (master : UnifiedMaster.Instance input)
   richOperations : ∀ (source : Source master) request, RichOperation source request
   richOperationsExact : ∀ source request, richOperations source request = sourceProduced source request
   richResultExact : ∀ source request, (richOperations source request).result = sourcePerform source request
+  bridgeRichResult : ∀ source request,
+    ((bridge master).sourceNext source request, (bridge master).sourceEvent source request) =
+      (richOperations source request).result
   historicalHandles : ∀ profile (history : History master profile) {target}
     (ref : Ref history.targets target),
     (History.step history).realization.reference
@@ -388,6 +448,7 @@ structure Certificate {input : Nat} (master : UnifiedMaster.Instance input)
   cachedObtain : ∀ memory handle var, handle < memory.register.length →
     (executeInput memory (.obtain handle var)).2.productions = []
   replies : ∀ memory request, RequestEvidence memory request (executeInput memory request)
+  replySpecifications : ∀ memory request, RequestSpecification memory request (executeInput memory request)
   candidateExact : ∀ req register handle var value,
     Nonempty (Authorization req register handle var value) ↔
       (decideReply req register handle var (some value)).message = .answer handle var value
@@ -404,6 +465,7 @@ structure Certificate {input : Nat} (master : UnifiedMaster.Instance input)
     (executeInput memory request).2.message = .refused handle var reason →
       (executeInput memory request).1 = memory
   followed : ∀ profile requests, Followed master (sourceStart master requirement profile) requests
+  followedAllReferences : ∀ profile requests, (followed profile requests).ExactReferences
   followedStages : ∀ profile request rest,
     (followed profile (request :: rest)).stages = requestStages master (sourceStart master requirement profile) request
   followedReferences : ∀ profile request rest,
@@ -449,55 +511,155 @@ structure Certificate {input : Nat} (master : UnifiedMaster.Instance input)
     executeRequests (start master requirement left) requests = executeRequests (start master requirement right) requests
 
 def certify {input : Nat} (master : UnifiedMaster.Instance input) (requirement : Requirement) :
-    Certificate master requirement where
-  initialExact := initialize_from_master_exact master requirement
-  headExact := executeInput_exact
-  headResources := head_uses_current_resources
-  headEntire := head_production_entire_exact
-  horizon := head_horizon_independent
-  formedRegister := executed_step_register_exact
-  progress := register_grows_by_one
-  oldReads := runSteps_old_read
-  allOldReads := all_future_old_reads
-  handlesTransport := resolveHandle_transport
-  historicalTargets := fun _ history => history.realization.materialRegister_exact
-  historicalFormation := fun _ history => history.realization.formation
-  richOperations := sourceProduced
-  richOperationsExact := fun _ _ => rfl
-  richResultExact := fun _ _ => rfl
-  historicalHandles := fun _ history => history.handle_transport
-  historicalPositions := fun _ history => history.realization.advance_position
-  historicalDistinctness := fun _ history => history.realization.injective
-  retainedCriterion := authorized_target_accepted
-  targetsAccepted := AnswerTarget.accepted
-  targetReads := fun _ _ => rfl
-  resumedOrigin := fun _ => rfl
-  cachedObtain := cached_obtain_runs_no_stage
-  replies := executedEvidence
-  candidateExact := candidate_authorization_exact
-  inspectionReturns := admitted_inspection_returns
-  obtainReturns := obtain_produces_and_returns
-  obtainSize := obtain_register_exact
-  obtainWork := obtain_work_exact
-  refusalsPreserveMemory := refusal_preserves_memory
-  followed := fun profile => all_executed_determinations_followed master (sourceStart master requirement profile)
-  followedStages := fun _ _ _ => rfl
-  followedReferences := fun _ _ _ => rfl
-  internalStages := request_stages_exact
-  satisfaction := fun profile => all_finite_responses_satisfy master (sourceStart master requirement profile)
-  entireHead := executeRequests_head_entire
-  futures := all_future_requests_exact master
-  events := all_future_events_exact master
-  reads := all_future_reads_exact master
-  admissions := admissions_forward master
-  reflection := admissions_reflected master
-  receivedReturn := admission_received_return
-  realizedReturn := admission_realized_return
-  requirementPersistent := requirement_persists
-  requirementReading := requirement_transport_exact
-  memoryFactor := agent_memory_factors_through_output master requirement
-  irrecoverable := initial_profile_not_recoverable master requirement
-  futureIndistinguishable := forgotten_sources_same_future master requirement
+    Certificate master requirement :=
+  let followed := fun profile requests =>
+    all_executed_determinations_followed master (sourceStart master requirement profile) requests
+  let replies := executedEvidence
+  { initialExact := initialize_from_master_exact master requirement
+    headExact := executeInput_exact
+    headResources := head_uses_current_resources
+    headEntire := head_production_entire_exact
+    horizon := head_horizon_independent
+    formedRegister := executed_step_register_exact
+    progress := register_grows_by_one
+    oldReads := runSteps_old_read
+    allOldReads := all_future_old_reads
+    handlesTransport := resolveHandle_transport
+    historicalTargets := fun _ history => history.realization.materialRegister_exact
+    historicalFormation := fun _ history => history.realization.formation
+    richOperations := sourceProduced
+    richOperationsExact := fun _ _ => rfl
+    richResultExact := fun _ _ => rfl
+    bridgeRichResult := fun _ _ => rfl
+    historicalHandles := fun _ history => history.handle_transport
+    historicalPositions := fun _ history => history.realization.advance_position
+    historicalDistinctness := fun _ history => history.realization.injective
+    retainedCriterion := authorized_target_accepted
+    targetsAccepted := AnswerTarget.accepted
+    targetReads := fun _ _ => rfl
+    resumedOrigin := fun _ => rfl
+    cachedObtain := cached_obtain_runs_no_stage
+    replies := replies
+    replySpecifications := fun memory request => (replies memory request).specification
+    candidateExact := candidate_authorization_exact
+    inspectionReturns := admitted_inspection_returns
+    obtainReturns := obtain_produces_and_returns
+    obtainSize := obtain_register_exact
+    obtainWork := obtain_work_exact
+    refusalsPreserveMemory := refusal_preserves_memory
+    followed := followed
+    followedAllReferences := fun profile requests => (followed profile requests).all_references_exact
+    followedStages := fun _ _ _ => rfl
+    followedReferences := fun profile request rest =>
+      ((followed profile (request :: rest)).all_references_exact).1
+    internalStages := request_stages_exact
+    satisfaction := fun profile requests => (followed profile requests).satisfies
+    entireHead := executeRequests_head_entire
+    futures := all_future_requests_exact master
+    events := all_future_events_exact master
+    reads := all_future_reads_exact master
+    admissions := admissions_forward master
+    reflection := admissions_reflected master
+    receivedReturn := admission_received_return
+    realizedReturn := admission_realized_return
+    requirementPersistent := requirement_persists
+    requirementReading := requirement_transport_exact
+    memoryFactor := agent_memory_factors_through_output master requirement
+    irrecoverable := initial_profile_not_recoverable master requirement
+    futureIndistinguishable := forgotten_sources_same_future master requirement }
+
+theorem Certificate.bridge_next_exact {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (source : Source master) (request : Request) :
+    (bridge master).sourceNext source request = (sourcePerform source request).1 :=
+  @congrArg (Source master × Event) (Source master)
+    ((bridge master).sourceNext source request, (bridge master).sourceEvent source request)
+    (sourcePerform source request) Prod.fst
+    ((certificate.bridgeRichResult source request).trans (certificate.richResultExact source request))
+
+theorem Certificate.bridge_event_exact {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (source : Source master) (request : Request) :
+    (bridge master).sourceEvent source request = (sourcePerform source request).2 :=
+  @congrArg (Source master × Event) Event
+    ((bridge master).sourceNext source request, (bridge master).sourceEvent source request)
+    (sourcePerform source request) Prod.snd
+    ((certificate.bridgeRichResult source request).trans (certificate.richResultExact source request))
+
+theorem Certificate.rich_run_eq {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (source : Source master) (requests : List Request) :
+    Continuation.run (fun state request => (sourcePerform state request).1) source requests =
+      Continuation.run (bridge master).sourceNext source requests := by
+  induction requests generalizing source with
+  | nil => rfl
+  | cons request rest ih =>
+      change Continuation.run _ (sourcePerform source request).1 rest =
+        Continuation.run _ ((bridge master).sourceNext source request) rest
+      rw [certificate.bridge_next_exact source request]
+      exact ih _
+
+theorem Certificate.rich_events_eq {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (source : Source master) (requests : List Request) :
+    Continuation.events (fun state request => (sourcePerform state request).1)
+      (fun state request => (sourcePerform state request).2) source requests =
+      Continuation.events (bridge master).sourceNext (bridge master).sourceEvent source requests := by
+  induction requests generalizing source with
+  | nil => rfl
+  | cons request rest ih =>
+      change (sourcePerform source request).2 :: _ = (bridge master).sourceEvent source request :: _
+      rw [certificate.bridge_event_exact source request, certificate.bridge_next_exact source request]
+      exact congrArg (List.cons _) (ih _)
+
+theorem Certificate.rich_futures {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (source : Source master) (requests : List Request) :
+    project (Continuation.run (fun state request => (sourcePerform state request).1) source requests) =
+      (executeRequests (project source) requests).1 :=
+  (@congrArg (Source master) Memory
+    (Continuation.run (fun state request => (sourcePerform state request).1) source requests)
+    (Continuation.run (bridge master).sourceNext source requests) project
+    (certificate.rich_run_eq source requests)).trans (certificate.futures source requests)
+
+theorem Certificate.rich_events {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (source : Source master) (requests : List Request) :
+    Continuation.events (fun state request => (sourcePerform state request).1)
+      (fun state request => (sourcePerform state request).2) source requests =
+      (executeRequests (project source) requests).2 :=
+  (certificate.rich_events_eq source requests).trans (certificate.events source requests)
+
+theorem Followed.chain_agreement {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} {source : Source master} {requests : List Request}
+    (followed : Followed master source requests) (certificate : Certificate master requirement) :
+    Followed.ChainAgreement certificate.richOperations followed := by
+  induction followed with
+  | nil _ => exact True.intro
+  | @cons source request rest response criterion rich richExact nextExact requirementExact references
+      referencesExact stages memoryExact eventsExact tail ih =>
+      have same := richExact.trans (certificate.richOperationsExact source request).symm
+      refine ⟨Followed.references_exact _, same, ?_, ?_, response.specification, ih⟩
+      · exact (certificate.bridgeRichResult source request).trans
+          (congrArg RichOperation.result same.symm)
+      · rw [richExact]
+        exact nextExact
+
+/-- The closed public package consumes all three guarantees on one history. -/
+theorem Certificate.followed_chain {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (profile : RoleOccurrenceProfile master.roles) (requests : List Request) :
+    Followed.ChainAgreement certificate.richOperations (certificate.followed profile requests) ∧
+      (certificate.followed profile requests).ExactReferences ∧
+      FiniteResponseCriterion (start master requirement profile) requests :=
+  ⟨(certificate.followed profile requests).chain_agreement certificate,
+    certificate.followedAllReferences profile requests, certificate.satisfaction profile requests⟩
+
+theorem Certificate.suffix_references {input : Nat} {master : UnifiedMaster.Instance input}
+    {requirement : Requirement} (certificate : Certificate master requirement)
+    (profile : RoleOccurrenceProfile master.roles) (prior suffix : List Request) :
+    (Followed.afterPrefix prior (certificate.followed profile (prior ++ suffix))).ExactReferences :=
+  Followed.afterPrefix_exact prior _ (certificate.followedAllReferences profile (prior ++ suffix))
 
 end ConstitutiveSearch.Agent
 /- AXIOM_AUDIT_BEGIN -/
@@ -531,6 +693,12 @@ end ConstitutiveSearch.Agent
 #print axioms ConstitutiveSearch.Agent.Followed.stages
 #print axioms ConstitutiveSearch.Agent.Followed.references
 #print axioms ConstitutiveSearch.Agent.Followed.references_exact
+#print axioms ConstitutiveSearch.Agent.Followed.ExactReferences
+#print axioms ConstitutiveSearch.Agent.Followed.all_references_exact
+#print axioms ConstitutiveSearch.Agent.Followed.references_of_exact
+#print axioms ConstitutiveSearch.Agent.Followed.afterPrefix
+#print axioms ConstitutiveSearch.Agent.Followed.afterPrefix_exact
+#print axioms ConstitutiveSearch.Agent.Followed.ChainAgreement
 #print axioms ConstitutiveSearch.Agent.request_stages_exact
 #print axioms ConstitutiveSearch.Agent.executeRequests_head_entire
 #print axioms ConstitutiveSearch.Agent.followStages
@@ -541,4 +709,14 @@ end ConstitutiveSearch.Agent
 #print axioms ConstitutiveSearch.Agent.initial_profile_not_recoverable
 #print axioms ConstitutiveSearch.Agent.forgotten_sources_same_future
 #print axioms ConstitutiveSearch.Agent.certify
+#print axioms ConstitutiveSearch.Agent.Certificate
+#print axioms ConstitutiveSearch.Agent.Certificate.bridge_next_exact
+#print axioms ConstitutiveSearch.Agent.Certificate.bridge_event_exact
+#print axioms ConstitutiveSearch.Agent.Certificate.rich_run_eq
+#print axioms ConstitutiveSearch.Agent.Certificate.rich_events_eq
+#print axioms ConstitutiveSearch.Agent.Certificate.rich_futures
+#print axioms ConstitutiveSearch.Agent.Certificate.rich_events
+#print axioms ConstitutiveSearch.Agent.Followed.chain_agreement
+#print axioms ConstitutiveSearch.Agent.Certificate.followed_chain
+#print axioms ConstitutiveSearch.Agent.Certificate.suffix_references
 /- AXIOM_AUDIT_END -/
