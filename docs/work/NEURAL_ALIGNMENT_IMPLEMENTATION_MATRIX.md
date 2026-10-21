@@ -282,7 +282,7 @@ Les contrôles de C17 ont été exécutés sur l’arbre de travail complet, san
 omettre les tests ni limiter le balayage aux nouveaux modules :
 
 - `lake build` réussit en 401 tâches, sans avertissement ;
-- l’audit exhaustif couvre 33 165 constantes issues de 398 modules et rapporte
+- l’audit exhaustif couvre 33 175 constantes issues de 398 modules et rapporte
   zéro déclaration manuscrite dépendante d’un axiome ;
 - les 399 fichiers Lean suivis ou nouveaux possèdent exactement un bloc
   `AXIOM_AUDIT` final et un artefact `.olean` produit par la construction ;
@@ -290,7 +290,7 @@ omettre les tests ni limiter le balayage aux nouveaux modules :
   `Classical`, `propext`, `Quot.sound`, `native_decide`, `implemented_by`,
   `sorry` ou `admit`, ni une dépendance de migration interdite ;
 - les fixtures positives sont toutes élaborées par la construction globale ;
-- les 83 fixtures négatives sont toutes refusées par leur unique diagnostic
+- les 86 fixtures négatives sont toutes refusées par leur unique diagnostic
   Lean, au site et pour l’obligation sémantique enregistrés ;
 - les auto-tests du parseur d’imports passent, ainsi que les dix-huit
   inventaires de frontières constitutives ;
@@ -307,16 +307,14 @@ omettre les tests ni limiter le balayage aux nouveaux modules :
 - `git diff --check` passe, aucun fichier n’est supprimé depuis le socle C16 et
   les sources historiques protégées restent identiques.
 
-Le wrapper `verify.ps1` et son équivalent Bash s’arrêtent encore avant ces contrôles sur
-`STALE_SOURCE: GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION`. Il ne révèle pas
-une régression Lean : l’empreinte de cet ancien claim couvre notamment les
-registres de fixtures et de stratification volontairement modifiés par le
-chantier. Le protocole impose que sa nouvelle empreinte soit calculée depuis
-une révision Git stable. C17 n’est donc pas déclaré fermé dans l’arbre non
-commité : après un commit explicitement autorisé, les claims affectés devront
-recevoir une nouvelle révision probatoire, puis les deux portails devront être
-relancés intégralement. Tous les contrôles techniques disponibles avant cette
-révision stable ont été lancés séparément ci-dessus.
+Le socle corrigé a été figé au commit
+`13f9e0977fcd79ae47504fc32400a90a3b17eeb1`. Les quatre claims dont la fermeture
+d’import consomme le registre des fixtures ont reçu une nouvelle révision
+probatoire sur ce SHA et une empreinte recalculée depuis ses sources. Les deux
+portails officiels, `scripts/verify.ps1` sous PowerShell et `scripts/verify.sh`
+sous Git Bash, ont ensuite été exécutés intégralement sur le même état : ils
+terminent tous deux avec succès et contrôlent les mêmes 399 fichiers Lean.
+C17 est donc fermé sur ce socle scientifique stable.
 
 ## Stratification imposée
 
@@ -379,20 +377,16 @@ Les fixtures négatives vérifient notamment que :
 
 - construction ciblée de tous les nouveaux modules : réussie ;
 - tests positifs neuronaux : réussis après adaptation à l’interface dépendante ;
-- 83 fixtures négatives : toutes rejetées au diagnostic et au site
+- 86 fixtures négatives : toutes rejetées au diagnostic et au site
   enregistrés, dont la substitution du programme d’oubli constant et celle de
   l’état complet à la mémoire réduite ;
 - inventaire de stratification : 332 modules, tous contrôlés, aucun orphelin ;
 - tous les nouveaux audits `#print axioms` : aucun axiome ;
-- construction globale : réussie, 401 tâches, audit exhaustif de 33 165
+- construction globale : réussie, 401 tâches, audit exhaustif de 33 175
   constantes sur 398 modules, aucune déclaration manuscrite dépendante d’un
   axiome ;
-- vérificateurs globaux : bloqués par la fraîcheur du registre scientifique
-  après modification des sources et du registre des fixtures.
-
-Le blocage `STALE_SOURCE: GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION` ne
-doit pas être neutralisé par une mise à jour mécanique d’empreinte. Conformément
-au protocole du dépôt, une nouvelle version de l’instantané scientifique ne
-peut être établie qu’après création d’un commit explicitement autorisé. Tant
-que cette étape de publication n’a pas eu lieu, la branche de travail n’est pas
-déclarée prête à fusionner.
+- registre scientifique : quatre fermetures renouvelées sur le commit stable
+  `13f9e0977fcd79ae47504fc32400a90a3b17eeb1`, 23 claims et 253 déclarations
+  résolus sans empreinte périmée ;
+- vérificateurs globaux : `verify.ps1` et `verify.sh` terminent intégralement
+  avec succès sur le registre renouvelé.
