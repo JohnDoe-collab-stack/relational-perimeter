@@ -284,14 +284,28 @@ une cible absente, la réutilise sans nouvelle étape et distingue les refus. Ce
 évaluations finies ne sont pas une campagne confirmatoire de complexité.
 
 `python scripts/test-agent-contract-links.py --output <répertoire neuf extérieur>`
-rejoue les cinq contrôles ciblés de ces raccords dans un clone détaché, avec
-artefacts copiés physiquement : deux pertes de témoins doivent échouer en
-preuve, deux substitutions runtime doivent échouer au contrôle compilé même
-si leurs accords de valeurs sont rétablis, et un auxiliaire riche correct
-doit réussir. Le protocole, les patches, leurs empreintes, les commandes et
-les résultats sont enregistrés sans modifier la référence. Ces contrôles
-complètent les preuves ; ils ne démontrent pas une résistance à toute
-réécriture simultanée de la spécification et de ses consommateurs.
+conserve le protocole historique à cinq cas. Le protocole courant est
+`python scripts/test-agent-contract-links-v2.py --output <répertoire neuf extérieur>`.
+Il exécute neuf contrôles dans des copies détachées avec artefacts copiés
+physiquement. Il conserve les deux pertes de témoins et les substitutions
+runtime antérieures, puis ajoute le contre-exemple où les productions viennent
+de l'opération riche mais où le message est recalculé depuis l'histoire, sa
+variante cachée derrière un auxiliaire, la reconstruction exacte positive de
+l'événement riche et un successeur construit indépendamment.
+
+Sur le fragment C produit par Lean, le contrôleur suit l'origine de la valeur
+effectivement retournée par les fermetures du pont. `sourceNext` doit provenir
+du successeur rendu par l'appel exact à `sourcePerform`, et `sourceEvent` de son
+événement, directement ou par reconstruction exacte et ordonnée du même
+événement. Les alias, auxiliaires statiques transparents, applications de
+fermetures et toutes les branches atteignables sont suivis. Une réponse
+recalculée depuis l'histoire est rejetée même si sa valeur est égale. Une forme
+sensible non prise en charge échoue fermée. Il s'agit d'une analyse bornée de ce
+fragment généré, non d'un théorème sur tout programme C arbitraire. Le protocole,
+les patches, leurs empreintes, les commandes et les résultats sont enregistrés
+sans modifier la référence. Ces contrôles complètent les preuves ; ils ne
+démontrent pas une résistance à toute réécriture simultanée de la spécification
+et de ses consommateurs.
 
 L'audit du commit `f6c6d2c051ae0886056d47cf5357253c137a1319` conclut
 `AGENT TARGET REQUIRES CORRECTIONS` et `NO REGRESSION VERIFIED`. Les raccords

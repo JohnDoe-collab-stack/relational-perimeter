@@ -8,10 +8,12 @@ import re
 import runpy
 import sys
 from unified_codegen_analysis import Analysis, Value, parameters, split_arguments
+from agent_codegen_provenance import ProvenanceError, bridge_provenance
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parent.parent
 shared = runpy.run_path(str(ROOT / "scripts/check-unified-codegen.py"))
+provenance_tests = runpy.run_path(str(ROOT / "scripts/test-agent-codegen-provenance.py"))
 
 
 class AgentAnalysis(Analysis):
@@ -93,7 +95,7 @@ def bodies_with_objects(text):
     return result
 
 
-def bridge_fields(functions, compiled_parameters, entry, rich, forbidden):
+def bridge_fields(functions, compiled_parameters, entry, rich, forbidden, *, verify_origin=True):
     """Inspect the actual returned bridge, not an unconsumed rich observer.
 
     Continuation.Exact's full Lean schema is pinned by AllConstantsAudit.
@@ -117,7 +119,20 @@ def bridge_fields(functions, compiled_parameters, entry, rich, forbidden):
                 applications(functions, compiled_parameters, closure.function, target, 0)
         except ValueError as error:
             raise ValueError(f'AGENT_BRIDGE_FAILED: {label}: {error}') from error
-        print('AGENT_BRIDGE_FIELD_OK ' + label + ': actual rich operation, no projected responder')
+        print('AGENT_BRIDGE_FIELD_ROUTE_OK ' + label + ': selected closure, sourcePerform=[1,1]')
+    if verify_origin:
+        try:
+            origins = bridge_provenance(functions, compiled_parameters, shared['reachable'],
+                                        entry, rich)
+        except ProvenanceError as error:
+            message = str(error)
+            if message.startswith(('sourceNext:', 'sourceEvent:')):
+                raise ValueError(f'AGENT_BRIDGE_FAILED: {message}') from error
+            raise ValueError(f'AGENT_BRIDGE_FAILED: record: {message}') from error
+        for label in ('sourceNext', 'sourceEvent'):
+            function, paths = origins[label]
+            print(f'AGENT_BRIDGE_FIELD_OK {label}: exact sourcePerform return origin; '
+                  f'arguments preserved; paths={paths}; closure={function}')
 
 
 def bridge_self_test():
@@ -154,7 +169,8 @@ out = lean_alloc_ctor(0, 9, 0);
         functions, params = bodies_with_objects(text), parameters([text])
         try:
             with contextlib.redirect_stdout(io.StringIO()):
-                bridge_fields(functions, params, 'l_bridge', 'l_rich', ('l_runtime',))
+                bridge_fields(functions, params, 'l_bridge', 'l_rich', ('l_runtime',),
+                              verify_origin=False)
         except ValueError as error:
             if permitted or 'AGENT_BRIDGE_FAILED' not in str(error):
                 raise
@@ -274,6 +290,7 @@ def self_test():
             if not permitted:
                 raise ValueError('Incorrect exact bound accepted: ' + name)
     print('AGENT_ANALYSIS_SELFTEST_OK: sharing, helpers, closures, dispatch and exact [1,1] bounds')
+    provenance_tests['self_test'](shared['bodies'], shared['reachable'])
 
 
 def main():

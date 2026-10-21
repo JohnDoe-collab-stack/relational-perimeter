@@ -859,3 +859,19 @@ empreintes et leur diff depuis HEAD. Aucun commit, push, envoi à Aristotle
 ou fusion n’a été réalisé pour ce lot. Le protocole d’audit futur devra
 désigner le SHA exact après autorisation de publication, sans utiliser le
 verdict historique comme validation de ce nouveau contenu.
+
+### 11.5. Rectification après le contre-exemple C2e
+
+Le réaudit ultérieur a montré que la campagne historique à cinq cas ne fermait
+pas la provenance du résultat retourné. Dans C2e, `sourcePerform` restait appelé
+et ses productions étaient conservées, mais le message rendu était recalculé
+depuis l'histoire. Les égalités de valeurs pouvaient être reconstruites ; les
+anciens contrôles de route acceptaient donc cette substitution. La clôture C2
+annoncée ci-dessus doit être lue comme le résultat historique de cette campagne,
+pas comme une protection contre C2e.
+
+Le lot correctif séparé introduit une analyse d'origine du retour effectif et
+un protocole version 2 à neuf cas. Il conserve la version 1 byte-identique pour
+la reproductibilité, rejette C2e directement et derrière un auxiliaire, accepte
+une reconstruction exacte de l'événement riche et contrôle séparément le
+successeur. Aucun résultat historique n'est réécrit rétroactivement.

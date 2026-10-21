@@ -346,8 +346,26 @@ The agent certificate requires exact engine references at every followed node
 and precise reply/refusal facts, including actual handle absence and the exact
 proposed value. Its rich/runtime bridge is pinned to the rich operation carried
 by the certificate; the compiled check examines the closures installed in its
-actual source fields, not merely an unused rich helper. `followed_chain` composes
-these guarantees on the same history, including all finite future interactions.
+actual source fields, not merely an unused rich helper. For the generated-C
+fragment emitted by Lean, the check also follows the value returned by those
+closures: `sourceNext` must originate from the successor returned by the exact
+`sourcePerform` call, and `sourceEvent` must originate from that call's event,
+either directly or through an exact ordered reconstruction of the same event.
+Aliases, transparent static helpers, closure applications and every reachable
+branch are followed; a projected responder recomputed from the history is
+rejected even when it has the same value. Unsupported origin-sensitive forms
+fail closed. This is a bounded origin analysis of that generated fragment, not
+a theorem about arbitrary C programs. `followed_chain` composes the Lean
+guarantees on the same history, including all finite future interactions.
+
+The historical five-case campaign remains reproducible with
+`python scripts/test-agent-contract-links.py --output <new external directory>`.
+The current nine-case campaign is
+`python scripts/test-agent-contract-links-v2.py --output <new external directory>`.
+It adds the projected-message counterexample both directly and behind a helper,
+an accepted exact event reconstruction, an independently constructed successor,
+and requires both repository verification routes to reject the projected-message
+counterexample for its exact `sourceEvent` origin failure.
 
 All Lean sources are constructive: they contain no `sorry`, `axiom`, or
 `noncomputable` declaration, and their final axiom-audit blocks report no axiom

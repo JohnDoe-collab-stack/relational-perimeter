@@ -277,13 +277,27 @@ reuses it without another stage and distinguishes refusal reasons. These finite
 evaluations are not a confirmatory complexity experiment.
 
 `python scripts/test-agent-contract-links.py --output <new external directory>`
-replays five focused checks in a detached clone with physically copied build
-artifacts: two witness-content losses must fail in proofs, two runtime
-substitutions must fail the compiled check even with their value agreements
-restored, and a legitimate rich helper must succeed. The protocol, patches,
-hashes, commands and results are recorded without changing the reference.
-These checks complement the proofs; they do not establish resistance to
-arbitrary simultaneous rewriting of the specification and its consumers.
+preserves the historical five-case protocol. The current protocol is
+`python scripts/test-agent-contract-links-v2.py --output <new external directory>`.
+It runs nine checks in detached copies with physically copied build artifacts.
+It preserves the two witness losses and previous runtime substitutions, then
+adds the counterexample in which productions come from the rich operation but
+the message is recomputed from the history, the same projection hidden behind
+a helper, a positive exact reconstruction of the rich event, and an
+independently constructed successor.
+
+On the generated-C fragment emitted by Lean, the checker follows the origin of
+the value actually returned by the bridge closures. `sourceNext` must originate
+from the successor returned by the exact `sourcePerform` call, and `sourceEvent`
+from its event, directly or through an exact ordered reconstruction of that same
+event. Aliases, transparent static helpers, closure applications and every
+reachable branch are followed. A response recomputed from the history is
+rejected even when its value is equal. An unsupported origin-sensitive form
+fails closed. This is a bounded analysis of that generated fragment, not a
+theorem about every arbitrary C program. The protocol, patches, hashes,
+commands and results are recorded without changing the reference. These checks
+complement the proofs; they do not establish resistance to arbitrary
+simultaneous rewriting of the specification and its consumers.
 
 The audit of commit `f6c6d2c051ae0886056d47cf5357253c137a1319` concludes
 `AGENT TARGET REQUIRES CORRECTIONS` and `NO REGRESSION VERIFIED`. The agreements

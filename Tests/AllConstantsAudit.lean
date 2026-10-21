@@ -30,7 +30,7 @@ set_option maxHeartbeats 0
 open Lean
 /- Pin the source projection layout used by the compiled bridge checker.
 Type families and proof fields erase; all other fields retain this order. -/
-run_cmd do
+run_cmd Lean.Elab.Command.liftTermElabM do
   let env ← Lean.getEnv
   let some info := Lean.getStructureInfo? env `ConstitutiveSearch.Grouping.Continuation.Exact
     | throwError "Bridge schema: missing Continuation.Exact"
@@ -38,7 +38,22 @@ run_cmd do
       ["project", "sourceNext", "reducedNext", "sourceAllow", "reducedAllow", "toReduced", "toSource",
        "sourceEvent", "reducedEvent", "sourceRead", "reducedRead", "nextLaw", "eventLaw", "readLaw"] do
     throwError "Bridge schema changed: {info.fieldNames}"
+  for (record, fields) in [
+      (`ConstitutiveSearch.Agent.Event, ["productions", "message"]),
+      (`ConstitutiveSearch.Agent.Source, ["requirement", "profile", "history"])] do
+    let some structureInfo := Lean.getStructureInfo? env record
+      | throwError "Bridge result schema: missing structure {record}"
+    unless structureInfo.fieldNames.toList.map Name.getString! == fields do
+      throwError "Bridge result schema changed: {record}: {structureInfo.fieldNames}"
+  let sourcePerform ← Lean.getConstInfo `ConstitutiveSearch.Agent.sourcePerform
+  Lean.Meta.forallTelescope sourcePerform.type fun _ result => do
+    let arguments := result.getAppArgs
+    unless result.getAppFn.constName? == some ``Prod && arguments.size == 2 &&
+        arguments[0]!.getAppFn.constName? == some `ConstitutiveSearch.Agent.Source &&
+        arguments[1]!.getAppFn.constName? == some `ConstitutiveSearch.Agent.Event do
+      throwError "Bridge producer result changed: {result}"
   logInfo "BRIDGE_SCHEMA_OK: sourceNext/sourceEvent selected from the actual Exact record"
+  logInfo "BRIDGE_RESULT_SCHEMA_OK: Source × Event with pinned runtime structures"
 /- Check the dependent restart record schema, including the nested live record.
 Counting top-level C fields alone would permit an archive hidden in `live`.
 This is a build-time interface check, not a heap-size theorem. -/
