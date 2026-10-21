@@ -1,0 +1,29 @@
+{
+  "protocol_id": "constitutive-neural-local-reuse-scaling-v3",
+  "status": "frozen-before-confirmatory-run",
+  "predecessor": "constitutive-neural-incremental-scaling-v2 is preserved unchanged",
+  "reason_for_new_version": "v2 reread each transported prefix fragment; v3 measures the runtime's source-indexed local transport without that conservative reread",
+  "scientific_scope": "empirical comparison; not a Lean theorem and not a general complexity claim",
+  "artifact_family": "chronological nonzero chain with a changed terminal suffix",
+  "property_checked_by_both_paths": "serialized-native-system-well-formed",
+  "generator_control": "each generated source is completely checked before it becomes the exact source-indexed reusable certificate",
+  "incremental_rule": "the target is materialized solely by a suffix delta over the certified source; the prefix certificate is transported and every affected suffix node is rechecked",
+  "complete_rule": "recheck every node and the output of the same materialized target artifact from scratch",
+  "sizes": [100, 1000, 5000, 20000, 50000],
+  "affected_cone_size": 4,
+  "reconfiguration_trace_length": 1,
+  "repetitions": 7,
+  "randomness": "none",
+  "primary_measure": "deterministic checked units",
+  "secondary_measure": "median wall-clock nanoseconds",
+  "script_sha256": "4aeb4ad83094aa2cf93d9d2961debac46efe117d26d2d9d934e806c765a78771",
+  "command": [
+    "py",
+    "-3",
+    "scripts/run-neural-update-scaling-v3.py",
+    "--protocol",
+    "experiments/constitutive-neural-alignment/v3/scaling-protocol.json",
+    "--output",
+    "experiments/constitutive-neural-alignment/v3/scaling-results.json"
+  ]
+}

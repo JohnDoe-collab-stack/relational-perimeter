@@ -1,0 +1,17 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.ReverseOperationalContractTransitionCannotBeAuthorized
+open ConstitutiveSearch.NeuralAgent
+
+/-- The fixed meta-contract authorizes only the transition from the initial
+operational contract to the reconfigured one.  Its permission cannot be reused
+in the reverse direction. -/
+def forbiddenReverseTransition : OperationalContractTransition
+    publicConstitutiveMetaContract .reconfigured .initial :=
+  certifyOperationalContractTransition .reconfigured .initial
+    PublicContractTransitionPermission.executeReconfiguration
+
+end Tests.ExpectedFailure.ReverseOperationalContractTransitionCannotBeAuthorized
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.certifyOperationalContractTransition
+/- AXIOM_AUDIT_END -/

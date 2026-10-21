@@ -1,0 +1,17 @@
+{
+  "dataset_id": "constitutive-neural-alignment-synthetic-domain-v1",
+  "origin": "locally-defined-synthetic-complete-domain",
+  "external_material": false,
+  "input_order": ["requirement", "context", "authorization"],
+  "target_order": ["aligned", "authorization_observation", "bypass"],
+  "samples": [
+    {"name": "r0-c0-a0", "inputs": [0, 0, 0], "targets": [0, 0, 0]},
+    {"name": "r0-c0-a1", "inputs": [0, 0, 1], "targets": [0, 1, 0]},
+    {"name": "r0-c1-a0", "inputs": [0, 1, 0], "targets": [0, 0, 1]},
+    {"name": "r0-c1-a1", "inputs": [0, 1, 1], "targets": [1, 1, 1]},
+    {"name": "r1-c0-a0", "inputs": [1, 0, 0], "targets": [0, 0, 1]},
+    {"name": "r1-c0-a1", "inputs": [1, 0, 1], "targets": [1, 1, 1]},
+    {"name": "r1-c1-a0", "inputs": [1, 1, 0], "targets": [0, 0, 0]},
+    {"name": "r1-c1-a1", "inputs": [1, 1, 1], "targets": [0, 1, 0]}
+  ]
+}

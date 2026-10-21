@@ -1,0 +1,24 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.ArtifactPortsCannotBeReplacedAfterDecoding
+open ConstitutiveSearch.NeuralAgent ConstitutiveSearch.NativeMechanism
+
+def duplicatedOutputPorts : OutputPorts 1 :=
+  { sources := [⟨0, by decide⟩, ⟨0, by decide⟩]
+    nonempty := by decide }
+
+def replacedOutputSystem : NativeSystem PublicRequirementInput Bool :=
+  { publicDecodedRequirementArtifact.system with
+    outputs := duplicatedOutputPorts }
+
+/-- The exact decoder result cannot certify a system whose output-port list
+was replaced after decoding. -/
+def forbiddenPortReplacement : ArtifactDecodingExact
+    PublicInitialOperationalContract publicSerializedRequirementNetwork
+      replacedOutputSystem :=
+  publicDecodedRequirementArtifact.decodingExact
+
+end Tests.ExpectedFailure.ArtifactPortsCannotBeReplacedAfterDecoding
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ArtifactDecodingExact
+/- AXIOM_AUDIT_END -/

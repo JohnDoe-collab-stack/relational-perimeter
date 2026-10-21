@@ -1,0 +1,15 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.EmptyCurrentDomainCannotReplaceDeclaredDomain
+open ConstitutiveSearch.NeuralAgent
+
+/-- Coverage of the four declared public inputs cannot be reused as coverage
+for an empty checker domain. -/
+def forbiddenEmptyCoverage : CoversDeclaredCurrentDomain
+    PublicInitialOperationalContract [] :=
+  publicFiniteCausalBasis.currentInputsComplete
+
+end Tests.ExpectedFailure.EmptyCurrentDomainCannotReplaceDeclaredDomain
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.CoversDeclaredCurrentDomain
+/- AXIOM_AUDIT_END -/

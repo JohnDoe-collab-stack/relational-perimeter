@@ -1,0 +1,623 @@
+{
+  "artifact_id": "independent-constitutive-neural-artifact-v1",
+  "domain_outputs": [
+    {
+      "initial": [
+        0,
+        0,
+        0
+      ],
+      "revision_one": [
+        0,
+        0,
+        0
+      ],
+      "revision_two": [
+        0,
+        0,
+        0
+      ],
+      "sample": "r0-c0-a0"
+    },
+    {
+      "initial": [
+        0,
+        1,
+        0
+      ],
+      "revision_one": [
+        0,
+        1,
+        0
+      ],
+      "revision_two": [
+        0,
+        1,
+        0
+      ],
+      "sample": "r0-c0-a1"
+    },
+    {
+      "initial": [
+        0,
+        0,
+        1
+      ],
+      "revision_one": [
+        0,
+        0,
+        1
+      ],
+      "revision_two": [
+        0,
+        0,
+        1
+      ],
+      "sample": "r0-c1-a0"
+    },
+    {
+      "initial": [
+        1,
+        1,
+        1
+      ],
+      "revision_one": [
+        1,
+        1,
+        1
+      ],
+      "revision_two": [
+        1,
+        1,
+        1
+      ],
+      "sample": "r0-c1-a1"
+    },
+    {
+      "initial": [
+        0,
+        0,
+        1
+      ],
+      "revision_one": [
+        0,
+        0,
+        1
+      ],
+      "revision_two": [
+        0,
+        0,
+        1
+      ],
+      "sample": "r1-c0-a0"
+    },
+    {
+      "initial": [
+        1,
+        1,
+        1
+      ],
+      "revision_one": [
+        1,
+        1,
+        1
+      ],
+      "revision_two": [
+        1,
+        1,
+        1
+      ],
+      "sample": "r1-c0-a1"
+    },
+    {
+      "initial": [
+        0,
+        0,
+        0
+      ],
+      "revision_one": [
+        0,
+        0,
+        0
+      ],
+      "revision_two": [
+        0,
+        0,
+        0
+      ],
+      "sample": "r1-c1-a0"
+    },
+    {
+      "initial": [
+        0,
+        1,
+        0
+      ],
+      "revision_one": [
+        0,
+        1,
+        0
+      ],
+      "revision_two": [
+        0,
+        1,
+        0
+      ],
+      "sample": "r1-c1-a1"
+    }
+  ],
+  "learning_method": "deterministic-exhaustive-integer-threshold-search",
+  "manual_weight_edits": false,
+  "networks": [
+    {
+      "inputCount": 3,
+      "neurons": [
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 0,
+                "kind": "receivedInput"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 1,
+                "kind": "receivedInput"
+              },
+              "weight": -2
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 0,
+                "kind": "receivedInput"
+              },
+              "weight": -2
+            },
+            {
+              "source": {
+                "index": 1,
+                "kind": "receivedInput"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 0,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 1,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 2,
+                "kind": "receivedInput"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 2,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 3,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -1
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 0,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 1,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -2
+        }
+      ],
+      "outputs": [
+        4,
+        3,
+        5
+      ],
+      "parent": null,
+      "version": "learned-v0"
+    },
+    {
+      "inputCount": 3,
+      "neurons": [
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 0,
+                "kind": "receivedInput"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 1,
+                "kind": "receivedInput"
+              },
+              "weight": -2
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 0,
+                "kind": "receivedInput"
+              },
+              "weight": -2
+            },
+            {
+              "source": {
+                "index": 1,
+                "kind": "receivedInput"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 0,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 1,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 2,
+                "kind": "receivedInput"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 2,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 3,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -1
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 0,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 1,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 4,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 3,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -1
+        }
+      ],
+      "outputs": [
+        6,
+        3,
+        5
+      ],
+      "parent": "learned-v0",
+      "version": "learned-v1"
+    },
+    {
+      "inputCount": 3,
+      "neurons": [
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 0,
+                "kind": "receivedInput"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 1,
+                "kind": "receivedInput"
+              },
+              "weight": -2
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 0,
+                "kind": "receivedInput"
+              },
+              "weight": -2
+            },
+            {
+              "source": {
+                "index": 1,
+                "kind": "receivedInput"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 0,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 1,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 2,
+                "kind": "receivedInput"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 2,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 3,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -1
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 0,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 1,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -2
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 4,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 3,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -1
+        },
+        {
+          "bias": -3,
+          "inputs": [
+            {
+              "source": {
+                "index": 6,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            },
+            {
+              "source": {
+                "index": 5,
+                "kind": "priorNeuron"
+              },
+              "weight": 1
+            }
+          ],
+          "threshold": -1
+        }
+      ],
+      "outputs": [
+        7,
+        3,
+        5
+      ],
+      "parent": "learned-v1",
+      "version": "learned-v2"
+    }
+  ],
+  "randomness": "none",
+  "training": [
+    {
+      "candidate_count": 394,
+      "name": "requirement-and-not-context"
+    },
+    {
+      "candidate_count": 100,
+      "name": "not-requirement-and-context"
+    },
+    {
+      "candidate_count": 492,
+      "name": "requirement-xor-context"
+    },
+    {
+      "candidate_count": 100,
+      "name": "authorization-observation"
+    },
+    {
+      "candidate_count": 493,
+      "name": "authorized-proposal"
+    },
+    {
+      "candidate_count": 492,
+      "name": "authorization-bypass-observation"
+    },
+    {
+      "candidate_count": 493,
+      "name": "first-successor-aligned-output"
+    },
+    {
+      "candidate_count": 493,
+      "name": "second-successor-aligned-output"
+    }
+  ]
+}

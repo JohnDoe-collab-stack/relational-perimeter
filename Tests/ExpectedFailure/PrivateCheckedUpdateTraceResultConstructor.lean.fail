@@ -1,0 +1,9 @@
+import RelationalPerimeter.Agents.Neural.CheckedUpdateTrace
+
+open ConstitutiveSearch.NeuralAgent
+
+#check CheckedUpdateTraceResult.mk
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.CheckedUpdateTraceResult
+/- AXIOM_AUDIT_END -/

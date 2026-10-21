@@ -1,0 +1,24 @@
+{
+  "manifest_id": "constitutive-neural-local-reuse-manifest-v3",
+  "hash_algorithm": "sha256",
+  "confirmatory_command": [
+    "py",
+    "-3",
+    "scripts/run-neural-update-scaling-v3.py",
+    "--protocol",
+    "experiments/constitutive-neural-alignment/v3/scaling-protocol.json",
+    "--output",
+    "experiments/constitutive-neural-alignment/v3/scaling-results.json"
+  ],
+  "files": {
+    "scripts/run-neural-update-scaling-v3.py": "4aeb4ad83094aa2cf93d9d2961debac46efe117d26d2d9d934e806c765a78771",
+    "experiments/constitutive-neural-alignment/v3/scaling-protocol.json": "c06b0be6194ba1b57dfed3acc64310b6ba1bb12ed98d944d518731bbf10d68bc",
+    "experiments/constitutive-neural-alignment/v3/scaling-results.json": "cc6bd251742b7a21e27e0db5865522a066ee0df043d59f069fee853066d19651",
+    "experiments/constitutive-neural-alignment/v2/final-negative-mutations.json": "b8464a7fe6b72824d7e90891c92c8a2814ed5b33498220fc55ef85664a4c3e4b"
+  },
+  "environment": {
+    "python": "3.9.13",
+    "operating_system": "Windows",
+    "randomness": "none"
+  }
+}

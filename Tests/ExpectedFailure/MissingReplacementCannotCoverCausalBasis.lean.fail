@@ -1,0 +1,20 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.MissingReplacementCannotCoverCausalBasis
+open ConstitutiveSearch.NeuralAgent ConstitutiveSearch.NativeMechanism
+
+def noReplacements
+    (_node : StableNodeId publicInitialStableNaming) :
+    List Activation := []
+
+/-- The executed public causal roles require their exact replacement values;
+coverage for the declared basis cannot certify an empty replacement basis. -/
+def forbiddenEmptyReplacementCoverage : CoversDeclaredCausalCondition
+    publicDecodedRequirementArtifact publicInitialStableNaming
+      noReplacements :=
+  publicCausalCoverage
+
+end Tests.ExpectedFailure.MissingReplacementCannotCoverCausalBasis
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.CoversDeclaredCausalCondition
+/- AXIOM_AUDIT_END -/

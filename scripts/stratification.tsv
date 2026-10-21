@@ -60,7 +60,7 @@ SegmentedResidualRole	F	enforced	Primitive residual roles and exact internal rea
 AbstractSegmentedTurning	F	enforced	Abstract segmented boundary and turning
 ExactTypeTransport	U	enforced	Constructive exact transport between carriers
 StrongPerimetralTurning	F	enforced	Strong relational perimeter and affirmative turning
-RelationalPerimeter	M19	enforced	Public root joining scientific production and the integrated master machine
+RelationalPerimeter	M38	enforced	Public root joining scientific production and the integrated master machine
 RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement
 RelationalPerimeter.Agents.Constitutive.ProducedEvidence	A11	enforced	Constitutive agent ProducedEvidence
 RelationalPerimeter.Agents.Constitutive.State	A12	enforced	Constitutive agent State
@@ -331,3 +331,23 @@ RelationalPerimeter.Instances.HeytingArithmetic.TheoryHistoryCoding	F	enforced	F
 RelationalPerimeter.Instances.HeytingArithmetic.TheoryHistorySoundness	F	enforced	Positive standard-model soundness certificates for finite theory histories
 RelationalPerimeter.Agents.Neural.PublicExactForgetting	M16	enforced	Closed public witnesses of fixed and reconfigured exact historical-input forgetting
 RelationalPerimeter.Agents.Neural.ConstitutiveAlignment	M17	enforced	Dependent certificate consuming the constructed native action continuation and forgetting chain
+RelationalPerimeter.Agents.Neural.OperationalContract	M18	enforced	Fixed meta-contract owning operational admissions transitions preservation and mandatory rechecks
+RelationalPerimeter.Agents.Neural.SerializedNativeSystem	M19	enforced	Certified decoding of complete serialized native systems under the fixed operational contract
+RelationalPerimeter.Agents.Neural.StableNodeIdentity	M20	enforced	Version-independent stable keys separated from artifact-local execution positions
+RelationalPerimeter.Agents.Neural.FiniteCausalBasis	M21	enforced	Finite declared input domain and stably named artifact-indexed causal intervention basis
+RelationalPerimeter.Agents.Neural.CoveredFutureRealization	M22	enforced	Exact realization of every finite future carried by the operational contract
+RelationalPerimeter.Agents.Neural.StateConstitutiveCertificate	M23	enforced	Exact state-indexed consumption of causal contract historical and future obligations
+RelationalPerimeter.Agents.Neural.CheckedState	M24	enforced	Privately constructed checked agents and meta-contract-indexed executed updates
+RelationalPerimeter.Agents.Neural.ReferenceChecker	M25	enforced	Executable initial decoding and complete reference-update verification
+RelationalPerimeter.Agents.Neural.StableNodeCorrespondence	M26	enforced	Validated partial stable-key correspondence across decoded artifact versions
+RelationalPerimeter.Agents.Neural.HeterogeneousCausalGraph	M27	enforced	Certificate-indexed heterogeneous graph from executed mechanisms through contract observations
+RelationalPerimeter.Agents.Neural.AffectedConstitutiveCone	M28	enforced	Executable affected cone computed from validated structural change and constitutive dependencies
+RelationalPerimeter.Agents.Neural.LocalCertificateReuse	M29	enforced	Positive transport of unchanged old certificate fragments outside the computed affected cone
+RelationalPerimeter.Agents.Neural.IncrementalChecker	M30	enforced	Proof-free serialized delta verification with explicit transported and recomputed certificate fragments
+RelationalPerimeter.Agents.Neural.IncrementalReferenceEquivalence	M31	enforced	Constructive equivalence of incremental and complete reference verification
+RelationalPerimeter.Agents.Neural.CheckedUpdateTrace	M32	enforced	Finite dependent traces whose tails consume the exact checked successor returned at the preceding step
+RelationalPerimeter.Agents.Neural.CertifiedRuntime	M33	enforced	Closed runtime API installing only successors returned by the executable incremental checker
+RelationalPerimeter.Agents.Neural.CertifiedRuntimeAccessibility	M34	enforced	Least API-generated reachability family and exact dependent trace evidence for every reachable runtime
+RelationalPerimeter.Agents.Neural.IndependentLearnedArtifact	M35	enforced	Externally learned multi-path artifact series reproduced from the frozen comparison protocol
+RelationalPerimeter.Agents.Neural.LearnedUpdateSeparation	M36	enforced	Same-intent learned candidates separated by executed authorization consumption rather than current behavior
+RelationalPerimeter.Agents.Neural.FiniteCounterfactualDivergence	M37	enforced	Explicit nonempty future exposing the latent contract divergence of the rejected bypass candidate

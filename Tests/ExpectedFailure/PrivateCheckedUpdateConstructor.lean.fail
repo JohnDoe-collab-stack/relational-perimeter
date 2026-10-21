@@ -1,0 +1,9 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+#check CheckedUpdate.mk
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.CheckedUpdate
+/- AXIOM_AUDIT_END -/

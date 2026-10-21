@@ -1,0 +1,12 @@
+import RelationalPerimeter.Agents.Neural.ReferenceChecker
+
+open ConstitutiveSearch.NeuralAgent
+
+def impossibleInitialAcceptance :
+    checkInitial publicSerializedReconfiguredNetwork =
+      .ok publicInitialCheckedAgent := by
+  rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.checkInitial
+/- AXIOM_AUDIT_END -/

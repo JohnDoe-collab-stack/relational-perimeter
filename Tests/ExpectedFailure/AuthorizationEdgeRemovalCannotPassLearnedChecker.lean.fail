@@ -1,0 +1,16 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.AuthorizationEdgeRemovalCannotPassLearnedChecker
+open ConstitutiveSearch.NeuralAgent
+
+/-- Removing the authorization edge reaches the causal diagnostic.  It cannot
+be reclassified as an unrelated intent failure to pass the update gate. -/
+example :
+    checkIndependentLearnedUpdate checkedIndependentLearnedInitial
+      bypassUpdate = .error .unadmittedIntent := by
+  rfl
+
+end Tests.ExpectedFailure.AuthorizationEdgeRemovalCannotPassLearnedChecker
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.checkIndependentLearnedUpdate
+/- AXIOM_AUDIT_END -/

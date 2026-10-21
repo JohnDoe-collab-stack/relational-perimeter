@@ -1,0 +1,21 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.ContractDecoderCannotBeReplacedAfterArtifactDecoding
+open ConstitutiveSearch.NeuralAgent ConstitutiveSearch.NativeMechanism
+
+def replacedDecoderSystem : NativeSystem PublicRequirementInput Bool :=
+  { publicDecodedRequirementArtifact.system with
+    decode := fun _values => false }
+
+/-- Exact decoding evidence is indexed by the system actually returned by the
+decoder.  It cannot certify a system whose proposal decoder was replaced
+after successful artifact decoding. -/
+def forbiddenReplacement : ArtifactDecodingExact
+    PublicInitialOperationalContract publicSerializedRequirementNetwork
+      replacedDecoderSystem :=
+  publicDecodedRequirementArtifact.decodingExact
+
+end Tests.ExpectedFailure.ContractDecoderCannotBeReplacedAfterArtifactDecoding
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ArtifactDecodingExact
+/- AXIOM_AUDIT_END -/

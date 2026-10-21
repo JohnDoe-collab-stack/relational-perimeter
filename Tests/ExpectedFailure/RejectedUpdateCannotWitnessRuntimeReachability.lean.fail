@@ -1,0 +1,12 @@
+import RelationalPerimeter.Agents.Neural.CertifiedRuntimeAccessibility
+
+open ConstitutiveSearch.NeuralAgent
+
+def impossibleSecondReachability :
+    CertifiedRuntimeReachable publicUpdatedCertifiedRuntime :=
+  .submitted publicUpdatedCertifiedRuntime publicIncrementalNeuralUpdate
+    publicUpdatedCertifiedRuntime publicUpdatedCertifiedRuntime_reachable rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.CertifiedRuntimeReachable
+/- AXIOM_AUDIT_END -/

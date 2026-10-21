@@ -1,0 +1,55 @@
+{
+  "campaign_id": "constitutive-neural-final-negative-mutations-v2",
+  "status": "frozen",
+  "interpretation": "Each fixture is executed by the exact-diagnostic gate; a failure at any other site does not count.",
+  "mutations": [
+    {
+      "id": "remove-authorization-edge",
+      "fixture": "Tests/ExpectedFailure/AuthorizationEdgeRemovalCannotPassLearnedChecker.lean.fail",
+      "expected_diagnostic": "Tactic `rfl` failed",
+      "scientific_role": "An update that removes authorization dependence is rejected at the missing-constitutive-dependency diagnostic."
+    },
+    {
+      "id": "substitute-context",
+      "fixture": "Tests/ExpectedFailure/ContextSubstitutionCannotReuseAuthorization.lean.fail",
+      "expected_diagnostic": "Application type mismatch",
+      "scientific_role": "Authorization for another context cannot enter the intended reconfiguration."
+    },
+    {
+      "id": "substitute-requirement",
+      "fixture": "Tests/ExpectedFailure/ForeignAuthorizationCannotBuildReconfiguration.lean.fail",
+      "expected_diagnostic": "Application type mismatch",
+      "scientific_role": "Authorization for another received requirement cannot enter the intended reconfiguration."
+    },
+    {
+      "id": "short-circuit-prior-system",
+      "fixture": "Tests/ExpectedFailure/FixedSystemCannotCertifyReconfiguredTail.lean.fail",
+      "expected_diagnostic": "Type mismatch",
+      "scientific_role": "A fixed earlier system cannot certify a tail indexed by the system produced by the preceding step."
+    },
+    {
+      "id": "post-hoc-constant-transformer",
+      "fixture": "Tests/ExpectedFailure/PostHocConstantTransformCannotWitnessExecution.lean.fail",
+      "expected_diagnostic": "Type mismatch",
+      "scientific_role": "A constant selected after observing the target cannot replace the executed effective edge."
+    },
+    {
+      "id": "zero-weight-edge",
+      "fixture": "Tests/ExpectedFailure/ZeroWeightEdgeCannotWitnessCausalParticipation.lean.fail",
+      "expected_diagnostic": "Type mismatch",
+      "scientific_role": "A recorded zero-weight read cannot witness effective causal participation."
+    },
+    {
+      "id": "pre-erase-history",
+      "fixture": "Tests/ExpectedFailure/AlreadyForgottenInputCannotWitnessExecutedForgetting.lean.fail",
+      "expected_diagnostic": "Type mismatch",
+      "scientific_role": "An already reduced input cannot witness loss performed by the executed forgetting transition."
+    },
+    {
+      "id": "independent-successor-reconstruction",
+      "fixture": "Tests/ExpectedFailure/StateCertificateCannotMoveToDifferentState.lean.fail",
+      "expected_diagnostic": "Type mismatch",
+      "scientific_role": "A state-indexed certificate cannot be moved onto an independently reconstructed successor."
+    }
+  ]
+}

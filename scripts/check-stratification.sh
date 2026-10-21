@@ -45,7 +45,7 @@ while IFS=$'\t' read -r module layer migration role extra; do
   [[ -z "$module" || "${module:0:1}" == '#' ]] && continue
   [[ -z "${extra:-}" && -n "$role" ]] || { echo "$manifest:$line_number: expected four tab-separated fields" >&2; exit 1; }
   [[ -z "${stratum[$module]+x}" ]] || { echo "$manifest:$line_number: duplicate module $module" >&2; exit 1; }
-  [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 A17 A18 A19 " == *" $layer "* || "$layer" =~ ^M([0-9]|1[0-9])$ ]] || { echo "$manifest:$line_number: unknown stratum $layer" >&2; exit 1; }
+  [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 A17 A18 A19 " == *" $layer "* || "$layer" =~ ^M([0-9]|1[0-9]|2[0-9]|3[0-8])$ ]] || { echo "$manifest:$line_number: unknown stratum $layer" >&2; exit 1; }
   [[ "$migration" == enforced ]] || { echo "$manifest:$line_number: every production module must be enforced, found $migration" >&2; exit 1; }
   stratum[$module]="$layer"; status[$module]="$migration"; responsibility[$module]="$role"
 done < "$manifest"
@@ -79,9 +79,9 @@ for module in "${!stratum[@]}"; do [[ -n "${file_for[$module]+x}" ]] || stale+=(
 
 allowed_dependency() {
   # Machine layers cannot depend on themselves or later machine layers.
-  if [[ "$1" =~ ^M([0-9]|1[0-9])$ ]]; then
+  if [[ "$1" =~ ^M([0-9]|1[0-9]|2[0-9]|3[0-8])$ ]]; then
     local rank="${BASH_REMATCH[1]}"
-    if [[ "$2" =~ ^M([0-9]|1[0-9])$ ]]; then
+    if [[ "$2" =~ ^M([0-9]|1[0-9]|2[0-9]|3[0-8])$ ]]; then
       (( BASH_REMATCH[1] < rank ))
     else
       [[ " U F G S B E M R X P K D Q N A0 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 A17 A18 A19 " == *" $2 "* ]]

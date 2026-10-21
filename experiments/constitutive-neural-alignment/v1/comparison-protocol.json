@@ -1,0 +1,72 @@
+{
+  "protocol_id": "constitutive-neural-alignment-comparison-v1",
+  "status": "frozen-before-confirmatory-experiment",
+  "confirmatory_results_present": false,
+  "shared_material": {
+    "artifact": "experiments/constitutive-neural-alignment/v1/learned-artifact.json",
+    "updates": "aligned-and-bypass-updates-to-be-produced-from-the-frozen-artifact",
+    "declared_domain": "all-eight-requirement-context-authorization-combinations",
+    "trace": "one-common-update-trace-per-executable-method"
+  },
+  "capabilities": [
+    "neural-causal-provenance",
+    "admission-distinct-from-certification",
+    "exact-action-and-effect",
+    "produced-succession",
+    "exact-forgetting",
+    "all-futures-preservation",
+    "pre-effect-refusal",
+    "local-certificate-reuse"
+  ],
+  "subject": {
+    "id": "constitutive-runtime",
+    "interface": "closed-runtime-consuming-proof-free-serialized-updates",
+    "evidence_required": "one-dependent-executed-trace-carrying-all-eight-capabilities"
+  },
+  "baselines": [
+    {
+      "id": "extensional-current-behavior-verification",
+      "interface": "artifact-times-declared-current-input-domain-to-current-output-table",
+      "comparison_output": "accept-or-reject-each-update-from-current-output-observations",
+      "adapter_status": "not-yet-implemented"
+    },
+    {
+      "id": "fixed-network-interventional-causal-analysis",
+      "interface": "fixed-artifact-times-intervention-basis-to-causal-observations",
+      "comparison_output": "causal-report-without-runtime-update-installation",
+      "adapter_status": "not-yet-implemented"
+    },
+    {
+      "id": "pre-execution-action-shielding",
+      "interface": "proposed-action-times-current-policy-state-to-allow-or-refuse",
+      "comparison_output": "pre-effect-action-decision",
+      "adapter_status": "not-yet-implemented"
+    },
+    {
+      "id": "guaranteed-self-adaptive-system",
+      "interface": "current-system-times-proposed-update-times-invariant-to-updated-system-or-rejection",
+      "comparison_output": "adaptation-result-and-invariant-evidence",
+      "adapter_status": "not-yet-implemented"
+    },
+    {
+      "id": "incremental-neural-verification-with-proof-reuse",
+      "interface": "old-artifact-times-update-times-old-certificate-to-new-certificate-or-rejection",
+      "comparison_output": "transported-and-recomputed-certificate-fragments",
+      "adapter_status": "not-yet-implemented"
+    },
+    {
+      "id": "deployment-chain-certificate-propagation",
+      "interface": "artifact-version-chain-times-certificates-to-deployment-verdicts",
+      "comparison_output": "certificate-status-at-each-version",
+      "adapter_status": "not-yet-implemented"
+    }
+  ],
+  "decision_rules": {
+    "same_material_required": true,
+    "missing_adapter_is_not_a_negative_result": true,
+    "missing_capability_must_be_reported_as_absent_or-uncertified": true,
+    "no_universal_impossibility_from_tool_absence": true,
+    "extensional_limitation_claim_requires_factorization_theorem": true,
+    "confirmatory_run_forbidden_until_all_declared_executable_adapters_are_frozen": true
+  }
+}

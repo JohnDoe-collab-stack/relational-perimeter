@@ -1,0 +1,22 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.ForeignFutureContractCannotReuseExactSimulation
+open ConstitutiveSearch ConstitutiveSearch.NeuralAgent
+open ContinuationSignatures
+
+def foreignReducedFutureContract : FutureContract Agent.Memory
+    (ULift.{3} Agent.Request) Agent.Event OperationalMemoryReadout :=
+  { reconfiguredOperationalMemoryFutureContract with
+    read := fun _memory => ⟨[]⟩ }
+
+/-- The local simulation laws are indexed by the exact reduced contract.  They
+cannot certify a separately prescribed readout contract. -/
+def forbiddenForeignSimulation : FutureContractSimulationData
+    PublicReconfiguredOperationalContract.futureContract
+    foreignReducedFutureContract ReconfiguredExecutionState.memory :=
+  publicOperationalFutureSimulationData
+
+end Tests.ExpectedFailure.ForeignFutureContractCannotReuseExactSimulation
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.FutureContractSimulationData
+/- AXIOM_AUDIT_END -/

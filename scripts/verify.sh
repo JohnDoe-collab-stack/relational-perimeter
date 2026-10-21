@@ -14,6 +14,8 @@ else
 fi
 "${python_command[@]}" scripts/check-scientific-docs.py --self-test
 "${python_command[@]}" scripts/check-scientific-docs.py --static
+"${python_command[@]}" scripts/check-independent-neural-artifact.py
+"${python_command[@]}" scripts/check-final-neural-campaign.py
 
 if command -v lake >/dev/null 2>&1; then
   lake_command=(lake)

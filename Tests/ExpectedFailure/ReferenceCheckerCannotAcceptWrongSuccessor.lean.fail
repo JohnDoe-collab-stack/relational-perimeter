@@ -1,0 +1,12 @@
+import RelationalPerimeter.Agents.Neural.ReferenceChecker
+
+open ConstitutiveSearch.NeuralAgent
+
+def impossibleReferenceUpdateAcceptance :
+    checkReferenceUpdate publicWrongSuccessorReferenceUpdate =
+      .ok publicReferenceCheckedUpdate := by
+  rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.checkReferenceUpdate
+/- AXIOM_AUDIT_END -/

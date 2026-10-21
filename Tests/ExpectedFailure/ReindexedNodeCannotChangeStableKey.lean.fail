@@ -1,0 +1,14 @@
+import RelationalPerimeter.Agents.Neural.StableNodeCorrespondence
+
+open ConstitutiveSearch.NeuralAgent
+
+def invalidStableKeyReuse :
+    (StableNodeId.receivedInput (naming := publicInitialStableNaming)
+        publicRequirementPort).key =
+      (StableNodeId.receivedInput (naming := publicReconfiguredStableNaming)
+        publicReconfigurationSourcePort).key := by
+  rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.publicStableNodeCorrespondence
+/- AXIOM_AUDIT_END -/

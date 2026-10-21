@@ -10,6 +10,10 @@ if (-not $pythonCommand) { throw "Python 3 is required for documentation and com
 if ($LASTEXITCODE -ne 0) { throw "scientific documentation self-test failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-scientific-docs.py") --static
 if ($LASTEXITCODE -ne 0) { throw "scientific documentation check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-independent-neural-artifact.py")
+if ($LASTEXITCODE -ne 0) { throw "independent neural artifact check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-final-neural-campaign.py")
+if ($LASTEXITCODE -ne 0) { throw "final neural mutation and scaling campaign check failed" }
 
 Push-Location $repoRoot
 try {

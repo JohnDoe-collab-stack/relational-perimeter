@@ -1,0 +1,24 @@
+{
+  "manifest_id": "constitutive-neural-final-campaign-manifest-v2",
+  "hash_algorithm": "sha256",
+  "confirmatory_command": [
+    "py",
+    "-3",
+    "scripts/run-neural-update-scaling.py",
+    "--protocol",
+    "experiments/constitutive-neural-alignment/v2/scaling-protocol.json",
+    "--output",
+    "experiments/constitutive-neural-alignment/v2/scaling-results.json"
+  ],
+  "files": {
+    "scripts/run-neural-update-scaling.py": "66bc45988777a1fa0e2bc5223b4a8e0b1e1c0b3a9b297d03405fded88fdb6fc9",
+    "experiments/constitutive-neural-alignment/v2/scaling-protocol.json": "a0695a5ef6cf3cac2b79e95631f0733c333454dd55f8c9371d9db6ab9508b501",
+    "experiments/constitutive-neural-alignment/v2/scaling-results.json": "a0463ab1738fac39cbe27a076040a89cbb5649481fa3ff16305db0fde6d3d76b",
+    "experiments/constitutive-neural-alignment/v2/final-negative-mutations.json": "b8464a7fe6b72824d7e90891c92c8a2814ed5b33498220fc55ef85664a4c3e4b"
+  },
+  "environment": {
+    "python": "3.9.13",
+    "operating_system": "Windows",
+    "randomness": "none"
+  }
+}

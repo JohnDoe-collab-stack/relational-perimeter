@@ -1,0 +1,8 @@
+import RelationalPerimeter.Agents.Neural.LearnedUpdateSeparation
+
+open ConstitutiveSearch.NeuralAgent
+
+/-- A certificate indexed by the authorization-consuming target cannot certify
+the bypass target. -/
+example : CheckedIndependentLearnedUpdate bypassUpdate :=
+  checkedAlignedUpdate

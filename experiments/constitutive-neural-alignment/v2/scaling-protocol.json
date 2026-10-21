@@ -1,0 +1,42 @@
+{
+  "protocol_id": "constitutive-neural-incremental-scaling-v2",
+  "status": "frozen-before-confirmatory-run",
+  "scientific_scope": "empirical comparison; not a Lean theorem and not a general complexity claim",
+  "artifact_family": "chronological nonzero chain with a changed terminal suffix",
+  "property_checked_by_both_paths": "serialized-native-system-well-formed",
+  "generator_control": "each generated source is completely checked before it may supply a reusable prefix certificate",
+  "incremental_rule": "compare every reused prefix fragment and recheck every node in the affected suffix",
+  "complete_rule": "recheck every node and the output of the same target artifact from scratch",
+  "sizes": [100, 1000, 5000, 20000, 50000],
+  "affected_cone_size": 4,
+  "reconfiguration_trace_length": 1,
+  "repetitions": 7,
+  "randomness": "none",
+  "primary_measure": "deterministic checked units",
+  "secondary_measure": "median wall-clock nanoseconds",
+  "required_fields": [
+    "network_size",
+    "affected_cone_size",
+    "reconfiguration_trace_length",
+    "initial_certificate_bytes",
+    "certificate_delta_bytes",
+    "execution_time_ns_median",
+    "initial_verification_time_ns_median",
+    "incremental_recheck_time_ns_median",
+    "complete_recheck_time_ns_median",
+    "incremental_checked_units",
+    "complete_checked_units",
+    "reused_fragments",
+    "recomputed_fragments"
+  ],
+  "script_sha256": "66bc45988777a1fa0e2bc5223b4a8e0b1e1c0b3a9b297d03405fded88fdb6fc9",
+  "command": [
+    "py",
+    "-3",
+    "scripts/run-neural-update-scaling.py",
+    "--protocol",
+    "experiments/constitutive-neural-alignment/v2/scaling-protocol.json",
+    "--output",
+    "experiments/constitutive-neural-alignment/v2/scaling-results.json"
+  ]
+}

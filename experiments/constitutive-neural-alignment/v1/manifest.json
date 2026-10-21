@@ -1,0 +1,48 @@
+{
+  "exact_command": [
+    "python3",
+    "scripts/train-independent-neural-artifact.py",
+    "--protocol",
+    "experiments/constitutive-neural-alignment/v1/comparison-protocol.json",
+    "--data",
+    "experiments/constitutive-neural-alignment/v1/training-data.json",
+    "--artifact",
+    "experiments/constitutive-neural-alignment/v1/learned-artifact.json",
+    "--lean",
+    "RelationalPerimeter/Agents/Neural/IndependentLearnedArtifact.lean",
+    "--manifest",
+    "experiments/constitutive-neural-alignment/v1/manifest.json"
+  ],
+  "files": {
+    "RelationalPerimeter/Agents/Neural/IndependentLearnedArtifact.lean": "b1cbe1803365710734c2a8936fb58297fa0c42035e1671617689aa5d3d821dc9",
+    "comparison-protocol.json": "82e747de52ca4bcffd0c760895176029d9bc1b3ce7ce32dc1b111efe59ea697a",
+    "learned-artifact.json": "4e00058b0bb3f5e84f7b730202f9682d4d39a02b98e7a0971da4ab49dee24918",
+    "scripts/train-independent-neural-artifact.py": "070136b53a76aca4774a47a099169782be4bce58a3ffe9ecdb9999710615a98e",
+    "training-data.json": "4ff37fb2056fb8d874d3103647babc22f1395dc626aec6d46947e2d9fc7ca807"
+  },
+  "hash_algorithm": "sha256",
+  "manifest_id": "independent-constitutive-neural-artifact-manifest-v1",
+  "parameters": {
+    "bias_range_inclusive": [
+      -3,
+      3
+    ],
+    "randomness": "none",
+    "threshold_range_inclusive": [
+      -3,
+      3
+    ],
+    "weight_values": [
+      -2,
+      -1,
+      1,
+      2
+    ]
+  },
+  "provenance": {
+    "data_origin": "locally-defined-synthetic-complete-domain",
+    "external_material": false,
+    "manual_weight_edits": false,
+    "reuse_conditions": "repository-license"
+  }
+}

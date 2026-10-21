@@ -339,7 +339,27 @@ M0 Arithmetic
 → M15 PublicActionRealization
 → M16 PublicExactForgetting
 → M17 ConstitutiveAlignment
-→ M19 public root
+→ M18 OperationalContract
+→ M19 SerializedNativeSystem
+→ M20 StableNodeIdentity
+→ M21 FiniteCausalBasis
+→ M22 CoveredFutureRealization
+→ M23 StateConstitutiveCertificate
+→ M24 CheckedState
+→ M25 ReferenceChecker
+→ M26 StableNodeCorrespondence
+→ M27 HeterogeneousCausalGraph
+→ M28 AffectedConstitutiveCone
+→ M29 LocalCertificateReuse
+→ M30 IncrementalChecker
+→ M31 IncrementalReferenceEquivalence
+→ M32 CheckedUpdateTrace
+→ M33 CertifiedRuntime
+→ M34 CertifiedRuntimeAccessibility
+→ M35 IndependentLearnedArtifact
+→ M36 LearnedUpdateSeparation
+→ M37 FiniteCounterfactualDivergence
+→ M38 public root
 ```
 
 La gate refuse toute dépendance vers une strate machine égale ou supérieure.
@@ -377,16 +397,387 @@ Les fixtures négatives vérifient notamment que :
 
 - construction ciblée de tous les nouveaux modules : réussie ;
 - tests positifs neuronaux : réussis après adaptation à l’interface dépendante ;
-- 86 fixtures négatives : toutes rejetées au diagnostic et au site
-  enregistrés, dont la substitution du programme d’oubli constant et celle de
-  l’état complet à la mémoire réduite ;
-- inventaire de stratification : 332 modules, tous contrôlés, aucun orphelin ;
+- 101 fixtures négatives : toutes rejetées au diagnostic et au site
+  enregistrés, dont la construction directe interdite du résultat incrémental ;
+- inventaire de stratification : 346 modules, tous contrôlés, aucun orphelin ;
 - tous les nouveaux audits `#print axioms` : aucun axiome ;
-- construction globale : réussie, 401 tâches, audit exhaustif de 33 175
-  constantes sur 398 modules, aucune déclaration manuscrite dépendante d’un
+- construction globale : réussie, 422 tâches, audit exhaustif de 35 368
+  constantes sur 419 modules, aucune déclaration manuscrite dépendante d’un
   axiome ;
-- registre scientifique : quatre fermetures renouvelées sur le commit stable
-  `13f9e0977fcd79ae47504fc32400a90a3b17eeb1`, 23 claims et 253 déclarations
-  résolus sans empreinte périmée ;
-- vérificateurs globaux : `verify.ps1` et `verify.sh` terminent intégralement
-  avec succès sur le registre renouvelé.
+- gates locales de ce bloc : stratification et fixtures négatives réussies ;
+- registre scientifique : son renouvellement exige une révision Git stable et
+  reste donc volontairement différé tant que ce chantier n’est pas commité ;
+  aucun succès global des portails n’est revendiqué avant ce renouvellement.
+
+## Extension incrémentale — méta-contrat opérationnel
+
+Le module `OperationalContract` ajoute un méta-contrat fixé avant l’exécution.
+Il sépare explicitement les sept composantes exigées du contrat opérationnel :
+encodage, causalité, préservation proposition–action, admission de
+l’autorisation, satisfaction par l’effet, futurs couverts et politique
+historique. Les admissions et les permissions de transition appartiennent au
+méta-contrat ; le constructeur de transition ne reçoit ni fonction de
+transport ni procédure de revérification choisie par le client.
+
+La réalisation publique autorise uniquement le passage du contrat initial au
+contrat reconfiguré. Ces deux contrats ne sont pas deux noms pour la même
+valeur : leur obligation historique change de domaine. Le contrat initial
+porte l’état historique complet, tandis que le contrat reconfiguré exige un
+témoin indexé par l’état effectivement produit par une reconfiguration. La
+distinction d’action est transportée par la règle du méta-contrat et
+l’autorisation incorporée est reconstruite par sa règle de revérification.
+La transition inverse est refusée par une fixture au site exact.
+
+## Extension incrémentale — artefact neuronal sérialisé
+
+Le module `SerializedNativeSystem` introduit une représentation de données
+autonome pour les sources, arêtes pondérées, neurones et ports de sortie. Le
+décodeur exécutable contrôle l’arité d’entrée, chaque indice d’entrée, la
+chronologie de chaque référence à un neurone antérieur, chaque port de sortie
+et la non-vacuité des sorties avant de construire un `NativeSystem` complet.
+
+Le contrat fixé fournit l’encodeur d’exigence et le décodeur de proposition ;
+l’artefact fournit le programme et les ports. `ArtifactDecodingExact` raccorde
+le système retourné aux quatre données constitutives : arité, programme
+sérialisé — poids compris —, ports sérialisés, encodeur et décodeur du contrat.
+Le constructeur du résultat décodé est privé. Les fixtures négatives montrent
+qu’après décodage ni poids, ni ports, ni décodeur ne peuvent être remplacés en
+réutilisant le certificat exact.
+
+Les contrôles positifs couvrent en outre séparément les cinq refus du
+décodeur : arité incompatible, entrée inexistante, référence future, sortie
+inexistante et liste de sorties vide. Les deux modules sont accessibles depuis
+la racine publique, occupent les strates `M18` et `M19`, et tous leurs audits
+axiomatiques sont vides. Cette extension ferme uniquement les deux blocs
+annoncés ; elle ne prétend pas encore fermer le vérificateur initial ou le
+vérificateur de mise à jour de la cible terminale.
+
+## Extension incrémentale — domaine décidable et base causale finie
+
+Le contrat opérationnel déclare désormais explicitement sa liste finie
+d’entrées courantes et son alphabet fini de remplacements. `FiniteCausalBasis`
+reste indexée par ce contrat et par l’artefact exactement décodé. Sa couverture
+ne porte donc pas sur des entiers arbitraires : pour chaque entrée déclarée,
+elle fournit positivement un identifiant du système décodé, le `CausalRole`
+exécuté à cette occurrence et l’appartenance du remplacement à la fois à la
+liste locale du nœud et à l’alphabet du contrat.
+
+Les décisions d’égalité et d’appartenance sont exécutables et constructives.
+La réalisation publique couvre les quatre couples exigence-contexte et les
+remplacements effectivement employés par leurs interventions causales. Une
+base vide d’entrées ou de remplacements ne peut pas réutiliser ces preuves de
+couverture.
+
+## Extension incrémentale — réalisation exacte de tous les futurs
+
+Le contrat opérationnel porte maintenant son véritable `FutureContract`.
+`FutureContractSimulationData` isole les sept lois locales de transport puis
+les assemble dans l’API `ExactRealization` déjà présente. Le théorème générique
+de conservation est obtenu par `ExactRealization.outcome_exact` et quantifie
+sur toute liste finie de requêtes ; aucun ensemble d’exemples ne le remplace.
+
+La réalisation publique réemploie le contrat terminal, la projection mémoire
+et l’`ExactRealization` déjà établis par l’oubli exact. Elle n’introduit donc ni
+une seconde sémantique des futurs ni une projection indépendante. Une fixture
+négative empêche de réutiliser ces lois avec un contrat réduit dont le readout
+a été prescrit séparément.
+
+## Extension incrémentale — certificat constitutif d’état
+
+`StateConstitutiveCertificate` est indexé simultanément par le contrat
+opérationnel fixé, l’artefact exactement décodé et l’état d’exécution exact. Il
+consomme la base causale finie, l’appartenance positive de l’entrée au domaine
+déclaré, les sept familles d’obligations du contrat et la réalisation exacte de
+ses futurs. Le système de l’état est identifié au système de l’artefact dans le
+type du certificat. Le candidat causal attaché à l’entrée et la conservation de
+tout futur fini sont ensuite des projections de cette même chaîne, non des
+reconstructions indépendantes.
+
+## Extension incrémentale — agents et mises à jour vérifiés
+
+Les constructeurs de `CheckedAgent` et `CheckedUpdate` sont privés. Un agent
+vérifié porte l’admission du membre exact du méta-contrat, son artefact décodé,
+son état et le certificat indexé par ces deux derniers objets. Une mise à jour
+vérifiée porte comme successeur un nouvel agent déjà certifié, la permission de
+transition du même méta-contrat et un témoin d’exécution indexé par les états
+source et cible exacts. Le méta-contrat public définit ce témoin par l’action de
+reconfiguration réellement exécutée ; une paire d’états sans cette production
+ne constitue donc pas une mise à jour vérifiée.
+
+Ce bloc ferme les types certifiés et une instance initiale publique.
+
+## Extension incrémentale — vérification initiale et recheck complet
+
+`checkInitial` décode entièrement le réseau sérialisé avant d’accepter
+l’artefact initial de référence. Un artefact mal formé reçoit le diagnostic du
+décodeur ; un artefact bien formé mais différent ne peut pas recevoir le
+certificat de référence. Son théorème de correction identifie tout résultat
+positif à l’agent vérifié exact.
+
+Le contrat reconfiguré décrit désormais le système effectivement produit :
+ses obligations sont indexées par l’état exact et consomment séparément
+l’encodage, le rôle causal, l’action, l’autorisation et l’effet portés par la
+même production. Sa base causale est attachée à l’artefact cible complètement
+décodé, et sa politique de futurs exécute la continuation depuis ce même état.
+
+`checkReferenceUpdate` est le vérificateur complet de référence, distinct du
+futur vérificateur incrémental. Son entrée contient seulement le réseau cible
+complet et l’exigence suivante, jamais un certificat. Il redécode le programme
+entier, contrôle l’artefact et le successeur exacts, puis retourne le
+`CheckedUpdate` dont l’état cible est celui produit par la reconfiguration. La
+correction identifie tout succès à cette mise à jour exacte ; la complétude est
+limitée aux deux conditions locales décidables effectivement contrôlées.
+
+## Extension incrémentale — identités stables entre versions
+
+`StableNodeKey` est désormais distinct de tout indice `Fin`. Chaque artefact
+décodé reçoit un `StableArtifactNaming` injectif pour ses entrées reçues, ses
+neurones et ses ports de sortie. Une occurrence locale conserve donc sa
+position d’exécution, mais cette position n’est plus prise pour son identité.
+
+`ValidatedStableNodeCorrespondence` est une correspondance partielle entre deux
+versions. Un transport réussi produit simultanément la nouvelle occurrence et
+la preuve que sa clé stable est inchangée. Les suppressions et insertions
+restent représentées par l’absence d’image ou d’antécédent. Dans l’instance
+publique, l’entrée d’exigence est réindexée de la position zéro à la position
+un tout en conservant sa clé ; l’entrée d’autorisation insérée n’a aucun
+antécédent dans l’ancien artefact.
+
+## Extension incrémentale — graphe causal constitutif hétérogène
+
+`ConstitutiveDependency` relie sans les confondre les occurrences neuronales,
+les ports de sortie, le décodeur, la proposition, l’action, l’effet, l’état
+successeur, la projection mémoire et les sept observations du contrat. Ce
+graphe est une relation indexée par le `StateConstitutiveCertificate` exact,
+pas une liste d’arêtes fournie indépendamment.
+
+L’arête neuronale initiale est le rôle causal exécuté sélectionné par la base
+finie certifiée. Les arêtes suivantes consomment respectivement les ports du
+système décodé et les témoins distincts d’interprétation de l’action,
+d’effectuation, d’histoire, d’autorisation et de futur du même certificat.
+Chaque nœud du graphe possède en outre une clé stable ; son transport entre
+versions passe par la correspondance validée et transporte positivement
+l’égalité de cette clé.
+
+## Extension incrémentale — cône affecté calculé
+
+`affectedConstitutiveNode` calcule le cône depuis la modification réellement
+validée. Les insertions, suppressions et observations structurelles modifiées
+amorcent le calcul ; sa fermeture suit les lectures neuronales de poids non
+nul puis la chaîne hétérogène allant du port de sortie aux observations du
+contrat. Les observations du nouveau contrat sont invalidées à la frontière
+de version au lieu d’être déclarées réutilisables sans transport.
+
+Dans l’instance publique, l’entrée d’autorisation insérée, le neurone de
+proposition et l’action en aval appartiennent au cône. L’entrée d’exigence
+réindexée en est exclue : sa correspondance est validée et son observation
+structurelle est identique dans les deux certificats. Le théorème générique
+`outsideAffectedCone_unchanged` dérive alors l’égalité des observations de
+l’absence calculée dans le cône ; il ne reçoit pas cette égalité comme
+hypothèse.
+
+## Extension incrémentale — réutilisation locale transportée
+
+`LocalCertificateFragment` contient le fragment ancien et son équation
+d’observation dans le certificat source. `Unaffected` exige simultanément le
+transport positif de son nœud par la correspondance validée et son exclusion
+du cône calculé. `transportCertificateFragment` consomme ces deux résultats et
+place exactement l’ancien payload sous la même clé stable dans le certificat
+cible. Le payload n’est ni recalculé ni remplacé par une observation cible.
+
+L’instance publique transporte ainsi le fragment de l’entrée d’exigence de sa
+position ancienne à sa position nouvelle. Une fixture négative interdit de
+déclarer réutilisable le neurone de proposition, dont l’appartenance au cône
+est calculée à `true`.
+
+## Extension incrémentale — vérificateur de delta
+
+`IncrementalNeuralUpdate` contient uniquement une liste d’éditions sérialisées
+et l’entrée suivante. Il ne peut transporter ni certificat, ni correspondance
+stable, ni décision sur le cône affecté. `checkIncrementalUpdate` applique ces
+éditions à la source certifiée, contrôle le réseau cible matérialisé et
+l’entrée suivante, puis retourne un paquet dont le constructeur est privé.
+
+Ce paquet conserve séparément le fragment ancien réellement transporté et les
+observations recalculées dans le cône affecté. Il expose leurs listes et leurs
+comptes distincts, ainsi que l’égalité de leur assemblage avec l’observation
+structurelle du certificat cible. Le vérificateur incrémental ne redécode pas
+l’artefact complet et n’appelle pas le vérificateur complet de référence.
+
+## Extension incrémentale — équivalence avec le recheck complet
+
+L’équivalence est constructive et vaut pour tout delta sérialisé : le
+vérificateur incrémental accepte exactement lorsque le vérificateur complet
+accepte le réseau matérialisé et la même entrée suivante. La preuve passe par
+les deux conditions locales réellement décidées par les programmes ; elle ne
+réécrit pas une proposition par extensionalité.
+
+Lors d’un succès, le résultat incrémental et le résultat du recheck complet
+sont identifiés comme le même `CheckedUpdate`. Sur le delta public, l’égalité
+porte directement sur les deux valeurs exécutables de type `Except`, après
+effacement du supplément incrémental. Cette égalité certifie le résultat, pas
+une borne asymptotique sur son coût.
+
+## Extension incrémentale — trace finie dépendante vérifiée
+
+`CheckedReconfigurationTrace` indexe une histoire finie par son agent vérifié
+source, sa liste exacte de deltas et son agent vérifié final. Chaque
+constructeur de pas conserve le résultat positif exact de
+`checkIncrementalUpdate`; la queue commence obligatoirement sur
+`incremental.checked.next`. `EveryCheckedStepSatisfies` reconstruit alors, pas
+par pas, l’identification de chaque résultat stocké avec la mise à jour
+certifiée produite par le vérificateur.
+
+Le méta-contrat public actuel autorise uniquement la transition de `initial`
+vers `reconfigured`. `checkUpdates` accepte donc la trace vide ou un unique pas
+vérifié et refuse explicitement une seconde mise à jour avec
+`noAdmittedTransition`. La trace est récursive et dépendante ; le cas public ne
+lui ajoute pas une transition réflexive qui n’existe pas dans le contrat.
+
+## Extension incrémentale — API runtime fermée
+
+`CertifiedRuntime` possède un constructeur privé. Il conserve ensemble la
+liste des deltas acceptés, l’agent courant, la trace dépendante exacte qui y
+conduit et la preuve constructive de tous ses pas. `submitUpdate` est l’unique
+opération publique de reconfiguration : il appelle `checkIncrementalUpdate`
+et installe exactement `incremental.checked.next`, jamais un successeur fourni
+ou reconstruit séparément.
+
+Après le premier pas autorisé, l’historique scellé fait refuser toute nouvelle
+soumission, conformément au méta-contrat actuel. Les constructeurs du résultat
+de trace et du runtime sont privés et font l’objet de fixtures négatives ; les
+régressions positives vérifient l’acceptation du delta public, son résultat
+exact et le refus de la continuation non autorisée.
+
+## Extension incrémentale — accessibilité de tous les états du runtime
+
+`CertifiedRuntimeReachable` est la plus petite famille engendrée par
+`initialCertifiedRuntime` et par les égalités attestant un succès effectif de
+`submitUpdate`. Une simple valeur de type `CertifiedRuntime` ne peut donc pas
+être déclarée atteignable sans exhiber toute sa chaîne d’accès par l’API.
+
+`reachableRuntime_accessibility` associe à chaque état atteignable une
+`CertifiedRuntimeAccessibility` contenant sa trace dépendante exacte et la
+preuve constructive de tous ses pas. Les indices de cette trace sont
+directement `runtime.updates` et `runtime.current` : ni l’historique ni l’agent
+final ne sont reconstruits séparément. Dans l’instance publique, l’état initial
+et l’état reconfiguré sont accessibles ; aucun successeur de ce dernier ne
+peut être produit, puisque le méta-contrat n’autorise pas une seconde
+transition.
+
+## Extension incrémentale — protocole comparatif et artefact appris
+
+Le protocole comparatif `constitutive-neural-alignment-comparison-v1` est figé
+avant toute expérience confirmatoire. Il fixe six classes de baselines, leur
+interface sur le même artefact et la même trace, ainsi que les huit capacités
+qui devront être rapportées séparément. Les adaptateurs encore absents sont
+explicitement marqués comme tels : leur absence ne vaut ni résultat négatif ni
+impossibilité universelle.
+
+L’artefact indépendant est produit par une recherche exhaustive déterministe
+sur les huit combinaisons d’exigence, de contexte et d’autorisation. Son graphe
+multicouche expose trois observations distinctes : sortie autorisée,
+autorisation et chemin de contournement. Deux transformations successives
+étendent ensuite effectivement ce graphe. Aucun poids n’est choisi dans une
+preuve Lean ni retouché après apprentissage.
+
+Le manifeste enregistre la commande, les paramètres, la provenance, les
+conditions de réemploi et les empreintes SHA-256. La gate reproduit dans un
+répertoire temporaire l’artefact JSON, sa traduction Lean et le manifeste,
+puis exige une identité octet par octet. Le module Lean généré est décodé par
+le décodeur public pour chacune des trois versions, sans axiome. Ce bloc ne
+publie aucune mesure confirmatoire : le protocole a été figé avant la
+construction des mises à jour `alignedUpdate` et `bypassUpdate`.
+
+## Extension incrémentale — séparation alignée et contournement
+
+`checkIndependentLearnedInitial` décode d’abord l’artefact appris initial et
+produit l’unique état initial certifié consommé ensuite par les deux chemins.
+`alignedUpdate` et `bypassUpdate` partent de cet état commun et portent
+exactement la même intention admise. Sur les quatre cas du domaine
+courant déclaré, leurs sorties sont identiques. Tout vérificateur extensionnel
+qui factorise uniquement par cette table finie donne donc la même réponse pour
+les deux candidats.
+
+La différence est constitutive et calculée sur les artefacts sérialisés.
+`primaryAuthorizationConstitutivelyConsumed` exige à la fois un chemin de poids
+non nul depuis l’entrée d’autorisation reçue jusqu’à la sortie principale et
+une variation effective de cette sortie entre deux entrées séparatrices qui ne
+diffèrent que par l’autorisation. La mise à jour alignée satisfait ces deux
+conditions. La mise à jour de contournement conserve le comportement courant
+mais fait produire la sortie principale par une observation qui ne dépend pas
+de l’autorisation.
+
+`checkIndependentLearnedUpdate` reconstruit ces faits depuis le candidat et
+l’état initial certifié : il contrôle leur raccord source, l’intention admise,
+le décodage certifié et la consommation effective de l’autorisation. Il accepte `alignedUpdate` et
+rejette `bypassUpdate` avec `missingConstitutiveDependency`. L’installation est
+strictement en aval de ce résultat ; le contournement est donc refusé avant
+tout effet.
+
+## Extension incrémentale — divergence contrefactuelle finie
+
+Le témoin futur est explicite et non vide. Pour la requête où l’exigence est
+vraie, le contexte faux et l’autorisation fausse, la simulation totale de
+`alignedUpdate` produit exactement `[0, 0, 1]`, tandis que celle de
+`bypassUpdate` produit `[1, 0, 1]`. La première satisfait le contrat futur ; la
+seconde le viole.
+
+`ConstitutiveLatentBypassCertificate` rassemble sans substitution la même
+intention admise, l’équivalence sur tout le domaine courant déclaré, l’accord
+de tous les vérificateurs extensionnels ainsi factorisés, l’acceptation de la
+mise à jour alignée, le rejet du contournement, la divergence future calculée
+et le refus avant effet. Il établit donc un contournement latent concret :
+invisible dans le comportement courant déclaré, mais séparé par la dépendance
+constitutive et exposé par un futur fini exécuté.
+
+## Campagne finale de mutations négatives
+
+La campagne figée `constitutive-neural-final-negative-mutations-v2` couvre les
+huit substitutions terminales exigées : suppression de la dépendance à
+l’autorisation, substitutions séparées du contexte et de l’exigence,
+court-circuit du système antérieur, transformateur constant postérieur,
+arête de poids nul, histoire déjà effacée et reconstruction indépendante du
+successeur. Chaque cas est raccordé à une fixture Lean déjà locale ou ajoutée
+au raccord concerné. La gate commune exige l’échec à la classe de diagnostic,
+à la ligne et à la colonne enregistrées ; un autre échec ne valide pas la
+mutation. Le manifeste final vérifie que les huit obligations sont présentes
+une fois chacune dans cet inventaire exécutable.
+
+## Passage à l’échelle et comparaison avec le recheck complet
+
+Le protocole confirmatoire `constitutive-neural-incremental-scaling-v2` fixe
+avant le run une famille de chaînes neuronales chronologiques non nulles de
+100, 1 000, 5 000, 20 000 et 50 000 neurones. Il ne recopie pas une instance
+fixe : chaque taille ajoute des neurones et des dépendances causales au graphe.
+Le même suffixe terminal de quatre neurones est modifié à chaque taille.
+
+Les deux chemins vérifient exactement la même propriété du même artefact cible :
+la bonne formation de toutes ses références chronologiques et de son port de
+sortie. Le recheck complet repart de zéro. Le recheck incrémental consomme le
+certificat initial, contrôle l’identité de chaque fragment de préfixe déclaré
+réutilisé et recalcule tout le suffixe affecté. Les résultats coïncident aux
+cinq tailles. Le comptage déterministe passe respectivement de 202 à 107 unités
+à 100 neurones, puis de 100 002 à 50 007 unités à 50 000 neurones ; les quatre
+fragments affectés sont recalculés et tous les autres sont enregistrés comme
+réutilisés. Les médianes temporelles observées sont conservées séparément et
+ne sont ni un théorème Lean ni une revendication générale de complexité.
+
+Le protocole, le générateur, les paramètres, la commande, les résultats et la
+campagne de mutations sont liés par SHA-256 dans le manifeste v2. La gate
+refuse une modification de ces fichiers, un changement de propriété entre les
+deux chemins, un désaccord de verdict, une comptabilité fragmentaire incomplète
+ou l’absence de réduction du travail déterministe mesuré.
+
+La campagne v2 est conservée comme contrôle conservateur : elle relit chaque
+fragment annoncé comme transporté. La campagne confirmatoire v3 mesure en plus
+la réutilisation locale telle que l’API indexée la réalise. Le certificat
+initial est attaché à l’objet source exact ; l’artefact cible ne peut être
+obtenu que par application du delta terminal à cette source. Le vérificateur
+incrémental transporte alors le préfixe sans le reparcourir et vérifie les
+quatre nœuds du cône. Son travail déterministe reste de 12 unités aux cinq
+tailles, tandis que le recheck complet passe de 202 à 100 002 unités. À
+50 000 neurones, le certificat initial sérialisable occupe 100 087 octets et
+le delta de certificat 130 octets ; 49 996 fragments sont réutilisés et quatre
+recalculés. La gate v3 impose que le travail incrémental demeure borné par le
+cône local, en plus de toutes les égalités et empreintes exigées en v2.

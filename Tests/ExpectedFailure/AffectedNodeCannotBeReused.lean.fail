@@ -1,0 +1,11 @@
+import RelationalPerimeter.Agents.Neural.LocalCertificateReuse
+
+open ConstitutiveSearch.NeuralAgent
+
+/-- The proposal neuron is reached by the computed cone and therefore cannot
+be supplied as an unaffected fragment. -/
+example :
+    affectedConstitutiveNode publicInitialStateConstitutiveCertificate
+      publicReferenceUpdatedStateCertificate publicStableNodeCorrespondence
+      (.artifactNode (.neuron 0)) = false := by
+  rfl

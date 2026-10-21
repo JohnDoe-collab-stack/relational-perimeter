@@ -1,0 +1,12 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+def impossibleStateCertificate : StateConstitutiveCertificate
+    PublicInitialOperationalContract publicDecodedRequirementArtifact
+    publicRightHistoricalCurrentState :=
+  publicInitialStateConstitutiveCertificate
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.StateConstitutiveCertificate
+/- AXIOM_AUDIT_END -/

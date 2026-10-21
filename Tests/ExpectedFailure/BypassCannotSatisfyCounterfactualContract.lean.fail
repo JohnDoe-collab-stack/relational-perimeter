@@ -1,0 +1,10 @@
+import RelationalPerimeter.Agents.Neural.FiniteCounterfactualDivergence
+
+open ConstitutiveSearch.NeuralAgent
+
+/-- Current extensional equivalence cannot be reused as preservation of the
+explicit nonempty future contract. -/
+example : independentLearnedFiniteFutureSatisfies
+    checkedIndependentLearnedInitial bypassUpdate
+    independentLearnedCounterfactualRequests = true := by
+  rfl

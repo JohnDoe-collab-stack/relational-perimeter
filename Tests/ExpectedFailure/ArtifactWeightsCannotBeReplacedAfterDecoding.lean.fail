@@ -1,0 +1,28 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.ArtifactWeightsCannotBeReplacedAfterDecoding
+open ConstitutiveSearch.NeuralAgent ConstitutiveSearch.NativeMechanism
+
+def replacedNeuron : NeuronSpec 1 0 :=
+  { inputs := [{ source := .receivedInput ⟨0, by decide⟩, weight := 2 }]
+    bias := 0
+    threshold := ⟨3⟩ }
+
+def replacedProgram : NetworkProgram 1 1 :=
+  .extend .empty replacedNeuron
+
+def replacedProgramSystem : NativeSystem PublicRequirementInput Bool :=
+  { publicDecodedRequirementArtifact.system with
+    program := replacedProgram }
+
+/-- The exact decoder result cannot certify a system whose serialized weight
+was replaced after decoding. -/
+def forbiddenWeightReplacement : ArtifactDecodingExact
+    PublicInitialOperationalContract publicSerializedRequirementNetwork
+      replacedProgramSystem :=
+  publicDecodedRequirementArtifact.decodingExact
+
+end Tests.ExpectedFailure.ArtifactWeightsCannotBeReplacedAfterDecoding
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ArtifactDecodingExact
+/- AXIOM_AUDIT_END -/
