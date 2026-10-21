@@ -1,4 +1,10 @@
 # fixture	category	line	column	expected Lean JSON error diagnostic
+Tests/ExpectedFailure/ForeignCertificateCannotReplaceCanonicalCertifier.lean.fail	dependent-type	29	64	Application type mismatch
+Tests/ExpectedFailure/InitialStateCannotReplaceProducedFinalState.lean.fail	semantic-type	15	2	Tactic `rfl` failed
+Tests/ExpectedFailure/FixedSystemCannotCertifyReconfiguredTail.lean.fail	dependent-type	14	2	Type mismatch
+Tests/ExpectedFailure/OriginalContractCannotReplaceReconfiguredContract.lean.fail	dependent-type	13	2	Type mismatch
+Tests/ExpectedFailure/PropositionCannotReplaceAlignmentCertificate.lean.fail	dependent-type	10	2	Type mismatch
+Tests/ExpectedFailure/InitialMemoryCannotReplaceProducedSuccessor.lean.fail	semantic-type	11	2	Tactic `rfl` failed
 Tests/ExpectedFailure/ResourcePortsCannotBePermuted.lean.fail	dependent-type	12	13	applyStage fresh
 Tests/ExpectedFailure/PrivateConstitutiveNormalizerCertificate.lean.fail	privacy	6	7	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveNormalizerSuccinctness.mk`
 Tests/ExpectedFailure/PrivateConstitutiveExtensiveSeparationCertificate.lean.fail	privacy	8	7	Unknown constant `ConstitutiveSearch.EndogenousDecomposition.ConstitutiveExtensiveSeparationCertificate.mk`

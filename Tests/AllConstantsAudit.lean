@@ -57,6 +57,13 @@ import Tests.Machine.ValidAssignmentForgetting
 import Tests.Machine.ReducedLiveRunnerChecks
 import Tests.Machine.Run
 import Tests.Machine.RunMachine
+import Tests.Mechanisms.NativeActionRealizationRegression
+import Tests.Mechanisms.NativeExecutionRegression
+import Tests.Mechanisms.NativeRequirementAlignmentRegression
+import Tests.Mechanisms.NeuralConstitutiveAlignmentRegression
+import Tests.Mechanisms.NeuralExactForgettingRegression
+import Tests.Mechanisms.NeuralInteractionHistoryRegression
+import Tests.Mechanisms.NeuralReconfigurationRegression
 
 /-! Build-time tooling, not a mathematical hypothesis or a new production
 dependency. Scan every constant in every imported repository module, including

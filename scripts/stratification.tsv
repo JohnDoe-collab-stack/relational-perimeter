@@ -3,6 +3,25 @@ RelationalPerimeter.Constitution.OccurrencePersistence	U	enforced	Exact old/fres
 RelationalPerimeter.Constitution.PerimeterPersistence	F	enforced	Perimeter facade reusing the existing generated histories and exact occurrence splits
 RelationalPerimeter.Constitution.Resources.TypedReferences	U	enforced	Typed references distinguishing constituted resource occurrences
 RelationalPerimeter.Constitution.Resources.ConstructedSupport	U	enforced	Dependent producers reading earlier typed occurrences
+RelationalPerimeter.Mechanisms.Native.Arithmetic	M0	enforced	Exact activation vectors weighted evaluation and integer thresholds
+RelationalPerimeter.Mechanisms.Native.Program	M1	enforced	Chronological native network programs with prior-only typed sources
+RelationalPerimeter.Mechanisms.Native.Execution	M2	enforced	Single structural recursion co-producing native activations and trace
+RelationalPerimeter.Mechanisms.Native.Occurrence	M3	enforced	Run-indexed input neuron parameter-use and proposal occurrences
+RelationalPerimeter.Mechanisms.Native.Relations	M4	enforced	Executed read formation order use and propagation relations
+RelationalPerimeter.Mechanisms.Native.Circuit	M5	enforced	Run-indexed circuit boundaries members and mechanism-scale composition
+RelationalPerimeter.Mechanisms.Native.Intervention	M6	enforced	Same-program local interventions separating activation from causal utility
+RelationalPerimeter.Mechanisms.Native.Explanation	M7	enforced	Causal-role explanations reconstructed on the exact executed circuit
+RelationalPerimeter.Agents.Neural.RequirementEncoding	M8	enforced	Received requirements encoded at a causally active executed input occurrence
+RelationalPerimeter.Agents.Neural.ProposalAlignment	M9	enforced	Local executed signal paths eliminated into required proposals
+RelationalPerimeter.Agents.Neural.RequirementSensitivity	M10	enforced	Same-context separation of distinct received requirements and executed proposals
+RelationalPerimeter.Agents.Neural.ActionRealization	M10	enforced	Aligned proposal interpreted as a command and executed by the proof-carrying agent
+RelationalPerimeter.Agents.Neural.PublicRequirementAlignment	M11	enforced	Closed two-requirement native instance with causal incorporation alignment and sensitivity
+RelationalPerimeter.Agents.Neural.InteractionHistory	M11	enforced	Prefix-local recursion threading only produced successors through covered interactions
+RelationalPerimeter.Agents.Neural.Reconfiguration	M12	enforced	Requirement-authorized mechanism production from the exact prior run with exact occurrence transport
+RelationalPerimeter.Agents.Neural.ReconfiguredContinuation	M13	enforced	Dependent recursion consuming each produced system state in the next reconfiguration
+RelationalPerimeter.Agents.Neural.ExactForgetting	M14	enforced	Exact forgetting under the explicitly fixed covered neural-agent future contract
+RelationalPerimeter.Agents.Neural.ReconfiguredExactForgetting	M14	enforced	Exact forgetting whose future consumes the reconfigured system state
+RelationalPerimeter.Agents.Neural.PublicActionRealization	M15	enforced	Closed public action effect reconfiguration and dependent continuation witnesses
 RelationalPerimeter.Constitution.Grouping.Traces	U	enforced	Directed action traces and distinct symmetric codetermination chains
 RelationalPerimeter.Constitution.Grouping.Rules	U	enforced	Positive local choices decrease and constructed local junctions
 RelationalPerimeter.Constitution.Grouping.Normalization	U	enforced	Executable normalization terminal uniqueness and exact chain fibres
@@ -310,3 +329,5 @@ RelationalPerimeter.Instances.HeytingArithmetic.SubstitutionMachine	F	enforced	E
 RelationalPerimeter.Instances.HeytingArithmetic.Syntax	F	enforced	First-order arithmetic syntax, constructive equality, and natural-number coding
 RelationalPerimeter.Instances.HeytingArithmetic.TheoryHistoryCoding	F	enforced	Finite arithmetic-theory histories and their injective codes
 RelationalPerimeter.Instances.HeytingArithmetic.TheoryHistorySoundness	F	enforced	Positive standard-model soundness certificates for finite theory histories
+RelationalPerimeter.Agents.Neural.PublicExactForgetting	M16	enforced	Closed public witnesses of fixed and reconfigured exact historical-input forgetting
+RelationalPerimeter.Agents.Neural.ConstitutiveAlignment	M17	enforced	Dependent certificate consuming the constructed native action continuation and forgetting chain

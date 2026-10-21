@@ -1,0 +1,20 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.InitialStateCannotReplaceProducedFinalState
+open ConstitutiveSearch.NeuralAgent
+
+def chain :
+    ConstitutiveAlignmentCertificate ⟨.deny, ()⟩ ⟨.allow, ()⟩ [] :=
+  constitutive_alignment ⟨.deny, ()⟩ ⟨.allow, ()⟩ []
+
+-- Exact forgetting starts from the state produced by the reconfigured
+-- continuation, not from the state that preceded that continuation.
+example :
+    chain.forgettingInitialState chain.forgottenLeft.origin =
+      chain.initialState := by
+  rfl
+
+end Tests.ExpectedFailure.InitialStateCannotReplaceProducedFinalState
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.constitutive_alignment
+/- AXIOM_AUDIT_END -/

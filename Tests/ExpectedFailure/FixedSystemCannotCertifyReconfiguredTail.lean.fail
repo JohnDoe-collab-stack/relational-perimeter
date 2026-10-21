@@ -1,0 +1,19 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.FixedSystemCannotCertifyReconfiguredTail
+open ConstitutiveSearch.NeuralAgent
+
+-- A certificate built for the original public system cannot certify an
+-- arbitrary state whose system was produced by the preceding step.
+def fixedCertificate
+    (source : ReconfiguredExecutionState publicRequirementFamily)
+    (next : PublicRequirementInput) :
+    CertifiedReconfiguration (builder := publicReconfigurationBuilder)
+      (sourceSystem := source.system) (sourceInput := source.input)
+      (nextInput := next) :=
+  publicCertifiedReconfiguration source.input next
+
+end Tests.ExpectedFailure.FixedSystemCannotCertifyReconfiguredTail
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.publicCertifiedReconfiguration
+/- AXIOM_AUDIT_END -/

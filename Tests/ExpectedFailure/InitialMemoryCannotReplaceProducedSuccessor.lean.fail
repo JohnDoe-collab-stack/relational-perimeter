@@ -1,0 +1,16 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.InitialMemoryCannotReplaceProducedSuccessor
+open ConstitutiveSearch.NeuralAgent
+
+-- The reconfigured continuation starts from the action's produced successor,
+-- not from the memory that existed before the action.
+example :
+    (publicInitialReconfiguredState ⟨.allow, ()⟩).memory =
+      publicActionMemory := by
+  rfl
+
+end Tests.ExpectedFailure.InitialMemoryCannotReplaceProducedSuccessor
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.publicInitialReconfiguredState
+/- AXIOM_AUDIT_END -/
