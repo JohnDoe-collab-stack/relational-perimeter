@@ -66,6 +66,29 @@ theorem executed_forgetting_inputs_are_distinct
       publicRightHistoricalForgettingInput source future :=
   public_historical_forgetting_inputs_distinct source future
 
+theorem operational_sources_are_distinct_before_forgetting :
+    publicLeftHistoricalOperationalState ≠
+      publicRightHistoricalOperationalState :=
+  public_historical_operational_states_distinct
+
+theorem operational_sources_retain_distinct_origins_before_forgetting :
+    publicLeftHistoricalOperationalState.origin ≠
+      publicRightHistoricalOperationalState.origin :=
+  public_historical_origins_distinct
+
+theorem left_forgetting_retains_the_executed_trace
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    (publicLeftExecutedForgetting source future).trace =
+      executePublicHistoricalForgettingTrace
+        publicLeftHistoricalOperationalState source future :=
+  public_left_forgetting_trace_exact source future
+
+theorem left_forgetting_output_is_read_from_its_trace
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    (publicLeftExecutedForgetting source future).output =
+      (publicLeftExecutedForgetting source future).trace.finalState.memory :=
+  public_left_forgetting_output_is_trace_memory source future
+
 theorem left_forgetting_output_is_executed_continuation
     (source : PublicRequirementInput) (future : List PublicRequirementInput) :
     (publicLeftExecutedForgetting source future).output =
@@ -176,10 +199,10 @@ theorem executed_forgetting_cannot_recover_both_origins
     (recover : ConstitutiveSearch.Agent.Memory -> PublicHistoricalOrigin)
     (leftExact :
       recover (publicLeftExecutedForgetting source future).output =
-        (publicLeftHistoricalForgettingInput source future).origin)
+        (publicLeftHistoricalForgettingInput source future).origin.origin)
     (rightExact :
       recover (publicRightExecutedForgetting source future).output =
-        (publicRightHistoricalForgettingInput source future).origin) : False :=
+        (publicRightHistoricalForgettingInput source future).origin.origin) : False :=
   public_executed_forgetting_origin_not_recoverable source future recover
     leftExact rightExact
 
@@ -192,6 +215,10 @@ end Tests.Mechanisms.NeuralExactForgettingRegression
 #print axioms Tests.Mechanisms.NeuralExactForgettingRegression.every_covered_future_is_preserved
 #print axioms Tests.Mechanisms.NeuralExactForgettingRegression.no_signature_decoder_recovers_both_histories
 #print axioms Tests.Mechanisms.NeuralExactForgettingRegression.executed_forgetting_inputs_are_distinct
+#print axioms Tests.Mechanisms.NeuralExactForgettingRegression.operational_sources_are_distinct_before_forgetting
+#print axioms Tests.Mechanisms.NeuralExactForgettingRegression.operational_sources_retain_distinct_origins_before_forgetting
+#print axioms Tests.Mechanisms.NeuralExactForgettingRegression.left_forgetting_retains_the_executed_trace
+#print axioms Tests.Mechanisms.NeuralExactForgettingRegression.left_forgetting_output_is_read_from_its_trace
 #print axioms Tests.Mechanisms.NeuralExactForgettingRegression.left_forgetting_output_is_executed_continuation
 #print axioms Tests.Mechanisms.NeuralExactForgettingRegression.right_forgetting_output_is_executed_continuation
 #print axioms Tests.Mechanisms.NeuralExactForgettingRegression.forgetting_output_equality_is_execution_derived

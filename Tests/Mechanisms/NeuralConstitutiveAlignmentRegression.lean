@@ -52,6 +52,21 @@ theorem scientific_future_is_preserved :
       completePublicChain.forgottenRightExecution.output :=
   completePublicScientificDecomposition.preservedFuture
 
+theorem scientific_left_forgetting_trace_is_executed :
+    completePublicChain.forgottenLeftExecution.trace =
+      (publicHistoricalForgettingProgram scopeZeroDirectInput
+        [scopeOneDirectInput, scopeZeroDirectInput, scopeOneDirectInput]).execute
+          completePublicChain.forgottenLeftInput.origin :=
+  completePublicScientificDecomposition.producedLeftForgettingTrace
+
+theorem scientific_left_forgetting_output_consumes_trace :
+    completePublicChain.forgottenLeftExecution.output =
+      (publicHistoricalForgettingProgram scopeZeroDirectInput
+        [scopeOneDirectInput, scopeZeroDirectInput, scopeOneDirectInput]).reduce
+          completePublicChain.forgottenLeftInput.origin
+          completePublicChain.forgottenLeftExecution.trace :=
+  completePublicScientificDecomposition.producedLeftForgettingReduction
+
 theorem scientific_historical_distinction_is_forgotten :
     completePublicChain.forgottenLeftInput.origin ≠
         completePublicChain.forgottenRightInput.origin ∧
@@ -64,12 +79,14 @@ theorem scientific_forgotten_origin_is_irrecoverable
     (recover : ConstitutiveSearch.Agent.Memory -> PublicHistoricalOrigin)
     (leftExact :
       recover completePublicChain.forgottenLeftExecution.output =
-        completePublicChain.forgottenLeftInput.origin)
+        completePublicChain.forgottenLeftInput.origin.origin)
     (rightExact :
       recover completePublicChain.forgottenRightExecution.output =
-        completePublicChain.forgottenRightInput.origin) : False :=
-  completePublicScientificDecomposition.originIrrecoverable recover
-    leftExact rightExact
+        completePublicChain.forgottenRightInput.origin.origin) : False :=
+  public_executed_forgetting_origin_not_recoverable
+    scopeZeroDirectInput
+    [scopeOneDirectInput, scopeZeroDirectInput, scopeOneDirectInput]
+    recover leftExact rightExact
 
 /-! C16: explicit non-regression of the dependent witness chain. -/
 
@@ -207,11 +224,14 @@ theorem alignment_forgetting_cannot_recover_both_origins
     (recover : ConstitutiveSearch.Agent.Memory -> PublicHistoricalOrigin)
     (leftExact :
       recover completePublicChain.forgottenLeftExecution.output =
-        completePublicChain.forgottenLeftInput.origin)
+        completePublicChain.forgottenLeftInput.origin.origin)
     (rightExact :
       recover completePublicChain.forgottenRightExecution.output =
-        completePublicChain.forgottenRightInput.origin) : False :=
-  completePublicChain.forgottenOriginNotRecoverable recover leftExact rightExact
+        completePublicChain.forgottenRightInput.origin.origin) : False :=
+  public_executed_forgetting_origin_not_recoverable
+    scopeZeroDirectInput
+    [scopeOneDirectInput, scopeZeroDirectInput, scopeOneDirectInput]
+    recover leftExact rightExact
 
 theorem substantive_instance_has_multiple_requirements :
     publicSubstantiveSource.requirement ≠
@@ -301,10 +321,10 @@ theorem substantive_instance_memory_is_strictly_reduced
     (recover : ConstitutiveSearch.Agent.Memory -> PublicHistoricalOrigin)
     (leftExact :
       recover publicSubstantiveAlignment.forgottenLeftExecution.output =
-        publicSubstantiveAlignment.forgottenLeftInput.origin)
+        publicSubstantiveAlignment.forgottenLeftInput.origin.origin)
     (rightExact :
       recover publicSubstantiveAlignment.forgottenRightExecution.output =
-        publicSubstantiveAlignment.forgottenRightInput.origin) : False :=
+        publicSubstantiveAlignment.forgottenRightInput.origin.origin) : False :=
   publicSubstantiveInstance.memoryStrictlyReduced recover leftExact rightExact
 
 theorem substantive_instance_executes_admission :
@@ -329,6 +349,8 @@ end Tests.Mechanisms.NeuralConstitutiveAlignmentRegression
 #print axioms Tests.Mechanisms.NeuralConstitutiveAlignmentRegression.scientific_initial_proposal_is_derived
 #print axioms Tests.Mechanisms.NeuralConstitutiveAlignmentRegression.scientific_head_authorization_is_only_the_incorporated_permission
 #print axioms Tests.Mechanisms.NeuralConstitutiveAlignmentRegression.scientific_future_is_preserved
+#print axioms Tests.Mechanisms.NeuralConstitutiveAlignmentRegression.scientific_left_forgetting_trace_is_executed
+#print axioms Tests.Mechanisms.NeuralConstitutiveAlignmentRegression.scientific_left_forgetting_output_consumes_trace
 #print axioms Tests.Mechanisms.NeuralConstitutiveAlignmentRegression.scientific_historical_distinction_is_forgotten
 #print axioms Tests.Mechanisms.NeuralConstitutiveAlignmentRegression.scientific_forgotten_origin_is_irrecoverable
 #print axioms Tests.Mechanisms.NeuralConstitutiveAlignmentRegression.c16_same_witness_is_produced_and_consumed

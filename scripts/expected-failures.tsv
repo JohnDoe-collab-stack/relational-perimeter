@@ -78,7 +78,9 @@ Tests/ExpectedFailure/ZeroWeightEdgeCannotWitnessCausalParticipation.lean.fail	d
 Tests/ExpectedFailure/GraphReachabilityCannotReplaceLaterCausalRole.lean.fail	dependent-type	29	2	Type mismatch	Graph Reachability Cannot Replace Later Causal Role.
 Tests/ExpectedFailure/MissingAuthorizationCannotBuildReconfiguration.lean.fail	dependent-type	14	2	Type mismatch	Missing Authorization Cannot Build Reconfiguration.
 Tests/ExpectedFailure/ForeignAuthorizationCannotBuildReconfiguration.lean.fail	dependent-type	17	4	Application type mismatch	Foreign Authorization Cannot Build Reconfiguration.
-Tests/ExpectedFailure/ConstantForgettingCannotReplaceExecutedProgram.lean.fail	dependent-type	21	2	Type mismatch	Constant Forgetting Cannot Replace Executed Program.
+Tests/ExpectedFailure/ConstantForgettingCannotReplaceExecutedProgram.lean.fail	dependent-type	23	2	Type mismatch	Constant Forgetting Cannot Replace Executed Program.
 Tests/ExpectedFailure/CompleteStateCannotReplaceReducedMemory.lean.fail	dependent-type	8	2	Type mismatch	Complete State Cannot Replace Reduced Memory.
 Tests/ExpectedFailure/TrivialAuthorizationCannotReplaceTerminalContract.lean.fail	dependent-type	19	2	Type mismatch	Trivial Authorization Cannot Replace Terminal Contract.
 Tests/ExpectedFailure/CollapsingCommandCannotPreserveRequiredDistinction.lean.fail	dependent-type	6	2	Type mismatch	Collapsing Command Cannot Preserve Required Distinction.
+Tests/ExpectedFailure/PostHocTransformCannotReplaceExecutedEdge.lean.fail	dependent-type	27	10	Type mismatch	Post Hoc Transform Cannot Replace Executed Edge.
+Tests/ExpectedFailure/ReducedMemoryCannotReplaceHistoricalOperationalState.lean.fail	dependent-type	15	12	Type mismatch	Reduced Memory Cannot Replace Historical Operational State.

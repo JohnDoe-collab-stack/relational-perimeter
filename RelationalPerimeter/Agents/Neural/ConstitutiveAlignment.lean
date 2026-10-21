@@ -286,6 +286,20 @@ structure ConstitutiveScientificDecomposition
       certificate.continuation.events) =
       Agent.executeRequests certificate.initialState.memory
         certificate.continuation.requests
+  producedLeftForgettingTrace :
+    certificate.forgetting.leftExecution.trace =
+      forgettingProgram.execute certificate.forgetting.leftInput.origin
+  producedRightForgettingTrace :
+    certificate.forgetting.rightExecution.trace =
+      forgettingProgram.execute certificate.forgetting.rightInput.origin
+  producedLeftForgettingReduction :
+    certificate.forgetting.leftExecution.output =
+      forgettingProgram.reduce certificate.forgetting.leftInput.origin
+        certificate.forgetting.leftExecution.trace
+  producedRightForgettingReduction :
+    certificate.forgetting.rightExecution.output =
+      forgettingProgram.reduce certificate.forgetting.rightInput.origin
+        certificate.forgetting.rightExecution.trace
   producedLeftForgettingExecution :
     certificate.forgetting.leftExecution.output =
       forgettingProgram.run certificate.forgetting.leftInput.origin
@@ -376,6 +390,14 @@ def decomposeConstitutiveAlignment
     producedActionExecution := certificate.action.execution_exact
     producedEffectExecution := certificate.effect.effect_exact
     producedContinuationExecution := certificate.continuationExecutionExact
+    producedLeftForgettingTrace :=
+      certificate.forgetting.leftExecution.traceExact
+    producedRightForgettingTrace :=
+      certificate.forgetting.rightExecution.traceExact
+    producedLeftForgettingReduction :=
+      certificate.forgetting.leftExecution.outputExact
+    producedRightForgettingReduction :=
+      certificate.forgetting.rightExecution.outputExact
     producedLeftForgettingExecution :=
       certificate.forgetting.leftExecution.executionExact
     producedRightForgettingExecution :=
@@ -409,7 +431,7 @@ def publicAlignmentForgettingPolicy
       publicAlignmentFutureContract :=
   { leftInput := publicLeftHistoricalForgettingInput source future
     rightInput := publicRightHistoricalForgettingInput source future
-    originsDistinct := public_historical_origins_distinct
+    originsDistinct := public_historical_operational_states_distinct
     leftExecution := publicLeftExecutedForgetting source future
     rightExecution := publicRightExecutedForgetting source future
     leftOutputExact := public_left_executed_forgetting_exact source future
@@ -421,7 +443,7 @@ abbrev PublicConstitutiveAlignmentCertificate
   ConstitutiveAlignmentCertificate publicRequirementFamily
     publicRequirementSystem publicRequirementEncoding publicRequirementDecoder
     publicAgentActionChannel publicReconfigurationBuilder
-    publicReconfigurationCertificateForState PublicHistoricalOrigin
+    publicReconfigurationCertificateForState PublicHistoricalOperationalState
     Agent.Memory
     source next future publicActionMemory
     (publicHistoricalForgettingProgram source (next :: future))
@@ -482,7 +504,7 @@ theorem forgottenFutureEquivalent
 
 theorem forgottenOriginNotRecoverable
     (certificate : PublicConstitutiveAlignmentCertificate source next future) :
-    forall recover : Agent.Memory -> PublicHistoricalOrigin,
+    forall recover : Agent.Memory -> PublicHistoricalOperationalState,
       recover certificate.forgottenLeftExecution.output =
           certificate.forgottenLeftInput.origin ->
       recover certificate.forgottenRightExecution.output =
@@ -605,9 +627,9 @@ structure PublicSubstantiveInstanceCertificate : Type 4 where
   memoryStrictlyReduced :
     forall recover : Agent.Memory -> PublicHistoricalOrigin,
       recover publicSubstantiveAlignment.forgottenLeftExecution.output =
-          publicSubstantiveAlignment.forgottenLeftInput.origin ->
+          publicSubstantiveAlignment.forgottenLeftInput.origin.origin ->
       recover publicSubstantiveAlignment.forgottenRightExecution.output =
-          publicSubstantiveAlignment.forgottenRightInput.origin -> False
+          publicSubstantiveAlignment.forgottenRightInput.origin.origin -> False
   futureAdmissionExecuted :
     publicAlignmentFutureContract.enabled
       publicSubstantiveAlignment.continuation.finalState.memory
@@ -647,7 +669,9 @@ def publicSubstantiveInstance : PublicSubstantiveInstanceCertificate where
   forgettingExecuted :=
     publicSubstantiveAlignment.forgottenLeftExecutionExact
   memoryStrictlyReduced :=
-    publicSubstantiveAlignment.forgottenOriginNotRecoverable
+    public_executed_forgetting_origin_not_recoverable
+      publicSubstantiveSource
+      [publicSubstantiveNext, publicSubstantiveContextualNext]
   futureAdmissionExecuted :=
     public_terminal_admitted_request_enabled publicSubstantiveSource
       [publicSubstantiveNext, publicSubstantiveContextualNext]

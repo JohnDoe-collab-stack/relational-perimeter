@@ -1,0 +1,20 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.ReducedMemoryCannotReplaceHistoricalOperationalState
+open ConstitutiveSearch.NeuralAgent
+
+def source : PublicRequirementInput := ⟨.scopeZero, .direct⟩
+def future : List PublicRequirementInput := []
+
+-- C8 requires the executed forgetting transition to receive the rich state
+-- that still contains its origin.  An already reduced memory cannot enter in
+-- its place.
+def forbiddenAlreadyReducedInput :
+    HistoricalForgettingInput
+      (publicHistoricalForgettingProgram source future) where
+  origin := publicActionMemory
+
+end Tests.ExpectedFailure.ReducedMemoryCannotReplaceHistoricalOperationalState
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.publicHistoricalForgettingProgram
+/- AXIOM_AUDIT_END -/

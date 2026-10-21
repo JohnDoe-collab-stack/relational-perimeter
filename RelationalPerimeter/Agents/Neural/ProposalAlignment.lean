@@ -28,17 +28,78 @@ structure SingleOutputRequirementDecoder
     system.decode [terminalRepresentation requirement context] =
       family.requiredProposal requirement context
 
-/-- One local transformation as it was executed between two exact
-occurrences of one native run.  The function is data; `outputExact` certifies
-that this function produced the target value from the source value. -/
+/-- One local transformation as it was executed between two exact occurrences
+of one native run.  Its only field is the effective edge that the executed
+neuron consumed.  The transformation function and its exactness equation are
+derived below from that neuron, its exact prefix, and the selected source;
+callers cannot install a function after observing the target value. -/
 structure ExecutedSignalTransformation
     {inputCount producedCount : Nat}
     {program : NetworkProgram inputCount producedCount}
     (run : NativeRun program)
     (source target : ActivationOccurrence run) where
-  transform : Activation -> Activation
-  edge : ReadsFrom run source target
-  outputExact : target.value = transform source.value
+  edge : EffectiveReadsFrom run source target
+
+def executedEdgeSignalTransform
+    {program : NetworkProgram inputCount produced}
+    {run : NativeRun program}
+    {source target : ActivationOccurrence run}
+    (edge : EffectiveReadsFrom run source target) :
+    Activation -> Activation :=
+  match edge with
+  | .executedEdge destination edge _ _ =>
+      match edge.source with
+      | .receivedInput index => fun replacement =>
+          fireNeuron (program.neuronAt destination)
+            (run.inputs.replace index replacement)
+            (run.trace.activationsBefore destination)
+      | .priorNeuron index => fun replacement =>
+          fireNeuron (program.neuronAt destination) run.inputs
+            ((run.trace.activationsBefore destination).replace index replacement)
+
+theorem executedEdgeSignalOutputExact
+    {program : NetworkProgram inputCount produced}
+    {run : NativeRun program}
+    {source target : ActivationOccurrence run}
+    (edge : EffectiveReadsFrom run source target) :
+    target.value = executedEdgeSignalTransform edge source.value := by
+  cases edge with
+  | executedEdge destination edge member weightNonzero =>
+      cases edge with
+      | mk edgeSource weight =>
+          cases edgeSource with
+          | receivedInput index =>
+              change run.activations.read destination =
+                fireNeuron (program.neuronAt destination)
+                  (run.inputs.replace index (run.inputs.read index))
+                  (run.trace.activationsBefore destination)
+              rw [SizedActivations.replace_self]
+              exact run.trace.neuron_output_exact destination
+          | priorNeuron index =>
+              change run.activations.read destination =
+                fireNeuron (program.neuronAt destination) run.inputs
+                  ((run.trace.activationsBefore destination).replace index
+                    (run.activations.read
+                      ⟨index.val, Nat.lt_trans index.isLt destination.isLt⟩))
+              rw [← run.trace.activationsBefore_read_exact destination index]
+              rw [SizedActivations.replace_self]
+              exact run.trace.neuron_output_exact destination
+
+def ExecutedSignalTransformation.transform
+    {program : NetworkProgram inputCount produced}
+    {run : NativeRun program}
+    {source target : ActivationOccurrence run}
+    (transition : ExecutedSignalTransformation run source target) :
+    Activation -> Activation :=
+  executedEdgeSignalTransform transition.edge
+
+theorem ExecutedSignalTransformation.outputExact
+    {program : NetworkProgram inputCount produced}
+    {run : NativeRun program}
+    {source target : ActivationOccurrence run}
+    (transition : ExecutedSignalTransformation run source target) :
+    target.value = transition.transform source.value :=
+  executedEdgeSignalOutputExact transition.edge
 
 inductive RequirementSignalPath
     {RequirementCase : Type u} {Context : Type v} {Proposal : Type w}
@@ -128,6 +189,10 @@ end ConstitutiveSearch.NeuralAgent
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.SingleOutputRequirementDecoder
 #print axioms ConstitutiveSearch.NeuralAgent.ExecutedSignalTransformation
+#print axioms ConstitutiveSearch.NeuralAgent.executedEdgeSignalTransform
+#print axioms ConstitutiveSearch.NeuralAgent.executedEdgeSignalOutputExact
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedSignalTransformation.transform
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedSignalTransformation.outputExact
 #print axioms ConstitutiveSearch.NeuralAgent.RequirementSignalPath
 #print axioms ConstitutiveSearch.NeuralAgent.RequirementSignalPath.signalExact
 #print axioms ConstitutiveSearch.NeuralAgent.RequirementSignalTransformation

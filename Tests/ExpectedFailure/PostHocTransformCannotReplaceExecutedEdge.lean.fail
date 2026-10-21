@@ -1,0 +1,32 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.PostHocTransformCannotReplaceExecutedEdge
+open ConstitutiveSearch.NativeMechanism ConstitutiveSearch.NeuralAgent
+
+def source : PublicRequirementInput := ⟨.scopeZero, .direct⟩
+
+def merelyRecordedRead :
+    ReadsFrom (publicRequirementSystem.run source)
+      (.receivedInput publicRequirementPort)
+      (.neuronOutput publicRequirementOutput) :=
+  (publicRequirementEdge source).toReadsFrom
+
+-- C3 forbids an arbitrary post-hoc function and a merely recorded read from
+-- replacing the effective edge that the target neuron actually consumed.
+def forbiddenPostHocTransformation
+    (postHoc : Activation -> Activation)
+    (observedExact :
+      (ActivationOccurrence.neuronOutput publicRequirementOutput :
+          ActivationOccurrence (publicRequirementSystem.run source)).value =
+        postHoc
+          ((ActivationOccurrence.receivedInput publicRequirementPort :
+            ActivationOccurrence (publicRequirementSystem.run source)).value)) :
+    ExecutedSignalTransformation (publicRequirementSystem.run source)
+      (.receivedInput publicRequirementPort)
+      (.neuronOutput publicRequirementOutput) where
+  edge := merelyRecordedRead
+
+end Tests.ExpectedFailure.PostHocTransformCannotReplaceExecutedEdge
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedSignalTransformation
+/- AXIOM_AUDIT_END -/

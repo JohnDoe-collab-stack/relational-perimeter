@@ -147,25 +147,117 @@ theorem public_historical_terminal_memory_exact
   congrArg ReconfiguredExecutionState.memory
     (public_historical_terminal_state_exact origin source future)
 
-/-- C9's public forgetting program. It executes from the supplied historical
-origin and returns the terminal operational memory, not the complete terminal
-state and not an independently supplied constant. -/
+/-- The operational input before forgetting.  Unlike `Agent.Memory`, this
+state positively retains the constituted origin together with the exact memory
+from which the continuation must execute.  The origin is therefore present in
+the operational source and is removed only by the executed projection below. -/
+structure PublicHistoricalOperationalState : Type 3 where
+  origin : PublicHistoricalOrigin
+  memory : Agent.Memory
+  memoryExact : memory = publicHistoricalInitialMemory origin
+
+def publicHistoricalOperationalState
+    (origin : PublicHistoricalOrigin) : PublicHistoricalOperationalState :=
+  { origin := origin
+    memory := publicHistoricalInitialMemory origin
+    memoryExact := rfl }
+
+def publicLeftHistoricalOperationalState :
+    PublicHistoricalOperationalState :=
+  publicHistoricalOperationalState
+    (ULift.up publicHistoricalMaster.distinctPair.left)
+
+def publicRightHistoricalOperationalState :
+    PublicHistoricalOperationalState :=
+  publicHistoricalOperationalState
+    (ULift.up publicHistoricalMaster.distinctPair.right)
+
+theorem public_historical_operational_states_distinct :
+    publicLeftHistoricalOperationalState ≠
+      publicRightHistoricalOperationalState := by
+  intro same
+  exact public_historical_origins_distinct
+    (congrArg PublicHistoricalOperationalState.origin same)
+
+/-- The source-indexed trace executed before forgetting.  Its initial state is
+built from the memory carried by the rich historical source. -/
+abbrev PublicHistoricalForgettingTrace
+    (historical : PublicHistoricalOperationalState)
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :=
+  ReconfiguredInteractionHistory publicReconfigurationBuilder
+    publicAgentActionChannel publicReconfigurationCertificateForState
+    (publicHistoricalInitialReconfiguredStateFromMemory historical.memory source)
+    future
+
+def executePublicHistoricalForgettingTrace
+    (historical : PublicHistoricalOperationalState)
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    PublicHistoricalForgettingTrace historical source future :=
+  executeReconfiguredInteractions publicReconfigurationBuilder
+    publicAgentActionChannel publicReconfigurationCertificateForState
+    (publicHistoricalInitialReconfiguredStateFromMemory historical.memory source)
+    future
+
+/-- Read only the terminal memory from the executed, source-indexed trace. -/
+def reducePublicHistoricalForgettingTrace
+    (historical : PublicHistoricalOperationalState)
+    (source : PublicRequirementInput) (future : List PublicRequirementInput)
+    (trace : PublicHistoricalForgettingTrace historical source future) :
+    Agent.Memory :=
+  trace.finalState.memory
+
+/-- Execute the complete continuation from the historically informed
+operational state and return only the terminal memory read from that exact
+trace.  The result type has no origin field. -/
+def executePublicHistoricalForgetting
+    (source : PublicRequirementInput) (future : List PublicRequirementInput)
+    (historical : PublicHistoricalOperationalState) : Agent.Memory :=
+  reducePublicHistoricalForgettingTrace historical source future
+    (executePublicHistoricalForgettingTrace historical source future)
+
+theorem execute_public_historical_forgetting_exact
+    (historical : PublicHistoricalOperationalState)
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    executePublicHistoricalForgetting source future historical =
+      (publicReconfiguredInteractionHistory source future).finalState.memory := by
+  unfold executePublicHistoricalForgetting
+  change (publicHistoricalTerminalStateFromMemory historical.memory source
+      future).memory = _
+  calc
+    _ = (publicHistoricalTerminalStateFromMemory
+          (publicHistoricalInitialMemory historical.origin) source future).memory :=
+      congrArg
+        (fun memory =>
+          (publicHistoricalTerminalStateFromMemory memory source future).memory)
+        historical.memoryExact
+    _ = _ := congrArg ReconfiguredExecutionState.memory
+      (public_historical_terminal_state_exact historical.origin source future)
+
+/-- C8–C9's public forgetting program. It consumes the rich operational
+state carrying the origin, executes from its exact historical memory, and
+returns the terminal operational memory.  Neither the complete terminal state
+nor the forgotten origin occurs in the output type. -/
 def publicHistoricalForgettingProgram
     (source : PublicRequirementInput) (future : List PublicRequirementInput) :
-    HistoricalForgettingProgram PublicHistoricalOrigin Agent.Memory where
-  run := publicHistoricalTerminalMemory source future
+    HistoricalForgettingProgram PublicHistoricalOperationalState Agent.Memory where
+  Trace := fun historical =>
+    PublicHistoricalForgettingTrace historical source future
+  execute := fun historical =>
+    executePublicHistoricalForgettingTrace historical source future
+  reduce := fun historical trace =>
+    reducePublicHistoricalForgettingTrace historical source future trace
 
 def publicLeftHistoricalForgettingInput
     (source : PublicRequirementInput) (future : List PublicRequirementInput) :
     HistoricalForgettingInput
       (publicHistoricalForgettingProgram source future) :=
-  { origin := ULift.up publicHistoricalMaster.distinctPair.left }
+  { origin := publicLeftHistoricalOperationalState }
 
 def publicRightHistoricalForgettingInput
     (source : PublicRequirementInput) (future : List PublicRequirementInput) :
     HistoricalForgettingInput
       (publicHistoricalForgettingProgram source future) :=
-  { origin := ULift.up publicHistoricalMaster.distinctPair.right }
+  { origin := publicRightHistoricalOperationalState }
 
 def publicLeftExecutedForgetting
     (source : PublicRequirementInput) (future : List PublicRequirementInput) :=
@@ -177,18 +269,45 @@ def publicRightExecutedForgetting
   executeHistoricalForgetting (publicHistoricalForgettingProgram source future)
     (publicRightHistoricalForgettingInput source future)
 
+theorem public_left_forgetting_trace_exact
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    (publicLeftExecutedForgetting source future).trace =
+      executePublicHistoricalForgettingTrace
+        publicLeftHistoricalOperationalState source future :=
+  (publicLeftExecutedForgetting source future).traceExact
+
+theorem public_right_forgetting_trace_exact
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    (publicRightExecutedForgetting source future).trace =
+      executePublicHistoricalForgettingTrace
+        publicRightHistoricalOperationalState source future :=
+  (publicRightExecutedForgetting source future).traceExact
+
+theorem public_left_forgetting_output_is_trace_memory
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    (publicLeftExecutedForgetting source future).output =
+      (publicLeftExecutedForgetting source future).trace.finalState.memory :=
+  (publicLeftExecutedForgetting source future).outputExact
+
+theorem public_right_forgetting_output_is_trace_memory
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    (publicRightExecutedForgetting source future).output =
+      (publicRightExecutedForgetting source future).trace.finalState.memory :=
+  (publicRightExecutedForgetting source future).outputExact
+
 theorem public_historical_forgetting_inputs_distinct
     (source : PublicRequirementInput) (future : List PublicRequirementInput) :
     publicLeftHistoricalForgettingInput source future ≠
       publicRightHistoricalForgettingInput source future :=
-  HistoricalForgettingInput.ne_of_origin_ne public_historical_origins_distinct
+  HistoricalForgettingInput.ne_of_origin_ne
+    public_historical_operational_states_distinct
 
 theorem public_left_executed_forgetting_exact
     (source : PublicRequirementInput) (future : List PublicRequirementInput) :
     (publicLeftExecutedForgetting source future).output =
       (publicReconfiguredInteractionHistory source future).finalState.memory :=
   (publicLeftExecutedForgetting source future).executionExact.trans
-    (public_historical_terminal_memory_exact
+    (execute_public_historical_forgetting_exact
       (publicLeftHistoricalForgettingInput source future).origin source future)
 
 theorem public_right_executed_forgetting_exact
@@ -196,7 +315,7 @@ theorem public_right_executed_forgetting_exact
     (publicRightExecutedForgetting source future).output =
       (publicReconfiguredInteractionHistory source future).finalState.memory :=
   (publicRightExecutedForgetting source future).executionExact.trans
-    (public_historical_terminal_memory_exact
+    (execute_public_historical_forgetting_exact
       (publicRightHistoricalForgettingInput source future).origin source future)
 
 /-- Equality is obtained only after both historically distinct inputs have run
@@ -354,16 +473,15 @@ theorem public_executed_forgetting_origin_not_recoverable
     (recover : Agent.Memory -> PublicHistoricalOrigin)
     (recoversLeft :
       recover (publicLeftExecutedForgetting source future).output =
-        (publicLeftHistoricalForgettingInput source future).origin)
+        (publicLeftHistoricalForgettingInput source future).origin.origin)
     (recoversRight :
       recover (publicRightExecutedForgetting source future).output =
-        (publicRightHistoricalForgettingInput source future).origin) : False :=
-  ExecutedHistoricalForgetting.origin_not_recoverable
-    (publicLeftExecutedForgetting source future)
-    (publicRightExecutedForgetting source future)
-    public_historical_origins_distinct
-    (public_executed_forgetting_outputs_equal source future)
-    recover recoversLeft recoversRight
+        (publicRightHistoricalForgettingInput source future).origin.origin) : False := by
+  apply public_historical_origins_distinct
+  exact recoversLeft.symm.trans
+    ((congrArg recover
+      (public_executed_forgetting_outputs_equal source future)).trans
+        recoversRight)
 
 end ConstitutiveSearch.NeuralAgent
 /- AXIOM_AUDIT_BEGIN -/
@@ -385,11 +503,25 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.public_historical_terminal_state_exact
 #print axioms ConstitutiveSearch.NeuralAgent.publicHistoricalTerminalMemory
 #print axioms ConstitutiveSearch.NeuralAgent.public_historical_terminal_memory_exact
+#print axioms ConstitutiveSearch.NeuralAgent.PublicHistoricalOperationalState
+#print axioms ConstitutiveSearch.NeuralAgent.publicHistoricalOperationalState
+#print axioms ConstitutiveSearch.NeuralAgent.publicLeftHistoricalOperationalState
+#print axioms ConstitutiveSearch.NeuralAgent.publicRightHistoricalOperationalState
+#print axioms ConstitutiveSearch.NeuralAgent.public_historical_operational_states_distinct
+#print axioms ConstitutiveSearch.NeuralAgent.PublicHistoricalForgettingTrace
+#print axioms ConstitutiveSearch.NeuralAgent.executePublicHistoricalForgettingTrace
+#print axioms ConstitutiveSearch.NeuralAgent.reducePublicHistoricalForgettingTrace
+#print axioms ConstitutiveSearch.NeuralAgent.executePublicHistoricalForgetting
+#print axioms ConstitutiveSearch.NeuralAgent.execute_public_historical_forgetting_exact
 #print axioms ConstitutiveSearch.NeuralAgent.publicHistoricalForgettingProgram
 #print axioms ConstitutiveSearch.NeuralAgent.publicLeftHistoricalForgettingInput
 #print axioms ConstitutiveSearch.NeuralAgent.publicRightHistoricalForgettingInput
 #print axioms ConstitutiveSearch.NeuralAgent.publicLeftExecutedForgetting
 #print axioms ConstitutiveSearch.NeuralAgent.publicRightExecutedForgetting
+#print axioms ConstitutiveSearch.NeuralAgent.public_left_forgetting_trace_exact
+#print axioms ConstitutiveSearch.NeuralAgent.public_right_forgetting_trace_exact
+#print axioms ConstitutiveSearch.NeuralAgent.public_left_forgetting_output_is_trace_memory
+#print axioms ConstitutiveSearch.NeuralAgent.public_right_forgetting_output_is_trace_memory
 #print axioms ConstitutiveSearch.NeuralAgent.public_historical_forgetting_inputs_distinct
 #print axioms ConstitutiveSearch.NeuralAgent.public_left_executed_forgetting_exact
 #print axioms ConstitutiveSearch.NeuralAgent.public_right_executed_forgetting_exact

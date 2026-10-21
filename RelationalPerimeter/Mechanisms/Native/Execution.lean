@@ -47,6 +47,47 @@ def NativeTrace.activationsBefore
           Nat.eq_of_lt_succ_of_not_lt target.isLt before
         exactLast.symm ▸ priorActivations
 
+theorem NativeTrace.activationsBefore_read_exact
+    {inputs : SizedActivations inputCount}
+    {program : NetworkProgram inputCount produced}
+    {activations : SizedActivations produced}
+    (trace : NativeTrace inputs program activations)
+    (target : Fin produced) (source : Fin target.val) :
+    (trace.activationsBefore target).read source =
+      activations.read
+        ⟨source.val, Nat.lt_trans source.isLt target.isLt⟩ := by
+  induction trace with
+  | empty => nomatch target
+  | @extend priorCount priorProgram neuron priorActivations prior ih =>
+      if before : target.val < priorCount then
+        let priorTarget : Fin priorCount := ⟨target.val, before⟩
+        let priorSource : Fin priorCount :=
+          ⟨source.val, Nat.lt_trans source.isLt before⟩
+        unfold NativeTrace.activationsBefore
+        rw [dif_pos before]
+        change (prior.activationsBefore priorTarget).read source =
+          (priorActivations.snoc
+            (fireNeuron neuron inputs priorActivations)).read
+              priorSource.castSucc
+        rw [SizedActivations.read_snoc_castSucc]
+        exact ih priorTarget source
+      else
+        have targetValue : target.val = priorCount :=
+          Nat.eq_of_lt_succ_of_not_lt target.isLt before
+        have targetExact : target = Fin.last priorCount := by
+          apply Fin.ext
+          exact targetValue
+        revert source
+        subst target
+        intro source
+        unfold NativeTrace.activationsBefore
+        rw [dif_neg before]
+        change priorActivations.read source =
+          (priorActivations.snoc
+            (fireNeuron neuron inputs priorActivations)).read
+              source.castSucc
+        rw [SizedActivations.read_snoc_castSucc]
+
 theorem NativeTrace.neuron_output_exact
     {inputs : SizedActivations inputCount}
     {program : NetworkProgram inputCount produced}
@@ -131,6 +172,7 @@ end ConstitutiveSearch.NativeMechanism
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NativeMechanism.NativeTrace
 #print axioms ConstitutiveSearch.NativeMechanism.NativeTrace.activationsBefore
+#print axioms ConstitutiveSearch.NativeMechanism.NativeTrace.activationsBefore_read_exact
 #print axioms ConstitutiveSearch.NativeMechanism.NativeTrace.neuron_output_exact
 #print axioms ConstitutiveSearch.NativeMechanism.executeWithTrace
 #print axioms ConstitutiveSearch.NativeMechanism.executeProgram

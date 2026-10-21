@@ -14,6 +14,16 @@ structure SizedActivations (count : Nat) where
   values : List Activation
   lengthExact : values.length = count
 
+theorem SizedActivations.eq_of_values_eq
+    (left right : SizedActivations count)
+    (same : left.values = right.values) : left = right := by
+  cases left with
+  | mk leftValues leftLength =>
+      cases right with
+      | mk rightValues rightLength =>
+          cases same
+          rfl
+
 theorem lengthAppend : (left right : List Activation) ->
     (left ++ right).length = left.length + right.length
   | left, right => by
@@ -94,11 +104,33 @@ theorem replaceAt_length : (values : List Activation) ->
   | _ :: rest, index + 1, replacement =>
       congrArg Nat.succ (replaceAt_length rest index replacement)
 
+theorem replaceAt_self : (values : List Activation) ->
+    (index : Nat) -> (within : index < values.length) ->
+    replaceAt values index (values.get ⟨index, within⟩) = values
+  | [], _, within => False.elim (Nat.not_lt_zero _ within)
+  | _ :: _, 0, _ => rfl
+  | head :: rest, index + 1, within => by
+      change head :: replaceAt rest index
+          (rest.get ⟨index, Nat.lt_of_succ_lt_succ within⟩) =
+        head :: rest
+      exact congrArg (List.cons head)
+        (replaceAt_self rest index (Nat.lt_of_succ_lt_succ within))
+
 def SizedActivations.replace (values : SizedActivations count)
     (index : Fin count) (replacement : Activation) : SizedActivations count :=
   { values := replaceAt values.values index.val replacement
     lengthExact := (replaceAt_length values.values index.val replacement).trans
       values.lengthExact }
+
+theorem SizedActivations.replace_self
+    (values : SizedActivations count) (index : Fin count) :
+    values.replace index (values.read index) = values := by
+  cases values with
+  | mk entries lengthExact =>
+      apply SizedActivations.eq_of_values_eq
+      exact replaceAt_self entries index.val (by
+        rw [lengthExact]
+        exact index.isLt)
 
 theorem takeLength : (values : List Activation) -> (limit : Nat) ->
     limit ≤ values.length -> (values.take limit).length = limit
@@ -161,6 +193,7 @@ def fireNeuron (spec : NeuronSpec inputCount produced)
 end ConstitutiveSearch.NativeMechanism
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NativeMechanism.SizedActivations
+#print axioms ConstitutiveSearch.NativeMechanism.SizedActivations.eq_of_values_eq
 #print axioms ConstitutiveSearch.NativeMechanism.lengthAppend
 #print axioms ConstitutiveSearch.NativeMechanism.SizedActivations.snoc
 #print axioms ConstitutiveSearch.NativeMechanism.SizedActivations.read
@@ -170,7 +203,9 @@ end ConstitutiveSearch.NativeMechanism
 #print axioms ConstitutiveSearch.NativeMechanism.SizedActivations.read_snoc_castSucc
 #print axioms ConstitutiveSearch.NativeMechanism.replaceAt
 #print axioms ConstitutiveSearch.NativeMechanism.replaceAt_length
+#print axioms ConstitutiveSearch.NativeMechanism.replaceAt_self
 #print axioms ConstitutiveSearch.NativeMechanism.SizedActivations.replace
+#print axioms ConstitutiveSearch.NativeMechanism.SizedActivations.replace_self
 #print axioms ConstitutiveSearch.NativeMechanism.takeLength
 #print axioms ConstitutiveSearch.NativeMechanism.SizedActivations.prefix
 #print axioms ConstitutiveSearch.NativeMechanism.weightedSum

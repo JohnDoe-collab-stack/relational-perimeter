@@ -14,12 +14,12 @@ auditée. Cette matrice en suit les obligations sans en modifier la portée.
 | T2, circuit constitué | `ReadsFrom`, `Reaches`, `reconstructCircuit` | rôle causal et explication | une arête décorative ou étrangère au run ne fournit pas le chemin indexé |
 | T3, rôle causal | intervention locale sur le même run, changement propagé | `RequirementIncorporation` | activation seule et intervention directe sur la sortie sont insuffisantes |
 | T4, exigence incorporée | `RequirementEncoding`, `RequirementIncorporation` | préservation du signal | un code constant ne reflète pas deux exigences reçues distinctes |
-| T5, proposition alignée | élimination de `RequirementSignalPath` | `ActionRealization` | une table de sorties ou un filtre aval ne remplace pas le chemin exécuté |
+| T5, proposition alignée | chaque `ExecutedSignalTransformation` est construit depuis un `EffectiveReadsFrom`; la fonction locale et son exactitude sont dérivées du neurone exécuté et de son préfixe exact | élimination de `RequirementSignalPath`, puis `ActionRealization` | une fonction choisie après observation, une simple arête décorative ou une arête de poids nul ne remplace pas l’arête effectivement consommée |
 | T6, sensibilité | deux exigences distinctes sur un même contexte | non-trivialité publique | les propositions produites sont distinctes |
 | T7, action et effet | proposition produite, `executeProducedInput`, `EffectRealization` | état initial reconfiguré | commande, résultat et successeur indépendants sont interdits |
 | T8, reconfiguration récursive | certificat indexé par le système et l’entrée de l’état courant | système cible, entrée et mémoire successeure du prochain état | un certificat du système initial ne certifie pas une queue reconfigurée |
 | T9, continuation | `executeReconfiguredInteractions` récure sur l’état cible produit | étape suivante et état final | la tête ne lit pas le futur ; le système produit est consommé par la queue |
-| T10, oubli exécuté, mémoire réduite et futurs non triviaux | `HistoricalForgettingInput`, `executeHistoricalForgetting`, projection du terminal produit vers sa seule `Agent.Memory` | contrat opérationnel d’agent avec admissions, refus, transitions et readout de table | ni un programme constant, ni l’état terminal complet, ni `PUnit` ne remplacent la mémoire et ses autorisations calculées |
+| T10, oubli exécuté, mémoire réduite et futurs non triviaux | `PublicHistoricalOperationalState` porte encore l’origine et sa mémoire exacte; `executeHistoricalForgetting` consomme cet état riche et produit seulement la mémoire du terminal exécuté | contrat opérationnel d’agent avec admissions, refus, transitions et readout de table | ni une mémoire déjà réduite, ni un programme constant, ni l’état terminal complet, ni `PUnit` ne remplacent l’entrée historiquement renseignée et ses autorisations calculées |
 | T11, composition | `ConstitutiveAlignmentCertificate` dans `Type` | certificat public `constitutive_alignment` | une proposition ou des témoins masqués par `Nonempty` ne remplacent pas la chaîne |
 
 ## Raccords désormais explicites
@@ -34,8 +34,9 @@ La chaîne finale n’est plus une conjonction de résultats indépendants.
 5. l’état reconfiguré dont la mémoire est le successeur de cet effet ;
 6. l’histoire reconfigurée indexée par cet état et par chaque système cible
    produit récursivement ;
-7. un programme d’oubli qui reçoit positivement chacune de deux origines
-   historiques distinctes et exécute depuis chacune la chaîne complète ;
+7. un programme d’oubli qui reçoit positivement deux états opérationnels
+   distincts, portant chacun son origine historique et sa mémoire exacte, puis
+   exécute depuis chacun la chaîne complète ;
 8. deux sorties calculées dont les preuves d’exécution les raccordent toutes
    deux à la mémoire de l’état final produit par cette histoire ;
 9. une réalisation exacte qui omet le système et l’entrée du terminal tout en
@@ -48,9 +49,10 @@ Le raccord T8 → T9 est porté par
 `ReconfiguredActionEffect.targetState` : le système cible du certificat, la
 nouvelle entrée et la mémoire effectivement produite deviennent ensemble
 l’index de la queue. Le raccord T9 → T10 est porté par
-`publicHistoricalForgettingProgram` : chaque entrée contient son origine,
-cette origine construit la mémoire initiale, puis la même action et la même
-récursion reconfigurée calculent la mémoire terminale. Les équations
+`publicHistoricalForgettingProgram` : chaque entrée contient encore son origine
+et la mémoire historiquement déterminée par celle-ci ; l’exécution consomme cet
+état riche, puis la même action et la même récursion reconfigurée calculent la
+mémoire terminale. Les équations
 `leftOutputExact` et `rightOutputExact` relient ces sorties calculées à la
 projection `ReconfiguredExecutionState.memory` du terminal de la continuation
 certifiée. `reconfiguredOperationalMemoryRealization` prouve séparément que
@@ -134,8 +136,9 @@ complète, et non un inventaire de petits exemples sans raccord. Son certificat
 - l’autorisation est lue exactement au port que le transport constitutif lui
   assigne ;
 - la continuation publique consomme deux requêtes produites ;
-- l’oubli est exécuté jusqu’à la mémoire terminale et rend impossible la
-  reconstruction simultanée des deux origines pourtant distinctes ;
+- l’oubli reçoit deux états opérationnels distincts qui portent encore leurs
+  origines, s’exécute jusqu’à la mémoire terminale et rend impossible la
+  reconstruction simultanée de ces deux origines ;
 - le contrat terminal admet une requête et en refuse une autre sur cette même
   mémoire produite.
 
@@ -206,11 +209,11 @@ plus laissés au seul commentaire : leurs types et leurs noms les séparent.
 | Statut | Donnée ou résultat exact |
 | --- | --- |
 | reçu comme contrat | canal d’action, constructeur de reconfiguration, certificateur, programme d’oubli et contrat de futurs, chacun accompagné de son égalité au paramètre reçu |
-| produit par exécution | rôle causal interventionnel du run exact, résultat d’action, effet, continuation et deux sorties du programme d’oubli, avec leurs équations d’exécution |
+| produit par exécution | rôle causal interventionnel du run exact, transformation locale dérivée du neurone et de l’arête effective, résultat d’action, effet, continuation et deux sorties du programme d’oubli, avec leurs équations d’exécution |
 | dérivé | proposition initiale, requête initiale et proposition de la première reconfiguration, obtenues par élimination des témoins de transformation et de dérivation |
 | seulement autorisé | permission incorporée de la première reconfiguration, identifiée à celle du certificat exact sans être présentée comme une exécution |
 | conservé | équivalence de tous les futurs couverts par le contrat reçu |
-| oublié | origines historiques distinctes dont les deux exécutions produisent la même sortie réduite |
+| oublié | origines présentes dans deux états opérationnels initialement distincts, puis absentes de la sortie réduite commune produite par les deux exécutions |
 | rendu irrécupérable | impossibilité, pour toute fonction depuis la sortie réduite, de reconstruire simultanément les deux origines distinctes |
 
 Les cinq confusions interdites sont fermées explicitement :
@@ -223,6 +226,11 @@ Les cinq confusions interdites sont fermées explicitement :
   `ExecutedHistoricalForgetting.executionExact`, tandis que la fixture
   `ConstantForgettingCannotReplaceExecutedProgram.lean.fail` interdit de
   substituer un résultat constant indépendant ;
+- `ReducedMemoryCannotReplaceHistoricalOperationalState.lean.fail` interdit de
+  commencer l’oubli depuis une mémoire qui ne porte déjà plus l’origine ;
+- `PostHocTransformCannotReplaceExecutedEdge.lean.fail` interdit qu’une
+  fonction choisie après observation et un simple `ReadsFrom` remplacent
+  l’arête effective dont l’action neuronale détermine la transformation ;
 - la sortie publique réduite est `Agent.Memory`, distincte du
   `ReconfiguredExecutionState` complet ; la fixture
   `CompleteStateCannotReplaceReducedMemory.lean.fail` impose cette frontière ;
@@ -265,13 +273,13 @@ l’audit exhaustif des constantes interdit qu’une dépendance axiomatique
 manuscrite soit apparue ailleurs. Aucun énoncé antérieur n’a été supprimé,
 affaibli ou remplacé pour fermer C16.
 
-## Fermeture de C17 — validation Lean complète
+## État de C17 — validation Lean complète
 
 Les contrôles de C17 ont été exécutés sur l’arbre de travail complet, sans
 omettre les tests ni limiter le balayage aux nouveaux modules :
 
 - `lake build` réussit en 401 tâches, sans avertissement ;
-- l’audit exhaustif couvre 33 103 constantes issues de 398 modules et rapporte
+- l’audit exhaustif couvre 33 165 constantes issues de 398 modules et rapporte
   zéro déclaration manuscrite dépendante d’un axiome ;
 - les 399 fichiers Lean suivis ou nouveaux possèdent exactement un bloc
   `AXIOM_AUDIT` final et un artefact `.olean` produit par la construction ;
@@ -279,7 +287,7 @@ omettre les tests ni limiter le balayage aux nouveaux modules :
   `Classical`, `propext`, `Quot.sound`, `native_decide`, `implemented_by`,
   `sorry` ou `admit`, ni une dépendance de migration interdite ;
 - les fixtures positives sont toutes élaborées par la construction globale ;
-- les 81 fixtures négatives sont toutes refusées par leur unique diagnostic
+- les 83 fixtures négatives sont toutes refusées par leur unique diagnostic
   Lean, au site et pour l’obligation sémantique enregistrés ;
 - les auto-tests du parseur d’imports passent, ainsi que les dix-huit
   inventaires de frontières constitutives ;
@@ -296,15 +304,16 @@ omettre les tests ni limiter le balayage aux nouveaux modules :
 - `git diff --check` passe, aucun fichier n’est supprimé depuis le socle C16 et
   les sources historiques protégées restent identiques.
 
-Le wrapper `verify.ps1` s’arrête encore avant ces contrôles sur
+Le wrapper `verify.ps1` et son équivalent Bash s’arrêtent encore avant ces contrôles sur
 `STALE_SOURCE: GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION`. Il ne révèle pas
 une régression Lean : l’empreinte de cet ancien claim couvre notamment les
 registres de fixtures et de stratification volontairement modifiés par le
 chantier. Le protocole impose que sa nouvelle empreinte soit calculée depuis
-une révision Git stable. Cette opération appartient donc à C18, qui exige la
-révision exacte de livraison ; elle ne peut pas être fabriquée depuis un arbre
-non commité. Tous les contrôles techniques que ce wrapper aurait exécutés après
-la gate de fraîcheur ont été lancés séparément ci-dessus.
+une révision Git stable. C17 n’est donc pas déclaré fermé dans l’arbre non
+commité : après un commit explicitement autorisé, les claims affectés devront
+recevoir une nouvelle révision probatoire, puis les deux portails devront être
+relancés intégralement. Tous les contrôles techniques disponibles avant cette
+révision stable ont été lancés séparément ci-dessus.
 
 ## Stratification imposée
 
@@ -356,6 +365,10 @@ Les fixtures négatives vérifient notamment que :
   certificateur canonique de l’étape ;
 - un programme constant retournant un état fourni ne remplace pas le programme
   d’oubli historique indexé par le certificat final ;
+- une mémoire déjà réduite ne remplace pas l’état opérationnel qui porte encore
+  l’origine à l’entrée de l’exécution d’oubli ;
+- une fonction arbitraire accompagnée d’un simple `ReadsFrom` ne remplace pas
+  la transformation dérivée de l’arête neuronale effective ;
 - l’état terminal complet ne peut pas être utilisé là où la sortie réduite
   exige uniquement `Agent.Memory`.
 
@@ -363,16 +376,16 @@ Les fixtures négatives vérifient notamment que :
 
 - construction ciblée de tous les nouveaux modules : réussie ;
 - tests positifs neuronaux : réussis après adaptation à l’interface dépendante ;
-- 81 fixtures négatives : toutes rejetées au diagnostic et au site
+- 83 fixtures négatives : toutes rejetées au diagnostic et au site
   enregistrés, dont la substitution du programme d’oubli constant et celle de
   l’état complet à la mémoire réduite ;
 - inventaire de stratification : 332 modules, tous contrôlés, aucun orphelin ;
 - tous les nouveaux audits `#print axioms` : aucun axiome ;
-- construction globale : réussie, 401 tâches, audit exhaustif de 33 103
+- construction globale : réussie, 401 tâches, audit exhaustif de 33 165
   constantes sur 398 modules, aucune déclaration manuscrite dépendante d’un
   axiome ;
-- vérificateur global : volontairement bloqué par la fraîcheur du registre
-  scientifique après modification de `scripts/stratification.tsv`.
+- vérificateurs globaux : bloqués par la fraîcheur du registre scientifique
+  après modification des sources et du registre des fixtures.
 
 Le blocage `STALE_SOURCE: GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION` ne
 doit pas être neutralisé par une mise à jour mécanique d’empreinte. Conformément

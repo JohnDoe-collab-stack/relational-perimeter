@@ -267,23 +267,17 @@ def publicRequirementDecoder :
     intro requirement context
     cases requirement <;> cases context <;> rfl
 
-def publicRequirementSignalTransform (value : Activation) : Activation :=
-  asActivation (fires ⟨3⟩ value)
-
 def publicRequirementExecutedTransformation (input : PublicRequirementInput) :
     ExecutedSignalTransformation (publicRequirementSystem.run input)
       (.receivedInput publicRequirementPort)
       (.neuronOutput publicRequirementOutput) where
-  transform := publicRequirementSignalTransform
-  edge := (publicRequirementEdge input).toReadsFrom
-  outputExact := by
-    cases input with
-    | mk requirement context => cases requirement <;> cases context <;> rfl
+  edge := publicRequirementEdge input
 
 def publicRequirementSignalPath (input : PublicRequirementInput) :
     RequirementSignalPath publicRequirementEncoding input
       (.neuronOutput publicRequirementOutput)
-      (fun value => publicRequirementSignalTransform value) :=
+      (fun value =>
+        (publicRequirementExecutedTransformation input).transform value) :=
   RequirementSignalPath.step
     (encoding := publicRequirementEncoding)
     (input := input)
@@ -299,7 +293,8 @@ def publicRequirementSignalTransformation (input : PublicRequirementInput) :
       (publicRequirementIncorporation input) := by
   exact
     { roleOutputExact := publicRequirementRoleOutputExact input
-      transform := fun value => publicRequirementSignalTransform value
+      transform := fun value =>
+        (publicRequirementExecutedTransformation input).transform value
       path := publicRequirementSignalPath input
       terminalExact := by
         cases input with
@@ -427,7 +422,6 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.publicRequirementCausalRole
 #print axioms ConstitutiveSearch.NeuralAgent.publicRequirementIncorporation
 #print axioms ConstitutiveSearch.NeuralAgent.publicRequirementDecoder
-#print axioms ConstitutiveSearch.NeuralAgent.publicRequirementSignalTransform
 #print axioms ConstitutiveSearch.NeuralAgent.publicRequirementExecutedTransformation
 #print axioms ConstitutiveSearch.NeuralAgent.publicRequirementSignalPath
 #print axioms ConstitutiveSearch.NeuralAgent.publicRequirementSignalTransformation

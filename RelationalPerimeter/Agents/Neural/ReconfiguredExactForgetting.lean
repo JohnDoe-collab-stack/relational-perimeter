@@ -19,11 +19,19 @@ set_option maxHeartbeats 2000000
 namespace ConstitutiveSearch.NeuralAgent
 open ContinuationSignatures NativeMechanism
 
-/-- An executable forgetting program consumes a constituted historical origin
-and computes the reduced material that may continue operationally.  The
-historical input is not stored in the result type. -/
+/-- An executable forgetting program separates the source-indexed execution
+trace from its reduced readout.  `execute` must positively construct a trace
+for the supplied history; `reduce` may then omit historical distinctions from
+the material that continues operationally. -/
 structure HistoricalForgettingProgram (History Reduced : Type 3) where
-  run : History -> Reduced
+  Trace : History -> Type 3
+  execute : (origin : History) -> Trace origin
+  reduce : (origin : History) -> Trace origin -> Reduced
+
+def HistoricalForgettingProgram.run
+    (program : HistoricalForgettingProgram History Reduced)
+    (origin : History) : Reduced :=
+  program.reduce origin (program.execute origin)
 
 /-- The input to forgetting positively contains the historical origin that is
 about to be consumed. -/
@@ -32,23 +40,39 @@ structure HistoricalForgettingInput
     (program : HistoricalForgettingProgram History Reduced) where
   origin : History
 
-/-- A forgetting execution records both its computed output and the exact
-equation showing that the output came from running the declared program on the
-historically informed input. -/
+/-- A forgetting execution retains the exact source-indexed trace and records
+the reduced output obtained from that trace.  The private constructor prevents
+callers from pairing an unrelated trace with a post-hoc output. -/
 structure ExecutedHistoricalForgetting
     {History Reduced : Type 3}
     (program : HistoricalForgettingProgram History Reduced)
     (input : HistoricalForgettingInput program) where
   private mk ::
+  trace : program.Trace input.origin
   output : Reduced
-  executionExact : output = program.run input.origin
+  traceExact : trace = program.execute input.origin
+  outputExact : output = program.reduce input.origin trace
+
+theorem ExecutedHistoricalForgetting.executionExact
+    {History Reduced : Type 3}
+    {program : HistoricalForgettingProgram History Reduced}
+    {input : HistoricalForgettingInput program}
+    (execution : ExecutedHistoricalForgetting program input) :
+    execution.output = program.run input.origin := by
+  calc
+    execution.output = program.reduce input.origin execution.trace :=
+      execution.outputExact
+    _ = program.reduce input.origin (program.execute input.origin) :=
+      congrArg (program.reduce input.origin) execution.traceExact
+    _ = program.run input.origin := rfl
 
 def executeHistoricalForgetting
     {History Reduced : Type 3}
     (program : HistoricalForgettingProgram History Reduced)
     (input : HistoricalForgettingInput program) :
     ExecutedHistoricalForgetting program input :=
-  .mk (program.run input.origin) rfl
+  .mk (program.execute input.origin)
+    (program.reduce input.origin (program.execute input.origin)) rfl rfl
 
 theorem HistoricalForgettingInput.ne_of_origin_ne
     {History Reduced : Type 3}
@@ -345,8 +369,10 @@ theorem reconfigured_origin_not_recoverable
 end ConstitutiveSearch.NeuralAgent
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.HistoricalForgettingProgram
+#print axioms ConstitutiveSearch.NeuralAgent.HistoricalForgettingProgram.run
 #print axioms ConstitutiveSearch.NeuralAgent.HistoricalForgettingInput
 #print axioms ConstitutiveSearch.NeuralAgent.ExecutedHistoricalForgetting
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedHistoricalForgetting.executionExact
 #print axioms ConstitutiveSearch.NeuralAgent.executeHistoricalForgetting
 #print axioms ConstitutiveSearch.NeuralAgent.HistoricalForgettingInput.ne_of_origin_ne
 #print axioms ConstitutiveSearch.NeuralAgent.ExecutedHistoricalForgetting.outputs_equal_of_common_target

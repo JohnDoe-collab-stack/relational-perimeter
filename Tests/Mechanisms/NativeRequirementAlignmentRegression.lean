@@ -80,6 +80,24 @@ theorem scope_one_changes_executed_proposal :
 def scope_zero_signal_path := publicRequirementSignalPath scopeZeroDirectInput
 def scope_one_signal_path := publicRequirementSignalPath scopeOneDirectInput
 
+/-- The generic C3 transition is inhabited by the effective edge consumed by
+the executed neuron, not by a caller-supplied transformation function. -/
+def scope_zero_effective_signal_edge :
+    EffectiveReadsFrom (publicRequirementSystem.run scopeZeroDirectInput)
+      (.receivedInput publicRequirementPort)
+      (.neuronOutput publicRequirementOutput) :=
+  (publicRequirementExecutedTransformation scopeZeroDirectInput).edge
+
+theorem scope_zero_signal_transform_is_execution_derived :
+    (ActivationOccurrence.neuronOutput publicRequirementOutput :
+        ActivationOccurrence
+          (publicRequirementSystem.run scopeZeroDirectInput)).value =
+      (publicRequirementExecutedTransformation scopeZeroDirectInput).transform
+        ((ActivationOccurrence.receivedInput publicRequirementPort :
+          ActivationOccurrence
+            (publicRequirementSystem.run scopeZeroDirectInput)).value) :=
+  (publicRequirementExecutedTransformation scopeZeroDirectInput).outputExact
+
 theorem scope_zero_received_code_is_not_terminal_representation :
     publicRequirementEncoding.code .scopeZero .direct ≠
       publicRequirementDecoder.terminalRepresentation .scopeZero .direct :=
@@ -100,7 +118,7 @@ theorem scope_zero_executed_occurrences_differ :
 theorem scope_zero_path_executes_nonidentity_transform :
     (ActivationOccurrence.neuronOutput publicRequirementOutput :
         ActivationOccurrence (publicRequirementSystem.run scopeZeroDirectInput)).value =
-      publicRequirementSignalTransform
+      (publicRequirementExecutedTransformation scopeZeroDirectInput).transform
         (publicRequirementEncoding.code .scopeZero .direct) :=
   (publicRequirementSignalPath scopeZeroDirectInput).signalExact
 
@@ -180,6 +198,8 @@ end Tests.Mechanisms.NativeRequirementAlignmentRegression
 #print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_one_changes_executed_proposal
 #print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_signal_path
 #print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_one_signal_path
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_effective_signal_edge
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_signal_transform_is_execution_derived
 #print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_received_code_is_not_terminal_representation
 #print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_one_received_code_is_not_terminal_representation
 #print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_executed_occurrences_differ
