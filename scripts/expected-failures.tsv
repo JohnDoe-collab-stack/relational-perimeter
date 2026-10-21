@@ -84,3 +84,6 @@ Tests/ExpectedFailure/TrivialAuthorizationCannotReplaceTerminalContract.lean.fai
 Tests/ExpectedFailure/CollapsingCommandCannotPreserveRequiredDistinction.lean.fail	dependent-type	6	2	Type mismatch	Collapsing Command Cannot Preserve Required Distinction.
 Tests/ExpectedFailure/PostHocTransformCannotReplaceExecutedEdge.lean.fail	dependent-type	27	10	Type mismatch	Post Hoc Transform Cannot Replace Executed Edge.
 Tests/ExpectedFailure/ReducedMemoryCannotReplaceHistoricalOperationalState.lean.fail	dependent-type	15	12	Type mismatch	Reduced Memory Cannot Replace Historical Operational State.
+Tests/ExpectedFailure/PostHocConstantTransformCannotWitnessExecution.lean.fail	dependent-type	28	10	Type mismatch	Post Hoc Constant Transform Cannot Witness Execution.
+Tests/ExpectedFailure/AlreadyForgottenInputCannotWitnessExecutedForgetting.lean.fail	dependent-type	13	12	Type mismatch	Already Forgotten Input Cannot Witness Executed Forgetting.
+Tests/ExpectedFailure/ConstantProjectionCannotWitnessExecutedForgetting.lean.fail	dependent-type	23	2	Type mismatch	Constant Projection Cannot Witness Executed Forgetting.

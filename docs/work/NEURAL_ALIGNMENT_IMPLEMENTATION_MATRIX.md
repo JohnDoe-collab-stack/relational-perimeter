@@ -19,7 +19,7 @@ auditée. Cette matrice en suit les obligations sans en modifier la portée.
 | T7, action et effet | proposition produite, `executeProducedInput`, `EffectRealization` | état initial reconfiguré | commande, résultat et successeur indépendants sont interdits |
 | T8, reconfiguration récursive | certificat indexé par le système et l’entrée de l’état courant | système cible, entrée et mémoire successeure du prochain état | un certificat du système initial ne certifie pas une queue reconfigurée |
 | T9, continuation | `executeReconfiguredInteractions` récure sur l’état cible produit | étape suivante et état final | la tête ne lit pas le futur ; le système produit est consommé par la queue |
-| T10, oubli exécuté, mémoire réduite et futurs non triviaux | `PublicHistoricalOperationalState` porte encore l’origine et sa mémoire exacte; `executeHistoricalForgetting` consomme cet état riche et produit seulement la mémoire du terminal exécuté | contrat opérationnel d’agent avec admissions, refus, transitions et readout de table | ni une mémoire déjà réduite, ni un programme constant, ni l’état terminal complet, ni `PUnit` ne remplacent l’entrée historiquement renseignée et ses autorisations calculées |
+| T10, oubli exécuté, mémoire réduite et futurs non triviaux | `PublicHistoricalOperationalState` porte encore l’origine et le `ReconfiguredExecutionState` courant exact; `executeHistoricalForgetting` exécute au moins une étape causale depuis cet état riche et produit seulement la mémoire du terminal exécuté | contrat opérationnel d’agent avec admissions, refus, transitions et readout de table | ni une mémoire déjà réduite, ni une projection constante, ni l’état terminal complet, ni `PUnit` ne remplacent l’entrée historiquement renseignée et son exécution calculée |
 | T11, composition | `ConstitutiveAlignmentCertificate` dans `Type` | certificat public `constitutive_alignment` | une proposition ou des témoins masqués par `Nonempty` ne remplacent pas la chaîne |
 
 ## Raccords désormais explicites
@@ -35,8 +35,8 @@ La chaîne finale n’est plus une conjonction de résultats indépendants.
 6. l’histoire reconfigurée indexée par cet état et par chaque système cible
    produit récursivement ;
 7. un programme d’oubli qui reçoit positivement deux états opérationnels
-   distincts, portant chacun son origine historique et sa mémoire exacte, puis
-   exécute depuis chacun la chaîne complète ;
+   distincts, portant chacun son origine historique et son état reconfiguré
+   courant, puis exécute depuis chacun la chaîne complète ;
 8. deux sorties calculées dont les preuves d’exécution les raccordent toutes
    deux à la mémoire de l’état final produit par cette histoire ;
 9. une réalisation exacte qui omet le système et l’entrée du terminal tout en
@@ -50,8 +50,9 @@ Le raccord T8 → T9 est porté par
 nouvelle entrée et la mémoire effectivement produite deviennent ensemble
 l’index de la queue. Le raccord T9 → T10 est porté par
 `publicHistoricalForgettingProgram` : chaque entrée contient encore son origine
-et la mémoire historiquement déterminée par celle-ci ; l’exécution consomme cet
-état riche, puis la même action et la même récursion reconfigurée calculent la
+et un état reconfiguré courant ; les deux états courants sont eux-mêmes
+distincts. L’exécution consomme cet état riche et commence obligatoirement par
+la même exigence reçue avant de poursuivre la récursion reconfigurée jusqu’à la
 mémoire terminale. Les équations
 `leftOutputExact` et `rightOutputExact` relient ces sorties calculées à la
 projection `ReconfiguredExecutionState.memory` du terminal de la continuation
@@ -224,11 +225,13 @@ Les cinq confusions interdites sont fermées explicitement :
   aucune égalité finale de proposition n’est reçue comme champ ;
 - les sorties oubliées portent chacune
   `ExecutedHistoricalForgetting.executionExact`, tandis que la fixture
-  `ConstantForgettingCannotReplaceExecutedProgram.lean.fail` interdit de
-  substituer un résultat constant indépendant ;
-- `ReducedMemoryCannotReplaceHistoricalOperationalState.lean.fail` interdit de
-  commencer l’oubli depuis une mémoire qui ne porte déjà plus l’origine ;
-- `PostHocTransformCannotReplaceExecutedEdge.lean.fail` interdit qu’une
+  `ConstantProjectionCannotWitnessExecutedForgetting.lean.fail` interdit de
+  substituer une projection constante indépendante ;
+- `AlreadyForgottenInputCannotWitnessExecutedForgetting.lean.fail` et
+  `ReducedMemoryCannotReplaceHistoricalOperationalState.lean.fail` interdisent
+  de commencer l’oubli depuis une mémoire qui ne porte déjà plus l’origine ;
+- `PostHocConstantTransformCannotWitnessExecution.lean.fail` et
+  `PostHocTransformCannotReplaceExecutedEdge.lean.fail` interdisent qu’une
   fonction choisie après observation et un simple `ReadsFrom` remplacent
   l’arête effective dont l’action neuronale détermine la transformation ;
 - la sortie publique réduite est `Agent.Memory`, distincte du

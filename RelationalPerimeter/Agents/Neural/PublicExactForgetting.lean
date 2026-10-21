@@ -7,6 +7,15 @@ set_option genInjectivity false
 namespace ConstitutiveSearch.NeuralAgent
 open ContinuationSignatures EndogenousDecomposition
 
+/-! ## Earlier normalized-profile factorization
+
+The declarations up to `public_historical_terminal_memory_exact` preserve the
+older result that normalized profiles already factor through one initial
+memory.  They are retained as a separate theorem family.  They are not the C8
+executed-forgetting witness below, and none of the C8 convergence theorems uses
+`Agent.initial_memories_equal`.
+-/
+
 def publicHistoricalMaster : UnifiedMaster.Instance 0 :=
   UnifiedMaster.publicInstance 0
 
@@ -147,30 +156,62 @@ theorem public_historical_terminal_memory_exact
   congrArg ReconfiguredExecutionState.memory
     (public_historical_terminal_state_exact origin source future)
 
-/-- The operational input before forgetting.  Unlike `Agent.Memory`, this
-state positively retains the constituted origin together with the exact memory
-from which the continuation must execute.  The origin is therefore present in
-the operational source and is removed only by the executed projection below. -/
+/-! ## C8: forgetting by an executed causal transition -/
+
+/-- The operational input before forgetting.  The constituted origin and the
+complete current reconfigured state are both present.  The state is therefore
+strictly richer than the reduced memory produced after the execution. -/
 structure PublicHistoricalOperationalState : Type 3 where
   origin : PublicHistoricalOrigin
-  memory : Agent.Memory
-  memoryExact : memory = publicHistoricalInitialMemory origin
+  current : ReconfiguredExecutionState publicRequirementFamily
+  currentMemoryExact : current.memory = publicActionMemory
 
-def publicHistoricalOperationalState
-    (origin : PublicHistoricalOrigin) : PublicHistoricalOperationalState :=
-  { origin := origin
-    memory := publicHistoricalInitialMemory origin
-    memoryExact := rfl }
+/-- Two distinct operational predecessors.  They share the same pre-action
+memory, but retain different received requirements and different constituted
+origins.  The common next requirement is not processed until the forgetting
+execution below. -/
+def publicLeftHistoricalCurrentState :
+    ReconfiguredExecutionState publicRequirementFamily :=
+  { system := publicRequirementSystem
+    input := ⟨.scopeZero, .direct⟩
+    memory := publicActionMemory }
+
+def publicRightHistoricalCurrentState :
+    ReconfiguredExecutionState publicRequirementFamily :=
+  { system := publicRequirementSystem
+    input := ⟨.scopeOne, .reversed⟩
+    memory := publicActionMemory }
 
 def publicLeftHistoricalOperationalState :
     PublicHistoricalOperationalState :=
-  publicHistoricalOperationalState
-    (ULift.up publicHistoricalMaster.distinctPair.left)
+  { origin := ULift.up publicHistoricalMaster.distinctPair.left
+    current := publicLeftHistoricalCurrentState
+    currentMemoryExact := rfl }
 
 def publicRightHistoricalOperationalState :
     PublicHistoricalOperationalState :=
-  publicHistoricalOperationalState
-    (ULift.up publicHistoricalMaster.distinctPair.right)
+  { origin := ULift.up publicHistoricalMaster.distinctPair.right
+    current := publicRightHistoricalCurrentState
+    currentMemoryExact := rfl }
+
+theorem public_historical_current_states_distinct :
+    publicLeftHistoricalOperationalState.current ≠
+      publicRightHistoricalOperationalState.current := by
+  intro same
+  have inputs := congrArg
+    (fun state : ReconfiguredExecutionState publicRequirementFamily => state.input)
+    same
+  have requirements := congrArg
+    (fun input : PublicRequirementInput => input.requirement) inputs
+  cases requirements
+
+theorem public_historical_current_inputs_distinct :
+    publicLeftHistoricalOperationalState.current.input ≠
+      publicRightHistoricalOperationalState.current.input := by
+  intro same
+  have requirements := congrArg
+    (fun input : PublicRequirementInput => input.requirement) same
+  cases requirements
 
 theorem public_historical_operational_states_distinct :
     publicLeftHistoricalOperationalState ≠
@@ -179,15 +220,16 @@ theorem public_historical_operational_states_distinct :
   exact public_historical_origins_distinct
     (congrArg PublicHistoricalOperationalState.origin same)
 
-/-- The source-indexed trace executed before forgetting.  Its initial state is
-built from the memory carried by the rich historical source. -/
+/-- The source-indexed trace that performs forgetting.  It starts from the
+exact rich current state and must execute the common source requirement before
+the remaining future.  Consequently even an empty `future` still contains one
+executed causal stage. -/
 abbrev PublicHistoricalForgettingTrace
     (historical : PublicHistoricalOperationalState)
     (source : PublicRequirementInput) (future : List PublicRequirementInput) :=
   ReconfiguredInteractionHistory publicReconfigurationBuilder
     publicAgentActionChannel publicReconfigurationCertificateForState
-    (publicHistoricalInitialReconfiguredStateFromMemory historical.memory source)
-    future
+    historical.current (source :: future)
 
 def executePublicHistoricalForgettingTrace
     (historical : PublicHistoricalOperationalState)
@@ -195,8 +237,7 @@ def executePublicHistoricalForgettingTrace
     PublicHistoricalForgettingTrace historical source future :=
   executeReconfiguredInteractions publicReconfigurationBuilder
     publicAgentActionChannel publicReconfigurationCertificateForState
-    (publicHistoricalInitialReconfiguredStateFromMemory historical.memory source)
-    future
+    historical.current (source :: future)
 
 /-- Read only the terminal memory from the executed, source-indexed trace. -/
 def reducePublicHistoricalForgettingTrace
@@ -221,17 +262,36 @@ theorem execute_public_historical_forgetting_exact
     executePublicHistoricalForgetting source future historical =
       (publicReconfiguredInteractionHistory source future).finalState.memory := by
   unfold executePublicHistoricalForgetting
-  change (publicHistoricalTerminalStateFromMemory historical.memory source
-      future).memory = _
+  let trace := executePublicHistoricalForgettingTrace historical source future
+  have traceExecution := congrArg Prod.fst trace.execution_exact
+  have traceRequests := trace.requests_exact
+  have initialExecution := congrArg Prod.fst (public_effect_exact source)
+  have publicExecution := congrArg Prod.fst
+    (public_reconfigured_execution_exact source future)
   calc
-    _ = (publicHistoricalTerminalStateFromMemory
-          (publicHistoricalInitialMemory historical.origin) source future).memory :=
+    trace.finalState.memory =
+        (Agent.executeRequests historical.current.memory trace.requests).1 :=
+      traceExecution
+    _ = (Agent.executeRequests historical.current.memory
+          (requiredRequests publicAgentActionChannel (source :: future))).1 :=
       congrArg
-        (fun memory =>
-          (publicHistoricalTerminalStateFromMemory memory source future).memory)
-        historical.memoryExact
-    _ = _ := congrArg ReconfiguredExecutionState.memory
-      (public_historical_terminal_state_exact historical.origin source future)
+        (fun requests => (Agent.executeRequests historical.current.memory requests).1)
+        traceRequests
+    _ = (Agent.executeRequests publicActionMemory
+          (requiredRequests publicAgentActionChannel (source :: future))).1 := by
+      rw [historical.currentMemoryExact]
+    _ = (Agent.executeRequests (publicEffect source).successor
+          (requiredRequests publicAgentActionChannel future)).1 := by
+      change (Agent.executeRequests
+        (Agent.executeInput publicActionMemory
+          (publicAgentActionChannel.command
+            (publicRequirementFamily.requiredProposal
+              source.requirement source.context))).1
+        (requiredRequests publicAgentActionChannel future)).1 = _
+      rw [← public_action_request_exact source]
+      rw [← initialExecution]
+    _ = (publicReconfiguredInteractionHistory source future).finalState.memory :=
+      publicExecution.symm
 
 /-- C8–C9's public forgetting program. It consumes the rich operational
 state carrying the origin, executes from its exact historical memory, and
@@ -268,6 +328,43 @@ def publicRightExecutedForgetting
     (source : PublicRequirementInput) (future : List PublicRequirementInput) :=
   executeHistoricalForgetting (publicHistoricalForgettingProgram source future)
     (publicRightHistoricalForgettingInput source future)
+
+/-- The first executed causal stage, rather than an equality imposed on the
+two historical inputs, is where their operational memories converge. -/
+theorem public_forgetting_head_memories_equal
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    (publicLeftExecutedForgetting source future).trace.headStage.nextState.memory =
+      (publicRightExecutedForgetting source future).trace.headStage.nextState.memory := by
+  let left := (publicLeftExecutedForgetting source future).trace.headStage
+  let right := (publicRightExecutedForgetting source future).trace.headStage
+  have leftRequest : left.request =
+      publicAgentActionChannel.command
+        (publicRequirementFamily.requiredProposal
+          source.requirement source.context) :=
+    left.request_from_proposal.trans
+      (congrArg publicAgentActionChannel.command left.proposal_required_exact)
+  have rightRequest : right.request =
+      publicAgentActionChannel.command
+        (publicRequirementFamily.requiredProposal
+          source.requirement source.context) :=
+    right.request_from_proposal.trans
+      (congrArg publicAgentActionChannel.command right.proposal_required_exact)
+  calc
+    left.nextState.memory = left.effect.1 := rfl
+    _ = (Agent.executeInput publicLeftHistoricalOperationalState.current.memory
+          left.request).1 := congrArg Prod.fst left.effect_from_request
+    _ = (Agent.executeInput publicActionMemory
+          (publicAgentActionChannel.command
+            (publicRequirementFamily.requiredProposal
+              source.requirement source.context))).1 := by
+      rw [publicLeftHistoricalOperationalState.currentMemoryExact]
+      rw [leftRequest]
+    _ = (Agent.executeInput publicRightHistoricalOperationalState.current.memory
+          right.request).1 := by
+      rw [publicRightHistoricalOperationalState.currentMemoryExact]
+      rw [rightRequest]
+    _ = right.effect.1 := (congrArg Prod.fst right.effect_from_request).symm
+    _ = right.nextState.memory := rfl
 
 theorem public_left_forgetting_trace_exact
     (source : PublicRequirementInput) (future : List PublicRequirementInput) :
@@ -504,9 +601,12 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.publicHistoricalTerminalMemory
 #print axioms ConstitutiveSearch.NeuralAgent.public_historical_terminal_memory_exact
 #print axioms ConstitutiveSearch.NeuralAgent.PublicHistoricalOperationalState
-#print axioms ConstitutiveSearch.NeuralAgent.publicHistoricalOperationalState
+#print axioms ConstitutiveSearch.NeuralAgent.publicLeftHistoricalCurrentState
+#print axioms ConstitutiveSearch.NeuralAgent.publicRightHistoricalCurrentState
 #print axioms ConstitutiveSearch.NeuralAgent.publicLeftHistoricalOperationalState
 #print axioms ConstitutiveSearch.NeuralAgent.publicRightHistoricalOperationalState
+#print axioms ConstitutiveSearch.NeuralAgent.public_historical_current_states_distinct
+#print axioms ConstitutiveSearch.NeuralAgent.public_historical_current_inputs_distinct
 #print axioms ConstitutiveSearch.NeuralAgent.public_historical_operational_states_distinct
 #print axioms ConstitutiveSearch.NeuralAgent.PublicHistoricalForgettingTrace
 #print axioms ConstitutiveSearch.NeuralAgent.executePublicHistoricalForgettingTrace
@@ -518,6 +618,7 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.publicRightHistoricalForgettingInput
 #print axioms ConstitutiveSearch.NeuralAgent.publicLeftExecutedForgetting
 #print axioms ConstitutiveSearch.NeuralAgent.publicRightExecutedForgetting
+#print axioms ConstitutiveSearch.NeuralAgent.public_forgetting_head_memories_equal
 #print axioms ConstitutiveSearch.NeuralAgent.public_left_forgetting_trace_exact
 #print axioms ConstitutiveSearch.NeuralAgent.public_right_forgetting_trace_exact
 #print axioms ConstitutiveSearch.NeuralAgent.public_left_forgetting_output_is_trace_memory

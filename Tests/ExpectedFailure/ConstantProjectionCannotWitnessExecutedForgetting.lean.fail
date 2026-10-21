@@ -1,0 +1,28 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.ConstantProjectionCannotWitnessExecutedForgetting
+open ConstitutiveSearch.NeuralAgent
+
+def source : PublicRequirementInput := ⟨.scopeZero, .direct⟩
+def next : PublicRequirementInput := ⟨.scopeOne, .direct⟩
+
+def constantProjectionProgram :
+    HistoricalForgettingProgram PublicHistoricalOperationalState
+      ConstitutiveSearch.Agent.Memory where
+  Trace := fun _ => PUnit
+  execute := fun _ => PUnit.unit
+  reduce := fun _ _ => publicActionMemory
+
+-- The certified policy is indexed by the actual source-indexed causal trace.
+-- A constant projection cannot replace that program even when its codomain is
+-- the same reduced memory type.
+def forbiddenConstantPolicy :
+    ConstitutiveForgettingPolicy constantProjectionProgram
+      (publicReconfiguredInteractionHistory source [next]).finalState.memory
+      publicAlignmentFutureContract :=
+  publicAlignmentForgettingPolicy source [next]
+
+end Tests.ExpectedFailure.ConstantProjectionCannotWitnessExecutedForgetting
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.publicAlignmentForgettingPolicy
+/- AXIOM_AUDIT_END -/

@@ -1,0 +1,33 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.PostHocConstantTransformCannotWitnessExecution
+open ConstitutiveSearch.NativeMechanism ConstitutiveSearch.NeuralAgent
+
+def source : PublicRequirementInput := ⟨.scopeZero, .direct⟩
+
+def recordedOnly :
+    ReadsFrom (publicRequirementSystem.run source)
+      (.receivedInput publicRequirementPort)
+      (.neuronOutput publicRequirementOutput) :=
+  (publicRequirementEdge source).toReadsFrom
+
+-- A constant chosen after observing the target and a merely recorded read do
+-- not inhabit the executed transformation.  C3 requires the effective edge;
+-- its transform is then derived internally from the executed neuron.
+def forbiddenConstantTransform
+    (constant : Activation -> Activation)
+    (postHoc :
+      (ActivationOccurrence.neuronOutput publicRequirementOutput :
+          ActivationOccurrence (publicRequirementSystem.run source)).value =
+        constant
+          ((ActivationOccurrence.receivedInput publicRequirementPort :
+            ActivationOccurrence (publicRequirementSystem.run source)).value)) :
+    ExecutedSignalTransformation (publicRequirementSystem.run source)
+      (.receivedInput publicRequirementPort)
+      (.neuronOutput publicRequirementOutput) where
+  edge := recordedOnly
+
+end Tests.ExpectedFailure.PostHocConstantTransformCannotWitnessExecution
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedSignalTransformation
+/- AXIOM_AUDIT_END -/

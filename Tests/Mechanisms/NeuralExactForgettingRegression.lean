@@ -76,6 +76,30 @@ theorem operational_sources_retain_distinct_origins_before_forgetting :
       publicRightHistoricalOperationalState.origin :=
   public_historical_origins_distinct
 
+theorem operational_current_states_are_distinct_before_forgetting :
+    publicLeftHistoricalOperationalState.current ≠
+      publicRightHistoricalOperationalState.current :=
+  public_historical_current_states_distinct
+
+theorem operational_current_inputs_are_distinct_before_forgetting :
+    publicLeftHistoricalOperationalState.current.input ≠
+      publicRightHistoricalOperationalState.current.input :=
+  public_historical_current_inputs_distinct
+
+def left_forgetting_has_an_executed_head
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :=
+  (publicLeftExecutedForgetting source future).trace.headStage
+
+def right_forgetting_has_an_executed_head
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :=
+  (publicRightExecutedForgetting source future).trace.headStage
+
+theorem executed_heads_produce_the_same_memory
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    (publicLeftExecutedForgetting source future).trace.headStage.nextState.memory =
+      (publicRightExecutedForgetting source future).trace.headStage.nextState.memory :=
+  public_forgetting_head_memories_equal source future
+
 theorem left_forgetting_retains_the_executed_trace
     (source : PublicRequirementInput) (future : List PublicRequirementInput) :
     (publicLeftExecutedForgetting source future).trace =
@@ -217,6 +241,11 @@ end Tests.Mechanisms.NeuralExactForgettingRegression
 #print axioms Tests.Mechanisms.NeuralExactForgettingRegression.executed_forgetting_inputs_are_distinct
 #print axioms Tests.Mechanisms.NeuralExactForgettingRegression.operational_sources_are_distinct_before_forgetting
 #print axioms Tests.Mechanisms.NeuralExactForgettingRegression.operational_sources_retain_distinct_origins_before_forgetting
+#print axioms Tests.Mechanisms.NeuralExactForgettingRegression.operational_current_states_are_distinct_before_forgetting
+#print axioms Tests.Mechanisms.NeuralExactForgettingRegression.operational_current_inputs_are_distinct_before_forgetting
+#print axioms Tests.Mechanisms.NeuralExactForgettingRegression.left_forgetting_has_an_executed_head
+#print axioms Tests.Mechanisms.NeuralExactForgettingRegression.right_forgetting_has_an_executed_head
+#print axioms Tests.Mechanisms.NeuralExactForgettingRegression.executed_heads_produce_the_same_memory
 #print axioms Tests.Mechanisms.NeuralExactForgettingRegression.left_forgetting_retains_the_executed_trace
 #print axioms Tests.Mechanisms.NeuralExactForgettingRegression.left_forgetting_output_is_read_from_its_trace
 #print axioms Tests.Mechanisms.NeuralExactForgettingRegression.left_forgetting_output_is_executed_continuation
