@@ -4,98 +4,196 @@ set_option genInjectivity false
 namespace Tests.Mechanisms.NativeRequirementAlignmentRegression
 open ConstitutiveSearch.NativeMechanism ConstitutiveSearch.NeuralAgent
 
-def denyInput : PublicRequirementInput :=
-  { requirement := .deny, context := () }
+def scopeZeroDirectInput : PublicRequirementInput :=
+  { requirement := .scopeZero, context := .direct }
 
-def allowInput : PublicRequirementInput :=
-  { requirement := .allow, context := () }
+def scopeOneDirectInput : PublicRequirementInput :=
+  { requirement := .scopeOne, context := .direct }
 
-theorem deny_requirement_scope :
-    denyInput.receivedRequirement.scope = [0] := rfl
+def scopeZeroReversedInput : PublicRequirementInput :=
+  { requirement := .scopeZero, context := .reversed }
 
-theorem allow_requirement_scope :
-    allowInput.receivedRequirement.scope = [1] := rfl
+theorem scope_zero_requirement_scope :
+    scopeZeroDirectInput.receivedRequirement.scope = [0] := rfl
 
-theorem deny_encoding_exact :
-    (publicRequirementSystem.run denyInput).inputs.read
-      publicRequirementEncoding.port = publicRequirementEncoding.code .deny :=
-  encoded_requirement_exact publicRequirementEncoding denyInput
+theorem scope_one_requirement_scope :
+    scopeOneDirectInput.receivedRequirement.scope = [1] := rfl
 
-theorem allow_encoding_exact :
-    (publicRequirementSystem.run allowInput).inputs.read
-      publicRequirementEncoding.port = publicRequirementEncoding.code .allow :=
-  encoded_requirement_exact publicRequirementEncoding allowInput
+theorem public_case_names_match_received_scopes :
+    (publicRequirementFamily.received .scopeZero).scope = [0] ∧
+      (publicRequirementFamily.received .scopeOne).scope = [1] :=
+  ⟨public_scope_zero_scope_exact, public_scope_one_scope_exact⟩
 
-def deny_executed_path :=
+theorem public_context_names_match_proposal_table :
+    (publicRequirementFamily.requiredProposal .scopeZero .direct = false ∧
+      publicRequirementFamily.requiredProposal .scopeOne .direct = true) ∧
+    (publicRequirementFamily.requiredProposal .scopeZero .reversed = true ∧
+      publicRequirementFamily.requiredProposal .scopeOne .reversed = false) :=
+  ⟨public_direct_proposals_exact, public_reversed_proposals_exact⟩
+
+theorem scope_zero_encoding_exact :
+    (publicRequirementSystem.run scopeZeroDirectInput).inputs.read
+      publicRequirementEncoding.port =
+        publicRequirementEncoding.code .scopeZero .direct :=
+  encoded_requirement_exact publicRequirementEncoding scopeZeroDirectInput
+
+theorem scope_one_encoding_exact :
+    (publicRequirementSystem.run scopeOneDirectInput).inputs.read
+      publicRequirementEncoding.port =
+        publicRequirementEncoding.code .scopeOne .direct :=
+  encoded_requirement_exact publicRequirementEncoding scopeOneDirectInput
+
+theorem reversed_context_encoding_exact :
+    (publicRequirementSystem.run scopeZeroReversedInput).inputs.read
+      publicRequirementEncoding.port =
+        publicRequirementEncoding.code .scopeZero .reversed :=
+  encoded_requirement_exact publicRequirementEncoding scopeZeroReversedInput
+
+def scope_zero_executed_path :=
   incorporated_requirement_has_executed_path
-    (publicRequirementIncorporation denyInput)
+    (publicRequirementIncorporation scopeZeroDirectInput)
 
-def allow_executed_path :=
+def scope_one_executed_path :=
   incorporated_requirement_has_executed_path
-    (publicRequirementIncorporation allowInput)
+    (publicRequirementIncorporation scopeOneDirectInput)
 
-def deny_causal_role :
-    CausalRole publicRequirementSystem denyInput
+def scope_zero_causal_role :
+    CausalRole publicRequirementSystem scopeZeroDirectInput
       (.receivedInput publicRequirementEncoding.port) :=
-  publicRequirementCausalRole denyInput
+  publicRequirementCausalRole scopeZeroDirectInput
 
-def allow_causal_role :
-    CausalRole publicRequirementSystem allowInput
+def scope_one_causal_role :
+    CausalRole publicRequirementSystem scopeOneDirectInput
       (.receivedInput publicRequirementEncoding.port) :=
-  publicRequirementCausalRole allowInput
+  publicRequirementCausalRole scopeOneDirectInput
 
-theorem deny_changes_executed_proposal :
-    ChangesProposal publicRequirementSystem denyInput
-      (publicRequirementIntervention denyInput) :=
-  publicRequirementProposalChange denyInput
+theorem scope_zero_changes_executed_proposal :
+    ChangesProposal publicRequirementSystem scopeZeroDirectInput
+      (publicRequirementIntervention scopeZeroDirectInput) :=
+  publicRequirementProposalChange scopeZeroDirectInput
 
-theorem allow_changes_executed_proposal :
-    ChangesProposal publicRequirementSystem allowInput
-      (publicRequirementIntervention allowInput) :=
-  publicRequirementProposalChange allowInput
+theorem scope_one_changes_executed_proposal :
+    ChangesProposal publicRequirementSystem scopeOneDirectInput
+      (publicRequirementIntervention scopeOneDirectInput) :=
+  publicRequirementProposalChange scopeOneDirectInput
 
-def deny_signal_path := publicRequirementSignalPath denyInput
-def allow_signal_path := publicRequirementSignalPath allowInput
+def scope_zero_signal_path := publicRequirementSignalPath scopeZeroDirectInput
+def scope_one_signal_path := publicRequirementSignalPath scopeOneDirectInput
 
-theorem deny_proposal_aligned :
-    publicRequirementSystem.proposal denyInput = false :=
-  public_proposal_aligned denyInput
+theorem scope_zero_received_code_is_not_terminal_representation :
+    publicRequirementEncoding.code .scopeZero .direct ≠
+      publicRequirementDecoder.terminalRepresentation .scopeZero .direct :=
+  publicRequirementTransformationNonidentity scopeZeroDirectInput
 
-theorem allow_proposal_aligned :
-    publicRequirementSystem.proposal allowInput = true :=
-  public_proposal_aligned allowInput
+theorem scope_one_received_code_is_not_terminal_representation :
+    publicRequirementEncoding.code .scopeOne .direct ≠
+      publicRequirementDecoder.terminalRepresentation .scopeOne .direct :=
+  publicRequirementTransformationNonidentity scopeOneDirectInput
+
+theorem scope_zero_executed_occurrences_differ :
+    (ActivationOccurrence.receivedInput publicRequirementPort :
+        ActivationOccurrence (publicRequirementSystem.run scopeZeroDirectInput)).value ≠
+      (ActivationOccurrence.neuronOutput publicRequirementOutput :
+        ActivationOccurrence (publicRequirementSystem.run scopeZeroDirectInput)).value :=
+  publicRequirementOccurrencesDiffer scopeZeroDirectInput
+
+theorem scope_zero_path_executes_nonidentity_transform :
+    (ActivationOccurrence.neuronOutput publicRequirementOutput :
+        ActivationOccurrence (publicRequirementSystem.run scopeZeroDirectInput)).value =
+      publicRequirementSignalTransform
+        (publicRequirementEncoding.code .scopeZero .direct) :=
+  (publicRequirementSignalPath scopeZeroDirectInput).signalExact
+
+theorem scope_zero_proposal_aligned :
+    publicRequirementSystem.proposal scopeZeroDirectInput = false :=
+  public_proposal_aligned scopeZeroDirectInput
+
+theorem scope_one_proposal_aligned :
+    publicRequirementSystem.proposal scopeOneDirectInput = true :=
+  public_proposal_aligned scopeOneDirectInput
+
+theorem reversed_context_proposal_aligned :
+    publicRequirementSystem.proposal scopeZeroReversedInput = true :=
+  public_proposal_aligned scopeZeroReversedInput
 
 theorem requirements_are_not_collapsed :
-    denyInput.receivedRequirement ≠ allowInput.receivedRequirement :=
+    scopeZeroDirectInput.receivedRequirement ≠ scopeOneDirectInput.receivedRequirement :=
   public_received_requirements_distinct
 
 theorem encodings_are_not_constant :
-    publicRequirementEncoding.code .deny ≠
-      publicRequirementEncoding.code .allow :=
+    publicRequirementEncoding.code .scopeZero .direct ≠
+      publicRequirementEncoding.code .scopeOne .direct :=
   public_requirement_codes_distinct
 
 theorem executed_proposals_are_not_constant :
-    publicRequirementSystem.proposal denyInput ≠
-      publicRequirementSystem.proposal allowInput :=
+    publicRequirementSystem.proposal scopeZeroDirectInput ≠
+      publicRequirementSystem.proposal scopeOneDirectInput :=
   public_executed_proposals_distinct
+
+theorem contexts_are_distinct :
+    PublicRequirementContext.direct ≠ PublicRequirementContext.reversed :=
+  public_contexts_distinct
+
+theorem contextual_inputs_keep_the_same_requirement :
+    scopeZeroDirectInput.requirement = scopeZeroReversedInput.requirement :=
+  rfl
+
+theorem context_changes_required_proposal :
+    publicRequirementFamily.requiredProposal scopeZeroDirectInput.requirement
+        scopeZeroDirectInput.context ≠
+      publicRequirementFamily.requiredProposal scopeZeroReversedInput.requirement
+        scopeZeroReversedInput.context :=
+  public_contextual_required_proposals_distinct
+
+theorem context_changes_encoded_signal :
+    publicRequirementEncoding.code scopeZeroDirectInput.requirement scopeZeroDirectInput.context ≠
+      publicRequirementEncoding.code scopeZeroReversedInput.requirement
+        scopeZeroReversedInput.context :=
+  public_context_codes_distinct
+
+theorem context_changes_executed_input :
+    (publicRequirementSystem.run scopeZeroDirectInput).inputs.read
+        publicRequirementEncoding.port ≠
+      (publicRequirementSystem.run scopeZeroReversedInput).inputs.read
+        publicRequirementEncoding.port :=
+  public_contextual_executed_inputs_distinct
+
+theorem context_changes_executed_proposal :
+    publicRequirementSystem.proposal scopeZeroDirectInput ≠
+      publicRequirementSystem.proposal scopeZeroReversedInput :=
+  public_contextual_executed_proposals_distinct
 
 end Tests.Mechanisms.NativeRequirementAlignmentRegression
 /- AXIOM_AUDIT_BEGIN -/
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.deny_requirement_scope
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.allow_requirement_scope
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.deny_encoding_exact
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.allow_encoding_exact
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.deny_executed_path
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.allow_executed_path
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.deny_causal_role
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.allow_causal_role
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.deny_changes_executed_proposal
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.allow_changes_executed_proposal
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.deny_signal_path
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.allow_signal_path
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.deny_proposal_aligned
-#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.allow_proposal_aligned
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_requirement_scope
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_one_requirement_scope
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.public_case_names_match_received_scopes
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.public_context_names_match_proposal_table
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_encoding_exact
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_one_encoding_exact
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.reversed_context_encoding_exact
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_executed_path
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_one_executed_path
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_causal_role
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_one_causal_role
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_changes_executed_proposal
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_one_changes_executed_proposal
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_signal_path
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_one_signal_path
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_received_code_is_not_terminal_representation
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_one_received_code_is_not_terminal_representation
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_executed_occurrences_differ
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_path_executes_nonidentity_transform
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_zero_proposal_aligned
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.scope_one_proposal_aligned
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.reversed_context_proposal_aligned
 #print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.requirements_are_not_collapsed
 #print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.encodings_are_not_constant
 #print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.executed_proposals_are_not_constant
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.contexts_are_distinct
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.contextual_inputs_keep_the_same_requirement
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.context_changes_required_proposal
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.context_changes_encoded_signal
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.context_changes_executed_input
+#print axioms Tests.Mechanisms.NativeRequirementAlignmentRegression.context_changes_executed_proposal
 /- AXIOM_AUDIT_END -/

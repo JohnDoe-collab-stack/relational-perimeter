@@ -88,6 +88,7 @@ def main() -> None:
         ('compiles', 'unexpectedly compiled'), ('wrong-diagnostic', 'failed for an unexpected reason'),
         ('wrong-site', 'failed for an unexpected reason'), ('missing-file', 'orphan fixture entry'),
         ('extra-error', 'failed for an unexpected reason'),
+        ('missing-obligation', 'invalid expected-failure inventory row'),
         ('printed-needle', 'executable diagnostic imitation is forbidden'),
     ]
     records = []
@@ -108,7 +109,7 @@ def main() -> None:
             if case == 'unlisted':
                 (work / 'Tests/ExpectedFailure/Unlisted.lean.fail').write_text('example : True := True.intro\n', encoding='utf-8')
             elif case == 'orphan':
-                inventory.write_text(manifest + 'Tests/ExpectedFailure/Absent.lean.fail\tdependent-type\t1\t0\tType mismatch\n', encoding='utf-8')
+                inventory.write_text(manifest + 'Tests/ExpectedFailure/Absent.lean.fail\tdependent-type\t1\t0\tType mismatch\tAbsent fixture must not be accepted.\n', encoding='utf-8')
             elif case == 'duplicate':
                 inventory.write_text(manifest + rows[0] + '\n', encoding='utf-8')
             elif case == 'compiles':
@@ -122,6 +123,9 @@ def main() -> None:
             elif case == 'extra-error':
                 original = (work / first).read_text(encoding='utf-8')
                 (work / first).write_text(original + '\nexample : Nat := True.intro\n', encoding='utf-8')
+            elif case == 'missing-obligation':
+                parts = rows[0].split('\t')
+                inventory.write_text(manifest.replace(rows[0], '\t'.join(parts[:5])), encoding='utf-8')
             elif case == 'printed-needle':
                 # The old substring gate accepted an expected message printed
                 # beside an unrelated error. The new gate must not.

@@ -45,12 +45,12 @@ def coveredInteractionEffect
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal)
     (memory : Agent.Memory) (input : RequirementInput family) :
-    EffectRealization (realizeAction channel (preservation input) memory) :=
-  realizeEffect (realizeAction channel (preservation input) memory)
+    EffectRealization (realizeAction channel (transformation input) memory) :=
+  realizeEffect (realizeAction channel (transformation input) memory)
 
 def HistoricalInteractionSource.currentMemory
     {History : Type 3} {initialMemory : History -> Agent.Memory}
@@ -61,14 +61,14 @@ def HistoricalInteractionSource.currentMemory
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal) :
     HistoricalInteractionSource History initialMemory family -> Agent.Memory
   | .initial origin => initialMemory origin
   | .step prior input =>
-      (coveredInteractionEffect preservation channel
-        (prior.currentMemory preservation channel) input).successor
+      (coveredInteractionEffect transformation channel
+        (prior.currentMemory transformation channel) input).successor
 
 def interactionFutureContract
     {History : Type 3} {initialMemory : History -> Agent.Memory}
@@ -79,16 +79,16 @@ def interactionFutureContract
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal) :
     FutureContract (HistoricalInteractionSource History initialMemory family)
       (ULift.{3} (RequirementInput family)) Agent.Event Agent.Memory where
   next := fun source input => .step source input.down
   event := fun source input =>
-    (coveredInteractionEffect preservation channel
-      (source.currentMemory preservation channel) input.down).event
-  read := fun source => source.currentMemory preservation channel
+    (coveredInteractionEffect transformation channel
+      (source.currentMemory transformation channel) input.down).event
+  read := fun source => source.currentMemory transformation channel
   Allow := fun _ _ => PUnit
   decision := fun _ _ => .inl PUnit.unit
 
@@ -101,15 +101,15 @@ theorem interaction_future_next_memory_exact
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal)
     (source : HistoricalInteractionSource History initialMemory family)
     (input : ULift.{3} (RequirementInput family)) :
-    ((interactionFutureContract preservation channel).next source input).currentMemory
-        preservation channel =
-      (coveredInteractionEffect preservation channel
-        (source.currentMemory preservation channel) input.down).successor :=
+    ((interactionFutureContract transformation channel).next source input).currentMemory
+        transformation channel =
+      (coveredInteractionEffect transformation channel
+        (source.currentMemory transformation channel) input.down).successor :=
   rfl
 
 theorem interaction_future_event_exact
@@ -121,14 +121,14 @@ theorem interaction_future_event_exact
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal)
     (source : HistoricalInteractionSource History initialMemory family)
     (input : ULift.{3} (RequirementInput family)) :
-    (interactionFutureContract preservation channel).event source input =
-      (coveredInteractionEffect preservation channel
-        (source.currentMemory preservation channel) input.down).event :=
+    (interactionFutureContract transformation channel).event source input =
+      (coveredInteractionEffect transformation channel
+        (source.currentMemory transformation channel) input.down).event :=
   rfl
 
 def reducedInteractionFutureContract
@@ -139,15 +139,15 @@ def reducedInteractionFutureContract
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal) :
     FutureContract Agent.Memory (ULift.{3} (RequirementInput family))
       Agent.Event Agent.Memory where
   next := fun memory input =>
-    (coveredInteractionEffect preservation channel memory input.down).successor
+    (coveredInteractionEffect transformation channel memory input.down).successor
   event := fun memory input =>
-    (coveredInteractionEffect preservation channel memory input.down).event
+    (coveredInteractionEffect transformation channel memory input.down).event
   read := fun memory => memory
   Allow := fun _ _ => PUnit
   decision := fun _ _ => .inl PUnit.unit
@@ -161,14 +161,14 @@ def signatureRealization
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal) :
     ExactRealization
       (interactionFutureContract (History := History)
-        (initialMemory := initialMemory) preservation channel) Agent.Memory where
-  reduced := reducedInteractionFutureContract preservation channel
-  project := fun source => source.currentMemory preservation channel
+        (initialMemory := initialMemory) transformation channel) Agent.Memory where
+  reduced := reducedInteractionFutureContract transformation channel
+  project := fun source => source.currentMemory transformation channel
   forward := fun _ _ witness => witness
   backward := fun _ _ witness => witness
   backward_forward := by intro _ _ witness; cases witness; rfl
@@ -186,17 +186,17 @@ def interactionFutureBasis
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal) :
     FiniteFutureBasis
       (interactionFutureContract (History := History)
-        (initialMemory := initialMemory) preservation channel) where
+        (initialMemory := initialMemory) transformation channel) where
   tests := [[]]
   complete := by
     intro left right agree
     apply (signatureRealization (History := History)
-      (initialMemory := initialMemory) preservation channel).equal_memory_same_futures
+      (initialMemory := initialMemory) transformation channel).equal_memory_same_futures
     exact congrArg Outcome.read (agree [] (.head _))
 
 def interactionSignature
@@ -208,14 +208,14 @@ def interactionSignature
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal)
     (source : HistoricalInteractionSource History initialMemory family) :
     List (Outcome Agent.Event Agent.Memory) :=
   producedSignature
     (interactionFutureBasis (History := History) (initialMemory := initialMemory)
-      preservation channel) source
+      transformation channel) source
 
 theorem forgotten_iff_future_indistinguishable
     {History : Type 3} {initialMemory : History -> Agent.Memory}
@@ -226,18 +226,18 @@ theorem forgotten_iff_future_indistinguishable
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal)
     (left right : HistoricalInteractionSource History initialMemory family) :
-    interactionSignature preservation channel left =
-        interactionSignature preservation channel right ↔
+    interactionSignature transformation channel left =
+        interactionSignature transformation channel right ↔
       FutureEquivalent
         (interactionFutureContract (History := History)
-          (initialMemory := initialMemory) preservation channel) left right :=
+          (initialMemory := initialMemory) transformation channel) left right :=
   signature_exact
     (interactionFutureBasis (History := History) (initialMemory := initialMemory)
-      preservation channel) left right
+      transformation channel) left right
 
 theorem same_memory_same_interaction_signature
     {History : Type 3} {initialMemory : History -> Agent.Memory}
@@ -248,19 +248,19 @@ theorem same_memory_same_interaction_signature
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal)
     {left right : HistoricalInteractionSource History initialMemory family}
-    (same : left.currentMemory preservation channel =
-      right.currentMemory preservation channel) :
-    interactionSignature preservation channel left =
-      interactionSignature preservation channel right :=
+    (same : left.currentMemory transformation channel =
+      right.currentMemory transformation channel) :
+    interactionSignature transformation channel left =
+      interactionSignature transformation channel right :=
   signature_complete
     (interactionFutureBasis (History := History) (initialMemory := initialMemory)
-      preservation channel)
+      transformation channel)
     ((signatureRealization (History := History) (initialMemory := initialMemory)
-      preservation channel).equal_memory_same_futures same)
+      transformation channel).equal_memory_same_futures same)
 
 theorem future_separable_not_forgotten
     {History : Type 3} {initialMemory : History -> Agent.Memory}
@@ -271,17 +271,17 @@ theorem future_separable_not_forgotten
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal)
     {left right : HistoricalInteractionSource History initialMemory family}
     (separable : ¬ FutureEquivalent
       (interactionFutureContract (History := History)
-        (initialMemory := initialMemory) preservation channel) left right) :
-    interactionSignature preservation channel left ≠
-      interactionSignature preservation channel right :=
+        (initialMemory := initialMemory) transformation channel) left right) :
+    interactionSignature transformation channel left ≠
+      interactionSignature transformation channel right :=
   fun same => separable
-    ((forgotten_iff_future_indistinguishable preservation channel left right).mp same)
+    ((forgotten_iff_future_indistinguishable transformation channel left right).mp same)
 
 theorem forgotten_origin_not_recoverable
     {History : Type 3} {initialMemory : History -> Agent.Memory}
@@ -292,22 +292,22 @@ theorem forgotten_origin_not_recoverable
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal)
     (left right : HistoricalInteractionSource History initialMemory family)
     (originsDistinct : left.origin ≠ right.origin)
-    (sameMemory : left.currentMemory preservation channel =
-      right.currentMemory preservation channel)
+    (sameMemory : left.currentMemory transformation channel =
+      right.currentMemory transformation channel)
     (recover : List (Outcome Agent.Event Agent.Memory) -> History)
-    (recoversLeft : recover (interactionSignature preservation channel left) =
+    (recoversLeft : recover (interactionSignature transformation channel left) =
       left.origin)
-    (recoversRight : recover (interactionSignature preservation channel right) =
+    (recoversRight : recover (interactionSignature transformation channel right) =
       right.origin) : False := by
   apply originsDistinct
   exact recoversLeft.symm.trans
     ((congrArg recover
-      (same_memory_same_interaction_signature preservation channel sameMemory)).trans
+      (same_memory_same_interaction_signature transformation channel sameMemory)).trans
         recoversRight)
 
 end ConstitutiveSearch.NeuralAgent

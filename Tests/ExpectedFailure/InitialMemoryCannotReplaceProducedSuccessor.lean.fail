@@ -6,7 +6,7 @@ open ConstitutiveSearch.NeuralAgent
 -- The reconfigured continuation starts from the action's produced successor,
 -- not from the memory that existed before the action.
 example :
-    (publicInitialReconfiguredState ⟨.allow, ()⟩).memory =
+    (publicInitialReconfiguredState ⟨.scopeOne, .direct⟩).memory =
       publicActionMemory := by
   rfl
 

@@ -1,0 +1,8 @@
+import RelationalPerimeter.Agents.Neural.PublicExactForgetting
+
+open ConstitutiveSearch.NeuralAgent
+
+def source : PublicRequirementInput := ⟨.scopeZero, .direct⟩
+
+def completeState : ReconfiguredExecutionState publicRequirementFamily :=
+  (publicLeftExecutedForgetting source []).output

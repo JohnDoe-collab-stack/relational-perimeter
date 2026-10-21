@@ -1,0 +1,19 @@
+import RelationalPerimeter.Agents.Neural.ConstitutiveAlignment
+
+open ConstitutiveSearch
+open ConstitutiveSearch.NeuralAgent
+open ConstitutiveSearch.ContinuationSignatures
+
+def trivialTerminalContract :
+    FutureContract Agent.Memory (ULift.{3} Agent.Request)
+      Agent.Event OperationalMemoryReadout where
+  next := reconfiguredOperationalMemoryFutureContract.next
+  event := reconfiguredOperationalMemoryFutureContract.event
+  read := reconfiguredOperationalMemoryFutureContract.read
+  Allow := fun _ _ => PUnit
+  decision := fun _ _ => .inl PUnit.unit
+
+def forbiddenTrivialAuthorization
+    (memory : Agent.Memory) (request : ULift.{3} Agent.Request) :
+    publicAlignmentFutureContract.Allow memory request :=
+  PUnit.unit

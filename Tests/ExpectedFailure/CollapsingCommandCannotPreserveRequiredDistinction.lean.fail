@@ -1,0 +1,7 @@
+import RelationalPerimeter.Agents.Neural.PublicActionRealization
+
+open ConstitutiveSearch NeuralAgent
+
+def forbiddenCollapsingChannel : NeuralAgent.AgentActionChannel Bool :=
+  { NeuralAgent.publicAgentActionChannel with
+    command := fun _ => .advance 0 }

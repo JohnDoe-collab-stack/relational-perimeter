@@ -1,0 +1,52 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.ZeroWeightEdgeCannotWitnessCausalParticipation
+open ConstitutiveSearch.NativeMechanism
+
+def zeroWeightInput : Fin 1 := ⟨0, by decide⟩
+def zeroWeightOutput : Fin 1 := ⟨0, by decide⟩
+
+def zeroWeightNeuron : NeuronSpec 1 0 :=
+  { inputs := [{ source := .receivedInput zeroWeightInput, weight := 0 }]
+    bias := 0
+    threshold := ⟨1⟩ }
+
+def zeroWeightProgram : NetworkProgram 1 1 :=
+  .extend .empty zeroWeightNeuron
+
+def zeroWeightInputs : SizedActivations 1 :=
+  SizedActivations.snoc SizedActivations.empty 1
+
+def zeroWeightOutputs : OutputPorts 1 :=
+  { sources := [zeroWeightOutput]
+    nonempty := by intro impossible; cases impossible }
+
+def zeroWeightSystem : NativeSystem Unit Bool :=
+  { inputCount := 1
+    producedCount := 1
+    encode := fun _ => zeroWeightInputs
+    program := zeroWeightProgram
+    outputs := zeroWeightOutputs
+    decode := fun _ => false }
+
+def zeroWeightRun : NativeRun zeroWeightProgram :=
+  zeroWeightSystem.run ()
+
+def zeroWeightReads :
+    ReadsFrom zeroWeightRun
+      (.receivedInput zeroWeightInput) (.neuronOutput zeroWeightOutput) :=
+  .executedEdge zeroWeightOutput
+    { source := .receivedInput zeroWeightInput, weight := 0 }
+    (by exact List.Mem.head _)
+
+-- C5 forbids a decorative edge with weight zero from replacing an effective
+-- causal edge, even when that edge is present in the program.
+def forbiddenZeroWeightParticipation :
+    EffectiveReadsFrom zeroWeightRun
+      (.receivedInput zeroWeightInput) (.neuronOutput zeroWeightOutput) :=
+  zeroWeightReads
+
+end Tests.ExpectedFailure.ZeroWeightEdgeCannotWitnessCausalParticipation
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NativeMechanism.EffectiveReadsFrom
+/- AXIOM_AUDIT_END -/

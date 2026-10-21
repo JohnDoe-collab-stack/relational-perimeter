@@ -5,11 +5,13 @@ import RelationalPerimeter.Agents.Constitutive.Requirement
 # Requirements received and incorporated by a native execution
 
 The requirement is not an output label.  A family names the received
-requirement and the proposal required in one context.  Its encoding is read at
-one declared input occurrence of the native run, and equality of encoded
-signals must reflect equality of the received requirements.  Incorporation
-additionally requires that this very input occurrence has an executed causal
-role in the produced proposal.
+requirement and the proposal required in one context.  The requirement and its
+context are encoded jointly at one declared input occurrence of the native
+run.  Equality of codes must reflect equality of requirements when the context
+is fixed.  Context sensitivity is established where the required proposal
+actually distinguishes contexts; contexts equivalent for a contract need not
+be separated globally.  Incorporation additionally requires that this very
+input occurrence has an executed causal role in the produced proposal.
 -/
 set_option genInjectivity false
 namespace ConstitutiveSearch.NeuralAgent
@@ -39,11 +41,12 @@ structure RequirementEncoding
     {family : RequirementFamily RequirementCase Context Proposal}
     (system : NativeSystem (RequirementInput family) Proposal) where
   port : Fin system.inputCount
-  code : RequirementCase -> Activation
+  code : RequirementCase -> Context -> Activation
   inputExact : forall input,
-    (system.encode input).read port = code input.requirement
-  requirementReflecting : forall one two,
-    code one = code two -> family.received one = family.received two
+    (system.encode input).read port = code input.requirement input.context
+  requirementReflecting : forall one two context,
+    code one context = code two context ->
+      family.received one = family.received two
 
 theorem encoded_requirement_exact
     {RequirementCase : Type u} {Context : Type v} {Proposal : Type w}
@@ -53,7 +56,7 @@ theorem encoded_requirement_exact
     (input : RequirementInput family) :
     (ActivationOccurrence.receivedInput encoding.port :
       ActivationOccurrence (system.run input)).value =
-        encoding.code input.requirement :=
+        encoding.code input.requirement input.context :=
   encoding.inputExact input
 
 structure RequirementIncorporation

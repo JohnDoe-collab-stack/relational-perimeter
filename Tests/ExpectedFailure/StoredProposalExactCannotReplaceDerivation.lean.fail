@@ -1,0 +1,19 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.StoredProposalExactCannotReplaceDerivation
+open ConstitutiveSearch.NeuralAgent
+
+def source : PublicRequirementInput := ⟨.scopeZero, .direct⟩
+def next : PublicRequirementInput := ⟨.scopeOne, .direct⟩
+
+-- C4 forbids the occurrence transport from replacing the executed derivation
+-- that produces final proposal exactness.
+def forbiddenStoredConclusion :
+    ReconfiguredProposalDerivation (publicReconfiguration source next)
+      (publicRequiredMechanismTransport source next) :=
+  publicRequiredMechanismTransport source next
+
+end Tests.ExpectedFailure.StoredProposalExactCannotReplaceDerivation
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ReconfiguredProposalDerivation.proposal_exact
+/- AXIOM_AUDIT_END -/

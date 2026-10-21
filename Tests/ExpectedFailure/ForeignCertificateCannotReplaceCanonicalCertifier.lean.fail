@@ -25,8 +25,12 @@ def foreignHead
       (executeReconfiguredAction channel source next foreign).targetState
       future) :
     ReconfiguredInteractionHistory builder channel certify source
-      (next :: future) :=
-  .step (executeReconfiguredAction channel source next foreign) tail
+      (next :: future) := by
+  have certificateExact : foreign = certify source next := by
+    rfl
+  subst foreign
+  exact .step
+    (executeReconfiguredCausalStage builder channel certify source next) tail
 
 end Tests.ExpectedFailure.ForeignCertificateCannotReplaceCanonicalCertifier
 /- AXIOM_AUDIT_BEGIN -/

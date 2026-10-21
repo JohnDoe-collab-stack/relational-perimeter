@@ -1,0 +1,34 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.GraphReachabilityCannotReplaceLaterCausalRole
+open ConstitutiveSearch.NativeMechanism ConstitutiveSearch.NeuralAgent
+
+def scopeZeroDirectInput : PublicRequirementInput := ⟨.scopeZero, .direct⟩
+def scopeOneDirectInput : PublicRequirementInput := ⟨.scopeOne, .direct⟩
+
+def firstStage :=
+  executeReconfiguredCausalStage publicReconfigurationBuilder
+    publicAgentActionChannel publicReconfigurationCertificateForState
+    (publicInitialReconfiguredState scopeZeroDirectInput) scopeOneDirectInput
+
+def laterStage :=
+  executeReconfiguredCausalStage publicReconfigurationBuilder
+    publicAgentActionChannel publicReconfigurationCertificateForState
+    firstStage.nextState scopeZeroDirectInput
+
+def laterGraphPath :=
+  causal_role_has_executed_path laterStage.sourceRole
+
+/-- A graph path extracted from the later step does not reconstruct the
+intervention, changed occurrences, changed target, or changed proposal that
+the continuation requires from a full `CausalRole`. -/
+def graphReachabilityCannotReplaceLaterCausalRole :
+    CausalRole laterStage.action.certificate.configuration.targetSystem
+      scopeZeroDirectInput
+      (.receivedInput laterStage.action.certificate.transport.sourcePort) :=
+  laterGraphPath
+
+end Tests.ExpectedFailure.GraphReachabilityCannotReplaceLaterCausalRole
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ReconfiguredCausalStage.sourceRole
+/- AXIOM_AUDIT_END -/

@@ -1,0 +1,19 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.MissingAuthorizationCannotBuildReconfiguration
+open ConstitutiveSearch.NeuralAgent
+
+def scopeZeroDirectInput : PublicRequirementInput := ⟨.scopeZero, .direct⟩
+def scopeOneDirectInput : PublicRequirementInput := ⟨.scopeOne, .direct⟩
+
+/-- A next mechanism cannot be built from a run and a requirement alone.  The
+admitted and incorporated authorization is a required constitutive input. -/
+def missingAuthorizationCannotBuildReconfiguration :
+    Reconfiguration publicReconfigurationBuilder publicRequirementSystem
+      scopeZeroDirectInput scopeOneDirectInput :=
+  reconfigure publicReconfigurationBuilder scopeZeroDirectInput scopeOneDirectInput
+
+end Tests.ExpectedFailure.MissingAuthorizationCannotBuildReconfiguration
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.reconfigure
+/- AXIOM_AUDIT_END -/

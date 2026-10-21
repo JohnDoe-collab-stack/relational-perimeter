@@ -7,10 +7,10 @@ open ConstitutiveSearch.ContinuationSignatures
 -- The fixed-system interaction contract cannot replace the future contract
 -- whose state contains and advances the produced native system.
 def wrongContract :
-    FutureContract PublicReconfiguredHistoricalSource
+    FutureContract (ReconfiguredExecutionState publicRequirementFamily)
       (ULift.{3} PublicRequirementInput)
       ConstitutiveSearch.Agent.Event ConstitutiveSearch.Agent.Memory :=
-  interactionFutureContract publicRequirementSignalPreservation
+  interactionFutureContract publicRequirementSignalTransformation
     publicAgentActionChannel
 
 end Tests.ExpectedFailure.OriginalContractCannotReplaceReconfiguredContract

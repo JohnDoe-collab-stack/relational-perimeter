@@ -4,14 +4,14 @@ namespace Tests.ExpectedFailure.InitialStateCannotReplaceProducedFinalState
 open ConstitutiveSearch.NeuralAgent
 
 def chain :
-    ConstitutiveAlignmentCertificate ⟨.deny, ()⟩ ⟨.allow, ()⟩ [] :=
-  constitutive_alignment ⟨.deny, ()⟩ ⟨.allow, ()⟩ []
+    PublicConstitutiveAlignmentCertificate
+      ⟨.scopeZero, .direct⟩ ⟨.scopeOne, .direct⟩ [] :=
+  constitutive_alignment ⟨.scopeZero, .direct⟩ ⟨.scopeOne, .direct⟩ []
 
--- Exact forgetting starts from the state produced by the reconfigured
--- continuation, not from the state that preceded that continuation.
+-- The output of forgetting is computed by the historical program and tied to
+-- the continuation final memory; it cannot be replaced by the initial memory.
 example :
-    chain.forgettingInitialState chain.forgottenLeft.origin =
-      chain.initialState := by
+    chain.forgottenLeftExecution.output = chain.initialState.memory := by
   rfl
 
 end Tests.ExpectedFailure.InitialStateCannotReplaceProducedFinalState

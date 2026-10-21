@@ -96,6 +96,29 @@ structure OccurrenceChanged
     (occurrence : ActivationOccurrence run) where
   different : intervenedValue intervention occurrence ≠ occurrence.value
 
+/-- An executed edge is effective only when its declared weight is nonzero.
+This prevents graph membership alone, in particular a decorative zero-weight
+edge, from witnessing causal propagation. -/
+inductive EffectiveReadsFrom
+    {program : NetworkProgram inputCount produced}
+    (run : NativeRun program) :
+    ActivationOccurrence run -> ActivationOccurrence run -> Type where
+  | executedEdge
+      (target : Fin produced)
+      (edge : WeightedInput inputCount target.val)
+      (member : edge ∈ (program.neuronAt target).inputs)
+      (weightNonzero : edge.weight ≠ 0) :
+      EffectiveReadsFrom run (program.sourceOccurrence run target edge.source)
+        (.neuronOutput target)
+
+def EffectiveReadsFrom.toReadsFrom
+    {program : NetworkProgram inputCount produced}
+    {run : NativeRun program}
+    {source target : ActivationOccurrence run} :
+    EffectiveReadsFrom run source target -> ReadsFrom run source target
+  | .executedEdge destination edge member _ =>
+      .executedEdge destination edge member
+
 inductive ExecutedChangePath
     {program : NetworkProgram inputCount produced}
     {run : NativeRun program}
@@ -103,7 +126,7 @@ inductive ExecutedChangePath
   | origin : ExecutedChangePath intervention intervention.focusOccurrence
   | step {source target : ActivationOccurrence run}
       (prior : ExecutedChangePath intervention source)
-      (edge : ReadsFrom run source target)
+      (edge : EffectiveReadsFrom run source target)
       (targetChanged : OccurrenceChanged intervention target) :
       ExecutedChangePath intervention target
 
@@ -116,7 +139,7 @@ def ExecutedChangePath.toReaches
       Reaches run intervention.focusOccurrence target
   | .origin => .refl _
   | .step prior edge _ =>
-      prior.toReaches.trans (.step edge (.refl _))
+      prior.toReaches.trans (.step edge.toReadsFrom (.refl _))
 
 inductive NontrivialExecutedChangePath
     {program : NetworkProgram inputCount produced}
@@ -124,7 +147,7 @@ inductive NontrivialExecutedChangePath
     (intervention : Intervention run) : ActivationOccurrence run -> Type where
   | step {source target : ActivationOccurrence run}
       (prior : ExecutedChangePath intervention source)
-      (edge : ReadsFrom run source target)
+      (edge : EffectiveReadsFrom run source target)
       (targetChanged : OccurrenceChanged intervention target) :
       NontrivialExecutedChangePath intervention target
 
@@ -216,6 +239,8 @@ end ConstitutiveSearch.NativeMechanism
 #print axioms ConstitutiveSearch.NativeMechanism.intervenedOutputs
 #print axioms ConstitutiveSearch.NativeMechanism.intervenedValue
 #print axioms ConstitutiveSearch.NativeMechanism.OccurrenceChanged
+#print axioms ConstitutiveSearch.NativeMechanism.EffectiveReadsFrom
+#print axioms ConstitutiveSearch.NativeMechanism.EffectiveReadsFrom.toReadsFrom
 #print axioms ConstitutiveSearch.NativeMechanism.ExecutedChangePath
 #print axioms ConstitutiveSearch.NativeMechanism.ExecutedChangePath.toReaches
 #print axioms ConstitutiveSearch.NativeMechanism.NontrivialExecutedChangePath

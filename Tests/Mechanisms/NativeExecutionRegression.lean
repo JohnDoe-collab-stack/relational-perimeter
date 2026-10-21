@@ -94,6 +94,20 @@ def permissionToOutput :
            { source := .receivedInput inputOne, weight := 1 }]
       exact List.Mem.head _)
 
+def effectivePermissionToOutput :
+    EffectiveReadsFrom (exampleSystem.run (true, true))
+      (.neuronOutput permissionOutput) (.neuronOutput outputNeuron) :=
+  .executedEdge outputNeuron
+    { source := .priorNeuron firstNeuron, weight := 1 }
+    (by
+      change
+        ({ source := .priorNeuron firstNeuron, weight := 1 } :
+          WeightedInput 2 1) ∈
+          [{ source := .priorNeuron firstNeuron, weight := 1 },
+           { source := .receivedInput inputOne, weight := 1 }]
+      exact List.Mem.head _)
+    (by decide)
+
 theorem outputOccurrenceChanged :
     OccurrenceChanged permissionIntervention (.neuronOutput outputNeuron) :=
   { different := by decide }
@@ -101,7 +115,7 @@ theorem outputOccurrenceChanged :
 def permissionPropagation :
     NontrivialExecutedChangePath permissionIntervention
       (.neuronOutput outputNeuron) :=
-  .step .origin permissionToOutput outputOccurrenceChanged
+  .step .origin effectivePermissionToOutput outputOccurrenceChanged
 
 def permissionReachesOutput :
     Reaches (exampleSystem.run (true, true))
@@ -182,6 +196,7 @@ end Tests.Mechanisms.NativeExecutionRegression
 #print axioms Tests.Mechanisms.NativeExecutionRegression.permissionTargetChange
 #print axioms Tests.Mechanisms.NativeExecutionRegression.permissionProposalChange
 #print axioms Tests.Mechanisms.NativeExecutionRegression.permissionToOutput
+#print axioms Tests.Mechanisms.NativeExecutionRegression.effectivePermissionToOutput
 #print axioms Tests.Mechanisms.NativeExecutionRegression.outputOccurrenceChanged
 #print axioms Tests.Mechanisms.NativeExecutionRegression.permissionPropagation
 #print axioms Tests.Mechanisms.NativeExecutionRegression.permissionReachesOutput

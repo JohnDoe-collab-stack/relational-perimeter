@@ -23,20 +23,20 @@ inductive InteractionHistory
     {decoder : SingleOutputRequirementDecoder encoding}
     (incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input)
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal) :
     Agent.Memory -> List (RequirementInput family) ->
       Type (max 3 (max u (max v w))) where
   | nil (memory : Agent.Memory) :
-      InteractionHistory incorporation preservation channel memory []
+      InteractionHistory incorporation transformation channel memory []
   | step {memory : Agent.Memory} {input : RequirementInput family}
       {future : List (RequirementInput family)}
-      (action : ActionRealization channel (preservation input) memory)
+      (action : ActionRealization channel (transformation input) memory)
       (effect : EffectRealization action)
-      (tail : InteractionHistory incorporation preservation channel
+      (tail : InteractionHistory incorporation transformation channel
         effect.successor future) :
-      InteractionHistory incorporation preservation channel memory
+      InteractionHistory incorporation transformation channel memory
         (input :: future)
 
 def executeInteractions
@@ -47,17 +47,17 @@ def executeInteractions
     {decoder : SingleOutputRequirementDecoder encoding}
     (incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input)
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal) :
     (memory : Agent.Memory) -> (inputs : List (RequirementInput family)) ->
-      InteractionHistory incorporation preservation channel memory inputs
+      InteractionHistory incorporation transformation channel memory inputs
   | memory, [] => .nil memory
   | memory, input :: future =>
-      let action := realizeAction channel (preservation input) memory
+      let action := realizeAction channel (transformation input) memory
       let effect := realizeEffect action
       .step action effect
-        (executeInteractions incorporation preservation channel
+        (executeInteractions incorporation transformation channel
           effect.successor future)
 
 def InteractionHistory.requests
@@ -68,10 +68,10 @@ def InteractionHistory.requests
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    {preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input)}
+    {transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input)}
     {channel : AgentActionChannel Proposal} {memory inputs} :
-    InteractionHistory incorporation preservation channel memory inputs ->
+    InteractionHistory incorporation transformation channel memory inputs ->
       List Agent.Request
   | .nil _ => []
   | .step action _ tail => action.request :: tail.requests
@@ -84,10 +84,10 @@ def InteractionHistory.events
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    {preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input)}
+    {transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input)}
     {channel : AgentActionChannel Proposal} {memory inputs} :
-    InteractionHistory incorporation preservation channel memory inputs ->
+    InteractionHistory incorporation transformation channel memory inputs ->
       List Agent.Event
   | .nil _ => []
   | .step _ effect tail => effect.event :: tail.events
@@ -100,10 +100,10 @@ def InteractionHistory.finalMemory
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    {preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input)}
+    {transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input)}
     {channel : AgentActionChannel Proposal} {memory inputs} :
-    InteractionHistory incorporation preservation channel memory inputs ->
+    InteractionHistory incorporation transformation channel memory inputs ->
       Agent.Memory
   | .nil memory => memory
   | .step _ _ tail => tail.finalMemory
@@ -127,10 +127,10 @@ theorem InteractionHistory.requests_exact
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    {preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input)}
+    {transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input)}
     {channel : AgentActionChannel Proposal} {memory inputs}
-    (history : InteractionHistory incorporation preservation channel memory inputs) :
+    (history : InteractionHistory incorporation transformation channel memory inputs) :
     history.requests = requiredRequests channel inputs := by
   induction history with
   | nil => rfl
@@ -151,10 +151,10 @@ theorem InteractionHistory.execution_exact
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    {preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input)}
+    {transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input)}
     {channel : AgentActionChannel Proposal} {memory inputs}
-    (history : InteractionHistory incorporation preservation channel memory inputs) :
+    (history : InteractionHistory incorporation transformation channel memory inputs) :
     (history.finalMemory, history.events) =
       Agent.executeRequests memory history.requests := by
   induction history with
@@ -194,13 +194,13 @@ theorem finite_continuation_aligned
     {decoder : SingleOutputRequirementDecoder encoding}
     (incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input)
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal) (memory : Agent.Memory)
     (inputs : List (RequirementInput family)) :
-    (executeInteractions incorporation preservation channel memory inputs).requests =
+    (executeInteractions incorporation transformation channel memory inputs).requests =
       requiredRequests channel inputs :=
-  (executeInteractions incorporation preservation channel memory inputs).requests_exact
+  (executeInteractions incorporation transformation channel memory inputs).requests_exact
 
 theorem finite_continuation_execution_exact
     {RequirementCase : Type u} {Context : Type v} {Proposal : Type w}
@@ -210,18 +210,18 @@ theorem finite_continuation_execution_exact
     {decoder : SingleOutputRequirementDecoder encoding}
     (incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input)
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal) (memory : Agent.Memory)
     (inputs : List (RequirementInput family)) :
     let history :=
-      executeInteractions incorporation preservation channel memory inputs
+      executeInteractions incorporation transformation channel memory inputs
     (history.finalMemory, history.events) =
       Agent.executeRequests memory (requiredRequests channel inputs) := by
   dsimp only
-  rw [← (executeInteractions incorporation preservation channel memory
+  rw [← (executeInteractions incorporation transformation channel memory
     inputs).requests_exact]
-  exact (executeInteractions incorporation preservation channel memory
+  exact (executeInteractions incorporation transformation channel memory
     inputs).execution_exact
 
 def InteractionHistory.headRequest
@@ -232,10 +232,10 @@ def InteractionHistory.headRequest
     {decoder : SingleOutputRequirementDecoder encoding}
     {incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input}
-    {preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input)}
+    {transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input)}
     {channel : AgentActionChannel Proposal} {memory inputs} :
-    InteractionHistory incorporation preservation channel memory inputs ->
+    InteractionHistory incorporation transformation channel memory inputs ->
       Option Agent.Request
   | .nil _ => none
   | .step action _ _ => some action.request
@@ -248,14 +248,14 @@ theorem head_horizon_independent
     {decoder : SingleOutputRequirementDecoder encoding}
     (incorporation : (input : RequirementInput family) ->
       RequirementIncorporation encoding input)
-    (preservation : (input : RequirementInput family) ->
-      RequirementSignalPreservation decoder (incorporation input))
+    (transformation : (input : RequirementInput family) ->
+      RequirementSignalTransformation decoder (incorporation input))
     (channel : AgentActionChannel Proposal) (memory : Agent.Memory)
     (input : RequirementInput family)
     (left right : List (RequirementInput family)) :
-    (executeInteractions incorporation preservation channel memory
+    (executeInteractions incorporation transformation channel memory
       (input :: left)).headRequest =
-    (executeInteractions incorporation preservation channel memory
+    (executeInteractions incorporation transformation channel memory
       (input :: right)).headRequest :=
   rfl
 

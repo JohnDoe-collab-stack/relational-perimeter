@@ -6,7 +6,8 @@ open ConstitutiveSearch.NeuralAgent
 -- The final result requires its dependent witnesses; a proposition is not a
 -- substitute for the constitutive chain.
 def forgedCertificate :
-    ConstitutiveAlignmentCertificate ⟨.deny, ()⟩ ⟨.allow, ()⟩ [] :=
+    PublicConstitutiveAlignmentCertificate
+      ⟨.scopeZero, .direct⟩ ⟨.scopeOne, .direct⟩ [] :=
   True.intro
 
 end Tests.ExpectedFailure.PropositionCannotReplaceAlignmentCertificate

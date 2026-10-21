@@ -1,0 +1,22 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.ForeignAuthorizationCannotBuildReconfiguration
+open ConstitutiveSearch.NeuralAgent
+
+def scopeZeroDirectInput : PublicRequirementInput := ⟨.scopeZero, .direct⟩
+def scopeOneDirectInput : PublicRequirementInput := ⟨.scopeOne, .direct⟩
+
+def authorizationForScopeZero := publicReconfigurationAuthorization scopeZeroDirectInput
+
+/-- Authorization incorporated for a different received requirement cannot be
+substituted into the constitutive chain for the requested reconfiguration. -/
+def foreignAuthorizationCannotBuildReconfiguration :
+    Reconfiguration publicReconfigurationBuilder publicRequirementSystem
+      scopeZeroDirectInput scopeOneDirectInput :=
+  reconfigure publicReconfigurationBuilder scopeZeroDirectInput scopeOneDirectInput
+    authorizationForScopeZero
+
+end Tests.ExpectedFailure.ForeignAuthorizationCannotBuildReconfiguration
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.reconfigure
+/- AXIOM_AUDIT_END -/

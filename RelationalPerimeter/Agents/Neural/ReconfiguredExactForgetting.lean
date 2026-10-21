@@ -1,20 +1,101 @@
 import RelationalPerimeter.Agents.Neural.ReconfiguredContinuation
+import RelationalPerimeter.Agents.ContinuationSignatures.ReachableAgent
 import RelationalPerimeter.Constitution.Continuation.Minimality
 
 /-!
 # Exact forgetting for a reconfigured continuation
 
-The rich source remembers its constituted origin and covered past.  Its
-current operational state is nevertheless computed only by executing the
-reconfiguration certificate produced from the preceding state.  The exact
-realization forgets the origin and past while retaining the current native
-system, current requirement and current agent memory: precisely the material
-needed to continue the same reconfiguration recursion.
+The rich source remembers its constituted origin and covered past. Its current
+operational state is computed only by executing the reconfiguration certificate
+produced from the preceding state. Two realizations are distinguished. The
+historical realization exposes the current reconfigured state. C9 then projects
+that state to the strictly poorer `Agent.Memory`: its current system, current
+requirement, constituted origin and covered past are absent. Exact transport
+laws prove that this smaller memory nevertheless preserves the authorizations,
+transitions, events, readouts, and every covered finite future.
 -/
 set_option genInjectivity false
 set_option maxHeartbeats 2000000
 namespace ConstitutiveSearch.NeuralAgent
 open ContinuationSignatures NativeMechanism
+
+/-- An executable forgetting program consumes a constituted historical origin
+and computes the reduced material that may continue operationally.  The
+historical input is not stored in the result type. -/
+structure HistoricalForgettingProgram (History Reduced : Type 3) where
+  run : History -> Reduced
+
+/-- The input to forgetting positively contains the historical origin that is
+about to be consumed. -/
+structure HistoricalForgettingInput
+    {History Reduced : Type 3}
+    (program : HistoricalForgettingProgram History Reduced) where
+  origin : History
+
+/-- A forgetting execution records both its computed output and the exact
+equation showing that the output came from running the declared program on the
+historically informed input. -/
+structure ExecutedHistoricalForgetting
+    {History Reduced : Type 3}
+    (program : HistoricalForgettingProgram History Reduced)
+    (input : HistoricalForgettingInput program) where
+  private mk ::
+  output : Reduced
+  executionExact : output = program.run input.origin
+
+def executeHistoricalForgetting
+    {History Reduced : Type 3}
+    (program : HistoricalForgettingProgram History Reduced)
+    (input : HistoricalForgettingInput program) :
+    ExecutedHistoricalForgetting program input :=
+  .mk (program.run input.origin) rfl
+
+theorem HistoricalForgettingInput.ne_of_origin_ne
+    {History Reduced : Type 3}
+    {program : HistoricalForgettingProgram History Reduced}
+    {left right : HistoricalForgettingInput program}
+    (different : left.origin ≠ right.origin) : left ≠ right := by
+  intro same
+  exact different (congrArg HistoricalForgettingInput.origin same)
+
+theorem ExecutedHistoricalForgetting.outputs_equal_of_common_target
+    {History Reduced : Type 3}
+    {program : HistoricalForgettingProgram History Reduced}
+    {leftInput rightInput : HistoricalForgettingInput program}
+    (left : ExecutedHistoricalForgetting program leftInput)
+    (right : ExecutedHistoricalForgetting program rightInput)
+    {target : Reduced}
+    (leftExact : left.output = target)
+    (rightExact : right.output = target) :
+    left.output = right.output :=
+  leftExact.trans rightExact.symm
+
+theorem ExecutedHistoricalForgetting.same_output_same_future
+    {History Reduced Input Event Observation : Type 3}
+    {program : HistoricalForgettingProgram History Reduced}
+    {leftInput rightInput : HistoricalForgettingInput program}
+    (left : ExecutedHistoricalForgetting program leftInput)
+    (right : ExecutedHistoricalForgetting program rightInput)
+    (contract : FutureContract Reduced Input Event Observation)
+    (same : left.output = right.output) :
+    FutureEquivalent contract left.output right.output := by
+  intro requests
+  rw [same]
+
+theorem ExecutedHistoricalForgetting.origin_not_recoverable
+    {History Reduced : Type 3}
+    {program : HistoricalForgettingProgram History Reduced}
+    {leftInput rightInput : HistoricalForgettingInput program}
+    (left : ExecutedHistoricalForgetting program leftInput)
+    (right : ExecutedHistoricalForgetting program rightInput)
+    (originsDistinct : leftInput.origin ≠ rightInput.origin)
+    (outputsEqual : left.output = right.output)
+    (recover : Reduced -> History)
+    (recoversLeft : recover left.output = leftInput.origin)
+    (recoversRight : recover right.output = rightInput.origin) : False := by
+  apply originsDistinct
+  exact recoversLeft.symm.trans
+    ((congrArg recover outputsEqual).trans recoversRight)
 
 inductive ReconfiguredHistoricalSource
     (History : Type 3)
@@ -120,6 +201,77 @@ def reducedReconfiguredFutureContract
   Allow := fun _ _ => PUnit
   decision := fun _ _ => .inl PUnit.unit
 
+/-- The observable part of the terminal operational contract.  It exposes the
+authorized answer table, not the complete memory that also contains the live
+engine and the retained requirement. -/
+abbrev OperationalMemoryReadout : Type 3 :=
+  ULift.{3} (List (Nat × SAT.Var × Bool))
+
+/-- The terminal contract before forgetting.  Requests are genuine agent
+requests.  Their admission is decided from the current requirement and
+register, and a transition executes the same proof-carrying agent operation
+that is available after projection.  The native system and neural input remain
+present in the source type but are not read by this terminal layer. -/
+def reconfiguredOperationalStateFutureContract
+    {RequirementCase Context Proposal : Type}
+    {family : RequirementFamily RequirementCase Context Proposal} :
+    FutureContract (ReconfiguredExecutionState family)
+      (ULift.{3} Agent.Request) Agent.Event OperationalMemoryReadout where
+  next := fun source request =>
+    { system := source.system
+      input := source.input
+      memory := (Agent.executeInput source.memory request.down).1 }
+  event := fun source request =>
+    (Agent.executeInput source.memory request.down).2
+  read := fun source =>
+    ⟨Agent.table source.memory.register
+      source.memory.requirement.realizedScope⟩
+  Allow := fun source request =>
+    Agent.Admission source.memory.requirement source.memory.register
+      request.down
+  decision := fun source request =>
+    ReachableAgent.decideAdmission source.memory request.down
+
+/-- The strictly reduced terminal contract is the existing complete runtime
+agent contract.  It contains admitted and refused requests, executes their
+decisions, and observes only the authorized table rather than the entire
+memory. -/
+def reconfiguredOperationalMemoryFutureContract :
+    FutureContract Agent.Memory (ULift.{3} Agent.Request)
+      Agent.Event OperationalMemoryReadout :=
+  ReachableAgent.runtimeContract
+
+/-- Exact C9–C10 realization of the full reconfigured state by its operational
+memory.  Authorization witnesses are transported in both directions, and
+transition, event and readout equality hold for every request. -/
+def reconfiguredOperationalMemoryRealization
+    {RequirementCase Context Proposal : Type}
+    {family : RequirementFamily RequirementCase Context Proposal} :
+    ExactRealization
+      (reconfiguredOperationalStateFutureContract (family := family))
+      Agent.Memory where
+  reduced := reconfiguredOperationalMemoryFutureContract
+  project := ReconfiguredExecutionState.memory
+  forward := fun _ _ witness => witness
+  backward := fun _ _ witness => witness
+  backward_forward := fun _ _ _ => rfl
+  forward_backward := fun _ _ _ => rfl
+  next_exact := fun _ _ => rfl
+  event_exact := fun _ _ => rfl
+  read_exact := fun _ => rfl
+
+theorem reconfiguredOperationalMemory_outcome_exact
+    {RequirementCase Context Proposal : Type}
+    {family : RequirementFamily RequirementCase Context Proposal}
+    (source : ReconfiguredExecutionState family)
+    (future : List (ULift.{3} Agent.Request)) :
+    (reconfiguredOperationalStateFutureContract (family := family)).outcome
+        source future =
+      reconfiguredOperationalMemoryFutureContract.outcome source.memory
+        future :=
+  (reconfiguredOperationalMemoryRealization (family := family)).outcome_exact
+    source future
+
 def reconfiguredStateRealization
     {History : Type 3}
     {RequirementCase Context Proposal : Type}
@@ -192,11 +344,23 @@ theorem reconfigured_origin_not_recoverable
 
 end ConstitutiveSearch.NeuralAgent
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.HistoricalForgettingProgram
+#print axioms ConstitutiveSearch.NeuralAgent.HistoricalForgettingInput
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedHistoricalForgetting
+#print axioms ConstitutiveSearch.NeuralAgent.executeHistoricalForgetting
+#print axioms ConstitutiveSearch.NeuralAgent.HistoricalForgettingInput.ne_of_origin_ne
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedHistoricalForgetting.outputs_equal_of_common_target
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedHistoricalForgetting.same_output_same_future
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedHistoricalForgetting.origin_not_recoverable
 #print axioms ConstitutiveSearch.NeuralAgent.ReconfiguredHistoricalSource
 #print axioms ConstitutiveSearch.NeuralAgent.ReconfiguredHistoricalSource.origin
 #print axioms ConstitutiveSearch.NeuralAgent.ReconfiguredHistoricalSource.currentState
 #print axioms ConstitutiveSearch.NeuralAgent.reconfiguredFutureContract
 #print axioms ConstitutiveSearch.NeuralAgent.reducedReconfiguredFutureContract
+#print axioms ConstitutiveSearch.NeuralAgent.reconfiguredOperationalStateFutureContract
+#print axioms ConstitutiveSearch.NeuralAgent.reconfiguredOperationalMemoryFutureContract
+#print axioms ConstitutiveSearch.NeuralAgent.reconfiguredOperationalMemoryRealization
+#print axioms ConstitutiveSearch.NeuralAgent.reconfiguredOperationalMemory_outcome_exact
 #print axioms ConstitutiveSearch.NeuralAgent.reconfiguredStateRealization
 #print axioms ConstitutiveSearch.NeuralAgent.reconfigured_same_state_same_future
 #print axioms ConstitutiveSearch.NeuralAgent.reconfigured_origin_not_recoverable

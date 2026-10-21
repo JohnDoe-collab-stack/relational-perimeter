@@ -37,166 +37,333 @@ theorem public_historical_origins_distinct :
 
 theorem public_historical_memories_equal :
     publicLeftHistoricalSource.currentMemory
-        publicRequirementSignalPreservation publicAgentActionChannel =
+        publicRequirementSignalTransformation publicAgentActionChannel =
       publicRightHistoricalSource.currentMemory
-        publicRequirementSignalPreservation publicAgentActionChannel :=
+        publicRequirementSignalTransformation publicAgentActionChannel :=
   Agent.initial_memories_equal publicHistoricalMaster
     publicHistoricalRequirement publicHistoricalMaster.distinctPair.left
     publicHistoricalMaster.distinctPair.right
 
 theorem public_left_historical_memory_is_action_memory :
     publicLeftHistoricalSource.currentMemory
-        publicRequirementSignalPreservation publicAgentActionChannel =
+        publicRequirementSignalTransformation publicAgentActionChannel =
       publicActionMemory :=
   rfl
 
 theorem public_forgotten_sources_same_signature :
-    interactionSignature publicRequirementSignalPreservation
+    interactionSignature publicRequirementSignalTransformation
         publicAgentActionChannel publicLeftHistoricalSource =
-      interactionSignature publicRequirementSignalPreservation
+      interactionSignature publicRequirementSignalTransformation
         publicAgentActionChannel publicRightHistoricalSource :=
-  same_memory_same_interaction_signature publicRequirementSignalPreservation
+  same_memory_same_interaction_signature publicRequirementSignalTransformation
     publicAgentActionChannel public_historical_memories_equal
 
 theorem public_forgotten_sources_same_future :
     FutureEquivalent
-      (interactionFutureContract publicRequirementSignalPreservation
+      (interactionFutureContract publicRequirementSignalTransformation
         publicAgentActionChannel)
       publicLeftHistoricalSource publicRightHistoricalSource :=
-  (forgotten_iff_future_indistinguishable publicRequirementSignalPreservation
+  (forgotten_iff_future_indistinguishable publicRequirementSignalTransformation
     publicAgentActionChannel publicLeftHistoricalSource
     publicRightHistoricalSource).mp public_forgotten_sources_same_signature
 
 theorem public_historical_origin_not_recoverable
     (recover : List (Outcome Agent.Event Agent.Memory) -> PublicHistoricalOrigin)
     (recoversLeft :
-      recover (interactionSignature publicRequirementSignalPreservation
+      recover (interactionSignature publicRequirementSignalTransformation
         publicAgentActionChannel publicLeftHistoricalSource) =
           publicLeftHistoricalSource.origin)
     (recoversRight :
-      recover (interactionSignature publicRequirementSignalPreservation
+      recover (interactionSignature publicRequirementSignalTransformation
         publicAgentActionChannel publicRightHistoricalSource) =
           publicRightHistoricalSource.origin) : False :=
-  forgotten_origin_not_recoverable publicRequirementSignalPreservation
+  forgotten_origin_not_recoverable publicRequirementSignalTransformation
     publicAgentActionChannel publicLeftHistoricalSource
     publicRightHistoricalSource public_historical_origins_distinct
     public_historical_memories_equal recover recoversLeft recoversRight
 
-/-- The reconfigured future starts only after the source action has executed.
-The retained state therefore contains its produced successor memory together
-with the exact native system and source input needed by the next
-reconfiguration. -/
-def publicReconfiguredInitialHistoricalStateFor
-    (source : PublicRequirementInput)
-    (_origin : PublicHistoricalOrigin) :
+/-- Execute the source action from an explicitly supplied historical memory.
+No terminal state is supplied independently. -/
+def publicHistoricalInitialReconfiguredStateFromMemory
+    (memory : Agent.Memory) (source : PublicRequirementInput) :
     ReconfiguredExecutionState publicRequirementFamily :=
-  publicInitialReconfiguredState source
+  { system := publicRequirementSystem
+    input := source
+    memory :=
+      (realizeEffect
+        (realizeAction publicAgentActionChannel
+          (publicRequirementSignalTransformation source) memory)).successor }
 
-abbrev PublicReconfiguredHistoricalSourceFor
-    (source : PublicRequirementInput) : Type 3 :=
-  ReconfiguredHistoricalSource PublicHistoricalOrigin publicRequirementFamily
-    publicReconfigurationBuilder publicAgentActionChannel
-    publicReconfigurationCertificateForState
-    (publicReconfiguredInitialHistoricalStateFor source)
+/-- Run the complete reconfigured continuation from the historical memory and
+return the terminal state produced by that execution. -/
+def publicHistoricalTerminalStateFromMemory
+    (memory : Agent.Memory) (source : PublicRequirementInput)
+    (future : List PublicRequirementInput) :
+    ReconfiguredExecutionState publicRequirementFamily :=
+  (executeReconfiguredInteractions publicReconfigurationBuilder
+    publicAgentActionChannel publicReconfigurationCertificateForState
+    (publicHistoricalInitialReconfiguredStateFromMemory memory source)
+    future).finalState
 
-def publicReconfiguredLeftHistoricalSourceFor
-    (source : PublicRequirementInput) :
-    PublicReconfiguredHistoricalSourceFor source :=
-  .initial (ULift.up publicHistoricalMaster.distinctPair.left)
+/-- The historical origin is consumed by the actual initial-memory
+construction and then by the complete source-action and reconfiguration
+execution. -/
+def publicHistoricalTerminalState
+    (source : PublicRequirementInput) (future : List PublicRequirementInput)
+    (origin : PublicHistoricalOrigin) :
+    ReconfiguredExecutionState publicRequirementFamily :=
+  publicHistoricalTerminalStateFromMemory
+    (publicHistoricalInitialMemory origin) source future
 
-def publicReconfiguredRightHistoricalSourceFor
-    (source : PublicRequirementInput) :
-    PublicReconfiguredHistoricalSourceFor source :=
-  .initial (ULift.up publicHistoricalMaster.distinctPair.right)
+theorem public_historical_initial_memory_eq_action_memory
+    (origin : PublicHistoricalOrigin) :
+    publicHistoricalInitialMemory origin = publicActionMemory :=
+  (Agent.initial_memories_equal publicHistoricalMaster
+    publicHistoricalRequirement origin.down
+    publicHistoricalMaster.distinctPair.left).trans rfl
 
-theorem public_reconfigured_historical_origins_distinct_for
-    (source : PublicRequirementInput) :
-    (publicReconfiguredLeftHistoricalSourceFor source).origin ≠
-      (publicReconfiguredRightHistoricalSourceFor source).origin :=
-  fun same => publicHistoricalMaster.distinctPair.distinct
-    (congrArg ULift.down same)
-
-theorem public_reconfigured_historical_states_equal_for
-    (source : PublicRequirementInput) :
-    (publicReconfiguredLeftHistoricalSourceFor source).currentState =
-      (publicReconfiguredRightHistoricalSourceFor source).currentState :=
+theorem public_historical_terminal_state_exact
+    (origin : PublicHistoricalOrigin) (source : PublicRequirementInput)
+    (future : List PublicRequirementInput) :
+    publicHistoricalTerminalState source future origin =
+      (publicReconfiguredInteractionHistory source future).finalState := by
+  unfold publicHistoricalTerminalState
+  rw [public_historical_initial_memory_eq_action_memory]
   rfl
 
-theorem public_reconfigured_forgotten_sources_same_future_for
-    (source : PublicRequirementInput) :
-    FutureEquivalent
-      (reconfiguredFutureContract
-        (channel := publicAgentActionChannel)
-        (certify := publicReconfigurationCertificateForState)
-        (initialState := publicReconfiguredInitialHistoricalStateFor source))
-      (publicReconfiguredLeftHistoricalSourceFor source)
-      (publicReconfiguredRightHistoricalSourceFor source) :=
-  reconfigured_same_state_same_future
-    (public_reconfigured_historical_states_equal_for source)
+/-- The strictly reduced output of the historical execution.  It is computed
+from the complete terminal state but retains only its operational memory;
+the terminal native system and requirement are absent. -/
+def publicHistoricalTerminalMemory
+    (source : PublicRequirementInput) (future : List PublicRequirementInput)
+    (origin : PublicHistoricalOrigin) : Agent.Memory :=
+  (publicHistoricalTerminalState source future origin).memory
 
-theorem public_reconfigured_origin_not_recoverable_for
-    (source : PublicRequirementInput)
-    (recover : ReconfiguredExecutionState publicRequirementFamily ->
-      PublicHistoricalOrigin)
+theorem public_historical_terminal_memory_exact
+    (origin : PublicHistoricalOrigin) (source : PublicRequirementInput)
+    (future : List PublicRequirementInput) :
+    publicHistoricalTerminalMemory source future origin =
+      (publicReconfiguredInteractionHistory source future).finalState.memory :=
+  congrArg ReconfiguredExecutionState.memory
+    (public_historical_terminal_state_exact origin source future)
+
+/-- C9's public forgetting program. It executes from the supplied historical
+origin and returns the terminal operational memory, not the complete terminal
+state and not an independently supplied constant. -/
+def publicHistoricalForgettingProgram
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    HistoricalForgettingProgram PublicHistoricalOrigin Agent.Memory where
+  run := publicHistoricalTerminalMemory source future
+
+def publicLeftHistoricalForgettingInput
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    HistoricalForgettingInput
+      (publicHistoricalForgettingProgram source future) :=
+  { origin := ULift.up publicHistoricalMaster.distinctPair.left }
+
+def publicRightHistoricalForgettingInput
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    HistoricalForgettingInput
+      (publicHistoricalForgettingProgram source future) :=
+  { origin := ULift.up publicHistoricalMaster.distinctPair.right }
+
+def publicLeftExecutedForgetting
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :=
+  executeHistoricalForgetting (publicHistoricalForgettingProgram source future)
+    (publicLeftHistoricalForgettingInput source future)
+
+def publicRightExecutedForgetting
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :=
+  executeHistoricalForgetting (publicHistoricalForgettingProgram source future)
+    (publicRightHistoricalForgettingInput source future)
+
+theorem public_historical_forgetting_inputs_distinct
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    publicLeftHistoricalForgettingInput source future ≠
+      publicRightHistoricalForgettingInput source future :=
+  HistoricalForgettingInput.ne_of_origin_ne public_historical_origins_distinct
+
+theorem public_left_executed_forgetting_exact
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    (publicLeftExecutedForgetting source future).output =
+      (publicReconfiguredInteractionHistory source future).finalState.memory :=
+  (publicLeftExecutedForgetting source future).executionExact.trans
+    (public_historical_terminal_memory_exact
+      (publicLeftHistoricalForgettingInput source future).origin source future)
+
+theorem public_right_executed_forgetting_exact
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    (publicRightExecutedForgetting source future).output =
+      (publicReconfiguredInteractionHistory source future).finalState.memory :=
+  (publicRightExecutedForgetting source future).executionExact.trans
+    (public_historical_terminal_memory_exact
+      (publicRightHistoricalForgettingInput source future).origin source future)
+
+/-- Equality is obtained only after both historically distinct inputs have run
+the forgetting program and have been related to the actually executed public
+continuation. -/
+theorem public_executed_forgetting_outputs_equal
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    (publicLeftExecutedForgetting source future).output =
+      (publicRightExecutedForgetting source future).output :=
+  ExecutedHistoricalForgetting.outputs_equal_of_common_target
+    (publicLeftExecutedForgetting source future)
+    (publicRightExecutedForgetting source future)
+    (public_left_executed_forgetting_exact source future)
+    (public_right_executed_forgetting_exact source future)
+
+theorem public_executed_forgetting_preserves_future
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    FutureEquivalent
+      reconfiguredOperationalMemoryFutureContract
+      (publicLeftExecutedForgetting source future).output
+      (publicRightExecutedForgetting source future).output :=
+  ExecutedHistoricalForgetting.same_output_same_future
+    (publicLeftExecutedForgetting source future)
+    (publicRightExecutedForgetting source future)
+    reconfiguredOperationalMemoryFutureContract
+    (public_executed_forgetting_outputs_equal source future)
+
+/-- Closed public witness that the strict memory projection preserves the
+complete reconfigured future contract exactly. -/
+def publicReconfiguredOperationalMemoryRealization :
+    ExactRealization
+      (reconfiguredOperationalStateFutureContract
+        (family := publicRequirementFamily)) Agent.Memory :=
+  reconfiguredOperationalMemoryRealization
+    (family := publicRequirementFamily)
+
+/-- Every covered future of the complete terminal execution is exactly the
+future computed from its strictly reduced operational memory. -/
+theorem public_terminal_memory_preserves_every_future
+    (source : PublicRequirementInput) (future : List PublicRequirementInput)
+    (requests : List (ULift.{3} Agent.Request)) :
+    (reconfiguredOperationalStateFutureContract
+        (family := publicRequirementFamily)).outcome
+        (publicReconfiguredInteractionHistory source future).finalState requests =
+      reconfiguredOperationalMemoryFutureContract.outcome
+        (publicReconfiguredInteractionHistory source future).finalState.memory
+        requests :=
+  publicReconfiguredOperationalMemoryRealization.outcome_exact
+    (publicReconfiguredInteractionHistory source future).finalState requests
+
+/-- A request admitted by every terminal operational memory. -/
+def publicTerminalAdmittedRequest : ULift.{3} Agent.Request :=
+  ⟨.advance 1⟩
+
+/-- A request outside the scope retained by the public terminal memory. -/
+def publicTerminalRefusedRequest : ULift.{3} Agent.Request :=
+  ⟨.obtain 0 1⟩
+
+theorem public_terminal_requirement_exact
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    (publicReconfiguredInteractionHistory source future).finalState.memory.requirement =
+      publicActionMemory.requirement := by
+  have execution := congrArg
+    (fun result : Agent.Memory × List Agent.Event => result.1.requirement)
+    (public_reconfigured_execution_exact source future)
+  have effect := congrArg
+    (fun result : Agent.Memory × Agent.Event => result.1.requirement)
+    (public_effect_exact source)
+  exact execution.trans
+    ((Agent.requirement_persists (publicEffect source).successor
+      (requiredRequests publicAgentActionChannel future)).trans
+        (effect.trans
+          (Agent.executeInput_requirement publicActionMemory
+            (publicAction source).request)))
+
+theorem public_terminal_admitted_request_enabled
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    reconfiguredOperationalMemoryFutureContract.enabled
+      (publicReconfiguredInteractionHistory source future).finalState.memory
+      publicTerminalAdmittedRequest = true :=
+  rfl
+
+theorem public_terminal_refused_request_disabled
+    (source : PublicRequirementInput) (future : List PublicRequirementInput) :
+    reconfiguredOperationalMemoryFutureContract.enabled
+      (publicReconfiguredInteractionHistory source future).finalState.memory
+      publicTerminalRefusedRequest = false := by
+  have absent :
+      (publicReconfiguredInteractionHistory source future).finalState.memory.requirement.permission
+          1 = none := by
+    rw [public_terminal_requirement_exact source future]
+    rfl
+  have impossible :
+      Agent.Admission
+        (publicReconfiguredInteractionHistory source future).finalState.memory.requirement
+        (publicReconfiguredInteractionHistory source future).finalState.memory.register
+        (.obtain 0 1) -> False :=
+    fun witness =>
+      Agent.resolvePermission_none _ _ absent witness.down
+  unfold FutureContract.enabled
+  cases chosen : reconfiguredOperationalMemoryFutureContract.decision
+      (publicReconfiguredInteractionHistory source future).finalState.memory
+      publicTerminalRefusedRequest with
+  | inl witness =>
+      exact False.elim (impossible witness)
+  | inr _ => rfl
+
+/-- Two operational memories with the same immediate readout.  They differ
+only in the received requirement, while their visible tables are both empty. -/
+def publicTerminalSeparatorLeft : Agent.Memory :=
+  { requirement := singletonRequirement 0
+    live := publicActionMemory.live
+    register := [] }
+
+def publicTerminalSeparatorRight : Agent.Memory :=
+  { requirement := singletonRequirement 1
+    live := publicActionMemory.live
+    register := [] }
+
+def publicTerminalSeparatingRequest : ULift.{3} Agent.Request :=
+  ⟨.obtain 0 0⟩
+
+theorem public_terminal_separator_same_immediate_readout :
+    reconfiguredOperationalMemoryFutureContract.read
+        publicTerminalSeparatorLeft =
+      reconfiguredOperationalMemoryFutureContract.read
+        publicTerminalSeparatorRight :=
+  rfl
+
+theorem public_terminal_separator_left_admitted :
+    reconfiguredOperationalMemoryFutureContract.enabled
+      publicTerminalSeparatorLeft publicTerminalSeparatingRequest = true :=
+  rfl
+
+theorem public_terminal_separator_right_refused :
+    reconfiguredOperationalMemoryFutureContract.enabled
+      publicTerminalSeparatorRight publicTerminalSeparatingRequest = false :=
+  rfl
+
+/-- The empty future cannot distinguish the separator memories through the
+contract readout, while the one-request future must distinguish them through
+the executed admission decision. -/
+theorem public_terminal_nonempty_future_is_necessary :
+    reconfiguredOperationalMemoryFutureContract.outcome
+        publicTerminalSeparatorLeft [publicTerminalSeparatingRequest] ≠
+      reconfiguredOperationalMemoryFutureContract.outcome
+        publicTerminalSeparatorRight [publicTerminalSeparatingRequest] := by
+  intro same
+  have decision := congrArg Outcome.right same
+  change true = false at decision
+  cases decision
+
+theorem public_executed_forgetting_origin_not_recoverable
+    (source : PublicRequirementInput) (future : List PublicRequirementInput)
+    (recover : Agent.Memory -> PublicHistoricalOrigin)
     (recoversLeft :
-      recover (publicReconfiguredLeftHistoricalSourceFor source).currentState =
-        (publicReconfiguredLeftHistoricalSourceFor source).origin)
+      recover (publicLeftExecutedForgetting source future).output =
+        (publicLeftHistoricalForgettingInput source future).origin)
     (recoversRight :
-      recover (publicReconfiguredRightHistoricalSourceFor source).currentState =
-        (publicReconfiguredRightHistoricalSourceFor source).origin) : False :=
-  reconfigured_origin_not_recoverable
-    (publicReconfiguredLeftHistoricalSourceFor source)
-    (publicReconfiguredRightHistoricalSourceFor source)
-    (public_reconfigured_historical_origins_distinct_for source)
-    (public_reconfigured_historical_states_equal_for source)
+      recover (publicRightExecutedForgetting source future).output =
+        (publicRightHistoricalForgettingInput source future).origin) : False :=
+  ExecutedHistoricalForgetting.origin_not_recoverable
+    (publicLeftExecutedForgetting source future)
+    (publicRightExecutedForgetting source future)
+    public_historical_origins_distinct
+    (public_executed_forgetting_outputs_equal source future)
     recover recoversLeft recoversRight
-
-def publicReconfiguredInitialHistoricalState :
-    PublicHistoricalOrigin -> ReconfiguredExecutionState publicRequirementFamily :=
-  publicReconfiguredInitialHistoricalStateFor ⟨.deny, ()⟩
-
-abbrev PublicReconfiguredHistoricalSource : Type 3 :=
-  PublicReconfiguredHistoricalSourceFor ⟨.deny, ()⟩
-
-def publicReconfiguredLeftHistoricalSource :
-    PublicReconfiguredHistoricalSource :=
-  publicReconfiguredLeftHistoricalSourceFor ⟨.deny, ()⟩
-
-def publicReconfiguredRightHistoricalSource :
-    PublicReconfiguredHistoricalSource :=
-  publicReconfiguredRightHistoricalSourceFor ⟨.deny, ()⟩
-
-theorem public_reconfigured_historical_origins_distinct :
-    publicReconfiguredLeftHistoricalSource.origin ≠
-      publicReconfiguredRightHistoricalSource.origin :=
-  public_reconfigured_historical_origins_distinct_for ⟨.deny, ()⟩
-
-theorem public_reconfigured_historical_states_equal :
-    publicReconfiguredLeftHistoricalSource.currentState =
-      publicReconfiguredRightHistoricalSource.currentState :=
-  public_reconfigured_historical_states_equal_for ⟨.deny, ()⟩
-
-theorem public_reconfigured_forgotten_sources_same_future :
-    FutureEquivalent
-      (reconfiguredFutureContract
-        (channel := publicAgentActionChannel)
-        (certify := publicReconfigurationCertificateForState)
-        (initialState := publicReconfiguredInitialHistoricalState))
-      publicReconfiguredLeftHistoricalSource
-      publicReconfiguredRightHistoricalSource :=
-  public_reconfigured_forgotten_sources_same_future_for ⟨.deny, ()⟩
-
-theorem public_reconfigured_origin_not_recoverable
-    (recover : ReconfiguredExecutionState publicRequirementFamily ->
-      PublicHistoricalOrigin)
-    (recoversLeft :
-      recover publicReconfiguredLeftHistoricalSource.currentState =
-        publicReconfiguredLeftHistoricalSource.origin)
-    (recoversRight :
-      recover publicReconfiguredRightHistoricalSource.currentState =
-        publicReconfiguredRightHistoricalSource.origin) : False :=
-  public_reconfigured_origin_not_recoverable_for ⟨.deny, ()⟩ recover
-    recoversLeft recoversRight
 
 end ConstitutiveSearch.NeuralAgent
 /- AXIOM_AUDIT_BEGIN -/
@@ -211,18 +378,36 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.public_forgotten_sources_same_signature
 #print axioms ConstitutiveSearch.NeuralAgent.public_forgotten_sources_same_future
 #print axioms ConstitutiveSearch.NeuralAgent.public_historical_origin_not_recoverable
-#print axioms ConstitutiveSearch.NeuralAgent.publicReconfiguredInitialHistoricalState
-#print axioms ConstitutiveSearch.NeuralAgent.publicReconfiguredInitialHistoricalStateFor
-#print axioms ConstitutiveSearch.NeuralAgent.publicReconfiguredLeftHistoricalSourceFor
-#print axioms ConstitutiveSearch.NeuralAgent.publicReconfiguredRightHistoricalSourceFor
-#print axioms ConstitutiveSearch.NeuralAgent.public_reconfigured_historical_origins_distinct_for
-#print axioms ConstitutiveSearch.NeuralAgent.public_reconfigured_historical_states_equal_for
-#print axioms ConstitutiveSearch.NeuralAgent.public_reconfigured_forgotten_sources_same_future_for
-#print axioms ConstitutiveSearch.NeuralAgent.public_reconfigured_origin_not_recoverable_for
-#print axioms ConstitutiveSearch.NeuralAgent.publicReconfiguredLeftHistoricalSource
-#print axioms ConstitutiveSearch.NeuralAgent.publicReconfiguredRightHistoricalSource
-#print axioms ConstitutiveSearch.NeuralAgent.public_reconfigured_historical_origins_distinct
-#print axioms ConstitutiveSearch.NeuralAgent.public_reconfigured_historical_states_equal
-#print axioms ConstitutiveSearch.NeuralAgent.public_reconfigured_forgotten_sources_same_future
-#print axioms ConstitutiveSearch.NeuralAgent.public_reconfigured_origin_not_recoverable
+#print axioms ConstitutiveSearch.NeuralAgent.publicHistoricalInitialReconfiguredStateFromMemory
+#print axioms ConstitutiveSearch.NeuralAgent.publicHistoricalTerminalStateFromMemory
+#print axioms ConstitutiveSearch.NeuralAgent.publicHistoricalTerminalState
+#print axioms ConstitutiveSearch.NeuralAgent.public_historical_initial_memory_eq_action_memory
+#print axioms ConstitutiveSearch.NeuralAgent.public_historical_terminal_state_exact
+#print axioms ConstitutiveSearch.NeuralAgent.publicHistoricalTerminalMemory
+#print axioms ConstitutiveSearch.NeuralAgent.public_historical_terminal_memory_exact
+#print axioms ConstitutiveSearch.NeuralAgent.publicHistoricalForgettingProgram
+#print axioms ConstitutiveSearch.NeuralAgent.publicLeftHistoricalForgettingInput
+#print axioms ConstitutiveSearch.NeuralAgent.publicRightHistoricalForgettingInput
+#print axioms ConstitutiveSearch.NeuralAgent.publicLeftExecutedForgetting
+#print axioms ConstitutiveSearch.NeuralAgent.publicRightExecutedForgetting
+#print axioms ConstitutiveSearch.NeuralAgent.public_historical_forgetting_inputs_distinct
+#print axioms ConstitutiveSearch.NeuralAgent.public_left_executed_forgetting_exact
+#print axioms ConstitutiveSearch.NeuralAgent.public_right_executed_forgetting_exact
+#print axioms ConstitutiveSearch.NeuralAgent.public_executed_forgetting_outputs_equal
+#print axioms ConstitutiveSearch.NeuralAgent.public_executed_forgetting_preserves_future
+#print axioms ConstitutiveSearch.NeuralAgent.publicReconfiguredOperationalMemoryRealization
+#print axioms ConstitutiveSearch.NeuralAgent.public_terminal_memory_preserves_every_future
+#print axioms ConstitutiveSearch.NeuralAgent.publicTerminalAdmittedRequest
+#print axioms ConstitutiveSearch.NeuralAgent.publicTerminalRefusedRequest
+#print axioms ConstitutiveSearch.NeuralAgent.public_terminal_requirement_exact
+#print axioms ConstitutiveSearch.NeuralAgent.public_terminal_admitted_request_enabled
+#print axioms ConstitutiveSearch.NeuralAgent.public_terminal_refused_request_disabled
+#print axioms ConstitutiveSearch.NeuralAgent.publicTerminalSeparatorLeft
+#print axioms ConstitutiveSearch.NeuralAgent.publicTerminalSeparatorRight
+#print axioms ConstitutiveSearch.NeuralAgent.publicTerminalSeparatingRequest
+#print axioms ConstitutiveSearch.NeuralAgent.public_terminal_separator_same_immediate_readout
+#print axioms ConstitutiveSearch.NeuralAgent.public_terminal_separator_left_admitted
+#print axioms ConstitutiveSearch.NeuralAgent.public_terminal_separator_right_refused
+#print axioms ConstitutiveSearch.NeuralAgent.public_terminal_nonempty_future_is_necessary
+#print axioms ConstitutiveSearch.NeuralAgent.public_executed_forgetting_origin_not_recoverable
 /- AXIOM_AUDIT_END -/

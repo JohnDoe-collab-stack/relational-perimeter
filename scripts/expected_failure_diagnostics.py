@@ -70,33 +70,37 @@ def main() -> None:
         if not row.strip() or row.startswith('#'):
             continue
         parts = row.split('\t')
-        if args.inventory and len(parts) == 3:
-            fixture, category, needle = parts
+        if args.inventory and len(parts) == 4:
+            fixture, category, needle, obligation = parts
             sites = None
         else:
-            if len(parts) != 5 or not parts[4] or not parts[2].isdigit() or not parts[3].isdigit():
+            if (len(parts) != 6 or not parts[4] or not parts[5].strip()
+                    or not parts[2].isdigit() or not parts[3].isdigit()):
                 raise ValueError('invalid expected-failure inventory row')
-            fixture, category, line, column, needle = parts
+            fixture, category, line, column, needle, obligation = parts
             sites = (int(line), int(column), needle)
         if not fixture.startswith('Tests/ExpectedFailure/') or not fixture.endswith('.lean.fail') or '..' in fixture:
             raise ValueError('invalid fixture path: ' + fixture)
         if category not in CATEGORIES:
             raise ValueError('unknown fixture category: ' + category)
+        if obligation.strip().lower() in {'todo', 'placeholder', 'unknown'}:
+            raise ValueError('invalid semantic obligation: ' + fixture)
         if not (ROOT / fixture).is_file():
             raise ValueError('orphan fixture entry: ' + fixture)
         if fixture in entries:
-            old_category, previous, _ = entries[fixture]
-            if old_category != category or sites is None or sites in previous:
+            old_category, previous, _, old_obligation = entries[fixture]
+            if (old_category != category or old_obligation != obligation
+                    or sites is None or sites in previous):
                 raise ValueError('duplicate fixture: ' + fixture)
             previous.append(sites)
         else:
-            entries[fixture] = (category, [] if sites is None else [sites], needle)
+            entries[fixture] = (category, [] if sites is None else [sites], needle, obligation)
     actual = {file.relative_to(ROOT).as_posix() for file in (ROOT / 'Tests/ExpectedFailure').rglob('*.lean.fail')}
     if not entries:
         raise ValueError('empty expected-failure inventory')
     if actual != set(entries):
         raise ValueError('uninventoried fixture: ' + ', '.join(sorted(actual - set(entries))))
-    for fixture, (category, sites, old_needle) in entries.items():
+    for fixture, (category, sites, old_needle, obligation) in entries.items():
         source = (ROOT / fixture).read_text(encoding='utf-8')
         if PROHIBITED.search(source):
             raise ValueError(f'{fixture}: executable diagnostic imitation is forbidden')
@@ -112,7 +116,8 @@ def main() -> None:
                 if old_needle not in record['data']:
                     print(f'{fixture}: additional error for review: {record["data"]}', file=sys.stderr)
                 needle = old_needle if old_needle in record['data'] else record['data'].splitlines()[0]
-                print('\t'.join((fixture, category, str(record['pos']['line']), str(record['pos']['column']), needle)))
+                print('\t'.join((fixture, category, str(record['pos']['line']),
+                    str(record['pos']['column']), needle, obligation)))
             continue
         if any(not record.get('data', '').startswith(ERROR_CLASSES[category]) for record in records):
             raise ValueError(f'{fixture}: failed for an unexpected reason (error class)')

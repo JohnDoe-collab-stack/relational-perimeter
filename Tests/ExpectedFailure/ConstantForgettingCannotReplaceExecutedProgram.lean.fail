@@ -1,0 +1,26 @@
+import RelationalPerimeter
+set_option genInjectivity false
+namespace Tests.ExpectedFailure.ConstantForgettingCannotReplaceExecutedProgram
+open ConstitutiveSearch.NeuralAgent
+
+def source : PublicRequirementInput := ⟨.scopeZero, .direct⟩
+def next : PublicRequirementInput := ⟨.scopeOne, .direct⟩
+def future : List PublicRequirementInput := [source]
+
+-- A constant wrapper around an already supplied final state is not the
+-- historical program indexed by the public certificate.
+def constantProgram :
+    HistoricalForgettingProgram PublicHistoricalOrigin ConstitutiveSearch.Agent.Memory where
+  run := fun _ =>
+    (publicInitialReconfiguredState source).memory
+
+def forgedPolicy :
+    ConstitutiveForgettingPolicy constantProgram
+      (publicInitialReconfiguredState source).memory
+      publicAlignmentFutureContract :=
+  publicAlignmentForgettingPolicy source (next :: future)
+
+end Tests.ExpectedFailure.ConstantForgettingCannotReplaceExecutedProgram
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.constitutive_alignment
+/- AXIOM_AUDIT_END -/

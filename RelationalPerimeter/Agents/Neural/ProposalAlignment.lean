@@ -3,11 +3,12 @@ import RelationalPerimeter.Agents.Neural.RequirementEncoding
 /-!
 # Proposal alignment through the executed native run
 
-For the present one-output contract, decoding is specified only on the signal
-that the requirement encoder produced.  A preservation witness must connect
-that signal to the declared output occurrence selected by the causal role.
-The alignment theorem then eliminates the actual output readout; it does not
-consult a proposal table or apply an output filter.
+For the present one-output contract, decoding is specified on a terminal
+representation of the requirement.  A transformation path connects the
+received code to that representation through local functions whose equations
+hold at the exact source and target occurrences of the executed run.  The
+alignment theorem eliminates the actual output readout; it does not consult a
+proposal table or apply an output filter.
 -/
 set_option genInjectivity false
 namespace ConstitutiveSearch.NeuralAgent
@@ -22,9 +23,22 @@ structure SingleOutputRequirementDecoder
     (encoding : RequirementEncoding system) where
   output : Fin system.producedCount
   portsExact : system.outputs.sources = [output]
-  decodeCode : forall requirement context,
-    system.decode [encoding.code requirement] =
+  terminalRepresentation : RequirementCase -> Context -> Activation
+  decodeRepresentation : forall requirement context,
+    system.decode [terminalRepresentation requirement context] =
       family.requiredProposal requirement context
+
+/-- One local transformation as it was executed between two exact
+occurrences of one native run.  The function is data; `outputExact` certifies
+that this function produced the target value from the source value. -/
+structure ExecutedSignalTransformation
+    {inputCount producedCount : Nat}
+    {program : NetworkProgram inputCount producedCount}
+    (run : NativeRun program)
+    (source target : ActivationOccurrence run) where
+  transform : Activation -> Activation
+  edge : ReadsFrom run source target
+  outputExact : target.value = transform source.value
 
 inductive RequirementSignalPath
     {RequirementCase : Type u} {Context : Type v} {Proposal : Type w}
@@ -32,14 +46,17 @@ inductive RequirementSignalPath
     {system : NativeSystem (RequirementInput family) Proposal}
     (encoding : RequirementEncoding system)
     (input : RequirementInput family) :
-    ActivationOccurrence (system.run input) -> Type where
+    ActivationOccurrence (system.run input) ->
+      (Activation -> Activation) -> Type where
   | origin : RequirementSignalPath encoding input
-      (.receivedInput encoding.port)
+      (.receivedInput encoding.port) (fun value => value)
   | step {source target : ActivationOccurrence (system.run input)}
-      (prior : RequirementSignalPath encoding input source)
-      (edge : ReadsFrom (system.run input) source target)
-      (preserved : target.value = source.value) :
+      {accumulated : Activation -> Activation}
+      (prior : RequirementSignalPath encoding input source accumulated)
+      (transition :
+        ExecutedSignalTransformation (system.run input) source target) :
       RequirementSignalPath encoding input target
+        (fun value => transition.transform (accumulated value))
 
 theorem RequirementSignalPath.signalExact
     {RequirementCase : Type u} {Context : Type v} {Proposal : Type w}
@@ -47,13 +64,17 @@ theorem RequirementSignalPath.signalExact
     {system : NativeSystem (RequirementInput family) Proposal}
     {encoding : RequirementEncoding system}
     {input : RequirementInput family}
-    {target : ActivationOccurrence (system.run input)} :
-    RequirementSignalPath encoding input target ->
-      target.value = encoding.code input.requirement
+    {target : ActivationOccurrence (system.run input)}
+    {accumulated : Activation -> Activation} :
+    RequirementSignalPath encoding input target accumulated ->
+      target.value = accumulated
+        (encoding.code input.requirement input.context)
   | .origin => encoded_requirement_exact encoding input
-  | .step prior _ preserved => preserved.trans prior.signalExact
+  | .step prior transition =>
+      transition.outputExact.trans
+        (congrArg transition.transform prior.signalExact)
 
-structure RequirementSignalPreservation
+structure RequirementSignalTransformation
     {RequirementCase : Type u} {Context : Type v} {Proposal : Type w}
     {family : RequirementFamily RequirementCase Context Proposal}
     {system : NativeSystem (RequirementInput family) Proposal}
@@ -63,8 +84,12 @@ structure RequirementSignalPreservation
     (incorporation : RequirementIncorporation encoding input) where
   roleOutputExact :
     system.outputs.sources.get incorporation.role.output = decoder.output
+  transform : Activation -> Activation
   path : RequirementSignalPath encoding input
-    (.neuronOutput decoder.output)
+    (.neuronOutput decoder.output) transform
+  terminalExact :
+    transform (encoding.code input.requirement input.context) =
+      decoder.terminalRepresentation input.requirement input.context
 
 theorem proposal_aligned
     {RequirementCase : Type u} {Context : Type v} {Proposal : Type w}
@@ -74,7 +99,8 @@ theorem proposal_aligned
     {decoder : SingleOutputRequirementDecoder encoding}
     {input : RequirementInput family}
     {incorporation : RequirementIncorporation encoding input}
-    (preservation : RequirementSignalPreservation decoder incorporation) :
+    (transformation :
+      RequirementSignalTransformation decoder incorporation) :
     system.proposal input =
       family.requiredProposal input.requirement input.context := by
   unfold NativeSystem.proposal NativeSystem.outputValues readOutputs
@@ -82,8 +108,8 @@ theorem proposal_aligned
   change system.decode [
     (ActivationOccurrence.neuronOutput decoder.output :
       ActivationOccurrence (system.run input)).value] = _
-  rw [preservation.path.signalExact]
-  exact decoder.decodeCode input.requirement input.context
+  rw [transformation.path.signalExact, transformation.terminalExact]
+  exact decoder.decodeRepresentation input.requirement input.context
 
 def aligned_proposal_formation
     {RequirementCase : Type u} {Context : Type v} {Proposal : Type w}
@@ -93,16 +119,18 @@ def aligned_proposal_formation
     {decoder : SingleOutputRequirementDecoder encoding}
     {input : RequirementInput family}
     {incorporation : RequirementIncorporation encoding input}
-    (_preservation : RequirementSignalPreservation decoder incorporation) :
+    (_transformation :
+      RequirementSignalTransformation decoder incorporation) :
     ProposalFormedBy system input (system.proposalOccurrence input) :=
   proposalFormation system input
 
 end ConstitutiveSearch.NeuralAgent
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.SingleOutputRequirementDecoder
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedSignalTransformation
 #print axioms ConstitutiveSearch.NeuralAgent.RequirementSignalPath
 #print axioms ConstitutiveSearch.NeuralAgent.RequirementSignalPath.signalExact
-#print axioms ConstitutiveSearch.NeuralAgent.RequirementSignalPreservation
+#print axioms ConstitutiveSearch.NeuralAgent.RequirementSignalTransformation
 #print axioms ConstitutiveSearch.NeuralAgent.proposal_aligned
 #print axioms ConstitutiveSearch.NeuralAgent.aligned_proposal_formation
 /- AXIOM_AUDIT_END -/
