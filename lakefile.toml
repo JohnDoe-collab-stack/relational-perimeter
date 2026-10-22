@@ -22,3 +22,7 @@ globs = [
   "RelationalPerimeter.Agents.+",
   "Tests.+",
 ]
+
+[[lean_exe]]
+name = "compiled_neural_checker_measure"
+root = "Tests.Executables.CompiledNeuralCheckerMeasure"

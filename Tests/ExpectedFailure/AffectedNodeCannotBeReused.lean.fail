@@ -6,6 +6,6 @@ open ConstitutiveSearch.NeuralAgent
 be supplied as an unaffected fragment. -/
 example :
     affectedConstitutiveNode publicInitialStateConstitutiveCertificate
-      publicReferenceUpdatedStateCertificate publicStableNodeCorrespondence
+      publicPreCertificateConstitutiveGraph
       (.artifactNode (.neuron 0)) = false := by
   rfl

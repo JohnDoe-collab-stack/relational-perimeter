@@ -1,0 +1,15 @@
+import RelationalPerimeter.Agents.Neural.IncrementalReferenceEquivalence
+
+open ConstitutiveSearch.NeuralAgent
+
+def foreignIncrementalUpdate : IncrementalNeuralUpdate :=
+  { publicIncrementalNeuralUpdate with
+    nextInput := publicSubstantiveContextualNext }
+
+example : IncrementalUpdateAccepted publicIncrementalNeuralUpdate ↔
+    ReferenceUpdateAccepted foreignIncrementalUpdate.toFullReferenceUpdate :=
+  incrementalAndReferenceAcceptance_equivalent publicIncrementalNeuralUpdate
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.incrementalAndReferenceAcceptance_equivalent
+/- AXIOM_AUDIT_END -/

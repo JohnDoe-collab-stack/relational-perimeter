@@ -1,0 +1,12 @@
+import RelationalPerimeter.Agents.Neural.LearnedContractFutureDivergence
+
+open ConstitutiveSearch NeuralAgent
+
+example : learnedFutureNormSatisfied learnedOperationalCounterfactualRequests
+      (learnedCandidateOperationalFuture learnedBypassCandidateAtInitial
+        learnedOperationalCounterfactualRequests) = true := by
+  rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedBypassCandidateFuture_violates
+/- AXIOM_AUDIT_END -/

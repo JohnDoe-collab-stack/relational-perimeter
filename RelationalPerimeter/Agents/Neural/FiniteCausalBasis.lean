@@ -1,4 +1,4 @@
-import RelationalPerimeter.Agents.Neural.StableNodeIdentity
+import RelationalPerimeter.Agents.Neural.SerializedConstitutiveArtifact
 
 /-!
 # Finite declared domains and causal intervention bases

@@ -21,18 +21,6 @@ def finiteLocations : (count : Nat) -> List (Fin count)
       ⟨0, Nat.zero_lt_succ count⟩ ::
         (finiteLocations count).map Fin.succ
 
-/-- A weighted read expressed only through stable identities. -/
-structure StableWeightedRead where
-  source : StableNodeKey
-  weight : Int
-
-/-- The local structural observation whose equality licenses reuse.  It is
-independent of artifact-local `Fin` positions. -/
-inductive StableArtifactObservation where
-  | receivedInput
-  | neuron (reads : List StableWeightedRead) (bias threshold : Int)
-  | outputPort (source : StableNodeKey)
-
 def stableNodeKeyEquality
     (left right : StableNodeKey) : Decidable (left = right) := by
   cases left with
@@ -439,65 +427,25 @@ theorem structuralInitiallyAffected_false_unchanged_true
   cases transported <;> cases unchanged <;>
     first | rfl | cases notAffected
 
-def StableArtifactNaming.weightedRead
-    {contract : ConstitutiveContract}
-    {artifact : DecodedNeuralArtifact contract}
-    (naming : StableArtifactNaming artifact)
-    (target : Fin artifact.system.producedCount)
-    (edge : WeightedInput artifact.system.inputCount target.val) :
-    StableWeightedRead :=
-  { source := (naming.sourceNode target edge.source).key
-    weight := edge.weight }
-
-def StableArtifactNaming.mechanismObservation
-    {contract : ConstitutiveContract}
-    {artifact : DecodedNeuralArtifact contract}
-    (naming : StableArtifactNaming artifact) :
-    StableNodeId naming -> StableArtifactObservation
-  | .receivedInput _ => .receivedInput
-  | .neuron target =>
-      let neuron := artifact.system.program.neuronAt target
-      .neuron (neuron.inputs.map (naming.weightedRead target))
-        neuron.bias neuron.threshold.level
-
-def StableArtifactNaming.outputObservation
-    {contract : ConstitutiveContract}
-    {artifact : DecodedNeuralArtifact contract}
-    (naming : StableArtifactNaming artifact)
-    (port : StableOutputPortId naming) : StableArtifactObservation :=
-  .outputPort
-    (StableNodeId.neuron
-      (naming := naming)
-      (artifact.system.outputs.sources.get port.index)).key
-
 /-- A complete stable snapshot of the artifact-local part of one certificate.
-The certificate supplies the authoritative naming; the observations are read
-from its exact decoded artifact. -/
+The observations are constitutive certificate data and their exactness field
+ties them to the decoded artifact and stable naming. -/
 def structuralObservationSnapshot
     {contract : ConstitutiveContract}
     {artifact : DecodedNeuralArtifact contract}
     {state : ReconfiguredExecutionState contract.family}
     (certificate : StateConstitutiveCertificate contract artifact state) :
     List (StableNodeKey × StableArtifactObservation) :=
-  (finiteLocations artifact.system.inputCount).map (fun index =>
-      let node : StableNodeId certificate.basis.naming := .receivedInput index
-      (node.key,
-        certificate.basis.naming.mechanismObservation node)) ++
-  (finiteLocations artifact.system.producedCount).map (fun index =>
-      let node : StableNodeId certificate.basis.naming := .neuron index
-      (node.key,
-        certificate.basis.naming.mechanismObservation node)) ++
-  (finiteLocations artifact.system.outputs.sources.length).map (fun index =>
-      let port := certificate.basis.naming.outputPort index
-      (port.key, certificate.basis.naming.outputObservation port))
+  certificate.structuralObservations
 
-def lookupStructuralObservation (key : StableNodeKey) :
-    List (StableNodeKey × StableArtifactObservation) ->
-      Option StableArtifactObservation
-  | [] => none
-  | entry :: rest =>
-      if entry.1 = key then some entry.2
-      else lookupStructuralObservation key rest
+theorem structuralObservationSnapshot_exact
+    {contract : ConstitutiveContract}
+    {artifact : DecodedNeuralArtifact contract}
+    {state : ReconfiguredExecutionState contract.family}
+    (certificate : StateConstitutiveCertificate contract artifact state) :
+    structuralObservationSnapshot certificate =
+      stableStructuralObservationSnapshot certificate.basis.naming :=
+  certificate.structuralObservationsExact
 
 def keyOccurs (target : ConstitutiveNodeKey) :
     List ConstitutiveNodeKey -> Bool
@@ -646,15 +594,70 @@ def semanticConstitutiveKeys : List ConstitutiveNodeKey :=
     .contractObservation .coveredFuture,
     .contractObservation .historicalPolicy ]
 
-def completeConstitutiveKeys
-    {contract : ConstitutiveContract}
-    {artifact : DecodedNeuralArtifact contract}
-    {state : ReconfiguredExecutionState contract.family}
-    (certificate : StateConstitutiveCertificate contract artifact state) :
-    List ConstitutiveNodeKey :=
-  (structuralObservationSnapshot certificate).map
-      (fun entry => .artifactNode entry.1) ++
-    semanticConstitutiveKeys
+/-! ## Pre-certificate graph
+
+The target certificate must not exist when the incremental checker decides
+what may be reused.  The following graph is therefore calculated only from
+the certified source naming and the decoded target naming.  Its constructor is
+private: callers cannot supply a correspondence, snapshot, edge set, or key
+set independently. -/
+
+structure PreCertificateConstitutiveGraph
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    (oldNaming : StableArtifactNaming oldArtifact)
+    (newNaming : StableArtifactNaming newArtifact) : Type 4 where
+  private mk ::
+  correspondence : ValidatedStableNodeCorrespondence oldNaming newNaming
+  correspondenceExact : correspondence =
+    calculateStableNodeCorrespondence oldNaming newNaming
+  targetObservations : List (StableNodeKey × StableArtifactObservation)
+  targetObservationsExact : targetObservations =
+    stableStructuralObservationSnapshot newNaming
+  dependencyEdges : List ConstitutiveDependencyEdge
+  dependencyEdgesExact : dependencyEdges =
+    heterogeneousDependencyEdges newNaming
+  targetKeys : List ConstitutiveNodeKey
+  targetKeysExact : targetKeys =
+    targetObservations.map (fun entry => .artifactNode entry.1) ++
+      semanticConstitutiveKeys
+
+/-- Calculate the complete graph needed by the incremental decision before a
+target certificate is assembled. -/
+def calculatePreCertificateConstitutiveGraph
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    (oldNaming : StableArtifactNaming oldArtifact)
+    (newNaming : StableArtifactNaming newArtifact) :
+    PreCertificateConstitutiveGraph oldNaming newNaming :=
+  let observations := stableStructuralObservationSnapshot newNaming
+  .mk (calculateStableNodeCorrespondence oldNaming newNaming) rfl
+    observations rfl
+    (heterogeneousDependencyEdges newNaming) rfl
+    (observations.map (fun entry => .artifactNode entry.1) ++
+      semanticConstitutiveKeys) rfl
+
+theorem calculatePreCertificateConstitutiveGraph_correspondence_exact
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    (oldNaming : StableArtifactNaming oldArtifact)
+    (newNaming : StableArtifactNaming newArtifact) :
+    (calculatePreCertificateConstitutiveGraph oldNaming newNaming).correspondence =
+      calculateStableNodeCorrespondence oldNaming newNaming := by
+  exact (calculatePreCertificateConstitutiveGraph oldNaming newNaming).correspondenceExact
+
+theorem calculatePreCertificateConstitutiveGraph_observations_exact
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    (oldNaming : StableArtifactNaming oldArtifact)
+    (newNaming : StableArtifactNaming newArtifact) :
+    (calculatePreCertificateConstitutiveGraph oldNaming newNaming).targetObservations =
+      stableStructuralObservationSnapshot newNaming := by
+  exact (calculatePreCertificateConstitutiveGraph oldNaming newNaming).targetObservationsExact
 
 /-- The initial affected predicate is entirely derived from the two exact
 certificates and the validated correspondence.  Cross-contract decoding and
@@ -665,23 +668,21 @@ def initiallyAffected
     {oldArtifact : DecodedNeuralArtifact oldContract}
     {newArtifact : DecodedNeuralArtifact newContract}
     {oldState : ReconfiguredExecutionState oldContract.family}
-    {newState : ReconfiguredExecutionState newContract.family}
     (oldCertificate :
       StateConstitutiveCertificate oldContract oldArtifact oldState)
-    (newCertificate :
-      StateConstitutiveCertificate newContract newArtifact newState)
-    (correspondence : ValidatedStableNodeCorrespondence
-      oldCertificate.basis.naming newCertificate.basis.naming) :
+    {newNaming : StableArtifactNaming newArtifact}
+    (graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming) :
     ConstitutiveNodeKey -> Bool
   | .artifactNode key =>
       structuralInitiallyAffected
         (keyOccurs (.artifactNode key)
-          (transportedArtifactKeys correspondence))
+          (transportedArtifactKeys graph.correspondence))
         (observationOptionsSame
           (lookupStructuralObservation key
             (structuralObservationSnapshot oldCertificate))
           (lookupStructuralObservation key
-            (structuralObservationSnapshot newCertificate)))
+            graph.targetObservations))
   | .decoder => true
   | .contractObservation _ => true
   | .proposal => false
@@ -734,18 +735,16 @@ def affectedConstitutiveNode
     {oldArtifact : DecodedNeuralArtifact oldContract}
     {newArtifact : DecodedNeuralArtifact newContract}
     {oldState : ReconfiguredExecutionState oldContract.family}
-    {newState : ReconfiguredExecutionState newContract.family}
     (oldCertificate :
       StateConstitutiveCertificate oldContract oldArtifact oldState)
-    (newCertificate :
-      StateConstitutiveCertificate newContract newArtifact newState)
-    (correspondence : ValidatedStableNodeCorrespondence
-      oldCertificate.basis.naming newCertificate.basis.naming)
+    {newNaming : StableArtifactNaming newArtifact}
+    (graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming)
     (key : ConstitutiveNodeKey) : Bool :=
   affectedWithin
-    (initiallyAffected oldCertificate newCertificate correspondence)
-    (heterogeneousDependencyEdges newCertificate.basis.naming)
-    (completeConstitutiveKeys newCertificate).length key
+    (initiallyAffected oldCertificate graph)
+    graph.dependencyEdges
+    graph.targetKeys.length key
 
 def selectAffectedKeys
     (affected : ConstitutiveNodeKey -> Bool) :
@@ -762,17 +761,15 @@ def affectedConstitutiveCone
     {oldArtifact : DecodedNeuralArtifact oldContract}
     {newArtifact : DecodedNeuralArtifact newContract}
     {oldState : ReconfiguredExecutionState oldContract.family}
-    {newState : ReconfiguredExecutionState newContract.family}
     (oldCertificate :
       StateConstitutiveCertificate oldContract oldArtifact oldState)
-    (newCertificate :
-      StateConstitutiveCertificate newContract newArtifact newState)
-    (correspondence : ValidatedStableNodeCorrespondence
-      oldCertificate.basis.naming newCertificate.basis.naming) :
+    {newNaming : StableArtifactNaming newArtifact}
+    (graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming) :
     List ConstitutiveNodeKey :=
   selectAffectedKeys
-    (affectedConstitutiveNode oldCertificate newCertificate correspondence)
-    (completeConstitutiveKeys newCertificate)
+    (affectedConstitutiveNode oldCertificate graph)
+    graph.targetKeys
 
 /-- Outside the computed cone, a transported structural key has exactly the
 same stable observation.  This is a consequence of the seed computation, not
@@ -782,56 +779,66 @@ theorem outsideAffectedCone_unchanged
     {oldArtifact : DecodedNeuralArtifact oldContract}
     {newArtifact : DecodedNeuralArtifact newContract}
     {oldState : ReconfiguredExecutionState oldContract.family}
-    {newState : ReconfiguredExecutionState newContract.family}
     (oldCertificate :
       StateConstitutiveCertificate oldContract oldArtifact oldState)
-    (newCertificate :
-      StateConstitutiveCertificate newContract newArtifact newState)
-    (correspondence : ValidatedStableNodeCorrespondence
-      oldCertificate.basis.naming newCertificate.basis.naming)
+    {newNaming : StableArtifactNaming newArtifact}
+    (graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming)
     (key : StableNodeKey)
-    (outside : affectedConstitutiveNode oldCertificate newCertificate
-      correspondence (.artifactNode key) = false) :
+    (outside : affectedConstitutiveNode oldCertificate graph
+      (.artifactNode key) = false) :
     lookupStructuralObservation key
         (structuralObservationSnapshot oldCertificate) =
       lookupStructuralObservation key
-        (structuralObservationSnapshot newCertificate) := by
+        graph.targetObservations := by
   have initialFalse := affectedWithin_false_initial_false
-    (initiallyAffected oldCertificate newCertificate correspondence)
-    (heterogeneousDependencyEdges newCertificate.basis.naming)
-    (completeConstitutiveKeys newCertificate).length
+    (initiallyAffected oldCertificate graph)
+    graph.dependencyEdges
+    graph.targetKeys.length
     (.artifactNode key) outside
   change structuralInitiallyAffected
-    (keyOccurs (.artifactNode key) (transportedArtifactKeys correspondence))
+    (keyOccurs (.artifactNode key)
+      (transportedArtifactKeys graph.correspondence))
     (observationOptionsSame
       (lookupStructuralObservation key
         (structuralObservationSnapshot oldCertificate))
       (lookupStructuralObservation key
-        (structuralObservationSnapshot newCertificate))) = false at initialFalse
+        graph.targetObservations)) = false at initialFalse
   exact observationOptionsSame_true _ _
     (structuralInitiallyAffected_false_unchanged_true _ _ initialFalse)
 
+/-- Public pre-certificate graph.  It is calculated from the source
+certificate naming and the decoded target naming; the target certificate is
+not an input and does not occur in its type. -/
+def publicPreCertificateConstitutiveGraph :
+    PreCertificateConstitutiveGraph
+      publicInitialStateConstitutiveCertificate.basis.naming
+      publicReconfiguredStableNaming :=
+  calculatePreCertificateConstitutiveGraph
+    publicInitialStateConstitutiveCertificate.basis.naming
+    publicReconfiguredStableNaming
+
 theorem publicRequirementNode_is_outsideAffectedCone :
     affectedConstitutiveNode publicInitialStateConstitutiveCertificate
-      publicReferenceUpdatedStateCertificate publicStableNodeCorrespondence
+      publicPreCertificateConstitutiveGraph
       (.artifactNode (.receivedInput 1)) = false := by
   rfl
 
 theorem publicAuthorizationNode_is_affected :
     affectedConstitutiveNode publicInitialStateConstitutiveCertificate
-      publicReferenceUpdatedStateCertificate publicStableNodeCorrespondence
+      publicPreCertificateConstitutiveGraph
       (.artifactNode (.receivedInput 2)) = true := by
   rfl
 
 theorem publicProposalNeuron_is_affected :
     affectedConstitutiveNode publicInitialStateConstitutiveCertificate
-      publicReferenceUpdatedStateCertificate publicStableNodeCorrespondence
+      publicPreCertificateConstitutiveGraph
       (.artifactNode (.neuron 0)) = true := by
   rfl
 
 theorem publicAction_is_affected_downstream :
     affectedConstitutiveNode publicInitialStateConstitutiveCertificate
-      publicReferenceUpdatedStateCertificate publicStableNodeCorrespondence
+      publicPreCertificateConstitutiveGraph
       .action = true := by
   rfl
 
@@ -859,9 +866,12 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.stableArtifactObservationsSame_true
 #print axioms ConstitutiveSearch.NeuralAgent.keyOccurs
 #print axioms ConstitutiveSearch.NeuralAgent.structuralObservationSnapshot
+#print axioms ConstitutiveSearch.NeuralAgent.structuralObservationSnapshot_exact
 #print axioms ConstitutiveSearch.NeuralAgent.transportedArtifactKeys
 #print axioms ConstitutiveSearch.NeuralAgent.ConstitutiveDependencyEdge
 #print axioms ConstitutiveSearch.NeuralAgent.heterogeneousDependencyEdges
+#print axioms ConstitutiveSearch.NeuralAgent.PreCertificateConstitutiveGraph
+#print axioms ConstitutiveSearch.NeuralAgent.calculatePreCertificateConstitutiveGraph
 #print axioms ConstitutiveSearch.NeuralAgent.initiallyAffected
 #print axioms ConstitutiveSearch.NeuralAgent.affectedWithin
 #print axioms ConstitutiveSearch.NeuralAgent.affectedConstitutiveNode

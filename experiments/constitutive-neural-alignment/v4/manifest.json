@@ -1,0 +1,20 @@
+{
+  "manifest_id": "constitutive-neural-capability-comparison-manifest-v4",
+  "hash_algorithm": "sha256",
+  "status": "pre-confirmatory-inputs-frozen",
+  "files": {
+    "experiments/constitutive-neural-alignment/v4/comparison-protocol.json": "ed58e683e5646a92fefbe29c0c39f18efca62e5b358a2d45a5c95d985558b5c4",
+    "experiments/constitutive-neural-alignment/v4/comparison-result-schema.json": "46f67a0dd8890c5befe2ce709097777dafb8dbf95ef11f0d0b4bb34da7771637",
+    "experiments/constitutive-neural-alignment/v4/README.md": "f3a90365e7cab948283bf9d13d105d5ec158d5e6242a3e97b0bbc1a6ad780a2c",
+    "scripts/check-neural-comparison-protocol-v4.py": "bdaaa292a3d417cc591fb9789533cefb5e9c438749ad33b2e88fc6f58497d8c1",
+    "RelationalPerimeter/Agents/Neural/LearnedRuntimeAdapter.lean": "28f60d0c13cea4983f4b4b79c0367d8cb9f24b76ecafe28430e9253b43ee3161",
+    "RelationalPerimeter/Agents/Neural/LearnedUpdateSeparation.lean": "f8f360064eb6a6fcdae048d8cf157986d851f165d7127975d91bf07afb6f565e",
+    "RelationalPerimeter/Agents/Neural/LearnedContractFutureDivergence.lean": "eb8bb03e965ae1e161f9f6ffdc367f06ce91d266dd25b1ec8557e6bd62107356",
+    "experiments/constitutive-neural-alignment/v1/learned-artifact.json": "4e00058b0bb3f5e84f7b730202f9682d4d39a02b98e7a0971da4ab49dee24918",
+    "experiments/constitutive-neural-alignment/v1/training-data.json": "4ff37fb2056fb8d874d3103647babc22f1395dc626aec6d46947e2d9fc7ca807"
+  },
+  "frozen_on": "2026-10-22",
+  "randomness": "none",
+  "result_status": "absent-by-protocol",
+  "adapter_manifest_status": "required-in-a-later-version-before-run"
+}

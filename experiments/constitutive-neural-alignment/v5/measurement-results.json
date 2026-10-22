@@ -1,0 +1,56 @@
+{
+  "protocol_id": "compiled-neural-checker-measurement-v5",
+  "protocol_sha256": "fd5f3f64c47fb6b66f19bca8540b9d73b3c05e93d03644cc14242a28f44e93fc",
+  "runner_sha256": "8c5d02fddc8aa2c8fd6b36fb9859434eaf6d3e703c8db9bb77dd40ca5772a990",
+  "lean_source_sha256": {
+    "Tests/Executables/CompiledNeuralCheckerMeasure.lean": "ee42f6764881325a1f9e5c6a0e36e8fcfd0612e42ab98a01b9848c1171f0affc",
+    "lakefile.toml": "2ed09efd20e3ea1f9aec7d51ff147c2a3278feb9bef9e707594f11d2f5dd737d",
+    "lean-toolchain": "a0ada3782cd088719516bbfdf37b9e7032230e211bf424b85d952ee650c51091",
+    "RelationalPerimeter/Agents/Neural/IncrementalChecker.lean": "4be35588aeafcb9fac871967c21cc56eca87b78c5c0aa911cc1b3e428819aacb",
+    "RelationalPerimeter/Agents/Neural/ReferenceChecker.lean": "158cfc1ffb1bb62d1d7ed58a298d37d36ba4df7b2894b14aeb23bdd14410a893",
+    "RelationalPerimeter/Agents/Neural/IncrementalReferenceEquivalence.lean": "5ee8371c34df32115611773f2b99fff11771c6fe59109989615f542a36cda946"
+  },
+  "executable_sha256": "484e3fd7c08e13c720e1cc1999cb606e18d4282eb4f1ebd6b7e8ea0cceee66d9",
+  "build_command": [
+    "lake",
+    "build",
+    "compiled_neural_checker_measure"
+  ],
+  "execution_command": [
+    ".lake/build/bin/compiled_neural_checker_measure.exe",
+    "public-update-v1"
+  ],
+  "negative_control": {
+    "selector": "invalid-update",
+    "rejected": true,
+    "exit_code": 1
+  },
+  "environment": {
+    "operating_system": "Windows",
+    "machine": "AMD64",
+    "python": "3.9.13",
+    "lean_toolchain": "leanprover/lean4:v4.33.1"
+  },
+  "observation": {
+    "measurement_id": "compiled-neural-checker-v5",
+    "scope": "fixed-public-update",
+    "warmup_count": 50,
+    "measured_count": 1000,
+    "incremental": {
+      "accepted": true,
+      "elapsed_nanoseconds": 17374500,
+      "checksum": 34000,
+      "affected_cone_size": 19,
+      "transported_fragments": 1,
+      "recomputed_fragments": 6,
+      "assembled_fragments": 7
+    },
+    "reference": {
+      "accepted": true,
+      "elapsed_nanoseconds": 1159000,
+      "checksum": 1000
+    },
+    "exact_result_theorem": true,
+    "timing_status": "observational-not-a-theorem"
+  }
+}

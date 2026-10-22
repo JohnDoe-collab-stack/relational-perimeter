@@ -1,4 +1,4 @@
-import RelationalPerimeter.Agents.Neural.StateConstitutiveCertificate
+import RelationalPerimeter.Agents.Neural.ExecutableMetaContract
 
 /-!
 # Checked neural states and checked updates

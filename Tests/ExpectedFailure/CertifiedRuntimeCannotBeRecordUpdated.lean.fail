@@ -2,9 +2,10 @@ import RelationalPerimeter.Agents.Neural.CertifiedRuntime
 
 open ConstitutiveSearch.NeuralAgent
 
-def forgedRuntime : CertifiedRuntime :=
-  { initialCertifiedRuntime with
-    updates := [publicIncrementalNeuralUpdate] }
+def forgedRuntime : CertifiedRuntime publicDependentIncrementalChecker
+    publicInitialCheckedAgent :=
+  { publicInitialCertifiedRuntime with
+    history := .initial }
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.CertifiedRuntime

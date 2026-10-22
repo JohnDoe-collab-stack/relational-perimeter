@@ -1,0 +1,23 @@
+import RelationalPerimeter.Agents.Neural.IncrementalChecker
+
+open ConstitutiveSearch.NeuralAgent
+
+def independentlyRecomputedRequirementFragment :
+    LocalCertificateFragment publicIncrementalAssembledTargetCertificate
+      (.receivedInput 1) where
+  payload := .receivedInput
+  observed := rfl
+
+def requiresLicensedTransport
+    (fragment : LicensedTransportedCertificateFragment
+      publicInitialStateConstitutiveCertificate
+      publicPreCertificateConstitutiveGraph
+      (.receivedInput publicRequirementPort)
+      publicInitialRequirementFragment) :=
+  fragment
+
+#check requiresLicensedTransport independentlyRecomputedRequirementFragment
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.licenseTransportedCertificateFragment
+/- AXIOM_AUDIT_END -/

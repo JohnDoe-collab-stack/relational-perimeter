@@ -1,0 +1,59 @@
+{
+  "protocol_id": "compiled-neural-checker-measurement-v5",
+  "status": "frozen-before-confirmatory-run",
+  "reason_for_new_version": "The v2 and v3 campaigns execute independent Python models. This protocol measures the checker definitions compiled from the Lean library itself.",
+  "scope": "One fixed public serialized update checked by the public incremental checker and its complete reference update checked by the public reference checker.",
+  "excluded_claims": [
+    "No scaling law is inferred from this fixed public artifact.",
+    "Elapsed time is an observation and not a Lean theorem.",
+    "This protocol does not measure peak memory or allocation volume.",
+    "The historical v2 and v3 Python measurements are not evidence about the runtime cost of the compiled Lean checker."
+  ],
+  "public_update_selector": "public-update-v1",
+  "warmup_count": 50,
+  "measured_count": 1000,
+  "build_command": [
+    "lake",
+    "build",
+    "compiled_neural_checker_measure"
+  ],
+  "confirmatory_command": [
+    "py",
+    "-3",
+    "scripts/run-compiled-neural-checker-measurement.py",
+    "--protocol",
+    "experiments/constitutive-neural-alignment/v5/measurement-protocol.json",
+    "--output",
+    "experiments/constitutive-neural-alignment/v5/measurement-results.json"
+  ],
+  "runner_sha256": "8c5d02fddc8aa2c8fd6b36fb9859434eaf6d3e703c8db9bb77dd40ca5772a990",
+  "source_sha256": {
+    "Tests/Executables/CompiledNeuralCheckerMeasure.lean": "ee42f6764881325a1f9e5c6a0e36e8fcfd0612e42ab98a01b9848c1171f0affc",
+    "lakefile.toml": "2ed09efd20e3ea1f9aec7d51ff147c2a3278feb9bef9e707594f11d2f5dd737d",
+    "lean-toolchain": "a0ada3782cd088719516bbfdf37b9e7032230e211bf424b85d952ee650c51091",
+    "RelationalPerimeter/Agents/Neural/IncrementalChecker.lean": "4be35588aeafcb9fac871967c21cc56eca87b78c5c0aa911cc1b3e428819aacb",
+    "RelationalPerimeter/Agents/Neural/ReferenceChecker.lean": "158cfc1ffb1bb62d1d7ed58a298d37d36ba4df7b2894b14aeb23bdd14410a893",
+    "RelationalPerimeter/Agents/Neural/IncrementalReferenceEquivalence.lean": "5ee8371c34df32115611773f2b99fff11771c6fe59109989615f542a36cda946"
+  },
+  "measured_definitions": {
+    "incremental": "ConstitutiveSearch.NeuralAgent.checkIncrementalUpdate",
+    "reference": "ConstitutiveSearch.NeuralAgent.checkReferenceUpdate",
+    "incremental_input": "ConstitutiveSearch.NeuralAgent.publicIncrementalNeuralUpdate",
+    "reference_input": "IncrementalNeuralUpdate.toFullReferenceUpdate applied to the same runtime-selected incremental input",
+    "exact_result_theorem": "ConstitutiveSearch.NeuralAgent.publicIncrementalAndReferenceChecks_exact"
+  },
+  "expected_deterministic_observation": {
+    "affected_cone_size": 19,
+    "transported_fragments": 1,
+    "recomputed_fragments": 6,
+    "assembled_fragments": 7,
+    "incremental_checksum": 34000,
+    "reference_checksum": 1000
+  },
+  "negative_control": {
+    "selector": "invalid-update",
+    "required_outcome": "nonzero process exit after rejection by the compiled incremental checker"
+  },
+  "primary_status": "direct-compiled-checker-connection",
+  "timing_status": "observational-not-a-theorem"
+}

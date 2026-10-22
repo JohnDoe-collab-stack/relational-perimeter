@@ -1,0 +1,19 @@
+import RelationalPerimeter.Agents.Neural.StateConstitutiveCertificate
+
+open ConstitutiveSearch.NeuralAgent
+
+def impossibleIncompleteFragments :
+    StateCertificateFragments PublicReconfiguredOperationalContract
+      publicDecodedReconfiguredArtifact publicReferenceUpdatedState :=
+  { structural := publicReferenceUpdatedStateFragments.structural
+    requirement := publicReferenceUpdatedStateFragments.requirement
+    causal := publicReferenceUpdatedStateFragments.causal
+    proposalAction := publicReferenceUpdatedStateFragments.proposalAction
+    authorization := publicReferenceUpdatedStateFragments.authorization
+    effect := publicReferenceUpdatedStateFragments.authorization
+    historical := publicReferenceUpdatedStateFragments.historical
+    futures := publicReferenceUpdatedStateFragments.futures }
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.StateCertificateFragments
+/- AXIOM_AUDIT_END -/

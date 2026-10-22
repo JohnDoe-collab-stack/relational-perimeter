@@ -54,6 +54,139 @@ structure ValidatedStableNodeCorrespondence
   neuronMapInjective : PartialInjective neuronMap
   outputMapInjective : PartialInjective outputMap
 
+/-- A positive result of searching a validated target naming for one stable
+serial.  The equality is produced by the search together with the location;
+it is not reconstructed from a later certificate. -/
+structure StableSerialMatch {count : Nat}
+    (serial : Nat) (targetSerial : Fin count -> Nat) : Type where
+  target : Fin count
+  serialExact : serial = targetSerial target
+
+/-- Executable search through the finite target layout. -/
+def findStableSerialMatch {count : Nat}
+    (serial : Nat) (targetSerial : Fin count -> Nat) :
+    List (Fin count) -> Option (StableSerialMatch serial targetSerial)
+  | [] => none
+  | target :: rest =>
+      if same : serial = targetSerial target then
+        some { target := target, serialExact := same }
+      else
+        findStableSerialMatch serial targetSerial rest
+
+/-- A stable-location map is calculated from the source and target namings.
+It searches the target layout for the source serial; deletions yield `none`,
+preservations and reindexings yield the unique target location. -/
+def calculatedStableLocationMap {sourceCount targetCount : Nat}
+    (sourceSerial : Fin sourceCount -> Nat)
+    (targetSerial : Fin targetCount -> Nat)
+    (source : Fin sourceCount) : Option (Fin targetCount) :=
+  match findStableSerialMatch (sourceSerial source) targetSerial
+      (structuralLocations targetCount) with
+  | none => none
+  | some matched => some matched.target
+
+theorem calculatedStableLocationMap_keyExact
+    {sourceCount targetCount : Nat}
+    (sourceSerial : Fin sourceCount -> Nat)
+    (targetSerial : Fin targetCount -> Nat)
+    (source : Fin sourceCount) :
+    match calculatedStableLocationMap sourceSerial targetSerial source with
+    | none => True
+    | some target => sourceSerial source = targetSerial target := by
+  unfold calculatedStableLocationMap
+  generalize found : findStableSerialMatch (sourceSerial source) targetSerial
+      (structuralLocations targetCount) = result
+  cases result with
+  | none => trivial
+  | some matched => exact matched.serialExact
+
+theorem calculatedStableLocationMap_partialInjective
+    {sourceCount targetCount : Nat}
+    (sourceSerial : Fin sourceCount -> Nat)
+    (targetSerial : Fin targetCount -> Nat)
+    (sourceSerialInjective : Function.Injective sourceSerial) :
+    PartialInjective
+      (calculatedStableLocationMap sourceSerial targetSerial) := by
+  intro left right target leftExact rightExact
+  have leftKey := calculatedStableLocationMap_keyExact
+    sourceSerial targetSerial left
+  have rightKey := calculatedStableLocationMap_keyExact
+    sourceSerial targetSerial right
+  rw [leftExact] at leftKey
+  rw [rightExact] at rightKey
+  exact sourceSerialInjective (leftKey.trans rightKey.symm)
+
+/-- The calculated map, its key equation, and its partial injectivity are one
+constitutive product.  Keeping them together prevents a later caller from
+substituting a map while reusing proofs produced for another calculation. -/
+structure CalculatedStableLocationMap {sourceCount targetCount : Nat}
+    (sourceSerial : Fin sourceCount -> Nat)
+    (targetSerial : Fin targetCount -> Nat) : Type where
+  map : Fin sourceCount -> Option (Fin targetCount)
+  keyExact : (source : Fin sourceCount) ->
+    match map source with
+    | none => True
+    | some target => sourceSerial source = targetSerial target
+  mapInjective : PartialInjective map
+
+def calculateStableLocationMap {sourceCount targetCount : Nat}
+    (sourceSerial : Fin sourceCount -> Nat)
+    (targetSerial : Fin targetCount -> Nat)
+    (sourceSerialInjective : Function.Injective sourceSerial) :
+    CalculatedStableLocationMap sourceSerial targetSerial :=
+  { map := calculatedStableLocationMap sourceSerial targetSerial
+    keyExact := calculatedStableLocationMap_keyExact sourceSerial targetSerial
+    mapInjective := calculatedStableLocationMap_partialInjective
+      sourceSerial targetSerial sourceSerialInjective }
+
+/-- The complete partial correspondence is calculated from the two validated
+stable namings.  No cross-version map or target certificate is supplied by a
+caller. -/
+def calculateStableNodeCorrespondence
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    (oldNaming : StableArtifactNaming oldArtifact)
+    (newNaming : StableArtifactNaming newArtifact) :
+    ValidatedStableNodeCorrespondence oldNaming newNaming := by
+  let inputs := calculateStableLocationMap
+    oldNaming.inputSerial newNaming.inputSerial oldNaming.inputSerialInjective
+  let neurons := calculateStableLocationMap
+    oldNaming.neuronSerial newNaming.neuronSerial oldNaming.neuronSerialInjective
+  let outputs := calculateStableLocationMap
+    oldNaming.outputSerial newNaming.outputSerial oldNaming.outputSerialInjective
+  exact
+    { inputMap := inputs.map
+      neuronMap := neurons.map
+      outputMap := outputs.map
+      inputKeyExact := by
+        intro source
+        cases mapped : inputs.map source with
+        | none => trivial
+        | some target =>
+            have exact := inputs.keyExact source
+            rw [mapped] at exact
+            exact exact
+      neuronKeyExact := by
+        intro source
+        cases mapped : neurons.map source with
+        | none => trivial
+        | some target =>
+            have exact := neurons.keyExact source
+            rw [mapped] at exact
+            exact exact
+      outputKeyExact := by
+        intro source
+        cases mapped : outputs.map source with
+        | none => trivial
+        | some target =>
+            have exact := outputs.keyExact source
+            rw [mapped] at exact
+            exact exact
+      inputMapInjective := inputs.mapInjective
+      neuronMapInjective := neurons.mapInjective
+      outputMapInjective := outputs.mapInjective }
+
 /-- A successful node transport carries its target together with the exact
 stable-key equation.  Preservation is therefore produced with the transport,
 not reconstructed from its result afterwards. -/
@@ -177,32 +310,9 @@ theorem finOne_equal (left right : Fin 1) : left = right := by
 
 def publicStableNodeCorrespondence :
     ValidatedStableNodeCorrespondence publicInitialStableNaming
-      publicReconfiguredStableNaming where
-  inputMap := publicReferenceInputMap
-  neuronMap := publicReferenceNeuronMap
-  outputMap := publicReferenceOutputMap
-  inputKeyExact := by intro source; rfl
-  neuronKeyExact := by
-    intro source
-    have sourceExact : source = publicRequirementOutput :=
-      finOne_equal source publicRequirementOutput
-    subst source
-    rfl
-  outputKeyExact := by
-    intro source
-    have sourceExact : source = publicRequirementOutputPort :=
-      finOne_equal source publicRequirementOutputPort
-    subst source
-    rfl
-  inputMapInjective := by
-    intro left right _ _ _
-    exact finOne_equal left right
-  neuronMapInjective := by
-    intro left right _ _ _
-    exact finOne_equal left right
-  outputMapInjective := by
-    intro left right _ _ _
-    exact finOne_equal left right
+      publicReconfiguredStableNaming :=
+  calculateStableNodeCorrespondence publicInitialStableNaming
+    publicReconfiguredStableNaming
 
 theorem publicStableNodeCorrespondence_reindexes_requirement :
     Option.map (TransportedStableNode.target
@@ -264,6 +374,14 @@ end ConstitutiveSearch.NeuralAgent
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.PartialInjective
 #print axioms ConstitutiveSearch.NeuralAgent.ValidatedStableNodeCorrespondence
+#print axioms ConstitutiveSearch.NeuralAgent.StableSerialMatch
+#print axioms ConstitutiveSearch.NeuralAgent.findStableSerialMatch
+#print axioms ConstitutiveSearch.NeuralAgent.calculatedStableLocationMap
+#print axioms ConstitutiveSearch.NeuralAgent.calculatedStableLocationMap_keyExact
+#print axioms ConstitutiveSearch.NeuralAgent.calculatedStableLocationMap_partialInjective
+#print axioms ConstitutiveSearch.NeuralAgent.CalculatedStableLocationMap
+#print axioms ConstitutiveSearch.NeuralAgent.calculateStableLocationMap
+#print axioms ConstitutiveSearch.NeuralAgent.calculateStableNodeCorrespondence
 #print axioms ConstitutiveSearch.NeuralAgent.TransportedStableNode
 #print axioms ConstitutiveSearch.NeuralAgent.ValidatedStableNodeCorrespondence.transportNode
 #print axioms ConstitutiveSearch.NeuralAgent.TransportedStableOutput

@@ -10,6 +10,18 @@ if (-not $pythonCommand) { throw "Python 3 is required for documentation and com
 if ($LASTEXITCODE -ne 0) { throw "scientific documentation self-test failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-scientific-docs.py") --static
 if ($LASTEXITCODE -ne 0) { throw "scientific documentation check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-neural-c1-c17-regression-floor.py")
+if ($LASTEXITCODE -ne 0) { throw "neural C1-C17 regression floor check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-neural-block-negative-fixtures.py")
+if ($LASTEXITCODE -ne 0) { throw "neural per-block negative-fixture check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-neural-comparison-protocol-v4.py") --self-test
+if ($LASTEXITCODE -ne 0) { throw "neural comparison protocol v4 self-test failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-neural-comparison-protocol-v4.py")
+if ($LASTEXITCODE -ne 0) { throw "neural comparison protocol v4 check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-compiled-neural-checker-measurement.py") --self-test
+if ($LASTEXITCODE -ne 0) { throw "compiled neural checker measurement self-test failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-compiled-neural-checker-measurement.py")
+if ($LASTEXITCODE -ne 0) { throw "compiled neural checker measurement check failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-independent-neural-artifact.py")
 if ($LASTEXITCODE -ne 0) { throw "independent neural artifact check failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-final-neural-campaign.py")

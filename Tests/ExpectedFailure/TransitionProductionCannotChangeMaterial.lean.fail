@@ -1,0 +1,17 @@
+import RelationalPerimeter.Agents.Neural.TransitionProduction
+
+open ConstitutiveSearch.NeuralAgent
+
+def differentTransitionMaterial :
+    publicTransitionProductionKernel.Material .initial .reconfigured :=
+  .reconfigure ⟨.scopeOne, .reversed⟩
+
+def impossibleMaterialSubstitution :
+    ExecutedTransitionProduction publicTransitionProductionKernel
+      publicInitialCheckedAgent publicOperationalTransition
+      differentTransitionMaterial :=
+  publicReferenceTransitionProduction
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedTransitionProduction
+/- AXIOM_AUDIT_END -/

@@ -2,10 +2,17 @@ import RelationalPerimeter.Agents.Neural.ReferenceChecker
 
 open ConstitutiveSearch.NeuralAgent
 
+def differentInitialArtifact : SerializedConstitutiveArtifact :=
+  { publicSerializedInitialConstitutiveArtifact with
+    stableNaming :=
+      { inputKeys := [101]
+        neuronKeys := [102]
+        outputKeys := [103] } }
+
 def impossibleInitialAcceptance :
-    checkInitial publicSerializedReconfiguredNetwork =
-      .ok publicInitialCheckedAgent := by
-  rfl
+    InitialCheckSuccess publicExecutableMetaContractInterface
+      differentInitialArtifact :=
+  publicInitialCheckSuccess
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.checkInitial

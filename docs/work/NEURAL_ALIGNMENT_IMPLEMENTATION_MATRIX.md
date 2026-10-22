@@ -342,29 +342,43 @@ M0 Arithmetic
 → M18 OperationalContract
 → M19 SerializedNativeSystem
 → M20 StableNodeIdentity
-→ M21 FiniteCausalBasis
-→ M22 CoveredFutureRealization
-→ M23 StateConstitutiveCertificate
-→ M24 CheckedState
-→ M25 ReferenceChecker
-→ M26 StableNodeCorrespondence
-→ M27 HeterogeneousCausalGraph
-→ M28 AffectedConstitutiveCone
-→ M29 LocalCertificateReuse
-→ M30 IncrementalChecker
-→ M31 IncrementalReferenceEquivalence
-→ M32 CheckedUpdateTrace
-→ M33 CertifiedRuntime
-→ M34 CertifiedRuntimeAccessibility
-→ M35 IndependentLearnedArtifact
-→ M36 LearnedUpdateSeparation
-→ M37 FiniteCounterfactualDivergence
-→ M38 public root
+→ M21 SerializedConstitutiveArtifact
+→ M22 FiniteCausalBasis
+→ M23 CoveredFutureRealization
+→ M24 StateConstitutiveCertificate
+→ M25 ExecutableMetaContract
+→ M26 CheckedState
+→ M27 TransitionProduction
+→ M28 ReferenceChecker
+→ M29 StableNodeCorrespondence
+→ M30 HeterogeneousCausalGraph
+→ M31 AffectedConstitutiveCone
+→ M32 LocalCertificateReuse
+→ M33 IncrementalChecker
+→ M34 IncrementalReferenceEquivalence
+→ M35 CheckedUpdateTrace
+→ M36 CertifiedRuntime
+→ M37 CertifiedRuntimeAccessibility
+→ M38 IndependentLearnedArtifact
+→ M39 LearnedUpdateSeparation
+→ M40 FiniteCounterfactualDivergence
+→ M41 LearnedRuntimeAdapter
+→ M42 LearnedContractFutureDivergence
+→ M43 public root
 ```
 
 La gate refuse toute dépendance vers une strate machine égale ou supérieure.
 Les modules ne sont donc plus rassemblés dans une strate `U` incapable
 d’imposer leur ordre constitutif interne.
+
+`ExecutableMetaContract` constitue la frontière exécutable entre le
+méta-contrat et les états vérifiés. Les noms et artefacts reçus restent des
+données sans preuve. Chaque décision positive sur l’admission, la transition,
+la base causale, l’exigence, le contexte causal, l’autorisation, l’action,
+l’effet, l’histoire et les futurs réfléchit vers le témoin dépendant exact.
+Le théorème générique `ExecutableMetaContractInterface.certifyState` assemble
+alors le certificat indexé sans comparer la source à un artefact public
+privilégié et sans contenir à l’avance un `CheckedAgent` ou un `CheckedUpdate`.
 
 ## Contrôles ajoutés
 
@@ -493,6 +507,24 @@ type du certificat. Le candidat causal attaché à l’entrée et la conservatio
 tout futur fini sont ensuite des projections de cette même chaîne, non des
 reconstructions indépendantes.
 
+Cette chaîne est désormais décomposée en huit fragments dépendants : structure
+stable et base causale, encodage de l’exigence, rôle causal exécuté,
+préservation proposition–action, autorisation, effet au successeur, politique
+historique, puis couverture et réalisation exacte des futurs. Tous portent les
+mêmes indices de contrat, d’artefact et d’état. `assembleStateConstitution`
+reçoit uniquement leur agrégat complet et produit le certificat cible ; il
+n’accepte jamais un certificat déjà construit. Les deux certificats publics
+sont définis par cet assemblage. Les lois `assemble_fragments_exact` et
+`fragments_assemble_exact` montrent constructivement que la décomposition ne
+perd ni n’ajoute de témoin.
+
+Le fragment structurel contient en outre la table finie des observations
+stables ; cette table fait donc partie du certificat assemblé et n’est plus une
+lecture auxiliaire reconstruite après coup. Les fixtures négatives refusent un
+fragment provenant de l’état initial dans l’assemblage reconfiguré, l’emploi
+d’un certificat cible à la place des fragments et l’omission du fragment
+d’effet.
+
 ## Extension incrémentale — agents et mises à jour vérifiés
 
 Les constructeurs de `CheckedAgent` et `CheckedUpdate` sont privés. Un agent
@@ -508,11 +540,43 @@ Ce bloc ferme les types certifiés et une instance initiale publique.
 
 ## Extension incrémentale — vérification initiale et recheck complet
 
-`checkInitial` décode entièrement le réseau sérialisé avant d’accepter
-l’artefact initial de référence. Un artefact mal formé reçoit le diagnostic du
-décodeur ; un artefact bien formé mais différent ne peut pas recevoir le
-certificat de référence. Son théorème de correction identifie tout résultat
-positif à l’agent vérifié exact.
+`checkInitial` est désormais paramétrique en un `ConstitutiveMetaContract`, en
+son `ExecutableMetaContractInterface` et en l’artefact complet reçu. Il décode
+séparément le nom du contrat et l’artefact, relie leurs contrats par
+l’injectivité de l’encodage, vérifie l’admission, puis exécute les onze
+décisions locales finies. Le succès est indexé par la source exacte et contient
+le contrat décodé, l’artefact décodé et les résultats positifs réfléchis. Le
+`CheckedAgent` est alors construit depuis l’état produit par cet artefact et le
+`StateConstitutiveCertificate` reconstruit par réflexion ; il n’est jamais une
+donnée fournie au checker.
+
+La correction est indexée par ce résultat exact. La complétude générique est
+relative uniquement aux deux décodages, à l’admission et aux décisions finies
+annoncées par l’interface ; sa preuve constructive ne dépend d’aucun axiome.
+Les erreurs distinguent le décodeur de nom, le décodeur d’artefact,
+l’admission et chacune des onze obligations locales. La spécialisation publique
+reconnaît les deux artefacts complets possédés par son méta-contrat. L’artefact
+initial reconstruit définitionnellement l’ancien `publicInitialCheckedAgent`,
+tandis qu’un artefact mal formé, un artefact complet mais localement non admis
+ou une décision locale négative reçoit un refus distinct.
+
+`TransitionProductionKernel` sépare ensuite la production sémantique commune
+des deux futurs chemins de vérification. Il reçoit l’agent source certifié, la
+transition admise et son matériau d’exécution. Sa fonction `produce` construit
+d’abord l’objet d’exécution constitutif, `targetOf` lit ensuite l’état
+successeur dans cet objet, et le témoin `execution` est indexé par cette lecture
+exacte. Ni l’état cible, ni un certificat cible, ni un verdict ne sont fournis
+au noyau. `ExecutedTransitionProduction` possède un constructeur privé et
+conserve le matériau dans ses indices, ce qui interdit de réutiliser une
+production pour un autre matériau.
+
+La réalisation publique produit le véritable `ReconfiguredCausalStage` par
+`executeReconfiguredCausalStage`, à partir de l’état de
+`publicInitialCheckedAgent` et de l’exigence suivante. La cible est celle de
+l’action exacte stockée dans ce stage. Le recheck public et le chemin
+incrémental consomment désormais exactement
+`publicReferenceTransitionProduction.execution`. Ils partagent donc la même
+production de transition, sans partager leur certificat cible ni leur verdict.
 
 Le contrat reconfiguré décrit désormais le système effectivement produit :
 ses obligations sont indexées par l’état exact et consomment séparément
@@ -520,13 +584,16 @@ l’encodage, le rôle causal, l’action, l’autorisation et l’effet portés
 même production. Sa base causale est attachée à l’artefact cible complètement
 décodé, et sa politique de futurs exécute la continuation depuis ce même état.
 
-`checkReferenceUpdate` est le vérificateur complet de référence, distinct du
-futur vérificateur incrémental. Son entrée contient seulement le réseau cible
-complet et l’exigence suivante, jamais un certificat. Il redécode le programme
-entier, contrôle l’artefact et le successeur exacts, puis retourne le
-`CheckedUpdate` dont l’état cible est celui produit par la reconfiguration. La
-correction identifie tout succès à cette mise à jour exacte ; la complétude est
-limitée aux deux conditions locales décidables effectivement contrôlées.
+`checkReferenceUpdate` est le vérificateur complet public de référence,
+distinct du vérificateur incrémental. Son entrée contient la transition nommée,
+l’artefact constitutif cible complet et l’exigence suivante, jamais un
+certificat. Il redécode la transition et l’artefact, relance séparément les
+onze décisions locales, reconstruit les huit fragments du certificat cible,
+les assemble, puis retourne le `CheckedUpdate` dont l’état cible est celui
+produit par la reconfiguration. Aucun fragment du certificat source n’est
+transporté dans ce chemin. La correction identifie tout succès à cette mise à
+jour exacte ; la complétude est limitée aux trois conditions locales décidables
+effectivement contrôlées.
 
 ## Extension incrémentale — identités stables entre versions
 
@@ -536,12 +603,14 @@ neurones et ses ports de sortie. Une occurrence locale conserve donc sa
 position d’exécution, mais cette position n’est plus prise pour son identité.
 
 `ValidatedStableNodeCorrespondence` est une correspondance partielle entre deux
-versions. Un transport réussi produit simultanément la nouvelle occurrence et
-la preuve que sa clé stable est inchangée. Les suppressions et insertions
-restent représentées par l’absence d’image ou d’antécédent. Dans l’instance
-publique, l’entrée d’exigence est réindexée de la position zéro à la position
-un tout en conservant sa clé ; l’entrée d’autorisation insérée n’a aucun
-antécédent dans l’ancien artefact.
+versions. `calculateStableNodeCorrespondence` la calcule en recherchant les
+clés de la source dans le nommage cible validé ; le delta ne peut donc pas la
+fournir séparément. Un transport réussi produit simultanément la nouvelle
+occurrence et la preuve que sa clé stable est inchangée. Les suppressions et
+insertions restent représentées par l’absence d’image ou d’antécédent. Dans
+l’instance publique, l’entrée d’exigence est réindexée de la position zéro à
+la position un tout en conservant sa clé ; l’entrée d’autorisation insérée n’a
+aucun antécédent dans l’ancien artefact.
 
 ## Extension incrémentale — graphe causal constitutif hétérogène
 
@@ -561,17 +630,22 @@ l’égalité de cette clé.
 
 ## Extension incrémentale — cône affecté calculé
 
-`affectedConstitutiveNode` calcule le cône depuis la modification réellement
-validée. Les insertions, suppressions et observations structurelles modifiées
-amorcent le calcul ; sa fermeture suit les lectures neuronales de poids non
-nul puis la chaîne hétérogène allant du port de sortie aux observations du
-contrat. Les observations du nouveau contrat sont invalidées à la frontière
-de version au lieu d’être déclarées réutilisables sans transport.
+`calculateIncrementalPreCertificateResult` matérialise l’artefact cible depuis
+le delta, le décode, calcule sa correspondance stable, ses observations, ses
+arêtes hétérogènes, puis ferme son cône affecté. Toutes ces données existent
+avant le certificat cible et sont conservées dans
+`IncrementalPreCertificateResult`. Les insertions, suppressions et observations
+structurelles modifiées amorcent le calcul ; sa fermeture suit les lectures
+neuronales de poids non nul puis la chaîne hétérogène allant du port de sortie
+aux observations du contrat. Les observations du nouveau contrat sont
+invalidées à la frontière de version au lieu d’être déclarées réutilisables
+sans transport.
 
 Dans l’instance publique, l’entrée d’autorisation insérée, le neurone de
 proposition et l’action en aval appartiennent au cône. L’entrée d’exigence
 réindexée en est exclue : sa correspondance est validée et son observation
-structurelle est identique dans les deux certificats. Le théorème générique
+structurelle est identique dans la source certifiée et le graphe cible calculé.
+Le théorème générique
 `outsideAffectedCone_unchanged` dérive alors l’égalité des observations de
 l’absence calculée dans le cône ; il ne reçoit pas cette égalité comme
 hypothèse.
@@ -580,10 +654,16 @@ hypothèse.
 
 `LocalCertificateFragment` contient le fragment ancien et son équation
 d’observation dans le certificat source. `Unaffected` exige simultanément le
-transport positif de son nœud par la correspondance validée et son exclusion
+transport positif de son nœud par la correspondance calculée et son exclusion
 du cône calculé. `transportCertificateFragment` consomme ces deux résultats et
-place exactement l’ancien payload sous la même clé stable dans le certificat
-cible. Le payload n’est ni recalculé ni remplacé par une observation cible.
+produit un `PreCertificateLocalFragment` observé dans le graphe cible, sans
+certificat cible. `LicensedTransportedCertificateFragment`, dont le
+constructeur est privé, conserve cette licence, le fragment pré-certificat et
+leur égalité exacte. Après l’assemblage seulement,
+`realizePreCertificateFragment` le raccorde au certificat cible par l’exactitude
+de ses observations. Un fragment recalculé sur la cible ne peut donc pas être
+requalifié en fragment transporté. Le payload n’est ni recalculé ni remplacé
+par une observation cible.
 
 L’instance publique transporte ainsi le fragment de l’entrée d’exigence de sa
 position ancienne à sa position nouvelle. Une fixture négative interdit de
@@ -592,17 +672,55 @@ est calculée à `true`.
 
 ## Extension incrémentale — vérificateur de delta
 
-`IncrementalNeuralUpdate` contient uniquement une liste d’éditions sérialisées
-et l’entrée suivante. Il ne peut transporter ni certificat, ni correspondance
-stable, ni décision sur le cône affecté. `checkIncrementalUpdate` applique ces
-éditions à la source certifiée, contrôle le réseau cible matérialisé et
-l’entrée suivante, puis retourne un paquet dont le constructeur est privé.
+Le noyau est désormais générique. `IncrementalCheckerEngine` est paramétré par
+le `ConstitutiveMetaContract`, le contrat courant et le `CheckedAgent` source ;
+il choisit seulement le type du delta, le type d’erreur et l’analyse exécutable
+propre au domaine. Un succès ne peut contenir qu’une telle analyse, via un
+constructeur privé. `buildIncrementalCheckedUpdate` assemble alors lui-même le
+certificat depuis les fragments transportés et recalculés de
+`IncrementalTargetAnalysis`, certifie l’agent cible, puis construit le
+`CheckedUpdate` depuis la transition et son exécution exactes. Le noyau ne
+connaît aucune constante de l’instance publique et n’appelle aucun recheck
+complet.
 
-Ce paquet conserve séparément le fragment ancien réellement transporté et les
-observations recalculées dans le cône affecté. Il expose leurs listes et leurs
-comptes distincts, ainsi que l’égalité de leur assemblage avec l’observation
-structurelle du certificat cible. Le vérificateur incrémental ne redécode pas
-l’artefact complet et n’appelle pas le vérificateur complet de référence.
+La spécialisation publique `analyzePublicIncrementalUpdate` exécute les gates
+du delta, calcule le graphe et le cône, conserve le calcul structurel, revérifie
+les obligations locales de l’état cible et expose l’exécution exacte. Le
+wrapper public appelle exclusivement `checkGenericIncrementalUpdate`; il ne
+rejoue plus un second chemin spécialisé. La correction de tout succès est
+définitionnelle. La complétude constructive relie l’acceptation générique à
+l’existence d’une analyse positive, puis cette condition aux trois égalités
+publiques effectivement décidées. Une fixture négative interdit la fabrication
+directe d’un succès générique.
+
+`IncrementalNeuralUpdate` contient uniquement la transition sérialisée, le
+nommage stable cible sérialisé, une liste d’éditions sérialisées et l’entrée
+suivante. Il ne peut transporter ni certificat, ni correspondance stable, ni
+décision sur le cône affecté. `checkIncrementalUpdate` applique ces éditions à
+la source certifiée, matérialise et décode l’artefact cible complet, puis
+exécute `calculateIncrementalPreCertificateResult` avant tout assemblage du
+certificat cible.
+
+`calculateIncrementalStructuralAssembly` parcourt les clés du graphe cible dans
+leur ordre. Pour chaque clé, il consulte exclusivement la liste transportée si
+la clé est hors cône, et exclusivement la liste recalculée si elle est dans le
+cône. Une donnée absente produit `missingTransported` ou `missingRecomputed` :
+aucune observation du graphe cible ne sert de payload de secours. Le résultat
+positif `CalculatedIncrementalStructuralAssembly` conserve simultanément
+l’exécution de ce calcul et son exactitude par rapport au snapshot cible.
+
+Le paquet d’assemblage incrémental ne reçoit plus un paquet libre de huit
+fragments déjà assemblés. Il consomme le graphe pré-certificat calculé, le
+fragment ancien sous sa licence de transport, le résultat positif du calcul
+structurel, la transition de contrat et les fragments sémantiques recalculés
+depuis la production exécutée. `PublicIncrementalCertificateAssembly.fragments`
+est la seule composition de ces données ; `assembleStateConstitution` produit
+ensuite le certificat cible, qui n’apparaît dans aucun argument. Le résultat
+pré-certificat calculé par le checker est relié à cet assemblage par
+`assemblePublicIncrementalCertificateFromPreCertificate` et cette dépendance
+est conservée dans le résultat vérifié. Le vérificateur incrémental n’appelle
+pas le vérificateur complet de référence. L’égalité avec le certificat de
+référence n’est prouvée qu’après ces deux constructions indépendantes.
 
 ## Extension incrémentale — équivalence avec le recheck complet
 
@@ -618,52 +736,81 @@ porte directement sur les deux valeurs exécutables de type `Except`, après
 effacement du supplément incrémental. Cette égalité certifie le résultat, pas
 une borne asymptotique sur son coût.
 
+La correction générique est également exposée composante par composante par
+`checkGenericIncrementalUpdate_constitutively_sound` : l’artefact et l’état du
+successeur sont exactement ceux de l’analyse positive, le certificat est
+exactement `assembleStateConstitution` appliqué aux fragments de cette même
+analyse, et la transition ainsi que son exécution sont celles consommées par
+le `CheckedUpdate`. La complétude reste strictement relative aux décisions
+locales annoncées. Enfin,
+`incrementalAndReferenceSuccessfulResults_exact` identifie directement les
+deux `CheckedUpdate` dès que les deux chemins réussissent sur le même delta ;
+il ne conclut pas seulement à l’équivalence de leurs verdicts.
+
 ## Extension incrémentale — trace finie dépendante vérifiée
 
-`CheckedReconfigurationTrace` indexe une histoire finie par son agent vérifié
-source, sa liste exacte de deltas et son agent vérifié final. Chaque
-constructeur de pas conserve le résultat positif exact de
-`checkIncrementalUpdate`; la queue commence obligatoirement sur
-`incremental.checked.next`. `EveryCheckedStepSatisfies` reconstruit alors, pas
-par pas, l’identification de chaque résultat stocké avec la mise à jour
-certifiée produite par le vérificateur.
+`CheckedReconfigurationTrace` est paramétrique dans un
+`DependentIncrementalChecker`. Elle indexe une histoire finie par son agent
+vérifié source et son agent vérifié final. Chaque pas conserve l'appel réussi
+exact du checker ; sa queue commence obligatoirement sur `result.checked.next`.
+`EveryCheckedStepSatisfies` reconstruit cette propriété pour toute la trace.
 
-Le méta-contrat public actuel autorise uniquement la transition de `initial`
-vers `reconfigured`. `checkUpdates` accepte donc la trace vide ou un unique pas
-vérifié et refuse explicitement une seconde mise à jour avec
-`noAdmittedTransition`. La trace est récursive et dépendante ; le cas public ne
-lui ajoute pas une transition réflexive qui n’existe pas dans le contrat.
+`CheckedUpdateProgram` exprime une suite dépendante : la continuation ne peut
+être choisie qu'après production du résultat exact du pas courant.
+`checkUpdates` l'exécute par récursion structurelle, sans borne de longueur ni
+test sur l'existence d'un historique antérieur. Toute longueur finie admise par
+le langage de mises à jour du méta-contrat est donc acceptée. La spécialisation
+publique ne possède qu'un constructeur de mise à jour à l'agent initial ; son
+unique pas vient de cette absence typée de transition sortante, et non d'une
+restriction inscrite dans l'algorithme générique. `checkPublicUpdates` conserve
+la façade concrète à liste du cas public et expose explicitement ce refus.
+Le théorème `checkUpdates_complete` porte sur toute exécution finie dépendante
+et démontre que le checker accepte sa totalité, quelle que soit sa longueur.
+`checkUpdates_preservesContracts` fournit en outre, à chaque pas, le transport
+des obligations persistantes et l'égalité de tous les futurs finis couverts
+par le certificat exact du successeur.
 
 ## Extension incrémentale — API runtime fermée
 
-`CertifiedRuntime` possède un constructeur privé. Il conserve ensemble la
-liste des deltas acceptés, l’agent courant, la trace dépendante exacte qui y
-conduit et la preuve constructive de tous ses pas. `submitUpdate` est l’unique
-opération publique de reconfiguration : il appelle `checkIncrementalUpdate`
-et installe exactement `incremental.checked.next`, jamais un successeur fourni
-ou reconstruit séparément.
+`CertifiedRuntime` est lui aussi paramétrique dans le méta-contrat et son
+checker dépendant. Son constructeur privé conserve l'agent courant avec la
+`CertifiedRuntimeHistory` exacte qui l'atteint. `submitUpdate` est l'unique
+opération générique de reconfiguration : le type de la requête dépend de
+l'agent stocké, le checker est appelé sur cet agent exact, puis le runtime
+installe uniquement `result.checked.next` et étend son histoire avec l'égalité
+du succès correspondant.
 
-Après le premier pas autorisé, l’historique scellé fait refuser toute nouvelle
-soumission, conformément au méta-contrat actuel. Les constructeurs du résultat
-de trace et du runtime sont privés et font l’objet de fixtures négatives ; les
-régressions positives vérifient l’acceptation du delta public, son résultat
-exact et le refus de la continuation non autorisée.
+`submitUpdate_rejected_cannot_install` ferme la branche négative au même
+niveau générique : si cet appel exact du checker renvoie une erreur, aucun état
+runtime ne peut être exposé comme résultat installé de la soumission.
+
+`EveryRuntimeStepPreservesContracts` relève la même garantie au niveau de
+l'histoire runtime : chaque transition transporte ses obligations persistantes
+et chaque successeur conserve exactement tous les futurs finis couverts.
+
+La longueur du runtime n'est donc pas câblée. Elle est déterminée par les
+constructeurs de mise à jour que le checker offre à chaque successeur. Dans le
+méta-contrat public, aucun constructeur n'existe après `reconfigured`, ce qui
+interdit un second pas par le type. `PublicCertifiedRuntime` et
+`submitPublicUpdate` conservent la façade concrète du cas public sans devenir
+le noyau scientifique.
 
 ## Extension incrémentale — accessibilité de tous les états du runtime
 
-`CertifiedRuntimeReachable` est la plus petite famille engendrée par
+`CertifiedRuntimeReachable` est la plus petite famille générique engendrée par
 `initialCertifiedRuntime` et par les égalités attestant un succès effectif de
-`submitUpdate`. Une simple valeur de type `CertifiedRuntime` ne peut donc pas
-être déclarée atteignable sans exhiber toute sa chaîne d’accès par l’API.
+`submitUpdate`. `CertifiedRuntimeAccessibility` restitue l'histoire dépendante
+exacte du runtime et la preuve constructive de chacun de ses pas. Comme cette
+histoire est un champ obligatoire du runtime privé, `CertifiedRuntime.accessibility`
+est disponible pour tout état constructible ; aucune chaîne n'est reconstruite
+indépendamment après coup.
 
-`reachableRuntime_accessibility` associe à chaque état atteignable une
-`CertifiedRuntimeAccessibility` contenant sa trace dépendante exacte et la
-preuve constructive de tous ses pas. Les indices de cette trace sont
-directement `runtime.updates` et `runtime.current` : ni l’historique ni l’agent
-final ne sont reconstruits séparément. Dans l’instance publique, l’état initial
-et l’état reconfiguré sont accessibles ; aucun successeur de ce dernier ne
-peut être produit, puisque le méta-contrat n’autorise pas une seconde
-transition.
+La spécialisation publique exhibe l'accessibilité de l'état initial et de
+l'état reconfiguré. Sa tentative de second pas est refusée parce que son
+méta-contrat n'offre aucune mise à jour à ce successeur. Les fixtures négatives
+vérifient séparément qu'un runtime ne peut être fabriqué par son constructeur,
+modifié par syntaxe de record ni déclaré accessible à partir d'une soumission
+rejetée.
 
 ## Extension incrémentale — protocole comparatif et artefact appris
 
@@ -673,6 +820,23 @@ interface sur le même artefact et la même trace, ainsi que les huit capacités
 qui devront être rapportées séparément. Les adaptateurs encore absents sont
 explicitement marqués comme tels : leur absence ne vaut ni résultat négatif ni
 impossibilité universelle.
+
+Le nouveau protocole `constitutive-neural-capability-comparison-v4` remplace
+v1 pour toute future comparaison confirmatoire, sans modifier les campagnes
+historiques. Il nomme les deux mises à jour désormais construites, l'agent
+initial vérifié, le runtime fermé, le contrat cible, le domaine courant exact
+à quatre cas et la requête future non vide. Il fixe avant implémentation les
+six contrats d'adaptateur, les huit colonnes de capacité, le vocabulaire des
+statuts et le schéma du résultat. Il interdit explicitement tout run tant que
+les six adaptateurs, leur commande unique, le commit et leurs empreintes ne
+sont pas réunis dans un manifeste ultérieur.
+
+Le manifeste v4 lie le protocole et son schéma aux artefacts appris v1 et aux
+trois modules Lean qui portent la séparation, le runtime et la divergence
+future. Sa gate possède cinq mutations négatives propres : résultat ou run
+prématuré, baseline manquante, confusion du domaine courant avec les huit cas
+d'apprentissage et futur vide. Ce gel ne constitue pas un résultat comparatif
+et ne ferme pas encore l'implémentation des adaptateurs.
 
 L’artefact indépendant est produit par une recherche exhaustive déterministe
 sur les huit combinaisons d’exigence, de contexte et d’autorisation. Son graphe
@@ -731,6 +895,49 @@ et le refus avant effet. Il établit donc un contournement latent concret :
 invisible dans le comportement courant déclaré, mais séparé par la dépendance
 constitutive et exposé par un futur fini exécuté.
 
+## Extension incrémentale — artefact appris au checker et au runtime communs
+
+`LearnedRuntimeAdapter` fait entrer l'artefact appris dans la même frontière
+générique que l'instance native : artefact reçu sans preuve, décodage
+constructif, `checkInitial`, `IncrementalCheckerEngine`,
+`DependentIncrementalChecker`, puis `CertifiedRuntime`. L'intention admise,
+l'autorisation consommée, l'effet, l'histoire et le futur contrefactuel restent
+des obligations distinctes du contrat opérationnel appris.
+
+Les deux candidats consomment exactement le `CheckedAgent` produit par
+`checkInitial`. `alignedUpdate` produit le certificat cible par le checker
+incrémental générique et `submitUpdate` installe exactement ce successeur.
+`bypassUpdate`, qui porte la même intention et le même artefact source, est
+refusé avec `missingConstitutiveDependency` ; le théorème de non-installation
+exclut alors positivement l'existence d'un runtime successeur. L'ancien checker
+spécialisé demeure un témoin antérieur, mais il n'est plus l'unique fondement
+du résultat discriminant.
+
+## Divergence future dans le contrat opérationnel exact
+
+`LearnedContractFutureDivergence` ferme le raccord qui restait entre le
+témoin contrefactuel et le runtime générique. Les deux candidats sont indexés
+par le `CheckedAgent` initial exact. Leur table courante complète et leurs
+futurs sont calculés par l'interprète pur du même artefact sérialisé. Tout
+vérificateur dont le verdict se factorise uniquement par cette table courante
+donne donc le même résultat sur les deux candidats.
+
+Pour le candidat aligné, la source future est celle de l'état effectivement
+installé par `submitUpdate`, et son issue est aussi l'issue portée par le
+fragment `coveredFutureWitness` du certificat installé. Le candidat de
+contournement est interpré contrefactuellement par ce même contrat cible, sans
+installation. Sur la liste non vide calculée, l'issue installée satisfait la
+norme d'autorisation, l'issue contrefactuelle la viole et les deux issues sont
+distinctes. Admission future et satisfaction normative restent deux notions
+séparées.
+
+`LearnedOperationalFutureDivergenceCertificate` rassemble ces faits sous le
+même méta-contrat, le même contrat courant et la même API fermée. Il consomme
+le succès exact de l'installation alignée, le diagnostic exact du rejet du
+contournement et la preuve qu'aucun successeur rejeté ne peut exister. La
+fixture `BypassCannotSatisfyExactLearnedFutureContract` protège la frontière
+normative correspondante.
+
 ## Campagne finale de mutations négatives
 
 La campagne figée `constitutive-neural-final-negative-mutations-v2` couvre les
@@ -744,9 +951,20 @@ au raccord concerné. La gate commune exige l’échec à la classe de diagnosti
 mutation. Le manifeste final vérifie que les huit obligations sont présentes
 une fois chacune dans cet inventaire exécutable.
 
+La couverture locale ne dépend pas de cette seule campagne terminale.
+`neural-block-negative-fixtures.tsv` associe exactement une fixture distincte
+à chacun des quatorze blocs d'implémentation, depuis le plancher C1–C17 jusqu'à
+la divergence future du contrat exact. La gate
+`check-neural-block-negative-fixtures.py`, appelée par les deux portails,
+interdit un bloc absent, un doublon, une fixture non enregistrée ou la
+réutilisation d'une même fixture comme substitut de deux frontières. Le bloc
+d'équivalence incrémental/recheck possède en particulier sa propre fixture :
+une équivalence indexée par une mise à jour ne peut pas certifier la
+matérialisation de référence d'une autre mise à jour.
+
 ## Passage à l’échelle et comparaison avec le recheck complet
 
-Le protocole confirmatoire `constitutive-neural-incremental-scaling-v2` fixe
+Le protocole historique `constitutive-neural-incremental-scaling-v2` fixe
 avant le run une famille de chaînes neuronales chronologiques non nulles de
 100, 1 000, 5 000, 20 000 et 50 000 neurones. Il ne recopie pas une instance
 fixe : chaque taille ajoute des neurones et des dépendances causales au graphe.
@@ -769,7 +987,10 @@ refuse une modification de ces fichiers, un changement de propriété entre les
 deux chemins, un désaccord de verdict, une comptabilité fragmentaire incomplète
 ou l’absence de réduction du travail déterministe mesuré.
 
-La campagne v2 est conservée comme contrôle conservateur : elle relit chaque
+Ces valeurs proviennent toutefois d'un modèle Python distinct du checker Lean
+public. Elles ne constituent donc pas des mesures du checker certifié et ne
+doivent pas être présentées comme telles. La campagne v2 est conservée comme
+contrôle historique conservateur : elle relit chaque
 fragment annoncé comme transporté. La campagne confirmatoire v3 mesure en plus
 la réutilisation locale telle que l’API indexée la réalise. Le certificat
 initial est attaché à l’objet source exact ; l’artefact cible ne peut être
@@ -781,3 +1002,18 @@ tailles, tandis que le recheck complet passe de 202 à 100 002 unités. À
 le delta de certificat 130 octets ; 49 996 fragments sont réutilisés et quatre
 recalculés. La gate v3 impose que le travail incrémental demeure borné par le
 cône local, en plus de toutes les égalités et empreintes exigées en v2.
+
+La campagne v5 ajoute le premier raccord direct au code compilé. Le target Lake
+`compiled_neural_checker_measure` appelle les définitions publiques
+`checkIncrementalUpdate` et `checkReferenceUpdate` sur la même mise à jour
+sélectionnée au runtime. Un théorème Lean relie exactement les deux résultats;
+le binaire expose le cône et les comptes de fragments effectivement produits.
+Le runner Python orchestre seulement le build, le contrôle négatif, les
+empreintes et l'enregistrement JSON.
+
+Le run v5 vérifie 1 000 fois l'instance publique après 50 échauffements : cône
+19, un fragment transporté, six recalculés, sept assemblés. L'incrémental prend
+17 374 500 ns au total contre 1 159 000 ns pour le recheck complet. Cette
+observation fixe ne démontre aucun gain de performance et ne constitue aucune
+loi de croissance. Le passage à l'échelle reste à reconstruire sur une famille
+paramétrée que le même checker Lean compilé consomme directement.

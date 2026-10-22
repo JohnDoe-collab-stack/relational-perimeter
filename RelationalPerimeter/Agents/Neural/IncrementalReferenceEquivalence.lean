@@ -16,36 +16,28 @@ def IncrementalUpdateAccepted (update : IncrementalNeuralUpdate) : Prop :=
 
 def IncrementalUpdateLocalConditions
     (update : IncrementalNeuralUpdate) : Prop :=
-  materializeIncrementalTarget update = publicSerializedReconfiguredNetwork ∧
+  update.transition = publicSerializedOperationalTransition ∧
+    materializeIncrementalConstitutiveArtifact update =
+      publicSerializedReconfiguredConstitutiveArtifact ∧
     update.nextInput = publicSubstantiveNext
 
 theorem checkIncrementalUpdate_complete_for_local_conditions
     (update : IncrementalNeuralUpdate) :
     IncrementalUpdateAccepted update ↔
       IncrementalUpdateLocalConditions update := by
-  constructor
-  · intro accepted
-    rcases accepted with ⟨checked, exact⟩
-    unfold checkIncrementalUpdate at exact
-    split at exact
-    · split at exact
-      · exact ⟨‹materializeIncrementalTarget update =
-            publicSerializedReconfiguredNetwork›,
-          ‹update.nextInput = publicSubstantiveNext›⟩
-      · cases exact
-    · cases exact
-  · intro conditions
-    rcases conditions with ⟨targetExact, inputExact⟩
-    refine ⟨publicIncrementalCheckedUpdate, ?_⟩
-    unfold checkIncrementalUpdate
-    split
-    · split
-      · rfl
-      · exact False.elim (‹Not (update.nextInput = publicSubstantiveNext)›
-          inputExact)
-    · exact False.elim
-        (‹Not (materializeIncrementalTarget update =
-          publicSerializedReconfiguredNetwork)› targetExact)
+  calc
+    IncrementalUpdateAccepted update ↔
+        PublicIncrementalCheckerAccepted update := Iff.rfl
+    _ ↔ GenericIncrementalUpdateAccepted
+        publicIncrementalCheckerEngine update :=
+      publicIncrementalAcceptance_iff_generic update
+    _ ↔ GenericIncrementalUpdateLocalConditions
+        publicIncrementalCheckerEngine update :=
+      checkGenericIncrementalUpdate_complete_for_local_conditions
+        publicIncrementalCheckerEngine update
+    _ ↔ PublicIncrementalEngineLocalConditions update :=
+      analyzePublicIncrementalUpdate_complete update
+    _ ↔ IncrementalUpdateLocalConditions update := Iff.rfl
 
 theorem incrementalAndReferenceLocalConditions_equivalent
     (update : IncrementalNeuralUpdate) :
@@ -115,6 +107,32 @@ theorem incrementalSuccess_matches_reference
       publicIncrementalCoreCheckedUpdate_eq_reference
     _ = complete := completeCanonical.symm
 
+/-- If both executable paths succeed on the same serialized delta, they return
+the very same checked transition.  This is result equality, not merely an
+equivalence of Boolean verdicts or the existence of isomorphic certificates. -/
+theorem incrementalAndReferenceSuccessfulResults_exact
+    (update : IncrementalNeuralUpdate)
+    (incremental : PublicIncrementalCheckedUpdate)
+    (complete : CheckedUpdate publicInitialCheckedAgent .reconfigured)
+    (incrementalAccepted :
+      checkIncrementalUpdate update = .ok incremental)
+    (completeAccepted :
+      checkReferenceUpdate update.toFullReferenceUpdate = .ok complete) :
+    incremental.checked = complete := by
+  have incrementalCanonical :=
+    checkIncrementalUpdate_sound update incremental incrementalAccepted
+  have completeCanonical :=
+    checkReferenceUpdate_sound update.toFullReferenceUpdate complete
+      completeAccepted
+  calc
+    incremental.checked = publicIncrementalCheckedUpdate.checked :=
+      congrArg PublicIncrementalCheckedUpdate.checked incrementalCanonical
+    _ = publicIncrementalCoreCheckedUpdate :=
+      publicIncrementalCheckedUpdate.checkedExact
+    _ = publicReferenceCheckedUpdate :=
+      publicIncrementalCoreCheckedUpdate_eq_reference
+    _ = complete := completeCanonical.symm
+
 def eraseIncrementalCheckResult :
     Except AlignmentError PublicIncrementalCheckedUpdate ->
       Except AlignmentError
@@ -139,5 +157,6 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.incrementalAndReferenceAcceptance_equivalent
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalCoreCheckedUpdate_eq_reference
 #print axioms ConstitutiveSearch.NeuralAgent.incrementalSuccess_matches_reference
+#print axioms ConstitutiveSearch.NeuralAgent.incrementalAndReferenceSuccessfulResults_exact
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalAndReferenceChecks_exact
 /- AXIOM_AUDIT_END -/

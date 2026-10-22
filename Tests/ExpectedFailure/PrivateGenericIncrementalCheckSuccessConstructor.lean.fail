@@ -1,0 +1,9 @@
+import RelationalPerimeter.Agents.Neural.IncrementalChecker
+
+open ConstitutiveSearch.NeuralAgent
+
+#check GenericIncrementalCheckSuccess.mk
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.GenericIncrementalCheckSuccess
+/- AXIOM_AUDIT_END -/

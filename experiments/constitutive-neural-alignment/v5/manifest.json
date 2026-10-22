@@ -1,0 +1,18 @@
+{
+  "manifest_id": "compiled-neural-checker-measurement-manifest-v5",
+  "status": "confirmatory-run-recorded",
+  "hash_algorithm": "sha256",
+  "files": {
+    "Tests/Executables/CompiledNeuralCheckerMeasure.lean": "ee42f6764881325a1f9e5c6a0e36e8fcfd0612e42ab98a01b9848c1171f0affc",
+    "lakefile.toml": "2ed09efd20e3ea1f9aec7d51ff147c2a3278feb9bef9e707594f11d2f5dd737d",
+    "lean-toolchain": "a0ada3782cd088719516bbfdf37b9e7032230e211bf424b85d952ee650c51091",
+    "RelationalPerimeter/Agents/Neural/IncrementalChecker.lean": "4be35588aeafcb9fac871967c21cc56eca87b78c5c0aa911cc1b3e428819aacb",
+    "RelationalPerimeter/Agents/Neural/ReferenceChecker.lean": "158cfc1ffb1bb62d1d7ed58a298d37d36ba4df7b2894b14aeb23bdd14410a893",
+    "RelationalPerimeter/Agents/Neural/IncrementalReferenceEquivalence.lean": "5ee8371c34df32115611773f2b99fff11771c6fe59109989615f542a36cda946",
+    "scripts/run-compiled-neural-checker-measurement.py": "8c5d02fddc8aa2c8fd6b36fb9859434eaf6d3e703c8db9bb77dd40ca5772a990",
+    "scripts/check-compiled-neural-checker-measurement.py": "801ef00ab4e3457472d5263d5465c7acd9128892d9d293fed1ed1dfc66a91317",
+    "experiments/constitutive-neural-alignment/v5/measurement-protocol.json": "fd5f3f64c47fb6b66f19bca8540b9d73b3c05e93d03644cc14242a28f44e93fc",
+    "experiments/constitutive-neural-alignment/v5/measurement-results.json": "82e71aa5a39a512fc0893c01e3f440cae84089d25d72822c851d290a50f95aa2",
+    "experiments/constitutive-neural-alignment/v5/README.md": "d7576ec7de6092f57e8b01ef40ec765c5989931188c938a24710da4b8faaacef"
+  }
+}

@@ -16,9 +16,106 @@ example :
   checkIncrementalUpdate_accepts_reference
 
 example :
-    publicIncrementalCheckedUpdate.transportedRequirement =
-      publicReusedRequirementFragment :=
-  publicIncrementalCheckedUpdate.transportedRequirementExact
+    GenericIncrementalUpdateLocalConditions publicIncrementalCheckerEngine
+      publicIncrementalNeuralUpdate :=
+  (analyzePublicIncrementalUpdate_complete
+    publicIncrementalNeuralUpdate).mpr ⟨rfl, rfl, rfl⟩
+
+example :
+    GenericIncrementalUpdateAccepted publicIncrementalCheckerEngine
+      publicIncrementalNeuralUpdate :=
+  (publicIncrementalAcceptance_iff_generic
+    publicIncrementalNeuralUpdate).mp
+      ⟨publicIncrementalCheckedUpdate,
+        checkIncrementalUpdate_accepts_reference⟩
+
+example (update : IncrementalNeuralUpdate) :
+    GenericIncrementalUpdateAccepted publicIncrementalCheckerEngine update ↔
+      GenericIncrementalUpdateLocalConditions
+        publicIncrementalCheckerEngine update :=
+  checkGenericIncrementalUpdate_complete_for_local_conditions
+    publicIncrementalCheckerEngine update
+
+example
+    (success : GenericIncrementalCheckSuccess
+      publicIncrementalCheckerEngine publicIncrementalNeuralUpdate) :
+    success.checked.nextCertificate =
+      assembleStateConstitution success.target.fragments := by
+  rfl
+
+example
+    (success : GenericIncrementalCheckSuccess
+      publicIncrementalCheckerEngine publicIncrementalNeuralUpdate)
+    (accepted : checkGenericIncrementalUpdate publicIncrementalCheckerEngine
+      publicIncrementalNeuralUpdate = .ok success) :
+    success.checked.next.artifact = success.target.artifact ∧
+      success.checked.next.state = success.target.state ∧
+      success.checked.nextCertificate =
+        assembleStateConstitution success.target.fragments ∧
+      success.checked.transition = success.target.transition ∧
+      success.checked.execution = success.target.execution :=
+  checkGenericIncrementalUpdate_constitutively_sound
+    publicIncrementalCheckerEngine publicIncrementalNeuralUpdate success
+      accepted
+
+example :
+    publicIncrementalCheckedUpdate.transportedRequirement.payload =
+      publicReusedRequirementFragment.payload :=
+  publicIncrementalCheckedUpdate.transportedRequirementPayloadExact
+
+example :
+    publicIncrementalCheckedUpdate.targetCertificate =
+      assembleIncrementalStateConstitution
+        publicIncrementalCheckedUpdate.assembly := by
+  rfl
+
+example :
+    publicIncrementalCheckedUpdate.targetCertificate =
+      publicReferenceUpdatedStateCertificate :=
+  publicIncrementalCheckedUpdate.targetCertificateExact
+
+example :
+    lookupStructuralObservation (.receivedInput 1)
+        publicIncrementalTargetFragments.structural.observations =
+      some publicIncrementalLicensedRequirementFragment.target.payload :=
+  publicIncrementalTransportedRequirement_coherent
+
+example :
+    calculateIncrementalStructuralAssembly
+        publicInitialStateConstitutiveCertificate
+        publicPreCertificateConstitutiveGraph
+        publicTransportedStructuralFragments
+        publicRecomputedStructuralFragments =
+      .ok publicIncrementalStructuralAssembly :=
+  publicCalculatedIncrementalStructuralAssembly.calculated
+
+example :
+    calculateIncrementalStructuralAssembly
+        publicInitialStateConstitutiveCertificate
+        publicPreCertificateConstitutiveGraph []
+        publicRecomputedStructuralFragments =
+      .error (.missingTransported (.receivedInput 1)) := by
+  rfl
+
+example :
+    calculateIncrementalStructuralAssembly
+        publicInitialStateConstitutiveCertificate
+        publicPreCertificateConstitutiveGraph
+        publicTransportedStructuralFragments [] =
+      .error (.missingRecomputed (.receivedInput 0)) := by
+  rfl
+
+example :
+    publicIncrementalCertificateAssembly.fragments =
+      publicIncrementalTargetFragments := by
+  rfl
+
+example :
+    publicIncrementalCheckedUpdate.assembly =
+      assemblePublicIncrementalCertificateFromPreCertificate
+        publicIncrementalCheckedUpdate.preCertificateResult
+        publicIncrementalCheckedUpdate.preCertificateResultExact :=
+  publicIncrementalCheckedUpdate.assemblyCalculated
 
 example : publicIncrementalCheckedUpdate.transportedCount = 1 := by
   rw [publicIncrementalCheckedUpdate.transportedCountExact,
@@ -49,6 +146,18 @@ example (update : IncrementalNeuralUpdate) :
       ReferenceUpdateAccepted update.toFullReferenceUpdate :=
   incrementalAndReferenceAcceptance_equivalent update
 
+example
+    (update : IncrementalNeuralUpdate)
+    (incremental : PublicIncrementalCheckedUpdate)
+    (complete : CheckedUpdate publicInitialCheckedAgent .reconfigured)
+    (incrementalAccepted :
+      checkIncrementalUpdate update = .ok incremental)
+    (completeAccepted :
+      checkReferenceUpdate update.toFullReferenceUpdate = .ok complete) :
+    incremental.checked = complete :=
+  incrementalAndReferenceSuccessfulResults_exact update incremental complete
+    incrementalAccepted completeAccepted
+
 example :
     eraseIncrementalCheckResult
         (checkIncrementalUpdate publicIncrementalNeuralUpdate) =
@@ -59,7 +168,12 @@ end ConstitutiveSearch.NeuralAgent.Tests
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.checkIncrementalUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.checkIncrementalUpdate_sound
+#print axioms ConstitutiveSearch.NeuralAgent.checkGenericIncrementalUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.checkGenericIncrementalUpdate_sound
+#print axioms ConstitutiveSearch.NeuralAgent.checkGenericIncrementalUpdate_constitutively_sound
+#print axioms ConstitutiveSearch.NeuralAgent.checkGenericIncrementalUpdate_complete_for_local_conditions
 #print axioms ConstitutiveSearch.NeuralAgent.incrementalAndReferenceAcceptance_equivalent
 #print axioms ConstitutiveSearch.NeuralAgent.incrementalSuccess_matches_reference
+#print axioms ConstitutiveSearch.NeuralAgent.incrementalAndReferenceSuccessfulResults_exact
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalAndReferenceChecks_exact
 /- AXIOM_AUDIT_END -/

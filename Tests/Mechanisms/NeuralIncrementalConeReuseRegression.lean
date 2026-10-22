@@ -1,9 +1,54 @@
-import RelationalPerimeter.Agents.Neural.LocalCertificateReuse
+import RelationalPerimeter.Agents.Neural.IncrementalChecker
 
 /-! Regression checks for the computed affected cone and positive local
 certificate-fragment transport. -/
 namespace ConstitutiveSearch.NeuralAgent.Tests
 open ConstitutiveSearch.NeuralAgent
+
+example :
+    publicPreCertificateConstitutiveGraph.correspondence =
+      calculateStableNodeCorrespondence
+        publicInitialStateConstitutiveCertificate.basis.naming
+        publicReconfiguredStableNaming :=
+  publicPreCertificateConstitutiveGraph.correspondenceExact
+
+example :
+    publicPreCertificateConstitutiveGraph.targetObservations =
+      stableStructuralObservationSnapshot publicReconfiguredStableNaming :=
+  publicPreCertificateConstitutiveGraph.targetObservationsExact
+
+example :
+    materializeIncrementalConstitutiveArtifact publicIncrementalNeuralUpdate =
+      publicSerializedReconfiguredConstitutiveArtifact :=
+  publicIncrementalConstitutiveArtifact_exact
+
+example :
+    calculateIncrementalPreCertificateResult publicIncrementalNeuralUpdate =
+      .ok publicIncrementalPreCertificateResult :=
+  calculateIncrementalPreCertificateResult_public_exact
+
+example :
+    publicIncrementalCheckedUpdate.affectedCone =
+      publicIncrementalCertificateAssembly.affectedCone :=
+  publicIncrementalCheckedUpdate.affectedConeExact
+
+def wrongStableNamingUpdate : IncrementalNeuralUpdate :=
+  { publicIncrementalNeuralUpdate with
+    targetStableNaming := publicSerializedInitialStableNaming }
+
+example :
+    checkIncrementalUpdate wrongStableNamingUpdate =
+      .error .unexpectedSuccessorArtifact := by
+  rfl
+
+def reversedTransitionUpdate : IncrementalNeuralUpdate :=
+  { publicIncrementalNeuralUpdate with
+    transition := { source := .reconfigured, target := .initial } }
+
+example :
+    checkIncrementalUpdate reversedTransitionUpdate =
+      .error .noAdmittedTransition := by
+  rfl
 
 example :
     HeterogeneousConstitutiveCausalGraph
@@ -14,25 +59,25 @@ example :
 
 example :
     affectedConstitutiveNode publicInitialStateConstitutiveCertificate
-      publicReferenceUpdatedStateCertificate publicStableNodeCorrespondence
+      publicPreCertificateConstitutiveGraph
       (.artifactNode (.receivedInput 1)) = false :=
   publicRequirementNode_is_outsideAffectedCone
 
 example :
     affectedConstitutiveNode publicInitialStateConstitutiveCertificate
-      publicReferenceUpdatedStateCertificate publicStableNodeCorrespondence
+      publicPreCertificateConstitutiveGraph
       (.artifactNode (.receivedInput 2)) = true :=
   publicAuthorizationNode_is_affected
 
 example :
     affectedConstitutiveNode publicInitialStateConstitutiveCertificate
-      publicReferenceUpdatedStateCertificate publicStableNodeCorrespondence
+      publicPreCertificateConstitutiveGraph
       (.artifactNode (.neuron 0)) = true :=
   publicProposalNeuron_is_affected
 
 example :
     affectedConstitutiveNode publicInitialStateConstitutiveCertificate
-      publicReferenceUpdatedStateCertificate publicStableNodeCorrespondence
+      publicPreCertificateConstitutiveGraph
       .action = true :=
   publicAction_is_affected_downstream
 
@@ -51,6 +96,8 @@ example :
 end ConstitutiveSearch.NeuralAgent.Tests
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.affectedConstitutiveNode
+#print axioms ConstitutiveSearch.NeuralAgent.calculatePreCertificateConstitutiveGraph
+#print axioms ConstitutiveSearch.NeuralAgent.calculateIncrementalPreCertificateResult
 #print axioms ConstitutiveSearch.NeuralAgent.outsideAffectedCone_unchanged
 #print axioms ConstitutiveSearch.NeuralAgent.transportCertificateFragment
 #print axioms ConstitutiveSearch.NeuralAgent.publicReusedRequirementFragment_payload_exact

@@ -1,0 +1,9 @@
+import RelationalPerimeter.Agents.Neural.ReferenceChecker
+
+open ConstitutiveSearch.NeuralAgent
+
+#check InitialCheckSuccess.mk
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.InitialCheckSuccess
+/- AXIOM_AUDIT_END -/

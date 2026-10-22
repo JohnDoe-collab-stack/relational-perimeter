@@ -1,0 +1,13 @@
+import RelationalPerimeter.Agents.Neural.StateConstitutiveCertificate
+
+open ConstitutiveSearch.NeuralAgent
+
+def impossibleCrossStateFragments :
+    StateCertificateFragments PublicReconfiguredOperationalContract
+      publicDecodedReconfiguredArtifact publicReferenceUpdatedState :=
+  { publicReferenceUpdatedStateFragments with
+    structural := publicInitialStateCertificateFragments.structural }
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.StateCertificateFragments
+/- AXIOM_AUDIT_END -/

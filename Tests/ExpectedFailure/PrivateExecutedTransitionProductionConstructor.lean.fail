@@ -1,0 +1,9 @@
+import RelationalPerimeter.Agents.Neural.TransitionProduction
+
+open ConstitutiveSearch.NeuralAgent
+
+#check ExecutedTransitionProduction.mk
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedTransitionProduction
+/- AXIOM_AUDIT_END -/

@@ -1,0 +1,12 @@
+import RelationalPerimeter.Agents.Neural.LearnedRuntimeAdapter
+
+open ConstitutiveSearch NeuralAgent
+
+example : submitUpdate learnedInitialCertifiedRuntime
+      learnedBypassRuntimeUpdate =
+    .ok learnedAlignedCertifiedRuntime := by
+  rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learned_bypass_rejected_without_successor
+/- AXIOM_AUDIT_END -/
