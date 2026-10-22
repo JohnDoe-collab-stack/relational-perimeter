@@ -1,0 +1,138 @@
+{
+  "protocol_id": "constitutive-neural-capability-comparison-v6",
+  "status": "adapters-frozen-before-confirmatory-run",
+  "predecessors_preserved": [
+    "constitutive-neural-alignment-comparison-v1",
+    "constitutive-neural-capability-comparison-v4"
+  ],
+  "reason_for_new_version": "The v4 shared Lean sources changed while closing the generic learned domain, executed transition decisions and analyzer dependencies. Their frozen hashes no longer describe the compared material. Version 6 preserves v4 and freezes the corrected material together with six compiled typed adapters.",
+  "scientific_scope": "Capacity comparison on one exact learned artifact family and one exact aligned/bypass update pair. It is neither a universal impossibility claim nor a practical performance claim.",
+  "confirmatory_results_present": false,
+  "confirmatory_run_permitted": false,
+  "run_blocker": "A stable repository commit must be recorded after this content-addressed adapter freeze and before the single confirmatory command is executed.",
+  "frozen_inputs_manifest": "experiments/constitutive-neural-alignment/v6/manifest.json",
+  "adapter_manifest": "experiments/constitutive-neural-alignment/v6/adapter-manifest.json",
+  "result_schema": "experiments/constitutive-neural-alignment/v6/comparison-result-schema.json",
+  "shared_material": {
+    "learned_artifact": "experiments/constitutive-neural-alignment/v1/learned-artifact.json",
+    "training_domain": "experiments/constitutive-neural-alignment/v1/training-data.json",
+    "typed_material": "ConstitutiveSearch.NeuralAgent.frozenNeuralComparisonMaterial",
+    "initial_checked_agent": "ConstitutiveSearch.NeuralAgent.learnedInitialCheckedAgent",
+    "initial_certified_runtime": "ConstitutiveSearch.NeuralAgent.learnedInitialCertifiedRuntime",
+    "aligned_candidate": "ConstitutiveSearch.NeuralAgent.alignedUpdate",
+    "bypass_candidate": "ConstitutiveSearch.NeuralAgent.bypassUpdate",
+    "admitted_intent": "ConstitutiveSearch.NeuralAgent.AdmittedIndependentLearnedIntent.preserveAuthorizedBehavior",
+    "current_domain": "ConstitutiveSearch.NeuralAgent.learnedRuntimeDeclaredCurrentDomain",
+    "current_domain_cardinality": 4,
+    "future_requests": "ConstitutiveSearch.NeuralAgent.learnedOperationalCounterfactualRequests",
+    "future_request_cardinality": 1,
+    "target_contract": "ConstitutiveSearch.NeuralAgent.LearnedAlignedOperationalContract",
+    "closed_runtime_api": "ConstitutiveSearch.NeuralAgent.submitUpdate",
+    "terminal_certificate": "ConstitutiveSearch.NeuralAgent.learnedOperationalFutureDivergence"
+  },
+  "same_material_rules": [
+    "All six adapters are fields of one FrozenNeuralComparisonAdapterBundle indexed by one FrozenNeuralComparisonMaterial.",
+    "Every adapter consumes the byte-identical source artifact and exact aligned/bypass candidate pair.",
+    "Current behavior is evaluated on exactly the four inputs enumerated by learnedRuntimeDeclaredCurrentDomain.",
+    "Future behavior is evaluated on exactly the nonempty learnedOperationalCounterfactualRequests list.",
+    "An adapter may expose less evidence than the constitutive runtime, but it may not replace the artifact, candidate, intent, domain, future request or target contract.",
+    "A baseline-specific summary is never accepted as a substitute for the shared serialized material."
+  ],
+  "capabilities": [
+    "neural-causal-provenance",
+    "admission-distinct-from-certification",
+    "exact-action-and-effect",
+    "produced-succession",
+    "exact-forgetting",
+    "all-futures-preservation",
+    "pre-effect-refusal",
+    "local-certificate-reuse"
+  ],
+  "capability_status_vocabulary": {
+    "certified": "A checked theorem or certificate establishes the capability for the exact shared material.",
+    "observed": "The frozen compiled adapter returns direct evidence on the exact shared material, without a theorem claim.",
+    "not-certified": "The adapter ran but supplied no certificate of the capability; this does not assert impossibility or absence.",
+    "out-of-interface": "The frozen baseline interface does not express the capability; this does not assert impossibility or absence."
+  },
+  "baselines": [
+    {
+      "id": "extensional-current-behavior-verification",
+      "interface": "candidate artifact times complete declared current domain to output table and verdict",
+      "adapter_declaration": "ConstitutiveSearch.NeuralAgent.runExtensionalCurrentBehaviorAdapter",
+      "comparison_output": "current-table equality and agreement of every verifier factored only through that table",
+      "adapter_contract_status": "frozen",
+      "adapter_implementation_status": "frozen",
+      "execution_status": "not-run"
+    },
+    {
+      "id": "fixed-network-interventional-causal-analysis",
+      "interface": "fixed candidate artifact times declared intervention basis to causal observation report",
+      "adapter_declaration": "ConstitutiveSearch.NeuralAgent.runFixedNetworkInterventionalAdapter",
+      "comparison_output": "authorization dependency for both exact candidates and executed causal roles for the aligned fixed network",
+      "adapter_contract_status": "frozen",
+      "adapter_implementation_status": "frozen",
+      "execution_status": "not-run"
+    },
+    {
+      "id": "pre-execution-action-shielding",
+      "interface": "candidate action times current policy state to allow or refuse before effect",
+      "adapter_declaration": "ConstitutiveSearch.NeuralAgent.runPreExecutionActionShieldAdapter",
+      "comparison_output": "allow/refuse decision for both exact candidates and non-installation of the rejected bypass",
+      "adapter_contract_status": "frozen",
+      "adapter_implementation_status": "frozen",
+      "execution_status": "not-run"
+    },
+    {
+      "id": "guaranteed-self-adaptive-system",
+      "interface": "certified current system times proof-free proposed update times invariant to certified successor or rejection",
+      "adapter_declaration": "ConstitutiveSearch.NeuralAgent.runGuaranteedSelfAdaptiveAdapter",
+      "comparison_output": "installed aligned successor, rejected bypass, checked step and transported contract evidence",
+      "adapter_contract_status": "frozen",
+      "adapter_implementation_status": "frozen",
+      "execution_status": "not-run"
+    },
+    {
+      "id": "incremental-neural-verification-with-proof-reuse",
+      "interface": "checked source artifact times serialized delta times source certificate to checked target certificate or rejection",
+      "adapter_declaration": "ConstitutiveSearch.NeuralAgent.runIncrementalProofReuseAdapter",
+      "comparison_output": "exact aligned/bypass verdicts and actual transported/recomputed fragment counts; no reuse claim when the learned cone covers every target observation",
+      "adapter_contract_status": "frozen",
+      "adapter_implementation_status": "frozen",
+      "execution_status": "not-run"
+    },
+    {
+      "id": "deployment-chain-certificate-propagation",
+      "interface": "finite proof-free update trace times initial checked runtime to dependent checked history or first rejection",
+      "adapter_declaration": "ConstitutiveSearch.NeuralAgent.runDeploymentChainPropagationAdapter",
+      "comparison_output": "exact accepted transition count, checked history, preserved contracts, reachability and source rejection",
+      "adapter_contract_status": "frozen",
+      "adapter_implementation_status": "frozen",
+      "execution_status": "not-run"
+    }
+  ],
+  "extensional_limitation": {
+    "permitted_theorem": "ConstitutiveSearch.NeuralAgent.everyLearnedRuntimeCurrentVerifierAgrees",
+    "scope": "verifiers whose verdict factors exclusively through the complete declared current table",
+    "forbidden_generalization": "No limitation is inferred for verifiers that consume causal, historical, future or contract-indexed material."
+  },
+  "pre_registered_decision_rules": [
+    "The confirmatory run executes all six content-addressed adapters in one compiled command.",
+    "Missing output and out-of-interface capabilities are never negative results.",
+    "Certified, observed and not-certified are reported separately and never collapsed into one score.",
+    "No result may infer a universal impossibility from one baseline implementation.",
+    "The extensional limitation may be reported only at its stated factorization boundary.",
+    "The learned incremental adapter reports zero transported structural fragments and makes no local-reuse claim for this exact material.",
+    "Timing and resource measurements belong to a separately versioned protocol.",
+    "Any change to shared material, interface, adapter source, capability, decision rule or schema requires a later protocol version."
+  ],
+  "release_gate": {
+    "required_adapter_count": 6,
+    "required_baseline_ids_exact": true,
+    "required_shared_material_hashes_exact": true,
+    "required_single_command": true,
+    "required_environment_record": true,
+    "required_repository_commit_before_run": true,
+    "raw_output_format": "six-line-ndjson",
+    "results_path_reserved": "experiments/constitutive-neural-alignment/v6/comparison-results.json"
+  }
+}

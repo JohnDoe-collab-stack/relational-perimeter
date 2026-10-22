@@ -1,0 +1,47 @@
+{
+  "adapter_manifest_id": "constitutive-neural-capability-adapters-v6",
+  "status": "content-frozen-not-run",
+  "protocol_id": "constitutive-neural-capability-comparison-v6",
+  "command": ["lake", "exe", "compiled_neural_comparison_adapters"],
+  "output_format": "six-line-ndjson",
+  "confirmatory_execution": false,
+  "repository_commit_required_before_run": true,
+  "adapter_source": "RelationalPerimeter/Agents/Neural/CapabilityComparisonAdapters.lean",
+  "compiled_entrypoint": "Tests/Executables/CompiledNeuralComparisonAdapters.lean",
+  "adapters": [
+    {
+      "id": "extensional-current-behavior-verification",
+      "declaration": "ConstitutiveSearch.NeuralAgent.runExtensionalCurrentBehaviorAdapter",
+      "output_type": "ConstitutiveSearch.NeuralAgent.ExtensionalCurrentBehaviorAdapterOutput"
+    },
+    {
+      "id": "fixed-network-interventional-causal-analysis",
+      "declaration": "ConstitutiveSearch.NeuralAgent.runFixedNetworkInterventionalAdapter",
+      "output_type": "ConstitutiveSearch.NeuralAgent.FixedNetworkInterventionalAdapterOutput"
+    },
+    {
+      "id": "pre-execution-action-shielding",
+      "declaration": "ConstitutiveSearch.NeuralAgent.runPreExecutionActionShieldAdapter",
+      "output_type": "ConstitutiveSearch.NeuralAgent.PreExecutionActionShieldAdapterOutput"
+    },
+    {
+      "id": "guaranteed-self-adaptive-system",
+      "declaration": "ConstitutiveSearch.NeuralAgent.runGuaranteedSelfAdaptiveAdapter",
+      "output_type": "ConstitutiveSearch.NeuralAgent.GuaranteedSelfAdaptiveAdapterOutput"
+    },
+    {
+      "id": "incremental-neural-verification-with-proof-reuse",
+      "declaration": "ConstitutiveSearch.NeuralAgent.runIncrementalProofReuseAdapter",
+      "output_type": "ConstitutiveSearch.NeuralAgent.IncrementalProofReuseAdapterOutput"
+    },
+    {
+      "id": "deployment-chain-certificate-propagation",
+      "declaration": "ConstitutiveSearch.NeuralAgent.runDeploymentChainPropagationAdapter",
+      "output_type": "ConstitutiveSearch.NeuralAgent.DeploymentChainPropagationAdapterOutput"
+    }
+  ],
+  "files": {
+    "RelationalPerimeter/Agents/Neural/CapabilityComparisonAdapters.lean": "b331c65835ec780c26c98a7bedad8f0401135dd63f9e3e22ea67d2ae10b91792",
+    "Tests/Executables/CompiledNeuralComparisonAdapters.lean": "160a5efec93320de82f521a32e8bcf43c82ac927fea57aab79e9aa51e796ea43"
+  }
+}

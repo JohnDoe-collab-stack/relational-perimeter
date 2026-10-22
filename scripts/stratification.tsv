@@ -60,7 +60,7 @@ SegmentedResidualRole	F	enforced	Primitive residual roles and exact internal rea
 AbstractSegmentedTurning	F	enforced	Abstract segmented boundary and turning
 ExactTypeTransport	U	enforced	Constructive exact transport between carriers
 StrongPerimetralTurning	F	enforced	Strong relational perimeter and affirmative turning
-RelationalPerimeter	M43	enforced	Public root joining scientific production the integrated master machine and the contract-indexed learned future divergence
+RelationalPerimeter	M44	enforced	Public root joining scientific production the integrated master machine and the frozen neural capability comparison interfaces
 RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement
 RelationalPerimeter.Agents.Constitutive.ProducedEvidence	A11	enforced	Constitutive agent ProducedEvidence
 RelationalPerimeter.Agents.Constitutive.State	A12	enforced	Constitutive agent State
@@ -356,3 +356,5 @@ RelationalPerimeter.Agents.Neural.LearnedUpdateSeparation	M39	enforced	Same-inte
 RelationalPerimeter.Agents.Neural.FiniteCounterfactualDivergence	M40	enforced	Explicit nonempty future exposing the latent contract divergence of the rejected bypass candidate
 RelationalPerimeter.Agents.Neural.LearnedRuntimeAdapter	M41	enforced	Independently learned artifacts adapted to the generic initial checker incremental checker and certified runtime
 RelationalPerimeter.Agents.Neural.LearnedContractFutureDivergence	M42	enforced	Current equivalence and finite future divergence calculated inside the exact learned operational contract and closed runtime API
+RelationalPerimeter.Agents.Neural.CapabilityComparisonAdapters	M43	enforced	Six frozen typed comparison adapters consuming one exact learned material package without comparative overclaim
+RelationalPerimeter.Agents.Neural.ParameterizedCompiledCheckerFamily	M43	enforced	Parameterized growing neural artifacts consumed by the same compiled initial incremental and full-reference checkers

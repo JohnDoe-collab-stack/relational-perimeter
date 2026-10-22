@@ -1,0 +1,17 @@
+import RelationalPerimeter
+
+namespace ConstitutiveSearch.NeuralAgent.Tests
+open ConstitutiveSearch.NeuralAgent
+
+/-- The reflected interface rejects the reverse transition.  Consequently no
+successful decision consumed by a checker can be manufactured for it. -/
+example :
+    (publicExecutableMetaContractInterface.transitionDecision
+      { current := PublicOperationalContract.reconfigured
+        next := PublicOperationalContract.initial }).result = true := by
+  rfl
+
+end ConstitutiveSearch.NeuralAgent.Tests
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.publicExecutableMetaContractInterface
+/- AXIOM_AUDIT_END -/

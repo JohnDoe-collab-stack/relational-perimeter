@@ -39,21 +39,6 @@ def learnedAlignedCandidateAtInitial : LearnedRuntimeCandidateAtInitial :=
 def learnedBypassCandidateAtInitial : LearnedRuntimeCandidateAtInitial :=
   .mk bypassUpdate rfl .preserveAuthorizedBehavior
 
-def learnedRuntimeDeclaredCurrentDomain : List IndependentLearnedInput :=
-  [IndependentLearnedCurrentCase.neither.input,
-   IndependentLearnedCurrentCase.contextOnly.input,
-   IndependentLearnedCurrentCase.requirementOnly.input,
-   IndependentLearnedCurrentCase.both.input]
-
-def learnedRuntimeDeclaredCurrentDomain_complete
-    (current : IndependentLearnedCurrentCase) :
-    Listed current.input learnedRuntimeDeclaredCurrentDomain := by
-  cases current with
-  | neither => exact .head
-  | contextOnly => exact .tail .head
-  | requirementOnly => exact .tail (.tail .head)
-  | both => exact .tail (.tail (.tail .head))
-
 /-- Current behavior is read by executing the candidate's exact serialized
 target.  No table is stored in the candidate or in the witness. -/
 def learnedRuntimeCurrentTable
@@ -338,7 +323,6 @@ def learnedOperationalFutureDivergence :
 end ConstitutiveSearch.NeuralAgent
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.LearnedRuntimeCandidateAtInitial
-#print axioms ConstitutiveSearch.NeuralAgent.learnedRuntimeDeclaredCurrentDomain_complete
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedBypass_currentTable_exact
 #print axioms ConstitutiveSearch.NeuralAgent.everyLearnedRuntimeCurrentVerifierAgrees
 #print axioms ConstitutiveSearch.NeuralAgent.learnedOperationalCounterfactualRequests_nonempty

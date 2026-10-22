@@ -16,10 +16,7 @@ def IncrementalUpdateAccepted (update : IncrementalNeuralUpdate) : Prop :=
 
 def IncrementalUpdateLocalConditions
     (update : IncrementalNeuralUpdate) : Prop :=
-  update.transition = publicSerializedOperationalTransition ∧
-    materializeIncrementalConstitutiveArtifact update =
-      publicSerializedReconfiguredConstitutiveArtifact ∧
-    update.nextInput = publicSubstantiveNext
+  PublicIncrementalEngineLocalConditions update
 
 theorem checkIncrementalUpdate_complete_for_local_conditions
     (update : IncrementalNeuralUpdate) :
@@ -43,7 +40,13 @@ theorem incrementalAndReferenceLocalConditions_equivalent
     (update : IncrementalNeuralUpdate) :
     IncrementalUpdateLocalConditions update ↔
       ReferenceUpdateLocalConditions update.toFullReferenceUpdate := by
-  rfl
+  constructor
+  · rintro ⟨conditions⟩
+    exact ⟨conditions.transitionExact,
+      conditions.decodedTarget.sourceExact, conditions.nextInputExact⟩
+  · rintro ⟨transitionExact, targetExact, inputExact⟩
+    exact ⟨publicIncrementalLocalConditionDataOfExact update
+      transitionExact targetExact inputExact⟩
 
 /-- For every serialized delta, incremental verification accepts exactly when
 complete verification accepts the materialized target. -/

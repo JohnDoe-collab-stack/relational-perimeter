@@ -32,6 +32,7 @@ REQUIRED_LEAN_NAMES = (
 
 REQUIRED_PORTAL_GATES = (
     "check-neural-c1-c17-regression-floor.py",
+    "check-neural-g1-g10-regression-floor.py",
     "check-neural-block-negative-fixtures.py",
     "check-neural-comparison-protocol-v4.py",
     "check-compiled-neural-checker-measurement.py",

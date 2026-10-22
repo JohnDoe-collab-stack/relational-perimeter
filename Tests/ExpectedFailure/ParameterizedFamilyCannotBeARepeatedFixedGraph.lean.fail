@@ -1,0 +1,8 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+example :
+    (scalingSystem 0 .source).producedCount =
+      (scalingSystem 3 .source).producedCount := by
+  rfl

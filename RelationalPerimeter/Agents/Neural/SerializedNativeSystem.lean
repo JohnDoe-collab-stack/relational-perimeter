@@ -260,6 +260,19 @@ structure DecodedNeuralArtifact (contract : ConstitutiveContract) : Type 4 where
   system : NativeSystem (RequirementInput contract.family) contract.Proposal
   decodingExact : ArtifactDecodingExact contract source system
 
+/-- Construct a decoded artifact from a complete positive decoding witness.
+This is the constructive boundary used by generated artifact families: the
+caller must supply the same equations that the byte decoder reconstructs, so
+no unchecked native system can be relabelled as decoded. -/
+def certifyDecodedNeuralArtifact
+    (contract : ConstitutiveContract)
+    (source : SerializedNetwork)
+    (system : NativeSystem (RequirementInput contract.family)
+      contract.Proposal)
+    (exact : ArtifactDecodingExact contract source system) :
+    DecodedNeuralArtifact contract :=
+  .mk source system exact
+
 def decodeArtifact (contract : ConstitutiveContract)
     (source : SerializedNetwork) :
     Except ArtifactError (DecodedNeuralArtifact contract) :=
@@ -442,6 +455,7 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.decodeSerializedOutputs
 #print axioms ConstitutiveSearch.NeuralAgent.ArtifactDecodingExact
 #print axioms ConstitutiveSearch.NeuralAgent.DecodedNeuralArtifact
+#print axioms ConstitutiveSearch.NeuralAgent.certifyDecodedNeuralArtifact
 #print axioms ConstitutiveSearch.NeuralAgent.decodeArtifact
 #print axioms ConstitutiveSearch.NeuralAgent.publicSerializedRequirementNetwork_decodes
 #print axioms ConstitutiveSearch.NeuralAgent.publicDecodedRequirementArtifact_system_exact

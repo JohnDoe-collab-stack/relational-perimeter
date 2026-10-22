@@ -327,13 +327,34 @@ def decodeSerializedConstitutiveArtifact
       | .error problem => .error (.naming problem)
           | .ok stable => .ok { artifact := artifact, stable := stable }
 
-/-- Proof-free terminal update header.  Later checker layers must validate
-that the named transition starts at the certified source contract and ends at
-the contract named by `target`; neither equality is stored as a proof here. -/
-structure SerializedConstitutiveUpdate where
-  transition : SerializedOperationalContractTransition
-  target : SerializedConstitutiveArtifact
+/-- One proof-free serialized update format shared by every constitutive
+checker.  The transition code, next-input code and intention code remain
+instance parameters, while the complete target network and its stable names
+have one representation.  In particular, no decoded artifact, transition
+witness, correspondence or certificate can be supplied by the request. -/
+structure SerializedConstitutiveUpdate
+    (TransitionCode NextInputCode IntentCode : Type) where
+  transition : TransitionCode
+  targetNetwork : SerializedNetwork
+  targetStableNaming : SerializedStableArtifactNaming
+  nextInput : NextInputCode
+  intent : IntentCode
   deriving DecidableEq
+
+/-- The public specialization of the unique serialized update format. -/
+abbrev PublicSerializedConstitutiveUpdate :=
+  SerializedConstitutiveUpdate SerializedOperationalContractTransition
+    PublicRequirementInput Unit
+
+/-- The complete public target artifact is materialized only from the target
+contract named by the serialized transition and the target data carried by the
+same request. -/
+def PublicSerializedConstitutiveUpdate.targetArtifact
+    (source : PublicSerializedConstitutiveUpdate) :
+    SerializedConstitutiveArtifact :=
+  { contract := source.transition.target
+    network := source.targetNetwork
+    stableNaming := source.targetStableNaming }
 
 def publicSerializedOperationalTransition :
     SerializedOperationalContractTransition :=
@@ -362,9 +383,18 @@ def publicSerializedReconfiguredConstitutiveArtifact :
     network := publicSerializedReconfiguredNetwork
     stableNaming := publicSerializedReconfiguredStableNaming }
 
-def publicSerializedConstitutiveUpdate : SerializedConstitutiveUpdate :=
+def publicSerializedConstitutiveUpdate :
+    PublicSerializedConstitutiveUpdate :=
   { transition := publicSerializedOperationalTransition
-    target := publicSerializedReconfiguredConstitutiveArtifact }
+    targetNetwork := publicSerializedReconfiguredNetwork
+    targetStableNaming := publicSerializedReconfiguredStableNaming
+    nextInput := publicSubstantiveNext
+    intent := () }
+
+theorem publicSerializedConstitutiveUpdate_target_exact :
+    publicSerializedConstitutiveUpdate.targetArtifact =
+      publicSerializedReconfiguredConstitutiveArtifact := by
+  rfl
 
 theorem publicSerializedOperationalTransition_decodes :
     decodeOperationalContractTransition publicSerializedOperationalTransition =
@@ -494,6 +524,8 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.SerializedConstitutiveArtifact
 #print axioms ConstitutiveSearch.NeuralAgent.decodeSerializedConstitutiveArtifact
 #print axioms ConstitutiveSearch.NeuralAgent.SerializedConstitutiveUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.PublicSerializedConstitutiveUpdate.targetArtifact
+#print axioms ConstitutiveSearch.NeuralAgent.publicSerializedConstitutiveUpdate_target_exact
 #print axioms ConstitutiveSearch.NeuralAgent.publicSerializedOperationalTransition_decodes
 #print axioms ConstitutiveSearch.NeuralAgent.reversedSerializedOperationalTransition_rejected
 #print axioms ConstitutiveSearch.NeuralAgent.stationaryInitialOperationalTransition_rejected

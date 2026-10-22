@@ -1,0 +1,13 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+/- A completed generic target is not a concrete public analysis.  The latter
+must retain the decoding, transition decision, cone calculation, fragment
+work and execution that produced the target. -/
+example : PublicIncrementalEngineAnalysis publicIncrementalNeuralUpdate :=
+  publicIncrementalTargetAnalysis
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.PublicIncrementalEngineAnalysis
+/- AXIOM_AUDIT_END -/

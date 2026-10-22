@@ -19,6 +19,12 @@ méta-contrat. Le problème traité est celui de la production, de la conservati
 et du contrôle effectifs de ces obligations à travers le mécanisme neuronal et
 ses reconfigurations.
 
+Le raccord constitutif explicité dans ce plan est obligatoire. Il complète les
+exigences existantes sans en supprimer ni en restreindre aucune. Il distingue
+le schéma reçu, son instanciation sur la production exécutée et les contraintes
+de préservation démontrées à partir de cette même production. Son inscription
+est une obligation de travail, pas une déclaration de réalisation dans le code.
+
 ## Objectif terminal
 
 Construire un runtime exécutable et un théorème Lean garantissant que, pour un
@@ -211,6 +217,115 @@ Chaque contrat opérationnel doit ensuite distinguer au minimum :
 - informations historiques conservables ou oubliables.
 
 Ces composantes ne doivent pas être compressées en un booléen opaque.
+
+### Raccord constitutif obligatoire — origine et portée des obligations
+
+Le méta-contrat, le schéma d'observation, les exigences et les contextes reçus
+restent des entrées explicitement déclarées. L'exécution ne fabrique pas leur
+justification normative. Elle produit les occurrences et les relations sur
+lesquelles le schéma est instancié, ainsi que les témoins permettant d'établir
+les conséquences de préservation. La production seule, sans schéma déclaré,
+ne définit pas ce qui doit être conservé.
+
+La construction doit distinguer les trois niveaux suivants :
+
+1. **Reçu et fixé.** Le méta-contrat détermine les schémas admissibles et leurs
+   transitions. Pour une comparaison donnée, le schéma d'observation, le
+   domaine et les exigences sont fixés indépendamment de la réalisation
+   candidate et de son verdict. Les changements restent possibles uniquement
+   par les transitions admises déjà exigées, sans adaptation opportuniste.
+2. **Instancié et produit.** Selon ce schéma, une construction explicite
+   instancie les familles d'obligations du contrat admis sur l'état et les
+   occurrences de la production maître. Elle indique quelles données sont
+   reçues, lesquelles sont calculées et quels témoins de cette même exécution
+   sont effectivement consommés.
+3. **Démontré et appliqué.** Les témoins produits certifient les dépendances et
+   distinctions pertinentes. Les contraintes de préservation en sont dérivées
+   sous le contrat fixé, pour les sources ainsi produites, puis appliquées aux
+   réalisations candidates.
+   Elles ne sont pas introduites comme des conclusions déjà présentes dans
+   les données d'entrée ou choisies pour accepter une représentation.
+
+Techniquement, trois objets restent distincts dans l'API existante :
+
+- le contrat opérationnel `c : ConstitutiveContract`, fourni par le
+  méta-contrat admis, fixe les familles d'obligations et le schéma des futurs ;
+- les applications `…At state` instancient ces familles sur l'état exact
+  produit. Par exemple, le témoin causal a pour type
+  `c.causalCondition.Witness (c.causalConditionAt state)` ; il faut en tracer
+  la construction et la consommation, pas seulement l'indice ;
+- `c.futureContract` est le contrat d'observation, et
+  `c.futureSourceOfState state` y raccorde cet état produit. Les conséquences
+  universelles de RC4 portent sur les réalisations exactes de ce contrat et
+  sur les sources issues de ce raccord.
+
+Instancier les obligations ne requiert donc pas de reconstruire un nouveau
+`ConstitutiveContract` à chaque run. Un changement de contrat reste une
+transition admise par le méta-contrat, avec les transports et revérifications
+déjà exigés. Ces repères désignent les interfaces de
+[OperationalContract.lean](../../RelationalPerimeter/Agents/Neural/OperationalContract.lean)
+et de [CoveredFutureRealization.lean](../../RelationalPerimeter/Agents/Neural/CoveredFutureRealization.lean),
+pas une seconde API à construire.
+
+L'ordre logique obligatoire est : schéma fixé et production exécutée,
+obligations instanciées et témoins issus de cette production, contraintes
+démontrées, puis examen d'une réalisation. Le sens des obligations sources
+n'est défini ni par la projection mémoire candidate, ni par sa preuve
+d'exactitude, ni par le succès du contrôle chargé de les vérifier. Les témoins
+sources qui fondent les conséquences universelles sont construits sans
+recevoir la projection ni supposer l'exactitude de la réalisation candidate
+à laquelle ces conséquences seront appliquées.
+
+Cette indépendance n'interdit ni la réutilisation justifiée de certificats
+antérieurs, ni la construction d'un témoin par réflexion d'une décision
+exécutée, dès lors que l'obligation vérifiée est définie indépendamment de son
+succès. Elle n'interdit pas non plus de produire l'état depuis l'artefact
+neuronal examiné. Le checker peut évaluer cette production dans sa sémantique
+pure, sans effectuer une action refusée. Les certificats de conformité sont
+bien calculés depuis les données et l'exécution examinées ; ils ne doivent
+pas redéfinir le contrat pour déclarer conforme la sortie observée.
+
+Les six obligations de clôture suivantes sont conjointes :
+
+| Obligation | Évidence exigée |
+| --- | --- |
+| RC1 — Origine déclarée | Identifier séparément les primitives, exigences, contextes, schémas reçus et lois d'admission. Ne pas présenter une norme reçue comme produite ou justifiée par l'exécution. |
+| RC2 — Instanciation authentique | Instancier les familles d'obligations sur l'état et les occurrences exactes du même run, avec leurs équations de production, leurs témoins et leurs consommateurs. Un champ stocké ou un résultat reconstruit indépendamment ne suffit pas. |
+| RC3 — Indépendance de la réalisation | Exposer les types, producteurs et dépendances excluant une obligation source définie par la projection à valider ou par le succès de son propre contrôle. Les témoins sources fondant les conséquences universelles sont construits sans recevoir la projection ni supposer l'exactitude candidate. Les certificats antérieurs et la réflexion d'une décision restent utilisables sous les conditions ci-dessus. Un schéma paramétrique conserve ses paramètres déclarés. |
+| RC4 — Conséquences générales démontrées | Pour `c.futureContract` fixé et les sources issues de la production, démontrer les contraintes observables certifiées pour tout type mémoire `M` et toute `ExactRealization c.futureContract M`. La séparation éventuelle est une conclusion depuis un témoin de distinction, jamais un champ supposé de l'exactitude. |
+| RC5 — Transport au fil des transformations | Raccorder ces obligations aux transformations neuronales, au décodeur, à l'action, au successeur, à la mémoire et aux transitions de contrat. Consommer les certificats exacts, transporter les obligations persistantes et revérifier celles invalidées avant effectuation. |
+| RC6 — Réalisations positives et prévention | Fermer ce raccord sur les constructions positives non identitaires, les reconfigurations successives et l'oubli non trivial exigés, avec une réalisation exacte témoin du contrat concerné, puis sur le rejet du contournement. Un refus universel ou une seule obstruction ne satisfait pas ce critère. |
+
+RC4 réutilise l'API de futurs et de réalisations exactes du dépôt, sans second
+runtime. Le lemme générique `ExactRealization.distinct_memory_of_separator`
+est réutilisé lorsqu'un séparateur est construit ; il n'est pas à redémontrer.
+Le travail requis porte sur le raccord neuronal, ses témoins issus de la
+production et ses consommateurs. Sa quantification sur les réalisations
+s'ajoute à celle portant sur toutes les traces finies acceptées ; aucune ne
+remplace l'autre. Elle ne postule ni injectivité globale, ni quotient canonique,
+ni interdiction de tout
+regroupement. Une dépendance causale certifiée ne devient pas automatiquement
+un séparateur de futurs : il faut construire le raccord aux observations du
+contrat et, lorsqu'une séparation est revendiquée, fournir son témoin fini.
+Les autres exigences causales restent à démontrer dans leur propre interface.
+La préservation dirigée des transformations ne doit pas être renforcée
+artificiellement en transport réversible ou en égalité de tous les types.
+
+Les contrôles locaux doivent viser les substitutions suivantes : contrat
+réécrit après lecture du candidat, obligation définie par le succès du
+checker, témoin emprunté à une autre occurrence, distinction nécessaire
+effacée sans transport et certificat réutilisé sous un contrat changé sans
+justification. Les tests existants peuvent couvrir ces cas si leur obligation
+exacte est atteinte. Les signatures et dépendances formelles établissent la
+généralité ; les fixtures ne la remplacent pas.
+
+Gödel est un cas extrême où une combinaison de regroupement et de préservation
+est impossible. Il n'est ni une étape, ni une prémisse, ni une dépendance
+diagonale requise pour le résultat neuronal. Ici, le raccord doit d'abord
+permettre les transformations, reconfigurations et oublis admissibles, puis
+prévenir leurs violations. Aucun témoin gödelien, énoncé indécidable ou rejet
+diagonal n'est exigé pour fermer RC1–RC6. Les résultats Gödel et Tarski déjà
+présents restent protégés par l'exigence de non-régression.
 
 ### Domaine décidable et base causale finie
 
@@ -714,9 +829,12 @@ authenticité C3
 → commit scientifique stable et gates fraîches du socle
 
 → méta-contrat et transitions de contrats opérationnels
+→ schéma contractuel et provenance des obligations explicités (RC1, RC3)
 → représentation sérialisée et décodage du NativeSystem complet
 → domaine décidable et base causale finie
+→ obligations instanciées sur l'état produit et témoins du run maître (RC2)
 → ExactRealization et tous les futurs
+→ raccord au futureContract fixé et contraintes pour toute réalisation exacte (RC4)
 → StateConstitutiveCertificate
 → CheckedAgent et CheckedUpdate
 
@@ -729,6 +847,7 @@ authenticité C3
 → réutilisation locale réellement transportée
 → vérificateur de mise à jour incrémental
 → équivalence entre vérification incrémentale et vérification complète
+→ consommation et transport du raccord constitutif à chaque transition (RC5)
 
 → checkUpdates et trace finie dépendante vérifiée
 → API runtime fermée
@@ -738,6 +857,7 @@ authenticité C3
 → artefact appris indépendant
 → séparation alignedUpdate/bypassUpdate
 → témoin fini de divergence contrefactuelle
+→ raccord fermé sur les instances positives et le refus pré-effectuation (RC6)
 → campagne finale de mutations négatives
 → passage à l’échelle et comparaison avec le recheck complet
 
@@ -770,6 +890,7 @@ fermées.
 | Transformation neuronale issue du run | démontrée génériquement |
 | Oubli d’états préalablement distincts | exécuté et démontré |
 | Méta-contrat fixe | tous les contrats et transitions opérationnels sont admis explicitement |
+| Raccord constitutif RC1–RC6 | contrat opérationnel reçu, obligations indexées par l'état produit et contrat de futurs distingués ; témoins du même run, contraintes générales démontrées puis effectivement consommées, sans dépendance diagonale requise |
 | Artefact sérialisé complet | programme, encodage, ports et décodeur raccordés |
 | Base causale finie | déclarée, exécutable et couverte par la complétude relative |
 | Vérificateur initial | exécutable et correct |
@@ -811,6 +932,15 @@ formulation candidate est :
 > il accepte une mise à jour constitutivement alignée et rejette avant tout effet
 > une mise à jour de contournement ayant le même comportement courant mais une
 > provenance causale incompatible avec le contrat.
+
+Ce claim devra inclure explicitement le raccord RC1–RC6 : sous les schémas
+admis, les obligations sont instanciées sur les états des productions exécutées
+et les contraintes observables sont certifiées depuis les témoins de ces mêmes
+productions, indépendamment de la réalisation exacte candidate. Toute
+réalisation exacte du contrat de futurs fixé doit respecter les contraintes
+ainsi démontrées sur les sources raccordées. La fermeture de cette partie
+requiert ses énoncés génériques, ses instances neuronales positives et ses
+consommateurs dans le runtime, pas une nouvelle application de Gödel.
 
 La priorité historique ou la qualification de percée ne fait pas partie du
 théorème Lean. Elle exige la comparaison de capacité, un audit bibliographique

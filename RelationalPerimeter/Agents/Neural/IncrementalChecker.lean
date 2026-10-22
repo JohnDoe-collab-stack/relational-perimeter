@@ -3,9 +3,9 @@ import RelationalPerimeter.Agents.Neural.LocalCertificateReuse
 /-!
 # Executable incremental neural update checker
 
-The received update is a proof-free list of serialized edits.  The checker
-applies those edits to the exact source artifact, validates the resulting
-target and the next input, and returns a certificate package that retains the
+The received update is the shared proof-free serialized update containing its
+complete target network, stable names, transition, next input and intention.
+The checker decodes those data once and returns a certificate package that retains the
 transported old fragment separately from the fragments recalculated in the
 computed affected cone.  The materialized target is decoded before the
 pre-certificate graph and affected cone are calculated; the target certificate
@@ -14,8 +14,9 @@ is assembled only afterwards.
 set_option genInjectivity false
 namespace ConstitutiveSearch.NeuralAgent
 
-/-- Plain serialized edits.  None of the constructors can carry a proof or a
-certificate. -/
+/-- A lower-level utility for experiments that apply explicit network edits.
+It is not an alternate checker request: the public and learned checkers both
+consume `SerializedConstitutiveUpdate`. -/
 inductive SerializedNetworkEdit where
   | replaceInputCount (count : Nat)
   | replaceNeurons (neurons : List SerializedNeuron)
@@ -35,42 +36,26 @@ def applySerializedNetworkEdits :
       applySerializedNetworkEdits rest
         (applySerializedNetworkEdit source edit)
 
-/-- The incremental request contains only edits and the next received input.
-In particular it contains neither a stable correspondence nor any certificate.
--/
-structure IncrementalNeuralUpdate where
-  transition : SerializedOperationalContractTransition
-  targetStableNaming : SerializedStableArtifactNaming
-  edits : List SerializedNetworkEdit
-  nextInput : PublicRequirementInput
+/-- Compatibility name for the public specialization of the one serialized
+update format.  The incremental checker receives the complete proof-free
+target; stable changes and the affected cone are calculated from it. -/
+abbrev IncrementalNeuralUpdate := PublicSerializedConstitutiveUpdate
 
 def materializeIncrementalTarget (update : IncrementalNeuralUpdate) :
     SerializedNetwork :=
-  applySerializedNetworkEdits update.edits
-    publicInitialCheckedAgent.artifact.source
+  update.targetNetwork
 
 def IncrementalNeuralUpdate.toFullReferenceUpdate
     (update : IncrementalNeuralUpdate) : FullReferenceNeuralUpdate :=
-  { transition := update.transition
-    targetArtifact :=
-      { contract := .reconfigured
-        network := materializeIncrementalTarget update
-        stableNaming := update.targetStableNaming }
-    nextInput := update.nextInput }
+  update
 
-/-- Proof-free complete target materialized from the delta. -/
+/-- Proof-free complete target materialized from the shared serialized update. -/
 def materializeIncrementalConstitutiveArtifact
     (update : IncrementalNeuralUpdate) : SerializedConstitutiveArtifact :=
-  update.toFullReferenceUpdate.targetArtifact
+  update.targetArtifact
 
 def publicIncrementalNeuralUpdate : IncrementalNeuralUpdate :=
-  { transition := publicSerializedOperationalTransition
-    targetStableNaming := publicSerializedReconfiguredStableNaming
-    edits :=
-      [ .replaceInputCount publicSerializedReconfiguredNetwork.inputCount,
-        .replaceNeurons publicSerializedReconfiguredNetwork.neurons,
-        .replaceOutputs publicSerializedReconfiguredNetwork.outputs ]
-    nextInput := publicSubstantiveNext }
+  publicSerializedConstitutiveUpdate
 
 theorem publicIncrementalTarget_exact :
     materializeIncrementalTarget publicIncrementalNeuralUpdate =
@@ -82,6 +67,81 @@ theorem publicIncrementalConstitutiveArtifact_exact :
       publicSerializedReconfiguredConstitutiveArtifact := by
   rfl
 
+/-- Result of decoding the complete target carried by this serialized update
+and establishing that it is the reconfigured member accepted by the public
+checker.  The decoded artifact is retained after transport to the exact
+public index; it is not reconstructed independently. -/
+structure DecodedPublicIncrementalTarget
+    (update : IncrementalNeuralUpdate) : Type 5 where
+  private mk ::
+  sourceExact : materializeIncrementalConstitutiveArtifact update =
+    publicSerializedReconfiguredConstitutiveArtifact
+  decoded : PublicExecutableDecodedArtifact
+    (materializeIncrementalConstitutiveArtifact update)
+
+theorem DecodedPublicIncrementalTarget.unique
+    {update : IncrementalNeuralUpdate}
+    (left right : DecodedPublicIncrementalTarget update) : left = right := by
+  cases left
+  rename_i leftExact leftDecoded
+  cases right
+  rename_i rightExact rightDecoded
+  have exactEqual : rightExact = leftExact := Subsingleton.elim _ _
+  cases exactEqual
+  congr
+  exact
+    (PublicExecutableDecodedArtifact.reconfigured_unique_of_sourceExact
+      leftDecoded leftExact).trans
+      (PublicExecutableDecodedArtifact.reconfigured_unique_of_sourceExact
+        rightDecoded leftExact).symm
+
+def decodePublicIncrementalTarget
+    (update : IncrementalNeuralUpdate) :
+    Except AlignmentError (DecodedPublicIncrementalTarget update) :=
+  match decodePublicExecutableArtifact
+      (materializeIncrementalConstitutiveArtifact update) with
+  | .error (.malformed problem) =>
+      .error (.malformedConstitutiveArtifact problem)
+  | .error .locallyUnsupported => .error .unexpectedSuccessorArtifact
+  | .ok decoded =>
+      if sourceExact : materializeIncrementalConstitutiveArtifact update =
+          publicSerializedReconfiguredConstitutiveArtifact then
+        .ok (.mk sourceExact decoded)
+      else
+        .error .unexpectedSuccessorArtifact
+
+def canonicalDecodedPublicIncrementalTarget
+    (update : IncrementalNeuralUpdate)
+    (sourceExact : materializeIncrementalConstitutiveArtifact update =
+      publicSerializedReconfiguredConstitutiveArtifact) :
+    DecodedPublicIncrementalTarget update :=
+  .mk sourceExact
+    (PublicExecutableDecodedArtifact.reconfigured.transportSource
+      sourceExact.symm)
+
+theorem decodePublicIncrementalTarget_of_exact
+    (update : IncrementalNeuralUpdate)
+    (sourceExact : materializeIncrementalConstitutiveArtifact update =
+      publicSerializedReconfiguredConstitutiveArtifact) :
+    decodePublicIncrementalTarget update =
+      .ok (canonicalDecodedPublicIncrementalTarget update sourceExact) := by
+  unfold decodePublicIncrementalTarget
+  rw [decodePublicExecutableArtifact_of_reconfigured_exact sourceExact]
+  simp only
+  rw [dif_pos sourceExact]
+  apply congrArg Except.ok
+  apply DecodedPublicIncrementalTarget.unique
+
+theorem decideCanonicalDecodedPublicIncrementalTarget_exact
+    (update : IncrementalNeuralUpdate)
+    (sourceExact : materializeIncrementalConstitutiveArtifact update =
+      publicSerializedReconfiguredConstitutiveArtifact) :
+    decidePublicReconfiguredTransitionFromDecoded
+        (canonicalDecodedPublicIncrementalTarget update sourceExact).decoded
+        sourceExact =
+      some publicReconfiguredTransitionDecision := by
+  exact decidePublicReconfiguredTransitionFromDecoded_of_sourceExact _ _
+
 /-- Proof-free observable output of pre-certificate analysis.  Every field is
 calculated before any target certificate is assembled. -/
 structure IncrementalPreCertificateResult where
@@ -90,7 +150,7 @@ structure IncrementalPreCertificateResult where
   dependencyEdges : List ConstitutiveDependencyEdge
   affectedCone : List ConstitutiveNodeKey
 
-/-- Decode the materialized delta target, calculate its stable
+/-- Decode the serialized target, calculate its stable
 correspondence and heterogeneous graph, then close the affected cone against
 the certified source.  Failure occurs before certificate assembly. -/
 def calculateIncrementalPreCertificateResult
@@ -464,6 +524,14 @@ def assemblePublicIncrementalCertificateFromPreCertificate
   match resultExact with
   | rfl => publicIncrementalCertificateAssembly
 
+theorem assemblePublicIncrementalCertificateFromPreCertificate_exact
+    (result : IncrementalPreCertificateResult)
+    (resultExact : result = publicIncrementalPreCertificateResult) :
+    assemblePublicIncrementalCertificateFromPreCertificate result resultExact =
+      publicIncrementalCertificateAssembly := by
+  cases resultExact
+  rfl
+
 /-! ## Generic incremental checker -/
 
 /-- Complete positive analysis required by the generic incremental checker.
@@ -501,7 +569,7 @@ structure IncrementalTargetAnalysis
     current.state state
 
 /-- An incremental engine owns proof-free updates and their executable local
-analysis.  It may decode a domain-specific delta, but it cannot return a
+analysis.  It may decode domain-specific serialized data, but it cannot return a
 certificate or checked update: those are built only by the generic checker
 below. -/
 structure IncrementalCheckerEngine
@@ -512,6 +580,19 @@ structure IncrementalCheckerEngine
   Error : Type
   Analysis : Update -> Type 6
   analyze : (update : Update) -> Except Error (Analysis update)
+  /-- Finite, positive conditions inspected before the analysis result exists.
+  An instance must define this type from its decoder, reflected decisions,
+  local calculations and exact transition data; it may not define it as
+  successful return of `analyze`. -/
+  LocalConditions : Update -> Type 6
+  /-- Constructive relative completeness from the autonomous local
+  conditions. -/
+  complete : (update : Update) -> LocalConditions update ->
+    { analysis : Analysis update // analyze update = .ok analysis }
+  /-- Every successful analysis exposes the autonomous local conditions that
+  justified it. -/
+  localOfSuccess : (update : Update) -> (analysis : Analysis update) ->
+    analyze update = .ok analysis -> LocalConditions update
   target : {update : Update} -> Analysis update ->
     IncrementalTargetAnalysis current
 
@@ -609,15 +690,16 @@ theorem checkGenericIncrementalUpdate_constitutively_sound
   exact ⟨rfl, rfl, rfl, rfl, rfl⟩
 
 /-- The exact, executable completeness boundary of a generic incremental
-engine: all local delta conditions hold precisely when its analysis function
-returns a positive dependent analysis. -/
+engine.  Unlike the former circular formulation, this proposition contains no
+analysis value and no equation mentioning `engine.analyze`: it merely states
+that the engine's independently declared local conditions are inhabited. -/
 def GenericIncrementalUpdateLocalConditions
     {constitution : ConstitutiveMetaContract}
     {currentContract : constitution.Contract}
     {current : CheckedAgent constitution currentContract}
     (engine : IncrementalCheckerEngine current)
     (update : engine.Update) : Prop :=
-  Exists fun analysis => engine.analyze update = .ok analysis
+  Nonempty (engine.LocalConditions update)
 
 def GenericIncrementalUpdateAccepted
     {constitution : ConstitutiveMetaContract}
@@ -640,21 +722,23 @@ theorem checkGenericIncrementalUpdate_complete_for_local_conditions
     GenericIncrementalUpdateLocalConditions
   constructor
   · rintro ⟨success, accepted⟩
-    unfold checkGenericIncrementalUpdate at accepted
-    cases analyzed : engine.analyze update with
-    | error problem =>
-        rw [analyzed] at accepted
-        cases accepted
-    | ok analysis =>
-        rw [analyzed] at accepted
-        have successExact :
-            GenericIncrementalCheckSuccess.mk analysis = success :=
-          Except.ok.inj accepted
-        have analysisExact : analysis = success.analysis :=
-          congrArg GenericIncrementalCheckSuccess.analysis successExact
-        exact ⟨success.analysis,
-          congrArg Except.ok analysisExact⟩
-  · rintro ⟨analysis, analyzed⟩
+    have analyzed : engine.analyze update = .ok success.analysis := by
+      unfold checkGenericIncrementalUpdate at accepted
+      cases exact : engine.analyze update with
+      | error problem =>
+          rw [exact] at accepted
+          cases accepted
+      | ok analysis =>
+          rw [exact] at accepted
+          have successExact :
+              GenericIncrementalCheckSuccess.mk analysis = success :=
+            Except.ok.inj accepted
+          have analysisExact : analysis = success.analysis :=
+            congrArg GenericIncrementalCheckSuccess.analysis successExact
+          exact congrArg Except.ok analysisExact
+    exact ⟨engine.localOfSuccess update success.analysis analyzed⟩
+  · rintro ⟨conditions⟩
+    rcases engine.complete update conditions with ⟨analysis, analyzed⟩
     refine ⟨.mk analysis, ?_⟩
     unfold checkGenericIncrementalUpdate
     rw [analyzed]
@@ -664,7 +748,8 @@ theorem checkGenericIncrementalUpdate_complete_for_local_conditions
 /-- The complete public target analysis is assembled from the calculated
 pre-certificate graph, the licensed old fragment, the recalculated affected
 fragments and the executed transition. -/
-def publicIncrementalTargetAnalysis :
+def publicIncrementalTargetAnalysisFromDecision
+    (transitionDecision : PublicReconfiguredTransitionDecision) :
     IncrementalTargetAnalysis publicInitialCheckedAgent :=
   { nextContract := .reconfigured
     contractAdmitted := PublicContractAdmission.reconfigured
@@ -680,29 +765,153 @@ def publicIncrementalTargetAnalysis :
     fragments := publicIncrementalCertificateAssembly.fragments
     fragmentNamingExact := rfl
     fragmentObservationsExact := rfl
-    transition := publicOperationalTransition
-    execution := publicReferenceTransitionProduction.execution }
+    transition := transitionDecision.transition
+    execution :=
+      publicTransitionProductionFromDecision_target_exact transitionDecision ▸
+        (publicTransitionProductionFromDecision transitionDecision).execution }
 
-/-- Positive public analysis retained by the domain-specific engine.  The
-target analysis is an actual field and is pinned to the value reconstructed
-from the delta; the generic engine cannot replace it by an independently
-supplied checked successor. -/
-structure PublicIncrementalEngineAnalysis
+def publicIncrementalTargetAnalysis :
+    IncrementalTargetAnalysis publicInitialCheckedAgent :=
+  publicIncrementalTargetAnalysisFromDecision
+    publicReconfiguredTransitionDecision
+
+theorem publicIncrementalTargetAnalysisFromDecision_exact
+    (decision : PublicReconfiguredTransitionDecision) :
+    publicIncrementalTargetAnalysisFromDecision decision =
+      publicIncrementalTargetAnalysis := by
+  unfold publicIncrementalTargetAnalysis
+  rw [decision.unique publicReconfiguredTransitionDecision]
+
+/-- The target analysis consumes the transition extracted from the reflected
+decision; it cannot silently substitute the parallel canonical transition. -/
+theorem publicIncrementalTargetAnalysisFromDecision_transition_exact
+    (decision : PublicReconfiguredTransitionDecision) :
+    (publicIncrementalTargetAnalysisFromDecision decision).transition =
+      decision.transition := by
+  rfl
+
+/-- Executed dependencies retained by the public analyzer before a generic
+target analysis exists.  Every datum is indexed by the received update or by
+an earlier executed decision: decoding precedes transition admission,
+pre-certificate calculation precedes transport/recalculation, and the
+successor execution consumes the transition returned by that same decision. -/
+structure PublicIncrementalExecutedDependencies
     (update : IncrementalNeuralUpdate) : Type 6 where
-  private mk ::
+  transitionExact : update.transition = publicSerializedOperationalTransition
+  decodedTarget : DecodedPublicIncrementalTarget update
+  decodedTargetExact :
+    decodePublicIncrementalTarget update = .ok decodedTarget
+  transitionDecision : PublicReconfiguredTransitionDecision
+  transitionAccepted :
+    decidePublicReconfiguredTransitionFromDecoded
+        decodedTarget.decoded decodedTarget.sourceExact =
+      some transitionDecision
   preCertificateResult : IncrementalPreCertificateResult
+  preCertificateCalculated :
+    calculateIncrementalPreCertificateResult update = .ok preCertificateResult
   preCertificateResultExact : preCertificateResult =
     publicIncrementalPreCertificateResult
-  assembly : PublicIncrementalCertificateAssembly
-  assemblyExact : assembly = publicIncrementalCertificateAssembly
-  assemblyCalculated : assembly =
-    assemblePublicIncrementalCertificateFromPreCertificate
-      preCertificateResult preCertificateResultExact
+  affectedConeExact : preCertificateResult.affectedCone =
+    affectedConstitutiveCone publicInitialStateConstitutiveCertificate
+      publicPreCertificateConstitutiveGraph
+  transportedOutsideCone :
+    Unaffected publicInitialStateConstitutiveCertificate
+      publicPreCertificateConstitutiveGraph
+      (.receivedInput publicRequirementPort)
+      publicInitialRequirementFragment
+  structuralRecalculation :
+    CalculatedIncrementalStructuralAssembly
+      publicInitialStateConstitutiveCertificate
+      publicPreCertificateConstitutiveGraph
+      publicTransportedStructuralFragments
+      publicRecomputedStructuralFragments
+  recomputedFragments : RecomputedStateCertificateFragments
+    PublicReconfiguredOperationalContract
+    publicDecodedReconfiguredArtifact publicReferenceUpdatedState
+  fragmentNamingExact :
+    publicIncrementalCertificateAssembly.fragments.structural.basis.naming =
+      publicReconfiguredFiniteCausalBasis.naming
+  fragmentObservationsExact :
+    publicIncrementalCertificateAssembly.fragments.structural.observations =
+      publicIncrementalCertificateAssembly.structuralAssembly.observations
   targetStateAccepted : ExecutableStateAcceptance
     publicExecutableMetaContractInterface
     PublicExecutableDecodedArtifact.reconfigured
-  targetAnalysis : IncrementalTargetAnalysis publicInitialCheckedAgent
-  targetAnalysisExact : targetAnalysis = publicIncrementalTargetAnalysis
+  targetStateChecked :
+    checkInitialState publicExecutableMetaContractInterface
+        PublicExecutableDecodedArtifact.reconfigured =
+      .ok targetStateAccepted
+  nextInputExact : update.nextInput = publicSubstantiveNext
+  producedSuccessor :
+    PublicProducedReconfiguredStateWitness publicReferenceUpdatedState
+  executedSuccessor : publicConstitutiveMetaContract.ExecutedStateTransition
+    transitionDecision.transition.permission publicInitialCheckedAgent.state
+      publicReferenceUpdatedState
+
+/-- The concrete public analysis contains only executed dependencies.  In
+particular it has no field of type `IncrementalTargetAnalysis`: the generic
+target is derived below from the retained decoding, calculation, transport,
+recalculation and execution. -/
+structure PublicIncrementalEngineAnalysis
+    (update : IncrementalNeuralUpdate) : Type 6 where
+  private mk ::
+  executed : PublicIncrementalExecutedDependencies update
+
+def PublicIncrementalEngineAnalysis.preCertificateResult
+    {update : IncrementalNeuralUpdate}
+    (analysis : PublicIncrementalEngineAnalysis update) :
+    IncrementalPreCertificateResult :=
+  analysis.executed.preCertificateResult
+
+theorem PublicIncrementalEngineAnalysis.preCertificateResultExact
+    {update : IncrementalNeuralUpdate}
+    (analysis : PublicIncrementalEngineAnalysis update) :
+    analysis.preCertificateResult = publicIncrementalPreCertificateResult :=
+  analysis.executed.preCertificateResultExact
+
+def PublicIncrementalEngineAnalysis.assembly
+    {update : IncrementalNeuralUpdate}
+    (analysis : PublicIncrementalEngineAnalysis update) :
+    PublicIncrementalCertificateAssembly :=
+  assemblePublicIncrementalCertificateFromPreCertificate
+    analysis.preCertificateResult analysis.preCertificateResultExact
+
+theorem PublicIncrementalEngineAnalysis.assemblyExact
+    {update : IncrementalNeuralUpdate}
+    (analysis : PublicIncrementalEngineAnalysis update) :
+    analysis.assembly = publicIncrementalCertificateAssembly := by
+  exact assemblePublicIncrementalCertificateFromPreCertificate_exact
+    analysis.preCertificateResult analysis.preCertificateResultExact
+
+theorem PublicIncrementalEngineAnalysis.assemblyCalculated
+    {update : IncrementalNeuralUpdate}
+    (analysis : PublicIncrementalEngineAnalysis update) :
+    analysis.assembly =
+      assemblePublicIncrementalCertificateFromPreCertificate
+        analysis.preCertificateResult analysis.preCertificateResultExact := by
+  rfl
+
+/-- Derive the generic target from the dependencies returned by the concrete
+analyzer.  The fragments come from the calculated assembly and the execution
+is indexed by the very transition decision retained in `executed`. -/
+def PublicIncrementalEngineAnalysis.targetAnalysis
+    {update : IncrementalNeuralUpdate}
+    (analysis : PublicIncrementalEngineAnalysis update) :
+    IncrementalTargetAnalysis publicInitialCheckedAgent :=
+  { nextContract := .reconfigured
+    contractAdmitted := PublicContractAdmission.reconfigured
+    artifact := publicDecodedReconfiguredArtifact
+    state := publicReferenceUpdatedState
+    targetNaming := publicReconfiguredFiniteCausalBasis.naming
+    preCertificateGraph := analysis.assembly.preCertificateGraph
+    transportedStructural := analysis.assembly.transportedFragments
+    recomputedStructural := analysis.assembly.recomputedFragments
+    structuralAssembly := analysis.assembly.structuralAssembly
+    fragments := analysis.assembly.fragments
+    fragmentNamingExact := rfl
+    fragmentObservationsExact := rfl
+    transition := analysis.executed.transitionDecision.transition
+    execution := analysis.executed.executedSuccessor }
 
 /-- Executable public analysis.  It consumes only the proof-free update and
 runs every gate needed by the incremental path.  In particular, the complete
@@ -712,39 +921,184 @@ def analyzePublicIncrementalUpdate (update : IncrementalNeuralUpdate) :
     Except AlignmentError (PublicIncrementalEngineAnalysis update) :=
   if _transitionExact : update.transition =
       publicSerializedOperationalTransition then
-    if targetExact : materializeIncrementalConstitutiveArtifact update =
-        publicSerializedReconfiguredConstitutiveArtifact then
-      match calculated : calculateIncrementalPreCertificateResult update with
-      | .error problem => .error (.malformedConstitutiveArtifact problem)
-      | .ok preCertificateResult =>
-          match checkInitialState publicExecutableMetaContractInterface
-              PublicExecutableDecodedArtifact.reconfigured with
-          | .error problem => .error (.targetStateRejected problem)
-          | .ok targetStateAccepted =>
-              match publicRequirementInputEquality update.nextInput
-                  publicSubstantiveNext with
-              | .isFalse _ => .error .successorMismatch
-              | .isTrue _nextExact =>
-                  have expected :=
-                    calculateIncrementalPreCertificateResult_eq_public_of_target_exact
-                      update targetExact
-                  have resultExact : preCertificateResult =
-                      publicIncrementalPreCertificateResult :=
-                    Except.ok.inj (calculated.symm.trans expected)
-                  let assembly :=
-                    assemblePublicIncrementalCertificateFromPreCertificate
-                      preCertificateResult resultExact
-                  have assemblyExact : assembly =
-                      publicIncrementalCertificateAssembly := by
-                    cases resultExact
-                    rfl
-                  .ok (.mk preCertificateResult resultExact assembly
-                    assemblyExact rfl targetStateAccepted
-                    publicIncrementalTargetAnalysis rfl)
-    else
-      .error .unexpectedSuccessorArtifact
+    match decodedRun : decodePublicIncrementalTarget update with
+    | .error problem => .error problem
+    | .ok decodedTarget =>
+          match transitionRun : decidePublicReconfiguredTransitionFromDecoded
+              decodedTarget.decoded decodedTarget.sourceExact with
+          | none => .error .noAdmittedTransition
+          | some transitionDecision =>
+              match calculated : calculateIncrementalPreCertificateResult update with
+              | .error problem => .error (.malformedConstitutiveArtifact problem)
+              | .ok preCertificateResult =>
+                  match targetStateRun :
+                      checkInitialState publicExecutableMetaContractInterface
+                      PublicExecutableDecodedArtifact.reconfigured with
+                  | .error problem => .error (.targetStateRejected problem)
+                  | .ok targetStateAccepted =>
+                      match publicRequirementInputEquality update.nextInput
+                          publicSubstantiveNext with
+                      | .isFalse _ => .error .successorMismatch
+                      | .isTrue _nextExact =>
+                          have expected :=
+                            calculateIncrementalPreCertificateResult_eq_public_of_target_exact
+                              update decodedTarget.sourceExact
+                          have resultExact : preCertificateResult =
+                              publicIncrementalPreCertificateResult :=
+                            Except.ok.inj (calculated.symm.trans expected)
+                          .ok (.mk
+                            { transitionExact := _transitionExact
+                              decodedTarget := decodedTarget
+                              decodedTargetExact := decodedRun
+                              transitionDecision := transitionDecision
+                              transitionAccepted := transitionRun
+                              preCertificateResult := preCertificateResult
+                              preCertificateCalculated := calculated
+                              preCertificateResultExact := resultExact
+                              affectedConeExact := by
+                                cases resultExact
+                                rfl
+                              transportedOutsideCone :=
+                                publicIncrementalRequirementFragmentUnaffected
+                              structuralRecalculation :=
+                                publicCalculatedIncrementalStructuralAssembly
+                              recomputedFragments :=
+                                publicRecomputedStateCertificateFragments
+                              fragmentNamingExact := rfl
+                              fragmentObservationsExact := rfl
+                              targetStateAccepted := targetStateAccepted
+                              targetStateChecked := targetStateRun
+                              nextInputExact := _nextExact
+                              producedSuccessor :=
+                                publicReferenceProducedStateWitness
+                              executedSuccessor :=
+                                publicTransitionProductionFromDecision_target_exact
+                                    transitionDecision ▸
+                                  (publicTransitionProductionFromDecision
+                                    transitionDecision).execution })
   else
     .error .noAdmittedTransition
+
+/-- The autonomous public local conditions are exactly the executed
+dependencies retained by the concrete analysis.  They are declared before
+the analyzer result and contain no `IncrementalTargetAnalysis`. -/
+abbrev PublicIncrementalEngineLocalConditionData :=
+  PublicIncrementalExecutedDependencies
+
+def PublicIncrementalEngineLocalConditions
+    (update : IncrementalNeuralUpdate) : Prop :=
+  Nonempty (PublicIncrementalEngineLocalConditionData update)
+
+/-- Build the autonomous public local data from the three proof-free request
+equalities.  The remaining fields are positive outputs of the decoder,
+transition decision, cone calculation, transport licence, fragment
+recalculation, target-state check and executed successor production. -/
+def publicIncrementalLocalConditionDataOfExact
+    (update : IncrementalNeuralUpdate)
+    (transitionExact : update.transition =
+      publicSerializedOperationalTransition)
+    (targetExact : materializeIncrementalConstitutiveArtifact update =
+      publicSerializedReconfiguredConstitutiveArtifact)
+    (inputExact : update.nextInput = publicSubstantiveNext) :
+    PublicIncrementalEngineLocalConditionData update :=
+  { transitionExact := transitionExact
+    decodedTarget := canonicalDecodedPublicIncrementalTarget update targetExact
+    decodedTargetExact :=
+      decodePublicIncrementalTarget_of_exact update targetExact
+    transitionDecision := publicReconfiguredTransitionDecision
+    transitionAccepted :=
+      decideCanonicalDecodedPublicIncrementalTarget_exact update targetExact
+    preCertificateResult := publicIncrementalPreCertificateResult
+    preCertificateCalculated :=
+      calculateIncrementalPreCertificateResult_eq_public_of_target_exact
+        update targetExact
+    preCertificateResultExact := rfl
+    affectedConeExact := rfl
+    transportedOutsideCone := publicIncrementalRequirementFragmentUnaffected
+    structuralRecalculation := publicCalculatedIncrementalStructuralAssembly
+    recomputedFragments := publicRecomputedStateCertificateFragments
+    fragmentNamingExact := rfl
+    fragmentObservationsExact := rfl
+    targetStateAccepted := publicExecutableStateAcceptance .reconfigured
+    targetStateChecked := rfl
+    nextInputExact := inputExact
+    producedSuccessor := publicReferenceProducedStateWitness
+    executedSuccessor := publicReferenceTransitionProduction.execution }
+
+def analyzePublicIncrementalUpdate_of_conditions
+    (update : IncrementalNeuralUpdate)
+    (conditions : PublicIncrementalEngineLocalConditionData update) :
+    { analysis : PublicIncrementalEngineAnalysis update //
+      analyzePublicIncrementalUpdate update = .ok analysis } := by
+  unfold analyzePublicIncrementalUpdate
+  rw [dif_pos conditions.transitionExact]
+  split
+  · have impossible :=
+      ‹decodePublicIncrementalTarget update = .error _›.symm.trans
+        conditions.decodedTargetExact
+    cases impossible
+  · have decodedExact : _ = conditions.decodedTarget :=
+      Except.ok.inj
+        (‹decodePublicIncrementalTarget update = .ok _›.symm.trans
+          conditions.decodedTargetExact)
+    cases decodedExact
+    split
+    · have impossible :=
+        ‹decidePublicReconfiguredTransitionFromDecoded
+            conditions.decodedTarget.decoded
+            conditions.decodedTarget.sourceExact = none›.symm.trans
+          conditions.transitionAccepted
+      cases impossible
+    · have transitionDecisionExact : _ = conditions.transitionDecision :=
+        Option.some.inj
+          (‹decidePublicReconfiguredTransitionFromDecoded
+              conditions.decodedTarget.decoded
+              conditions.decodedTarget.sourceExact = some _›.symm.trans
+            conditions.transitionAccepted)
+      cases transitionDecisionExact
+      split
+      · have impossible :=
+          ‹calculateIncrementalPreCertificateResult update = .error _›.symm.trans
+            conditions.preCertificateCalculated
+        cases impossible
+      · have preCertificateExact : _ = conditions.preCertificateResult :=
+          Except.ok.inj
+            (‹calculateIncrementalPreCertificateResult update = .ok _›.symm.trans
+              conditions.preCertificateCalculated)
+        cases preCertificateExact
+        split
+        · have impossible :=
+            ‹checkInitialState publicExecutableMetaContractInterface
+                PublicExecutableDecodedArtifact.reconfigured = .error _›.symm.trans
+              conditions.targetStateChecked
+          cases impossible
+        · have targetStateExact : _ = conditions.targetStateAccepted :=
+            Except.ok.inj
+              (‹checkInitialState publicExecutableMetaContractInterface
+                  PublicExecutableDecodedArtifact.reconfigured = .ok _›.symm.trans
+                conditions.targetStateChecked)
+          cases targetStateExact
+          split
+          · exact False.elim (‹update.nextInput ≠ publicSubstantiveNext›
+              conditions.nextInputExact)
+          · exact ⟨_, rfl⟩
+
+/-- Autonomous local conditions construct a successful public analysis. -/
+def completePublicIncrementalAnalysis
+    (update : IncrementalNeuralUpdate)
+    (conditions : PublicIncrementalEngineLocalConditionData update) :
+    { analysis : PublicIncrementalEngineAnalysis update //
+      analyzePublicIncrementalUpdate update = .ok analysis } := by
+  exact analyzePublicIncrementalUpdate_of_conditions update conditions
+
+/-- A successful public analysis yields the very executed dependencies
+retained by that analysis; no target package is unpacked or reconstructed. -/
+def publicIncrementalLocalConditionsOfSuccess
+    (update : IncrementalNeuralUpdate)
+    (analysis : PublicIncrementalEngineAnalysis update)
+    (_accepted : analyzePublicIncrementalUpdate update = .ok analysis) :
+    PublicIncrementalEngineLocalConditionData update :=
+  analysis.executed
 
 def publicIncrementalCheckerEngine :
     IncrementalCheckerEngine publicInitialCheckedAgent :=
@@ -752,105 +1106,17 @@ def publicIncrementalCheckerEngine :
     Error := AlignmentError
     Analysis := PublicIncrementalEngineAnalysis
     analyze := analyzePublicIncrementalUpdate
+    LocalConditions := PublicIncrementalEngineLocalConditionData
+    complete := completePublicIncrementalAnalysis
+    localOfSuccess := publicIncrementalLocalConditionsOfSuccess
     target := fun analysis => analysis.targetAnalysis }
-
-def PublicIncrementalEngineLocalConditions
-    (update : IncrementalNeuralUpdate) : Prop :=
-  update.transition = publicSerializedOperationalTransition ∧
-    materializeIncrementalConstitutiveArtifact update =
-      publicSerializedReconfiguredConstitutiveArtifact ∧
-    update.nextInput = publicSubstantiveNext
-
-def publicCanonicalIncrementalEngineAnalysis
-    (update : IncrementalNeuralUpdate) :
-    PublicIncrementalEngineAnalysis update :=
-  .mk publicIncrementalPreCertificateResult rfl
-    publicIncrementalCertificateAssembly rfl rfl
-    (publicExecutableStateAcceptance .reconfigured)
-    publicIncrementalTargetAnalysis rfl
-
-theorem analyzePublicIncrementalUpdate_of_conditions
-    (update : IncrementalNeuralUpdate)
-    (transitionExact : update.transition =
-      publicSerializedOperationalTransition)
-    (targetExact : materializeIncrementalConstitutiveArtifact update =
-      publicSerializedReconfiguredConstitutiveArtifact)
-    (inputExact : update.nextInput = publicSubstantiveNext) :
-    analyzePublicIncrementalUpdate update =
-      .ok (publicCanonicalIncrementalEngineAnalysis update) := by
-  unfold analyzePublicIncrementalUpdate
-  rw [dif_pos transitionExact]
-  rw [dif_pos targetExact]
-  have calculatedExact :=
-    calculateIncrementalPreCertificateResult_eq_public_of_target_exact
-      update targetExact
-  split
-  · have impossible :=
-      ‹calculateIncrementalPreCertificateResult update = .error _›.symm.trans
-        calculatedExact
-    cases impossible
-  · have resultExact : _ = publicIncrementalPreCertificateResult :=
-      Except.ok.inj
-        (‹calculateIncrementalPreCertificateResult update = .ok _›.symm.trans
-          calculatedExact)
-    cases resultExact
-    simp only [show checkInitialState publicExecutableMetaContractInterface
-      PublicExecutableDecodedArtifact.reconfigured =
-      .ok (publicExecutableStateAcceptance .reconfigured) from rfl]
-    cases inputDecision :
-        publicRequirementInputEquality update.nextInput
-          publicSubstantiveNext with
-    | isFalse inputDifferent =>
-        exact False.elim (inputDifferent inputExact)
-    | isTrue inputAccepted =>
-        rfl
 
 theorem analyzePublicIncrementalUpdate_complete
     (update : IncrementalNeuralUpdate) :
     GenericIncrementalUpdateLocalConditions
         publicIncrementalCheckerEngine update ↔
       PublicIncrementalEngineLocalConditions update := by
-  unfold GenericIncrementalUpdateLocalConditions
-  change (Exists fun analysis =>
-    analyzePublicIncrementalUpdate update = .ok analysis) ↔
-      PublicIncrementalEngineLocalConditions update
-  unfold PublicIncrementalEngineLocalConditions
-  constructor
-  · rintro ⟨analysis, accepted⟩
-    unfold analyzePublicIncrementalUpdate at accepted
-    split at accepted
-    · split at accepted
-      · split at accepted
-        · cases accepted
-        · simp only [show checkInitialState publicExecutableMetaContractInterface
-                PublicExecutableDecodedArtifact.reconfigured =
-                .ok (publicExecutableStateAcceptance .reconfigured) from rfl]
-                at accepted
-          cases inputDecision :
-              publicRequirementInputEquality update.nextInput
-                publicSubstantiveNext with
-          | isFalse inputDifferent =>
-              rw [inputDecision] at accepted
-              cases accepted
-          | isTrue inputExact =>
-              exact ⟨‹update.transition =
-                publicSerializedOperationalTransition›,
-                ‹materializeIncrementalConstitutiveArtifact update =
-                publicSerializedReconfiguredConstitutiveArtifact›,
-                inputExact⟩
-      · cases accepted
-    · cases accepted
-  · rintro ⟨transitionExact, targetExact, inputExact⟩
-    cases analyzed : analyzePublicIncrementalUpdate update with
-    | ok analysis =>
-        exact ⟨analysis, rfl⟩
-    | error problem =>
-        have accepted := analyzePublicIncrementalUpdate_of_conditions update
-          transitionExact targetExact inputExact
-        have impossible : Except.error problem =
-            Except.ok (publicCanonicalIncrementalEngineAnalysis update) :=
-          analyzed.symm.trans accepted
-        cases impossible
+  rfl
 
 /-- Construct the checked update independently of the full-reference checker.
 The two constructions will be identified in the next layer. -/
@@ -1021,15 +1287,10 @@ theorem checkIncrementalUpdate_accepts_reference :
   rfl
 
 def publicIncorrectIncrementalUpdate : IncrementalNeuralUpdate :=
-  { transition := publicSerializedOperationalTransition
-    targetStableNaming := publicSerializedReconfiguredStableNaming
-    edits := [.replaceOutputs [0]]
-    nextInput := publicSubstantiveNext }
-
-theorem checkIncrementalUpdate_rejects_incomplete_delta :
-    checkIncrementalUpdate publicIncorrectIncrementalUpdate =
-      .error .unexpectedSuccessorArtifact := by
-  rfl
+  { publicSerializedConstitutiveUpdate with
+    targetNetwork :=
+      applySerializedNetworkEdit publicSerializedReconfiguredNetwork
+        (.replaceOutputs [0]) }
 
 def PublicIncrementalCheckerAccepted
     (update : IncrementalNeuralUpdate) : Prop :=
@@ -1069,6 +1330,34 @@ theorem publicIncrementalAcceptance_iff_generic
         · unfold checkIncrementalUpdate
           rw [analyzed]
 
+theorem checkIncrementalUpdate_rejects_incomplete_delta :
+    Not (PublicIncrementalCheckerAccepted publicIncorrectIncrementalUpdate) := by
+  intro accepted
+  have genericAccepted :=
+    (publicIncrementalAcceptance_iff_generic
+      publicIncorrectIncrementalUpdate).mp accepted
+  have localConditions :=
+    (checkGenericIncrementalUpdate_complete_for_local_conditions
+      publicIncrementalCheckerEngine publicIncorrectIncrementalUpdate).mp
+        genericAccepted
+  have publicConditions :=
+    (analyzePublicIncrementalUpdate_complete
+      publicIncorrectIncrementalUpdate).mp localConditions
+  rcases publicConditions with ⟨publicConditionData⟩
+  have targetExact := publicConditionData.decodedTarget.sourceExact
+  have outputsExact := congrArg
+    (fun artifact : SerializedConstitutiveArtifact => artifact.network.outputs)
+    targetExact
+  have outputsDifferent : [0] ≠ publicSerializedReconfiguredNetwork.outputs := by
+    decide
+  apply outputsDifferent
+  simpa [publicIncorrectIncrementalUpdate,
+    materializeIncrementalConstitutiveArtifact,
+    publicSerializedConstitutiveUpdate,
+    publicSerializedReconfiguredConstitutiveArtifact,
+    PublicSerializedConstitutiveUpdate.targetArtifact,
+    applySerializedNetworkEdit] using outputsExact
+
 /-- Every successful incremental check returns the one package assembled from
 the calculated cone, transported old payload and recalculated target data. -/
 theorem checkIncrementalUpdate_sound
@@ -1087,6 +1376,10 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.materializeIncrementalConstitutiveArtifact
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalTarget_exact
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalConstitutiveArtifact_exact
+#print axioms ConstitutiveSearch.NeuralAgent.DecodedPublicIncrementalTarget
+#print axioms ConstitutiveSearch.NeuralAgent.decodePublicIncrementalTarget
+#print axioms ConstitutiveSearch.NeuralAgent.decodePublicIncrementalTarget_of_exact
+#print axioms ConstitutiveSearch.NeuralAgent.decideCanonicalDecodedPublicIncrementalTarget_exact
 #print axioms ConstitutiveSearch.NeuralAgent.IncrementalPreCertificateResult
 #print axioms ConstitutiveSearch.NeuralAgent.calculateIncrementalPreCertificateResult
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalPreCertificateResult
@@ -1115,6 +1408,7 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalCertificateAssembly
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalAssembly_eq_fullReference
 #print axioms ConstitutiveSearch.NeuralAgent.assemblePublicIncrementalCertificateFromPreCertificate
+#print axioms ConstitutiveSearch.NeuralAgent.assemblePublicIncrementalCertificateFromPreCertificate_exact
 #print axioms ConstitutiveSearch.NeuralAgent.IncrementalTargetAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.IncrementalCheckerEngine
 #print axioms ConstitutiveSearch.NeuralAgent.buildIncrementalCheckedUpdate
@@ -1126,12 +1420,19 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.GenericIncrementalUpdateAccepted
 #print axioms ConstitutiveSearch.NeuralAgent.checkGenericIncrementalUpdate_complete_for_local_conditions
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalTargetAnalysis
+#print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalTargetAnalysisFromDecision
+#print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalTargetAnalysisFromDecision_transition_exact
+#print axioms ConstitutiveSearch.NeuralAgent.PublicIncrementalExecutedDependencies
 #print axioms ConstitutiveSearch.NeuralAgent.PublicIncrementalEngineAnalysis
+#print axioms ConstitutiveSearch.NeuralAgent.PublicIncrementalEngineAnalysis.targetAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.analyzePublicIncrementalUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.PublicIncrementalEngineLocalConditionData
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalCheckerEngine
 #print axioms ConstitutiveSearch.NeuralAgent.PublicIncrementalEngineLocalConditions
-#print axioms ConstitutiveSearch.NeuralAgent.publicCanonicalIncrementalEngineAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.analyzePublicIncrementalUpdate_of_conditions
+#print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalLocalConditionDataOfExact
+#print axioms ConstitutiveSearch.NeuralAgent.completePublicIncrementalAnalysis
+#print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalLocalConditionsOfSuccess
 #print axioms ConstitutiveSearch.NeuralAgent.analyzePublicIncrementalUpdate_complete
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalTargetAnalysis_checked_exact
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalCoreCheckedUpdate_execution_exact

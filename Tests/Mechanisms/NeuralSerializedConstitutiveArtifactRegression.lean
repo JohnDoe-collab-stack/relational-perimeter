@@ -93,7 +93,8 @@ theorem requirement_key_survives_serialized_reindexing :
   rfl
 
 theorem public_update_names_the_reconfigured_contract :
-    publicSerializedConstitutiveUpdate.target.contract = .reconfigured := by
+    publicSerializedConstitutiveUpdate.targetArtifact.contract =
+      .reconfigured := by
   rfl
 
 theorem public_key_changes_detect_insertions_and_reindexing :

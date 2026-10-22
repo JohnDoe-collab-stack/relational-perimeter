@@ -1,0 +1,14 @@
+import RelationalPerimeter
+
+namespace ConstitutiveSearch.NeuralAgent.Tests
+open ConstitutiveSearch.NeuralAgent
+
+def forbiddenSingletonLearnedDomain :
+    LearnedInitialOperationalContract.declaredCurrentInputs =
+      [independentLearnedCertifiedInput] := by
+  rfl
+
+end ConstitutiveSearch.NeuralAgent.Tests
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedInitialOperationalContract
+/- AXIOM_AUDIT_END -/

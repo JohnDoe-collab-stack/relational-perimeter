@@ -584,16 +584,141 @@ l’encodage, le rôle causal, l’action, l’autorisation et l’effet portés
 même production. Sa base causale est attachée à l’artefact cible complètement
 décodé, et sa politique de futurs exécute la continuation depuis ce même état.
 
-`checkReferenceUpdate` est le vérificateur complet public de référence,
-distinct du vérificateur incrémental. Son entrée contient la transition nommée,
-l’artefact constitutif cible complet et l’exigence suivante, jamais un
-certificat. Il redécode la transition et l’artefact, relance séparément les
-onze décisions locales, reconstruit les huit fragments du certificat cible,
-les assemble, puis retourne le `CheckedUpdate` dont l’état cible est celui
-produit par la reconfiguration. Aucun fragment du certificat source n’est
-transporté dans ce chemin. La correction identifie tout succès à cette mise à
-jour exacte ; la complétude est limitée aux trois conditions locales décidables
-effectivement contrôlées.
+`FullRecheckEngine` est désormais le moteur complet générique, distinct du
+vérificateur incrémental. Il est paramétré par l’interface exécutable, l’agent
+source certifié et le noyau commun de production sémantique. Son entrée ne
+contient jamais un certificat. `checkFullUpdate` redécode l’artefact cible,
+relance séparément les onze décisions locales, reconstruit tous les fragments
+du certificat, redécide la transition et réexécute le noyau avant de construire
+le `CheckedUpdate` exact. Le moteur ne possède aucun champ pour recevoir une
+analyse incrémentale, un fragment transporté, un verdict incrémental ou un
+certificat final déjà assemblé.
+
+`checkReferenceUpdate` est la spécialisation publique de ce moteur. Elle
+consomme la transition nommée, l’artefact constitutif cible complet et
+l’exigence suivante, puis expose l’ancien type de résultat public. Aucun
+fragment du certificat source n’est transporté dans ce chemin. La correction
+identifie tout succès à la mise à jour publique exacte ; la complétude reste
+limitée aux trois conditions locales décidables effectivement contrôlées.
+
+## Extension incrémentale — complétude locale autonome
+
+La complétude du checker incrémental n’est plus définie par l’existence d’une
+analyse déjà acceptée. `IncrementalCheckerEngine` déclare maintenant, avant le
+résultat de `analyze`, un type positif `LocalConditions`. Il doit fournir deux
+constructions distinctes : les conditions locales produisent constructivement
+une analyse acceptée, et tout succès restitue les conditions qui l’ont
+justifié. `GenericIncrementalUpdateLocalConditions` affirme uniquement que ces
+conditions autonomes sont habitées ; sa définition ne mentionne ni une
+`Analysis` ni l’équation de retour de `analyze`.
+
+La spécialisation publique enregistre séparément le décodage réussi, la
+transition réfléchie admise, le calcul du pré-certificat et du cône exact,
+l’autorisation du transport hors cône, le recalcul structurel dans le cône, la
+cohérence des fragments, l’acceptation locale de l’état cible, l’exactitude de
+l’entrée successeure et la production exécutée de cet état. La spécialisation
+apprise possède le même raccord : décodage et nommage stable, décision de
+transition, consommation de la dépendance d’autorisation, identité du réseau
+cible, calcul structurel complet, cohérence des fragments et exécution du
+successeur. Dans les deux cas, ces données sont définies sans contenir le
+résultat de l’analyseur ; les deux implications succès/conditions sont prouvées
+constructivement et sans axiome.
+
+## Extension incrémentale — dépendances exécutées des analyseurs terminaux
+
+Les analyses terminales publique et apprise ne contiennent plus de champ de
+type `IncrementalTargetAnalysis`. Elles retiennent respectivement un
+`PublicIncrementalExecutedDependencies` et un
+`LearnedIncrementalExecutedDependencies`. Ces objets sont produits dans les
+branches de succès des analyseurs concrets et conservent le décodage exact de
+la requête reçue, la décision effectivement retournée par le méta-contrat, les
+calculs structurels locaux et l’exécution du successeur indexée par cette même
+décision.
+
+Dans l’instance publique, l’objet conserve en plus le résultat exécutable du
+pré-certificat, son cône affecté, l’autorisation du transport hors cône, le
+recalcul des fragments dans le cône, les fragments sémantiques recalculés et
+le contrôle de l’état cible. `PublicIncrementalEngineAnalysis.targetAnalysis`
+assemble la cible générique depuis ces dépendances : ses fragments proviennent
+de l’assemblage calculé et son exécution est exactement
+`executedSuccessor`. Dans l’instance apprise,
+`LearnedIncrementalEngineAnalysis.target` consomme de la même manière le
+décodage, la décision transportée, le recalcul structurel et le successeur
+exécuté retenus par l’analyse.
+
+Le moteur générique conserve volontairement son interface conditionnelle,
+mais aucune des deux instances scientifiques terminales ne peut désormais lui
+fournir une cible complète littérale. Deux fixtures négatives vérifient qu’un
+`IncrementalTargetAnalysis` déjà construit ne peut remplacer ni l’analyse
+publique ni l’analyse apprise.
+
+## Planchers conjoints G1–G10 et C1–C17
+
+`Tests.Mechanisms.NeuralG1G10RegressionFloor` rend chaque garantie G1–G10
+accessible par des noms stables sans recopier ses témoins dans une structure
+propositionnelle parallèle. Les déclarations conservent leurs indices et leurs
+quantifications d’origine : évolution autorisée et contrats préservés,
+certificat constitutif exécuté, ressources causales et autorisation consommées,
+programmes dépendants finis arbitraires, accessibilité et refus avant effet,
+oubli exécuté avec non-récupérabilité et tous les futurs couverts, conditions
+locales autonomes des deux checkers, transport local et égalité avec le recheck
+complet, réalisations positives substantielles et séparation du contournement
+latent.
+
+La gate `check-neural-g1-g10-regression-floor.py` exige les vingt et une
+déclarations correspondantes, leur import dans l’audit exhaustif de toutes les
+constantes, son exécution par les deux portails et quatorze fixtures négatives
+locales. Elle exige également la présence de la gate C1–C17 ; réciproquement,
+la gate C1–C17 exige maintenant la gate G1–G10 dans les deux portails. Les
+contrôles locaux ajoutés aux six corrections précédentes restent compilés dans
+leurs modules de régression et enregistrés dans la campagne exacte des échecs
+attendus.
+
+Ce plancher protège les preuves formelles déjà obtenues. Il ne transforme pas
+à lui seul les comparaisons, mesures, textes canoniques ou audits indépendants
+encore requis en résultats acquis.
+
+## Interfaces comparatives et six adaptateurs figés
+
+Le protocole v4 reste un artefact historique : ses empreintes portent sur des
+sources antérieures à l'unification du domaine appris, à la consommation de la
+décision de transition et à la fermeture des dépendances exécutées. Il n'est
+donc pas réécrit. Le protocole
+`constitutive-neural-capability-comparison-v6` versionne le matériel corrigé et
+gèle les six interfaces avant toute exécution confirmatoire.
+
+`FrozenNeuralComparisonMaterial` possède un constructeur privé et fixe dans un
+même objet l'artefact source, les candidats aligné et de contournement,
+l'intention admise, le domaine courant à quatre cas et la requête future non
+vide. `FrozenNeuralComparisonAdapterBundle` applique les six adaptateurs à ce
+même objet. Aucun adaptateur ne peut donc remplacer isolément un candidat ou
+un domaine tout en conservant l'étiquette de comparaison.
+
+Les six sorties typées sont :
+
+1. la table courante complète et l'accord de tout vérificateur qui factorise
+   uniquement par cette table ;
+2. la dépendance d'autorisation des deux réseaux fixes et les rôles causaux
+   exécutés du réseau aligné ;
+3. les décisions autoriser/refuser avant effet et l'absence de successeur pour
+   le contournement ;
+4. le successeur effectivement installé, l'histoire contrôlée et le transport
+   des obligations du système auto-adaptatif ;
+5. les verdicts du vérificateur incrémental et les nombres réellement
+   transportés et recalculés ; sur ce matériel appris le cône couvre toutes
+   les observations cibles, donc zéro fragment structurel est transporté et
+   aucune réutilisation locale n'est revendiquée ;
+6. la chaîne de déploiement dépendante, sa longueur, ses preuves de pas, ses
+   contrats préservés et son accessibilité exacte.
+
+L'exécutable `compiled_neural_comparison_adapters` produit six observations
+NDJSON brutes. Ces observations ne sont ni un classement ni un résultat
+confirmatoire. Le manifeste v6 fixe les sources, l'entrée compilée, la commande
+unique et leurs empreintes ; le run reste interdit tant qu'un commit stable
+n'est pas enregistré. La gate v6 vérifie sept mutations du protocole, les six
+déclarations Lean, les six identifiants émis, le schéma à huit capacités et
+l'absence de fichier de résultat. Une fixture négative interdit d'annoncer une
+réutilisation de fragments absente de l'instance apprise.
 
 ## Extension incrémentale — identités stables entre versions
 
@@ -1017,3 +1142,25 @@ Le run v5 vérifie 1 000 fois l'instance publique après 50 échauffements : cô
 observation fixe ne démontre aucun gain de performance et ne constitue aucune
 loi de croissance. Le passage à l'échelle reste à reconstruire sur une famille
 paramétrée que le même checker Lean compilé consomme directement.
+
+La campagne confirmatoire v8 ferme ce raccord sur une famille compilée
+paramétrée. Le protocole, le runner et les 358 sources Lean influençant le
+binaire ont été figés par empreinte avant le run. Sept tailles de 0 à 80 ont
+été exécutées, avec une trace de six mises à jour et cinq répétitions mesurées
+par taille. Les 35 traces et leurs 210 étapes sont acceptées ; le réseau, le
+profil, le graphe causal et les certificats croissent strictement avec la
+taille. Chaque paire consomme le même état et le même artefact, et Lean
+identifie les successeurs incrémental et complet.
+
+Le résultat temporel est défavorable. À la taille 80, la médiane de la trace
+incrémentale est de 70 777,626 ms, contre 10,522 ms pour le recheck complet ;
+le ratio total médian, initialisation comprise, est 5 779,31. Le critère de
+gain substantiel figé avant le run est donc faux. La campagne établit bien la
+réutilisation structurelle — jusqu'à 83 fragments transportés pour un seul
+recalculé lors d'une transition locale — mais aucune économie pratique de
+temps pour l'implémentation actuelle. L'analyse complète est conservée dans
+`experiments/constitutive-neural-alignment/v8/SCALING_ANALYSIS.md`.
+
+La v7 précédente demeure enregistrée séparément : la taille 160 a dépassé le
+budget de 120 secondes pendant l'échauffement, de sorte qu'aucune observation
+partielle v7 n'a été promue en résultat confirmatoire.

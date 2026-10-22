@@ -1,0 +1,30 @@
+{
+  "$id": "compiled-parameterized-neural-scaling-result-v8",
+  "type": "object",
+  "required": [
+    "protocol_id",
+    "protocol_sha256",
+    "runner_sha256",
+    "source_sha256",
+    "lean_tree_file_count",
+    "lean_tree_sha256",
+    "executable_sha256",
+    "environment",
+    "negative_control",
+    "raw_runs",
+    "summaries",
+    "pre_registered_practical_gain",
+    "interpretation_boundary"
+  ],
+  "properties": {
+    "protocol_id": {
+      "const": "compiled-parameterized-neural-scaling-v8"
+    },
+    "pre_registered_practical_gain": {
+      "type": "boolean"
+    },
+    "interpretation_boundary": {
+      "const": "observational-not-a-Lean-theorem"
+    }
+  }
+}

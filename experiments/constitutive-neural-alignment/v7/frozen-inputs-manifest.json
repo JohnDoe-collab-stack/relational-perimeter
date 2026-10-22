@@ -1,0 +1,18 @@
+{
+  "manifest_id": "compiled-parameterized-neural-scaling-inputs-v7",
+  "status": "frozen-before-confirmatory-run",
+  "lean_tree_file_count": 358,
+  "lean_tree_sha256": "6b56620ca18933233203f314f0f41ecab997ae266d889507da27cec585e802c2",
+  "files": {
+    "experiments/constitutive-neural-alignment/v7/scaling-protocol.json": "a9c1b56fd3af33f65f769f9a9c550d7f1847f1b7e5b626f03162d5469d4151df",
+    "experiments/constitutive-neural-alignment/v7/result-schema.json": "1b7b35a6c4deb512809ce725de54c3a15bd6144737e3e38e78c293dc87948caf",
+    "experiments/constitutive-neural-alignment/v7/README.md": "970b02dbfc7957e6198d7bf49c95bef990fd60fb629813a10f34709c34715d14",
+    "scripts/run-compiled-parameterized-neural-scaling-v7.py": "f115a700916a45e42107c7dbb399870e7b6d60006d2e341a7a22b0b3ccc86c9d",
+    "scripts/check-compiled-parameterized-neural-scaling-v7.py": "e58ea3ad9c25dd1005ccd2e25add901a9e19cdba170a1464c720dad019cab522",
+    "RelationalPerimeter/Agents/Neural/ParameterizedCompiledCheckerFamily.lean": "4d39492ac31e9d08c5ecaa8deff66787726f2184361d1e381dcc2e9a447bb2b9",
+    "Tests/Executables/CompiledParameterizedNeuralCheckerFamily.lean": "7dbe75efaf5b5260c8459cba91eb5071d2153dce324fb77883faf8325a472b12",
+    "lakefile.toml": "6715c2828c06213365a8d75c3febdbe22296ea4714e43447b495bcf1157df572",
+    "lake-manifest.json": "558a6999b82d0fac6c385da1a5cabeb50a594d6ecc7996f0be33014cfb68afa8",
+    "lean-toolchain": "a0ada3782cd088719516bbfdf37b9e7032230e211bf424b85d952ee650c51091"
+  }
+}

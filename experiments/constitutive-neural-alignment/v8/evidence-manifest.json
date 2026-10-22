@@ -1,0 +1,14 @@
+{
+  "manifest_id": "compiled-parameterized-neural-scaling-evidence-v8",
+  "status": "confirmatory-run-complete",
+  "files": {
+    "experiments/constitutive-neural-alignment/v8/scaling-protocol.json": "7114daf6eccdb4803b73b5369b88b3830ec9f09b41c3b9fb5e15eb684662ca28",
+    "experiments/constitutive-neural-alignment/v8/frozen-inputs-manifest.json": "e3bd2ee5375710d05cd9100020413064f35d9043397e4b65e7d5840681d590f2",
+    "experiments/constitutive-neural-alignment/v8/scaling-results.json": "f97ba3d725f9954cef6ff530ed08c284f2c656b47bda1ea1ea04c06bf0a15341",
+    "experiments/constitutive-neural-alignment/v8/SCALING_ANALYSIS.md": "8b0334b6cad2956123d48379d325d24e9f945f5e771ab9b079e2aa038dcb5a0d",
+    "experiments/constitutive-neural-alignment/v8/result-schema.json": "96708afe2796c8135f4f8d37fdcf9f6840fff181884937d8f5bb868f24cc7a51",
+    "experiments/constitutive-neural-alignment/v8/README.md": "fc6b2eaf5341bc47e7980393065d70747c2f78cc3b55093dff1d36902e772372",
+    "scripts/run-compiled-parameterized-neural-scaling-v8.py": "5460f042016413c8dc16e31314402106052db26cd49adfcf5286aa85bb8ffcfd",
+    "scripts/run-compiled-parameterized-neural-scaling-v7.py": "f115a700916a45e42107c7dbb399870e7b6d60006d2e341a7a22b0b3ccc86c9d"
+  }
+}

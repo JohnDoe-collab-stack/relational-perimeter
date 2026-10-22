@@ -1,0 +1,12 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+/- A completed learned target cannot replace the learned analyzer's executed
+dependencies. -/
+example : LearnedIncrementalEngineAnalysis learnedAlignedSerializedUpdate :=
+  learnedAlignedTargetAnalysis
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedIncrementalEngineAnalysis
+/- AXIOM_AUDIT_END -/

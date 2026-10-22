@@ -47,6 +47,40 @@ example : checkReferenceUpdate publicFullReferenceNeuralUpdate =
     .ok publicReferenceCheckedUpdate :=
   checkReferenceUpdate_accepts_reference
 
+def publicGenericFullRecheckSuccess :
+    GenericPublicFullRecheckSuccess publicFullReferenceNeuralUpdate :=
+  match exact : checkPublicFullUpdateGeneric
+      publicFullReferenceNeuralUpdate with
+  | .ok success => success
+  | .error _ => False.elim (by cases exact)
+
+example : checkPublicFullUpdateGeneric publicFullReferenceNeuralUpdate =
+    .ok publicGenericFullRecheckSuccess := by
+  rfl
+
+example : checkPublicFullUpdateGeneric publicWrongSuccessorReferenceUpdate =
+    .error .successorMismatch := by
+  rfl
+
+example :
+    publicGenericFullRecheckSuccess.target.checkedAgent.certificate =
+      publicExecutableMetaContractInterface.certifyState
+        publicGenericFullRecheckSuccess.target.stateAccepted := by
+  rfl
+
+example :
+    publicGenericFullRecheckSuccess.checked.next =
+      publicGenericFullRecheckSuccess.target.checkedAgent := by
+  rfl
+
+example (accepted : ExecutableStateAcceptance
+      publicExecutableMetaContractInterface
+      PublicExecutableDecodedArtifact.reconfigured)
+    (decision : PublicReconfiguredTransitionDecision) :
+    (publicFullyRecheckedUpdateFromDecision accepted decision).transition =
+      decision.transition :=
+  publicFullyRecheckedUpdateFromDecision_consumes_decision accepted decision
+
 example : checkReferenceUpdate publicWrongSuccessorReferenceUpdate =
     .error .successorMismatch :=
   checkReferenceUpdate_rejects_wrong_successor
@@ -76,6 +110,12 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.publicFullyRecheckedCertificate_fragments_exact
 #print axioms ConstitutiveSearch.NeuralAgent.publicInitialCheckSuccess_checkedAgent_exact
 #print axioms ConstitutiveSearch.NeuralAgent.checkReferenceUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.checkFullUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.checkFullUpdate_sound
+#print axioms ConstitutiveSearch.NeuralAgent.publicFullRecheckEngine
+#print axioms ConstitutiveSearch.NeuralAgent.checkPublicFullUpdateGeneric
+#print axioms ConstitutiveSearch.NeuralAgent.publicGenericFullRecheckSuccess
+#print axioms ConstitutiveSearch.NeuralAgent.publicFullyRecheckedUpdateFromDecision_consumes_decision
 #print axioms ConstitutiveSearch.NeuralAgent.checkReferenceUpdate_sound
 #print axioms ConstitutiveSearch.NeuralAgent.checkReferenceUpdate_complete_for_local_conditions
 #print axioms ConstitutiveSearch.NeuralAgent.publicReferenceCheckedUpdate

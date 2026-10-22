@@ -1,0 +1,19 @@
+import RelationalPerimeter
+
+namespace ConstitutiveSearch.NeuralAgent.Tests
+open ConstitutiveSearch.NeuralAgent
+
+/-- The former circular witness consisted of an analysis paired with the
+equation saying that the analyzer returned it.  That pair is no longer a local
+condition: the checker requires the independently declared positive decision
+record instead. -/
+example : GenericIncrementalUpdateLocalConditions
+    publicIncrementalCheckerEngine publicIncrementalNeuralUpdate :=
+  ⟨(completePublicIncrementalAnalysis publicIncrementalNeuralUpdate
+      (publicIncrementalLocalConditionDataOfExact
+        publicIncrementalNeuralUpdate rfl rfl rfl)).val⟩
+
+end ConstitutiveSearch.NeuralAgent.Tests
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.GenericIncrementalUpdateLocalConditions
+/- AXIOM_AUDIT_END -/

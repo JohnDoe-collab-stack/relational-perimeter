@@ -1,0 +1,97 @@
+{
+  "protocol_id": "compiled-parameterized-neural-scaling-v7",
+  "status": "frozen-before-single-confirmatory-run",
+  "predecessors_preserved": [
+    "constitutive-neural-incremental-scaling-v2",
+    "constitutive-neural-local-reuse-scaling-v3",
+    "compiled-neural-checker-measurement-v5"
+  ],
+  "reason_for_new_version": "The historical v2 and v3 runs measure Python models and v5 repeats one fixed artifact. Version 7 executes a growing family through the same compiled Lean incremental and complete checkers.",
+  "scientific_scope": "Paired observed costs and structural certificate accounting for a generated family of compiled neural artifacts. This is not a complexity theorem and is not evidence about all neural systems.",
+  "frozen_base_commit": "fafd739b7f4718ab9939ccd870eb4983a4655d2e",
+  "source_freeze_mode": "content-addressed complete Lean source tree because commit creation was not authorized before the run",
+  "runner_sha256": "f115a700916a45e42107c7dbb399870e7b6d60006d2e341a7a22b0b3ccc86c9d",
+  "lean_tree_file_count": 358,
+  "lean_tree_sha256": "6b56620ca18933233203f314f0f41ecab997ae266d889507da27cec585e802c2",
+  "source_sha256": {
+    "RelationalPerimeter/Agents/Neural/ParameterizedCompiledCheckerFamily.lean": "4d39492ac31e9d08c5ecaa8deff66787726f2184361d1e381dcc2e9a447bb2b9",
+    "Tests/Executables/CompiledParameterizedNeuralCheckerFamily.lean": "7dbe75efaf5b5260c8459cba91eb5071d2153dce324fb77883faf8325a472b12",
+    "lakefile.toml": "6715c2828c06213365a8d75c3febdbe22296ea4714e43447b495bcf1157df572",
+    "lake-manifest.json": "558a6999b82d0fac6c385da1a5cabeb50a594d6ecc7996f0be33014cfb68afa8",
+    "lean-toolchain": "a0ada3782cd088719516bbfdf37b9e7032230e211bf424b85d952ee650c51091"
+  },
+  "parameters": {
+    "sizes": [0, 2, 5, 10, 20, 40, 80, 160],
+    "trace_length": 6,
+    "schedule": ["local", "source", "extended", "local", "source", "extended"],
+    "warmup_repetitions": 1,
+    "measured_repetitions": 5,
+    "random_seeds": [],
+    "determinism": "The generator, schedule and checkers are deterministic; no random source is used."
+  },
+  "paired_execution": {
+    "master_instance": "One checkScalingInitial result per process.",
+    "same_source": "At every step both checker paths consume the same current CheckedAgent.",
+    "same_target": "At every step both checker paths consume the same ScalingReceivedArtifact.",
+    "successor_equality": "ScalingPairedStepResult.successorExact identifies their checked successors in Lean.",
+    "continuation": "Only the accepted incremental successor becomes the source of the next step."
+  },
+  "metrics": {
+    "structural": [
+      "neural_nodes",
+      "profile_width",
+      "causal_graph_nodes",
+      "causal_graph_edges",
+      "affected_cone",
+      "transported_fragments",
+      "recomputed_fragments",
+      "initial_certificate_entries",
+      "certificate_delta_entries",
+      "trace_length"
+    ],
+    "logical_cost_proxies": ["execution_units", "verification_units"],
+    "elapsed": [
+      "initial_nanoseconds",
+      "incremental_nanoseconds",
+      "full_recheck_nanoseconds",
+      "process_wall_nanoseconds"
+    ],
+    "physical": ["peak_resident_bytes"],
+    "aggregation": ["minimum", "q1", "median", "q3", "maximum"],
+    "outlier_policy": "No measured run is dropped."
+  },
+  "practical_gain_rule": {
+    "name": "substantial-cumulative-incremental-gain",
+    "sizes_at_or_above": 20,
+    "maximum_incremental_fraction_of_full": 0.8,
+    "decision": "Gain is true only if the median initial-plus-incremental trace cost is at most 80 percent of the median initial-plus-full-recheck trace cost at every assessed size.",
+    "structural_reuse_is_not_timing_gain": true
+  },
+  "resource_budget": {
+    "timeout_seconds_per_process": 120,
+    "resident_memory_limit_bytes": 2147483648,
+    "failure_policy": "A timeout, memory limit or rejected step is reported as absence of a result within budget and never as falsity of a mathematical property."
+  },
+  "build_command": ["lake", "build", "compiled_parameterized_neural_checker"],
+  "confirmatory_command": [
+    "py",
+    "-3",
+    "scripts/run-compiled-parameterized-neural-scaling-v7.py",
+    "--protocol",
+    "experiments/constitutive-neural-alignment/v7/scaling-protocol.json",
+    "--output",
+    "experiments/constitutive-neural-alignment/v7/scaling-results.json"
+  ],
+  "negative_control": {
+    "arguments": ["invalid", "1"],
+    "required_outcome": "nonzero process exit before any accepted observation"
+  },
+  "interpretation_rules": [
+    "Elapsed time and memory are observations, not Lean theorems.",
+    "Structural reuse is reported separately from practical speed.",
+    "A slower incremental path is published without reclassification.",
+    "The family must grow in neural nodes, structural profile width and causal graph nodes.",
+    "No asymptotic law is inferred from eight finite sizes.",
+    "The confirmatory result file is created once and never overwritten."
+  ]
+}

@@ -392,7 +392,8 @@ def lean_check(root, references):
         source += "\n".join("#print axioms " + name for name in names) + "\n/- AXIOM_AUDIT_END -/\n"
         with tempfile.TemporaryDirectory(prefix="scientific-docs-") as directory:
             path = Path(directory) / "References.lean"
-            path.write_text(source, encoding="utf-8", newline="\n")
+            with path.open("w", encoding="utf-8", newline="\n") as stream:
+                stream.write(source)
             result = subprocess.run(["lake", "env", "lean", str(path)], cwd=root,
                                     capture_output=True, text=True, encoding="utf-8", timeout=180, check=False)
             output = result.stdout + result.stderr

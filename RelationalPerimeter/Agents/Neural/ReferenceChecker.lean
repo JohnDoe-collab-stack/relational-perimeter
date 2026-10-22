@@ -7,11 +7,12 @@ The initial checker is generic in one executable meta-contract interface.  It
 decodes the complete received artifact, runs every announced finite reflected
 decision, and constructs the exact checked agent indexed by that source.  The
 public initial agent is a specialization of this algorithm, not a literal
-embedded in it.  The full-reference update checker remains the public closed
-reference for the later generic update step: it decodes the complete successor
-network, checks the exact next requirement, and returns the `CheckedUpdate`
-whose successor certificate consumes the executed reconfiguration.  Neither
-serialized input contains a proof or a certificate.
+embedded in it.  Full update rechecking is generic in an executable interface,
+a checked source, and a semantic transition-production kernel.  It decodes the
+complete successor, recomputes every target obligation, redetermines the
+transition, reruns semantic production, and only then returns a checked update.
+The public checker is one specialization of this algorithm.  Neither serialized
+input contains a proof or a certificate.
 
 This is deliberately the full reference checker.  Stable cross-version node
 identifiers, affected-cone computation, and incremental certificate reuse are
@@ -178,6 +179,139 @@ def checkInitial
                   admissionAccepted stateAccepted)
           else
             .error .contractNotAdmitted
+
+/-! ## Generic independent full recheck -/
+
+/-- Execution material reconstructed by a full checker after decoding and
+transition admission.  The target equality ties the fresh semantic execution
+to the state decoded from the same received artifact. -/
+structure FullRecheckExecution
+    {constitution : ConstitutiveMetaContract}
+    (interface : ExecutableMetaContractInterface constitution)
+    (kernel : TransitionProductionKernel constitution)
+    {currentContract : constitution.Contract}
+    (current : CheckedAgent constitution currentContract)
+    {source : interface.ReceivedArtifact}
+    (decoded : interface.DecodedArtifact source)
+    (decision : AcceptedTransitionDecision interface
+      { current := currentContract
+        next := interface.decodedContract decoded }) : Type 6 where
+  material : kernel.Material currentContract
+    (interface.decodedContract decoded)
+  targetExact :
+    (produceTransition kernel current decision.transition material).targetState =
+      interface.stateOfArtifact decoded
+
+/-- A complete checker engine owns only proof-free update decoding, error
+translation, and the semantic transition kernel.  In particular, it has no
+field through which an incremental analysis, transported fragment, assembled
+certificate, or incremental verdict could be supplied. -/
+structure FullRecheckEngine
+    {constitution : ConstitutiveMetaContract}
+    (interface : ExecutableMetaContractInterface constitution)
+    {currentContract : constitution.Contract}
+    (current : CheckedAgent constitution currentContract) : Type 7 where
+  Update : Type
+  Error : Type
+  targetArtifact : Update -> interface.ReceivedArtifact
+  mapTargetError : InitialCheckError interface -> Error
+  transitionRejected : Error
+  kernel : TransitionProductionKernel constitution
+  recomputeExecution :
+    (update : Update) ->
+      (target : InitialCheckSuccess interface (targetArtifact update)) ->
+      (decision : AcceptedTransitionDecision interface
+        { current := currentContract
+          next := interface.decodedContract target.decodedArtifact }) ->
+      Except Error
+        (FullRecheckExecution interface kernel current target.decodedArtifact
+          decision)
+
+/-- Positive result of an independent complete recheck.  The target check,
+transition decision, and semantic execution are retained as one dependent
+chain, so no result can be exchanged for one produced from another update. -/
+structure FullRecheckSuccess
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (engine : FullRecheckEngine interface current)
+    (update : engine.Update) : Type 7 where
+  private mk ::
+  target : InitialCheckSuccess interface (engine.targetArtifact update)
+  transitionDecision : AcceptedTransitionDecision interface
+    { current := currentContract
+      next := interface.decodedContract target.decodedArtifact }
+  execution : FullRecheckExecution interface engine.kernel current
+    target.decodedArtifact transitionDecision
+
+/-- The checked successor is assembled only after the complete target state
+has been reconstructed and every target obligation has been decided again.
+The execution transported into it is the one freshly produced by the engine's
+semantic kernel. -/
+def FullRecheckSuccess.checked
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    {engine : FullRecheckEngine interface current}
+    {update : engine.Update}
+    (success : FullRecheckSuccess engine update) :
+    CheckedUpdate current
+      (interface.decodedContract success.target.decodedArtifact) :=
+  let production := produceTransition engine.kernel current
+    success.transitionDecision.transition success.execution.material
+  have checkedStateExact :
+      success.target.checkedAgent.state =
+        interface.stateOfArtifact success.target.decodedArtifact := by
+    rfl
+  have productionTargetExact :
+      production.targetState = success.target.checkedAgent.state :=
+    success.execution.targetExact.trans checkedStateExact.symm
+  certifyCheckedUpdate success.target.checkedAgent
+    success.transitionDecision.transition
+    (productionTargetExact ▸ production.execution)
+
+/-- Execute a complete recheck independently of every incremental path.  The
+algorithm decodes and fully certifies the target, decides the transition to
+the decoded contract, then reruns the semantic transition producer. -/
+def checkFullUpdate
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (engine : FullRecheckEngine interface current)
+    (update : engine.Update) :
+    Except engine.Error (FullRecheckSuccess engine update) :=
+  match checkInitial interface (engine.targetArtifact update) with
+  | .error problem => .error (engine.mapTargetError problem)
+  | .ok target =>
+      match decideDecodedTransition interface currentContract
+          target.decodedArtifact with
+      | none => .error engine.transitionRejected
+      | some transitionDecision =>
+          match engine.recomputeExecution update target transitionDecision with
+          | .error problem => .error problem
+          | .ok execution =>
+              .ok (.mk target transitionDecision execution)
+
+/-- Every successful complete recheck exposes exactly the freshly rechecked
+agent, the transition returned by the interface decision, and the execution
+returned by the independent semantic producer. -/
+theorem checkFullUpdate_sound
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (engine : FullRecheckEngine interface current)
+    (update : engine.Update)
+    (success : FullRecheckSuccess engine update)
+    (_accepted : checkFullUpdate engine update = .ok success) :
+    success.checked.next = success.target.checkedAgent ∧
+      success.checked.transition = success.transitionDecision.transition ∧
+      success.checked.next.certificate =
+        interface.certifyState success.target.stateAccepted := by
+  exact ⟨rfl, rfl, rfl⟩
 
 inductive AlignmentError where
   | malformedArtifact (problem : ArtifactError)
@@ -419,6 +553,111 @@ def publicExecutableMetaContractInterface :
   futureRealizationDecision := fun decoded =>
     reflectedTrue decoded.recomputedFragments.futures.realization
 
+abbrev PublicReconfiguredTransitionDecision :=
+  AcceptedTransitionDecision publicExecutableMetaContractInterface
+    { current := PublicOperationalContract.initial
+      next := PublicExecutableDecodedArtifact.reconfigured.contract }
+
+def publicReconfiguredTransitionDecision :
+    PublicReconfiguredTransitionDecision :=
+  match exact : decideDecodedTransition publicExecutableMetaContractInterface
+      .initial PublicExecutableDecodedArtifact.reconfigured with
+  | some decision => decision
+  | none => False.elim (by cases exact)
+
+theorem decidePublicReconfiguredTransition_exact :
+    decideDecodedTransition publicExecutableMetaContractInterface .initial
+        PublicExecutableDecodedArtifact.reconfigured =
+      some publicReconfiguredTransitionDecision := by
+  rfl
+
+def PublicExecutableDecodedArtifact.transportSource
+    {left right : SerializedConstitutiveArtifact}
+    (same : left = right)
+    (decoded : PublicExecutableDecodedArtifact left) :
+    PublicExecutableDecodedArtifact right := by
+  cases same
+  exact decoded
+
+theorem decodePublicExecutableArtifact_of_reconfigured_exact
+    {source : SerializedConstitutiveArtifact}
+    (sourceExact : source =
+      publicSerializedReconfiguredConstitutiveArtifact) :
+    decodePublicExecutableArtifact source =
+      .ok (PublicExecutableDecodedArtifact.reconfigured.transportSource
+        sourceExact.symm) := by
+  cases sourceExact
+  rfl
+
+theorem PublicExecutableDecodedArtifact.reconfigured_unique
+    (decoded : PublicExecutableDecodedArtifact
+      publicSerializedReconfiguredConstitutiveArtifact) :
+    decoded = PublicExecutableDecodedArtifact.reconfigured := by
+  cases decoded
+  rfl
+
+theorem PublicExecutableDecodedArtifact.reconfigured_unique_of_sourceExact
+    {source : SerializedConstitutiveArtifact}
+    (decoded : PublicExecutableDecodedArtifact source)
+    (sourceExact : source =
+      publicSerializedReconfiguredConstitutiveArtifact) :
+    decoded = PublicExecutableDecodedArtifact.reconfigured.transportSource
+      sourceExact.symm := by
+  cases sourceExact
+  exact decoded.reconfigured_unique
+
+/-- Transport the artifact decoded from this update to its established public
+target index, then decide the transition to that decoded contract. -/
+def decidePublicReconfiguredTransitionFromDecoded
+    {source : SerializedConstitutiveArtifact}
+    (decoded : PublicExecutableDecodedArtifact source)
+    (sourceExact : source =
+      publicSerializedReconfiguredConstitutiveArtifact) :
+    Option PublicReconfiguredTransitionDecision := by
+  let transported := decoded.transportSource sourceExact
+  cases transported
+  exact decideDecodedTransition publicExecutableMetaContractInterface
+    .initial PublicExecutableDecodedArtifact.reconfigured
+
+theorem decidePublicReconfiguredTransitionFromDecoded_exact
+    (decoded : PublicExecutableDecodedArtifact
+      publicSerializedReconfiguredConstitutiveArtifact) :
+    decidePublicReconfiguredTransitionFromDecoded decoded rfl =
+      some publicReconfiguredTransitionDecision := by
+  rw [decoded.reconfigured_unique]
+  rfl
+
+theorem decidePublicReconfiguredTransitionFromDecoded_of_sourceExact
+    {source : SerializedConstitutiveArtifact}
+    (decoded : PublicExecutableDecodedArtifact source)
+    (sourceExact : source =
+      publicSerializedReconfiguredConstitutiveArtifact) :
+    decidePublicReconfiguredTransitionFromDecoded decoded sourceExact =
+      some publicReconfiguredTransitionDecision := by
+  cases sourceExact
+  exact decidePublicReconfiguredTransitionFromDecoded_exact decoded
+
+/-- Produce the public state transition from the witness returned by the
+executable transition decision.  The checker cannot replace this transition
+with the parallel canonical constant. -/
+def publicTransitionProductionFromDecision
+    (decision : PublicReconfiguredTransitionDecision) :
+    ExecutedTransitionProduction publicTransitionProductionKernel
+      publicInitialCheckedAgent decision.transition
+      publicReferenceTransitionMaterial :=
+  produceTransition publicTransitionProductionKernel publicInitialCheckedAgent
+    decision.transition publicReferenceTransitionMaterial
+
+theorem publicTransitionProductionFromDecision_target_exact
+    (decision : PublicReconfiguredTransitionDecision) :
+    (publicTransitionProductionFromDecision decision).targetState =
+      publicReferenceUpdatedState := by
+  change
+    (publicTransitionProductionFromDecision decision).production.action.targetState =
+      publicReferenceUpdateExecution.targetState
+  rw [(publicTransitionProductionFromDecision decision).production.actionExact]
+  rfl
+
 def checkPublicInitial
     (source : SerializedConstitutiveArtifact) :
     Except (InitialCheckError publicExecutableMetaContractInterface)
@@ -436,18 +675,13 @@ theorem decodeOperationalContractTransition_source_exact
   · exact ‹source = { source := .initial, target := .reconfigured }›
   · cases accepted
 
-/-- The full-reference request carries the complete constitutive successor,
-the proof-free named transition, and the next requirement.  It contains no
-decoded artifact, fragment, witness, certificate, or verdict. -/
-structure FullReferenceNeuralUpdate where
-  transition : SerializedOperationalContractTransition
-  targetArtifact : SerializedConstitutiveArtifact
-  nextInput : PublicRequirementInput
+/-- The reference checker and the incremental checker consume the same
+proof-free serialized update.  There is no second request representation from
+which an independent target could be reconstructed. -/
+abbrev FullReferenceNeuralUpdate := PublicSerializedConstitutiveUpdate
 
 def publicFullReferenceNeuralUpdate : FullReferenceNeuralUpdate :=
-  { transition := publicSerializedOperationalTransition
-    targetArtifact := publicSerializedReconfiguredConstitutiveArtifact
-    nextInput := publicSubstantiveNext }
+  publicSerializedConstitutiveUpdate
 
 def publicExecutableStateAcceptance
     {source : SerializedConstitutiveArtifact}
@@ -534,13 +768,44 @@ theorem publicFullyRecheckedNextAgent_exact
       publicReferenceNextCheckedAgent := by
   rfl
 
+def publicFullyRecheckedUpdateFromDecision
+    (accepted : ExecutableStateAcceptance
+      publicExecutableMetaContractInterface
+      PublicExecutableDecodedArtifact.reconfigured)
+    (decision : PublicReconfiguredTransitionDecision) :
+    CheckedUpdate publicInitialCheckedAgent .reconfigured :=
+  certifyCheckedUpdate (publicFullyRecheckedNextAgent accepted)
+    decision.transition
+    (by
+      have nextStateExact :
+          (publicFullyRecheckedNextAgent accepted).state =
+            publicReferenceUpdatedState :=
+        congrArg CheckedAgent.state
+          (publicFullyRecheckedNextAgent_exact accepted)
+      have targetExact :
+          (publicTransitionProductionFromDecision decision).targetState =
+            (publicFullyRecheckedNextAgent accepted).state :=
+        (publicTransitionProductionFromDecision_target_exact decision).trans
+          nextStateExact.symm
+      exact targetExact ▸
+        (publicTransitionProductionFromDecision decision).execution)
+
 def publicFullyRecheckedUpdate
     (accepted : ExecutableStateAcceptance
       publicExecutableMetaContractInterface
       PublicExecutableDecodedArtifact.reconfigured) :
     CheckedUpdate publicInitialCheckedAgent .reconfigured :=
-  certifyCheckedUpdate (publicFullyRecheckedNextAgent accepted)
-    publicOperationalTransition publicReferenceTransitionProduction.execution
+  publicFullyRecheckedUpdateFromDecision accepted
+    publicReconfiguredTransitionDecision
+
+theorem publicFullyRecheckedUpdateFromDecision_consumes_decision
+    (accepted : ExecutableStateAcceptance
+      publicExecutableMetaContractInterface
+      PublicExecutableDecodedArtifact.reconfigured)
+    (decision : PublicReconfiguredTransitionDecision) :
+    (publicFullyRecheckedUpdateFromDecision accepted decision).transition =
+      decision.transition := by
+  rfl
 
 theorem publicFullyRecheckedUpdate_exact
     (accepted : ExecutableStateAcceptance
@@ -548,6 +813,170 @@ theorem publicFullyRecheckedUpdate_exact
       PublicExecutableDecodedArtifact.reconfigured) :
     publicFullyRecheckedUpdate accepted = publicReferenceCheckedUpdate := by
   rfl
+
+theorem publicFullyRecheckedUpdateFromDecision_exact
+    (accepted : ExecutableStateAcceptance
+      publicExecutableMetaContractInterface
+      PublicExecutableDecodedArtifact.reconfigured)
+    (decision : PublicReconfiguredTransitionDecision) :
+    publicFullyRecheckedUpdateFromDecision accepted decision =
+      publicReferenceCheckedUpdate := by
+  rw [decision.unique publicReconfiguredTransitionDecision]
+  exact publicFullyRecheckedUpdate_exact accepted
+
+def mapPublicFullRecheckTargetError :
+    InitialCheckError publicExecutableMetaContractInterface -> AlignmentError
+  | .contractName _ => .noAdmittedTransition
+  | .artifact (.malformed problem) => .malformedConstitutiveArtifact problem
+  | .artifact .locallyUnsupported => .unexpectedSuccessorArtifact
+  | .contractNotAdmitted => .unexpectedSuccessorArtifact
+  | .state problem => .targetStateRejected problem
+
+def publicDecodedFullRecheckExecution
+    {source : SerializedConstitutiveArtifact}
+    (decoded : PublicExecutableDecodedArtifact source)
+    (decision : AcceptedTransitionDecision
+      publicExecutableMetaContractInterface
+      { current := PublicOperationalContract.initial
+        next := decoded.contract })
+    (nextInput : PublicRequirementInput)
+    (nextExact : nextInput = publicSubstantiveNext) :
+    FullRecheckExecution publicExecutableMetaContractInterface
+      publicTransitionProductionKernel publicInitialCheckedAgent decoded
+      decision := by
+  cases decoded with
+  | initial =>
+      cases decision.transition.permission
+  | reconfigured =>
+      have decisionExact :
+          decision = publicReconfiguredTransitionDecision :=
+        decision.unique publicReconfiguredTransitionDecision
+      cases decisionExact
+      cases nextExact
+      exact
+        { material := .reconfigure publicSubstantiveNext
+          targetExact :=
+            publicTransitionProductionFromDecision_target_exact
+              publicReconfiguredTransitionDecision }
+
+/-- Reconstruct the public execution from the proof-free update after the
+complete target check has finished.  The transition bytes and the next input
+are checked here; neither the target certificate nor an incremental analysis
+is accepted as material. -/
+def recomputePublicFullRecheckExecution
+    (update : FullReferenceNeuralUpdate)
+    (target : InitialCheckSuccess publicExecutableMetaContractInterface
+      update.targetArtifact)
+    (decision : AcceptedTransitionDecision
+      publicExecutableMetaContractInterface
+      { current := PublicOperationalContract.initial
+        next := publicExecutableMetaContractInterface.decodedContract
+          target.decodedArtifact }) :
+    Except AlignmentError
+      (FullRecheckExecution publicExecutableMetaContractInterface
+        publicTransitionProductionKernel publicInitialCheckedAgent
+        target.decodedArtifact decision) := by
+  match transitionDecoded :
+      decodeOperationalContractTransition update.transition with
+  | .error _ => exact .error .noAdmittedTransition
+  | .ok _receivedTransition =>
+      match publicRequirementInputEquality update.nextInput
+          publicSubstantiveNext with
+      | .isFalse _ => exact .error .successorMismatch
+      | .isTrue nextExact =>
+          exact .ok (publicDecodedFullRecheckExecution
+            target.decodedArtifact decision update.nextInput nextExact)
+
+/-- Public specialization of the generic independent full-recheck engine. -/
+def publicFullRecheckEngine : FullRecheckEngine
+    publicExecutableMetaContractInterface publicInitialCheckedAgent where
+  Update := FullReferenceNeuralUpdate
+  Error := AlignmentError
+  targetArtifact := fun update => update.targetArtifact
+  mapTargetError := mapPublicFullRecheckTargetError
+  transitionRejected := .noAdmittedTransition
+  kernel := publicTransitionProductionKernel
+  recomputeExecution := recomputePublicFullRecheckExecution
+
+abbrev GenericPublicFullRecheckSuccess (update : FullReferenceNeuralUpdate) :=
+  FullRecheckSuccess publicFullRecheckEngine update
+
+def checkPublicFullUpdateGeneric (update : FullReferenceNeuralUpdate) :
+    Except AlignmentError (GenericPublicFullRecheckSuccess update) :=
+  checkFullUpdate publicFullRecheckEngine update
+
+theorem publicAcceptedTransition_next_exact
+    {next : PublicOperationalContract}
+    (decision : AcceptedTransitionDecision
+      publicExecutableMetaContractInterface
+      { current := PublicOperationalContract.initial, next := next }) :
+    next = .reconfigured := by
+  cases decision.transition.permission
+  rfl
+
+/-- Public evidence retained around the generic result.  These equalities are
+decoded from the same proof-free update; they make the concrete compatibility
+API expose why its dependent result has the public reconfigured index. -/
+structure PublicFullRecheckSuccess
+    (update : FullReferenceNeuralUpdate) : Type 7 where
+  private mk ::
+  generic : GenericPublicFullRecheckSuccess update
+  transitionExact : update.transition = publicSerializedOperationalTransition
+  targetExact : update.targetArtifact =
+    publicSerializedReconfiguredConstitutiveArtifact
+  nextInputExact : update.nextInput = publicSubstantiveNext
+
+theorem PublicFullRecheckSuccess.updateExact
+    {update : FullReferenceNeuralUpdate}
+    (success : PublicFullRecheckSuccess update) :
+    update = publicFullReferenceNeuralUpdate := by
+  cases update with
+  | mk transition targetNetwork targetStableNaming nextInput intent =>
+      cases success.transitionExact
+      have targetExact := success.targetExact
+      change
+        ({ contract := .reconfigured
+           network := targetNetwork
+           stableNaming := targetStableNaming } :
+          SerializedConstitutiveArtifact) =
+        publicSerializedReconfiguredConstitutiveArtifact at targetExact
+      cases targetExact
+      have nextInputExact := success.nextInputExact
+      cases nextInputExact
+      cases intent
+      rfl
+
+def PublicFullRecheckSuccess.checked
+    {update : FullReferenceNeuralUpdate}
+    (success : PublicFullRecheckSuccess update) :
+    CheckedUpdate publicInitialCheckedAgent .reconfigured :=
+  let nextExact :=
+    publicAcceptedTransition_next_exact success.generic.transitionDecision
+  nextExact ▸ success.generic.checked
+
+/-- Public full checking is the generic independent algorithm plus exact
+instance-level decoding evidence. -/
+def checkPublicFullUpdate (update : FullReferenceNeuralUpdate) :
+    Except AlignmentError (PublicFullRecheckSuccess update) :=
+  match checkPublicFullUpdateGeneric update with
+  | .error problem => .error problem
+  | .ok generic =>
+      match transitionDecoded :
+          decodeOperationalContractTransition update.transition with
+      | .error _ => .error .noAdmittedTransition
+      | .ok transition =>
+          let transitionExact :=
+            decodeOperationalContractTransition_source_exact update.transition
+              transition transitionDecoded
+          if targetExact : update.targetArtifact =
+              publicSerializedReconfiguredConstitutiveArtifact then
+            match publicRequirementInputEquality update.nextInput
+                publicSubstantiveNext with
+            | .isFalse _ => .error .successorMismatch
+            | .isTrue nextInputExact =>
+                .ok (.mk generic transitionExact targetExact nextInputExact)
+          else
+            .error .unexpectedSuccessorArtifact
 
 /-- Full verification recomputes the complete target certificate fragment by
 fragment.  It decodes the named transition and complete constitutive artifact,
@@ -557,27 +986,9 @@ transition.  No source certificate fragment is transported into this path. -/
 def checkReferenceUpdate (update : FullReferenceNeuralUpdate) :
     Except AlignmentError
       (CheckedUpdate publicInitialCheckedAgent .reconfigured) :=
-  match decodeOperationalContractTransition update.transition with
-  | .error _ => .error .noAdmittedTransition
-  | .ok _transition =>
-      match decodePublicExecutableArtifact update.targetArtifact with
-      | .error (.malformed problem) =>
-          .error (.malformedConstitutiveArtifact problem)
-      | .error .locallyUnsupported => .error .unexpectedSuccessorArtifact
-      | .ok _decoded =>
-          if _targetExact : update.targetArtifact =
-              publicSerializedReconfiguredConstitutiveArtifact then
-            match checkInitialState publicExecutableMetaContractInterface
-                PublicExecutableDecodedArtifact.reconfigured with
-            | .error problem => .error (.targetStateRejected problem)
-            | .ok accepted =>
-                match publicRequirementInputEquality update.nextInput
-                    publicSubstantiveNext with
-                | .isFalse _ => .error .successorMismatch
-                | .isTrue _nextExact =>
-                    .ok (publicFullyRecheckedUpdate accepted)
-          else
-            .error .unexpectedSuccessorArtifact
+  match checkPublicFullUpdate update with
+  | .error problem => .error problem
+  | .ok success => .ok success.checked
 
 theorem checkInitial_accepts_reference :
     checkPublicInitial publicSerializedInitialConstitutiveArtifact =
@@ -614,8 +1025,7 @@ theorem checkReferenceUpdate_accepts_reference :
   rfl
 
 def publicWrongSuccessorReferenceUpdate : FullReferenceNeuralUpdate :=
-  { transition := publicSerializedOperationalTransition
-    targetArtifact := publicSerializedReconfiguredConstitutiveArtifact
+  { publicSerializedConstitutiveUpdate with
     nextInput := publicSubstantiveContextualNext }
 
 theorem checkReferenceUpdate_rejects_wrong_successor :
@@ -751,22 +1161,16 @@ theorem checkReferenceUpdate_sound
     (accepted : checkReferenceUpdate update = .ok checked) :
     checked = publicReferenceCheckedUpdate := by
   unfold checkReferenceUpdate at accepted
-  split at accepted
-  · cases accepted
-  · split at accepted
-    · cases accepted
-    · cases accepted
-    · split at accepted
-      · simp only [show checkInitialState publicExecutableMetaContractInterface
-            PublicExecutableDecodedArtifact.reconfigured =
-            .ok (publicExecutableStateAcceptance .reconfigured) from rfl]
-          at accepted
-        split at accepted
-        · cases accepted
-        · have same := Except.ok.inj accepted
-          rw [← same]
-          exact publicFullyRecheckedUpdate_exact _
-      · cases accepted
+  generalize fullExact : checkPublicFullUpdate update = result at accepted
+  cases result with
+  | error problem => cases accepted
+  | ok success =>
+      have updateExact := success.updateExact
+      cases updateExact
+      have reference := checkReferenceUpdate_accepts_reference
+      unfold checkReferenceUpdate at reference
+      rw [fullExact] at reference
+      exact (Except.ok.inj accepted).symm.trans (Except.ok.inj reference)
 
 def ReferenceUpdateAccepted (update : FullReferenceNeuralUpdate) : Prop :=
   Exists fun checked => checkReferenceUpdate update = .ok checked
@@ -787,26 +1191,13 @@ theorem checkReferenceUpdate_complete_for_local_conditions
   · intro accepted
     rcases accepted with ⟨checked, exact⟩
     unfold checkReferenceUpdate at exact
-    split at exact
-    · cases exact
-    · split at exact
-      · cases exact
-      · cases exact
-      · split at exact
-        · simp only [show checkInitialState publicExecutableMetaContractInterface
-              PublicExecutableDecodedArtifact.reconfigured =
-              .ok (publicExecutableStateAcceptance .reconfigured) from rfl]
-            at exact
-          split at exact
-          · cases exact
-          · exact
-              ⟨decodeOperationalContractTransition_source_exact
-                  update.transition _ ‹decodeOperationalContractTransition
-                    update.transition = .ok _›,
-                ‹update.targetArtifact =
-                  publicSerializedReconfiguredConstitutiveArtifact›,
-                ‹update.nextInput = publicSubstantiveNext›⟩
-        · cases exact
+    generalize fullExact : checkPublicFullUpdate update = result at exact
+    cases result with
+    | error problem => cases exact
+    | ok success =>
+        have updateExact := success.updateExact
+        cases updateExact
+        exact ⟨rfl, rfl, rfl⟩
   · intro conditions
     rcases conditions with ⟨transitionExact, artifactExact, inputExact⟩
     cases update
@@ -824,10 +1215,23 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.InitialCheckSuccess
 #print axioms ConstitutiveSearch.NeuralAgent.InitialCheckSuccess.checkedAgent
 #print axioms ConstitutiveSearch.NeuralAgent.checkInitial
+#print axioms ConstitutiveSearch.NeuralAgent.FullRecheckExecution
+#print axioms ConstitutiveSearch.NeuralAgent.FullRecheckEngine
+#print axioms ConstitutiveSearch.NeuralAgent.FullRecheckSuccess
+#print axioms ConstitutiveSearch.NeuralAgent.FullRecheckSuccess.checked
+#print axioms ConstitutiveSearch.NeuralAgent.checkFullUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.checkFullUpdate_sound
 #print axioms ConstitutiveSearch.NeuralAgent.AlignmentError
 #print axioms ConstitutiveSearch.NeuralAgent.PublicExecutableDecodedArtifact
 #print axioms ConstitutiveSearch.NeuralAgent.decodePublicExecutableArtifact
 #print axioms ConstitutiveSearch.NeuralAgent.publicExecutableMetaContractInterface
+#print axioms ConstitutiveSearch.NeuralAgent.decodePublicExecutableArtifact_of_reconfigured_exact
+#print axioms ConstitutiveSearch.NeuralAgent.PublicExecutableDecodedArtifact.reconfigured_unique_of_sourceExact
+#print axioms ConstitutiveSearch.NeuralAgent.publicReconfiguredTransitionDecision
+#print axioms ConstitutiveSearch.NeuralAgent.decidePublicReconfiguredTransitionFromDecoded
+#print axioms ConstitutiveSearch.NeuralAgent.decidePublicReconfiguredTransitionFromDecoded_of_sourceExact
+#print axioms ConstitutiveSearch.NeuralAgent.publicTransitionProductionFromDecision
+#print axioms ConstitutiveSearch.NeuralAgent.publicTransitionProductionFromDecision_target_exact
 #print axioms ConstitutiveSearch.NeuralAgent.checkPublicInitial
 #print axioms ConstitutiveSearch.NeuralAgent.decodeOperationalContractTransition_source_exact
 #print axioms ConstitutiveSearch.NeuralAgent.FullReferenceNeuralUpdate
@@ -839,7 +1243,20 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.publicFullyRecheckedNextAgent
 #print axioms ConstitutiveSearch.NeuralAgent.publicFullyRecheckedNextAgent_exact
 #print axioms ConstitutiveSearch.NeuralAgent.publicFullyRecheckedUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.publicFullyRecheckedUpdateFromDecision
+#print axioms ConstitutiveSearch.NeuralAgent.publicFullyRecheckedUpdateFromDecision_consumes_decision
+#print axioms ConstitutiveSearch.NeuralAgent.publicFullyRecheckedUpdateFromDecision_exact
 #print axioms ConstitutiveSearch.NeuralAgent.publicFullyRecheckedUpdate_exact
+#print axioms ConstitutiveSearch.NeuralAgent.mapPublicFullRecheckTargetError
+#print axioms ConstitutiveSearch.NeuralAgent.publicDecodedFullRecheckExecution
+#print axioms ConstitutiveSearch.NeuralAgent.recomputePublicFullRecheckExecution
+#print axioms ConstitutiveSearch.NeuralAgent.publicFullRecheckEngine
+#print axioms ConstitutiveSearch.NeuralAgent.checkPublicFullUpdateGeneric
+#print axioms ConstitutiveSearch.NeuralAgent.publicAcceptedTransition_next_exact
+#print axioms ConstitutiveSearch.NeuralAgent.PublicFullRecheckSuccess
+#print axioms ConstitutiveSearch.NeuralAgent.PublicFullRecheckSuccess.updateExact
+#print axioms ConstitutiveSearch.NeuralAgent.PublicFullRecheckSuccess.checked
+#print axioms ConstitutiveSearch.NeuralAgent.checkPublicFullUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.checkReferenceUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.publicInitialCheckSuccess
 #print axioms ConstitutiveSearch.NeuralAgent.publicReconfiguredCheckSuccess

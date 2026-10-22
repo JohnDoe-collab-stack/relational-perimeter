@@ -178,6 +178,70 @@ structure ExecutableMetaContractInterface
         (CoveredFutureRealization
           (constitution.operational (decodedContract decoded)))
 
+/-- Positive result of the meta-contract's executable transition decision.
+The constructor is private: the only public producer below must run the
+decision stored in the exact interface on the exact request. -/
+structure AcceptedTransitionDecision
+    {constitution : ConstitutiveMetaContract}
+    (interface : ExecutableMetaContractInterface constitution)
+    (request : ContractTransitionRequest constitution) : Type 5 where
+  private mk ::
+  accepted : (interface.transitionDecision request).result = true
+
+/-- The admitted transition is extracted from the positive result of the
+interface decision; it is not supplied independently by a checker. -/
+def AcceptedTransitionDecision.transition
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {request : ContractTransitionRequest constitution}
+    (decision : AcceptedTransitionDecision interface request) :
+    OperationalContractTransition constitution request.current request.next :=
+  (interface.transitionDecision request).accept decision.accepted
+
+theorem AcceptedTransitionDecision.unique
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {request : ContractTransitionRequest constitution}
+    (left right : AcceptedTransitionDecision interface request) :
+    left = right := by
+  cases left
+  cases right
+  rfl
+
+def AcceptedTransitionDecision.transportRequest
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {left right : ContractTransitionRequest constitution}
+    (same : left = right)
+    (decision : AcceptedTransitionDecision interface left) :
+    AcceptedTransitionDecision interface right := by
+  cases same
+  exact decision
+
+/-- Execute the transition decision owned by the meta-contract interface. -/
+def decideTransition
+    {constitution : ConstitutiveMetaContract}
+    (interface : ExecutableMetaContractInterface constitution)
+    (request : ContractTransitionRequest constitution) :
+    Option (AcceptedTransitionDecision interface request) :=
+  if accepted : (interface.transitionDecision request).result = true then
+    some (.mk accepted)
+  else
+    none
+
+/-- Decide the transition whose target contract was reconstructed from the
+same received artifact that the checker decoded. -/
+def decideDecodedTransition
+    {constitution : ConstitutiveMetaContract}
+    (interface : ExecutableMetaContractInterface constitution)
+    (current : constitution.Contract)
+    {source : interface.ReceivedArtifact}
+    (decoded : interface.DecodedArtifact source) :
+    Option (AcceptedTransitionDecision interface
+      { current := current, next := interface.decodedContract decoded }) :=
+  decideTransition interface
+    { current := current, next := interface.decodedContract decoded }
+
 /-- Exact positive outcomes needed to turn one decoded artifact and one
 executed state into a complete constitutive state certificate.  The fields
 contain only equalities saying that the corresponding executable decisions
@@ -296,6 +360,12 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.DecodedContractName
 #print axioms ConstitutiveSearch.NeuralAgent.ContractTransitionRequest
 #print axioms ConstitutiveSearch.NeuralAgent.ExecutableMetaContractInterface
+#print axioms ConstitutiveSearch.NeuralAgent.AcceptedTransitionDecision
+#print axioms ConstitutiveSearch.NeuralAgent.AcceptedTransitionDecision.transition
+#print axioms ConstitutiveSearch.NeuralAgent.AcceptedTransitionDecision.unique
+#print axioms ConstitutiveSearch.NeuralAgent.AcceptedTransitionDecision.transportRequest
+#print axioms ConstitutiveSearch.NeuralAgent.decideTransition
+#print axioms ConstitutiveSearch.NeuralAgent.decideDecodedTransition
 #print axioms ConstitutiveSearch.NeuralAgent.ExecutableStateAcceptance
 #print axioms ConstitutiveSearch.NeuralAgent.ExecutableMetaContractInterface.certifyFragments
 #print axioms ConstitutiveSearch.NeuralAgent.ExecutableMetaContractInterface.certifyState

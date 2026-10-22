@@ -1,0 +1,14 @@
+import RelationalPerimeter
+
+namespace ConstitutiveSearch.NeuralAgent.Tests
+open ConstitutiveSearch.NeuralAgent
+
+def forbiddenCandidateRuntimeUpdate :
+    learnedDependentIncrementalChecker.Update
+      learnedInitialCertifiedRuntime.current :=
+  .serialized alignedUpdate
+
+end ConstitutiveSearch.NeuralAgent.Tests
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedDependentIncrementalChecker
+/- AXIOM_AUDIT_END -/

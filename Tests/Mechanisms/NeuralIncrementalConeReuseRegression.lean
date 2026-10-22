@@ -38,7 +38,7 @@ def wrongStableNamingUpdate : IncrementalNeuralUpdate :=
 
 example :
     checkIncrementalUpdate wrongStableNamingUpdate =
-      .error .unexpectedSuccessorArtifact := by
+      .error (.malformedConstitutiveArtifact (.naming .inputCountMismatch)) := by
   rfl
 
 def reversedTransitionUpdate : IncrementalNeuralUpdate :=

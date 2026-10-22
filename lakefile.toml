@@ -26,3 +26,11 @@ globs = [
 [[lean_exe]]
 name = "compiled_neural_checker_measure"
 root = "Tests.Executables.CompiledNeuralCheckerMeasure"
+
+[[lean_exe]]
+name = "compiled_neural_comparison_adapters"
+root = "Tests.Executables.CompiledNeuralComparisonAdapters"
+
+[[lean_exe]]
+name = "compiled_parameterized_neural_checker"
+root = "Tests.Executables.CompiledParameterizedNeuralCheckerFamily"

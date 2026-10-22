@@ -46,6 +46,26 @@ def IndependentLearnedCurrentCase.input :
   | .requirementOnly => ⟨true, false, true⟩
   | .both => ⟨true, true, true⟩
 
+/-- The single canonical current domain of the learned experiment.  Every
+specialized and generic current-behavior view is derived from this list. -/
+def learnedRuntimeDeclaredCurrentDomain : List IndependentLearnedInput :=
+  [IndependentLearnedCurrentCase.neither.input,
+   IndependentLearnedCurrentCase.contextOnly.input,
+   IndependentLearnedCurrentCase.requirementOnly.input,
+   IndependentLearnedCurrentCase.both.input]
+
+theorem learnedRuntimeDeclaredCurrentDomain_complete
+    (current : IndependentLearnedCurrentCase) :
+    current.input ∈ learnedRuntimeDeclaredCurrentDomain := by
+  cases current with
+  | neither => exact List.Mem.head _
+  | contextOnly => exact List.Mem.tail _ (List.Mem.head _)
+  | requirementOnly =>
+      exact List.Mem.tail _ (List.Mem.tail _ (List.Mem.head _))
+  | both =>
+      exact List.Mem.tail _
+        (List.Mem.tail _ (List.Mem.tail _ (List.Mem.head _)))
+
 /-- Decode the received serialized network, then execute its actual decoded
 program on the supplied raw learned signals. -/
 def executeIndependentLearnedArtifact
@@ -362,14 +382,8 @@ def independentLearnedCurrentBehaviorTable
     (initial : CheckedIndependentLearnedInitial)
     (candidate : IndependentLearnedUpdateCandidate) :
     List (List Activation) :=
-  [simulateUncheckedUpdate initial candidate
-      IndependentLearnedCurrentCase.neither.input,
-   simulateUncheckedUpdate initial candidate
-      IndependentLearnedCurrentCase.contextOnly.input,
-   simulateUncheckedUpdate initial candidate
-      IndependentLearnedCurrentCase.requirementOnly.input,
-   simulateUncheckedUpdate initial candidate
-      IndependentLearnedCurrentCase.both.input]
+  learnedRuntimeDeclaredCurrentDomain.map
+    (simulateUncheckedUpdate initial candidate)
 
 theorem alignedBypass_currentBehaviorTable_exact :
     independentLearnedCurrentBehaviorTable checkedIndependentLearnedInitial
@@ -420,6 +434,8 @@ theorem bypassUpdate_rejectedBeforeEffect :
 end ConstitutiveSearch.NeuralAgent
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.IndependentLearnedInput
+#print axioms ConstitutiveSearch.NeuralAgent.learnedRuntimeDeclaredCurrentDomain
+#print axioms ConstitutiveSearch.NeuralAgent.learnedRuntimeDeclaredCurrentDomain_complete
 #print axioms ConstitutiveSearch.NeuralAgent.executeIndependentLearnedArtifact
 #print axioms ConstitutiveSearch.NeuralAgent.executeSerializedArtifact
 #print axioms ConstitutiveSearch.NeuralAgent.IndependentLearnedUpdateCandidate

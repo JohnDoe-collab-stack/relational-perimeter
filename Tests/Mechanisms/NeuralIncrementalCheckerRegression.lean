@@ -19,7 +19,43 @@ example :
     GenericIncrementalUpdateLocalConditions publicIncrementalCheckerEngine
       publicIncrementalNeuralUpdate :=
   (analyzePublicIncrementalUpdate_complete
-    publicIncrementalNeuralUpdate).mpr ⟨rfl, rfl, rfl⟩
+    publicIncrementalNeuralUpdate).mpr
+      ⟨publicIncrementalLocalConditionDataOfExact
+        publicIncrementalNeuralUpdate rfl rfl rfl⟩
+
+example : PublicIncrementalEngineLocalConditions
+    publicIncrementalNeuralUpdate :=
+  ⟨publicIncrementalLocalConditionDataOfExact
+    publicIncrementalNeuralUpdate rfl rfl rfl⟩
+
+example :
+    (publicIncrementalLocalConditionDataOfExact
+      publicIncrementalNeuralUpdate rfl rfl rfl).preCertificateResult.affectedCone =
+      affectedConstitutiveCone publicInitialStateConstitutiveCertificate
+        publicPreCertificateConstitutiveGraph := by
+  rfl
+
+example (decision : PublicReconfiguredTransitionDecision) :
+    (publicIncrementalTargetAnalysisFromDecision decision).transition =
+      decision.transition :=
+  publicIncrementalTargetAnalysisFromDecision_transition_exact decision
+
+example {update : IncrementalNeuralUpdate}
+    (analysis : PublicIncrementalEngineAnalysis update) :
+    analysis.targetAnalysis.transition =
+      analysis.executed.transitionDecision.transition := by
+  rfl
+
+example {update : IncrementalNeuralUpdate}
+    (analysis : PublicIncrementalEngineAnalysis update) :
+    analysis.targetAnalysis.execution =
+      analysis.executed.executedSuccessor := by
+  rfl
+
+example {update : IncrementalNeuralUpdate}
+    (analysis : PublicIncrementalEngineAnalysis update) :
+    analysis.targetAnalysis.fragments = analysis.assembly.fragments := by
+  rfl
 
 example :
     GenericIncrementalUpdateAccepted publicIncrementalCheckerEngine
@@ -164,9 +200,14 @@ example :
       checkReferenceUpdate publicFullReferenceNeuralUpdate :=
   publicIncrementalAndReferenceChecks_exact
 
+theorem public_incremental_and_reference_use_same_serialized_update :
+    publicIncrementalNeuralUpdate = publicFullReferenceNeuralUpdate := by
+  rfl
+
 end ConstitutiveSearch.NeuralAgent.Tests
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.checkIncrementalUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalTargetAnalysisFromDecision_transition_exact
 #print axioms ConstitutiveSearch.NeuralAgent.checkIncrementalUpdate_sound
 #print axioms ConstitutiveSearch.NeuralAgent.checkGenericIncrementalUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.checkGenericIncrementalUpdate_sound
@@ -176,4 +217,5 @@ end ConstitutiveSearch.NeuralAgent.Tests
 #print axioms ConstitutiveSearch.NeuralAgent.incrementalSuccess_matches_reference
 #print axioms ConstitutiveSearch.NeuralAgent.incrementalAndReferenceSuccessfulResults_exact
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalAndReferenceChecks_exact
+#print axioms ConstitutiveSearch.NeuralAgent.Tests.public_incremental_and_reference_use_same_serialized_update
 /- AXIOM_AUDIT_END -/

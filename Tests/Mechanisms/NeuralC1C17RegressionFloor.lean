@@ -94,7 +94,7 @@ theorem rejected_runtime_update_cannot_be_installed :
         .ok next) :=
   submitUpdate_rejected_cannot_install publicInitialCertifiedRuntime
     (.reconfigure publicIncorrectIncrementalUpdate)
-    .unexpectedSuccessorArtifact rfl
+    (.malformedConstitutiveArtifact (.naming .outputCountMismatch)) rfl
 
 theorem aligned_and_bypass_updates_remain_currently_equivalent :
     CurrentBehaviorEquivalentAfterUpdate checkedIndependentLearnedInitial

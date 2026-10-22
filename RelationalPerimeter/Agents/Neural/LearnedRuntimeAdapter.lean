@@ -8,7 +8,7 @@ The independently learned source and its two candidate successors enter the
 same constitutive checking boundary as every other certified neural state.
 The adapter does not call the earlier specialized learned-update checker.
 Instead it supplies a local operational contract, reflected initial-state
-decisions, a proof-free candidate update language, and an incremental engine
+decisions, the common proof-free serialized update language, and an incremental engine
 whose only installed successor is assembled by the generic checker.
 
 The admitted intent remains distinct from certification.  Authorization is a
@@ -61,7 +61,17 @@ def independentLearnedCertifiedInput : IndependentLearnedRequirementInput :=
 
 def independentLearnedDeclaredInputs :
     List IndependentLearnedRequirementInput :=
-  [independentLearnedCertifiedInput]
+  learnedRuntimeDeclaredCurrentDomain.map
+    IndependentLearnedInput.toRequirementInput
+
+def independentLearnedDeclaredInputs_complete
+    (current : IndependentLearnedCurrentCase) :
+    Listed current.input.toRequirementInput independentLearnedDeclaredInputs := by
+  cases current with
+  | neither => exact .head
+  | contextOnly => exact .tail .head
+  | requirementOnly => exact .tail (.tail .head)
+  | both => exact .tail (.tail (.tail .head))
 
 structure IndependentLearnedFutureSource : Type 3 where
   network : SerializedNetwork
@@ -188,7 +198,7 @@ def learnedOperationalContract
     decode := decodeIndependentLearnedProposal
     actionChannel := publicAgentActionChannel
     declaredCurrentInputs := independentLearnedDeclaredInputs
-    declaredReplacementValues := [0]
+    declaredReplacementValues := [0, 1]
     FutureSource := IndependentLearnedFutureSource
     FutureInput := IndependentLearnedFutureInput
     FutureEvent := IndependentLearnedFutureEvent
@@ -451,6 +461,227 @@ def learnedAlignedAuthorizationRole :
         change false ≠ true
         decide }
 
+/-! ## Executed causal coverage of the canonical four-case domain -/
+
+def IndependentLearnedCurrentCase.requirementReplacement :
+    IndependentLearnedCurrentCase -> Activation
+  | .neither => 1
+  | .contextOnly => 1
+  | .requirementOnly => 0
+  | .both => 0
+
+def learnedInitialRequirementPort :
+    Fin learnedDecodedInitialArtifact.system.inputCount := ⟨0, by decide⟩
+
+def learnedInitialXorNeuron :
+    Fin learnedDecodedInitialArtifact.system.producedCount := ⟨2, by decide⟩
+
+def learnedInitialSensitiveNeuron :
+    IndependentLearnedCurrentCase ->
+      Fin learnedDecodedInitialArtifact.system.producedCount
+  | .neither => ⟨0, by decide⟩
+  | .contextOnly => ⟨1, by decide⟩
+  | .requirementOnly => ⟨0, by decide⟩
+  | .both => ⟨1, by decide⟩
+
+def learnedInitialCurrentIntervention
+    (current : IndependentLearnedCurrentCase) :
+    Intervention
+      (learnedDecodedInitialArtifact.system.run
+        current.input.toRequirementInput) where
+  focus := .input learnedInitialRequirementPort
+  replacement := current.requirementReplacement
+  changesValue := by cases current <;> decide
+
+def learnedInitialCurrentInputEdge
+    (current : IndependentLearnedCurrentCase) :
+    EffectiveReadsFrom
+      (learnedDecodedInitialArtifact.system.run
+        current.input.toRequirementInput)
+      (.receivedInput learnedInitialRequirementPort)
+      (.neuronOutput (learnedInitialSensitiveNeuron current)) := by
+  cases current with
+  | neither | requirementOnly =>
+      exact .executedEdge ⟨0, by decide⟩
+        { source := .receivedInput learnedInitialRequirementPort, weight := 1 }
+        (by exact List.Mem.head _) (by decide)
+  | contextOnly | both =>
+      exact .executedEdge ⟨1, by decide⟩
+        { source := .receivedInput learnedInitialRequirementPort, weight := -2 }
+        (by exact List.Mem.head _) (by decide)
+
+def learnedInitialCurrentXorEdge
+    (current : IndependentLearnedCurrentCase) :
+    EffectiveReadsFrom
+      (learnedDecodedInitialArtifact.system.run
+        current.input.toRequirementInput)
+      (.neuronOutput (learnedInitialSensitiveNeuron current))
+      (.neuronOutput learnedInitialXorNeuron) := by
+  cases current with
+  | neither | requirementOnly =>
+      exact .executedEdge learnedInitialXorNeuron
+        { source := .priorNeuron ⟨0, by decide⟩, weight := 1 }
+        (by exact List.Mem.head _) (by decide)
+  | contextOnly | both =>
+      exact .executedEdge learnedInitialXorNeuron
+        { source := .priorNeuron ⟨1, by decide⟩, weight := 1 }
+        (by exact List.Mem.tail _ (List.Mem.head _)) (by decide)
+
+def learnedInitialCurrentPrimaryEdge
+    (current : IndependentLearnedCurrentCase) :
+    EffectiveReadsFrom
+      (learnedDecodedInitialArtifact.system.run
+        current.input.toRequirementInput)
+      (.neuronOutput learnedInitialXorNeuron)
+      (.neuronOutput learnedInitialPrimaryNeuron) :=
+  .executedEdge learnedInitialPrimaryNeuron
+    { source := .priorNeuron ⟨2, by decide⟩, weight := 1 }
+    (by exact List.Mem.head _) (by cases current <;> decide)
+
+def learnedInitialCurrentPropagation
+    (current : IndependentLearnedCurrentCase) :
+    NontrivialExecutedChangePath (learnedInitialCurrentIntervention current)
+      (.neuronOutput learnedInitialPrimaryNeuron) :=
+  .step
+    (.step
+      (.step .origin (learnedInitialCurrentInputEdge current)
+        { different := by cases current <;> decide })
+      (learnedInitialCurrentXorEdge current)
+        { different := by cases current <;> decide })
+    (learnedInitialCurrentPrimaryEdge current)
+      { different := by cases current <;> decide }
+
+def learnedInitialCurrentRole
+    (current : IndependentLearnedCurrentCase) :
+    CausalRole learnedDecodedInitialArtifact.system
+      current.input.toRequirementInput
+      (.receivedInput learnedInitialRequirementPort) where
+  intervention := learnedInitialCurrentIntervention current
+  focusExact := rfl
+  output := learnedInitialPrimaryOutputPort
+  propagation := learnedInitialCurrentPropagation current
+  targetChange := { different := by cases current <;> decide }
+  proposalChange :=
+    { different := by
+        cases current with
+        | neither => change true ≠ false; decide
+        | contextOnly => change false ≠ true; decide
+        | requirementOnly => change false ≠ true; decide
+        | both => change true ≠ false; decide }
+
+def learnedAlignedRequirementPort :
+    Fin learnedDecodedAlignedArtifact.system.inputCount := ⟨0, by decide⟩
+
+def learnedAlignedXorNeuron :
+    Fin learnedDecodedAlignedArtifact.system.producedCount := ⟨2, by decide⟩
+
+def learnedAlignedSensitiveNeuron :
+    IndependentLearnedCurrentCase ->
+      Fin learnedDecodedAlignedArtifact.system.producedCount
+  | .neither => ⟨0, by decide⟩
+  | .contextOnly => ⟨1, by decide⟩
+  | .requirementOnly => ⟨0, by decide⟩
+  | .both => ⟨1, by decide⟩
+
+def learnedAlignedCurrentIntervention
+    (current : IndependentLearnedCurrentCase) :
+    Intervention
+      (learnedDecodedAlignedArtifact.system.run
+        current.input.toRequirementInput) where
+  focus := .input learnedAlignedRequirementPort
+  replacement := current.requirementReplacement
+  changesValue := by cases current <;> decide
+
+def learnedAlignedCurrentInputEdge
+    (current : IndependentLearnedCurrentCase) :
+    EffectiveReadsFrom
+      (learnedDecodedAlignedArtifact.system.run
+        current.input.toRequirementInput)
+      (.receivedInput learnedAlignedRequirementPort)
+      (.neuronOutput (learnedAlignedSensitiveNeuron current)) := by
+  cases current with
+  | neither | requirementOnly =>
+      exact .executedEdge ⟨0, by decide⟩
+        { source := .receivedInput learnedAlignedRequirementPort, weight := 1 }
+        (by exact List.Mem.head _) (by decide)
+  | contextOnly | both =>
+      exact .executedEdge ⟨1, by decide⟩
+        { source := .receivedInput learnedAlignedRequirementPort, weight := -2 }
+        (by exact List.Mem.head _) (by decide)
+
+def learnedAlignedCurrentXorEdge
+    (current : IndependentLearnedCurrentCase) :
+    EffectiveReadsFrom
+      (learnedDecodedAlignedArtifact.system.run
+        current.input.toRequirementInput)
+      (.neuronOutput (learnedAlignedSensitiveNeuron current))
+      (.neuronOutput learnedAlignedXorNeuron) := by
+  cases current with
+  | neither | requirementOnly =>
+      exact .executedEdge learnedAlignedXorNeuron
+        { source := .priorNeuron ⟨0, by decide⟩, weight := 1 }
+        (by exact List.Mem.head _) (by decide)
+  | contextOnly | both =>
+      exact .executedEdge learnedAlignedXorNeuron
+        { source := .priorNeuron ⟨1, by decide⟩, weight := 1 }
+        (by exact List.Mem.tail _ (List.Mem.head _)) (by decide)
+
+def learnedAlignedCurrentIntermediateEdge
+    (current : IndependentLearnedCurrentCase) :
+    EffectiveReadsFrom
+      (learnedDecodedAlignedArtifact.system.run
+        current.input.toRequirementInput)
+      (.neuronOutput learnedAlignedXorNeuron)
+      (.neuronOutput learnedAlignedIntermediateNeuron) :=
+  .executedEdge learnedAlignedIntermediateNeuron
+    { source := .priorNeuron ⟨2, by decide⟩, weight := 1 }
+    (by exact List.Mem.head _) (by cases current <;> decide)
+
+def learnedAlignedCurrentPrimaryEdge
+    (current : IndependentLearnedCurrentCase) :
+    EffectiveReadsFrom
+      (learnedDecodedAlignedArtifact.system.run
+        current.input.toRequirementInput)
+      (.neuronOutput learnedAlignedIntermediateNeuron)
+      (.neuronOutput learnedAlignedPrimaryNeuron) :=
+  .executedEdge learnedAlignedPrimaryNeuron
+    { source := .priorNeuron ⟨4, by decide⟩, weight := 1 }
+    (by exact List.Mem.head _) (by cases current <;> decide)
+
+def learnedAlignedCurrentPropagation
+    (current : IndependentLearnedCurrentCase) :
+    NontrivialExecutedChangePath (learnedAlignedCurrentIntervention current)
+      (.neuronOutput learnedAlignedPrimaryNeuron) :=
+  .step
+    (.step
+      (.step
+        (.step .origin (learnedAlignedCurrentInputEdge current)
+          { different := by cases current <;> decide })
+        (learnedAlignedCurrentXorEdge current)
+          { different := by cases current <;> decide })
+      (learnedAlignedCurrentIntermediateEdge current)
+        { different := by cases current <;> decide })
+    (learnedAlignedCurrentPrimaryEdge current)
+      { different := by cases current <;> decide }
+
+def learnedAlignedCurrentRole
+    (current : IndependentLearnedCurrentCase) :
+    CausalRole learnedDecodedAlignedArtifact.system
+      current.input.toRequirementInput
+      (.receivedInput learnedAlignedRequirementPort) where
+  intervention := learnedAlignedCurrentIntervention current
+  focusExact := rfl
+  output := learnedAlignedPrimaryOutputPort
+  propagation := learnedAlignedCurrentPropagation current
+  targetChange := { different := by cases current <;> decide }
+  proposalChange :=
+    { different := by
+        cases current with
+        | neither => change true ≠ false; decide
+        | contextOnly => change false ≠ true; decide
+        | requirementOnly => change false ≠ true; decide
+        | both => change true ≠ false; decide }
+
 /-! ## Stable names, finite causal bases, and state fragments -/
 
 def learnedInitialSerializedNaming : SerializedStableArtifactNaming :=
@@ -511,11 +742,11 @@ def learnedActivationEquality
 
 def learnedInitialCausalReplacements
     (_node : StableNodeId learnedInitialStableNaming) : List Activation :=
-  [0]
+  [0, 1]
 
 def learnedAlignedCausalReplacements
     (_node : StableNodeId learnedAlignedStableNaming) : List Activation :=
-  [0]
+  [0, 1]
 
 def learnedInitialCausalCoverage : CoversDeclaredCausalCondition
     learnedDecodedInitialArtifact learnedInitialStableNaming
@@ -524,11 +755,35 @@ def learnedInitialCausalCoverage : CoversDeclaredCausalCondition
   cases declared with
   | head =>
       exact
-        { node := .receivedInput learnedInitialAuthorizationPort
-          role := learnedInitialAuthorizationRole
-          replacementListed := .head
-          replacementDeclared := .head }
-  | tail impossible => nomatch impossible
+        { node := .receivedInput learnedInitialRequirementPort
+          role := learnedInitialCurrentRole .neither
+          replacementListed := .tail .head
+          replacementDeclared := .tail .head }
+  | tail later =>
+      cases later with
+      | head =>
+          exact
+            { node := .receivedInput learnedInitialRequirementPort
+              role := learnedInitialCurrentRole .contextOnly
+              replacementListed := .tail .head
+              replacementDeclared := .tail .head }
+      | tail later =>
+          cases later with
+          | head =>
+              exact
+                { node := .receivedInput learnedInitialRequirementPort
+                  role := learnedInitialCurrentRole .requirementOnly
+                  replacementListed := .head
+                  replacementDeclared := .head }
+          | tail later =>
+              cases later with
+              | head =>
+                  exact
+                    { node := .receivedInput learnedInitialRequirementPort
+                      role := learnedInitialCurrentRole .both
+                      replacementListed := .head
+                      replacementDeclared := .head }
+              | tail impossible => nomatch impossible
 
 def learnedAlignedCausalCoverage : CoversDeclaredCausalCondition
     learnedDecodedAlignedArtifact learnedAlignedStableNaming
@@ -537,11 +792,35 @@ def learnedAlignedCausalCoverage : CoversDeclaredCausalCondition
   cases declared with
   | head =>
       exact
-        { node := .receivedInput learnedAlignedAuthorizationPort
-          role := learnedAlignedAuthorizationRole
-          replacementListed := .head
-          replacementDeclared := .head }
-  | tail impossible => nomatch impossible
+        { node := .receivedInput learnedAlignedRequirementPort
+          role := learnedAlignedCurrentRole .neither
+          replacementListed := .tail .head
+          replacementDeclared := .tail .head }
+  | tail later =>
+      cases later with
+      | head =>
+          exact
+            { node := .receivedInput learnedAlignedRequirementPort
+              role := learnedAlignedCurrentRole .contextOnly
+              replacementListed := .tail .head
+              replacementDeclared := .tail .head }
+      | tail later =>
+          cases later with
+          | head =>
+              exact
+                { node := .receivedInput learnedAlignedRequirementPort
+                  role := learnedAlignedCurrentRole .requirementOnly
+                  replacementListed := .head
+                  replacementDeclared := .head }
+          | tail later =>
+              cases later with
+              | head =>
+                  exact
+                    { node := .receivedInput learnedAlignedRequirementPort
+                      role := learnedAlignedCurrentRole .both
+                      replacementListed := .head
+                      replacementDeclared := .head }
+              | tail impossible => nomatch impossible
 
 def learnedInitialFiniteCausalBasis : FiniteCausalBasis
     LearnedInitialOperationalContract learnedDecodedInitialArtifact where
@@ -569,7 +848,7 @@ def learnedInitialStateFragments : StateCertificateFragments
   { structural :=
       { basis := learnedInitialFiniteCausalBasis
         systemExact := rfl
-        inputDeclared := .head
+        inputDeclared := .tail (.tail .head)
         observations := stableStructuralObservationSnapshot
           learnedInitialFiniteCausalBasis.naming
         observationsExact := rfl }
@@ -603,7 +882,7 @@ def learnedAlignedStateFragments : StateCertificateFragments
   { structural :=
       { basis := learnedAlignedFiniteCausalBasis
         systemExact := rfl
-        inputDeclared := .head
+        inputDeclared := .tail (.tail .head)
         observations := stableStructuralObservationSnapshot
           learnedAlignedFiniteCausalBasis.naming
         observationsExact := rfl }
@@ -716,6 +995,46 @@ def learnedReceivedBypassArtifact : LearnedReceivedArtifact :=
   { contract := .aligned
     network := independentLearnedBypassNetwork
     stableNaming := learnedAlignedSerializedNaming }
+
+/-- The learned checker uses the same proof-free serialized update envelope as
+the public checker.  Only its contract code, next-input code and intention
+code are instance-specific. -/
+abbrev LearnedSerializedConstitutiveUpdate :=
+  SerializedConstitutiveUpdate
+    (ContractTransitionRequest learnedConstitutiveMetaContract)
+    IndependentLearnedRequirementInput IndependentLearnedUpdateIntent
+
+def IndependentLearnedUpdateCandidate.toSerializedUpdate
+    (candidate : IndependentLearnedUpdateCandidate) :
+    LearnedSerializedConstitutiveUpdate :=
+  { transition := { current := .initial, next := .aligned }
+    targetNetwork := candidate.targetArtifact
+    targetStableNaming := learnedAlignedSerializedNaming
+    nextInput := independentLearnedCertifiedInput
+    intent := candidate.intent }
+
+def learnedAlignedSerializedUpdate : LearnedSerializedConstitutiveUpdate :=
+  alignedUpdate.toSerializedUpdate
+
+def learnedBypassSerializedUpdate : LearnedSerializedConstitutiveUpdate :=
+  bypassUpdate.toSerializedUpdate
+
+def LearnedSerializedConstitutiveUpdate.targetReceivedArtifact
+    (source : LearnedSerializedConstitutiveUpdate) :
+    LearnedReceivedArtifact :=
+  { contract := source.transition.next
+    network := source.targetNetwork
+    stableNaming := source.targetStableNaming }
+
+theorem learnedAlignedSerializedUpdate_target_exact :
+    learnedAlignedSerializedUpdate.targetReceivedArtifact =
+      learnedReceivedAlignedArtifact := by
+  rfl
+
+theorem learnedBypassSerializedUpdate_target_exact :
+    learnedBypassSerializedUpdate.targetReceivedArtifact =
+      learnedReceivedBypassArtifact := by
+  rfl
 
 inductive LearnedExecutableDecodedArtifact :
     LearnedReceivedArtifact -> Type 4 where
@@ -845,6 +1164,26 @@ def learnedExecutableMetaContractInterface :
   futureRealizationDecision := fun decoded =>
     reflectedTrue decoded.fragments.futures.realization
 
+abbrev LearnedAlignedTransitionDecision :=
+  AcceptedTransitionDecision learnedExecutableMetaContractInterface
+    ({ current := LearnedOperationalContract.initial
+       next := LearnedOperationalContract.aligned } :
+      ContractTransitionRequest learnedConstitutiveMetaContract)
+
+def learnedAlignedTransitionDecision : LearnedAlignedTransitionDecision :=
+  match exact : decideTransition learnedExecutableMetaContractInterface
+      ({ current := .initial, next := .aligned } :
+        ContractTransitionRequest learnedConstitutiveMetaContract) with
+  | some decision => decision
+  | none => False.elim (by cases exact)
+
+theorem decideLearnedAlignedTransition_exact :
+    decideTransition learnedExecutableMetaContractInterface
+        ({ current := .initial, next := .aligned } :
+          ContractTransitionRequest learnedConstitutiveMetaContract) =
+      some learnedAlignedTransitionDecision := by
+  rfl
+
 /-! ## The learned source produced by the generic initial checker -/
 
 def learnedExecutableStateAcceptance
@@ -912,7 +1251,8 @@ def learnedCalculatedStructuralAssembly :
         learnedRecomputedStructuralFragments :=
   certifyCalculatedIncrementalStructuralAssembly (by rfl) rfl
 
-def learnedAlignedTargetAnalysis :
+def learnedAlignedTargetAnalysisFromDecision
+    (transitionDecision : LearnedAlignedTransitionDecision) :
     IncrementalTargetAnalysis learnedInitialCheckedAgent :=
   { nextContract := .aligned
     contractAdmitted := .aligned
@@ -926,78 +1266,317 @@ def learnedAlignedTargetAnalysis :
     fragments := learnedAlignedStateFragments
     fragmentNamingExact := rfl
     fragmentObservationsExact := rfl
-    transition := learnedOperationalTransition
-    execution := LearnedExecutedStateTransition.installAligned }
+    transition := transitionDecision.transition
+    execution := by
+      have decisionExact :=
+        transitionDecision.unique learnedAlignedTransitionDecision
+      cases decisionExact
+      exact LearnedExecutedStateTransition.installAligned }
+
+def learnedAlignedTargetAnalysis :
+    IncrementalTargetAnalysis learnedInitialCheckedAgent :=
+  learnedAlignedTargetAnalysisFromDecision learnedAlignedTransitionDecision
+
+theorem learnedAlignedTargetAnalysisFromDecision_exact
+    (decision : LearnedAlignedTransitionDecision) :
+    learnedAlignedTargetAnalysisFromDecision decision =
+      learnedAlignedTargetAnalysis := by
+  unfold learnedAlignedTargetAnalysis
+  rw [decision.unique learnedAlignedTransitionDecision]
+
+/-- The learned checker target consumes the transition returned by the
+decision executed on the decoded serialized update. -/
+theorem learnedAlignedTargetAnalysisFromDecision_transition_exact
+    (decision : LearnedAlignedTransitionDecision) :
+    (learnedAlignedTargetAnalysisFromDecision decision).transition =
+      decision.transition := by
+  rfl
 
 inductive LearnedRuntimeUpdateError where
   | malformedArtifact (problem : ArtifactError)
-  | unexpectedSourceArtifact
+  | invalidStableNaming (problem : StableNamingError)
+  | unexpectedTransition
+  | unexpectedNextInput
   | unadmittedIntent
   | missingConstitutiveDependency
   | unsupportedTargetArtifact
   deriving DecidableEq
 
-structure LearnedIncrementalEngineAnalysis
-    (candidate : IndependentLearnedUpdateCandidate) : Type 6 where
+/-- Positive decoding of the one learned serialized update.  All values used
+by the checker are reconstructed from the same request before any target
+analysis can be returned. -/
+structure DecodedLearnedSerializedConstitutiveUpdate
+    (source : LearnedSerializedConstitutiveUpdate) : Type 4 where
   private mk ::
-  target : IncrementalTargetAnalysis learnedInitialCheckedAgent
-  targetExact : target = learnedAlignedTargetAnalysis
+  transitionExact : source.transition =
+    ({ current := .initial, next := .aligned } :
+      ContractTransitionRequest learnedConstitutiveMetaContract)
+  target : DecodedNeuralArtifact LearnedAlignedOperationalContract
+  stable : DecodedStableArtifactNaming target source.targetStableNaming
+  nextInputExact : source.nextInput = independentLearnedCertifiedInput
+  intentAdmitted : AdmittedIndependentLearnedIntent source.intent
+
+def learnedTransitionRequestEquality
+    (left right : ContractTransitionRequest learnedConstitutiveMetaContract) :
+    Decidable (left = right) := by
+  cases left with
+  | mk leftCurrent leftNext =>
+      cases right with
+      | mk rightCurrent rightNext =>
+          cases leftCurrent <;> cases leftNext <;>
+            cases rightCurrent <;> cases rightNext <;>
+              first
+              | exact .isTrue rfl
+              | exact .isFalse (fun same => nomatch same)
+
+def decodeLearnedSerializedConstitutiveUpdate
+    (source : LearnedSerializedConstitutiveUpdate) :
+    Except LearnedRuntimeUpdateError
+      (DecodedLearnedSerializedConstitutiveUpdate source) :=
+  match learnedTransitionRequestEquality source.transition
+      ({ current := .initial, next := .aligned } :
+        ContractTransitionRequest learnedConstitutiveMetaContract) with
+  | .isFalse _ => .error .unexpectedTransition
+  | .isTrue transitionExact =>
+      match decodeArtifact LearnedAlignedOperationalContract
+          source.targetNetwork with
+      | .error problem => .error (.malformedArtifact problem)
+      | .ok target =>
+          match decodeStableArtifactNaming target source.targetStableNaming with
+          | .error problem => .error (.invalidStableNaming problem)
+          | .ok stable =>
+              match independentLearnedRequirementInputEquality source.nextInput
+                  independentLearnedCertifiedInput with
+              | .isFalse _ => .error .unexpectedNextInput
+              | .isTrue nextInputExact =>
+                  match source.intent with
+                  | .preserveAuthorizedBehavior =>
+                      .ok (.mk transitionExact target stable nextInputExact
+                        .preserveAuthorizedBehavior)
+
+/-- Executed learned dependencies retained before the generic target exists.
+The decoded request determines the admitted transition; the same decision
+indexes both the structural calculation and the executed successor. -/
+structure LearnedIncrementalExecutedDependencies
+    (source : LearnedSerializedConstitutiveUpdate) : Type 6 where
+  decoded : DecodedLearnedSerializedConstitutiveUpdate source
+  decodedExact :
+    decodeLearnedSerializedConstitutiveUpdate source = .ok decoded
+  receivedDecision : AcceptedTransitionDecision
+    learnedExecutableMetaContractInterface source.transition
+  transitionAccepted :
+    decideTransition learnedExecutableMetaContractInterface source.transition =
+      some receivedDecision
+  dependencyExact :
+    primaryAuthorizationConstitutivelyConsumed source.targetNetwork = true
+  targetExact :
+    source.targetNetwork = independentLearnedFirstSuccessorNetwork
+  preCertificateGraphExact : learnedPreCertificateGraph =
+    calculatePreCertificateConstitutiveGraph
+      learnedInitialCheckedAgent.certificate.basis.naming
+      learnedAlignedFiniteCausalBasis.naming
+  transportedOutsideCone :
+    (learnedAlignedTargetAnalysisFromDecision
+      (receivedDecision.transportRequest decoded.transitionExact)
+    ).transportedStructural = []
+  structuralRecalculation :
+    CalculatedIncrementalStructuralAssembly
+      learnedInitialCheckedAgent.certificate learnedPreCertificateGraph []
+        learnedRecomputedStructuralFragments
+  fragmentNamingExact : learnedAlignedStateFragments.structural.basis.naming =
+    learnedAlignedFiniteCausalBasis.naming
+  fragmentObservationsExact :
+    learnedAlignedStateFragments.structural.observations =
+      structuralRecalculation.observations
+  executedSuccessor : learnedConstitutiveMetaContract.ExecutedStateTransition
+    (receivedDecision.transportRequest decoded.transitionExact).transition.permission
+    learnedInitialCheckedAgent.state learnedAlignedState
+
+/-- The learned analysis contains the executed dependencies and no completed
+`IncrementalTargetAnalysis`. -/
+structure LearnedIncrementalEngineAnalysis
+    (source : LearnedSerializedConstitutiveUpdate) : Type 6 where
+  private mk ::
+  executed : LearnedIncrementalExecutedDependencies source
+
+/-- Derive the learned generic target from the concrete decoder, reflected
+transition, structural recalculation and executed successor retained by the
+analyzer. -/
+def LearnedIncrementalEngineAnalysis.target
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedIncrementalEngineAnalysis source) :
+    IncrementalTargetAnalysis learnedInitialCheckedAgent :=
+  { nextContract := .aligned
+    contractAdmitted := .aligned
+    artifact := learnedDecodedAlignedArtifact
+    state := learnedAlignedState
+    targetNaming := learnedAlignedFiniteCausalBasis.naming
+    preCertificateGraph := learnedPreCertificateGraph
+    transportedStructural := []
+    recomputedStructural := learnedRecomputedStructuralFragments
+    structuralAssembly := analysis.executed.structuralRecalculation
+    fragments := learnedAlignedStateFragments
+    fragmentNamingExact := analysis.executed.fragmentNamingExact
+    fragmentObservationsExact := analysis.executed.fragmentObservationsExact
+    transition :=
+      (analysis.executed.receivedDecision.transportRequest
+        analysis.executed.decoded.transitionExact).transition
+    execution := analysis.executed.executedSuccessor }
 
 def analyzeLearnedRuntimeUpdate
-    (candidate : IndependentLearnedUpdateCandidate) :
+    (source : LearnedSerializedConstitutiveUpdate) :
     Except LearnedRuntimeUpdateError
-      (LearnedIncrementalEngineAnalysis candidate) :=
-  if _sourceExact : candidate.sourceArtifact =
-      learnedInitialCheckedAgent.artifact.source then
-    if _intentExact : candidate.intent =
-        .preserveAuthorizedBehavior then
-      match decodeArtifact LearnedAlignedOperationalContract
-          candidate.targetArtifact with
-      | .error problem => .error (.malformedArtifact problem)
-      | .ok _ =>
+      (LearnedIncrementalEngineAnalysis source) :=
+  match decodedRun : decodeLearnedSerializedConstitutiveUpdate source with
+  | .error problem => .error problem
+  | .ok decoded =>
+      match decisionRun : decideTransition learnedExecutableMetaContractInterface
+          source.transition with
+      | none => .error .unexpectedTransition
+      | some receivedDecision =>
           if _dependencyExact :
               primaryAuthorizationConstitutivelyConsumed
-                candidate.targetArtifact = true then
-            if _targetExact : candidate.targetArtifact =
+                source.targetNetwork = true then
+            if _targetExact : source.targetNetwork =
                 independentLearnedFirstSuccessorNetwork then
-              .ok (.mk learnedAlignedTargetAnalysis rfl)
+              .ok (.mk
+                { decoded := decoded
+                  decodedExact := decodedRun
+                  receivedDecision := receivedDecision
+                  transitionAccepted := decisionRun
+                  dependencyExact := _dependencyExact
+                  targetExact := _targetExact
+                  preCertificateGraphExact := rfl
+                  transportedOutsideCone := rfl
+                  structuralRecalculation :=
+                    learnedCalculatedStructuralAssembly
+                  fragmentNamingExact := rfl
+                  fragmentObservationsExact := rfl
+                  executedSuccessor := by
+                    have decisionExact :=
+                      (receivedDecision.transportRequest
+                        decoded.transitionExact).unique
+                        learnedAlignedTransitionDecision
+                    cases decisionExact
+                    exact LearnedExecutedStateTransition.installAligned })
             else
               .error .unsupportedTargetArtifact
           else
             .error .missingConstitutiveDependency
-    else
-      .error .unadmittedIntent
-  else
-    .error .unexpectedSourceArtifact
+
+/-- Learned local conditions and learned analyses share the same executed
+dependency object, while remaining different wrapper types. -/
+abbrev LearnedIncrementalEngineLocalConditionData :=
+  LearnedIncrementalExecutedDependencies
+
+def LearnedIncrementalEngineLocalConditions
+    (source : LearnedSerializedConstitutiveUpdate) : Prop :=
+  Nonempty (LearnedIncrementalEngineLocalConditionData source)
+
+def learnedIncrementalAnalysisOfLocalConditions
+    (source : LearnedSerializedConstitutiveUpdate)
+    (conditions : LearnedIncrementalEngineLocalConditionData source) :
+    LearnedIncrementalEngineAnalysis source :=
+  .mk conditions
+
+def completeLearnedIncrementalAnalysis
+    (source : LearnedSerializedConstitutiveUpdate)
+    (conditions : LearnedIncrementalEngineLocalConditionData source) :
+    { analysis : LearnedIncrementalEngineAnalysis source //
+      analyzeLearnedRuntimeUpdate source = .ok analysis } := by
+  unfold analyzeLearnedRuntimeUpdate
+  split
+  · have impossible :=
+      ‹decodeLearnedSerializedConstitutiveUpdate source = .error _›.symm.trans
+        conditions.decodedExact
+    cases impossible
+  · have decodedExact : _ = conditions.decoded :=
+      Except.ok.inj
+        (‹decodeLearnedSerializedConstitutiveUpdate source = .ok _›.symm.trans
+          conditions.decodedExact)
+    cases decodedExact
+    split
+    · have impossible :=
+        ‹decideTransition learnedExecutableMetaContractInterface
+            source.transition = none›.symm.trans
+          conditions.transitionAccepted
+      cases impossible
+    · have decisionExact : _ = conditions.receivedDecision :=
+        Option.some.inj
+          (‹decideTransition learnedExecutableMetaContractInterface
+              source.transition = some _›.symm.trans
+            conditions.transitionAccepted)
+      cases decisionExact
+      rw [dif_pos conditions.dependencyExact]
+      rw [dif_pos conditions.targetExact]
+      exact ⟨_, rfl⟩
+
+/-- Extract the same autonomous local decisions from any successful learned
+analysis.  The extraction follows every executable failure branch, rather
+than wrapping the success equation in an existential. -/
+def learnedIncrementalLocalConditionsOfSuccess
+    (source : LearnedSerializedConstitutiveUpdate)
+    (analysis : LearnedIncrementalEngineAnalysis source)
+    (_accepted : analyzeLearnedRuntimeUpdate source = .ok analysis) :
+    LearnedIncrementalEngineLocalConditionData source :=
+  analysis.executed
 
 def learnedIncrementalCheckerEngine :
     IncrementalCheckerEngine learnedInitialCheckedAgent :=
-  { Update := IndependentLearnedUpdateCandidate
+  { Update := LearnedSerializedConstitutiveUpdate
     Error := LearnedRuntimeUpdateError
     Analysis := LearnedIncrementalEngineAnalysis
     analyze := analyzeLearnedRuntimeUpdate
+    LocalConditions := LearnedIncrementalEngineLocalConditionData
+    complete := completeLearnedIncrementalAnalysis
+    localOfSuccess := learnedIncrementalLocalConditionsOfSuccess
     target := fun analysis => analysis.target }
+
+theorem analyzeLearnedRuntimeUpdate_complete
+    (source : LearnedSerializedConstitutiveUpdate) :
+    GenericIncrementalUpdateLocalConditions
+        learnedIncrementalCheckerEngine source ↔
+      LearnedIncrementalEngineLocalConditions source := by
+  rfl
 
 theorem learnedGenericChecker_accepts_aligned :
     GenericIncrementalUpdateAccepted learnedIncrementalCheckerEngine
-      alignedUpdate := by
+      learnedAlignedSerializedUpdate := by
   apply (checkGenericIncrementalUpdate_complete_for_local_conditions
-    learnedIncrementalCheckerEngine alignedUpdate).2
-  exact ⟨.mk learnedAlignedTargetAnalysis rfl, rfl⟩
+    learnedIncrementalCheckerEngine learnedAlignedSerializedUpdate).2
+  exact ⟨
+    { decoded :=
+        { transitionExact := rfl
+          target := learnedDecodedAlignedArtifact
+          stable := learnedDecodedAlignedStableNaming
+          nextInputExact := rfl
+          intentAdmitted := .preserveAuthorizedBehavior }
+      decodedExact := rfl
+      receivedDecision := learnedAlignedTransitionDecision
+      transitionAccepted := rfl
+      dependencyExact := rfl
+      targetExact := rfl
+      preCertificateGraphExact := rfl
+      transportedOutsideCone := rfl
+      structuralRecalculation := learnedCalculatedStructuralAssembly
+      fragmentNamingExact := rfl
+      fragmentObservationsExact := rfl
+      executedSuccessor := LearnedExecutedStateTransition.installAligned }⟩
 
 theorem learnedGenericChecker_rejects_bypass :
     checkGenericIncrementalUpdate learnedIncrementalCheckerEngine
-        bypassUpdate =
+        learnedBypassSerializedUpdate =
       .error .missingConstitutiveDependency := by
   rfl
 
-/-- The dependent update language exposes plain learned candidates only at
-the exact checked source returned by `checkInitial`.  No constructor exists
-at an independently assembled source or after the aligned successor. -/
+/-- The dependent update language exposes only the common serialized request
+at the exact checked source returned by `checkInitial`.  No constructor exists
+for an instance-specific candidate, an independently assembled source, or the
+aligned successor. -/
 inductive LearnedRuntimeUpdate :
     {contract : LearnedOperationalContract} ->
       CheckedAgent learnedConstitutiveMetaContract contract -> Type where
-  | candidate (update : IndependentLearnedUpdateCandidate) :
+  | serialized (update : LearnedSerializedConstitutiveUpdate) :
       LearnedRuntimeUpdate learnedInitialCheckedAgent
 
 def learnedAlignedCheckedUpdate : CheckedUpdate
@@ -1015,9 +1594,9 @@ def learnedDependentIncrementalChecker :
   check := by
     intro contract current update
     cases update with
-    | candidate candidate =>
+    | serialized serialized =>
         match accepted : checkGenericIncrementalUpdate
-            learnedIncrementalCheckerEngine candidate with
+            learnedIncrementalCheckerEngine serialized with
         | .error problem => exact .error problem
         | .ok success =>
             exact .ok (dependentCheckedUpdateResult success.checked)
@@ -1030,12 +1609,12 @@ def learnedInitialCertifiedRuntime : CertifiedRuntime
 def learnedAlignedRuntimeUpdate :
     learnedDependentIncrementalChecker.Update
       learnedInitialCertifiedRuntime.current :=
-  .candidate alignedUpdate
+  .serialized learnedAlignedSerializedUpdate
 
 def learnedBypassRuntimeUpdate :
     learnedDependentIncrementalChecker.Update
       learnedInitialCertifiedRuntime.current :=
-  .candidate bypassUpdate
+  .serialized learnedBypassSerializedUpdate
 
 def learnedAlignedCertifiedRuntime : CertifiedRuntime
     learnedDependentIncrementalChecker learnedInitialCheckedAgent :=
@@ -1111,6 +1690,8 @@ def learnedAlignedRuntime_preservedContracts :
   learnedAlignedCertifiedRuntime.preservedContracts
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.independentLearnedDeclaredInputs
+#print axioms ConstitutiveSearch.NeuralAgent.independentLearnedDeclaredInputs_complete
 #print axioms ConstitutiveSearch.NeuralAgent.independentLearnedRequirementFamily
 #print axioms ConstitutiveSearch.NeuralAgent.independentLearnedFutureContract
 #print axioms ConstitutiveSearch.NeuralAgent.learnedOperationalContract
@@ -1118,16 +1699,37 @@ def learnedAlignedRuntime_preservedContracts :
 #print axioms ConstitutiveSearch.NeuralAgent.learnedDecodedAlignedArtifact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedInitialAuthorizationRole
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedAuthorizationRole
+#print axioms ConstitutiveSearch.NeuralAgent.learnedInitialCurrentRole
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedCurrentRole
 #print axioms ConstitutiveSearch.NeuralAgent.learnedInitialFiniteCausalBasis
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedFiniteCausalBasis
 #print axioms ConstitutiveSearch.NeuralAgent.learnedInitialStateFragments
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedStateFragments
 #print axioms ConstitutiveSearch.NeuralAgent.learnedConstitutiveMetaContract
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedSerializedConstitutiveUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.IndependentLearnedUpdateCandidate.toSerializedUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedSerializedConstitutiveUpdate.targetReceivedArtifact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedTransitionRequestEquality
+#print axioms ConstitutiveSearch.NeuralAgent.decodeLearnedSerializedConstitutiveUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExecutableMetaContractInterface
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedAlignedTransitionDecision
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedTransitionDecision
+#print axioms ConstitutiveSearch.NeuralAgent.decideLearnedAlignedTransition_exact
 #print axioms ConstitutiveSearch.NeuralAgent.checkInitial_accepts_learned_artifact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedInitialCheckedAgent
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedTargetAnalysis
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedTargetAnalysisFromDecision
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedTargetAnalysisFromDecision_transition_exact
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedIncrementalExecutedDependencies
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedIncrementalEngineAnalysis
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedIncrementalEngineAnalysis.target
 #print axioms ConstitutiveSearch.NeuralAgent.analyzeLearnedRuntimeUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedIncrementalEngineLocalConditionData
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedIncrementalEngineLocalConditions
+#print axioms ConstitutiveSearch.NeuralAgent.learnedIncrementalAnalysisOfLocalConditions
+#print axioms ConstitutiveSearch.NeuralAgent.completeLearnedIncrementalAnalysis
+#print axioms ConstitutiveSearch.NeuralAgent.learnedIncrementalLocalConditionsOfSuccess
+#print axioms ConstitutiveSearch.NeuralAgent.analyzeLearnedRuntimeUpdate_complete
 #print axioms ConstitutiveSearch.NeuralAgent.learnedGenericChecker_accepts_aligned
 #print axioms ConstitutiveSearch.NeuralAgent.learnedGenericChecker_rejects_bypass
 #print axioms ConstitutiveSearch.NeuralAgent.learnedDependentIncrementalChecker

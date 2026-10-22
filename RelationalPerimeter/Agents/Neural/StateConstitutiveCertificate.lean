@@ -26,12 +26,14 @@ def structuralLocations : (count : Nat) -> List (Fin count)
 structure StableWeightedRead where
   source : StableNodeKey
   weight : Int
+  deriving DecidableEq
 
 /-- The stable artifact-local observation retained by a state certificate. -/
 inductive StableArtifactObservation where
   | receivedInput
   | neuron (reads : List StableWeightedRead) (bias threshold : Int)
   | outputPort (source : StableNodeKey)
+  deriving DecidableEq
 
 def StableArtifactNaming.weightedRead
     {contract : ConstitutiveContract}

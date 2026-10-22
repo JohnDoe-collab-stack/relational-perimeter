@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "constitutive-neural-capability-comparison-result-v6",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_id",
+    "protocol_sha256",
+    "adapter_manifest_sha256",
+    "repository_commit",
+    "command",
+    "environment",
+    "shared_material_sha256",
+    "rows"
+  ],
+  "properties": {
+    "protocol_id": {
+      "const": "constitutive-neural-capability-comparison-v6"
+    },
+    "protocol_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "adapter_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "repository_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "command": {
+      "const": ["lake", "exe", "compiled_neural_comparison_adapters"]
+    },
+    "environment": {
+      "type": "object"
+    },
+    "shared_material_sha256": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "required": ["baseline_id"],
+            "properties": { "baseline_id": { "const": "extensional-current-behavior-verification" } }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["baseline_id"],
+            "properties": { "baseline_id": { "const": "fixed-network-interventional-causal-analysis" } }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["baseline_id"],
+            "properties": { "baseline_id": { "const": "pre-execution-action-shielding" } }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["baseline_id"],
+            "properties": { "baseline_id": { "const": "guaranteed-self-adaptive-system" } }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["baseline_id"],
+            "properties": { "baseline_id": { "const": "incremental-neural-verification-with-proof-reuse" } }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["baseline_id"],
+            "properties": { "baseline_id": { "const": "deployment-chain-certificate-propagation" } }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ],
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "baseline_id",
+          "adapter_sha256",
+          "same_material_checks",
+          "capabilities",
+          "diagnostics"
+        ],
+        "properties": {
+          "baseline_id": {
+            "enum": [
+              "extensional-current-behavior-verification",
+              "fixed-network-interventional-causal-analysis",
+              "pre-execution-action-shielding",
+              "guaranteed-self-adaptive-system",
+              "incremental-neural-verification-with-proof-reuse",
+              "deployment-chain-certificate-propagation"
+            ]
+          },
+          "adapter_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "same_material_checks": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "artifact_exact",
+              "aligned_candidate_exact",
+              "bypass_candidate_exact",
+              "admitted_intent_exact",
+              "current_domain_exact",
+              "future_requests_exact",
+              "target_contract_exact"
+            ],
+            "properties": {
+              "artifact_exact": { "const": true },
+              "aligned_candidate_exact": { "const": true },
+              "bypass_candidate_exact": { "const": true },
+              "admitted_intent_exact": { "const": true },
+              "current_domain_exact": { "const": true },
+              "future_requests_exact": { "const": true },
+              "target_contract_exact": { "const": true }
+            }
+          },
+          "capabilities": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "neural-causal-provenance",
+              "admission-distinct-from-certification",
+              "exact-action-and-effect",
+              "produced-succession",
+              "exact-forgetting",
+              "all-futures-preservation",
+              "pre-effect-refusal",
+              "local-certificate-reuse"
+            ],
+            "properties": {
+              "neural-causal-provenance": { "$ref": "#/$defs/capability-result" },
+              "admission-distinct-from-certification": { "$ref": "#/$defs/capability-result" },
+              "exact-action-and-effect": { "$ref": "#/$defs/capability-result" },
+              "produced-succession": { "$ref": "#/$defs/capability-result" },
+              "exact-forgetting": { "$ref": "#/$defs/capability-result" },
+              "all-futures-preservation": { "$ref": "#/$defs/capability-result" },
+              "pre-effect-refusal": { "$ref": "#/$defs/capability-result" },
+              "local-certificate-reuse": { "$ref": "#/$defs/capability-result" }
+            }
+          },
+          "diagnostics": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "capability-result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "evidence"],
+      "properties": {
+        "status": {
+          "enum": ["certified", "observed", "not-certified", "out-of-interface"]
+        },
+        "evidence": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}
