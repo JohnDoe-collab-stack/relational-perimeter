@@ -1,0 +1,738 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[a4paper,margin=2.55cm]{geometry}
+\usepackage{microtype}
+\usepackage{booktabs,array}
+\usepackage{fancyvrb}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+\setlist[itemize]{leftmargin=*,topsep=3pt,itemsep=2pt}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\emergencystretch=2em
+
+\newcommand{\Truth}{\operatorname{Truth}}
+\newcommand{\Proof}{\operatorname{Proof}}
+\newcommand{\ExactRealization}{\operatorname{ExactRealization}}
+\newcommand{\FutureContract}{\operatorname{FutureContract}}
+\newcommand{\FutureEquivalent}{\operatorname{FutureEquivalent}}
+\newcommand{\Outcome}{\operatorname{Outcome}}
+\newcommand{\Empty}{\mathsf{Empty}}
+% Les identifiants longs doivent pouvoir se couper aux caractères techniques
+% afin de respecter la largeur du texte. Une \mbox ici provoquerait des
+% débordements dans les marges pour les hashes et les noms de claims.
+\newcommand{\code}[1]{\nolinkurl{#1}}
+\newcommand{\Source}[2]{\href{https://github.com/JohnDoe-collab-stack/relational-perimeter/blob/1e5aeda745559d62a3819bb3213da7fce3c31ad1/#1}{\nolinkurl{#2}}}
+\newcommand{\SourceAt}[3]{\href{https://github.com/JohnDoe-collab-stack/relational-perimeter/blob/1e5aeda745559d62a3819bb3213da7fce3c31ad1/#1\#L#2}{\nolinkurl{#3}}}
+\newcommand{\MainAxis}{%
+  \begin{gathered}
+  \text{exécution certifiée}\\
+  \downarrow\\
+  \bigl(C(e),\Gamma_e,\sigma_e\bigr)\\
+  \downarrow\\
+  \text{obligation universelle}\\
+  \text{sur toute réalisation exacte de }C(e)
+  \end{gathered}}
+\newcommand{\FormalRevision}{1e5aeda745559d62a3819bb3213da7fce3c31ad1}
+
+\newtheorem{theoreme}{Théorème}[section]
+\newtheorem{proposition}[theoreme]{Proposition}
+\newtheorem{lemme}[theoreme]{Lemme}
+\theoremstyle{remark}
+\newtheorem{remarque}[theoreme]{Remarque}
+
+\title{De l'exécution gödelienne aux obligations universelles\\
+  de réalisation exacte\\[5pt]
+  \large Constitution opérationnelle des contrats, séparation et progression finie}
+\author{Formalisation \code{relational-perimeter}}
+\date{Révision formelle \code{1e5aeda74555}\\
+  \small Version documentaire révisée du 23 octobre 2026}
+
+\begin{document}
+\maketitle
+\vspace{-1.4em}
+
+\begin{abstract}
+Dans la théorie formelle plus large des contrats de futurs, du regroupement
+opérationnel, de la séparation finie, de la préservation dirigée des readouts
+et de la réalisation exacte, le résultat présenté ici est la construction
+spécifiquement gödelienne qui dérive une obligation universelle d'une
+exécution certifiée et renouvelle cette construction propre à chaque
+exécution par une progression finie des régimes de preuve.
+
+Nous présentons un résultat dont l'objet n'est pas seulement la non-prouvabilité
+produite par la diagonalisation gödelienne, mais l'obligation que son
+\emph{exécution certifiée} impose à toute réalisation exacte d'un contrat
+constitué à partir de cette même exécution. À chaque étage arithmétique
+certifié, une production exécutée fournit une phrase $G$ et des témoins de
+$\Truth(G)$ et de $\Proof_T(G)\to\Empty$. Le runtime constitué depuis cette
+exécution calcule deux terminaux. La même exécution dérive canoniquement son
+contrat, le paquet des deux runs et de leur collision opérationnelle, puis un
+séparateur fini entre les terminaux ainsi produits. Il s'ensuit que, pour tout
+type mémoire et toute réalisation exacte du contrat, leurs images mémoire sont
+distinctes. Cette séparation n'est pas un champ de la définition d'exactitude :
+elle est dérivée des témoins d'extrémité certifiés, des readouts terminaux et
+de leurs lois de préservation. En parallèle, un
+regroupement opérationnel à mémoire terminale commune est effectivement
+construit lorsqu'on n'exige pas l'exactitude globale des readouts, tandis
+qu'une réalisation exacte identité garantit la non-vacuité du résultat.
+Enfin, une progression gödelienne finie retient chaque exécution, étend
+exactement l'histoire par la phrase produite, puis renouvelle au nouvel
+étage le contrat et son obligation universelle. Le développement construit
+ainsi, pour toute hauteur naturelle finie, une chaîne dans laquelle chaque
+exécution retenue engendre une loi universelle sur toutes ses réalisations
+exactes admissibles. Son objet exact est la dérivation, propre à chaque
+exécution, d'un contrat et de son obligation, ainsi que leur renouvellement
+fini le long des exécutions effectivement produites.
+\end{abstract}
+
+\noindent\textbf{Objet central.}
+\[
+\boxed{\MainAxis}
+\]
+\noindent\textbf{Formalisation de référence.}
+\href{https://github.com/JohnDoe-collab-stack/relational-perimeter}{\code{relational-perimeter}}\\
+Révision \code{1e5aeda745559d62a3819bb3213da7fce3c31ad1}.
+
+\noindent\textbf{Claims suivis.}
+\begin{itemize}[leftmargin=1.25em,topsep=2pt,itemsep=0pt]
+\item \code{GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION}
+\item \code{GODEL_CONSTITUTIVE_THEORY_PROGRESSION}
+\end{itemize}
+
+\begin{center}
+\fbox{\begin{minipage}{0.91\linewidth}
+\textbf{Contrat constitué par une exécution $e$.}
+\[
+C(e)=\bigl(S_e,I,E,O,\operatorname{next},\operatorname{event},
+  \operatorname{read},\operatorname{Allow},\operatorname{decision}\bigr),
+\]
+avec $O=\mathrm{Type}$ et, pour les deux positions issues du même témoin
+gödelien produit,
+\[
+\operatorname{read}_{C(e)}(t^{\mathrm v})=\Truth(G),\qquad
+\operatorname{read}_{C(e)}(t^{\mathrm p})=\Proof_T(G).
+\]
+Le contrat est fixé avant tout choix de type mémoire et de réalisation.
+\end{minipage}}
+\end{center}
+
+\section{Changement d'objet de démonstration}
+
+La production d'une phrase gödelienne $G$ certifiée vraie et non prouvable
+dans une théorie $T$ demeure un ingrédient indispensable. Cependant, le
+résultat présenté ici ne s'arrête pas à ces deux propriétés. L'exécution
+qui produit les témoins sert à \emph{constituer un contrat} $C$ ; le contrat
+fixe des transitions, des événements, des autorisations et des readouts ;
+la distinction attestée par le témoin devient alors une propriété nécessaire
+de toute réalisation qui préserve exactement ce contrat.
+
+On passe ainsi d'une affirmation sur le régime de preuve de $T$ à un énoncé
+universel portant sur les représentations exactes admissibles de $C$.
+L'universalité ne signifie pas que toutes les représentations arbitraires
+sont admissibles : elle est quantifiée \emph{sur celles qui réalisent
+exactement le contrat de l'exécution}.
+
+\paragraph{Énoncé directeur.}
+À chaque étage fini $n$ de la progression considérée, notons $e_n$
+l'exécution gödelienne retenue, $C_n$ son contrat,
+$t_n^{\mathrm v}$ et $t_n^{\mathrm p}$ ses terminaux de vérité et de preuve,
+et $q_A$ la projection mémoire d'une réalisation $A$. Alors :
+\begin{equation}\label{eq:main}
+\boxed{\begin{gathered}
+C_n=\operatorname{godelClosureContract}(e_n),\\[3pt]
+\forall M,\;\forall A:\ExactRealization(C_n,M),\\[2pt]
+q_A(t_n^{\mathrm v})\neq q_A(t_n^{\mathrm p}).
+\end{gathered}}
+\end{equation}
+La différence des mémoires est une \emph{conclusion} et non une clause
+constitutive de $\ExactRealization$.
+
+\section{Constitution du contrat depuis l'exécution}
+\label{sec:contract}
+
+\subsection{Données exécutées et témoins}
+
+Soit $T$ un étage doté de la certification requise par l'interface formelle.
+La production gödelienne exécutée $e$ contient une phrase $G$ et des
+habitants des types
+\begin{equation}\label{eq:witnesses}
+\Truth(G),\qquad \Proof_T(G)\longrightarrow\Empty.
+\end{equation}
+Ici $\Proof_T(G)$ désigne le \emph{type de preuve} relatif au régime $T$ ;
+le second terme ne constitue pas une preuve de $G$ dans $T$, mais une
+fonction qui rejetterait tout habitant d'un tel type.
+
+L'exécution sert également de paramètre à la constitution des deux pôles du
+runtime, de ses sources et de ses runs autorisés de fermeture. Ces runs
+calculent les terminaux $t^{\mathrm v}$ et $t^{\mathrm p}$, auxquels sont
+associés les readouts
+\begin{equation}\label{eq:readouts}
+\operatorname{read}_C(t^{\mathrm v})=\Truth(G),\qquad
+\operatorname{read}_C(t^{\mathrm p})=\Proof_T(G).
+\end{equation}
+Les égalités concernent des valeurs du type d'observation, qui est ici un
+univers de types Lean. Elles ne comparent pas directement des valeurs de
+vérité booléennes.
+
+\subsection{Le contrat opérationnel fixé avant toute réalisation}
+
+Dans \SourceAt{RelationalPerimeter/Constitution/Continuation/Behavior.lean}{9-L14}{Behavior.lean}
+(lignes 9--14), un \code{FutureContract} comporte, pour des types
+$S$ (sources), $I$ (requêtes), $E$ (événements) et $O$ (observations),
+les opérations
+\[
+\begin{aligned}
+\operatorname{next}&:S\times I\to S, &
+\operatorname{event}&:S\times I\to E,\\
+\operatorname{read}&:S\to O, &
+\operatorname{Allow}&:S\times I\to\mathrm{Type},
+\end{aligned}
+\]
+ainsi qu'une décision effective d'autorisation ou de rejet pour chaque
+couple $(s,i)$. Le contrat prévoit les observations même lorsqu'une requête
+est refusée.
+
+Pour l'exécution gödelienne, la définition
+\code{godelClosureContract e} de
+\SourceAt{RelationalPerimeter/Constitution/Godel/OperationalClosure.lean}{150-L157}{OperationalClosure.lean}
+(lignes 150--157) fixe les cinq composantes du contrat : \code{next},
+\code{event}, \code{read}, \code{Allow} et \code{decision}. Son
+readout est déterminé par le pôle de la source :
+\code{Truth(G)} pour le pôle gauche et \code{Proof(G)} pour le pôle droit.
+Aucun type mémoire réduit ni aucune réalisation exacte n'entre dans
+la définition de ce contrat.
+
+\subsection{Sens exact de la réalisation}
+
+La structure \code{ExactRealization}, définie dans
+\SourceAt{RelationalPerimeter/Constitution/Continuation/Minimality.lean}{9-L23}{Minimality.lean}
+(lignes 9--23), donne un contrat réduit sur un type mémoire $M$ et une
+projection $q_A:S\to M$. Elle impose : préservation bilatérale des
+preuves d'autorisation (avec les lois d'aller-retour), commutation avec
+les transitions, égalité des événements et exactitude des readouts.
+En particulier :
+\begin{equation}\label{eq:exactness}
+\begin{aligned}
+q_A(\operatorname{next}_C(s,i))
+  &=\operatorname{next}_{A}(q_A(s),i),\\
+\operatorname{event}_C(s,i)
+  &=\operatorname{event}_{A}(q_A(s),i),\\
+\operatorname{read}_C(s)
+  &=\operatorname{read}_{A}(q_A(s)).
+\end{aligned}
+\end{equation}
+Cette structure ne contient aucun champ de la forme
+$q_A(t^{\mathrm v})\neq q_A(t^{\mathrm p})$. La préservation est fixée
+génériquement ; la nécessité de préserver \emph{cette distinction précise}
+provient de l'exécution gödelienne.
+
+\subsection{Paquet constitutif canoniquement dérivé}
+
+Il est utile de concentrer les données produites par une même exécution
+sans les transformer en nouvelle primitive. À toute exécution gödelienne
+certifiée $e$ sont canoniquement dérivés
+\begin{equation}\label{eq:constitutive-package}
+e\longmapsto\bigl(C(e),\Gamma_e,\sigma_e\bigr).
+\end{equation}
+Cette écriture résume une chaîne de constructions déjà séparées dans la
+formalisation ; elle ne désigne pas une structure Lean supplémentaire.
+Le paquet $\Gamma_e$ retient les deux runs autorisés non vides, leurs
+événements et leurs terminaux effectivement calculés :
+\[
+\Gamma_e=
+\bigl(r_e^{\mathrm v},r_e^{\mathrm p},
+      t_e^{\mathrm v},t_e^{\mathrm p},\kappa_e\bigr),
+\]
+où $\kappa_e$ certifie la collision des projections terminales dans la
+réalisation opérationnelle sans exactitude globale des readouts. Cette
+collision n'identifie ni les sources ni leurs profils constitutifs.
+
+Le dernier composant est construit sur les mêmes terminaux :
+\begin{equation}\label{eq:sigma-package}
+\sigma_e:
+\mathrm{FutureSeparator}
+  \bigl(C(e),t_e^{\mathrm v},t_e^{\mathrm p}\bigr),
+\qquad \sigma_e.\mathrm{requests}=[].
+\end{equation}
+Il dépend des témoins et des runs de $e$, mais d'aucun choix de type mémoire
+$M$ ni de réalisation exacte $A$. Le contrat fixe donc les règles de
+préservation, tandis que $\sigma_e$ détermine la distinction particulière
+que ces règles obligent toute réalisation exacte à conserver. On obtient :
+\begin{equation}\label{eq:package-obligation}
+\boxed{
+\sigma_e\Longrightarrow
+\forall M,\ \forall A:\ExactRealization(C(e),M),\quad
+q_A(t_e^{\mathrm v})\neq q_A(t_e^{\mathrm p}).}
+\end{equation}
+L'ordre des dépendances est ainsi explicite : l'exécution construit les
+runs et leurs terminaux ; les témoins exécutés certifient $\sigma_e$ ;
+l'exactitude rend ensuite la séparation obligatoire pour une réalisation
+arbitraire du contrat déjà fixé.
+
+\subsection{Deux conséquences distinctes du même contrat}
+
+Le contrat constitué alimente deux chemins formels qu'il ne faut pas
+confondre. Le premier impose une obligation universelle à toute réalisation
+exacte. Le second part d'un regroupement opérationnel positif et localise
+l'incompatibilité d'une préservation dirigée supplémentaire.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{>{\centering\arraybackslash}p{0.44\linewidth}
+                >{\centering\arraybackslash}p{0.44\linewidth}}
+\textbf{Chemin A : séparation universelle}
+& \textbf{Chemin B : collision et transport dirigé} \\
+paquet $(C(e),\Gamma_e,\sigma_e)$ & paquet $(C(e),\Gamma_e)$ \\
+$\downarrow$ & $\downarrow$ \\
+séparateur fini $\sigma_e$ avec requête $[]$ & collision opérationnelle $\kappa_e$ \\
+$\downarrow$ & $\downarrow$ \\
+$\forall A:\ExactRealization(C(e),M)$,
+$q_A(t^{\mathrm v})\neq q_A(t^{\mathrm p})$
+& collision mémoire et préservation dirigée supplémentaire \\
+& $\downarrow$ \\
+& transport dirigé $\Truth(G)\to\Proof_T(G)$ \\
+& $\downarrow$ avec \code{trueWitness} et \code{unprovable} \\
+& $\Empty$
+\end{tabular}
+\end{center}
+
+Dans le chemin B, la préservation dirigée n'est pas un champ de
+$C(e)$ : elle est l'exigence additionnelle dont la compatibilité avec la
+collision calculée est testée.
+
+\section{Du témoin gödelien au séparateur fini}
+\label{sec:separator}
+
+\begin{lemme}[Incompatibilité des readouts]\label{lem:readout}
+Les témoins de \eqref{eq:witnesses} établissent, comme inégalité de types
+utilisés par le readout,
+\[
+\Truth(G)\neq\Proof_T(G).
+\]
+\end{lemme}
+\begin{proof}
+Supposons une égalité de ces types. Le transport du témoin
+$\Truth(G)$ le long de l'égalité donne un habitant de $\Proof_T(G)$.
+L'application du témoin $\Proof_T(G)\to\Empty$ fournit un habitant de
+$\Empty$, contradiction. C'est la forme de
+\code{godelWitnessReadouts\_ne},
+\SourceAt{RelationalPerimeter/Constitution/Godel/OperationalClosure.lean}{636-L641}{OperationalClosure.lean},
+lignes 636--641.
+\end{proof}
+
+\paragraph{Distinction de deux exécutions de requêtes.}
+Les terminaux sont \emph{d'abord calculés} par des runs autorisés de fermeture
+portant chacun la requête non vide \code{[close]}. Une fois ces terminaux
+obtenus, le séparateur les observe avec la liste de requêtes vide
+\code{[]}. Cette seconde liste n'est pas une exécution vide qui aurait
+fabriqué les terminaux : elle observe leurs readouts déjà produits.
+
+Le contrat possède une fonction $\operatorname{outcome}_C(s,w)$ qui
+assemble readout, autorisations et événements le long de la liste $w$.
+Par définition,
+\[
+\operatorname{outcome}_C(s,[]) =
+  \operatorname{stop}(\operatorname{read}_C(s)).
+\]
+Le lemme précédent et \eqref{eq:readouts} donnent donc :
+\begin{equation}\label{eq:separator}
+\operatorname{outcome}_{C}(t^{\mathrm v},[])
+\neq\operatorname{outcome}_{C}(t^{\mathrm p},[]).
+\end{equation}
+L'objet \code{godelTerminalSeparator e} construit précisément ce
+\code{FutureSeparator}, avec le champ \code{requests := []}
+(\SourceAt{RelationalPerimeter/Constitution/Godel/OperationalClosure.lean}{642-L667}{OperationalClosure.lean},
+lignes 642--667).
+
+\section{Obligation universelle de réalisation exacte}
+\label{sec:theorem}
+
+\begin{lemme}[Principe générique de conservation]\label{lem:generic}
+Pour un contrat $C$, une réalisation exacte $A$ de $C$ sur un type mémoire
+$M$ et deux sources $s,t$, on a
+\[
+q_A(s)=q_A(t)\quad\Longrightarrow\quad
+\FutureEquivalent(C,s,t).
+\]
+Ainsi, tout séparateur fini de $s$ et $t$ interdit $q_A(s)=q_A(t)$.
+\end{lemme}
+\begin{proof}
+La préservation de la transition, de l'autorisation, de l'événement et du
+readout donne, par induction sur les listes de requêtes, l'égalité des
+outcomes du contrat et du contrat réduit. Deux mémoires projetées égales
+ont alors les mêmes outcomes réduits pour toute liste ; par transport,
+les outcomes sources sont égaux. Un séparateur fournit une liste pour
+laquelle cette égalité est impossible. Ces étapes sont les théorèmes
+\code{ExactRealization.outcome\_exact},
+\code{equal\_memory\_same\_futures}, puis
+\code{distinct\_memory\_of\_separator} dans
+\SourceAt{RelationalPerimeter/Constitution/Continuation/Minimality.lean}{56-L75}{Minimality.lean}
+et \SourceAt{RelationalPerimeter/Constitution/Continuation/ExactSeparation.lean}{20-L27}{ExactSeparation.lean}.
+\end{proof}
+
+\begin{theoreme}[Séparation universelle engendrée par l'exécution gödelienne]
+\label{thm:universal}
+Soit $e$ une exécution gödelienne certifiée et $C(e)$ le contrat
+\code{godelClosureContract e} qu'elle constitue. Soient
+$t^{\mathrm v}(e)$ et $t^{\mathrm p}(e)$ les terminaux effectivement
+calculés par le regroupement opérationnel de cette exécution. Alors
+\begin{equation}\label{eq:universal}
+\boxed{\begin{gathered}
+\forall M,\quad \forall A:\ExactRealization(C(e),M),\\
+q_A(t^{\mathrm v}(e))\neq q_A(t^{\mathrm p}(e)).
+\end{gathered}}
+\end{equation}
+\end{theoreme}
+\begin{proof}
+L'exécution produit les témoins de \eqref{eq:witnesses} et ses deux runs
+calculent les terminaux. Le lemme~\ref{lem:readout} fournit la différence
+de readouts ; la requête vide fournit le séparateur fini
+\eqref{eq:separator}. Pour une réalisation exacte $A$ arbitraire, le
+lemme~\ref{lem:generic} interdit l'égalité de leurs projections mémoire.
+Aucun choix de $M$ ou de $A$ n'intervient dans la construction du contrat
+ni dans celle du séparateur. L'énoncé se conclut donc pour toutes les
+réalisations exactes admissibles. En Lean, le théorème
+\begin{center}
+\code{godelEveryExactRealizationSeparatesTerminals}
+\end{center}
+est obtenu par
+application directe de
+\code{realization.distinct\_memory\_of\_separator}
+à \code{godelTerminalSeparator execution}
+(\SourceAt{RelationalPerimeter/Constitution/Godel/OperationalClosure.lean}{669-L676}{OperationalClosure.lean},
+lignes 669--676).
+\end{proof}
+
+\begin{remarque}[Nature de l'universalité]
+Le contrat $C(e)$ \emph{dépend} de l'exécution $e$. Ce qui est indépendant
+d'une réalisation particulière n'est ni l'existence de cette exécution
+ni le choix de son contrat, mais la preuve de la contrainte
+\eqref{eq:universal}. La quantification porte sur les réalisations exactes
+de $C(e)$, et non sur tous les modèles possibles de Gödel.
+\end{remarque}
+
+\begin{remarque}[Force minimale de l'obstruction]
+Pour ces terminaux, la liste séparatrice est vide : le désaccord est
+immédiatement visible dans les readouts. L'argument particulier peut donc
+être lu directement via \code{read\_exact}. Le lemme générique de
+conservation des futurs est plus large que ce qui est nécessaire pour
+ce seul séparateur. Cette observation ne modifie ni la constitution du
+contrat ni la portée universelle du théorème.
+\end{remarque}
+
+\section{Frontière exacte : regroupement, conservation, existence}
+\label{sec:frontier}
+
+Le théorème précédent ne dit pas qu'aucun regroupement des deux branches
+n'est exécutable. Le code sépare précisément trois affirmations.
+
+\begin{proposition}[Regroupement opérationnel sans exactitude globale]
+Une projection opérationnelle conserve les transitions, les événements
+et les autorisations tout en calculant une mémoire terminale commune après
+les deux runs de fermeture. Elle n'assume pas l'exactitude globale des
+readouts.
+\end{proposition}
+\begin{proof}[Construction]
+La mémoire opérationnelle comporte des états actifs retenant le pôle et
+des états \code{grouped} qui ne le retiennent plus. La transition de
+fermeture produit un état \code{grouped} commun. Les lois opérationnelles
+sont établies dans \code{godelOperationalRealizationWithoutRead} ;
+\code{godelOperationalGroupingWithoutRead} exécute les deux runs et
+démontre leur collision calculée (\SourceAt{RelationalPerimeter/Constitution/Godel/OperationalClosure.lean}{589-L602}{OperationalClosure.lean},
+lignes 165--272 et 358--372, 589--602). Le contrat réduit lit ici une
+observation constante \code{PUnit} : il ne prétend pas reproduire les deux
+readouts sources.
+\end{proof}
+
+\begin{proposition}[Rejet de la conservation dirigée en présence de collision]
+Ajouter à ce regroupement la conservation dirigée permettant de passer du
+readout de vérité au readout de preuve produirait
+$\Truth(G)\to\Proof_T(G)$, puis $\Empty$.
+\end{proposition}
+\begin{proof}
+Le regroupement calcule l'égalité des mémoires terminales. Une
+\begin{center}
+\code{DirectedTerminalReadoutPreservation}
+\end{center}
+transporterait alors un
+habitant du readout de vérité vers le readout de preuve. Appliquée au
+témoin vrai et suivie du certificat de non-prouvabilité, cette conversion
+produit $\Empty$. C'est la chaîne
+\begin{center}
+\code{godelComputedGroupingToProducedCompleteness}\\[2pt]
+$\downarrow$\\[2pt]
+\code{rejectGodelComputedGroupingToEmpty}
+\end{center}
+Elle est distincte de la
+preuve du théorème~\ref{thm:universal}.
+\end{proof}
+
+\begin{proposition}[Non-vacuité de l'exactitude]
+Pour tout contrat $C$ de type \code{FutureContract}, il existe une
+réalisation exacte identité, dont le type mémoire est celui des sources.
+En particulier, le contrat gödelien possède une réalisation exacte.
+\end{proposition}
+\begin{proof}[Construction]
+La définition \code{identityRealization} pose
+$M=S$, $q_A=\mathrm{id}$ et reprend le contrat comme contrat réduit.
+Les lois d'exactitude se réduisent à des égalités réflexives ; voir
+\SourceAt{RelationalPerimeter/Constitution/Continuation/CommonMemoryGrouping.lean}{10-L19}{CommonMemoryGrouping.lean},
+lignes 10--19. La spécialisation est \code{godelIdentityRealization},
+puis \code{heytingArithmeticIdentityRuntime} pour l'instance HA.
+\end{proof}
+
+Ces trois résultats fixent la frontière : \emph{fusion opérationnelle
+constructible sans exactitude globale des readouts ; fusion des terminaux
+interdite dans toute réalisation exacte du contrat ; existence effective
+d'au moins une telle réalisation exacte}. La non-vacuité est globale : elle
+n'implique pas que chaque type mémoire arbitraire admette une réalisation
+exacte.
+
+\section{Renouvellement constitutif à chaque étage fini}
+\label{sec:progression}
+
+Un \code{SoundGodelTheoryStage} conserve une histoire $\mathcal H_n$, le
+régime arithmétique $T_n$ qu'elle présente, sa certification,
+une exécution gödelienne maîtresse et une preuve d'identité de cette exécution
+avec la production canonique du régime. La procédure
+\code{executeGodelTheoryProgressionFrom} consomme cette exécution retenue.
+Elle ajoute \emph{l'occurrence exacte} de la phrase qu'elle a produite :
+\begin{equation}\label{eq:successor}
+\mathcal H_{n+1}
+  =\operatorname{extend}\bigl(\mathcal H_n,
+    \operatorname{occurrence}(G_n)\bigr).
+\end{equation}
+Cette écriture désigne une extension constitutive de l'histoire par
+l'occurrence effectivement produite. Elle ne désigne ni une union
+ensembliste primitive ni l'ajout d'une phrase reconstruite indépendamment.
+La certification s'appuie sur le témoin de vérité de la production source.
+L'occurrence nouvellement ajoutée fournit une preuve vérifiée de $G_n$
+dans $T_{n+1}$. Cette preuve est construite \emph{par l'occurrence ajoutée}
+: la fonction Lean nommée \code{oldTruthToTargetProof} ignore son argument
+de vérité et renvoie la preuve cible déjà construite. Il ne s'agit donc
+pas d'un procédé général transformant la vérité en preuve.
+
+La même étape exécute une \emph{nouvelle} production $G_{n+1}$ relativement
+au régime étendu. On dispose alors des données suivantes :
+\[
+\begin{gathered}
+\Proof_{T_n}(G_n)\to\Empty,
+\qquad \Proof_{T_{n+1}}(G_n),\\
+\Truth(G_{n+1}),\qquad
+\Proof_{T_{n+1}}(G_{n+1})\to\Empty,\\
+G_n\neq G_{n+1}.
+\end{gathered}
+\]
+L'inégalité des phrases est démontrée : les identifier transporterait
+la preuve construite de $G_n$ au nouvel énoncé non prouvable
+$G_{n+1}$ (\SourceAt{RelationalPerimeter/Instances/HeytingArithmetic/GodelTheoryProgression.lean}{175-L207}{GodelTheoryProgression.lean},
+lignes 175--207).
+
+\begin{theoreme}[Renouvellement fini de l'obligation]\label{thm:finite}
+Pour tout étage certifié $S_0$ et toute hauteur naturelle $n$, l'étage
+$S_n=\operatorname{advance}(S_0,n)$ est constitué par itération finie.
+En désignant par $e_n$ l'exécution qu'il retient, par $C_n=C(e_n)$ son
+contrat et par $t_n^{\mathrm v}$, $t_n^{\mathrm p}$ ses terminaux calculés,
+la conclusion \eqref{eq:main} vaut à cet étage. Cette conclusion vaut en
+particulier pour la progression issue de l'étage initial HA.
+\end{theoreme}
+\begin{proof}
+La construction \code{advance} est récursive sur $n$ ; la construction
+\code{executedTrace} retient en outre chaque étape, son exécution cible
+et son histoire. Son cas successeur consomme le terminal effectivement
+produit par l'étape précédente, plutôt que de reconstruire une histoire
+équivalente à partir d'un simple indice. La propriété universelle
+\code{everyExactRealizationSeparatesCurrentTerminals} s'applique à
+chaque \code{SoundGodelTheoryStage}, donc à l'étage obtenu pour la hauteur
+$n$ (\SourceAt{RelationalPerimeter/Instances/HeytingArithmetic/GodelTheoryProgression.lean}{291-L448}{GodelTheoryProgression.lean},
+lignes 291--448).
+\end{proof}
+
+L'extension de la théorie et la réalisation du contrat restent deux
+opérations distinctes. Aucune réalisation exacte commune n'est construite
+entre $C_n$ et $C_{n+1}$ ; les frontières de preuve et les obligations sont
+réévaluées \emph{relativement au contrat propre de chaque étage}.
+
+La trace exécutée conserve les étapes et les exécutions effectivement
+produites. Les obligations universelles ne sont pas stockées comme des champs
+de l'histoire ou de la trace. Elles sont dérivables à chaque étage retenu en
+appliquant \code{everyExactRealizationSeparatesCurrentTerminals} à l'exécution
+propre de cet étage. À chaque étage de la trace finie, une obligation
+renouvelée, relative à son propre contrat, est donc dérivable.
+
+\section{Contribution et portée exacte du résultat}
+
+La contribution formellement présentée est la chaîne constitutive complète
+\[
+\boxed{\begin{gathered}
+e\longmapsto\bigl(C(e),\Gamma_e,\sigma_e\bigr)\\[3pt]
+\downarrow\\[3pt]
+\forall M,\;\forall A:\ExactRealization(C(e),M),\\[2pt]
+q_A(t_e^{\mathrm v})\neq q_A(t_e^{\mathrm p}).
+\end{gathered}}
+\]
+Elle est réalisée par la production gödelienne, son séparateur fini, le
+théorème universel de séparation et leur renouvellement à toute hauteur finie.
+
+\paragraph{Découverte présentée.}
+Une exécution gödelienne certifiée ne fournit pas seulement une phrase et
+des propriétés relatives à sa prouvabilité. À partir du même témoin exécuté,
+elle constitue son contrat de futurs, produit deux runs et leurs terminaux,
+construit une collision opérationnelle sous le régime qui n'impose pas
+l'exactitude globale des readouts, puis construit sur ces mêmes terminaux un
+séparateur fini. Cette donnée particulière engendre alors une conséquence
+indépendante de tout choix ultérieur de mémoire : chaque réalisation exacte
+admissible du contrat doit maintenir distinctes les projections des deux
+terminaux. La progression conserve les exécutions produites et renouvelle
+cette génération d'une obligation universelle à chaque étage naturel fini.
+
+Le passage décisif n'est pas la seule inégalité finale entre deux mémoires.
+À partir d'une exécution singulière sont construits le contrat, les runs, les
+terminaux et le séparateur auxquels s'applique ensuite la loi générique
+d'exactitude. La distinction particulière imposée aux réalisations n'est donc
+ni un champ de \code{ExactRealization}, ni une séparation choisie avant
+l'exécution. Elle est engendrée par les objets effectivement produits, puis
+devient universelle relativement au contrat ainsi constitué. Le résultat
+transforme donc les témoins gödeliens certifiés en une obligation
+représentationnelle portant sur toute réalisation exacte admissible.
+
+La contribution ne réside donc ni dans le seul lemme abstrait affirmant
+qu'une observation préservée doit rester distinguable, ni dans la seule
+production d'une phrase gödelienne. Elle réside dans leur articulation
+constitutive complète : les données auxquelles s'applique l'obligation
+universelle sont précisément celles qu'a produites et retenues l'exécution
+gödelienne qui constitue le contrat.
+
+Le résultat peut être résumé en une phrase :
+\begin{quote}
+Une exécution gödelienne certifiée dérive canoniquement un contrat, deux runs
+et leurs terminaux, une collision opérationnelle ainsi qu'un séparateur fini
+de ces mêmes terminaux. Sans postuler d'inégalité entre leurs mémoires
+projetées, ce séparateur impose leur séparation dans toute réalisation exacte
+admissible ; la progression des théories renouvelle cette obligation à chaque
+étage fini constitué.
+\end{quote}
+
+\paragraph{Portée exacte.}
+Le théorème porte sur les contrats constitués par les exécutions certifiées
+de la formalisation et sur toutes leurs réalisations exactes admissibles.
+La progression est construite pour chaque hauteur naturelle finie ; elle
+retient les occurrences et les exécutions effectivement produites, puis
+réévalue l'obligation relativement au contrat propre du nouvel étage. Son
+objet ne comprend pas d'étage limite, d'union transfinie, de théorie finale
+complète ni de réalisation transversale entre les contrats successifs. La
+séparation démontrée concerne la non-prouvabilité certifiée de la phrase
+produite ; elle ne remplace pas une preuve distincte de non-réfutabilité.
+
+\paragraph{Positionnement scientifique.}
+La diagonalisation exécutée, la séparation observationnelle, les contrats
+indépendants de leurs implémentations et les progressions de théories ont
+chacun des antécédents établis. La contribution revendiquée ici n'est aucun
+de ces ingrédients isolés. Dans le corpus primaire comparatif examiné, aucun
+antécédent n'a été identifié qui construise, à partir du même témoin
+gödelien exécuté, la chaîne entière
+\[
+e\longmapsto\bigl(C(e),\Gamma_e,\sigma_e\bigr)
+\longmapsto
+\forall M\,\forall A:\ExactRealization(C(e),M),\quad
+q_A(t_e^{\mathrm v})\neq q_A(t_e^{\mathrm p}),
+\]
+qui établisse en même temps la possibilité du regroupement opérationnel sans
+exactitude globale, la non-vacuité de la quantification par une réalisation
+exacte positive, puis renouvelle cette obligation sur la trace finie
+effectivement produite. Ce positionnement localise la contribution ; il ne
+remplace ni la chaîne formelle ni l'axe d'exposition qui part de l'exécution.
+
+\section{Noyau Lean et traçabilité des dépendances}
+\label{sec:lean}
+
+La formule centrale rassemble quatre constructions formelles distinctes :
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.28\linewidth}
+                >{\raggedright\arraybackslash}p{0.61\linewidth}}
+\toprule
+\textbf{Notation du manuscrit} & \textbf{Construction Lean} \\
+\midrule
+$C(e)$ & \code{godelClosureContract execution} \\
+$\Gamma_e$ & \code{godelOperationalGroupingWithoutRead execution} \\
+$\sigma_e$ & \code{godelTerminalSeparator execution} \\
+obligation universelle & \code{godelEveryExactRealizationSeparatesTerminals} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Le triplet $(C(e),\Gamma_e,\sigma_e)$ est une notation documentaire pour
+cette composition de constructions existantes. Il ne désigne pas une
+structure Lean supplémentaire.
+
+Le point de passage qui rend visible le changement d'objet est le théorème
+\begin{center}
+\code{godelEveryExactRealizationSeparatesTerminals}
+\end{center}
+de
+\SourceAt{RelationalPerimeter/Constitution/Godel/OperationalClosure.lean}{669-L676}{OperationalClosure.lean}
+(lignes 669--676). Son terme de preuve est exactement :
+\begin{Verbatim}[fontsize=\small]
+realization.distinct_memory_of_separator (godelTerminalSeparator execution)
+\end{Verbatim}
+La progression aboutit au théorème suivant, valable pour un étage certifié
+quelconque :
+\begin{center}
+\code{everyExactRealizationSeparatesCurrentTerminals}
+\end{center}
+Son hypothèse \code{realization} est quantifiée sur toute réalisation exacte
+du contrat de l'exécution retenue par l'étage.
+
+\paragraph{Dépendances décisives, dans leur ordre logique.}
+\begin{enumerate}[leftmargin=*,itemsep=3pt]
+\item \textbf{Constitution.} \code{godelClosureContract} est défini à partir de l'exécution, sans mémoire choisie.
+\item \textbf{Production de $\Gamma_e$.} \code{godelOperationalGroupingWithoutRead} exécute les deux runs non vides, retient leurs événements et leurs terminaux, puis construit leur collision opérationnelle sans exactitude globale des readouts.
+\item \textbf{Construction de $\sigma_e$.} \code{godelTerminalSeparator} réutilise les terminaux de ces runs, fixe la requête \code{[]} et prouve le désaccord de leurs outcomes à partir des témoins de la même exécution.
+\item \textbf{Passage au général.} \code{distinct_memory_of_separator} transforme le séparateur en contrainte sur chaque réalisation exacte, sans choisir la mémoire ni la réalisation lors de la construction de $\sigma_e$.
+\item \textbf{Frontière.} La collision de $\Gamma_e$ est positive dans la réalisation opérationnelle sans readout exact, tandis que \code{identityRealization} construit une réalisation exacte qui conserve les terminaux distincts.
+\item \textbf{Progression.} \code{executedTrace} conserve les étapes ; l'obligation est portée à un étage quelconque par le théorème indiqué ci-dessus.
+\end{enumerate}
+
+\paragraph{Statut de la vérification.}
+Les définitions et les corps de preuve cités ont été confrontés aux fichiers
+publics du dépôt à la révision indiquée en première page. Les sources
+comportent des directives \texttt{\#print axioms} pour les déclarations
+centrales. Leur présence ne vaut pas, à elle seule, rapport d'audit des
+résultats ; ce manuscrit ne prétend pas avoir exécuté indépendamment
+\texttt{lake build} ni reproduit les sorties de l'audit axiomatique.
+
+\paragraph{Statut documentaire.}
+Ce texte réorganise, sans augmenter la portée des résultats, le théorème-cadre
+\Source{docs/theoreme-cadre-progression-godelienne-separation-exacte.fr.tex}{LaTeX}
+et la présentation canonique
+\href{https://github.com/JohnDoe-collab-stack/relational-perimeter/blob/1e5aeda745559d62a3819bb3213da7fce3c31ad1/docs/progression-constitutive-theories-godeliennes.fr.md}{\emph{Progression constitutive des théories et obstructions gödeliennes}}.
+Il explicite avant tout l'axe exécution--contrat--obligation universelle,
+qui motive le présent ordre d'exposition.
+
+\section{Conclusion}
+
+Le déplacement établi par la formalisation part de l'exécution elle-même.
+Une production gödelienne certifiée constitue les objets, le contrat et le
+témoin fini qui rendent ensuite démontrable une obligation portant sur toute
+réalisation exacte admissible, quel que soit son type mémoire. L'universel
+n'est donc ni ajouté extérieurement à l'exécution ni supposé dans la
+définition de l'exactitude : il est engendré par la conservation exacte des
+distinctions que cette exécution particulière a effectivement produites.
+
+La progression finie répète ce passage sans reconstruire indépendamment ses
+entrées : chaque nouvel étage consomme l'histoire et l'exécution retenues,
+constitue son propre contrat, puis renouvelle l'obligation universelle. Le
+résultat central demeure ainsi celui annoncé dès la première page :
+\[
+\boxed{\MainAxis}
+\]
+
+\end{document}

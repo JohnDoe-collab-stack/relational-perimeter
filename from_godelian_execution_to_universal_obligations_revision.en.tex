@@ -1,0 +1,735 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[a4paper,margin=2.55cm]{geometry}
+\usepackage{microtype}
+\usepackage{booktabs,array}
+\usepackage{fancyvrb}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+\setlist[itemize]{leftmargin=*,topsep=3pt,itemsep=2pt}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+\emergencystretch=2em
+
+\newcommand{\Truth}{\operatorname{Truth}}
+\newcommand{\Proof}{\operatorname{Proof}}
+\newcommand{\ExactRealization}{\operatorname{ExactRealization}}
+\newcommand{\FutureContract}{\operatorname{FutureContract}}
+\newcommand{\FutureEquivalent}{\operatorname{FutureEquivalent}}
+\newcommand{\Outcome}{\operatorname{Outcome}}
+\newcommand{\Empty}{\mathsf{Empty}}
+% Long technical identifiers must remain breakable so that hashes and claim
+% names do not extend beyond the text area.
+\newcommand{\code}[1]{\nolinkurl{#1}}
+\newcommand{\Source}[2]{\href{https://github.com/JohnDoe-collab-stack/relational-perimeter/blob/1e5aeda745559d62a3819bb3213da7fce3c31ad1/#1}{\nolinkurl{#2}}}
+\newcommand{\SourceAt}[3]{\href{https://github.com/JohnDoe-collab-stack/relational-perimeter/blob/1e5aeda745559d62a3819bb3213da7fce3c31ad1/#1\#L#2}{\nolinkurl{#3}}}
+\newcommand{\MainAxis}{%
+  \begin{gathered}
+  \text{certified execution}\\
+  \downarrow\\
+  \bigl(C(e),\Gamma_e,\sigma_e\bigr)\\
+  \downarrow\\
+  \text{universal obligation}\\
+  \text{over every exact realization of }C(e)
+  \end{gathered}}
+\newcommand{\FormalRevision}{1e5aeda745559d62a3819bb3213da7fce3c31ad1}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{From Gödelian Execution to Universal Obligations\\
+  of Exact Realization\\[5pt]
+  \large Operational Constitution of Contracts, Separation, and Finite Progression}
+\author{Formalization \code{relational-perimeter}}
+\date{Formal revision \code{1e5aeda74555}\\
+  \small Revised document version of October 23, 2026}
+
+\begin{document}
+\maketitle
+\vspace{-1.4em}
+
+\begin{abstract}
+Within the broader formal theory of future contracts, operational grouping,
+finite separation, directed readout preservation, and exact realization, the
+result presented here is the specifically Gödelian construction that derives
+a universal obligation from a certified execution and renews this
+per-execution construction through a finite progression of proof regimes.
+
+We present a result whose object is not only the unprovability produced by
+Gödelian diagonalization, but the obligation that its \emph{certified
+execution} imposes on every exact realization of a contract constituted
+from that same execution. At each certified arithmetic stage, an executed
+production supplies a sentence $G$ and witnesses of $\Truth(G)$ and
+$\Proof_T(G)\to\Empty$. The runtime constituted from that execution computes
+two terminals. The same execution canonically derives its contract, the
+package containing the two runs and their operational collision, and then a
+finite separator between the terminals thus produced. It follows that, for
+every memory type and every exact realization of the contract, their memory
+images are distinct. This separation is not a field of the definition of
+exactness: it is derived from the certified endpoint witnesses, the terminal
+readouts, and their preservation laws. In parallel, an
+operational grouping with a common terminal memory is effectively
+constructed when global readout exactness is not required, while an exact
+identity realization ensures that the result is non-vacuous. Finally, a
+finite Gödelian progression retains every execution, extends the history
+exactly by the produced sentence, and then renews the contract and its
+universal obligation at the new stage. The development therefore constructs,
+for every finite natural height, a chain in which each retained execution
+generates a universal law governing all its admissible exact realizations.
+Its exact object is the per-execution derivation of a contract and its
+obligation, together with their finite renewal along the executions that were
+actually produced.
+\end{abstract}
+
+\noindent\textbf{Central object.}
+\[
+\boxed{\MainAxis}
+\]
+\noindent\textbf{Reference formalization.}
+\href{https://github.com/JohnDoe-collab-stack/relational-perimeter}{\code{relational-perimeter}}\\
+Revision \code{1e5aeda745559d62a3819bb3213da7fce3c31ad1}.
+
+\noindent\textbf{Tracked claims.}
+\begin{itemize}[leftmargin=1.25em,topsep=2pt,itemsep=0pt]
+\item \code{GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION}
+\item \code{GODEL_CONSTITUTIVE_THEORY_PROGRESSION}
+\end{itemize}
+
+\begin{center}
+\fbox{\begin{minipage}{0.91\linewidth}
+\textbf{Contract constituted by an execution $e$.}
+\[
+C(e)=\bigl(S_e,I,E,O,\operatorname{next},\operatorname{event},
+  \operatorname{read},\operatorname{Allow},\operatorname{decision}\bigr),
+\]
+with $O=\mathrm{Type}$ and, for the two positions obtained from the same
+produced Gödelian witness,
+\[
+\operatorname{read}_{C(e)}(t^{\mathrm v})=\Truth(G),\qquad
+\operatorname{read}_{C(e)}(t^{\mathrm p})=\Proof_T(G).
+\]
+The contract is fixed before any choice of memory type or realization.
+\end{minipage}}
+\end{center}
+
+\section{A change in the object of proof}
+
+The production of a Gödelian sentence $G$ certified as true and unprovable
+in a theory $T$ remains an indispensable ingredient. The result presented
+here, however, does not stop at these two properties. The execution that
+produces the witnesses serves to \emph{constitute a contract} $C$; the
+contract fixes transitions, events, authorizations, and readouts; the
+distinction certified by the witness then becomes a necessary property of
+every realization that preserves this contract exactly.
+
+We thereby move from a statement about the proof regime of $T$ to a
+universal statement about the admissible exact representations of $C$.
+Universality does not mean that all arbitrary representations are
+admissible: the quantification ranges \emph{over those that realize the
+contract of the execution exactly}.
+
+\paragraph{Governing statement.}
+At every finite stage $n$ of the progression under consideration, let
+$e_n$ be the retained Gödelian execution, $C_n$ its contract,
+$t_n^{\mathrm v}$ and $t_n^{\mathrm p}$ its truth and proof terminals, and
+$q_A$ the memory projection of a realization $A$. Then:
+\begin{equation}\label{eq:main}
+\boxed{\begin{gathered}
+C_n=\operatorname{godelClosureContract}(e_n),\\[3pt]
+\forall M,\;\forall A:\ExactRealization(C_n,M),\\[2pt]
+q_A(t_n^{\mathrm v})\neq q_A(t_n^{\mathrm p}).
+\end{gathered}}
+\end{equation}
+The difference between the memories is a \emph{conclusion}, not a
+constitutive clause of $\ExactRealization$.
+
+\section{Constitution of the contract from the execution}
+\label{sec:contract}
+
+\subsection{Executed data and witnesses}
+
+Let $T$ be a stage equipped with the certification required by the formal
+interface. The executed Gödelian production $e$ contains a sentence $G$
+and inhabitants of the types
+\begin{equation}\label{eq:witnesses}
+\Truth(G),\qquad \Proof_T(G)\longrightarrow\Empty.
+\end{equation}
+Here $\Proof_T(G)$ denotes the \emph{proof type} relative to the regime
+$T$; the second term is not a proof of $G$ in $T$, but a function that
+would reject any inhabitant of such a type.
+
+The execution also serves as a parameter in the constitution of the two
+poles of the runtime, its sources, and its authorized closure runs. These
+runs compute the terminals $t^{\mathrm v}$ and $t^{\mathrm p}$, to which
+the readouts
+\begin{equation}\label{eq:readouts}
+\operatorname{read}_C(t^{\mathrm v})=\Truth(G),\qquad
+\operatorname{read}_C(t^{\mathrm p})=\Proof_T(G)
+\end{equation}
+are associated. These equalities concern values of the observation type,
+which here is a Lean universe of types. They do not directly compare
+Boolean truth values.
+
+\subsection{The operational contract fixed before any realization}
+
+In \SourceAt{RelationalPerimeter/Constitution/Continuation/Behavior.lean}{9-L14}{Behavior.lean}
+(lines 9--14), a \code{FutureContract} contains, for types $S$ (sources),
+$I$ (requests), $E$ (events), and $O$ (observations), the operations
+\[
+\begin{aligned}
+\operatorname{next}&:S\times I\to S, &
+\operatorname{event}&:S\times I\to E,\\
+\operatorname{read}&:S\to O, &
+\operatorname{Allow}&:S\times I\to\mathrm{Type},
+\end{aligned}
+\]
+together with an effective authorization-or-rejection decision for each
+pair $(s,i)$. The contract specifies observations even when a request is
+rejected.
+
+For the Gödelian execution, the definition \code{godelClosureContract e}
+in \SourceAt{RelationalPerimeter/Constitution/Godel/OperationalClosure.lean}{150-L157}{OperationalClosure.lean}
+(lines 150--157) fixes the five components of the contract: \code{next},
+\code{event}, \code{read}, \code{Allow}, and \code{decision}. Its readout
+is determined by the pole of the source: \code{Truth(G)} for the left pole
+and \code{Proof(G)} for the right pole. Neither a reduced memory type nor an
+exact realization enters into the definition of this contract.
+
+\subsection{Exact meaning of realization}
+
+The structure \code{ExactRealization}, defined in
+\SourceAt{RelationalPerimeter/Constitution/Continuation/Minimality.lean}{9-L23}{Minimality.lean}
+(lines 9--23), supplies a reduced contract on a memory type $M$ and a
+projection $q_A:S\to M$. It imposes bilateral preservation of
+authorization proofs (with round-trip laws), commutation with transitions,
+equality of events, and exactness of readouts. In particular:
+\begin{equation}\label{eq:exactness}
+\begin{aligned}
+q_A(\operatorname{next}_C(s,i))
+  &=\operatorname{next}_{A}(q_A(s),i),\\
+\operatorname{event}_C(s,i)
+  &=\operatorname{event}_{A}(q_A(s),i),\\
+\operatorname{read}_C(s)
+  &=\operatorname{read}_{A}(q_A(s)).
+\end{aligned}
+\end{equation}
+This structure contains no field of the form
+$q_A(t^{\mathrm v})\neq q_A(t^{\mathrm p})$. Preservation is fixed
+generically; the necessity of preserving \emph{this particular
+distinction} comes from the Gödelian execution.
+
+\subsection{The canonically derived constitutive package}
+
+It is useful to gather the data produced by one execution without turning
+them into a new primitive. From every certified Gödelian execution $e$, the
+following are canonically derived:
+\begin{equation}\label{eq:constitutive-package}
+e\longmapsto\bigl(C(e),\Gamma_e,\sigma_e\bigr).
+\end{equation}
+This notation summarizes a chain of constructions that remain separate in
+the formalization; it does not denote an additional Lean structure. The
+package $\Gamma_e$ retains the two nonempty authorized runs, their events,
+and their actually computed terminals:
+\[
+\Gamma_e=
+\bigl(r_e^{\mathrm v},r_e^{\mathrm p},
+      t_e^{\mathrm v},t_e^{\mathrm p},\kappa_e\bigr),
+\]
+where $\kappa_e$ certifies the collision of the terminal projections in the
+operational realization without global readout exactness. This collision
+identifies neither the sources nor their constitutive profiles.
+
+The final component is constructed on the same terminals:
+\begin{equation}\label{eq:sigma-package}
+\sigma_e:
+\mathrm{FutureSeparator}
+  \bigl(C(e),t_e^{\mathrm v},t_e^{\mathrm p}\bigr),
+\qquad \sigma_e.\mathrm{requests}=[].
+\end{equation}
+It depends on the witnesses and runs of $e$, but on no choice of memory
+type $M$ or exact realization $A$. The contract therefore fixes the
+preservation rules, while $\sigma_e$ determines the particular distinction
+that these rules oblige every exact realization to preserve. We obtain:
+\begin{equation}\label{eq:package-obligation}
+\boxed{
+\sigma_e\Longrightarrow
+\forall M,\ \forall A:\ExactRealization(C(e),M),\quad
+q_A(t_e^{\mathrm v})\neq q_A(t_e^{\mathrm p}).}
+\end{equation}
+The order of dependencies is thus explicit: the execution constructs the
+runs and their terminals; the executed witnesses certify $\sigma_e$;
+exactness then makes separation mandatory for an arbitrary realization of
+the already fixed contract.
+
+\subsection{Two distinct consequences of the same contract}
+
+The constituted contract supports two formal paths that must not be
+confused. The first imposes a universal obligation on every exact
+realization. The second starts from a positive operational grouping and
+locates the incompatibility of an additional directed-preservation
+requirement.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{>{\centering\arraybackslash}p{0.44\linewidth}
+                >{\centering\arraybackslash}p{0.44\linewidth}}
+\textbf{Path A: universal separation}
+& \textbf{Path B: collision and directed transport} \\
+package $(C(e),\Gamma_e,\sigma_e)$ & package $(C(e),\Gamma_e)$ \\
+$\downarrow$ & $\downarrow$ \\
+finite separator $\sigma_e$ with request $[]$ & operational collision $\kappa_e$ \\
+$\downarrow$ & $\downarrow$ \\
+$\forall A:\ExactRealization(C(e),M)$,
+$q_A(t^{\mathrm v})\neq q_A(t^{\mathrm p})$
+& memory collision and additional directed preservation \\
+& $\downarrow$ \\
+& directed transport $\Truth(G)\to\Proof_T(G)$ \\
+& $\downarrow$ using \code{trueWitness} and \code{unprovable} \\
+& $\Empty$
+\end{tabular}
+\end{center}
+
+In Path B, directed preservation is not a field of $C(e)$: it is the
+additional requirement whose compatibility with the computed collision is
+being tested.
+
+\section{From the Gödelian witness to the finite separator}
+\label{sec:separator}
+
+\begin{lemma}[Incompatibility of the readouts]\label{lem:readout}
+The witnesses in \eqref{eq:witnesses} establish, as an inequality between
+the types used by the readout,
+\[
+\Truth(G)\neq\Proof_T(G).
+\]
+\end{lemma}
+\begin{proof}
+Assume an equality between these types. Transporting the witness of
+$\Truth(G)$ along the equality gives an inhabitant of $\Proof_T(G)$.
+Applying the witness $\Proof_T(G)\to\Empty$ produces an inhabitant of
+$\Empty$, a contradiction. This is the form of
+\code{godelWitnessReadouts\_ne},
+\SourceAt{RelationalPerimeter/Constitution/Godel/OperationalClosure.lean}{636-L641}{OperationalClosure.lean},
+lines 636--641.
+\end{proof}
+
+\paragraph{Distinguishing two request executions.}
+The terminals are \emph{first computed} by authorized closure runs, each
+carrying the nonempty request \code{[close]}. Once these terminals have
+been obtained, the separator observes them with the empty request list
+\code{[]}. This second list is not an empty execution that would have
+produced the terminals: it observes readouts of terminals that have already
+been produced.
+
+The contract has a function $\operatorname{outcome}_C(s,w)$ assembling the
+readout, authorizations, and events along the list $w$. By definition,
+\[
+\operatorname{outcome}_C(s,[]) =
+  \operatorname{stop}(\operatorname{read}_C(s)).
+\]
+The preceding lemma and \eqref{eq:readouts} therefore give:
+\begin{equation}\label{eq:separator}
+\operatorname{outcome}_{C}(t^{\mathrm v},[])
+\neq\operatorname{outcome}_{C}(t^{\mathrm p},[]).
+\end{equation}
+The object \code{godelTerminalSeparator e} constructs exactly this
+\code{FutureSeparator}, with the field \code{requests := []}
+(\SourceAt{RelationalPerimeter/Constitution/Godel/OperationalClosure.lean}{642-L667}{OperationalClosure.lean},
+lines 642--667).
+
+\section{Universal obligation of exact realization}
+\label{sec:theorem}
+
+\begin{lemma}[Generic preservation principle]\label{lem:generic}
+For a contract $C$, an exact realization $A$ of $C$ on a memory type $M$,
+and two sources $s,t$, one has
+\[
+q_A(s)=q_A(t)\quad\Longrightarrow\quad
+\FutureEquivalent(C,s,t).
+\]
+Thus every finite separator of $s$ and $t$ rules out $q_A(s)=q_A(t)$.
+\end{lemma}
+\begin{proof}
+Preservation of transition, authorization, event, and readout gives, by
+induction on request lists, equality between the outcomes of the contract
+and those of the reduced contract. Two equal projected memories then have
+the same reduced outcomes for every list; by transport, the source outcomes
+are equal. A separator supplies a list for which this equality is
+impossible. These steps are the theorems
+\code{ExactRealization.outcome\_exact},
+\code{equal\_memory\_same\_futures}, and then
+\code{distinct\_memory\_of\_separator} in
+\SourceAt{RelationalPerimeter/Constitution/Continuation/Minimality.lean}{56-L75}{Minimality.lean}
+and \SourceAt{RelationalPerimeter/Constitution/Continuation/ExactSeparation.lean}{20-L27}{ExactSeparation.lean}.
+\end{proof}
+
+\begin{theorem}[Universal separation generated by the Gödelian execution]
+\label{thm:universal}
+Let $e$ be a certified Gödelian execution and let $C(e)$ be the contract
+\code{godelClosureContract e} that it constitutes. Let
+$t^{\mathrm v}(e)$ and $t^{\mathrm p}(e)$ be the terminals actually
+computed by the operational grouping of this execution. Then
+\begin{equation}\label{eq:universal}
+\boxed{\begin{gathered}
+\forall M,\quad \forall A:\ExactRealization(C(e),M),\\
+q_A(t^{\mathrm v}(e))\neq q_A(t^{\mathrm p}(e)).
+\end{gathered}}
+\end{equation}
+\end{theorem}
+\begin{proof}
+The execution produces the witnesses in \eqref{eq:witnesses}, and its two
+runs compute the terminals. Lemma~\ref{lem:readout} supplies the difference
+between the readouts; the empty request supplies the finite separator
+\eqref{eq:separator}. For an arbitrary exact realization $A$,
+Lemma~\ref{lem:generic} rules out equality between their memory projections.
+No choice of $M$ or $A$ enters into the construction of either the contract
+or the separator. The statement therefore follows for every admissible
+exact realization. In Lean, the theorem
+\begin{center}
+\code{godelEveryExactRealizationSeparatesTerminals}
+\end{center}
+is obtained by directly applying
+\code{realization.distinct\_memory\_of\_separator} to
+\code{godelTerminalSeparator execution}
+(\SourceAt{RelationalPerimeter/Constitution/Godel/OperationalClosure.lean}{669-L676}{OperationalClosure.lean},
+lines 669--676).
+\end{proof}
+
+\begin{remark}[Nature of universality]
+The contract $C(e)$ \emph{depends} on the execution $e$. What is independent
+of a particular realization is neither the existence of this execution nor
+the choice of its contract, but the proof of the constraint
+\eqref{eq:universal}. The quantification ranges over exact realizations of
+$C(e)$, not over all possible models of Gödel.
+\end{remark}
+
+\begin{remark}[Minimal strength of the obstruction]
+For these terminals, the separating list is empty: disagreement is
+immediately visible in the readouts. The particular argument can therefore
+be read directly through \code{read\_exact}. The generic future-preservation
+lemma is more general than what is required for this separator alone. This
+observation changes neither the constitution of the contract nor the
+universal scope of the theorem.
+\end{remark}
+
+\section{Exact boundary: grouping, preservation, existence}
+\label{sec:frontier}
+
+The preceding theorem does not say that no grouping of the two branches can
+be executed. The code precisely separates three statements.
+
+\begin{proposition}[Operational grouping without global exactness]
+An operational projection preserves transitions, events, and authorizations
+while computing a common terminal memory after the two closure runs. It does
+not assume global exactness of the readouts.
+\end{proposition}
+\begin{proof}[Construction]
+The operational memory contains active states retaining the pole and
+\code{grouped} states that no longer retain it. The closure transition
+produces a common \code{grouped} state. The operational laws are established
+in \code{godelOperationalRealizationWithoutRead};
+\code{godelOperationalGroupingWithoutRead} executes the two runs and proves
+their computed collision
+(\SourceAt{RelationalPerimeter/Constitution/Godel/OperationalClosure.lean}{589-L602}{OperationalClosure.lean},
+lines 165--272 and 358--372, 589--602). The reduced contract here reads a
+constant \code{PUnit} observation: it does not claim to reproduce the two
+source readouts.
+\end{proof}
+
+\begin{proposition}[Rejection of directed preservation in the presence of collision]
+Adding to this grouping the directed preservation that converts the truth
+readout into the proof readout would produce
+$\Truth(G)\to\Proof_T(G)$ and then $\Empty$.
+\end{proposition}
+\begin{proof}
+The grouping computes equality between the terminal memories. A
+\begin{center}
+\code{DirectedTerminalReadoutPreservation}
+\end{center}
+would then transport an inhabitant of the truth readout to the proof
+readout. Applied to the true witness and followed by the unprovability
+certificate, this conversion produces $\Empty$. This is the chain
+\begin{center}
+\code{godelComputedGroupingToProducedCompleteness}\\[2pt]
+$\downarrow$\\[2pt]
+\code{rejectGodelComputedGroupingToEmpty}
+\end{center}
+It is distinct from the proof of Theorem~\ref{thm:universal}.
+\end{proof}
+
+\begin{proposition}[Non-vacuity of exactness]
+For every contract $C$ of type \code{FutureContract}, there is an exact
+identity realization whose memory type is the source type. In particular,
+the Gödelian contract has an exact realization.
+\end{proposition}
+\begin{proof}[Construction]
+The definition \code{identityRealization} sets
+$M=S$, $q_A=\mathrm{id}$, and takes the contract itself as the reduced
+contract. The exactness laws reduce to reflexive equalities; see
+\SourceAt{RelationalPerimeter/Constitution/Continuation/CommonMemoryGrouping.lean}{10-L19}{CommonMemoryGrouping.lean},
+lines 10--19. The specialization is \code{godelIdentityRealization}, then
+\code{heytingArithmeticIdentityRuntime} for the HA instance.
+\end{proof}
+
+These three results fix the boundary: \emph{operational fusion is
+constructible without global readout exactness; fusion of the terminals is
+forbidden in every exact realization of the contract; at least one such
+exact realization effectively exists}. Non-vacuity is global: it does not
+imply that every arbitrary memory type admits an exact realization.
+
+\section{Constitutive renewal at every finite stage}
+\label{sec:progression}
+
+A \code{SoundGodelTheoryStage} retains a history $\mathcal H_n$, the
+arithmetic regime $T_n$ that it presents, its certification, a master
+Gödelian execution, and a proof that this execution is identical to the
+canonical production of the regime. The procedure
+\code{executeGodelTheoryProgressionFrom} consumes this retained execution.
+It adds \emph{the exact occurrence} of the sentence that the execution
+produced:
+\begin{equation}\label{eq:successor}
+\mathcal H_{n+1}
+  =\operatorname{extend}\bigl(\mathcal H_n,
+    \operatorname{occurrence}(G_n)\bigr).
+\end{equation}
+This notation denotes a constitutive extension of the history by the
+occurrence actually produced. It denotes neither a primitive set-theoretic
+union nor the addition of a sentence reconstructed independently. The
+certification uses the truth witness of the source production. The newly
+added occurrence supplies a verified proof of $G_n$ in $T_{n+1}$. This
+proof is constructed \emph{by the added occurrence}: the Lean function
+named \code{oldTruthToTargetProof} ignores its truth argument and returns
+the already constructed target proof. It is therefore not a general
+procedure that transforms truth into proof.
+
+The same step executes a \emph{new} production $G_{n+1}$ relative to the
+extended regime. The following data are then available:
+\[
+\begin{gathered}
+\Proof_{T_n}(G_n)\to\Empty,
+\qquad \Proof_{T_{n+1}}(G_n),\\
+\Truth(G_{n+1}),\qquad
+\Proof_{T_{n+1}}(G_{n+1})\to\Empty,\\
+G_n\neq G_{n+1}.
+\end{gathered}
+\]
+The inequality between the sentences is proved: identifying them would
+transport the constructed proof of $G_n$ to the new unprovable sentence
+$G_{n+1}$
+(\SourceAt{RelationalPerimeter/Instances/HeytingArithmetic/GodelTheoryProgression.lean}{175-L207}{GodelTheoryProgression.lean},
+lines 175--207).
+
+\begin{theorem}[Finite renewal of the obligation]\label{thm:finite}
+For every certified stage $S_0$ and every natural height $n$, the stage
+$S_n=\operatorname{advance}(S_0,n)$ is constituted by finite iteration.
+Let $e_n$ be the execution that it retains, let $C_n=C(e_n)$ be its
+contract, and let $t_n^{\mathrm v}$ and $t_n^{\mathrm p}$ be its computed
+terminals. The conclusion of \eqref{eq:main} holds at this stage. In
+particular, this conclusion holds for the progression from the initial HA
+stage.
+\end{theorem}
+\begin{proof}
+The construction \code{advance} is recursive in $n$; the construction
+\code{executedTrace} additionally retains every step, its target execution,
+and its history. Its successor case consumes the terminal actually produced
+by the preceding step instead of reconstructing an equivalent history from
+a mere index. The universal property
+\code{everyExactRealizationSeparatesCurrentTerminals} applies to every
+\code{SoundGodelTheoryStage}, hence to the stage obtained at height $n$
+(\SourceAt{RelationalPerimeter/Instances/HeytingArithmetic/GodelTheoryProgression.lean}{291-L448}{GodelTheoryProgression.lean},
+lines 291--448).
+\end{proof}
+
+Extending the theory and realizing the contract remain two distinct
+operations. No common exact realization is constructed between $C_n$ and
+$C_{n+1}$; proof boundaries and obligations are reevaluated \emph{relative
+to the contract proper to each stage}.
+
+The executed trace retains the stages and the executions actually produced.
+Universal obligations are not stored as fields of either the history or the
+trace. They are derivable at every retained stage by applying
+\code{everyExactRealizationSeparatesCurrentTerminals} to the execution proper
+to that stage. Thus, at every stage of the finite trace, a renewed obligation
+relative to its own contract is derivable.
+
+\section{Contribution and exact scope of the result}
+
+The formally presented contribution is the complete constitutive chain
+\[
+\boxed{\begin{gathered}
+e\longmapsto\bigl(C(e),\Gamma_e,\sigma_e\bigr)\\[3pt]
+\downarrow\\[3pt]
+\forall M,\;\forall A:\ExactRealization(C(e),M),\\[2pt]
+q_A(t_e^{\mathrm v})\neq q_A(t_e^{\mathrm p}).
+\end{gathered}}
+\]
+It is realized by the Gödelian production, its finite separator, the universal
+separation theorem, and their renewal at every finite height.
+
+\paragraph{The discovery presented.}
+A certified Gödelian execution supplies not only a sentence and properties
+relative to its provability. From the same executed witness, it constitutes
+its future contract, produces two runs and their terminals, constructs an
+operational collision under the regime that does not impose global readout
+exactness, and then constructs a finite separator on these same terminals.
+This particular datum generates a consequence independent of every later
+choice of memory: every admissible exact realization of the contract must
+keep the projections of the two terminals distinct. The progression retains
+the produced executions and renews this generation of a universal
+obligation at every finite natural stage.
+
+The decisive passage is not merely the final inequality between two
+memories. From a single execution, the contract, the runs, the terminals,
+and the separator are constructed, and the generic law of exactness is then
+applied to them. The particular distinction imposed on realizations is
+therefore neither a field of \code{ExactRealization} nor a separation chosen
+before execution. It is generated by the objects actually produced and then
+becomes universal relative to the contract thus constituted. The result
+therefore turns the certified Gödelian witnesses into a representational
+obligation governing every admissible exact realization.
+
+The contribution therefore lies neither in the abstract lemma alone, which
+states that a preserved observation must remain distinguishable, nor in the
+production of a Gödelian sentence alone. It lies in their complete
+constitutive articulation: the data to which the universal obligation
+applies are precisely those produced and retained by the Gödelian execution
+that constitutes the contract.
+
+The result can be summarized in one sentence:
+\begin{quote}
+A certified Gödelian execution canonically derives a contract, two runs and
+their terminals, an operational collision, and a finite separator of these
+same terminals. Without postulating an inequality between their projected
+memories, this separator imposes their separation in every admissible exact
+realization; the progression of theories renews this obligation at every
+constituted finite stage.
+\end{quote}
+
+\paragraph{Exact scope.}
+The theorem concerns the contracts constituted by the certified executions
+of the formalization and all their admissible exact realizations. The
+progression is constructed for every finite natural height; it retains the
+occurrences and executions actually produced and then reevaluates the
+obligation relative to the contract proper to the new stage. Its object does
+not include a limit stage, a transfinite union, a final complete theory, or
+a transversal realization between successive contracts. The proved
+separation concerns certified unprovability of the produced sentence; it
+does not replace a separate proof of irrefutability.
+
+\paragraph{Scientific positioning.}
+Executed diagonalization, observational separation, contracts independent
+of their implementations, and progressions of theories each have
+established antecedents. The contribution claimed here is none of these
+ingredients in isolation. In the comparative primary corpus examined, no
+antecedent was identified that constructs, from the same executed Gödelian
+witness, the complete chain
+\[
+e\longmapsto\bigl(C(e),\Gamma_e,\sigma_e\bigr)
+\longmapsto
+\forall M\,\forall A:\ExactRealization(C(e),M),\quad
+q_A(t_e^{\mathrm v})\neq q_A(t_e^{\mathrm p}),
+\]
+while simultaneously establishing the possibility of operational grouping
+without global exactness, the non-vacuity of the quantification through a
+positive exact realization, and then renewing this obligation on the finite
+trace actually produced. This positioning locates the contribution; it
+replaces neither the formal chain nor the execution-first axis of exposition.
+
+\section{Lean core and dependency traceability}
+\label{sec:lean}
+
+The central formula gathers four distinct formal constructions:
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.28\linewidth}
+                >{\raggedright\arraybackslash}p{0.61\linewidth}}
+\toprule
+\textbf{Manuscript notation} & \textbf{Lean construction} \\
+\midrule
+$C(e)$ & \code{godelClosureContract execution} \\
+$\Gamma_e$ & \code{godelOperationalGroupingWithoutRead execution} \\
+$\sigma_e$ & \code{godelTerminalSeparator execution} \\
+universal obligation & \code{godelEveryExactRealizationSeparatesTerminals} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The triple $(C(e),\Gamma_e,\sigma_e)$ is manuscript notation for this
+composition of existing constructions. It does not denote an additional
+Lean structure.
+
+The passage that makes the change of object visible is the theorem
+\begin{center}
+\code{godelEveryExactRealizationSeparatesTerminals}
+\end{center}
+in
+\SourceAt{RelationalPerimeter/Constitution/Godel/OperationalClosure.lean}{669-L676}{OperationalClosure.lean}
+(lines 669--676). Its proof term is exactly:
+\begin{Verbatim}[fontsize=\small]
+realization.distinct_memory_of_separator (godelTerminalSeparator execution)
+\end{Verbatim}
+The progression reaches the following theorem, valid for an arbitrary
+certified stage:
+\begin{center}
+\code{everyExactRealizationSeparatesCurrentTerminals}
+\end{center}
+Its \code{realization} hypothesis is quantified over every exact realization
+of the contract of the execution retained by the stage.
+
+\paragraph{Decisive dependencies, in their logical order.}
+\begin{enumerate}[leftmargin=*,itemsep=3pt]
+\item \textbf{Constitution.} \code{godelClosureContract} is defined from the execution, without a chosen memory.
+\item \textbf{Production of $\Gamma_e$.} \code{godelOperationalGroupingWithoutRead} executes the two nonempty runs, retains their events and terminals, and then constructs their operational collision without global readout exactness.
+\item \textbf{Construction of $\sigma_e$.} \code{godelTerminalSeparator} reuses the terminals of these runs, fixes the request \code{[]}, and proves disagreement between their outcomes from the witnesses of the same execution.
+\item \textbf{Passage to the general result.} \code{distinct_memory_of_separator} turns the separator into a constraint on every exact realization, without choosing either the memory or the realization when $\sigma_e$ is constructed.
+\item \textbf{Boundary.} The collision in $\Gamma_e$ is positive in the operational realization without exact readout, while \code{identityRealization} constructs an exact realization that keeps the terminals distinct.
+\item \textbf{Progression.} \code{executedTrace} retains the stages; the obligation is carried to an arbitrary stage by the theorem identified above.
+\end{enumerate}
+
+\paragraph{Verification status.}
+The definitions and proof bodies cited above were compared with the public
+repository files at the revision stated on the first page. The sources
+contain \texttt{\#print axioms} directives for the central declarations.
+Their presence alone does not constitute an audit report of the results;
+this manuscript does not claim to have independently executed
+\texttt{lake build} or reproduced the outputs of the axiom audit.
+
+\paragraph{Document status.}
+This text reorganizes, without increasing the scope of the results, the
+framework theorem
+\Source{docs/theoreme-cadre-progression-godelienne-separation-exacte.fr.tex}{LaTeX}
+and the canonical presentation
+\href{https://github.com/JohnDoe-collab-stack/relational-perimeter/blob/1e5aeda745559d62a3819bb3213da7fce3c31ad1/docs/progression-constitutive-theories-godeliennes.fr.md}{\emph{Constitutive progression of theories and Gödelian obstructions}}.
+Above all, it makes explicit the execution--contract--universal-obligation
+axis that motivates the present order of exposition.
+
+\section{Conclusion}
+
+The shift established by the formalization starts from the execution
+itself. A certified Gödelian production constitutes the objects, the
+contract, and the finite witness that then make it possible to prove an
+obligation governing every admissible exact realization, whatever its
+memory type. The universal is therefore neither added externally to the
+execution nor assumed in the definition of exactness: it is generated by
+exact preservation of the distinctions that this particular execution
+actually produced.
+
+The finite progression repeats this passage without independently
+reconstructing its inputs: every new stage consumes the retained history and
+execution, constitutes its own contract, and then renews the universal
+obligation. The central result therefore remains the one announced on the
+first page:
+\[
+\boxed{\MainAxis}
+\]
+
+\end{document}
