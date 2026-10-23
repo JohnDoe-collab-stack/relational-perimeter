@@ -1,0 +1,12 @@
+{
+  "$id": "constitutive-neural-oracle-independent-result-v13",
+  "type": "object",
+  "required": ["protocol_id", "repository_commit", "command", "rows", "raw_output_sha256"],
+  "properties": {
+    "protocol_id": {"const": "constitutive-neural-oracle-independent-capability-comparison-v13"},
+    "repository_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "command": {"const": ["lake", "exe", "compiled_independent_complete_neural_comparison"]},
+    "rows": {"type": "array", "minItems": 9, "maxItems": 9},
+    "raw_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -141,6 +141,24 @@ theorem Reconfiguration.target_exact
         configuration.authorization :=
   configuration.targetExact
 
+/-- Reindex a produced reconfiguration by a positively proved equality of
+target systems.  This changes no computed target: the replacement must be
+equal to the exact output already produced by `builder.build`.  The operation
+is useful when downstream dependent witnesses need the canonical name of that
+same produced system. -/
+def Reconfiguration.reindexTarget
+    {RequirementCase : Type u} {Context : Type v} {Proposal : Type w}
+    {family : RequirementFamily RequirementCase Context Proposal}
+    {sourceSystem : NativeSystem (RequirementInput family) Proposal}
+    {builder : ReconfigurationBuilder family}
+    {sourceInput nextInput : RequirementInput family}
+    (configuration : Reconfiguration builder sourceSystem sourceInput nextInput)
+    (targetSystem : NativeSystem (RequirementInput family) Proposal)
+    (targetExact : configuration.targetSystem = targetSystem) :
+    Reconfiguration builder sourceSystem sourceInput nextInput :=
+  .mk configuration.authorization targetSystem
+    (targetExact.symm.trans configuration.targetExact)
+
 /-- Exact occurrence transport into the reconfigured mechanism.  The three
 materials remain separate.  Each transported occurrence must also carry a
 full interventionally witnessed causal role in the target proposal; a graph
@@ -266,6 +284,7 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.Reconfiguration.permission
 #print axioms ConstitutiveSearch.NeuralAgent.reconfigure
 #print axioms ConstitutiveSearch.NeuralAgent.Reconfiguration.target_exact
+#print axioms ConstitutiveSearch.NeuralAgent.Reconfiguration.reindexTarget
 #print axioms ConstitutiveSearch.NeuralAgent.RequiredMechanismTransport
 #print axioms ConstitutiveSearch.NeuralAgent.ReconfiguredProposalDerivation
 #print axioms ConstitutiveSearch.NeuralAgent.ReconfiguredProposalDerivation.proposal_exact

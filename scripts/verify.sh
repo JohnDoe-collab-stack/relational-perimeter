@@ -29,6 +29,9 @@ fi
 "${python_command[@]}" scripts/check-compiled-parameterized-neural-scaling-v8.py --archive-metadata --self-test
 "${python_command[@]}" scripts/check-compiled-parameterized-neural-scaling-v8.py --archive-metadata
 "${python_command[@]}" scripts/check-complete-property-scaling-v11.py --allow-draft --self-test
+"${python_command[@]}" scripts/check-causal-complete-property-scaling-v12.py --allow-draft --self-test
+"${python_command[@]}" scripts/check-independent-capability-comparison-v13.py --allow-draft --self-test
+"${python_command[@]}" scripts/check-independent-capability-comparison-v13.py --allow-draft
 "${python_command[@]}" scripts/check-independent-neural-artifact.py
 "${python_command[@]}" scripts/check-final-neural-campaign.py
 
@@ -123,6 +126,7 @@ fi
 "${python_command[@]}" scripts/check-continuation-signature-codegen.py
 "${python_command[@]}" scripts/check-variable-master-codegen.py
 "${python_command[@]}" scripts/check-integrated-machine-codegen.py
+"${python_command[@]}" scripts/check-independent-comparison-codegen.py
 
 bash scripts/check-expected-failures.sh
 

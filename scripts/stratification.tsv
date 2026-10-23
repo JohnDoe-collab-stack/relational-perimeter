@@ -60,7 +60,7 @@ SegmentedResidualRole	F	enforced	Primitive residual roles and exact internal rea
 AbstractSegmentedTurning	F	enforced	Abstract segmented boundary and turning
 ExactTypeTransport	U	enforced	Constructive exact transport between carriers
 StrongPerimetralTurning	F	enforced	Strong relational perimeter and affirmative turning
-RelationalPerimeter	M48	enforced	Public root joining scientific production the integrated master machine and the complete frozen neural capability comparison interfaces
+RelationalPerimeter	M49	enforced	Public root joining scientific production the integrated master machine and the oracle-independent neural capability comparison interfaces
 RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement
 RelationalPerimeter.Agents.Constitutive.ProducedEvidence	A11	enforced	Constitutive agent ProducedEvidence
 RelationalPerimeter.Agents.Constitutive.State	A12	enforced	Constitutive agent State
@@ -363,5 +363,8 @@ RelationalPerimeter.Agents.Neural.LearnedSuccessiveStructuralCone	M45	enforced	E
 RelationalPerimeter.Agents.Neural.AutonomousCheckerClosure	M46	enforced	Autonomous successive and post-forgetting checkers with independent full recheck and finite local-condition completeness
 RelationalPerimeter.Agents.Neural.CapabilityComparisonAdapters	M43	enforced	Six frozen typed comparison adapters consuming one exact learned material package without comparative overclaim
 RelationalPerimeter.Agents.Neural.CompleteCapabilityComparison	M47	enforced	Complete nine-method comparison with relational execution reference combination independent full recheck and explicit translations
+RelationalPerimeter.Agents.Neural.IndependentCapabilityComparison	M48	enforced	Oracle-independent reference combination and corrected nine-method comparison observations preserving v10 as historical evidence
 RelationalPerimeter.Agents.Neural.ParameterizedCompiledCheckerFamily	M43	enforced	Parameterized growing neural artifacts consumed by the same compiled initial incremental and full-reference checkers
 RelationalPerimeter.Agents.Neural.CompletePropertyScalingMeasurement	M44	enforced	Complete substantive contract accounting and canonical certificate delta size model for scaling measurements
+RelationalPerimeter.Agents.Neural.CausalParameterizedCompiledCheckerFamily	M45	enforced	Source-indexed action effect and successor production consumed by paired incremental and independent full checkers
+RelationalPerimeter.Agents.Neural.CausalCompletePropertyScalingMeasurement	M46	enforced	Complete accounting for the causal compiled checker family without reclassifying the historical v11 campaign

@@ -87,21 +87,18 @@ theorem learned_analysis_installs_received_decoded_naming
 
 theorem learned_second_update_installs_received_decoded_artifact
     {source : LearnedSerializedConstitutiveUpdate}
-    (decoded : DecodedLearnedSuccessiveUpdate source)
-    (targetExact :
-      source.targetNetwork = independentLearnedSecondSuccessorNetwork) :
-    HEq (learnedReceivedExtendedCheckedUpdate decoded
-      targetExact).next.artifact decoded.target :=
-  learnedReceivedExtendedCheckedUpdate_artifact_exact decoded targetExact
+    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    HEq (buildIncrementalCheckedUpdate analysis.target).next.artifact
+      analysis.executed.decoded.target :=
+  analysis.receivedDecodedArtifact_installed
 
 theorem learned_second_update_installs_received_decoded_naming
     {source : LearnedSerializedConstitutiveUpdate}
-    (decoded : DecodedLearnedSuccessiveUpdate source)
-    (targetExact :
-      source.targetNetwork = independentLearnedSecondSuccessorNetwork) :
-    HEq (learnedReceivedExtendedCheckedUpdate decoded
-      targetExact).next.certificate.basis.naming decoded.stable.naming :=
-  learnedReceivedExtendedCheckedUpdate_naming_exact decoded targetExact
+    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    HEq (buildIncrementalCheckedUpdate analysis.target).next.certificate.basis.naming
+      analysis.executed.decoded.stable.naming :=
+  HEq.trans (heq_of_eq analysis.target.structuralBasisNamingExact)
+    analysis.receivedDecodedStableNaming_installed
 
 theorem learned_renamed_serialized_identity_remains_installed :
     learnedRenamedIdentityCertifiedRuntime.current.certificate.basis.naming.inputSerial

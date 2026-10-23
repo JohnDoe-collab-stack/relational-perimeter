@@ -1,0 +1,12 @@
+import RelationalPerimeter.Agents.Neural.AutonomousCheckerClosure
+
+open ConstitutiveSearch ConstitutiveSearch.NeuralAgent
+
+def permissionCannotReplaceClosedChange :=
+  closeLearnedPostForgettingContractChange
+    learnedSuccessiveIncrementalSuccess.analysis
+    learnedPostForgettingContractChangePermission
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.closeLearnedPostForgettingContractChange
+/- AXIOM_AUDIT_END -/

@@ -40,6 +40,12 @@ if ($LASTEXITCODE -ne 0) { throw "parameterized neural scaling v8 self-test fail
 if ($LASTEXITCODE -ne 0) { throw "parameterized neural scaling v8 check failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-complete-property-scaling-v11.py") --allow-draft --self-test
 if ($LASTEXITCODE -ne 0) { throw "complete-property neural scaling v11 check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-causal-complete-property-scaling-v12.py") --allow-draft --self-test
+if ($LASTEXITCODE -ne 0) { throw "causal complete-property neural scaling v12 check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-independent-capability-comparison-v13.py") --allow-draft --self-test
+if ($LASTEXITCODE -ne 0) { throw "oracle-independent capability comparison v13 self-test failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-independent-capability-comparison-v13.py") --allow-draft
+if ($LASTEXITCODE -ne 0) { throw "oracle-independent capability comparison v13 check failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-independent-neural-artifact.py")
 if ($LASTEXITCODE -ne 0) { throw "independent neural artifact check failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-final-neural-campaign.py")
@@ -148,6 +154,8 @@ try {
   if ($LASTEXITCODE -ne 0) { throw "compiled variable-master sharing check failed" }
   & $pythonCommand (Join-Path $PSScriptRoot "check-integrated-machine-codegen.py")
   if ($LASTEXITCODE -ne 0) { throw "compiled integrated machine sharing check failed" }
+  & $pythonCommand (Join-Path $PSScriptRoot "check-independent-comparison-codegen.py")
+  if ($LASTEXITCODE -ne 0) { throw "oracle-independent comparison dependency check failed" }
   & (Join-Path $PSScriptRoot "check-expected-failures.ps1")
   if ($LASTEXITCODE -ne 0) { throw "expected-failure check failed" }
 

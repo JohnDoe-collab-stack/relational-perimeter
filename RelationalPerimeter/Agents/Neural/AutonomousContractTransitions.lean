@@ -342,6 +342,60 @@ abbrev PostForgettingDecision
   PSum (PostForgettingPermission current forgotten request)
     (PostForgettingPermission current forgotten request -> False)
 
+/-- An admitted ordinary continuation after forgetting is an executed use of
+the reduced memory, not a meta-contract transition.  The exact permission is
+an index of this value; the successor memory, emitted event, and complete
+one-request outcome are all computed by the reduced future contract stored in
+the current certificate. -/
+structure ExecutedPostForgettingContinuation
+    {constitution : ConstitutiveMetaContract}
+    {currentContract : constitution.Contract}
+    (current : CheckedAgent constitution currentContract)
+    (forgotten : ForgottenCurrentAgent current)
+    (input : (constitution.operational currentContract).FutureInput)
+    (permission : PostForgettingPermission current forgotten
+      (.continueCurrent input)) : Type 7 where
+  nextMemory : current.certificate.futureRealization.ReducedMemory
+  nextMemoryExact : nextMemory =
+    current.certificate.futureRealization.reducedContract.next
+      forgotten.memory input
+  event : (constitution.operational currentContract).FutureEvent
+  eventExact : event =
+    current.certificate.futureRealization.reducedContract.event
+      forgotten.memory input
+  outcome : ContinuationSignatures.Outcome
+    (constitution.operational currentContract).FutureEvent
+    (constitution.operational currentContract).FutureObservation
+  outcomeExact : outcome =
+    current.certificate.futureRealization.reducedContract.outcome
+      forgotten.memory [input]
+
+/-- Execute an admitted continuation from the exact reduced memory.  Pattern
+matching on the permission is intentional: no continuation result can be
+constructed by this API without consuming the admission witness attached to
+that same input and memory. -/
+def executePostForgettingContinuation
+    {constitution : ConstitutiveMetaContract}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    {forgotten : ForgottenCurrentAgent current}
+    {input : (constitution.operational currentContract).FutureInput}
+    (permission : PostForgettingPermission current forgotten
+      (.continueCurrent input)) :
+    ExecutedPostForgettingContinuation current forgotten input permission :=
+  match permission with
+  | .continueCurrent _ _ =>
+      { nextMemory :=
+          current.certificate.futureRealization.reducedContract.next
+            forgotten.memory input
+        nextMemoryExact := rfl
+        event := current.certificate.futureRealization.reducedContract.event
+          forgotten.memory input
+        eventExact := rfl
+        outcome := current.certificate.futureRealization.reducedContract.outcome
+          forgotten.memory [input]
+        outcomeExact := rfl }
+
 end ConstitutiveSearch.NeuralAgent
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.AutonomousReconfigurationConditions
@@ -364,4 +418,6 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.JustifiedPostForgettingTransition.rechecked
 #print axioms ConstitutiveSearch.NeuralAgent.PostForgettingPermission
 #print axioms ConstitutiveSearch.NeuralAgent.PostForgettingDecision
+#print axioms ConstitutiveSearch.NeuralAgent.ExecutedPostForgettingContinuation
+#print axioms ConstitutiveSearch.NeuralAgent.executePostForgettingContinuation
 /- AXIOM_AUDIT_END -/

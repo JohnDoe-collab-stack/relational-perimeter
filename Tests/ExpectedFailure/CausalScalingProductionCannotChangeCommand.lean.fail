@@ -1,0 +1,17 @@
+import RelationalPerimeter.Agents.Neural.CausalParameterizedCompiledCheckerFamily
+namespace Tests.ExpectedFailure.CausalScalingProductionCannotChangeCommand
+open ConstitutiveSearch.NeuralAgent
+
+def retargeted
+    (production : ExecutedTransitionProduction causalScalingTransitionKernel
+      (causalScalingInitialAgent 2) causalScalingOperationalTransition
+      (ULift.up { size := 2, version := ScalingArtifactVersion.local })) :
+    ExecutedTransitionProduction causalScalingTransitionKernel
+      (causalScalingInitialAgent 2) causalScalingOperationalTransition
+      (ULift.up { size := 2, version := ScalingArtifactVersion.extended }) :=
+  production
+
+end Tests.ExpectedFailure.CausalScalingProductionCannotChangeCommand
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingTransitionKernel
+/- AXIOM_AUDIT_END -/

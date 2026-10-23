@@ -1,0 +1,76 @@
+{
+  "protocol_id": "constitutive-neural-oracle-independent-capability-comparison-v13",
+  "status": "draft-awaiting-stable-source-commit",
+  "confirmatory_results_present": false,
+  "confirmatory_run_permitted": false,
+  "scientific_scope": "Nine repository-local computations on one exact learned material package. The run compares executable local adapters; it does not establish equivalence with every external method in the named research classes, universal superiority or an impossibility theorem.",
+  "historical_v10_preserved": {
+    "experiments/constitutive-neural-alignment/v10/comparison-protocol.json": "8d6e7261b08bd132a6b756d094669162dafdae4093d0e8c648ae5001800a7c3a",
+    "experiments/constitutive-neural-alignment/v10/comparison-results.ndjson": "e5bad0bce56276a75d488f121a6a16bc659324c1b410f7f2a25f03a2f7fad1d4",
+    "experiments/constitutive-neural-alignment/v10/result-record.json": "c43f12a6d4ac429d1c31d1b87382ac1516ae3869f48d1ea1bdf03de693211816",
+    "experiments/constitutive-neural-alignment/v10/COMPARISON_ANALYSIS.md": "0716471480636f511509eab1691badb7b49e3fa3ce39218fcedb35b036456ff4"
+  },
+  "corrections": {
+    "reference_combination": "Computed only from current-table equality, authorization dependency, mutation shielding and future-contract satisfaction.",
+    "forbidden_reference_inputs": [
+      "runtime submission verdict",
+      "incremental checker verdict",
+      "complete recheck verdict",
+      "target certificate",
+      "final constitutive closure"
+    ],
+    "transitive_codegen_gate": "scripts/check-independent-comparison-codegen.py",
+    "observation_policy": "Every emitted scientific value is computed in the executable. Lean-only consequences remain in evidence-ledger.json and are never emitted as runtime observations."
+  },
+  "methods": [
+    "extensional-current-behavior-verification",
+    "fixed-network-interventional-causal-analysis",
+    "pre-execution-action-shielding",
+    "guaranteed-self-adaptive-system",
+    "incremental-neural-verification-with-proof-reuse",
+    "deployment-chain-certificate-propagation",
+    "relational-execution-comparison",
+    "explicit-reference-combination",
+    "independent-complete-recheck"
+  ],
+  "translation_counts": [2, 2, 2, 3, 4, 3, 4, 6, 4],
+  "covered_probes": ["P1", "P2", "P3", "P4", "P5", "P6", "P7"],
+  "covered_criteria": ["S1", "S2", "S3", "S4", "S5", "S7", "S8"],
+  "delegated_without_reclassification": {
+    "P8": "experiments/constitutive-neural-alignment/v12/scaling-protocol.json",
+    "S6": "experiments/constitutive-neural-alignment/v12/scaling-protocol.json"
+  },
+  "fairness_rules": [
+    "All nine computations consume the same exact frozen material package.",
+    "Each adapter receives every artifact, intervention, future, contract, version or serialized update in its declared repository-local interface.",
+    "The explicit reference combination receives no verdict or certificate produced by the system it compares.",
+    "The complete recheck receives no incremental verdict or incremental fragment assembly as an oracle.",
+    "Every emitted field is mapped to an executed producer in evidence-ledger.json.",
+    "Proof-only properties are reported only by declaration name and source revision.",
+    "Successes of reference and competing adapters remain visible.",
+    "Missing adapters, translations or out-of-interface properties never count as general impossibility results.",
+    "Translation counts are bookkeeping and not runtime cost."
+  ],
+  "build_command": ["lake", "build", "compiled_independent_complete_neural_comparison"],
+  "executed_command": ["lake", "exe", "compiled_independent_complete_neural_comparison"],
+  "freeze_command": ["py", "-3", "scripts/freeze-independent-capability-comparison-v13.py"],
+  "confirmatory_command": ["py", "-3", "scripts/run-independent-capability-comparison-v13.py"],
+  "reserved_outputs": {
+    "raw": "experiments/constitutive-neural-alignment/v13/comparison-results.ndjson",
+    "record": "experiments/constitutive-neural-alignment/v13/result-record.json"
+  },
+  "output_policy": {
+    "rows": 9,
+    "retain_all_rows_in_order": true,
+    "overwrite": false,
+    "raw_output_hashed_after_production": true,
+    "selection_after_observation": false
+  },
+  "interpretation_rules": [
+    "V10 remains historical evidence at its recorded revision and is not silently repaired or reclassified.",
+    "No confirmatory result exists until this protocol is frozen at a recoverable source commit and the reserved command is executed once.",
+    "The run establishes only the observations it emits and the proof consequences separately named in the evidence ledger.",
+    "P8 and S6 retain the exact status of v12 and are not inferred from this comparison.",
+    "Any change to material, methods, decisions, fields, evidence mapping, translations, command or schema requires a later protocol version."
+  ]
+}

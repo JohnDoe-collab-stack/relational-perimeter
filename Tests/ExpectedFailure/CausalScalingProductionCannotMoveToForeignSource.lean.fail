@@ -1,0 +1,17 @@
+import RelationalPerimeter.Agents.Neural.CausalParameterizedCompiledCheckerFamily
+namespace Tests.ExpectedFailure.CausalScalingProductionCannotMoveToForeignSource
+open ConstitutiveSearch.NeuralAgent
+
+def misplaced
+    (production : ExecutedTransitionProduction causalScalingTransitionKernel
+      (causalScalingInitialAgent 1) causalScalingOperationalTransition
+      (ULift.up { size := 1, version := ScalingArtifactVersion.local })) :
+    ExecutedTransitionProduction causalScalingTransitionKernel
+      (causalScalingInitialAgent 2) causalScalingOperationalTransition
+      (ULift.up { size := 1, version := ScalingArtifactVersion.local }) :=
+  production
+
+end Tests.ExpectedFailure.CausalScalingProductionCannotMoveToForeignSource
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingTransitionKernel
+/- AXIOM_AUDIT_END -/

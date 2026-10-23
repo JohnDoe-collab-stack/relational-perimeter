@@ -181,9 +181,32 @@ theorem g7_post_forgetting_continuation_is_relatively_complete :
 theorem g7_post_forgetting_contract_change_is_relatively_complete :
     LearnedPostForgettingFullRecheckAccepted
         learnedPostForgettingExtendedChangeRequest ↔
-      Nonempty (LearnedPostForgettingLocalConditionData
-        learnedPostForgettingExtendedChangeRequest) :=
+      LearnedPostForgettingFullLocalConditions
+        learnedPostForgettingExtendedChangeRequest :=
   learnedPostForgettingRequiredRelativeCompleteness.2.2.2
+
+theorem g7_post_forgetting_contract_change_is_effectfully_installed :
+    submitUpdate learnedPostForgettingInitialRuntime
+        learnedPostForgettingExtendedRuntimeUpdate =
+      .ok learnedPostForgettingExtendedRuntime :=
+  submitUpdate_postForgettingExtended_exact
+
+theorem g7_post_forgetting_contract_change_consumes_transport_and_recheck :
+    learnedClosedPostForgettingExtendedChange.transportedIntent =
+        learnedPostForgettingExtendedJustification.transportedPersistent
+          .admittedIntent ∧
+      learnedClosedPostForgettingExtendedChange.recheckedAuthorization =
+        learnedPostForgettingExtendedJustification.rechecked
+          .authorizationConsumption :=
+  ⟨learnedClosedPostForgettingExtendedChange.transportedIntentExact,
+    learnedClosedPostForgettingExtendedChange.recheckedAuthorizationExact⟩
+
+theorem g7_post_forgetting_bad_change_has_no_successor :
+    Not (Exists fun next =>
+      submitUpdate learnedPostForgettingInitialRuntime
+        (LearnedPostForgettingRuntimeUpdate.changeContract
+          learnedAlignedSerializedUpdate) = .ok next) :=
+  learnedPostForgettingBadChange_rejected_without_successor
 
 /-! ## G8 -- exact local reuse and independent full recheck -/
 
@@ -239,6 +262,9 @@ end Tests.Mechanisms.NeuralG1G10RegressionFloor
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_successive_incremental_and_full_successor_exact
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_continuation_is_relatively_complete
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_contract_change_is_relatively_complete
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_contract_change_is_effectfully_installed
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_contract_change_consumes_transport_and_recheck
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_bad_change_has_no_successor
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g8_unaffected_fragment_is_transported
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g8_incremental_and_full_recheck_are_equal
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g9_independent_learned_artifact_is_decodable

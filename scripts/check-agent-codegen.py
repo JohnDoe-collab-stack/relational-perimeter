@@ -207,19 +207,92 @@ LEAN_EXPORT lean_object* l_bad(){ return 0; }
     # may be added beside it by a wrapper or a non-inlined helper.
     for entry, boundary in ((session, request), (session_produce, produced), (session_all, executor)):
         applications(functions, compiled_parameters, entry, live, 0, boundaries=(boundary,))
-    # L3: the learned transition producer computes exactly one action in each
-    # material branch and feeds that very object to the effect constructor.
-    # The generated C exposes the shared local once; a second action call or an
-    # action call reachable from effect production fails this gate.
+    # L3/F1: each material branch consumes the exact current checked state and
+    # its certificate witnesses in one state-indexed reconfiguration/action
+    # producer.  That producer executes one ReconfiguredActionEffect, which
+    # stores the action result and therefore cannot reconstruct a detached
+    # effect.  The raw reconfiguration must itself call `reconfigure`, so the
+    # current system and its exact run reach the compiled installation path.
     learned_producer = select(functions, "NeuralAgent_produceLearnedTransitionData___redArg")
-    learned_aligned_action = select(functions, "NeuralAgent_learnedAlignedInstallingActionFor")
-    learned_extended_action = select(functions, "NeuralAgent_learnedExtendedInstallingActionFor")
-    learned_effect = select(functions, "NeuralAgent_produceLearnedEffect___redArg")
-    calls(functions, learned_producer, "NeuralAgent_learnedAlignedInstallingActionFor", 1)
-    calls(functions, learned_producer, "NeuralAgent_learnedExtendedInstallingActionFor", 1)
-    calls(functions, learned_producer, "NeuralAgent_produceLearnedEffect___redArg", 2)
-    absent(functions, learned_effect, [], exact=(learned_aligned_action, learned_extended_action))
-    print("AGENT_LEARNED_SHARING_OK: one action occurrence per material branch; effect consumes it without reconstruction")
+    learned_aligned_action = select(functions,
+        "NeuralAgent_executeLearnedAlignedReconfigurationFromState")
+    learned_extended_action = select(functions,
+        "NeuralAgent_executeLearnedExtendedReconfigurationFromState")
+    learned_aligned_raw = select(functions,
+        "NeuralAgent_learnedAlignedRawReconfigurationForState")
+    learned_extended_raw = select(functions,
+        "NeuralAgent_learnedExtendedRawReconfigurationForState")
+    reconfigured_action = select(functions,
+        "NeuralAgent_executeReconfiguredAction___redArg")
+    learned_target = select(functions,
+        "NeuralAgent_learnedProducedTransitionTarget___redArg")
+    calls(functions, learned_producer,
+        "NeuralAgent_executeLearnedAlignedReconfigurationFromState", 1)
+    calls(functions, learned_producer,
+        "NeuralAgent_executeLearnedExtendedReconfigurationFromState", 1)
+    calls(functions, learned_aligned_action,
+        "NeuralAgent_executeReconfiguredAction___redArg", 1)
+    calls(functions, learned_extended_action,
+        "NeuralAgent_executeReconfiguredAction___redArg", 1)
+    calls(functions, learned_aligned_raw, "NeuralAgent_reconfigure___redArg", 1)
+    calls(functions, learned_extended_raw, "NeuralAgent_reconfigure___redArg", 1)
+    calls(functions, reconfigured_action, "Agent_executeProducedInput", 1)
+    absent(functions, learned_target,
+        ["executeLearnedAlignedReconfigurationFromState",
+         "executeLearnedExtendedReconfigurationFromState",
+         "executeReconfiguredAction", "Agent_executeProducedInput"])
+    print("AGENT_LEARNED_SHARING_OK: each material branch consumes its current state in one reconfiguration/action/effect occurrence; the successor only projects that shared occurrence")
+    # F2: the successive runtime route must execute the decoder-produced
+    # analysis and build the installed checked update from that analysis.  A
+    # return of the separately named canonical checked update would recreate
+    # the bypass found by the audit even if extensional equality tests passed.
+    successive_decoded = select(functions,
+        "NeuralAgent_checkDecodedLearnedExtendedSerializedUpdate___redArg")
+    successive_serialized = select(functions,
+        "NeuralAgent_checkLearnedExtendedSerializedUpdate")
+    successive_runtime = select(functions,
+        "NeuralAgent_checkDecodedLearnedRuntimeUpdateAtCurrent___redArg")
+    calls(functions, successive_decoded,
+        "NeuralAgent_analyzeDecodedLearnedSuccessiveUpdate___redArg", 1)
+    calls(functions, successive_decoded,
+        "NeuralAgent_LearnedSuccessiveEngineAnalysis_target___redArg", 1)
+    calls(functions, successive_decoded,
+        "NeuralAgent_buildIncrementalCheckedUpdate___redArg", 1)
+    calls(functions, successive_serialized,
+        "NeuralAgent_checkDecodedLearnedExtendedSerializedUpdate___redArg", 1)
+    calls(functions, successive_runtime,
+        "NeuralAgent_checkDecodedLearnedExtendedSerializedUpdate___redArg", 1)
+    absent(functions, successive_decoded, ["learnedExtendedCheckedUpdate"])
+    absent(functions, successive_serialized, ["learnedExtendedCheckedUpdate"])
+    print("AGENT_SUCCESSIVE_RUNTIME_OK: decoded update -> executed successive analysis -> transported/recomputed target -> installed checked update; no canonical-update bypass")
+    # F3: an admitted ordinary continuation must execute the reduced future
+    # contract, while a contract change must pass through the post-forgetting
+    # analyzer and build the checked successor from that returned analysis.
+    # These are distinct compiled routes; neither may substitute a named
+    # canonical successor or treat the continuation as a contract update.
+    post_continuation = select(functions,
+        "NeuralAgent_submitLearnedPostForgettingContinuation")
+    post_runtime = select(functions,
+        "NeuralAgent_checkLearnedPostForgettingRuntimeUpdate___redArg")
+    post_closed_change = select(functions,
+        "NeuralAgent_closeLearnedPostForgettingContractChange___redArg")
+    calls(functions, post_continuation,
+        "NeuralAgent_checkLearnedPostForgettingIncremental", 1)
+    calls(functions, post_continuation,
+        "NeuralAgent_executePostForgettingContinuation___redArg", 1)
+    calls(functions, post_runtime,
+        "NeuralAgent_analyzeLearnedPostForgettingIncrementally", 1)
+    calls(functions, post_runtime,
+        "NeuralAgent_closeLearnedPostForgettingContractChange___redArg", 1)
+    calls(functions, post_closed_change,
+        "NeuralAgent_JustifiedPostForgettingTransition_transportedPersistent___redArg", 1)
+    calls(functions, post_closed_change,
+        "NeuralAgent_JustifiedPostForgettingTransition_rechecked___redArg", 1)
+    calls(functions, post_closed_change,
+        "NeuralAgent_buildIncrementalCheckedUpdate___redArg", 1)
+    absent(functions, post_runtime,
+        ["learnedExtendedCheckedUpdate", "learnedPostForgettingExtendedRuntime"])
+    print("AGENT_POST_FORGETTING_RUNTIME_OK: reduced-memory continuation is executed; contract change consumes its persistent transport and authorization recheck before building and installing the returned checked update; no canonical-successor bypass")
     # L6: the installed incremental successor must be assembled through the
     # unique fragment constructor whose structural field is the calculated
     # transport/recompute assembly.  Neither that constructor nor the scaling
@@ -245,6 +318,37 @@ LEAN_EXPORT lean_object* l_bad(){ return 0; }
     absent(functions, scaling_incremental,
         ["checkInitial", "checkFullUpdate", "FullRecheck", "certifyFragments"])
     print("AGENT_INCREMENTAL_ASSEMBLY_OK: installed certificate consumes direct transport/recomputation; no regenerated target snapshot or complete-check oracle")
+    # F4: the successor campaign must produce one action from the exact source,
+    # pass that same produced object to the effect constructor, and build the
+    # successor from that effect.  Re-executing an extensionally equal action
+    # here would hide an occurrence substitution behind value equality.
+    causal_producer = select(functions,
+        "NeuralAgent_produceCausalScalingTransition")
+    causal_action = select(functions,
+        "NeuralAgent_causalScalingAction")
+    causal_target_analysis = select(functions,
+        "NeuralAgent_causalScalingIncrementalTargetAnalysis")
+    calls(functions, causal_producer, "NeuralAgent_causalScalingAction", 1)
+    calls(functions, causal_action,
+        "NeuralAgent_causalScalingTransitionRequest___redArg", 1)
+    calls(functions, causal_action,
+        "Agent_executeProducedInput", 1)
+    calls(functions, causal_producer,
+        "NeuralAgent_causalScalingEffectOfAction___redArg", 1)
+    absent(functions, causal_producer, [], exact=(
+        select(functions, "NeuralAgent_causalScalingEffect"),
+        select(functions, "NeuralAgent_produceScalingEffect"),
+    ))
+    calls(functions, causal_target_analysis,
+        "NeuralAgent_ExecutedTransitionProduction_targetState___redArg", 1)
+    causal_trace = select(functions,
+        "NeuralAgent_CompiledCausalCompletePropertyScaling_runTrace")
+    calls(functions, causal_trace,
+        "NeuralAgent_checkGenericIncrementalUpdate___redArg", 1)
+    calls(functions, causal_trace,
+        "NeuralAgent_checkFullUpdate___redArg", 1)
+    print("AGENT_CAUSAL_SCALING_OK: one source-indexed action occurrence is consumed by one effect occurrence and the produced successor")
+    print("AGENT_CAUSAL_SCALING_PAIRED_OK: the compiled runner executes one incremental check and one independent full recheck on each current state before continuing from the checked successor")
     print("AGENT_CODEGEN_OK: actual live step, one request head, learned sharing and incremental assembly, no rich archive or extensive enumeration")
 
 

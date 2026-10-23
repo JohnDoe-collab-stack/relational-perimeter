@@ -14,8 +14,10 @@ ROOTS = (
     "Tests.Executables.CompiledNeuralCheckerMeasure",
     "Tests.Executables.CompiledNeuralComparisonAdapters",
     "Tests.Executables.CompiledCompleteNeuralComparison",
+    "Tests.Executables.CompiledIndependentCompleteNeuralComparison",
     "Tests.Executables.CompiledParameterizedNeuralCheckerFamily",
     "Tests.Executables.CompiledCompletePropertyNeuralScaling",
+    "Tests.Executables.CompiledCausalCompletePropertyNeuralScaling",
 )
 BLOCK_RE = re.compile(
     r"/- REPOSITORY_CONSTANT_AUDIT_BEGIN -/\s*(.*?)\s*"

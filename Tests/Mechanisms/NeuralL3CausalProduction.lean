@@ -108,48 +108,47 @@ def extended_authorization_role_is_consumed :
 def alignedProduction := learnedReferenceTransitionProduction.production
 
 theorem aligned_production_action_is_exact :
-    alignedProduction.action = learnedAlignedInstallingAction :=
+    alignedProduction.action =
+      executeLearnedAlignedReconfigurationFromState
+        learnedInitialCheckedAgent.state
+        learnedInitialCheckedAgent.certificate.requirementEncodingWitness
+        learnedInitialCheckedAgent.certificate.proposalActionWitness :=
   alignedProduction.actionExact
 
-def aligned_production_effect_consumes_exact_action :
-    LearnedEffectWitness learnedAlignedActionSourceState
-      alignedProduction.action :=
-  alignedProduction.effect
-
 theorem aligned_production_event_memory_are_same_effect :
-    (alignedProduction.effect.successor,
-        alignedProduction.effect.event) =
-      Agent.executeInput learnedAlignedActionSourceState.memory
+    alignedProduction.action.result =
+      Agent.executeInput learnedInitialCheckedAgent.state.memory
         alignedProduction.action.request :=
-  alignedProduction.effect.effect_exact
+  alignedProduction.action.resultExact
 
 theorem aligned_production_successor_is_same_effect :
     learnedProducedTransitionTarget learnedInitialCheckedAgent
         learnedOperationalTransition .installAligned alignedProduction =
-      alignedProduction.effect.targetState := by
+      alignedProduction.action.targetState := by
   rfl
 
 def extendedProduction := learnedExtendedReferenceTransitionProduction.production
 
 theorem extended_production_action_is_exact :
     extendedProduction.action =
-      learnedExtendedInstallingActionFor
-        LearnedAlignedCheckedAgent.state.memory :=
+      executeLearnedExtendedReconfigurationFromState
+        LearnedAlignedCheckedAgent.state
+        LearnedAlignedCheckedAgent.certificate.requirementEncodingWitness
+        LearnedAlignedCheckedAgent.certificate.proposalActionWitness :=
   extendedProduction.actionExact
 
-def extended_production_effect_consumes_exact_action :
-    LearnedEffectWitness
-      (learnedExtendedActionSourceStateFor
-        LearnedAlignedCheckedAgent.state.memory)
-      extendedProduction.action :=
-  extendedProduction.effect
+theorem extended_production_event_memory_are_same_effect :
+    extendedProduction.action.result =
+      Agent.executeInput LearnedAlignedCheckedAgent.state.memory
+        extendedProduction.action.request :=
+  extendedProduction.action.resultExact
 
 theorem extended_production_successor_is_same_effect :
     learnedProducedTransitionTarget LearnedAlignedCheckedAgent
         learnedExtendedOperationalTransition
         learnedExtendedReferenceTransitionMaterial
         extendedProduction =
-      extendedProduction.effect.targetState := by
+      extendedProduction.action.targetState := by
   rfl
 
 end Tests.Mechanisms.NeuralL3CausalProduction
@@ -169,10 +168,9 @@ end Tests.Mechanisms.NeuralL3CausalProduction
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_requirement_role_is_consumed
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_authorization_role_is_consumed
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.aligned_production_action_is_exact
-#print axioms Tests.Mechanisms.NeuralL3CausalProduction.aligned_production_effect_consumes_exact_action
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.aligned_production_event_memory_are_same_effect
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.aligned_production_successor_is_same_effect
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_production_action_is_exact
-#print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_production_effect_consumes_exact_action
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_production_event_memory_are_same_effect
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_production_successor_is_same_effect
 /- AXIOM_AUDIT_END -/

@@ -1,0 +1,15 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.ForeignCurrentCannotDriveLearnedInstallation
+open ConstitutiveSearch.NeuralAgent
+
+def forbiddenForeignCurrent : ReconfiguredActionEffect
+    (builder := learnedAlignedReconfigurationBuilder)
+    publicAgentActionChannel learnedAlignedState independentLearnedCertifiedInput :=
+  executeLearnedAlignedReconfigurationFromState learnedInitialState
+    { inputExact := rfl } learnedInitialAction
+
+end Tests.ExpectedFailure.ForeignCurrentCannotDriveLearnedInstallation
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.executeLearnedAlignedReconfigurationFromState
+/- AXIOM_AUDIT_END -/

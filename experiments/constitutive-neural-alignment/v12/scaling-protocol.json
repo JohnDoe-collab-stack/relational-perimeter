@@ -1,0 +1,116 @@
+{
+  "protocol_id": "compiled-causal-complete-property-scaling-v12",
+  "status": "draft-awaiting-stable-source-commit",
+  "historical_evidence_preserved": {
+    "experiments/constitutive-neural-alignment/v5/measurement-results.json": "82e71aa5a39a512fc0893c01e3f440cae84089d25d72822c851d290a50f95aa2",
+    "experiments/constitutive-neural-alignment/v7/RUN_FAILURE.md": "e31da3f1b0f57b2a509fe8ce93e3f4ed68ab88ee876b85624e483951ba111f47",
+    "experiments/constitutive-neural-alignment/v7/scaling-protocol.json": "a9c1b56fd3af33f65f769f9a9c550d7f1847f1b7e5b626f03162d5469d4151df",
+    "experiments/constitutive-neural-alignment/v8/scaling-results.json": "f97ba3d725f9954cef6ff530ed08c284f2c656b47bda1ea1ea04c06bf0a15341",
+    "experiments/constitutive-neural-alignment/v8/scaling-protocol.json": "7114daf6eccdb4803b73b5369b88b3830ec9f09b41c3b9fb5e15eb684662ca28",
+    "experiments/constitutive-neural-alignment/v8/SCALING_ANALYSIS.md": "8b0334b6cad2956123d48379d325d24e9f945f5e771ab9b079e2aa038dcb5a0d",
+    "experiments/constitutive-neural-alignment/v11/scaling-protocol.json": "3123982e2ec5da661cceb57e6bb8bed51c0d3633dda7d40602d3b148f1ed14fd",
+    "experiments/constitutive-neural-alignment/v11/scaling-results.json": "8438e66f5aab002c78a3b538ef187e4f412fa36c889564c54b08245be8d80048"
+  },
+  "scientific_scope": "Observed finite scaling of paired compiled checkers on a growing complete certificate property whose successor is produced by an action and effect from the exact checked source. This is neither an asymptotic theorem nor a claim about all neural systems.",
+  "causal_transition_property": {
+    "source_consumed_by_action": true,
+    "effective_register_progress": true,
+    "action_consumed_by_effect": true,
+    "effect_consumed_by_successor": true,
+    "trace_continues_from_installed_successor": true,
+    "v11_remains_historical_negative": true
+  },
+  "complete_property": {
+    "contract_obligations": [
+      "requirement encoding incorporation",
+      "executed causal role",
+      "proposal-to-action execution",
+      "incorporated authorization",
+      "produced effect",
+      "finite covered future",
+      "exact native run history"
+    ],
+    "growth_requirements": [
+      "neural_nodes strictly grow across points",
+      "causal_graph_nodes strictly grow across points",
+      "causal_graph_edges strictly grow across points",
+      "complete_obligations strictly grow across points and trace steps",
+      "future_trace_length equals step plus one",
+      "every emitted transition checksum forces source action effect and successor",
+      "target register length equals source register length plus one at every step",
+      "at least one local cone transports a nonempty fragment set",
+      "at least one extended cone recalculates a nonempty fragment set"
+    ],
+    "unit_obligations_forbidden": true
+  },
+  "parameters": {
+    "points": [
+      {"size": 0, "trace_length": 3},
+      {"size": 4, "trace_length": 6},
+      {"size": 8, "trace_length": 9},
+      {"size": 16, "trace_length": 12},
+      {"size": 32, "trace_length": 15}
+    ],
+    "schedule": "local, source, extended, repeated",
+    "warmup_repetitions": 1,
+    "measured_repetitions": 5,
+    "random_seeds": [],
+    "determinism": "The family, transition producer, schedule and both compiled checkers are deterministic."
+  },
+  "uncertainty": {
+    "reported_statistics": ["minimum", "q1", "median", "q3", "maximum"],
+    "outlier_policy": "No measured run is removed.",
+    "failed_run_policy": "Every failure remains in raw_runs and makes the gain verdict false for its point."
+  },
+  "accounting": {
+    "phase_units": [
+      "conversion_units", "initialization_units", "construction_units",
+      "verification_units", "assembly_units", "installation_units",
+      "execution_units", "full_conversion_units",
+      "full_initialization_units", "full_construction_units",
+      "full_verification_units", "full_assembly_units",
+      "full_installation_units", "full_execution_units"
+    ],
+    "elapsed": [
+      "initial_nanoseconds", "incremental_nanoseconds",
+      "full_recheck_nanoseconds", "process_wall_nanoseconds"
+    ],
+    "memory": ["peak_resident_bytes"],
+    "serialized_sizes": [
+      "certificate_serialized_bytes", "delta_serialized_bytes",
+      "transported_serialized_bytes", "recomputed_serialized_bytes"
+    ],
+    "publication": "Raw rows, cumulative and amortized totals, all failures, transition checksums and state readouts are mandatory."
+  },
+  "practical_gain_rule": {
+    "name": "causal-complete-property-cumulative-incremental-gain",
+    "sizes_at_or_above": 16,
+    "maximum_incremental_fraction_of_full": 0.8,
+    "decision": "Gain is true only if every repetition completes and median initialization-plus-incremental cumulative time is at most 80 percent of the full recheck at every assessed point.",
+    "selection_counts_never_establish_gain": true
+  },
+  "resource_budget": {
+    "timeout_seconds_per_process": 120,
+    "resident_memory_limit_bytes": 2147483648,
+    "failure_policy": "Timeout, memory excess and rejection are published as unfavorable observations."
+  },
+  "build_command": ["lake", "build", "compiled_causal_complete_property_neural_scaling"],
+  "freeze_command": ["python", "scripts/freeze-causal-complete-property-scaling-v12.py"],
+  "confirmatory_command": [
+    "python", "scripts/run-compiled-causal-complete-property-scaling-v12.py",
+    "--protocol", "experiments/constitutive-neural-alignment/v12/scaling-protocol.json",
+    "--output", "experiments/constitutive-neural-alignment/v12/scaling-results.json"
+  ],
+  "negative_control": {
+    "arguments": ["invalid", "1"],
+    "required_outcome": "nonzero exit before an accepted observation"
+  },
+  "interpretation_rules": [
+    "v11 remains a historical negative result and is never reclassified.",
+    "All finite costs are observations, not Lean theorems.",
+    "No asymptotic form is inferred from five finite points.",
+    "Fragment reuse and elapsed-time gain are distinct claims.",
+    "The confirmatory result file is written once and never overwritten.",
+    "The protocol must be frozen at a recoverable clean commit before the run."
+  ]
+}

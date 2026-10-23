@@ -1464,6 +1464,260 @@ def learnedExtendedCertifiedReconfiguration :
     learnedExtendedRequiredMechanismTransport
     learnedExtendedReconfiguredProposalDerivation
 
+/-! ## State-indexed learned reconfiguration consumed by installation
+
+The fixed learned systems above remain the closed reference instances.  The
+runtime producer below does not reuse them as detached targets: it rebuilds
+the reconfiguration from the exact current state, using the current state's
+requirement and action witnesses to prove that the builder selected the
+learned target.  The resulting certificate is indexed by the current system
+and its actual run before the action is executed.
+-/
+
+theorem learnedCertifiedSourceProposal_true
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    source.system.proposal source.input = true :=
+  sourceAction.preservation.proposalExact.trans
+    ((congrArg (fun input : IndependentLearnedRequirementInput =>
+        independentLearnedRequirementFamily.requiredProposal
+          input.requirement input.context) encoding.inputExact).trans (by rfl))
+
+def learnedAlignedRawReconfigurationForState
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily) :
+    Reconfiguration learnedAlignedReconfigurationBuilder source.system
+      source.input independentLearnedCertifiedInput :=
+  reconfigure learnedAlignedReconfigurationBuilder source.input
+    independentLearnedCertifiedInput
+    (learnedReconfigurationAuthorization independentLearnedCertifiedInput)
+
+theorem learnedAlignedReconfigurationForState_target_exact
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    (learnedAlignedRawReconfigurationForState source).targetSystem =
+      learnedDecodedAlignedArtifact.system := by
+  unfold learnedAlignedRawReconfigurationForState
+  change
+    buildLearnedReconfiguredSystem learnedDecodedAlignedArtifact.system
+        source.system (source.system.run source.input)
+        independentLearnedCertifiedInput
+        (learnedReconfigurationAuthorization independentLearnedCertifiedInput) =
+      learnedDecodedAlignedArtifact.system
+  unfold buildLearnedReconfiguredSystem
+  have runProposalExact :
+      learnedProposalFromRun source.system (source.system.run source.input) =
+        source.system.proposal source.input := by
+    rfl
+  rw [runProposalExact,
+    learnedCertifiedSourceProposal_true source encoding sourceAction]
+  rfl
+
+def learnedAlignedReconfigurationForState
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    Reconfiguration learnedAlignedReconfigurationBuilder source.system
+      source.input independentLearnedCertifiedInput :=
+  (learnedAlignedRawReconfigurationForState source).reindexTarget
+    learnedDecodedAlignedArtifact.system
+    (learnedAlignedReconfigurationForState_target_exact source encoding
+      sourceAction)
+
+def learnedAlignedRequiredMechanismTransportForState
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    RequiredMechanismTransport
+      (learnedAlignedReconfigurationForState source encoding sourceAction) :=
+  { sourcePort := learnedAlignedContextPort
+    requirementPort := learnedAlignedRequirementPort
+    authorizationPort := learnedAlignedAuthorizationPort
+    portsDistinct := learnedFin_ne_of_val_ne (by decide)
+    sourceAuthorizationDistinct := learnedFin_ne_of_val_ne (by decide)
+    requirementAuthorizationDistinct := learnedFin_ne_of_val_ne (by decide)
+    sourceExact := by
+      change
+        (learnedDecodedAlignedArtifact.system.encode
+            independentLearnedCertifiedInput).read learnedAlignedContextPort =
+          learnedPriorProposalCode (source.system.proposal source.input)
+      rw [learnedCertifiedSourceProposal_true source encoding sourceAction]
+      rfl
+    requirementExact := by rfl
+    authorizationExact := by rfl
+    sourceRole := learnedAlignedContextRole
+    requirementRole := learnedAlignedCurrentRole .requirementOnly
+    authorizationRole := learnedAlignedAuthorizationRole }
+
+def learnedAlignedReconfiguredProposalDerivationForState
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    ReconfiguredProposalDerivation
+      (learnedAlignedReconfigurationForState source encoding sourceAction)
+      (learnedAlignedRequiredMechanismTransportForState source encoding
+        sourceAction) :=
+  { combine := learnedAlignedReconfigurationCombinedOutputs
+    combinationExecuted := by rfl
+    decoderExact := by
+      change
+        learnedDecodedAlignedArtifact.system.decode
+            (learnedAlignedReconfigurationCombinedOutputs
+              (learnedPriorProposalCode (source.system.proposal source.input))
+              (learnedBoolCode independentLearnedCertifiedInput.requirement)
+              (learnedReconfigurationAuthorizationCode
+                independentLearnedCertifiedInput
+                (learnedAlignedReconfigurationForState source encoding
+                  sourceAction).permission)) =
+          independentLearnedRequirementFamily.requiredProposal
+            independentLearnedCertifiedInput.requirement
+            independentLearnedCertifiedInput.context
+      rw [learnedCertifiedSourceProposal_true source encoding sourceAction]
+      rfl }
+
+def learnedAlignedCertifiedReconfigurationForState
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    CertifiedReconfiguration
+      (builder := learnedAlignedReconfigurationBuilder)
+      (sourceSystem := source.system) (sourceInput := source.input)
+      (nextInput := independentLearnedCertifiedInput) :=
+  certifyReconfiguration
+    (learnedAlignedReconfigurationForState source encoding sourceAction)
+    (learnedAlignedRequiredMechanismTransportForState source encoding
+      sourceAction)
+    (learnedAlignedReconfiguredProposalDerivationForState source encoding
+      sourceAction)
+
+def executeLearnedAlignedReconfigurationFromState
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    ReconfiguredActionEffect (builder := learnedAlignedReconfigurationBuilder)
+      publicAgentActionChannel source independentLearnedCertifiedInput :=
+  executeReconfiguredAction publicAgentActionChannel source
+    independentLearnedCertifiedInput
+    (learnedAlignedCertifiedReconfigurationForState source encoding sourceAction)
+
+def learnedExtendedRawReconfigurationForState
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily) :
+    Reconfiguration learnedExtendedReconfigurationBuilder source.system
+      source.input independentLearnedCertifiedInput :=
+  reconfigure learnedExtendedReconfigurationBuilder source.input
+    independentLearnedCertifiedInput
+    (learnedReconfigurationAuthorization independentLearnedCertifiedInput)
+
+theorem learnedExtendedReconfigurationForState_target_exact
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    (learnedExtendedRawReconfigurationForState source).targetSystem =
+      learnedDecodedExtendedArtifact.system := by
+  unfold learnedExtendedRawReconfigurationForState
+  change
+    buildLearnedReconfiguredSystem learnedDecodedExtendedArtifact.system
+        source.system (source.system.run source.input)
+        independentLearnedCertifiedInput
+        (learnedReconfigurationAuthorization independentLearnedCertifiedInput) =
+      learnedDecodedExtendedArtifact.system
+  unfold buildLearnedReconfiguredSystem
+  have runProposalExact :
+      learnedProposalFromRun source.system (source.system.run source.input) =
+        source.system.proposal source.input := by
+    rfl
+  rw [runProposalExact,
+    learnedCertifiedSourceProposal_true source encoding sourceAction]
+  rfl
+
+def learnedExtendedReconfigurationForState
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    Reconfiguration learnedExtendedReconfigurationBuilder source.system
+      source.input independentLearnedCertifiedInput :=
+  (learnedExtendedRawReconfigurationForState source).reindexTarget
+    learnedDecodedExtendedArtifact.system
+    (learnedExtendedReconfigurationForState_target_exact source encoding
+      sourceAction)
+
+def learnedExtendedRequiredMechanismTransportForState
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    RequiredMechanismTransport
+      (learnedExtendedReconfigurationForState source encoding sourceAction) :=
+  { sourcePort := learnedExtendedContextPort
+    requirementPort := learnedExtendedRequirementPort
+    authorizationPort := learnedExtendedAuthorizationPort
+    portsDistinct := learnedFin_ne_of_val_ne (by decide)
+    sourceAuthorizationDistinct := learnedFin_ne_of_val_ne (by decide)
+    requirementAuthorizationDistinct := learnedFin_ne_of_val_ne (by decide)
+    sourceExact := by
+      change
+        (learnedDecodedExtendedArtifact.system.encode
+            independentLearnedCertifiedInput).read learnedExtendedContextPort =
+          learnedPriorProposalCode (source.system.proposal source.input)
+      rw [learnedCertifiedSourceProposal_true source encoding sourceAction]
+      rfl
+    requirementExact := by rfl
+    authorizationExact := by rfl
+    sourceRole := learnedExtendedContextRole
+    requirementRole := learnedExtendedCurrentRole .requirementOnly
+    authorizationRole := learnedExtendedAuthorizationRole }
+
+def learnedExtendedReconfiguredProposalDerivationForState
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    ReconfiguredProposalDerivation
+      (learnedExtendedReconfigurationForState source encoding sourceAction)
+      (learnedExtendedRequiredMechanismTransportForState source encoding
+        sourceAction) :=
+  { combine := learnedExtendedReconfigurationCombinedOutputs
+    combinationExecuted := by rfl
+    decoderExact := by
+      change
+        learnedDecodedExtendedArtifact.system.decode
+            (learnedExtendedReconfigurationCombinedOutputs
+              (learnedPriorProposalCode (source.system.proposal source.input))
+              (learnedBoolCode independentLearnedCertifiedInput.requirement)
+              (learnedReconfigurationAuthorizationCode
+                independentLearnedCertifiedInput
+                (learnedExtendedReconfigurationForState source encoding
+                  sourceAction).permission)) =
+          independentLearnedRequirementFamily.requiredProposal
+            independentLearnedCertifiedInput.requirement
+            independentLearnedCertifiedInput.context
+      rw [learnedCertifiedSourceProposal_true source encoding sourceAction]
+      rfl }
+
+def learnedExtendedCertifiedReconfigurationForState
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    CertifiedReconfiguration
+      (builder := learnedExtendedReconfigurationBuilder)
+      (sourceSystem := source.system) (sourceInput := source.input)
+      (nextInput := independentLearnedCertifiedInput) :=
+  certifyReconfiguration
+    (learnedExtendedReconfigurationForState source encoding sourceAction)
+    (learnedExtendedRequiredMechanismTransportForState source encoding
+      sourceAction)
+    (learnedExtendedReconfiguredProposalDerivationForState source encoding
+      sourceAction)
+
+def executeLearnedExtendedReconfigurationFromState
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    ReconfiguredActionEffect (builder := learnedExtendedReconfigurationBuilder)
+      publicAgentActionChannel source independentLearnedCertifiedInput :=
+  executeReconfiguredAction publicAgentActionChannel source
+    independentLearnedCertifiedInput
+    (learnedExtendedCertifiedReconfigurationForState source encoding sourceAction)
+
 def learnedAlignedSourceInputTransformation :
     ExecutedSignalTransformation
       (learnedDecodedAlignedArtifact.system.run independentLearnedCertifiedInput)
@@ -2431,44 +2685,60 @@ inductive LearnedExecutedStateTransition :
   | executed
       (currentState : ReconfiguredExecutionState
         independentLearnedRequirementFamily)
-      (installingAction : LearnedActionWitness
-        (learnedAlignedActionSourceStateFor currentState.memory))
+      (sourceEncoding : LearnedRequirementEncodingWitness currentState)
+      (sourceAction : LearnedActionWitness currentState)
+      (installingAction : ReconfiguredActionEffect
+        (builder := learnedAlignedReconfigurationBuilder)
+        publicAgentActionChannel currentState independentLearnedCertifiedInput)
       (installingActionExact : installingAction =
-        learnedAlignedInstallingActionFor currentState.memory)
-      (installingEffect : LearnedEffectWitness
-        (learnedAlignedActionSourceStateFor currentState.memory)
-        installingAction) :
+        executeLearnedAlignedReconfigurationFromState currentState
+          sourceEncoding sourceAction) :
       LearnedExecutedStateTransition
         LearnedContractTransitionPermission.installAligned
-        currentState installingEffect.targetState
+        currentState installingAction.targetState
   | executedExtended
       (currentState : ReconfiguredExecutionState
         independentLearnedRequirementFamily)
-      (installingAction : LearnedActionWitness
-        (learnedExtendedActionSourceStateFor currentState.memory))
+      (sourceEncoding : LearnedRequirementEncodingWitness currentState)
+      (sourceAction : LearnedActionWitness currentState)
+      (installingAction : ReconfiguredActionEffect
+        (builder := learnedExtendedReconfigurationBuilder)
+        publicAgentActionChannel currentState independentLearnedCertifiedInput)
       (installingActionExact : installingAction =
-        learnedExtendedInstallingActionFor currentState.memory)
-      (installingEffect : LearnedEffectWitness
-        (learnedExtendedActionSourceStateFor currentState.memory)
-        installingAction) :
+        executeLearnedExtendedReconfigurationFromState currentState
+          sourceEncoding sourceAction) :
       LearnedExecutedStateTransition
         LearnedContractTransitionPermission.installExtended
-        currentState installingEffect.targetState
+        currentState installingAction.targetState
 
 def executeLearnedAlignedStateTransition :
     LearnedExecutedStateTransition
       LearnedContractTransitionPermission.installAligned
       learnedInitialState learnedAlignedState :=
-  .executed learnedInitialState learnedAlignedInstallingAction rfl
-    learnedAlignedInstallingEffect
+  .executed learnedInitialState { inputExact := rfl } learnedInitialAction
+    (executeLearnedAlignedReconfigurationFromState learnedInitialState
+      { inputExact := rfl } learnedInitialAction) rfl
 
 def executeLearnedExtendedStateTransition :
     LearnedExecutedStateTransition
       LearnedContractTransitionPermission.installExtended
       learnedAlignedState learnedExtendedState :=
-  .executedExtended learnedAlignedState
-    (learnedExtendedInstallingActionFor learnedAlignedState.memory) rfl
-    (learnedExtendedInstallingEffectFor learnedAlignedState.memory)
+  .executedExtended learnedAlignedState { inputExact := rfl }
+    learnedAlignedAction
+    (executeLearnedExtendedReconfigurationFromState learnedAlignedState
+      { inputExact := rfl } learnedAlignedAction) rfl
+
+theorem executeLearnedAlignedReconfigurationFromState_initial_target_exact :
+    (executeLearnedAlignedReconfigurationFromState learnedInitialState
+      { inputExact := rfl } learnedInitialAction).targetState =
+        learnedAlignedState := by
+  rfl
+
+theorem executeLearnedExtendedReconfigurationFromState_aligned_target_exact :
+    (executeLearnedExtendedReconfigurationFromState learnedAlignedState
+      { inputExact := rfl } learnedAlignedAction).targetState =
+        learnedExtendedState := by
+  rfl
 
 def learnedConstitutiveMetaContract : ConstitutiveMetaContract where
   Contract := LearnedOperationalContract
@@ -2510,22 +2780,42 @@ inductive LearnedTransitionMaterial :
 structure LearnedTransitionProductionData
     (current : CheckedAgent learnedConstitutiveMetaContract .initial) : Type 3 where
   private mk ::
-  action : LearnedActionWitness
-    (learnedAlignedActionSourceStateFor current.state.memory)
+  action : ReconfiguredActionEffect
+    (builder := learnedAlignedReconfigurationBuilder)
+    publicAgentActionChannel current.state independentLearnedCertifiedInput
   actionExact : action =
-    learnedAlignedInstallingActionFor current.state.memory
-  effect : LearnedEffectWitness
-    (learnedAlignedActionSourceStateFor current.state.memory) action
+    executeLearnedAlignedReconfigurationFromState current.state
+      current.certificate.requirementEncodingWitness
+      current.certificate.proposalActionWitness
 
 structure LearnedExtendedTransitionProductionData
     (current : CheckedAgent learnedConstitutiveMetaContract .aligned) : Type 3 where
   private mk ::
-  action : LearnedActionWitness
-    (learnedExtendedActionSourceStateFor current.state.memory)
+  action : ReconfiguredActionEffect
+    (builder := learnedExtendedReconfigurationBuilder)
+    publicAgentActionChannel current.state independentLearnedCertifiedInput
   actionExact : action =
-    learnedExtendedInstallingActionFor current.state.memory
-  effect : LearnedEffectWitness
-    (learnedExtendedActionSourceStateFor current.state.memory) action
+    executeLearnedExtendedReconfigurationFromState current.state
+      current.certificate.requirementEncodingWitness
+      current.certificate.proposalActionWitness
+
+/-- The aligned production stores the single executed action/effect occurrence.
+Its event and successor memory are the two projections of the result produced
+from that occurrence; no second action is reconstructed to justify them. -/
+theorem LearnedTransitionProductionData.result_exact
+    (current : CheckedAgent learnedConstitutiveMetaContract .initial)
+    (production : LearnedTransitionProductionData current) :
+    production.action.result =
+      Agent.executeInput current.state.memory production.action.request :=
+  production.action.resultExact
+
+/-- The same sharing law for the second learned reconfiguration. -/
+theorem LearnedExtendedTransitionProductionData.result_exact
+    (current : CheckedAgent learnedConstitutiveMetaContract .aligned)
+    (production : LearnedExtendedTransitionProductionData current) :
+    production.action.result =
+      Agent.executeInput current.state.memory production.action.request :=
+  production.action.resultExact
 
 def learnedTransitionProductionData
     {currentContract nextContract : LearnedOperationalContract}
@@ -2545,12 +2835,14 @@ def produceLearnedTransitionData
       learnedTransitionProductionData current _transition material := by
   intro material
   cases material
-  · let action := learnedAlignedInstallingActionFor current.state.memory
-    let effect := learnedAlignedInstallingEffectFrom current.state.memory action
-    exact .mk action rfl effect
-  · let action := learnedExtendedInstallingActionFor current.state.memory
-    let effect := learnedExtendedInstallingEffectFrom current.state.memory action
-    exact .mk action rfl effect
+  · exact .mk
+      (executeLearnedAlignedReconfigurationFromState current.state
+        current.certificate.requirementEncodingWitness
+        current.certificate.proposalActionWitness) rfl
+  · exact .mk
+      (executeLearnedExtendedReconfigurationFromState current.state
+        current.certificate.requirementEncodingWitness
+        current.certificate.proposalActionWitness) rfl
 
 def learnedProducedTransitionTarget
     {currentContract nextContract : LearnedOperationalContract}
@@ -2562,8 +2854,29 @@ def learnedProducedTransitionTarget
     ReconfiguredExecutionState
       (learnedOperationalContract nextContract).family := by
   cases material with
-  | installAligned => exact production.effect.targetState
-  | installExtended => exact production.effect.targetState
+  | installAligned => exact production.action.targetState
+  | installExtended => exact production.action.targetState
+
+/-- The aligned successor is a projection of the action/effect occurrence
+stored by the production, rather than an independently reconstructed state. -/
+theorem learnedAlignedProducedTransitionTarget_is_shared_effect
+    (current : CheckedAgent learnedConstitutiveMetaContract .initial)
+    (transition : OperationalContractTransition learnedConstitutiveMetaContract
+      .initial .aligned)
+    (production : LearnedTransitionProductionData current) :
+    learnedProducedTransitionTarget current transition .installAligned
+        production = production.action.targetState := by
+  rfl
+
+/-- The same successor-sharing law for the extended branch. -/
+theorem learnedExtendedProducedTransitionTarget_is_shared_effect
+    (current : CheckedAgent learnedConstitutiveMetaContract .aligned)
+    (transition : OperationalContractTransition learnedConstitutiveMetaContract
+      .aligned .extended)
+    (production : LearnedExtendedTransitionProductionData current) :
+    learnedProducedTransitionTarget current transition .installExtended
+        production = production.action.targetState := by
+  rfl
 
 def learnedProducedTransitionExecution
     {currentContract nextContract : LearnedOperationalContract}
@@ -2578,12 +2891,16 @@ def learnedProducedTransitionExecution
   cases material with
   | installAligned =>
       cases transition.permission
-      exact .executed current.state production.action production.actionExact
-        production.effect
+      exact .executed current.state
+        current.certificate.requirementEncodingWitness
+        current.certificate.proposalActionWitness production.action
+        production.actionExact
   | installExtended =>
       cases transition.permission
-      exact .executedExtended current.state production.action
-        production.actionExact production.effect
+      exact .executedExtended current.state
+        current.certificate.requirementEncodingWitness
+        current.certificate.proposalActionWitness production.action
+        production.actionExact
 
 def learnedTransitionProductionKernel :
     TransitionProductionKernel learnedConstitutiveMetaContract where
@@ -4049,6 +4366,52 @@ def learnedExtendedCheckedUpdate : CheckedUpdate
     learnedExtendedOperationalTransition
     learnedExtendedReferenceTransitionProduction.execution
 
+/-! ## Successive structural assembly from the checked predecessor -/
+
+/-- The successive pre-certificate graph is calculated from the exact
+certificate installed by the first checked update and the naming decoded for
+the second successor.  It is the graph consumed by both the runtime checker
+and the independent incremental-checker interface below. -/
+def learnedSuccessivePreCertificateGraph : PreCertificateConstitutiveGraph
+    LearnedAlignedCheckedAgent.certificate.basis.naming
+      learnedExtendedStableNaming :=
+  calculatePreCertificateConstitutiveGraph
+    LearnedAlignedCheckedAgent.certificate.basis.naming
+    learnedExtendedStableNaming
+
+/-- Exact source occurrences licensed outside the successive affected cone. -/
+def learnedSuccessiveLicensedStructuralTransports :
+    List (LicensedStructuralTransport
+      LearnedAlignedCheckedAgent.certificate
+      learnedSuccessivePreCertificateGraph) :=
+  calculateLicensedStructuralTransports
+    LearnedAlignedCheckedAgent.certificate
+    learnedSuccessivePreCertificateGraph
+
+/-- Exact source-certificate payloads projected from the calculated
+transport licenses. -/
+def learnedSuccessiveTransportedStructuralFragments :
+    List (StableNodeKey × StableArtifactObservation) :=
+  licensedStructuralEntries learnedSuccessiveLicensedStructuralTransports
+
+/-- Target payloads recomputed only at nodes invalidated by the calculated
+successive graph. -/
+def learnedSuccessiveRecomputedStructuralFragments :
+    List (StableNodeKey × StableArtifactObservation) :=
+  recomputeAffectedStructuralObservations
+    LearnedAlignedCheckedAgent.certificate learnedExtendedStableNaming
+    learnedSuccessivePreCertificateGraph
+
+/-- The structural observations installed by the successive checker are the
+result of the exact transport/recompute assembly, not a target snapshot. -/
+def learnedSuccessiveCalculatedStructuralAssembly :
+    CalculatedIncrementalStructuralAssembly
+      LearnedAlignedCheckedAgent.certificate
+      learnedSuccessivePreCertificateGraph
+      learnedSuccessiveTransportedStructuralFragments
+      learnedSuccessiveRecomputedStructuralFragments :=
+  certifyCalculatedIncrementalStructuralAssembly rfl rfl
+
 structure DecodedLearnedSuccessiveUpdate
     (source : LearnedSerializedConstitutiveUpdate) : Type 4 where
   private mk ::
@@ -4111,36 +4474,93 @@ def decodeLearnedSuccessiveUpdate
               else
                 .error .unsupportedStableNaming
 
-/-- The second installation is transported to the artifact value returned by
-decoding this exact update.  The stable-naming equation is consumed in the
-same construction, so an update for another version cannot reuse the checked
-successor. -/
-def learnedReceivedExtendedCheckedUpdateForArtifact
-    (target : DecodedNeuralArtifact LearnedExtendedOperationalContract)
-    (targetExact : target = learnedDecodedExtendedArtifact) :
-    CheckedUpdate LearnedAlignedCheckedAgent .extended :=
-  match targetExact with
-  | rfl => learnedExtendedCheckedUpdate
+/-! ## One successive analysis consumed by both checker interfaces -/
 
-theorem learnedReceivedExtendedCheckedUpdateForArtifact_artifact_exact
+/-- Every dependency retained here has been obtained by executing the decoder,
+the reflected transition decision, and the two finite authorization checks on
+the received update.  No checked target or target certificate is a field. -/
+structure LearnedSuccessiveExecutedDependencies
+    (source : LearnedSerializedConstitutiveUpdate) : Type 6 where
+  decoded : DecodedLearnedSuccessiveUpdate source
+  decodedExact : decodeLearnedSuccessiveUpdate source = .ok decoded
+  receivedDecision : AcceptedTransitionDecision
+    learnedExecutableMetaContractInterface source.transition
+  transitionAccepted :
+    decideTransition learnedExecutableMetaContractInterface source.transition =
+      some receivedDecision
+  authorizationConsumed :
+    primaryAuthorizationConstitutivelyConsumed source.targetNetwork = true
+  targetNetworkExact :
+    source.targetNetwork = independentLearnedSecondSuccessorNetwork
+
+structure LearnedSuccessiveEngineAnalysis
+    (source : LearnedSerializedConstitutiveUpdate) : Type 6 where
+  private mk ::
+  executed : LearnedSuccessiveExecutedDependencies source
+
+/-- Build the successive target from the exact decoded artifact admitted by
+the declared successive domain.  The transport below is eliminative: after
+the decoder has proved that its target is the unique supported learned
+successor, the calculated transport/recompute assembly is installed on that
+same dependent target.  No checked target or target certificate is supplied. -/
+def learnedSuccessiveTargetAnalysisFromReceivedArtifact
     (target : DecodedNeuralArtifact LearnedExtendedOperationalContract)
-    (targetExact : target = learnedDecodedExtendedArtifact) :
-    HEq (learnedReceivedExtendedCheckedUpdateForArtifact target
-      targetExact).next.artifact target := by
+    (targetExact : target = learnedDecodedExtendedArtifact)
+    (decision : AcceptedTransitionDecision
+      learnedExecutableMetaContractInterface
+      ({ current := .aligned, next := .extended } :
+        ContractTransitionRequest learnedConstitutiveMetaContract)) :
+    IncrementalTargetAnalysis LearnedAlignedCheckedAgent :=
+  match target, targetExact with
+  | _, rfl =>
+    { nextContract := .extended
+      contractAdmitted := .extended
+      artifact := learnedDecodedExtendedArtifact
+      state := learnedExtendedState
+      targetNaming := learnedExtendedStableNaming
+      preCertificateGraph := learnedSuccessivePreCertificateGraph
+      transportedLicenses := learnedSuccessiveLicensedStructuralTransports
+      recomputedStructural := learnedSuccessiveRecomputedStructuralFragments
+      structuralAssembly := learnedSuccessiveCalculatedStructuralAssembly
+      structuralBasis := learnedExtendedFiniteCausalBasis
+      structuralBasisNamingExact := rfl
+      structuralSystemExact := rfl
+      structuralInputDeclared := .tail (.tail .head)
+      recomputedCertificateFragments :=
+        learnedExtendedRecomputedCertificateFragments
+      transition := decision.transition
+      execution := by
+        have decisionExact := decision.unique
+          learnedExtendedTransitionDecision
+        cases decisionExact
+        exact learnedExtendedReferenceTransitionProduction.execution }
+
+theorem learnedSuccessiveTargetAnalysisFromReceivedArtifact_artifact_exact
+    (target : DecodedNeuralArtifact LearnedExtendedOperationalContract)
+    (targetExact : target = learnedDecodedExtendedArtifact)
+    (decision : AcceptedTransitionDecision
+      learnedExecutableMetaContractInterface
+      ({ current := .aligned, next := .extended } :
+        ContractTransitionRequest learnedConstitutiveMetaContract)) :
+    HEq (learnedSuccessiveTargetAnalysisFromReceivedArtifact target
+      targetExact decision).artifact target := by
   cases targetExact
   rfl
 
-theorem learnedReceivedExtendedCheckedUpdateForArtifact_naming_exact
+theorem learnedSuccessiveTargetAnalysisFromReceivedArtifact_naming_exact
     (target : DecodedNeuralArtifact LearnedExtendedOperationalContract)
     (targetExact : target = learnedDecodedExtendedArtifact)
     {sourceNaming : SerializedStableArtifactNaming}
     (stable : DecodedStableArtifactNaming target sourceNaming)
     (stableDecodedExact :
       decodeStableArtifactNaming target sourceNaming = .ok stable)
-    (stableNamingExact :
-      sourceNaming = learnedExtendedSerializedNaming) :
-    HEq (learnedReceivedExtendedCheckedUpdateForArtifact target
-      targetExact).next.certificate.basis.naming stable.naming := by
+    (stableNamingExact : sourceNaming = learnedExtendedSerializedNaming)
+    (decision : AcceptedTransitionDecision
+      learnedExecutableMetaContractInterface
+      ({ current := .aligned, next := .extended } :
+        ContractTransitionRequest learnedConstitutiveMetaContract)) :
+    HEq (learnedSuccessiveTargetAnalysisFromReceivedArtifact target
+      targetExact decision).targetNaming stable.naming := by
   cases targetExact
   cases stableNamingExact
   have canonicalExact :
@@ -4153,61 +4573,150 @@ theorem learnedReceivedExtendedCheckedUpdateForArtifact_naming_exact
   cases stableExact
   rfl
 
-def learnedReceivedExtendedCheckedUpdate
+/-- The target analysis is transported from the data actually decoded from
+the received update.  Eliminating the exact decoder equations is what makes
+the calculated graph, transported fragments, recomputed fragments, produced
+state, and executed transition share one dependent target. -/
+def LearnedSuccessiveEngineAnalysis.target
     {source : LearnedSerializedConstitutiveUpdate}
-    (decoded : DecodedLearnedSuccessiveUpdate source)
-    (targetExact :
-      source.targetNetwork = independentLearnedSecondSuccessorNetwork) :
-    CheckedUpdate LearnedAlignedCheckedAgent .extended :=
-  learnedReceivedExtendedCheckedUpdateForArtifact decoded.target
-    (decoded.targetArtifactExact targetExact)
+    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    IncrementalTargetAnalysis LearnedAlignedCheckedAgent := by
+  have targetExact := analysis.executed.decoded.targetArtifactExact
+    analysis.executed.targetNetworkExact
+  have transitionExact := analysis.executed.decoded.transitionExact
+  have receivedDecision :=
+    analysis.executed.receivedDecision.transportRequest transitionExact
+  exact learnedSuccessiveTargetAnalysisFromReceivedArtifact
+    analysis.executed.decoded.target targetExact receivedDecision
 
-theorem learnedReceivedExtendedCheckedUpdate_artifact_exact
+theorem LearnedSuccessiveEngineAnalysis.receivedDecodedArtifact_installed
     {source : LearnedSerializedConstitutiveUpdate}
-    (decoded : DecodedLearnedSuccessiveUpdate source)
-    (targetExact :
-      source.targetNetwork = independentLearnedSecondSuccessorNetwork) :
-    HEq (learnedReceivedExtendedCheckedUpdate decoded targetExact).next.artifact
-      decoded.target := by
-  exact learnedReceivedExtendedCheckedUpdateForArtifact_artifact_exact _ _
+    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    HEq analysis.target.artifact analysis.executed.decoded.target := by
+  apply learnedSuccessiveTargetAnalysisFromReceivedArtifact_artifact_exact
 
-theorem learnedReceivedExtendedCheckedUpdate_naming_exact
+theorem LearnedSuccessiveEngineAnalysis.receivedDecodedStableNaming_installed
     {source : LearnedSerializedConstitutiveUpdate}
-    (decoded : DecodedLearnedSuccessiveUpdate source)
-    (targetExact :
-      source.targetNetwork = independentLearnedSecondSuccessorNetwork) :
-    HEq (learnedReceivedExtendedCheckedUpdate decoded targetExact).next.certificate.basis.naming
-      decoded.stable.naming := by
-  exact learnedReceivedExtendedCheckedUpdateForArtifact_naming_exact _ _
-    decoded.stable decoded.stableDecodedExact decoded.stableNamingExact
+    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    HEq analysis.target.targetNaming analysis.executed.decoded.stable.naming := by
+  apply learnedSuccessiveTargetAnalysisFromReceivedArtifact_naming_exact
+    (stableDecodedExact := analysis.executed.decoded.stableDecodedExact)
+    (stableNamingExact := analysis.executed.decoded.stableNamingExact)
 
-def checkDecodedLearnedExtendedSerializedUpdate
+theorem LearnedSuccessiveEngineAnalysis.structuralAssembly_installed
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    analysis.target.structuralAssembly.observations =
+      stableStructuralObservationSnapshot analysis.target.targetNaming :=
+  analysis.target.structuralAssembly.targetExact
+
+/-- Execute the remaining reflected checks for an already decoded successive
+request.  This is the sole producer of a successive engine analysis. -/
+def analyzeDecodedLearnedSuccessiveUpdate
     (source : LearnedSerializedConstitutiveUpdate)
-    (decoded : DecodedLearnedSuccessiveUpdate source) :
-    Except LearnedRuntimeUpdateError
-      (DependentCheckedUpdateResult LearnedAlignedCheckedAgent) :=
-  match decideTransition learnedExecutableMetaContractInterface
-      source.transition with
+    (decoded : DecodedLearnedSuccessiveUpdate source)
+    (decodedExact : decodeLearnedSuccessiveUpdate source = .ok decoded) :
+    Except LearnedRuntimeUpdateError (LearnedSuccessiveEngineAnalysis source) :=
+  match transitionAccepted :
+      decideTransition learnedExecutableMetaContractInterface source.transition with
   | none => .error .unexpectedTransition
-  | some _decision =>
-      if _dependencyExact : primaryAuthorizationConstitutivelyConsumed
-          source.targetNetwork = true then
-        if _targetExact : source.targetNetwork =
+  | some receivedDecision =>
+      if authorizationConsumed :
+          primaryAuthorizationConstitutivelyConsumed source.targetNetwork = true then
+        if targetNetworkExact : source.targetNetwork =
             independentLearnedSecondSuccessorNetwork then
-          .ok (dependentCheckedUpdateResult
-            (learnedReceivedExtendedCheckedUpdate decoded _targetExact))
+          .ok (.mk
+            { decoded := decoded
+              decodedExact := decodedExact
+              receivedDecision := receivedDecision
+              transitionAccepted := transitionAccepted
+              authorizationConsumed := authorizationConsumed
+              targetNetworkExact := targetNetworkExact })
         else
           .error .unsupportedTargetArtifact
       else
         .error .missingConstitutiveDependency
 
+def analyzeLearnedSuccessiveUpdate
+    (source : LearnedSerializedConstitutiveUpdate) :
+    Except LearnedRuntimeUpdateError (LearnedSuccessiveEngineAnalysis source) :=
+  match decodedExact : decodeLearnedSuccessiveUpdate source with
+  | .error problem => .error problem
+  | .ok decoded =>
+      analyzeDecodedLearnedSuccessiveUpdate source decoded decodedExact
+
+abbrev LearnedSuccessiveLocalConditionData :=
+  LearnedSuccessiveExecutedDependencies
+
+def completeLearnedSuccessiveAnalysis
+    (source : LearnedSerializedConstitutiveUpdate)
+    (conditions : LearnedSuccessiveLocalConditionData source) :
+    { analysis : LearnedSuccessiveEngineAnalysis source //
+      analyzeLearnedSuccessiveUpdate source = .ok analysis } := by
+  unfold analyzeLearnedSuccessiveUpdate
+  split
+  · have impossible :=
+      ‹decodeLearnedSuccessiveUpdate source = .error _›.symm.trans
+        conditions.decodedExact
+    cases impossible
+  · rename_i decoded decodedExact
+    have decodedValueExact : decoded = conditions.decoded :=
+      Except.ok.inj (decodedExact.symm.trans conditions.decodedExact)
+    cases decodedValueExact
+    unfold analyzeDecodedLearnedSuccessiveUpdate
+    split
+    · have impossible :=
+        ‹decideTransition learnedExecutableMetaContractInterface
+            source.transition = none›.symm.trans
+          conditions.transitionAccepted
+      cases impossible
+    · rename_i receivedDecision transitionAccepted
+      have decisionExact : receivedDecision = conditions.receivedDecision :=
+        Option.some.inj
+          (transitionAccepted.symm.trans conditions.transitionAccepted)
+      cases decisionExact
+      rw [dif_pos conditions.authorizationConsumed,
+        dif_pos conditions.targetNetworkExact]
+      exact ⟨.mk conditions, rfl⟩
+
+def learnedSuccessiveLocalConditionsOfSuccess
+    (source : LearnedSerializedConstitutiveUpdate)
+    (analysis : LearnedSuccessiveEngineAnalysis source)
+    (_accepted : analyzeLearnedSuccessiveUpdate source = .ok analysis) :
+    LearnedSuccessiveLocalConditionData source :=
+  analysis.executed
+
+def learnedSuccessiveIncrementalCheckerEngine :
+    IncrementalCheckerEngine LearnedAlignedCheckedAgent :=
+  { Update := LearnedSerializedConstitutiveUpdate
+    Error := LearnedRuntimeUpdateError
+    Analysis := LearnedSuccessiveEngineAnalysis
+    analyze := analyzeLearnedSuccessiveUpdate
+    LocalConditions := LearnedSuccessiveLocalConditionData
+    complete := completeLearnedSuccessiveAnalysis
+    localOfSuccess := learnedSuccessiveLocalConditionsOfSuccess
+    target := fun analysis => analysis.target }
+
+def checkDecodedLearnedExtendedSerializedUpdate
+    (source : LearnedSerializedConstitutiveUpdate)
+    (decoded : DecodedLearnedSuccessiveUpdate source)
+    (decodedExact : decodeLearnedSuccessiveUpdate source = .ok decoded) :
+    Except LearnedRuntimeUpdateError
+      (DependentCheckedUpdateResult LearnedAlignedCheckedAgent) :=
+  match analyzeDecodedLearnedSuccessiveUpdate source decoded decodedExact with
+  | .error problem => .error problem
+  | .ok analysis =>
+      .ok (dependentCheckedUpdateResult
+        (buildIncrementalCheckedUpdate analysis.target))
+
 def checkLearnedExtendedSerializedUpdate
     (source : LearnedSerializedConstitutiveUpdate) :
     Except LearnedRuntimeUpdateError
       (DependentCheckedUpdateResult LearnedAlignedCheckedAgent) :=
-  match decodeLearnedSuccessiveUpdate source with
+  match decodedExact : decodeLearnedSuccessiveUpdate source with
   | .error problem => .error problem
-  | .ok decoded => checkDecodedLearnedExtendedSerializedUpdate source decoded
+  | .ok decoded =>
+      checkDecodedLearnedExtendedSerializedUpdate source decoded decodedExact
 
 theorem checkLearnedExtendedSerializedUpdate_accepts :
     checkLearnedExtendedSerializedUpdate learnedExtendedSerializedUpdate =
@@ -4281,8 +4790,8 @@ def checkDecodedLearnedRuntimeUpdateAtCurrent
       | .ok analysis =>
           .ok (dependentCheckedUpdateResult
             (buildIncrementalCheckedUpdate analysis.target))
-  | .successive target _decodedExact =>
-      checkDecodedLearnedExtendedSerializedUpdate _ target
+  | .successive target decodedExact =>
+      checkDecodedLearnedExtendedSerializedUpdate _ target decodedExact
 
 def checkLearnedRuntimeUpdateAtCurrent
     {contract : LearnedOperationalContract}
@@ -4303,7 +4812,10 @@ def learnedAlignedDependentResult :
 
 def learnedExtendedDependentResult :
     DependentCheckedUpdateResult LearnedAlignedCheckedAgent :=
-  dependentCheckedUpdateResult learnedExtendedCheckedUpdate
+  match exact : checkLearnedExtendedSerializedUpdate
+      learnedExtendedSerializedUpdate with
+  | .ok result => result
+  | .error problem => False.elim (by cases exact)
 
 def learnedDependentIncrementalChecker :
     DependentIncrementalChecker learnedConstitutiveMetaContract where
@@ -4375,7 +4887,14 @@ the first transition. -/
 theorem learnedDependentChecker_accepts_extended :
     learnedDependentIncrementalChecker.check LearnedAlignedCheckedAgent
         learnedExtendedRuntimeUpdate =
-      .ok (dependentCheckedUpdateResult learnedExtendedCheckedUpdate) := by
+      .ok learnedExtendedDependentResult := by
+  rfl
+
+/-- The result consumed by the dependent runtime is the certificate assembled
+from the transported and recomputed successive fragments. -/
+theorem learnedDependentSuccessiveResult_consumes_structuralAssembly :
+    learnedExtendedDependentResult.checked.next.certificate.structuralObservations =
+      learnedSuccessiveCalculatedStructuralAssembly.observations := by
   rfl
 
 theorem learnedDependentChecker_rejects_wrong_successive :
@@ -4468,6 +4987,13 @@ theorem learnedExtendedRuntime_state_exact :
 theorem learnedExtendedRuntime_artifact_exact :
     learnedExtendedCertifiedRuntime.current.artifact =
       learnedDecodedExtendedArtifact := by
+  rfl
+
+/-- Installation through `submitUpdate` retains exactly the structural
+assembly produced by the successive incremental analysis. -/
+theorem learnedExtendedRuntime_certificate_consumes_successiveAssembly :
+    learnedExtendedCertifiedRuntime.current.certificate.structuralObservations =
+      learnedSuccessiveCalculatedStructuralAssembly.observations := by
   rfl
 
 theorem learnedExtendedRuntime_consumes_first_successor_memory :
@@ -4578,6 +5104,21 @@ def learnedExtendedRuntime_preservedContracts :
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedReconfigurationBuilder
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedCertifiedReconfiguration
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedCertifiedReconfiguration
+#print axioms ConstitutiveSearch.NeuralAgent.learnedCertifiedSourceProposal_true
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedRawReconfigurationForState
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedReconfigurationForState_target_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedReconfigurationForState
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedRequiredMechanismTransportForState
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedReconfiguredProposalDerivationForState
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedCertifiedReconfigurationForState
+#print axioms ConstitutiveSearch.NeuralAgent.executeLearnedAlignedReconfigurationFromState
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedRawReconfigurationForState
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedReconfigurationForState_target_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedReconfigurationForState
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedRequiredMechanismTransportForState
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedReconfiguredProposalDerivationForState
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedCertifiedReconfigurationForState
+#print axioms ConstitutiveSearch.NeuralAgent.executeLearnedExtendedReconfigurationFromState
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedComposedSourceTransformation
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedComposedSourceTransformation_nonidentity
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedComposedSourceTransformation_output_exact
@@ -4585,6 +5126,9 @@ def learnedExtendedRuntime_preservedContracts :
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedComposedSourceTransformation_nonidentity
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedComposedSourceTransformation_output_exact
 #print axioms ConstitutiveSearch.NeuralAgent.executeLearnedAlignedStateTransition
+#print axioms ConstitutiveSearch.NeuralAgent.executeLearnedExtendedStateTransition
+#print axioms ConstitutiveSearch.NeuralAgent.executeLearnedAlignedReconfigurationFromState_initial_target_exact
+#print axioms ConstitutiveSearch.NeuralAgent.executeLearnedExtendedReconfigurationFromState_aligned_target_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedInitialFiniteCausalBasis
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedFiniteCausalBasis
 #print axioms ConstitutiveSearch.NeuralAgent.learnedInitialStateFragments
@@ -4616,9 +5160,16 @@ def learnedExtendedRuntime_preservedContracts :
 #print axioms ConstitutiveSearch.NeuralAgent.completeLearnedIncrementalAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.learnedIncrementalLocalConditionsOfSuccess
 #print axioms ConstitutiveSearch.NeuralAgent.learnedTransitionProductionKernel
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedExecutedStateTransition
 #print axioms ConstitutiveSearch.NeuralAgent.LearnedTransitionProductionData
 #print axioms ConstitutiveSearch.NeuralAgent.LearnedExtendedTransitionProductionData
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedTransitionProductionData.result_exact
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedExtendedTransitionProductionData.result_exact
 #print axioms ConstitutiveSearch.NeuralAgent.produceLearnedTransitionData
+#print axioms ConstitutiveSearch.NeuralAgent.learnedProducedTransitionTarget
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedProducedTransitionTarget_is_shared_effect
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedProducedTransitionTarget_is_shared_effect
+#print axioms ConstitutiveSearch.NeuralAgent.learnedProducedTransitionExecution
 #print axioms ConstitutiveSearch.NeuralAgent.learnedReferenceTransitionProduction
 #print axioms ConstitutiveSearch.NeuralAgent.learnedLicensedStructuralTransports
 #print axioms ConstitutiveSearch.NeuralAgent.learnedTransportedStructuralFragments
@@ -4666,6 +5217,7 @@ def learnedExtendedRuntime_preservedContracts :
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedCheckedUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.checkLearnedExtendedSerializedUpdate_accepts
 #print axioms ConstitutiveSearch.NeuralAgent.learnedDependentChecker_accepts_extended
+#print axioms ConstitutiveSearch.NeuralAgent.learnedDependentSuccessiveResult_consumes_structuralAssembly
 #print axioms ConstitutiveSearch.NeuralAgent.learnedTwoStepCheckedTrace_sound
 #print axioms ConstitutiveSearch.NeuralAgent.learnedTwoStepCheckedTrace_preservesContracts
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedTransportedIntent
@@ -4675,6 +5227,7 @@ def learnedExtendedRuntime_preservedContracts :
 #print axioms ConstitutiveSearch.NeuralAgent.submitUpdate_learned_extended_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedRuntime_state_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedRuntime_artifact_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedRuntime_certificate_consumes_successiveAssembly
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedRuntime_consumes_first_successor_memory
 #print axioms ConstitutiveSearch.NeuralAgent.learned_wrong_successive_rejected_without_checked_action
 #print axioms ConstitutiveSearch.NeuralAgent.learned_wrong_successive_rejected_without_successor
@@ -4699,8 +5252,20 @@ def learnedExtendedRuntime_preservedContracts :
 #print axioms ConstitutiveSearch.NeuralAgent.LearnedIncrementalEngineAnalysis.receivedStructuralAssembly_installed
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedInstalledStructuralAssembly_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedRenamedInstalledStructuralAssembly_exact
-#print axioms ConstitutiveSearch.NeuralAgent.learnedReceivedExtendedCheckedUpdate_artifact_exact
-#print axioms ConstitutiveSearch.NeuralAgent.learnedReceivedExtendedCheckedUpdate_naming_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessivePreCertificateGraph
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveLicensedStructuralTransports
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveRecomputedStructuralFragments
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveCalculatedStructuralAssembly
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedSuccessiveExecutedDependencies
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveTargetAnalysisFromReceivedArtifact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveTargetAnalysisFromReceivedArtifact_artifact_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveTargetAnalysisFromReceivedArtifact_naming_exact
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedSuccessiveEngineAnalysis.target
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedSuccessiveEngineAnalysis.receivedDecodedArtifact_installed
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedSuccessiveEngineAnalysis.receivedDecodedStableNaming_installed
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedSuccessiveEngineAnalysis.structuralAssembly_installed
+#print axioms ConstitutiveSearch.NeuralAgent.analyzeDecodedLearnedSuccessiveUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveIncrementalCheckerEngine
 #print axioms ConstitutiveSearch.NeuralAgent.DecodedLearnedRuntimeUpdateAtCurrent
 #print axioms ConstitutiveSearch.NeuralAgent.decodeLearnedRuntimeUpdateAtCurrent
 #print axioms ConstitutiveSearch.NeuralAgent.checkLearnedRuntimeUpdateAtCurrent

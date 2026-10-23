@@ -1,0 +1,9 @@
+import RelationalPerimeter.Agents.Neural.IndependentCapabilityComparison
+
+open ConstitutiveSearch.NeuralAgent
+
+#check independentReferenceDecision
+  (observeRuntimeSubmission learnedInitialCertifiedRuntime
+    learnedAlignedRuntimeUpdate)
+  .allow
+  true

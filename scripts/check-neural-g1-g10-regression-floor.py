@@ -12,6 +12,10 @@ LEARNED_CLOSURE = (
     ROOT
     / "RelationalPerimeter/Agents/Neural/LearnedFutureConstitutiveClosure.lean"
 )
+AUTONOMOUS_CLOSURE = (
+    ROOT
+    / "RelationalPerimeter/Agents/Neural/AutonomousCheckerClosure.lean"
+)
 ALL_CONSTANTS = ROOT / "Tests/AllConstantsAudit.lean"
 C1_C17_GATE = ROOT / "scripts/check-neural-c1-c17-regression-floor.py"
 SH_PORTAL = ROOT / "scripts/verify.sh"
@@ -42,6 +46,9 @@ REQUIRED_LEAN_NAMES = (
     "g7_successive_incremental_and_full_successor_exact",
     "g7_post_forgetting_continuation_is_relatively_complete",
     "g7_post_forgetting_contract_change_is_relatively_complete",
+    "g7_post_forgetting_contract_change_is_effectfully_installed",
+    "g7_post_forgetting_contract_change_consumes_transport_and_recheck",
+    "g7_post_forgetting_bad_change_has_no_successor",
     "g8_unaffected_fragment_is_transported",
     "g8_incremental_and_full_recheck_are_equal",
     "g9_independent_learned_artifact_is_decodable",
@@ -70,11 +77,15 @@ REQUIRED_NEGATIVE_FIXTURES = (
     "LearnedRequirementCannotBeBypassedInReconfiguration.lean.fail",
     "LearnedAdmissionCannotReplaceIncorporatedAuthorization.lean.fail",
     "ForeignLearnedActionCannotReplaceInstallingAction.lean.fail",
+    "ForeignCurrentCannotDriveLearnedInstallation.lean.fail",
     "ForeignLearnedEffectCannotReplaceInstallingEffect.lean.fail",
     "ReconstructedLearnedEffectCannotReplaceProducedEffect.lean.fail",
     "ReconstructedLearnedSuccessorCannotInstall.lean.fail",
     "PostForgettingRefusedRequestCannotSatisfyLocalConditions.lean.fail",
     "PostForgettingFullRecheckCannotConsumeIncrementalVerdict.lean.fail",
+    "PostForgettingContinuationCannotMasqueradeAsContractUpdate.lean.fail",
+    "PostForgettingContractChangeCannotStartFromInitial.lean.fail",
+    "PostForgettingPermissionCannotReplaceClosedChange.lean.fail",
 )
 
 REQUIRED_JOINT_CLOSURE_NAMES = (
@@ -97,6 +108,18 @@ REQUIRED_JOINT_CLOSURE_NAMES = (
     "futureSourceFromInstalledRuntime",
     "forgettingConsumesAlignedRuntime",
     "bypassHasNoInstalledSuccessor",
+)
+
+REQUIRED_POST_FORGETTING_CLOSURE_NAMES = (
+    "LearnedPostForgettingOperationalClosure",
+    "learnedPostForgettingOperationalClosure",
+    "submitLearnedPostForgettingContinuation",
+    "learnedInstalledPostForgettingContinuation_consumes_reducedMemory",
+    "submitUpdate_postForgettingExtended_exact",
+    "learnedClosedPostForgettingExtendedChange",
+    "checkLearnedPostForgettingExtendedRuntimeUpdate_exact",
+    "learnedPostForgettingExtendedRuntime_reachable",
+    "learnedPostForgettingBadChange_rejected_without_successor",
 )
 
 FORBIDDEN_MIXED_FLOOR_NAMES = (
@@ -135,6 +158,11 @@ def main() -> None:
         closure_text,
         REQUIRED_JOINT_CLOSURE_NAMES,
         "joint learned closure",
+    )
+    require_all(
+        AUTONOMOUS_CLOSURE.read_text(encoding="utf-8"),
+        REQUIRED_POST_FORGETTING_CLOSURE_NAMES,
+        "post-forgetting operational closure",
     )
 
     import_name = "import Tests.Mechanisms.NeuralG1G10RegressionFloor"

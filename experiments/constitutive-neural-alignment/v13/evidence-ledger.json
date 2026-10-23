@@ -1,0 +1,83 @@
+{
+  "ledger_id": "constitutive-neural-oracle-independent-evidence-v13",
+  "emitted_fields": {
+    "extensional-current-behavior-verification": {
+      "current_cases": "FrozenNeuralComparisonAdapterBundle.extensional.alignedTable.length",
+      "tables_equal": "decide (alignedTable = bypassTable)"
+    },
+    "fixed-network-interventional-causal-analysis": {
+      "aligned_authorization_dependency": "FixedNetworkInterventionalAdapterOutput.alignedAuthorizationDependency",
+      "bypass_authorization_dependency": "FixedNetworkInterventionalAdapterOutput.bypassAuthorizationDependency"
+    },
+    "pre-execution-action-shielding": {
+      "aligned_decision": "PreExecutionActionShieldAdapterOutput.alignedDecision",
+      "bypass_decision": "PreExecutionActionShieldAdapterOutput.bypassDecision"
+    },
+    "guaranteed-self-adaptive-system": {
+      "aligned_submission": "observeRuntimeSubmission learnedInitialCertifiedRuntime learnedAlignedRuntimeUpdate",
+      "bypass_submission": "observeRuntimeSubmission learnedInitialCertifiedRuntime learnedBypassRuntimeUpdate"
+    },
+    "incremental-neural-verification-with-proof-reuse": {
+      "aligned_submission": "observeGenericIncremental learnedAlignedSerializedUpdate",
+      "bypass_submission": "observeGenericIncremental learnedBypassSerializedUpdate",
+      "transported_structural_fragments": "IncrementalProofReuseAdapterOutput.transportedStructuralCount",
+      "recomputed_structural_fragments": "IncrementalProofReuseAdapterOutput.recomputedStructuralCount"
+    },
+    "deployment-chain-certificate-propagation": {
+      "accepted_transitions": "DeploymentChainPropagationAdapterOutput.transitionCount",
+      "bypass_submission": "observeRuntimeSubmission learnedInitialCertifiedRuntime learnedBypassRuntimeUpdate"
+    },
+    "relational-execution-comparison": {
+      "current_tables_equal": "decide (aligned current table = bypass current table)",
+      "future_requests": "FrozenCompleteComparisonMaterial.base.futureRequests.length",
+      "future_outputs_different": "decide (learnedOperationalFutureOutputs aligned != learnedOperationalFutureOutputs bypass)",
+      "aligned_future_satisfies": "learnedFutureNormSatisfied requests alignedOutcome",
+      "bypass_future_satisfies": "learnedFutureNormSatisfied requests bypassOutcome"
+    },
+    "explicit-reference-combination": {
+      "current_tables_equal": "IndependentReferenceObservation.currentTablesEqual",
+      "aligned_authorization_dependency": "IndependentReferenceObservation.alignedAuthorizationDependency",
+      "bypass_authorization_dependency": "IndependentReferenceObservation.bypassAuthorizationDependency",
+      "aligned_mutation_decision": "IndependentReferenceObservation.alignedMutationDecision",
+      "bypass_mutation_decision": "IndependentReferenceObservation.bypassMutationDecision",
+      "aligned_future_satisfies": "IndependentReferenceObservation.alignedFutureSatisfied",
+      "bypass_future_satisfies": "IndependentReferenceObservation.bypassFutureSatisfied",
+      "aligned_decision": "IndependentReferenceObservation.alignedDecision",
+      "bypass_decision": "IndependentReferenceObservation.bypassDecision"
+    },
+    "independent-complete-recheck": {
+      "aligned_decision": "frozenFullRecheckDecision material.alignedSerializedUpdate",
+      "bypass_decision": "frozenFullRecheckDecision material.bypassSerializedUpdate"
+    }
+  },
+  "proof_only_evidence": [
+    {
+      "property": "self-adaptive installed history is checked",
+      "declaration": "ConstitutiveSearch.NeuralAgent.GuaranteedSelfAdaptiveAdapterOutput.everyInstalledStepChecked"
+    },
+    {
+      "property": "self-adaptive installed history preserves contracts",
+      "declaration": "ConstitutiveSearch.NeuralAgent.GuaranteedSelfAdaptiveAdapterOutput.everyInstalledStepPreservesContracts"
+    },
+    {
+      "property": "incremental structural fragments are source-transported",
+      "declaration": "ConstitutiveSearch.NeuralAgent.IncrementalProofReuseAdapterOutput.learnedReuseExact"
+    },
+    {
+      "property": "deployment history is checked",
+      "declaration": "ConstitutiveSearch.NeuralAgent.DeploymentChainPropagationAdapterOutput.checkedHistory"
+    },
+    {
+      "property": "deployment history preserves contracts",
+      "declaration": "ConstitutiveSearch.NeuralAgent.DeploymentChainPropagationAdapterOutput.preservedContracts"
+    },
+    {
+      "property": "complete-recheck successor equals incremental successor",
+      "declaration": "ConstitutiveSearch.NeuralAgent.IndependentFullRecheckComparisonOutput.alignedSuccessorMatchesIncremental"
+    },
+    {
+      "property": "complete recheck accepts without incremental oracle",
+      "declaration": "ConstitutiveSearch.NeuralAgent.IndependentFullRecheckComparisonOutput.acceptedWithoutIncrementalOracle"
+    }
+  ]
+}
