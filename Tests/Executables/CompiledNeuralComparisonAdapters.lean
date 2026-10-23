@@ -52,7 +52,7 @@ def emitIncremental
   IO.print (Nat.repr bundle.incremental.transportedStructuralCount)
   IO.print ",\"recomputed_structural_fragments\":"
   IO.print (Nat.repr bundle.incremental.recomputedStructuralCount)
-  IO.print ",\"reuse_claimed\":false}\n"
+  IO.print ",\"reuse_claimed\":true}\n"
 
 def emitDeployment
     (bundle : FrozenNeuralComparisonAdapterBundle) : IO Unit := do

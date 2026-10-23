@@ -1,0 +1,18 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.ForgottenLearnedIdentityCannotBeRecovered
+open ConstitutiveSearch.NeuralAgent
+
+def forgedRecover : IndependentLearnedOperationalMemory ->
+    LearnedHistoricalStableOrigin :=
+  fun _ => .aligned
+
+theorem forgedRenamedRecovery :
+    forgedRecover learnedRenamedExecutedFutureForgetting.output =
+      learnedRenamedHistoricalForgettingInput.origin := by
+  rfl
+
+end Tests.ExpectedFailure.ForgottenLearnedIdentityCannotBeRecovered
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExecutedFutureForgetting_origin_not_recoverable
+/- AXIOM_AUDIT_END -/

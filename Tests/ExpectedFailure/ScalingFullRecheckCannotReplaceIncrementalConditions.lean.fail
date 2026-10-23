@@ -1,0 +1,16 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+/- The independent full recheck returns its own freshly checked chain.  Its
+success cannot be substituted for the incremental checker's autonomous local
+decoding, assembly and transition receipts. -/
+example {current : CheckedAgent scalingMetaContract ()}
+    {update : ScalingReceivedArtifact}
+    (full : FullRecheckSuccess (scalingFullRecheckEngine current) update) :
+    ScalingIncrementalLocalConditions current update :=
+  full
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingIncrementalLocalConditions
+/- AXIOM_AUDIT_END -/

@@ -103,6 +103,8 @@ La chaîne distingue explicitement :
 | Installation alignée et rejet du contournement | `submitUpdate_learned_aligned_exact`, `submitUpdate_learned_bypass_rejected` dans [LearnedRuntimeAdapter.lean](../RelationalPerimeter/Agents/Neural/LearnedRuntimeAdapter.lean) |
 | Divergence dans le contrat futur exact | `learnedOperationalFutureDivergence` dans [LearnedContractFutureDivergence.lean](../RelationalPerimeter/Agents/Neural/LearnedContractFutureDivergence.lean) |
 | Oubli exécuté, futurs conservés et origine irrécupérable | `public_executed_forgetting_outputs_equal`, `public_executed_forgetting_preserves_future`, `public_executed_forgetting_origin_not_recoverable` dans [PublicExactForgetting.lean](../RelationalPerimeter/Agents/Neural/PublicExactForgetting.lean) |
+| Séparation pour toute réalisation exacte et préservation de toute suite finie couverte | `learnedEveryExactRealizationSeparatesAlignedFromBypass`, `learnedExecutedFutureForgetting_preserves_every_finite_future` dans [LearnedFutureConstitutiveClosure.lean](../RelationalPerimeter/Agents/Neural/LearnedFutureConstitutiveClosure.lean) |
+| Certificat conjoint sur la même lignée apprise | `learnedConstitutiveAlignmentClosure` dans [LearnedFutureConstitutiveClosure.lean](../RelationalPerimeter/Agents/Neural/LearnedFutureConstitutiveClosure.lean) |
 
 Ces déclarations restent soumises aux gates complètes du dépôt et au futur
 commit d’évidence. La liste indique les points d’entrée du claim ; elle ne
@@ -121,18 +123,20 @@ filtrage d’action avant exécution, système auto-adaptatif garanti, vérifica
 neuronale incrémentale avec réemploi de preuve, et propagation de certificats
 sur une chaîne de déploiement.
 
-Le statut actuel est strict : les adaptateurs sont figés, mais aucun run
+Le statut actuel est strict : v6 est un protocole historique dont les
+empreintes ne correspondent plus aux sources du candidat courant. Aucun run
 confirmatoire v6 n’a été exécuté et aucun fichier de résultat comparatif
-n’existe. Il est donc interdit d’en déduire une supériorité générale, une
-incapacité d’une baseline ou une nouveauté scientifique. Le seul contraste
-formel déjà fermé à ce niveau est celui des vérificateurs dont le verdict
-factorise exclusivement par la table courante finie : ils ne distinguent pas
-les deux candidats, alors que le checker constitutif les distingue par la
-dépendance exécutée et le contrat futur.
+n’existe. Une nouvelle version devra figer les adaptateurs et leurs références
+avant toute exécution confirmatoire. Il est donc interdit d’en déduire une
+supériorité générale, une incapacité d’une baseline ou une nouveauté
+scientifique. Le seul contraste formel déjà fermé à ce niveau est celui des
+vérificateurs dont le verdict factorise exclusivement par la table courante
+finie : ils ne distinguent pas les deux candidats, alors que le checker
+constitutif les distingue par la dépendance exécutée et le contrat futur.
 
 ### Passage à l’échelle du checker compilé
 
-La campagne confirmatoire
+La campagne historique
 [`compiled-parameterized-neural-scaling-v8`](../experiments/constitutive-neural-alignment/v8/SCALING_ANALYSIS.md)
 porte sur le même checker Lean compilé, pour sept tailles de 0 à 80, cinq
 répétitions mesurées et 210 mises à jour acceptées. Elle établit une
@@ -143,7 +147,11 @@ Elle n’établit aucun gain pratique de temps. À la taille 80, la médiane de 
 trace incrémentale est de 70 777,626 ms, contre 10,522 ms pour le recheck
 complet ; le critère de gain préenregistré est faux. Aucune loi asymptotique,
 aucune économie générale et aucune généralisation à d’autres familles ne sont
-revendiquées.
+revendiquées. Ses empreintes sont conservées sans être réécrites ; elles ne
+valident pas le candidat courant. La campagne exploratoire rejouée sur celui-ci
+confirme la réutilisation structurelle mais reste non figée, sans mesure mémoire
+exploitable et avec des temps incrémentaux défavorables. P8 et S6 restent donc
+ouverts pour une nouvelle campagne préenregistrée.
 
 ## Exclusions explicites
 

@@ -1,0 +1,21 @@
+import RelationalPerimeter
+
+namespace ConstitutiveSearch.NeuralAgent.Tests
+open ConstitutiveSearch.NeuralAgent
+
+def unadmittedStableNamingUpdate : LearnedSerializedConstitutiveUpdate :=
+  { learnedAlignedSerializedUpdate with
+    targetStableNaming :=
+      { inputKeys := [2100, 2101, 2102]
+        neuronKeys := [2110, 2111, 2112, 2113, 2114, 2115, 2116]
+        outputKeys := [2120, 2121, 2122] } }
+
+example : decodeLearnedSerializedConstitutiveUpdate
+      unadmittedStableNamingUpdate =
+    .error .missingConstitutiveDependency := by
+  rfl
+
+end ConstitutiveSearch.NeuralAgent.Tests
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.decodeLearnedSerializedConstitutiveUpdate
+/- AXIOM_AUDIT_END -/

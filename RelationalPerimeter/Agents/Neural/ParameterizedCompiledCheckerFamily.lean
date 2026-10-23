@@ -591,70 +591,213 @@ def scalingFullRecheckEngine
           target.decodedArtifact
         targetExact := rfl }
 
-structure ScalingIncrementalLocalConditions
+/-- The exact graph calculated from the certified source and the stable naming
+decoded from the received target.  It is a function of the two checker inputs,
+not a graph supplied by the caller. -/
+def scalingIncrementalGraph
     (current : CheckedAgent scalingMetaContract ())
-    (update : ScalingReceivedArtifact) : Type 6 where
-  target : InitialCheckSuccess scalingExecutableInterface update
-  graph : PreCertificateConstitutiveGraph
+    {update : ScalingReceivedArtifact}
+    (target : InitialCheckSuccess scalingExecutableInterface update) :
+    PreCertificateConstitutiveGraph
+      current.certificate.basis.naming
+      (scalingExecutableInterface.decodedStableNaming
+        target.decodedArtifact).naming :=
+  calculatePreCertificateConstitutiveGraph
     current.certificate.basis.naming
     (scalingExecutableInterface.decodedStableNaming
       target.decodedArtifact).naming
-  transported : List (StableNodeKey × StableArtifactObservation)
-  recomputed : List (StableNodeKey × StableArtifactObservation)
-  assembly : CalculatedIncrementalStructuralAssembly
-    current.certificate graph transported recomputed
+
+/-- The old snapshot inspected by the incremental structural calculation. -/
+def scalingIncrementalTransported
+    (current : CheckedAgent scalingMetaContract ()) :
+    List (StableNodeKey × StableArtifactObservation) :=
+  structuralObservationSnapshot current.certificate
+
+/-- The target observations selected for recalculation by the calculated
+pre-certificate graph. -/
+def scalingIncrementalRecomputed
+    (current : CheckedAgent scalingMetaContract ())
+    {update : ScalingReceivedArtifact}
+    (target : InitialCheckSuccess scalingExecutableInterface update) :
+    List (StableNodeKey × StableArtifactObservation) :=
+  (scalingIncrementalGraph current target).targetObservations
+
+/-- One named executable boundary for the structural calculation.  Keeping
+this calculation distinct from its later certificate makes its receipt a
+local condition rather than a preassembled target certificate. -/
+def calculateScalingIncrementalStructuralAssembly
+    (current : CheckedAgent scalingMetaContract ())
+    {update : ScalingReceivedArtifact}
+    (target : InitialCheckSuccess scalingExecutableInterface update) :=
+  calculateIncrementalStructuralAssembly current.certificate
+    (scalingIncrementalGraph current target)
+    (scalingIncrementalTransported current)
+    (scalingIncrementalRecomputed current target)
+
+/-- Execute only the structural assembly subcheck.  Its successful value is
+the certificate of that local calculation, not an incremental checker
+result. -/
+def checkScalingIncrementalStructuralAssembly
+    (current : CheckedAgent scalingMetaContract ())
+    {update : ScalingReceivedArtifact}
+    (target : InitialCheckSuccess scalingExecutableInterface update) :
+    Except ScalingCheckerError
+      (CalculatedIncrementalStructuralAssembly current.certificate
+        (scalingIncrementalGraph current target)
+        (scalingIncrementalTransported current)
+        (scalingIncrementalRecomputed current target)) :=
+  let graph := scalingIncrementalGraph current target
+  match calculated :
+      calculateScalingIncrementalStructuralAssembly current target with
+  | .error _ => .error .structuralAssembly
+  | .ok observations =>
+      if targetExact : observations = graph.targetObservations then
+        .ok (certifyCalculatedIncrementalStructuralAssembly
+          calculated targetExact)
+      else
+        .error .structuralMismatch
+
+/-- Positive output of the parameterized analyzer.  Receipts of the smaller
+checks do not live here: they belong to the autonomous specification below. -/
+structure ScalingIncrementalAnalysis
+    (current : CheckedAgent scalingMetaContract ())
+    (update : ScalingReceivedArtifact) : Type 6 where
+  target : InitialCheckSuccess scalingExecutableInterface update
+  assembly : CalculatedIncrementalStructuralAssembly current.certificate
+    (scalingIncrementalGraph current target)
+    (scalingIncrementalTransported current)
+    (scalingIncrementalRecomputed current target)
   transitionDecision : AcceptedTransitionDecision scalingExecutableInterface
     { current := ()
       next := scalingExecutableInterface.decodedContract
         target.decodedArtifact }
 
-def calculateScalingIncrementalLocalConditions
+/-- Autonomous local conditions for the parameterized incremental checker.
+Each equation is the receipt of a strictly smaller executable decision:
+complete target decoding and admission, structural assembly, or transition
+admission.  This type contains neither an incremental analysis result nor an
+equation saying that the whole incremental analyzer has already succeeded. -/
+structure ScalingIncrementalLocalConditions
+    (current : CheckedAgent scalingMetaContract ())
+    (update : ScalingReceivedArtifact) : Type 6 where
+  target : InitialCheckSuccess scalingExecutableInterface update
+  targetChecked : checkInitial scalingExecutableInterface update = .ok target
+  assembly : CalculatedIncrementalStructuralAssembly current.certificate
+    (scalingIncrementalGraph current target)
+    (scalingIncrementalTransported current)
+    (scalingIncrementalRecomputed current target)
+  assemblyChecked :
+    checkScalingIncrementalStructuralAssembly current target = .ok assembly
+  transitionDecision : AcceptedTransitionDecision scalingExecutableInterface
+    { current := ()
+      next := scalingExecutableInterface.decodedContract
+        target.decodedArtifact }
+  transitionAccepted :
+    decideDecodedTransition scalingExecutableInterface ()
+        target.decodedArtifact = some transitionDecision
+
+def ScalingIncrementalAnalysis.graph
+    {current : CheckedAgent scalingMetaContract ()}
+    {update : ScalingReceivedArtifact}
+    (analysis : ScalingIncrementalAnalysis current update) :=
+  scalingIncrementalGraph current analysis.target
+
+def ScalingIncrementalAnalysis.transported
+    {current : CheckedAgent scalingMetaContract ()}
+    {update : ScalingReceivedArtifact}
+    (_analysis : ScalingIncrementalAnalysis current update) :=
+  scalingIncrementalTransported current
+
+def ScalingIncrementalAnalysis.recomputed
+    {current : CheckedAgent scalingMetaContract ()}
+    {update : ScalingReceivedArtifact}
+    (analysis : ScalingIncrementalAnalysis current update) :=
+  scalingIncrementalRecomputed current analysis.target
+
+def analyzeScalingIncrementalUpdate
     (current : CheckedAgent scalingMetaContract ())
     (update : ScalingReceivedArtifact) :
     Except ScalingCheckerError
-      (ScalingIncrementalLocalConditions current update) :=
-  match checkInitial scalingExecutableInterface update with
+      (ScalingIncrementalAnalysis current update) :=
+  match _targetChecked : checkInitial scalingExecutableInterface update with
   | .error _ => .error .target
   | .ok target =>
-      let targetNaming :=
-        (scalingExecutableInterface.decodedStableNaming
-          target.decodedArtifact).naming
-      let graph := calculatePreCertificateConstitutiveGraph
-        current.certificate.basis.naming targetNaming
-      let transported := structuralObservationSnapshot current.certificate
-      let recomputed := graph.targetObservations
-      match calculated : calculateIncrementalStructuralAssembly
-          current.certificate graph transported recomputed with
-      | .error _ => .error .structuralAssembly
-      | .ok observations =>
-          if targetExact : observations = graph.targetObservations then
-            let assembly := certifyCalculatedIncrementalStructuralAssembly
-              calculated targetExact
-            match decideDecodedTransition scalingExecutableInterface ()
-                target.decodedArtifact with
-            | none => .error .transition
-            | some transitionDecision =>
-                .ok
-                  { target := target
-                    graph := graph
-                    transported := transported
-                    recomputed := recomputed
-                    assembly := assembly
-                    transitionDecision := transitionDecision }
-          else
-            .error .structuralMismatch
+      match checkScalingIncrementalStructuralAssembly current target with
+      | .error problem => .error problem
+      | .ok assembly =>
+        match _transitionAccepted :
+            decideDecodedTransition scalingExecutableInterface ()
+            target.decodedArtifact with
+        | none => .error .transition
+        | some transitionDecision =>
+            .ok
+              { target := target
+                assembly := assembly
+                transitionDecision := transitionDecision }
 
-structure ScalingIncrementalEvidence
+/-- Autonomous local decisions are sufficient to replay the analyzer.  The
+proof consumes only the three smaller receipts stored above; it never assumes
+the success equation that it constructs. -/
+def completeScalingIncrementalAnalysis
     (current : CheckedAgent scalingMetaContract ())
-    (update : ScalingReceivedArtifact) : Type 6 where
-  conditions : ScalingIncrementalLocalConditions current update
-  calculated : calculateScalingIncrementalLocalConditions current update =
-    .ok conditions
+    (update : ScalingReceivedArtifact)
+    (conditions : ScalingIncrementalLocalConditions current update) :
+    { analysis : ScalingIncrementalAnalysis current update //
+      analyzeScalingIncrementalUpdate current update =
+        .ok analysis } := by
+  unfold analyzeScalingIncrementalUpdate
+  split
+  · have impossible :=
+      ‹checkInitial scalingExecutableInterface update = .error _›.symm.trans
+        conditions.targetChecked
+    cases impossible
+  · have targetExact : _ = conditions.target :=
+      Except.ok.inj
+        (‹checkInitial scalingExecutableInterface update = .ok _›.symm.trans
+          conditions.targetChecked)
+    cases targetExact
+    rw [conditions.assemblyChecked]
+    rw [conditions.transitionAccepted]
+    exact ⟨_, rfl⟩
+
+/-- A successful top-level analysis exposes the independent receipts that
+made its three local checks succeed. -/
+def scalingIncrementalLocalConditionsOfSuccess
+    (current : CheckedAgent scalingMetaContract ())
+    (update : ScalingReceivedArtifact)
+    (analysis : ScalingIncrementalAnalysis current update)
+    (accepted : analyzeScalingIncrementalUpdate current update =
+      .ok analysis) :
+    ScalingIncrementalLocalConditions current update := by
+  unfold analyzeScalingIncrementalUpdate at accepted
+  split at accepted
+  · cases accepted
+  · rename_i target targetChecked
+    split at accepted
+    · cases accepted
+    · rename_i assembly assemblyChecked
+      split at accepted
+      · cases accepted
+      · rename_i transitionDecision transitionAccepted
+        have analysisExact :
+            ({ target := target
+               assembly := assembly
+               transitionDecision := transitionDecision } :
+                ScalingIncrementalAnalysis current update) = analysis :=
+          Except.ok.inj accepted
+        cases analysisExact
+        exact
+          { target := target
+            targetChecked := targetChecked
+            assembly := assembly
+            assemblyChecked := assemblyChecked
+            transitionDecision := transitionDecision
+            transitionAccepted := transitionAccepted }
 
 def scalingIncrementalTargetAnalysis
     {current : CheckedAgent scalingMetaContract ()}
     {update : ScalingReceivedArtifact}
-    (conditions : ScalingIncrementalLocalConditions current update) :
+    (conditions : ScalingIncrementalAnalysis current update) :
     IncrementalTargetAnalysis current :=
   let fragments := scalingExecutableInterface.certifyFragments
     conditions.target.stateAccepted
@@ -685,13 +828,22 @@ def scalingIncrementalCheckerEngine
     IncrementalCheckerEngine current where
   Update := ScalingReceivedArtifact
   Error := ScalingCheckerError
-  Analysis := fun update => ScalingIncrementalLocalConditions current update
-  analyze := calculateScalingIncrementalLocalConditions current
-  LocalConditions := fun update => ScalingIncrementalEvidence current update
-  complete := fun _ evidence => ⟨evidence.conditions, evidence.calculated⟩
-  localOfSuccess := fun _ conditions calculated =>
-    { conditions := conditions, calculated := calculated }
+  Analysis := fun update => ScalingIncrementalAnalysis current update
+  analyze := analyzeScalingIncrementalUpdate current
+  LocalConditions := fun update => ScalingIncrementalLocalConditions current update
+  complete := completeScalingIncrementalAnalysis current
+  localOfSuccess := scalingIncrementalLocalConditionsOfSuccess current
   target := scalingIncrementalTargetAnalysis
+
+theorem analyzeScalingIncrementalUpdate_complete
+    (current : CheckedAgent scalingMetaContract ())
+    (update : ScalingReceivedArtifact) :
+    GenericIncrementalUpdateAccepted
+        (scalingIncrementalCheckerEngine current) update ↔
+      GenericIncrementalUpdateLocalConditions
+        (scalingIncrementalCheckerEngine current) update :=
+  checkGenericIncrementalUpdate_complete_for_local_conditions
+    (scalingIncrementalCheckerEngine current) update
 
 structure ScalingPairMetrics where
   neuralNodeCount : Nat
@@ -707,7 +859,7 @@ structure ScalingPairMetrics where
 def scalingPairMetrics
     {current : CheckedAgent scalingMetaContract ()}
     {update : ScalingReceivedArtifact}
-    (analysis : ScalingIncrementalLocalConditions current update) :
+    (analysis : ScalingIncrementalAnalysis current update) :
     ScalingPairMetrics :=
   let targetKeys := analysis.graph.targetKeys
   let affected := affectedConstitutiveCone current.certificate analysis.graph
@@ -872,7 +1024,13 @@ def scalingFamilyMetrics
 #print axioms ConstitutiveSearch.NeuralAgent.scalingExecutableInterface
 #print axioms ConstitutiveSearch.NeuralAgent.checkScalingInitial
 #print axioms ConstitutiveSearch.NeuralAgent.scalingFullRecheckEngine
+#print axioms ConstitutiveSearch.NeuralAgent.checkScalingIncrementalStructuralAssembly
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingIncrementalAnalysis
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingIncrementalLocalConditions
+#print axioms ConstitutiveSearch.NeuralAgent.completeScalingIncrementalAnalysis
+#print axioms ConstitutiveSearch.NeuralAgent.scalingIncrementalLocalConditionsOfSuccess
 #print axioms ConstitutiveSearch.NeuralAgent.scalingIncrementalCheckerEngine
+#print axioms ConstitutiveSearch.NeuralAgent.analyzeScalingIncrementalUpdate_complete
 #print axioms ConstitutiveSearch.NeuralAgent.checkScalingStep
 #print axioms ConstitutiveSearch.NeuralAgent.checkScalingPair
 #print axioms ConstitutiveSearch.NeuralAgent.ScalingFamilyParameters

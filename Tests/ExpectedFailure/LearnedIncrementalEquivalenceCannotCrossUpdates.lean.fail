@@ -1,0 +1,13 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+/- Exact result equality is indexed by the same received update.  The local
+incremental result cannot consume the fully renamed recheck result. -/
+example : learnedAlignedGenericIncrementalSuccess.checked.next =
+    learnedRenamedFullRecheckSuccess.checked.next :=
+  learnedAlignedIncrementalAndFullSuccessor_exact
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedIncrementalAndFullSuccessor_exact
+/- AXIOM_AUDIT_END -/

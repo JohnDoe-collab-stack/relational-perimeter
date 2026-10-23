@@ -1,0 +1,16 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.PostHocLearnedPreservationCannotDriveInstallingAction
+open ConstitutiveSearch.NeuralAgent
+
+def postHocAction : LearnedActionWitness learnedAlignedActionSourceState :=
+  executeLearnedAction learnedAlignedActionSourceState
+    learnedInitialProposalPreservation
+    learnedAlignedActionSourceCausalWitness
+    learnedAlignedActionAuthorizationWitness
+    rfl
+
+end Tests.ExpectedFailure.PostHocLearnedPreservationCannotDriveInstallingAction
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.executeLearnedAction
+/- AXIOM_AUDIT_END -/

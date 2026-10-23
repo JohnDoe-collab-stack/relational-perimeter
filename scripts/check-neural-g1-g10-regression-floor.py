@@ -8,6 +8,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 LEAN_FLOOR = ROOT / "Tests/Mechanisms/NeuralG1G10RegressionFloor.lean"
+LEARNED_CLOSURE = (
+    ROOT
+    / "RelationalPerimeter/Agents/Neural/LearnedFutureConstitutiveClosure.lean"
+)
 ALL_CONSTANTS = ROOT / "Tests/AllConstantsAudit.lean"
 C1_C17_GATE = ROOT / "scripts/check-neural-c1-c17-regression-floor.py"
 SH_PORTAL = ROOT / "scripts/verify.sh"
@@ -53,6 +57,28 @@ REQUIRED_NEGATIVE_FIXTURES = (
     "RecomputedFragmentCannotReplaceLicensedTransport.lean.fail",
     "SingletonLearnedDomainCannotReplaceCanonicalDomain.lean.fail",
     "BypassCannotSatisfyExactLearnedFutureContract.lean.fail",
+    "ForeignLearnedRuntimeCannotEnterJointClosure.lean.fail",
+)
+
+REQUIRED_JOINT_CLOSURE_NAMES = (
+    "LearnedArtifactExecutionLineage",
+    "LearnedConstitutiveAlignmentClosureCertificate",
+    "learnedConstitutiveAlignmentClosure",
+    "lineagePreservesContracts",
+    "extendedAccessible",
+    "localReuseExact",
+    "incrementalFullSuccessorExact",
+    "futureSourceFromInstalledRuntime",
+    "forgettingConsumesAlignedRuntime",
+    "bypassHasNoInstalledSuccessor",
+)
+
+FORBIDDEN_MIXED_FLOOR_NAMES = (
+    "publicSubstantiveAlignment",
+    "publicReconfiguration",
+    "public_terminal_memory_preserves_every_future",
+    "publicIncrementalAndReferenceChecks_exact",
+    "constitutiveChecker_detectsLatentBypass",
 )
 
 
@@ -69,6 +95,21 @@ def require_all(text: str, required: tuple[str, ...], label: str) -> None:
 def main() -> None:
     lean_text = LEAN_FLOOR.read_text(encoding="utf-8")
     require_all(lean_text, REQUIRED_LEAN_NAMES, "named Lean floor")
+    require_all(
+        lean_text,
+        ("learnedConstitutiveAlignmentClosure",),
+        "joint learned regression floor",
+    )
+    mixed = [name for name in FORBIDDEN_MIXED_FLOOR_NAMES if name in lean_text]
+    if mixed:
+        fail(f"mixed public/learned evidence returned: {', '.join(mixed)}")
+
+    closure_text = LEARNED_CLOSURE.read_text(encoding="utf-8")
+    require_all(
+        closure_text,
+        REQUIRED_JOINT_CLOSURE_NAMES,
+        "joint learned closure",
+    )
 
     import_name = "import Tests.Mechanisms.NeuralG1G10RegressionFloor"
     if import_name not in ALL_CONSTANTS.read_text(encoding="utf-8"):
@@ -93,7 +134,8 @@ def main() -> None:
     print(
         "NEURAL_G1_G10_REGRESSION_FLOOR_OK "
         f"lean={len(REQUIRED_LEAN_NAMES)} portals=2 "
-        f"negative={len(REQUIRED_NEGATIVE_FIXTURES)} c1_c17=connected"
+        f"negative={len(REQUIRED_NEGATIVE_FIXTURES)} "
+        "joint_learned=connected c1_c17=connected"
     )
 
 

@@ -1,0 +1,16 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+/- The analyzer output contains the decoded target, structural certificate and
+transition.  It cannot replace the independent receipts that specify why the
+three smaller executable checks must succeed. -/
+example {current : CheckedAgent scalingMetaContract ()}
+    {update : ScalingReceivedArtifact}
+    (analysis : ScalingIncrementalAnalysis current update) :
+    ScalingIncrementalLocalConditions current update :=
+  analysis
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingIncrementalLocalConditions
+/- AXIOM_AUDIT_END -/

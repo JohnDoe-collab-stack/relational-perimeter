@@ -1,0 +1,20 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+/- The success equation of the whole analyzer cannot be inserted directly as
+the receipt of the independent structural subcheck.  Recovering that receipt
+requires eliminating the executed analyzer path through the production
+extractor, rather than treating the two equations as interchangeable. -/
+example {current : CheckedAgent scalingMetaContract ()}
+    {update : ScalingReceivedArtifact}
+    (analysis : ScalingIncrementalAnalysis current update)
+    (accepted : analyzeScalingIncrementalUpdate current update =
+      .ok analysis) :
+    checkScalingIncrementalStructuralAssembly current analysis.target =
+      .ok analysis.assembly :=
+  accepted
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.checkScalingIncrementalStructuralAssembly
+/- AXIOM_AUDIT_END -/

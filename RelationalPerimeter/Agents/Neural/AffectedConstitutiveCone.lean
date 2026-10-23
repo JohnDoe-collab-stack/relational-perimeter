@@ -701,16 +701,66 @@ def edgePropagates
        | .isTrue _ => previous edge.source
        | .isFalse _ => false) || edgePropagates previous target rest
 
+/-- Insert every key without duplicating one already retained. -/
+def insertConstitutiveKeys :
+    List ConstitutiveNodeKey -> List ConstitutiveNodeKey ->
+      List ConstitutiveNodeKey
+  | [], retained => retained
+  | key :: rest, retained =>
+      insertConstitutiveKeys rest (insertConstitutiveKey key retained)
+
+/-- Exact reverse frontier of a finite edge list. -/
+def constitutivePredecessors
+    (targets : List ConstitutiveNodeKey) :
+    List ConstitutiveDependencyEdge -> List ConstitutiveNodeKey
+  | [] => []
+  | edge :: rest =>
+      let earlier := constitutivePredecessors targets rest
+      match keyOccurs edge.target targets with
+      | true => insertConstitutiveKey edge.source earlier
+      | false => earlier
+
+def unseenConstitutiveKeys
+    (known : List ConstitutiveNodeKey) :
+    List ConstitutiveNodeKey -> List ConstitutiveNodeKey
+  | [] => []
+  | key :: rest =>
+      match keyOccurs key known with
+      | true => unseenConstitutiveKeys known rest
+      | false => key :: unseenConstitutiveKeys known rest
+
+def anyInitiallyAffected
+    (initial : ConstitutiveNodeKey -> Bool) :
+    List ConstitutiveNodeKey -> Bool
+  | [] => false
+  | key :: rest => initial key || anyInitiallyAffected initial rest
+
+/-- Executable backward closure with an explicit visited set.  Unlike the
+pointwise recursive expansion, one already visited node is never expanded a
+second time. -/
+def backwardAffectedWithin
+    (initial : ConstitutiveNodeKey -> Bool)
+    (edges : List ConstitutiveDependencyEdge) :
+    Nat -> List ConstitutiveNodeKey -> List ConstitutiveNodeKey -> Bool
+  | 0, _, _ => false
+  | fuel + 1, frontier, known =>
+      let next := unseenConstitutiveKeys known
+        (constitutivePredecessors frontier edges)
+      anyInitiallyAffected initial next ||
+        backwardAffectedWithin initial edges fuel next
+          (insertConstitutiveKeys next known)
+
 /-- Bounded closure is executable.  The graph is finite and acyclic by its
 typed chronological neural edges and fixed downstream chain; the number of
-new-version nodes therefore bounds every dependency path. -/
+new-version nodes therefore bounds every dependency path.  The visited set
+makes this computation linear in the explored finite graph rather than in the
+number of repeated dependency paths. -/
 def affectedWithin
     (initial : ConstitutiveNodeKey -> Bool)
     (edges : List ConstitutiveDependencyEdge) :
     Nat -> ConstitutiveNodeKey -> Bool
-  | 0, key => initial key
-  | fuel + 1, key =>
-      initial key || edgePropagates (affectedWithin initial edges fuel) key edges
+  | fuel, key =>
+      initial key || backwardAffectedWithin initial edges fuel [key] [key]
 
 theorem affectedWithin_false_initial_false
     (initial : ConstitutiveNodeKey -> Bool)
@@ -719,15 +769,13 @@ theorem affectedWithin_false_initial_false
     (key : ConstitutiveNodeKey)
     (outside : affectedWithin initial edges fuel key = false) :
     initial key = false := by
-  cases fuel with
-  | zero => exact outside
-  | succ fuel =>
-      unfold affectedWithin at outside
-      cases initialExact : initial key with
-      | false => exact rfl
-      | true =>
-          rw [initialExact] at outside
-          cases outside
+  change (initial key ||
+    backwardAffectedWithin initial edges fuel [key] [key]) = false at outside
+  cases initialExact : initial key with
+  | false => exact rfl
+  | true =>
+      rw [initialExact] at outside
+      cases outside
 
 /-- Executable characteristic function of the affected constitutive cone. -/
 def affectedConstitutiveNode
@@ -873,6 +921,11 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.PreCertificateConstitutiveGraph
 #print axioms ConstitutiveSearch.NeuralAgent.calculatePreCertificateConstitutiveGraph
 #print axioms ConstitutiveSearch.NeuralAgent.initiallyAffected
+#print axioms ConstitutiveSearch.NeuralAgent.insertConstitutiveKeys
+#print axioms ConstitutiveSearch.NeuralAgent.constitutivePredecessors
+#print axioms ConstitutiveSearch.NeuralAgent.unseenConstitutiveKeys
+#print axioms ConstitutiveSearch.NeuralAgent.anyInitiallyAffected
+#print axioms ConstitutiveSearch.NeuralAgent.backwardAffectedWithin
 #print axioms ConstitutiveSearch.NeuralAgent.affectedWithin
 #print axioms ConstitutiveSearch.NeuralAgent.affectedConstitutiveNode
 #print axioms ConstitutiveSearch.NeuralAgent.affectedConstitutiveCone

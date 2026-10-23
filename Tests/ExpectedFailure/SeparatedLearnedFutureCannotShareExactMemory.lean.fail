@@ -1,0 +1,16 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.SeparatedLearnedFutureCannotShareExactMemory
+open ConstitutiveSearch.NeuralAgent
+
+theorem forgedSharedExactMemory :
+    learnedBehavioralFutureRealization.project
+        (learnedCandidateFutureSource learnedAlignedCandidateAtInitial) =
+      learnedBehavioralFutureRealization.project
+        (learnedCandidateFutureSource learnedBypassCandidateAtInitial) := by
+  rfl
+
+end Tests.ExpectedFailure.SeparatedLearnedFutureCannotShareExactMemory
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedEveryExactRealizationSeparatesAlignedFromBypass
+/- AXIOM_AUDIT_END -/

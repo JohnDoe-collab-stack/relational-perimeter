@@ -7,8 +7,8 @@ The six adapters in this module consume one shared, proof-free learned
 artifact family and the exact aligned/bypass update pair.  They expose only
 what their declared interface computes or certifies.  In particular, an
 interface boundary is not turned into a negative theorem about a method
-family, and the learned incremental instance does not claim fragment reuse:
-all of its target structural observations are recomputed.
+family.  The learned local update transports its three stable input
+observations and recalculates its ten versioned internal/output observations.
 
 This module defines the adapters but does not execute the confirmatory
 comparison.  The separately versioned protocol freezes these definitions and
@@ -226,11 +226,11 @@ structure IncrementalProofReuseAdapterOutput
       .error .missingConstitutiveDependency
   transportedStructuralCount : Nat
   recomputedStructuralCount : Nat
-  transportedStructuralCountExact : transportedStructuralCount = 0
-  recomputedStructuralCountExact : recomputedStructuralCount =
-    learnedAlignedTargetAnalysis.fragments.structural.observations.length
-  noLearnedReuseClaim :
-    learnedAlignedTargetAnalysis.transportedStructural = []
+  transportedStructuralCountExact : transportedStructuralCount = 3
+  recomputedStructuralCountExact : recomputedStructuralCount = 10
+  learnedReuseExact :
+    learnedAlignedTargetAnalysis.transportedStructural =
+      learnedTransportedStructuralFragments
 
 def runIncrementalProofReuseAdapter
     (material : FrozenNeuralComparisonMaterial) :
@@ -244,7 +244,7 @@ def runIncrementalProofReuseAdapter
       learnedAlignedTargetAnalysis.recomputedStructural.length
     transportedStructuralCountExact := rfl
     recomputedStructuralCountExact := rfl
-    noLearnedReuseClaim := rfl }
+    learnedReuseExact := rfl }
 
 /-! ## 6. Deployment-chain certificate propagation -/
 

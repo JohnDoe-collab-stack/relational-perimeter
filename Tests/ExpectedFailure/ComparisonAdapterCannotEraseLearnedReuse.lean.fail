@@ -1,0 +1,12 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+example :
+    (runIncrementalProofReuseAdapter frozenNeuralComparisonMaterial
+      ).transportedStructuralCount = 0 := by
+  rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.runIncrementalProofReuseAdapter
+/- AXIOM_AUDIT_END -/

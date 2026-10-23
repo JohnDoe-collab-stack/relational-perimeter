@@ -1,0 +1,13 @@
+import RelationalPerimeter
+
+namespace ConstitutiveSearch.NeuralAgent.Tests
+open ConstitutiveSearch.NeuralAgent
+
+def forbiddenForeignRuntime : LearnedConstitutiveAlignmentClosureCertificate :=
+  { learnedConstitutiveAlignmentClosure with
+    alignedRuntime := learnedRenamedIdentityCertifiedRuntime }
+
+end ConstitutiveSearch.NeuralAgent.Tests
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedConstitutiveAlignmentClosure
+/- AXIOM_AUDIT_END -/

@@ -1,0 +1,14 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+/- The complete recheck reconstructs its own target and execution.  Its
+success is not an incremental decoder, cone, transport, or assembly receipt. -/
+example {update : LearnedSerializedConstitutiveUpdate}
+    (full : FullRecheckSuccess learnedFullRecheckEngine update) :
+    LearnedIncrementalEngineLocalConditionData update :=
+  full
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedFullRecheckEngine
+/- AXIOM_AUDIT_END -/

@@ -1,0 +1,14 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.RefusedLearnedFutureRequestCannotBeAdmitted
+open ConstitutiveSearch.NeuralAgent
+
+def forgedAdmission : independentLearnedFutureContract.Allow
+    (learnedCandidateFutureSource learnedAlignedCandidateAtInitial)
+    learnedRefusedFutureRequest :=
+  learnedAdmittedFutureRequestWitness
+
+end Tests.ExpectedFailure.RefusedLearnedFutureRequestCannotBeAdmitted
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedRefusedFutureRequest_has_no_witness
+/- AXIOM_AUDIT_END -/

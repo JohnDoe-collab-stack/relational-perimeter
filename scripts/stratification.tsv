@@ -356,5 +356,6 @@ RelationalPerimeter.Agents.Neural.LearnedUpdateSeparation	M39	enforced	Same-inte
 RelationalPerimeter.Agents.Neural.FiniteCounterfactualDivergence	M40	enforced	Explicit nonempty future exposing the latent contract divergence of the rejected bypass candidate
 RelationalPerimeter.Agents.Neural.LearnedRuntimeAdapter	M41	enforced	Independently learned artifacts adapted to the generic initial checker incremental checker and certified runtime
 RelationalPerimeter.Agents.Neural.LearnedContractFutureDivergence	M42	enforced	Current equivalence and finite future divergence calculated inside the exact learned operational contract and closed runtime API
+RelationalPerimeter.Agents.Neural.LearnedFutureConstitutiveClosure	M43	enforced	Learned future admission exact realization executed forgetting and universal separation closed on one produced chain
 RelationalPerimeter.Agents.Neural.CapabilityComparisonAdapters	M43	enforced	Six frozen typed comparison adapters consuming one exact learned material package without comparative overclaim
 RelationalPerimeter.Agents.Neural.ParameterizedCompiledCheckerFamily	M43	enforced	Parameterized growing neural artifacts consumed by the same compiled initial incremental and full-reference checkers

@@ -44,6 +44,18 @@ theorem profile_width_is_computed_by_the_checker :
       .ok [6] := by
   rfl
 
+/-- The generated family obeys the same non-circular completeness boundary as
+the public and learned checkers: success is equivalent to autonomous local
+receipts, not to an equation restating success of the whole analyzer. -/
+theorem success_iff_autonomous_local_conditions
+    (current : CheckedAgent scalingMetaContract ())
+    (update : ScalingReceivedArtifact) :
+    GenericIncrementalUpdateAccepted
+        (scalingIncrementalCheckerEngine current) update ↔
+      GenericIncrementalUpdateLocalConditions
+        (scalingIncrementalCheckerEngine current) update :=
+  analyzeScalingIncrementalUpdate_complete current update
+
 end Tests.Mechanisms.NeuralParameterizedCompiledCheckerFamilyRegression
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms Tests.Mechanisms.NeuralParameterizedCompiledCheckerFamilyRegression.generated_network_grows
@@ -52,4 +64,5 @@ end Tests.Mechanisms.NeuralParameterizedCompiledCheckerFamilyRegression
 #print axioms Tests.Mechanisms.NeuralParameterizedCompiledCheckerFamilyRegression.upstream_change_replaces_the_upstream_neuron
 #print axioms Tests.Mechanisms.NeuralParameterizedCompiledCheckerFamilyRegression.local_change_replaces_the_terminal_neuron
 #print axioms Tests.Mechanisms.NeuralParameterizedCompiledCheckerFamilyRegression.profile_width_is_computed_by_the_checker
+#print axioms Tests.Mechanisms.NeuralParameterizedCompiledCheckerFamilyRegression.success_iff_autonomous_local_conditions
 /- AXIOM_AUDIT_END -/

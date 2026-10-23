@@ -7,6 +7,7 @@ import RelationalPerimeter.Agents.Neural.CertifiedRuntimeAccessibility
 import RelationalPerimeter.Agents.Neural.FiniteCounterfactualDivergence
 import RelationalPerimeter.Agents.Neural.LearnedRuntimeAdapter
 import RelationalPerimeter.Agents.Neural.LearnedContractFutureDivergence
+import RelationalPerimeter.Agents.Neural.LearnedFutureConstitutiveClosure
 import RelationalPerimeter.Agents.Neural.CapabilityComparisonAdapters
 import RelationalPerimeter.Agents.Neural.ParameterizedCompiledCheckerFamily
 import RelationalPerimeter.Computation.EndogenousOperationalDecomposition
@@ -261,4 +262,6 @@ operational decomposition.
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticObservedExactClosureRejected
 #print axioms RelationalPerimeter.HeytingArithmetic.heytingArithmeticPositiveIdentityCorrespondence
 #print axioms ConstitutiveSearch.NeuralAgent.learnedOperationalFutureDivergence
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedConstitutiveAlignmentClosureCertificate
+#print axioms ConstitutiveSearch.NeuralAgent.learnedConstitutiveAlignmentClosure
 /- AXIOM_AUDIT_END -/

@@ -1,0 +1,15 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.PostForgettingCannotRecoverHistoricalIdentity
+open ConstitutiveSearch.NeuralAgent
+
+def forgedRecoveryPermission : LearnedPostForgettingPermission
+    learnedAlignedExecutedFutureForgetting.output
+    .recoverHistoricalIdentity :=
+  .continueFuture learnedAdmittedFutureRequest
+    learnedAdmittedFutureRequestWitness
+
+end Tests.ExpectedFailure.PostForgettingCannotRecoverHistoricalIdentity
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingRecovery_refused
+/- AXIOM_AUDIT_END -/

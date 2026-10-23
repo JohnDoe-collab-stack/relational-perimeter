@@ -1,7 +1,4 @@
-import RelationalPerimeter.Agents.Neural.CertifiedRuntimeAccessibility
-import RelationalPerimeter.Agents.Neural.ConstitutiveAlignment
-import RelationalPerimeter.Agents.Neural.IncrementalReferenceEquivalence
-import RelationalPerimeter.Agents.Neural.LearnedContractFutureDivergence
+import RelationalPerimeter.Agents.Neural.LearnedFutureConstitutiveClosure
 
 /-!
 # Named regression floor for G1--G10
@@ -13,6 +10,7 @@ witness or restates the original generic theorem at its full quantification.
 -/
 namespace Tests.Mechanisms.NeuralG1G10RegressionFloor
 open ConstitutiveSearch ConstitutiveSearch.NeuralAgent
+open ConstitutiveSearch.NativeMechanism
 open ContinuationSignatures
 
 /-! ## G1 -- authorized contract evolution -/
@@ -21,57 +19,43 @@ theorem g1_authorized_update_is_installed :
     submitUpdate learnedInitialCertifiedRuntime
         learnedAlignedRuntimeUpdate =
       .ok learnedAlignedCertifiedRuntime :=
-  submitUpdate_learned_aligned_exact
+  learnedConstitutiveAlignmentClosure.alignedInstalled
 
 def g1_every_installed_step_preserves_contracts :
-    EveryRuntimeStepPreservesContracts learnedAlignedCertifiedRuntime.history :=
-  learnedAlignedRuntime_preservedContracts
+    EveryCheckedStepPreservesContracts
+      learnedConstitutiveAlignmentClosure.lineage.trace :=
+  learnedConstitutiveAlignmentClosure.lineagePreservesContracts
 
 /-! ## G2 -- authenticity of the executed chain -/
 
 def g2_executed_chain_is_constructed :
-    PublicConstitutiveAlignmentCertificate publicSubstantiveSource
-      publicSubstantiveNext [publicSubstantiveContextualNext] :=
-  publicSubstantiveAlignment
+    LearnedArtifactExecutionLineage :=
+  learnedConstitutiveAlignmentClosure.lineage
 
 theorem g2_internal_transformation_is_nonidentity :
-    publicRequirementEncoding.code publicSubstantiveSource.requirement
-        publicSubstantiveSource.context ≠
-      publicRequirementDecoder.terminalRepresentation
-        publicSubstantiveSource.requirement publicSubstantiveSource.context :=
-  publicSubstantiveInstance.signalTransformationNonidentity
+    independentLearnedInitialNetwork.neurons.length ≠
+      independentLearnedFirstSuccessorNetwork.neurons.length :=
+  learnedConstitutiveAlignmentClosure.initialAlignedNonidentity
 
 /-! ## G3 -- effective causal dependencies -/
 
-theorem g3_source_resource_changes_the_reconfiguration :
-    (publicReconfiguration ⟨.scopeZero, .direct⟩
-        ⟨.scopeZero, .direct⟩).targetSystem.outputValues
-        ⟨.scopeZero, .direct⟩ ≠
-      (publicReconfiguration ⟨.scopeOne, .direct⟩
-        ⟨.scopeZero, .direct⟩).targetSystem.outputValues
-        ⟨.scopeZero, .direct⟩ :=
-  publicSubstantiveInstance.sourceStateChangesReconfiguration
+def g3_source_resource_changes_the_reconfiguration :
+    CausalRole learnedInitialState.system learnedInitialState.input
+      (.receivedInput
+        learnedConstitutiveAlignmentClosure.initialCausal.requirementPort) :=
+  learnedConstitutiveAlignmentClosure.initialCausal.requirementRole
 
-theorem g3_requirement_resource_changes_the_reconfiguration :
-    (publicReconfiguration ⟨.scopeZero, .direct⟩
-        ⟨.scopeZero, .direct⟩).targetSystem.outputValues
-        ⟨.scopeZero, .direct⟩ ≠
-      (publicReconfiguration ⟨.scopeZero, .direct⟩
-        ⟨.scopeOne, .direct⟩).targetSystem.outputValues
-        ⟨.scopeOne, .direct⟩ :=
-  publicSubstantiveInstance.nextRequirementChangesReconfiguration
+def g3_requirement_resource_changes_the_reconfiguration :
+    CausalRole learnedInitialState.system learnedInitialState.input
+      (.receivedInput
+        learnedConstitutiveAlignmentClosure.initialCausal.contextPort) :=
+  learnedConstitutiveAlignmentClosure.initialCausal.contextRole
 
-theorem g3_authorization_is_constitutively_consumed :
-    ((publicReconfiguration publicSubstantiveSource
-        publicSubstantiveNext).targetSystem.encode
-        publicSubstantiveNext).read
-        (publicRequiredMechanismTransport publicSubstantiveSource
-          publicSubstantiveNext).authorizationPort =
-      publicReconfigurationBuilder.authorizationCode
-        publicSubstantiveNext
-        (publicReconfiguration publicSubstantiveSource
-          publicSubstantiveNext).permission :=
-  publicSubstantiveInstance.authorizationConsumed
+def g3_authorization_is_constitutively_consumed :
+    CausalRole learnedInitialState.system learnedInitialState.input
+      (.receivedInput
+        learnedConstitutiveAlignmentClosure.initialCausal.authorizationPort) :=
+  learnedConstitutiveAlignmentClosure.initialCausal.authorizationRole
 
 /-! ## G4 -- arbitrary finite dependent traces -/
 
@@ -89,87 +73,79 @@ theorem g4_every_finite_executed_program_is_accepted
 /-! ## G5 -- refusal before effect and closed accessibility -/
 
 def g5_installed_runtime_is_accessible :
-    CertifiedRuntimeAccessibility learnedAlignedCertifiedRuntime :=
-  learnedAlignedCertifiedRuntime_accessibility
+    CertifiedRuntimeAccessibility
+      learnedConstitutiveAlignmentClosure.extendedRuntime :=
+  learnedConstitutiveAlignmentClosure.extendedAccessible
 
 theorem g5_rejected_update_has_no_installed_successor :
     Not (Exists fun next =>
       submitUpdate learnedInitialCertifiedRuntime
         learnedBypassRuntimeUpdate = .ok next) :=
-  learned_bypass_rejected_without_successor
+  learnedConstitutiveAlignmentClosure.bypassHasNoInstalledSuccessor
 
 /-! ## G6 -- executed forgetting and exact futures -/
 
 theorem g6_historical_inputs_are_distinct
-    (source : PublicRequirementInput)
-    (future : List PublicRequirementInput) :
-    publicLeftHistoricalForgettingInput source future ≠
-      publicRightHistoricalForgettingInput source future :=
-  public_historical_forgetting_inputs_distinct source future
+    : learnedAlignedHistoricalForgettingInput ≠
+      learnedRenamedHistoricalForgettingInput :=
+  learnedConstitutiveAlignmentClosure.forgetting.historiesDistinct
 
 theorem g6_outputs_converge_only_after_execution
-    (source : PublicRequirementInput)
-    (future : List PublicRequirementInput) :
-    (publicLeftExecutedForgetting source future).output =
-      (publicRightExecutedForgetting source future).output :=
-  public_executed_forgetting_outputs_equal source future
+    : learnedAlignedExecutedFutureForgetting.output =
+      learnedRenamedExecutedFutureForgetting.output :=
+  learnedConstitutiveAlignmentClosure.forgetting.forgottenOutputsEqual
 
 theorem g6_forgotten_origin_is_not_recoverable
-    (source : PublicRequirementInput)
-    (future : List PublicRequirementInput)
-    (recover : Agent.Memory -> PublicHistoricalOrigin)
+    (recover : IndependentLearnedOperationalMemory ->
+      LearnedHistoricalStableOrigin)
     (recoversLeft :
-      recover (publicLeftExecutedForgetting source future).output =
-        (publicLeftHistoricalForgettingInput source future).origin.origin)
+      recover learnedAlignedExecutedFutureForgetting.output =
+        learnedAlignedHistoricalForgettingInput.origin)
     (recoversRight :
-      recover (publicRightExecutedForgetting source future).output =
-        (publicRightHistoricalForgettingInput source future).origin.origin) :
+      recover learnedRenamedExecutedFutureForgetting.output =
+        learnedRenamedHistoricalForgettingInput.origin) :
     False :=
-  public_executed_forgetting_origin_not_recoverable source future recover
+  learnedConstitutiveAlignmentClosure.forgetting.originNotRecoverable recover
     recoversLeft recoversRight
 
 theorem g6_every_covered_finite_future_is_preserved
-    (source : PublicRequirementInput)
-    (future : List PublicRequirementInput)
-    (requests : List (ULift.{3} Agent.Request)) :
-    (reconfiguredOperationalStateFutureContract
-        (family := publicRequirementFamily)).outcome
-        (publicReconfiguredInteractionHistory source future).finalState requests =
-      reconfiguredOperationalMemoryFutureContract.outcome
-        (publicReconfiguredInteractionHistory source future).finalState.memory
-        requests :=
-  public_terminal_memory_preserves_every_future source future requests
+    (origin : LearnedHistoricalStableOrigin)
+    (requests : List IndependentLearnedFutureInput) :
+    independentLearnedFutureContract.outcome
+        (LearnedAlignedOperationalContract.futureSourceOfState
+          learnedAlignedEffect.targetState) requests =
+      independentLearnedReducedFutureContract.outcome
+        (executeHistoricalForgetting learnedHistoricalFutureForgettingProgram
+          { origin := origin }).output requests :=
+  learnedConstitutiveAlignmentClosure.forgetting.everyFuturePreserved
+    origin requests
 
 /-! ## G7 -- executable, non-circular checking -/
 
 theorem g7_public_success_iff_autonomous_local_conditions
-    (update : IncrementalNeuralUpdate) :
-    GenericIncrementalUpdateAccepted publicIncrementalCheckerEngine update ↔
-      GenericIncrementalUpdateLocalConditions
-        publicIncrementalCheckerEngine update :=
-  checkGenericIncrementalUpdate_complete_for_local_conditions
-    publicIncrementalCheckerEngine update
-
-theorem g7_learned_success_iff_autonomous_local_conditions
     (update : LearnedSerializedConstitutiveUpdate) :
     GenericIncrementalUpdateAccepted learnedIncrementalCheckerEngine update ↔
       GenericIncrementalUpdateLocalConditions
         learnedIncrementalCheckerEngine update :=
-  checkGenericIncrementalUpdate_complete_for_local_conditions
-    learnedIncrementalCheckerEngine update
+  learnedConstitutiveAlignmentClosure.checkerComplete update
+
+theorem g7_learned_success_iff_autonomous_local_conditions :
+    GenericIncrementalUpdateAccepted learnedIncrementalCheckerEngine
+        learnedAlignedSerializedUpdate ↔
+      LearnedFullUpdateAccepted learnedAlignedSerializedUpdate :=
+  learnedAlignedIncrementalAndFullAcceptance_equivalent
 
 /-! ## G8 -- exact local reuse and independent full recheck -/
 
 theorem g8_unaffected_fragment_is_transported :
-    publicReusedRequirementFragment.payload =
-      publicInitialRequirementFragment.payload :=
-  publicReusedRequirementFragment_payload_exact
+    learnedConstitutiveAlignmentClosure.localReuse.observations =
+      learnedPreCertificateGraph.targetObservations :=
+  learnedConstitutiveAlignmentClosure.localReuse.targetExact
 
 theorem g8_incremental_and_full_recheck_are_equal :
-    eraseIncrementalCheckResult
-        (checkIncrementalUpdate publicIncrementalNeuralUpdate) =
-      checkReferenceUpdate publicFullReferenceNeuralUpdate :=
-  publicIncrementalAndReferenceChecks_exact
+    learnedAlignedGenericIncrementalSuccess.checked.next =
+      learnedAlignedFullRecheckSuccess.checked.next :=
+  learnedConstitutiveAlignmentClosure.incrementalFullSuccessorExact
 
 /-! ## G9 -- substantive positive realizations -/
 
@@ -178,14 +154,15 @@ theorem g9_independent_learned_artifact_is_decodable :
   independentLearnedInitialNetwork_decodes
 
 theorem g9_positive_continuation_has_two_executed_steps :
-    publicSubstantiveAlignment.continuation.requests.length = 2 :=
-  publicSubstantiveInstance.continuationHasTwoSteps
+    HEq learnedConstitutiveAlignmentClosure.lineage.trace
+      learnedTwoStepCheckedTrace := by
+  exact HEq.rfl
 
 /-! ## G10 -- latent bypass distinguished by the same closed API -/
 
 def g10_latent_bypass_is_distinguished :
-    ConstitutiveLatentBypassCertificate :=
-  constitutiveChecker_detectsLatentBypass
+    LearnedOperationalFutureDivergenceCertificate :=
+  learnedConstitutiveAlignmentClosure.divergence
 
 end Tests.Mechanisms.NeuralG1G10RegressionFloor
 /- AXIOM_AUDIT_BEGIN -/

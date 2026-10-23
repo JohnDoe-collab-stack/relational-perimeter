@@ -705,9 +705,10 @@ Les six sorties typées sont :
 4. le successeur effectivement installé, l'histoire contrôlée et le transport
    des obligations du système auto-adaptatif ;
 5. les verdicts du vérificateur incrémental et les nombres réellement
-   transportés et recalculés ; sur ce matériel appris le cône couvre toutes
-   les observations cibles, donc zéro fragment structurel est transporté et
-   aucune réutilisation locale n'est revendiquée ;
+   transportés et recalculés ; sur ce matériel appris, les trois entrées
+   conservent leurs identités stables et sont transportées depuis le certificat
+   source, tandis que les dix observations internes et de sortie versionnées
+   sont recalculées ;
 6. la chaîne de déploiement dépendante, sa longueur, ses preuves de pas, ses
    contrats préservés et son accessibilité exacte.
 
@@ -717,8 +718,8 @@ confirmatoire. Le manifeste v6 fixe les sources, l'entrée compilée, la command
 unique et leurs empreintes ; le run reste interdit tant qu'un commit stable
 n'est pas enregistré. La gate v6 vérifie sept mutations du protocole, les six
 déclarations Lean, les six identifiants émis, le schéma à huit capacités et
-l'absence de fichier de résultat. Une fixture négative interdit d'annoncer une
-réutilisation de fragments absente de l'instance apprise.
+l'absence de fichier de résultat. Une fixture négative interdit d'effacer du
+rapport les trois fragments effectivement transportés par l'instance apprise.
 
 ## Extension incrémentale — identités stables entre versions
 
@@ -794,6 +795,14 @@ L’instance publique transporte ainsi le fragment de l’entrée d’exigence d
 position ancienne à sa position nouvelle. Une fixture négative interdit de
 déclarer réutilisable le neurone de proposition, dont l’appartenance au cône
 est calculée à `true`.
+
+L’instance apprise locale conserve les clés stables de ses trois entrées. Son
+calcul structurel transporte exactement leurs trois observations depuis le
+certificat source et recalcule les dix observations internes et de sortie
+dont les identités sont versionnées. Le contrôle entièrement renommé ne
+transporte aucun fragment et recalcule les treize observations cibles. Ces
+deux assemblages sont produits par le même calcul du cône ; ils ne sont pas
+des certificats cibles fournis au vérificateur.
 
 ## Extension incrémentale — vérificateur de delta
 
@@ -872,6 +881,22 @@ locales annoncées. Enfin,
 deux `CheckedUpdate` dès que les deux chemins réussissent sur le même delta ;
 il ne conclut pas seulement à l’équivalence de leurs verdicts.
 
+L'instance apprise possède son propre
+`learnedTransitionProductionKernel`, consommé à la fois par l'analyseur
+incrémental et par `learnedFullRecheckEngine`. Le recheck complet redécode et
+revérifie indépendamment la requête, l'entrée, l'intention, la dépendance et la
+cible ; il ne reçoit aucune analyse ni aucun fragment incrémental. Sur la mise
+à jour locale et sur le contrôle entièrement renommé, Lean prouve à la fois
+l'équivalence d'acceptation, l'égalité du successeur certifié et l'égalité du
+certificat produit. Des fixtures distinctes interdisent de substituer le
+succès complet aux conditions incrémentales, de croiser les deux mises à jour
+ou de remplacer un payload transporté par un payload cible recalculé.
+L'équivalence d'acceptation est aussi quantifiée sur tout le domaine des
+nomenclatures apprises admises. Le contournement causal est refusé par les deux
+chemins : le vérificateur incrémental expose la dépendance constitutive absente,
+tandis que le recheck complet refuse l'artefact cible non admis. Aucun des deux
+ne produit de successeur certifié pour ce contrôle négatif.
+
 ## Extension incrémentale — trace finie dépendante vérifiée
 
 `CheckedReconfigurationTrace` est paramétrique dans un
@@ -912,6 +937,21 @@ runtime ne peut être exposé comme résultat installé de la soumission.
 `EveryRuntimeStepPreservesContracts` relève la même garantie au niveau de
 l'histoire runtime : chaque transition transporte ses obligations persistantes
 et chaque successeur conserve exactement tous les futurs finis couverts.
+
+L'instance apprise réalise maintenant deux transitions successives distinctes,
+`initial -> aligned -> extended`. La seconde requête n'est constructible qu'au
+successeur vérifié exact de la première ; son réseau sérialisé est différent du
+premier et son action d'installation consomme la mémoire produite au premier
+pas. Son certificat cible est reconstruit par le recheck complet, transporte
+l'intention persistante et contient définitionnellement le témoin
+d'autorisation revérifié par la permission `aligned -> extended`.
+`learnedTwoStepCheckedTrace` conserve les deux succès dans une trace dépendante
+dont la queue part de `result.checked.next`. La même succession est installée
+par `submitUpdate` dans `learnedExtendedCertifiedRuntime`, avec accessibilité,
+préservation de contrats et histoire vérifiée. Une demande de premier pas
+présentée comme seconde est refusée avant tout résultat vérifié et avant tout
+successeur ; une fixture distincte interdit également de construire la seconde
+transition au runtime initial.
 
 La longueur du runtime n'est donc pas câblée. Elle est déterminée par les
 constructeurs de mise à jour que le checker offre à chaque successeur. Dans le
@@ -1062,6 +1102,33 @@ le succès exact de l'installation alignée, le diagnostic exact du rejet du
 contournement et la preuve qu'aucun successeur rejeté ne peut exister. La
 fixture `BypassCannotSatisfyExactLearnedFutureContract` protège la frontière
 normative correspondante.
+
+## Clôture conjointe sur la même lignée apprise
+
+`LearnedArtifactExecutionLineage` contient deux résultats successifs du
+vérificateur dépendant. La deuxième mise à jour est typée par le successeur
+retourné par la première ; ses égalités hétérogènes identifient les requêtes et
+résultats stockés aux deux transitions apprises canoniques. La lignée ne peut
+donc pas être recomposée à partir d'un agent aligné reconstruit séparément.
+
+`LearnedConstitutiveAlignmentClosureCertificate` réunit sur cette lignée les
+empreintes du protocole et de l'artefact, les transformations non identitaires,
+la couverture du domaine courant, les trois témoins causaux indexés par les
+états initial, aligné et étendu, les deux installations, l'accessibilité du
+runtime terminal, la réutilisation locale issue du certificat initial,
+l'accord avec le recheck complet indépendant, la divergence future non vide,
+l'oubli exécuté et le rejet du contournement avant installation. Les égalités
+de raccord imposent en particulier que la source future et l'origine alignée
+de l'oubli proviennent du runtime installé par la première transition.
+
+La gate G1–G10 ne prélève plus G2, G3, G6, G8 ou G9 sur l'instance publique :
+toutes ses spécialisations positives sont désormais des projections de
+`learnedConstitutiveAlignmentClosure`, tandis que G4 conserve sa quantification
+générique sur toute trace finie acceptée. La fixture
+`ForeignLearnedRuntimeCannotEnterJointClosure` interdit de remplacer le runtime
+aligné de ce paquet par le runtime d'une autre histoire de nommage admise.
+Cette clôture est une preuve conjointe ; elle ne constitue pas encore le run
+comparatif confirmatoire de L9.
 
 ## Campagne finale de mutations négatives
 

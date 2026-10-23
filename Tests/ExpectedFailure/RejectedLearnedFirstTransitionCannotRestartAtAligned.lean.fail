@@ -1,0 +1,12 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch NeuralAgent
+
+example : learnedDependentIncrementalChecker.check LearnedAlignedCheckedAgent
+      learnedWrongSuccessiveRuntimeUpdate =
+    .ok learnedExtendedDependentResult := by
+  rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learned_wrong_successive_rejected_without_checked_action
+/- AXIOM_AUDIT_END -/

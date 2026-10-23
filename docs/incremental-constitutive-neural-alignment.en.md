@@ -101,6 +101,8 @@ The chain explicitly distinguishes:
 | Aligned installation and bypass rejection | `submitUpdate_learned_aligned_exact`, `submitUpdate_learned_bypass_rejected` in [LearnedRuntimeAdapter.lean](../RelationalPerimeter/Agents/Neural/LearnedRuntimeAdapter.lean) |
 | Divergence under the exact future contract | `learnedOperationalFutureDivergence` in [LearnedContractFutureDivergence.lean](../RelationalPerimeter/Agents/Neural/LearnedContractFutureDivergence.lean) |
 | Executed forgetting, preserved futures, and irrecoverable origin | `public_executed_forgetting_outputs_equal`, `public_executed_forgetting_preserves_future`, `public_executed_forgetting_origin_not_recoverable` in [PublicExactForgetting.lean](../RelationalPerimeter/Agents/Neural/PublicExactForgetting.lean) |
+| Separation for every exact realization and preservation of every covered finite sequence | `learnedEveryExactRealizationSeparatesAlignedFromBypass`, `learnedExecutedFutureForgetting_preserves_every_finite_future` in [LearnedFutureConstitutiveClosure.lean](../RelationalPerimeter/Agents/Neural/LearnedFutureConstitutiveClosure.lean) |
+| Joint certificate over the same learned lineage | `learnedConstitutiveAlignmentClosure` in [LearnedFutureConstitutiveClosure.lean](../RelationalPerimeter/Agents/Neural/LearnedFutureConstitutiveClosure.lean) |
 
 These declarations remain subject to the repository's complete gates and the
 future evidence commit. The table identifies claim entry points; it does not
@@ -119,17 +121,19 @@ pre-execution action shielding, guaranteed self-adaptive systems, incremental
 neural verification with proof reuse, and certificate propagation through a
 deployment chain.
 
-The current status is strict: the adapters are frozen, but no v6 confirmatory
-run has been executed and no comparative result file exists. No general
-superiority, baseline incapacity, or novelty conclusion may therefore be drawn.
-The only formal contrast already closed at this level concerns verifiers whose
-verdict factors exclusively through the finite current table: they cannot
-distinguish the two candidates, whereas the constitutive checker distinguishes
-them through executed dependency and the future contract.
+The current status is strict: v6 is a historical protocol whose fingerprints
+no longer match the current candidate sources. No v6 confirmatory run has been
+executed and no comparative result file exists. A new version must freeze the
+adapters and their references before any confirmatory execution. No general
+superiority, baseline incapacity, or novelty conclusion may therefore be
+drawn. The only formal contrast already closed at this level concerns
+verifiers whose verdict factors exclusively through the finite current table:
+they cannot distinguish the two candidates, whereas the constitutive checker
+distinguishes them through executed dependency and the future contract.
 
 ### Scaling of the compiled checker
 
-The confirmatory
+The historical
 [`compiled-parameterized-neural-scaling-v8`](../experiments/constitutive-neural-alignment/v8/SCALING_ANALYSIS.md)
 campaign runs the same compiled Lean checker at seven sizes from 0 to 80, with
 five measured repetitions and 210 accepted updates. It establishes actual
@@ -139,7 +143,12 @@ transported and one is recomputed.
 It establishes no practical time gain. At size 80, the median incremental
 trace takes 70,777.626 ms, versus 10.522 ms for the complete recheck; the
 pre-registered gain criterion is false. No asymptotic law, general resource
-saving, or generalization to other families is claimed.
+saving, or generalization to other families is claimed. Its fingerprints are
+preserved rather than rewritten; they do not validate the current candidate.
+The exploratory campaign rerun on that candidate confirms structural reuse but
+remains unfrozen, lacks a usable memory measurement, and has unfavorable
+incremental timings. P8 and S6 therefore remain open for a new preregistered
+campaign.
 
 ## Explicit exclusions
 

@@ -1,0 +1,12 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.ForeignLearnedEffectCannotReplaceInstallingEffect
+open ConstitutiveSearch.NeuralAgent
+
+def foreignEffect : LearnedEffectWitness learnedAlignedActionSourceState :=
+  learnedInitialEffect
+
+end Tests.ExpectedFailure.ForeignLearnedEffectCannotReplaceInstallingEffect
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.produceLearnedEffect
+/- AXIOM_AUDIT_END -/

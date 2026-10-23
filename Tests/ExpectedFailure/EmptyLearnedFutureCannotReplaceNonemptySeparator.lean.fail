@@ -1,0 +1,16 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.EmptyLearnedFutureCannotReplaceNonemptySeparator
+open ConstitutiveSearch.NeuralAgent
+
+theorem forgedEmptySeparator :
+    independentLearnedFutureContract.outcome
+        (learnedCandidateFutureSource learnedAlignedCandidateAtInitial) [] ≠
+      independentLearnedFutureContract.outcome
+        (learnedCandidateFutureSource learnedBypassCandidateAtInitial) [] :=
+  learnedAlignedBypass_operationalFuture_different
+
+end Tests.ExpectedFailure.EmptyLearnedFutureCannotReplaceNonemptySeparator
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedBypassFutureSeparator
+/- AXIOM_AUDIT_END -/

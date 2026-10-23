@@ -36,11 +36,12 @@ theorem self_adaptive_installs_only_aligned :
   ⟨bundle.selfAdaptive.alignedSubmissionExact,
     bundle.selfAdaptive.bypassSubmissionExact⟩
 
-theorem learned_incremental_reports_no_transport :
-    bundle.incremental.transportedStructuralCount = 0 /\
-      learnedAlignedTargetAnalysis.transportedStructural = [] :=
+theorem learned_incremental_reports_effective_transport :
+    bundle.incremental.transportedStructuralCount = 3 /\
+      learnedAlignedTargetAnalysis.transportedStructural =
+        learnedTransportedStructuralFragments :=
   ⟨bundle.incremental.transportedStructuralCountExact,
-    bundle.incremental.noLearnedReuseClaim⟩
+    bundle.incremental.learnedReuseExact⟩
 
 theorem deployment_chain_contains_one_accepted_transition :
     bundle.deployment.transitionCount = 1 :=
@@ -53,6 +54,6 @@ end Tests.Mechanisms.NeuralCapabilityComparisonAdaptersRegression
 #print axioms Tests.Mechanisms.NeuralCapabilityComparisonAdaptersRegression.interventional_candidates_separate
 #print axioms Tests.Mechanisms.NeuralCapabilityComparisonAdaptersRegression.shield_allows_aligned_and_refuses_bypass
 #print axioms Tests.Mechanisms.NeuralCapabilityComparisonAdaptersRegression.self_adaptive_installs_only_aligned
-#print axioms Tests.Mechanisms.NeuralCapabilityComparisonAdaptersRegression.learned_incremental_reports_no_transport
+#print axioms Tests.Mechanisms.NeuralCapabilityComparisonAdaptersRegression.learned_incremental_reports_effective_transport
 #print axioms Tests.Mechanisms.NeuralCapabilityComparisonAdaptersRegression.deployment_chain_contains_one_accepted_transition
 /- AXIOM_AUDIT_END -/

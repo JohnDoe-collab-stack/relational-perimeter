@@ -1,0 +1,21 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.ReconstructedLearnedSuccessorCannotInstall
+open ConstitutiveSearch.NeuralAgent
+
+def reconstructedSuccessor :
+    ReconfiguredExecutionState independentLearnedRequirementFamily :=
+  { system := learnedDecodedAlignedArtifact.system
+    input := independentLearnedCertifiedInput
+    memory := publicActionMemory }
+
+def reconstructedSuccessorTransition :
+    LearnedExecutedStateTransition
+      LearnedContractTransitionPermission.installAligned
+      learnedInitialState reconstructedSuccessor :=
+  executeLearnedAlignedStateTransition
+
+end Tests.ExpectedFailure.ReconstructedLearnedSuccessorCannotInstall
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.executeLearnedAlignedStateTransition
+/- AXIOM_AUDIT_END -/

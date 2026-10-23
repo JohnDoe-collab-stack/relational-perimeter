@@ -1,0 +1,13 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+/- Transported observations are retained from the certified source.  The
+target-side recalculation list cannot be substituted for them. -/
+example : learnedTransportedStructuralFragments =
+    learnedRecomputedStructuralFragments := by
+  rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedTransportedStructuralFragments
+/- AXIOM_AUDIT_END -/

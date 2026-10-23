@@ -1,0 +1,13 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.StoredLearnedAuthorizationCannotReplaceAction
+open ConstitutiveSearch.NeuralAgent
+
+def storedAuthorizationIsNotAnAction :
+    LearnedActionWitness learnedAlignedState :=
+  learnedAlignedAuthorizationWitness
+
+end Tests.ExpectedFailure.StoredLearnedAuthorizationCannotReplaceAction
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedActionWitness
+/- AXIOM_AUDIT_END -/
