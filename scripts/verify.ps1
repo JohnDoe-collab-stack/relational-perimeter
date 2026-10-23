@@ -117,11 +117,18 @@ try {
   if ($joinedOutput -match 'depends on axioms:|sorryAx') {
     throw "axiom audit failure detected in lake build output"
   }
-  $expectedModules = $leanFiles.Count - 1
+  # Executable roots all define `main` and therefore cannot be imported into one
+  # common audit environment.  The full build and their mandatory final audit
+  # blocks check them independently; the exhaustive sweep covers every other
+  # repository module except its own audit driver.
+  $independentExecutableRoots = @($relativeLeanFiles | Where-Object {
+      $_ -match '^Tests/Executables/[^/]+\.lean$'
+    })
+  $expectedModules = $leanFiles.Count - 1 - $independentExecutableRoots.Count
   $sweepLines = [regex]::Matches($joinedOutput, 'ALL_CONSTANTS_OK constants=[0-9]+ modules=[0-9]+ generatedExceptions=[0-9]+ writtenExceptions=[0-9]+')
   if ($sweepLines.Count -ne 1 -or $sweepLines[0].Value.TrimEnd("`r") -notmatch
       "^ALL_CONSTANTS_OK constants=[0-9]+ modules=$expectedModules generatedExceptions=[0-9]+ writtenExceptions=0$") {
-    throw "Missing or incomplete exhaustive constant audit (including all test modules)"
+    throw "Missing or incomplete exhaustive constant audit of all jointly importable modules"
   }
   & $pythonCommand (Join-Path $PSScriptRoot "check-scientific-docs.py") --lean
   if ($LASTEXITCODE -ne 0) { throw "scientific Lean reference check failed" }
