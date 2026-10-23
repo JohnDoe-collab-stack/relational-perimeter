@@ -105,22 +105,13 @@ if grep -E 'depends on axioms:|sorryAx' "$build_log"; then
   exit 1
 fi
 
-# Executable roots all define `main` and therefore cannot be imported into one
-# common audit environment. The full build and their mandatory final audit
-# blocks check them independently; the exhaustive sweep covers every other
-# repository module except its own audit driver.
-independent_executable_roots=0
-for lean_file in "${lean_files[@]}"; do
-  if [[ "$lean_file" =~ ^Tests/Executables/[^/]+\.lean$ ]]; then
-    independent_executable_roots=$((independent_executable_roots + 1))
-  fi
-done
-expected_modules=$((${#lean_files[@]} - 1 - independent_executable_roots))
 if [[ "$(grep -c 'ALL_CONSTANTS_OK ' "$build_log" || true)" != 1 ]] ||
-    ! grep -Eq "ALL_CONSTANTS_OK constants=[0-9]+ modules=$expected_modules generatedExceptions=[0-9]+ writtenExceptions=0$" <(tr -d '\r' < "$build_log"); then
-  echo 'Missing or incomplete exhaustive constant audit of all jointly importable modules' >&2
+    ! grep -Eq 'ALL_CONSTANTS_OK constants=[0-9]+ modules=[0-9]+ generatedExceptions=[0-9]+ writtenExceptions=0$' <(tr -d '\r' < "$build_log"); then
+  echo 'Missing or incomplete primary exhaustive constant audit' >&2
   exit 1
 fi
+"${python_command[@]}" scripts/check-executable-constant-audits.py --self-test
+"${python_command[@]}" scripts/check-executable-constant-audits.py
 "${python_command[@]}" scripts/check-scientific-docs.py --lean
 "${python_command[@]}" scripts/check-unified-codegen.py
 "${python_command[@]}" scripts/check-agent-codegen.py

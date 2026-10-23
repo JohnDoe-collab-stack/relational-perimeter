@@ -137,6 +137,7 @@ run_cmd Lean.Elab.Command.liftTermElabM do
             throwError "Agent register must store produced targets, not source archives: {result}"
   logInfo "RESTART_SCHEMA_OK: produced memory and nested live-state fields checked"
 
+/- REPOSITORY_CONSTANT_AUDIT_BEGIN -/
 run_cmd do
   let env ← Lean.getEnv
   let mut checked := 0
@@ -166,8 +167,9 @@ run_cmd do
           let source ← IO.FS.readFile (moduleText.replace "." "/" ++ ".lean")
           sources := sources.insert moduleName source
           pure source
+    let declarationRanges ← Lean.findDeclarationRangesCore? name
     let mut selected := ""
-    if let some location ← Lean.findDeclarationRangesCore? name then
+    if let some location := declarationRanges then
       let range := location.selectionRange
       if range.pos.line == range.endPos.line then
         let line := (source.splitOn "\n")[range.pos.line - 1]!
@@ -191,12 +193,30 @@ run_cmd do
       else if !authored && userName.contains "___macroRules_" && source.contains "macro" &&
           (match info with | .defnInfo _ => true | _ => false) then
         "compiler-tactic-macro"
+      else if !authored && leaf.startsWith "_sparseCasesOn_" &&
+          (env.find? parent).any (fun value =>
+            match value with | .defnInfo _ => true | _ => false) then
+        "compiler-sparse-cases"
+      else if !authored && declarationRanges.isNone && leaf == "_f" &&
+          (match info with | .defnInfo _ => true | _ => false) &&
+          (env.find? parent).any (fun value =>
+            match value with | .defnInfo _ => true | _ => false) then
+        "compiler-local-recursion"
+      else if !authored && declarationRanges.isNone && leaf.startsWith "match_" &&
+          (match info with | .defnInfo _ => true | _ => false) &&
+          (env.find? parent).any (fun value =>
+            match value with | .defnInfo _ => true | _ => false) then
+        "compiler-match-helper"
       else "REJECTED"
     if category == "REJECTED" then
       throwError "All-constant audit rejected {name}; source identifier '{selected}'; dependencies {dependencies}"
     generated := generated + 1
     logInfo m!"ALL_CONSTANTS_EXCEPTION\t{moduleName}\t{name}\t{category}\t{dependencies}"
+  for moduleName in env.header.moduleNames do
+    if modules.contains moduleName then
+      logInfo m!"ALL_CONSTANTS_MODULE\t{moduleName}"
   logInfo m!"ALL_CONSTANTS_OK constants={checked} modules={modules.size} generatedExceptions={generated} writtenExceptions=0"
+/- REPOSITORY_CONSTANT_AUDIT_END -/
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.ContinuationSignatures.ExactRealization.distinct_memory_of_separator

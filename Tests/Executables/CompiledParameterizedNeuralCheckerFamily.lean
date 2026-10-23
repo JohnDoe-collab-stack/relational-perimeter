@@ -23,6 +23,39 @@ def errorText : ScalingCheckerError -> String
   | .structuralAssembly => "structural-assembly"
   | .structuralMismatch => "structural-mismatch"
 
+structure ParsedNat where
+  accepted : Bool
+  value : Nat
+
+def decimalCode (code : Nat) : ParsedNat :=
+  if 48 <= code then
+    if code <= 57 then
+      { accepted := true, value := code - 48 }
+    else
+      { accepted := false, value := 0 }
+  else
+    { accepted := false, value := 0 }
+
+def parseNatBytes (bytes : ByteArray) : Nat -> Nat -> Nat -> ParsedNat
+  | 0, _, accumulated => { accepted := true, value := accumulated }
+  | remaining + 1, index, accumulated =>
+      if within : index < bytes.size then
+        let digit := decimalCode (bytes[index]'within).toNat
+        if digit.accepted then
+          parseNatBytes bytes remaining (index + 1)
+            (accumulated * 10 + digit.value)
+        else
+          { accepted := false, value := 0 }
+      else
+        { accepted := false, value := 0 }
+
+def parseNat (value : String) : ParsedNat :=
+  let bytes := value.toUTF8
+  if bytes.size = 0 then
+    { accepted := false, value := 0 }
+  else
+    parseNatBytes bytes bytes.size 0 0
+
 def emitObservation
     (size step initialNanoseconds incrementalNanoseconds
       fullNanoseconds initialCertificateEntries : Nat)
@@ -80,7 +113,7 @@ def runTrace
         (scalingIncrementalCheckerEngine current) target
       match incrementalResult with
       | .error problem =>
-          throw (IO.userError s!"incremental rejection: {errorText problem}")
+          throw (IO.userError (errorText problem))
       | .ok incremental =>
           let metrics := scalingPairMetrics incremental.analysis
           let metricChecksum := metrics.causalGraphNodeCount +
@@ -95,7 +128,7 @@ def runTrace
               (scalingFullRecheckEngine current) target
             match fullResult with
             | .error problem =>
-                throw (IO.userError s!"full rejection: {errorText problem}")
+                throw (IO.userError (errorText problem))
             | .ok full =>
                 have _successorExact :
                     incremental.checked.next = full.checked.next := by
@@ -129,20 +162,42 @@ def run (size traceLength : Nat) : IO Unit := do
         runTrace size (initialFinished - initialStarted)
           initialCertificateEntries success.checkedAgent 0 traceLength
 
+def runParsed (sizeText traceText : String) : IO Unit :=
+  let size := parseNat sizeText
+  let traceLength := parseNat traceText
+  if size.accepted && traceLength.accepted then
+    run size.value traceLength.value
+  else
+    throw (IO.userError "expected natural size and trace length")
+
+def runAfterSize (sizeText : String) : List String -> IO Unit
+  | [] =>
+      throw (IO.userError
+        "usage: compiled_parameterized_neural_checker FAMILY_SIZE TRACE_LENGTH")
+  | traceText :: _ => runParsed sizeText traceText
+
 end ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily
 
 def main (arguments : List String) : IO Unit := do
   match arguments with
-  | sizeText :: traceText :: _ =>
-      match sizeText.toNat?, traceText.toNat? with
-      | some size, some traceLength =>
-          ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.run
-            size traceLength
-      | _, _ => throw (IO.userError "expected natural size and trace length")
-  | _ => throw (IO.userError "usage: compiled_parameterized_neural_checker FAMILY_SIZE TRACE_LENGTH")
+  | [] =>
+      throw (IO.userError
+        "usage: compiled_parameterized_neural_checker FAMILY_SIZE TRACE_LENGTH")
+  | sizeText :: remaining =>
+      ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.runAfterSize
+        sizeText remaining
 
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.versionText
 #print axioms ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.errorText
+#print axioms ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.ParsedNat
+#print axioms ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.decimalCode
+#print axioms ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.parseNatBytes
+#print axioms ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.parseNat
 #print axioms ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.emitObservation
+#print axioms ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.runTrace
+#print axioms ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.run
+#print axioms ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.runParsed
+#print axioms ConstitutiveSearch.NeuralAgent.CompiledParameterizedFamily.runAfterSize
+#print axioms main
 /- AXIOM_AUDIT_END -/
