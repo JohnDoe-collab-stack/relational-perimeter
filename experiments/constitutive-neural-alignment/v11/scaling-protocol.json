@@ -1,12 +1,26 @@
 {
   "protocol_id": "compiled-complete-property-scaling-v11",
-  "status": "draft-awaiting-stable-source-commit",
-  "frozen_source_commit": null,
-  "frozen_source_git_tree": null,
-  "source_tree_file_count": null,
-  "source_tree_sha256": null,
-  "runner_sha256": null,
-  "source_sha256": {},
+  "status": "frozen-before-confirmatory-run",
+  "frozen_source_commit": "f9471ceab8d1af85d51eae8d2c6ab31959f41686",
+  "frozen_source_git_tree": "a31280357a551620beca738595e2d177a5898cf9",
+  "source_tree_file_count": 464,
+  "source_tree_sha256": "703fd8173e8c6d5d4a46f2c6e722fbedbb15cbe58f4e92c4f2ff55a93eb965f4",
+  "runner_sha256": "82cf8b9c107a950ac053e91865fdbd9a8948a14c1f08a55f0c19e76aeab3a090",
+  "source_sha256": {
+    "scripts/run-compiled-complete-property-scaling-v11.py": "82cf8b9c107a950ac053e91865fdbd9a8948a14c1f08a55f0c19e76aeab3a090",
+    "scripts/check-complete-property-scaling-v11.py": "2900a2c9c1b40d5ce86156f042edb241d7fd53b262723733d81a4f310423fac1",
+    "scripts/freeze-complete-property-scaling-v11.py": "dd796769ec1208fda34925464f868b395fb3b981f9395403603cf480d2e13845",
+    "RelationalPerimeter/Agents/Neural/ParameterizedCompiledCheckerFamily.lean": "2743191d39a6f190ac47619086b98f8758f5209333d14533a92e01592f1059df",
+    "RelationalPerimeter/Agents/Neural/CompletePropertyScalingMeasurement.lean": "16c5225bae56aeba62d583183cdfe464270dd3cd128a68648b3de3848c579914",
+    "Tests/Executables/CompiledCompletePropertyNeuralScaling.lean": "36aa8ff01b76df40cb81d7c712dc2d552c9d6b50a20b2672315d61843559419d",
+    "Tests/Mechanisms/NeuralCompletePropertyScalingRegression.lean": "47d6758ea1ca012a9954d8d2b3e78e5e493f36df9658b7b42668a3b0876edd73",
+    "Tests/ExpectedFailure/ScalingUnitCannotReplaceSubstantiveRequirement.lean.fail": "d614006367e60a682c13d1a912801d9bc465693a54ddc34c62afb0f787981d7e",
+    "scripts/expected-failures.tsv": "2d0eeafe04e87d7a058271eb8b43c593c0c77d900d14a807c8cbdff2e91fe3cb",
+    "scripts/stratification.tsv": "8263d3ab7178f917e485afdbc593bba77ec57eea11f97998b9c2d4749c86cf39",
+    "lakefile.toml": "f56ca84f65919a0f11c42755b3de424263ec9c6d16be09768c790a271308543d",
+    "lake-manifest.json": "558a6999b82d0fac6c385da1a5cabeb50a594d6ecc7996f0be33014cfb68afa8",
+    "lean-toolchain": "a0ada3782cd088719516bbfdf37b9e7032230e211bf424b85d952ee650c51091"
+  },
   "historical_evidence_preserved": {
     "experiments/constitutive-neural-alignment/v5/measurement-results.json": "82e71aa5a39a512fc0893c01e3f440cae84089d25d72822c851d290a50f95aa2",
     "experiments/constitutive-neural-alignment/v7/RUN_FAILURE.md": "e31da3f1b0f57b2a509fe8ce93e3f4ed68ab88ee876b85624e483951ba111f47",
@@ -40,11 +54,26 @@
   },
   "parameters": {
     "points": [
-      {"size": 0, "trace_length": 3},
-      {"size": 4, "trace_length": 6},
-      {"size": 8, "trace_length": 9},
-      {"size": 16, "trace_length": 12},
-      {"size": 32, "trace_length": 15}
+      {
+        "size": 0,
+        "trace_length": 3
+      },
+      {
+        "size": 4,
+        "trace_length": 6
+      },
+      {
+        "size": 8,
+        "trace_length": 9
+      },
+      {
+        "size": 16,
+        "trace_length": 12
+      },
+      {
+        "size": 32,
+        "trace_length": 15
+      }
     ],
     "schedule": "local, source, extended, repeated",
     "warmup_repetitions": 1,
@@ -53,7 +82,13 @@
     "determinism": "The generated family, schedule and both compiled checkers are deterministic. No random source is used."
   },
   "uncertainty": {
-    "reported_statistics": ["minimum", "q1", "median", "q3", "maximum"],
+    "reported_statistics": [
+      "minimum",
+      "q1",
+      "median",
+      "q3",
+      "maximum"
+    ],
     "outlier_policy": "No measured run is removed.",
     "failed_run_policy": "Every timeout, memory excess, rejection or malformed output remains in raw_runs and makes the practical-gain verdict false for its point."
   },
@@ -80,7 +115,9 @@
       "full_recheck_nanoseconds",
       "process_wall_nanoseconds"
     ],
-    "memory": ["peak_resident_bytes"],
+    "memory": [
+      "peak_resident_bytes"
+    ],
     "serialized_sizes": [
       "certificate_serialized_bytes",
       "delta_serialized_bytes",
@@ -112,8 +149,15 @@
     "reference_independence": "The complete reference checker reconstructs its target certificate and transition without receiving the incremental verdict, fragments or certificate.",
     "continuation": "Only the accepted incremental successor becomes the next exact source."
   },
-  "build_command": ["lake", "build", "compiled_complete_property_neural_scaling"],
-  "freeze_command": ["python", "scripts/freeze-complete-property-scaling-v11.py"],
+  "build_command": [
+    "lake",
+    "build",
+    "compiled_complete_property_neural_scaling"
+  ],
+  "freeze_command": [
+    "python",
+    "scripts/freeze-complete-property-scaling-v11.py"
+  ],
   "confirmatory_command": [
     "python",
     "scripts/run-compiled-complete-property-scaling-v11.py",
@@ -123,7 +167,10 @@
     "experiments/constitutive-neural-alignment/v11/scaling-results.json"
   ],
   "negative_control": {
-    "arguments": ["invalid", "1"],
+    "arguments": [
+      "invalid",
+      "1"
+    ],
     "required_outcome": "nonzero exit before an accepted observation"
   },
   "interpretation_rules": [
