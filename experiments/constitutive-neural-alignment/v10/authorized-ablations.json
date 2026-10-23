@@ -1,0 +1,13 @@
+{
+  "scope": "Isolated expected-failure fixtures; never production mutations.",
+  "ablations": [
+    {"id":"A1-missing-requirement-role","probe":"P1","fixture":"Tests/ExpectedFailure/LearnedRequirementCannotBeBypassedInReconfiguration.lean.fail","expected":"rejected"},
+    {"id":"A2-foreign-effect","probe":"P2","fixture":"Tests/ExpectedFailure/ForeignLearnedEffectCannotReplaceInstallingEffect.lean.fail","expected":"rejected"},
+    {"id":"A3-wrong-version-fragments","probe":"P2","fixture":"Tests/ExpectedFailure/LearnedExtendedFragmentsCannotReplaceAlignedFragments.lean.fail","expected":"rejected"},
+    {"id":"A4-recover-forgotten-origin","probe":"P4","fixture":"Tests/ExpectedFailure/PostForgettingCannotRecoverHistoricalIdentity.lean.fail","expected":"rejected"},
+    {"id":"A5-incremental-oracle-in-full-recheck","probe":"P5","fixture":"Tests/ExpectedFailure/PostForgettingFullRecheckCannotConsumeIncrementalVerdict.lean.fail","expected":"rejected"},
+    {"id":"A6-substitute-second-production","probe":"P6","fixture":"Tests/ExpectedFailure/JointClosureCannotSubstituteSecondProduction.lean.fail","expected":"rejected"},
+    {"id":"A7-reconstruct-effect","probe":"P6","fixture":"Tests/ExpectedFailure/ReconstructedLearnedEffectCannotReplaceProducedEffect.lean.fail","expected":"rejected"}
+  ],
+  "interpretation_rule": "A rejected mutation localizes a protected dependency. It is not a universal necessity or impossibility theorem."
+}

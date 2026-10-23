@@ -3,7 +3,8 @@ import RelationalPerimeter
 namespace Tests.ExpectedFailure.ForeignLearnedEffectCannotReplaceInstallingEffect
 open ConstitutiveSearch.NeuralAgent
 
-def foreignEffect : LearnedEffectWitness learnedAlignedActionSourceState :=
+def foreignEffect : LearnedEffectWitness learnedAlignedActionSourceState
+    learnedAlignedInstallingAction :=
   learnedInitialEffect
 
 end Tests.ExpectedFailure.ForeignLearnedEffectCannotReplaceInstallingEffect

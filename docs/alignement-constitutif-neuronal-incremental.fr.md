@@ -2,13 +2,14 @@
 
 ## Statut scientifique
 
-Identifiant de claim proposé :
+Identifiant de claim enregistré :
 `CONSTITUTIVE_NEURAL_ALIGNMENT_CLOSED_RUNTIME`.
 
-Ce texte est le passage canonique français préparé avant le commit d’évidence,
-l’enregistrement du claim et les audits indépendants. Il décrit les résultats
-présents dans l’arbre de travail ; il ne déclare pas encore C18 satisfait et ne
-remplace pas la révision exacte qui devra être enregistrée après le gel.
+Le registre contient déjà cet identifiant sur une révision historique. Les
+changements du candidat courant rouvrent toutefois la lecture scientifique,
+la comparaison de la traduction et l’audit indépendant. Ce texte décrit les
+résultats présents dans l’arbre de travail ; il ne déclare pas C18 satisfait et
+ne transfère aucun verdict antérieur vers la future révision d’évidence.
 
 ## Claim canonique
 
@@ -17,8 +18,8 @@ table de sorties. Il est relatif à un méta-contrat constitutif reçu et fixé,
 qui distingue les contrats opérationnels admis, leurs transitions autorisées
 et les obligations à préserver ou à revérifier. Pour un artefact neuronal
 sérialisé accepté par le vérificateur initial et toute suite finie de mises à
-jour acceptée par le vérificateur dépendant, le runtime ne poursuit que la
-chaîne effectivement certifiée : décodage de l’artefact reçu, exécution du
+jour acceptée par le vérificateur dépendant, le runtime formalisé ne poursuit
+que la chaîne effectivement certifiée : décodage de l’artefact reçu, exécution du
 mécanisme neuronal, proposition, action, effet, successeur, transition de
 contrat et obligations de futurs. Chaque étape consomme exactement l’état
 certifié produit par la précédente ; une mise à jour refusée ne fournit aucun
@@ -27,9 +28,10 @@ successeur installable par l’API fermée.
 La certification ne reçoit pas sa conclusion comme donnée. Les obligations du
 contrat sont définies indépendamment du succès du vérificateur, instanciées sur
 l’état et les occurrences produits, puis décidées par des analyses
-exécutables. Le vérificateur complet recalcule tous les fragments ; le
-vérificateur incrémental transporte uniquement les fragments situés hors du
-cône affecté et recalcule les autres. Sur leur domaine local déclaré, leur
+exécutables. Le vérificateur complet de référence reconstruit ses fragments
+sans recevoir le verdict ni les fragments du chemin incrémental ; le
+vérificateur incrémental transporte les fragments licenciés situés hors du
+cône affecté et recalcule les autres. Sur leur domaine fini déclaré, leur
 acceptation est équivalente et leurs succès produisent le même successeur
 certifié.
 
@@ -81,7 +83,7 @@ La chaîne distingue explicitement :
 | Statut | Contenu |
 | --- | --- |
 | Reçu et fixé | Méta-contrat, contrat admis, exigences, contextes, autorisations, artefacts sérialisés et schéma des futurs. |
-| Produit par exécution | Décodage, activations neuronales, transformations, propositions, actions, effets, successeurs, décisions locales et cônes affectés. |
+| Produit par exécution | Décodage, activations neuronales, transformations, propositions, actions, effets, successeurs et décisions locales ; le cône affecté est ensuite calculé depuis le graphe et le delta décodés. |
 | Dérivé | Certificats d’état, correction du checker, équivalence incrémental/complet, préservation des contrats et accessibilité du runtime. |
 | Autorisé | Transitions de contrats et mises à jour admises par le méta-contrat ; l’admission reste distincte de la satisfaction du contrat cible. |
 | Transporté | Fragments hors cône, obligations persistantes et futurs couverts explicitement par le contrat. |
@@ -106,33 +108,35 @@ La chaîne distingue explicitement :
 | Séparation pour toute réalisation exacte et préservation de toute suite finie couverte | `learnedEveryExactRealizationSeparatesAlignedFromBypass`, `learnedExecutedFutureForgetting_preserves_every_finite_future` dans [LearnedFutureConstitutiveClosure.lean](../RelationalPerimeter/Agents/Neural/LearnedFutureConstitutiveClosure.lean) |
 | Certificat conjoint sur la même lignée apprise | `learnedConstitutiveAlignmentClosure` dans [LearnedFutureConstitutiveClosure.lean](../RelationalPerimeter/Agents/Neural/LearnedFutureConstitutiveClosure.lean) |
 
-Ces déclarations restent soumises aux gates complètes du dépôt et au futur
-commit d’évidence. La liste indique les points d’entrée du claim ; elle ne
-remplace pas l’audit de leurs dépendances transitives.
+Ces déclarations restent soumises aux gates complètes du dépôt, au raccord à
+une révision d’évidence existante et aux audits distincts de validité et de
+portée. La liste indique les points d’entrée du claim ; elle ne remplace ni
+l’audit de leurs dépendances transitives ni une généralisation au-delà des
+interfaces et quantifications effectivement énoncées.
 
 ## Dossier comparatif
 
 ### Comparaison de capacité
 
 Le protocole
-[`constitutive-neural-capability-comparison-v6`](../experiments/constitutive-neural-alignment/v6/comparison-protocol.json)
-fige un même artefact appris, une même paire de mises à jour, six adaptateurs
-typés et huit capacités. Les six classes sont : vérification extensionnelle du
-comportement courant, analyse causale interventionnelle d’un réseau fixe,
-filtrage d’action avant exécution, système auto-adaptatif garanti, vérification
-neuronale incrémentale avec réemploi de preuve, et propagation de certificats
-sur une chaîne de déploiement.
+[`constitutive-neural-complete-capability-comparison-v10`](../experiments/constitutive-neural-alignment/v10/comparison-protocol.json)
+fige un même artefact appris et une même paire de mises à jour pour neuf
+calculs locaux : six adaptateurs typés, la méthode relationnelle, une
+combinaison explicite de références et le recheck complet indépendant. Il
+fournit à chaque méthode les interventions, futurs, contrats et versions que
+son interface déclarée sait consommer. La combinaison de référence calcule
+ses observations sans recevoir le verdict final ni le certificat cible comme
+oracle.
 
-Le statut actuel est strict : v6 est un protocole historique dont les
-empreintes ne correspondent plus aux sources du candidat courant. Aucun run
-confirmatoire v6 n’a été exécuté et aucun fichier de résultat comparatif
-n’existe. Une nouvelle version devra figer les adaptateurs et leurs références
-avant toute exécution confirmatoire. Il est donc interdit d’en déduire une
-supériorité générale, une incapacité d’une baseline ou une nouveauté
-scientifique. Le seul contraste formel déjà fermé à ce niveau est celui des
-vérificateurs dont le verdict factorise exclusivement par la table courante
-finie : ils ne distinguent pas les deux candidats, alors que le checker
-constitutif les distingue par la dépendance exécutée et le contrat futur.
+Le statut actuel reste strict : v10 est figé avant exécution, mais aucun run
+confirmatoire n’a encore été produit et ses sorties réservées sont absentes.
+Le dossier préenregistre en outre qu’aucun avantage discriminant propre à P1
+n’est actuellement certifié : la combinaison de référence et le recheck
+complet distinguent eux aussi les deux candidats. Le résultat formel fermé est
+la conjonction locale des dépendances exécutées, transitions contractuelles,
+réutilisation licenciée, divergence future et oubli sur une même lignée typée.
+Il est interdit d’en déduire une supériorité générale, une incapacité d’une
+baseline ou une nouveauté scientifique avant le run et les audits prévus.
 
 ### Passage à l’échelle du checker compilé
 
@@ -151,11 +155,15 @@ revendiquées. Ses empreintes sont conservées sans être réécrites ; elles ne
 valident pas le candidat courant. Le snapshot complet de sources v8 n’avait pas
 été commité et n’est plus reconstructible depuis l’historique Git ; la gate ne
 peut donc revalider que le protocole, les résultats bruts, leur agrégation et
-leurs empreintes archivées, pas réélaborer exactement ce snapshot. La campagne
-exploratoire rejouée sur le candidat courant confirme la réutilisation
-structurelle mais reste non figée, sans mesure mémoire exploitable et avec des
-temps incrémentaux défavorables. P8 et S6 restent donc ouverts pour une nouvelle
-campagne préenregistrée sur un commit de sources récupérable.
+leurs empreintes archivées, pas réélaborer exactement ce snapshot. Le protocole
+de la campagne v11,
+[`compiled-complete-property-scaling-v11`](../experiments/constitutive-neural-alignment/v11/scaling-protocol.json),
+préenregistre désormais une propriété constitutive complète, une famille dont
+les graphes, obligations et traces croissent, les coûts de toutes les phases,
+la mémoire, les tailles sérialisées et un recheck indépendant. Elle reste un
+brouillon en attente d’un commit source stable : aucune empreinte de gel ni
+aucun résultat confirmatoire n’existe encore. P8 et S6 demeurent donc ouverts ;
+les essais exploratoires ne sont pas promus en évidence scientifique.
 
 ## Exclusions explicites
 

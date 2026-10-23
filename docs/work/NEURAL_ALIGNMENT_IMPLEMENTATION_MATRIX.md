@@ -1231,3 +1231,41 @@ temps pour l'implémentation actuelle. L'analyse complète est conservée dans
 La v7 précédente demeure enregistrée séparément : la taille 160 a dépassé le
 budget de 120 secondes pendant l'échauffement, de sorte qu'aucune observation
 partielle v7 n'a été promue en résultat confirmatoire.
+
+## État comparatif complet après L9
+
+Le protocole v10 remplace, pour les productions futures, l'interface
+comparative incomplète de v9. Il fige neuf calculs sur un même matériel : les
+six adaptateurs locaux, la méthode relationnelle, une combinaison explicite de
+références et le recheck complet indépendant. La combinaison de référence ne
+reçoit ni verdict constitutif final ni certificat cible. Le dossier reconnaît
+positivement ses succès : elle distingue elle aussi les deux candidats, de
+même que le recheck complet. Il n'existe donc pas, à ce stade, de gain
+discriminant propre certifié pour P1.
+
+V10 est figé avant son run confirmatoire, mais ce run n'a pas encore été
+exécuté. Ses sorties réservées sont absentes et aucun statut `observed` ne doit
+être inventé. Cette absence relève du gel et de la livraison scientifique de
+L12, pas d'une preuve Lean manquante dans la chaîne C/G/RC.
+
+## Propriété complète de passage à l'échelle après L10
+
+`CompletePropertyScalingMeasurement.lean` et l'exécutable
+`compiled_complete_property_neural_scaling` mesurent désormais la même
+propriété constitutive complète dans les chemins incrémental et complet. La
+famille fait croître les nœuds neuronaux réellement consommés par la sortie,
+le graphe causal, les sept familles d'obligations et la longueur de trace. Les
+cas locaux transportent des fragments non vides et les cas étendus en
+recalculent ; une obligation `Unit` ne peut remplacer l'exigence substantielle.
+
+Le protocole v11 enregistre les phases, le temps, le pic résident et les
+tailles sérialisées, mais reste volontairement
+`draft-awaiting-stable-source-commit`. Il ne possède ni empreinte de commit
+source ni résultat confirmatoire. Les essais de développement restent des
+smoke tests et ne ferment ni P8 ni S6.
+
+## Prévalidation L11
+
+La prévalidation exhaustive du candidat, ses raccords C1--C17, G1--G10 et
+RC1--RC6, les contrôles exécutés et les limites réservées à L12 sont consignés
+dans [L11_PREVALIDATION_CANDIDAT_ALIGNEMENT_CONSTITUTIF.fr.md](L11_PREVALIDATION_CANDIDAT_ALIGNEMENT_CONSTITUTIF.fr.md).

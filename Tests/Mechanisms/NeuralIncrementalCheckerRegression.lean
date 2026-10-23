@@ -55,7 +55,7 @@ example {update : IncrementalNeuralUpdate}
 example {update : IncrementalNeuralUpdate}
     (analysis : PublicIncrementalEngineAnalysis update) :
     analysis.targetAnalysis.fragments = analysis.assembly.fragments := by
-  rfl
+  exact analysis.targetAnalysis_fragments_exact
 
 example :
     GenericIncrementalUpdateAccepted publicIncrementalCheckerEngine

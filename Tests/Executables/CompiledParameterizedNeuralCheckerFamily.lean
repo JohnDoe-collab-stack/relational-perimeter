@@ -130,9 +130,6 @@ def runTrace
             | .error problem =>
                 throw (IO.userError (errorText problem))
             | .ok full =>
-                have _successorExact :
-                    incremental.checked.next = full.checked.next := by
-                  rfl
                 let fullChecksum :=
                   structuralObservationSnapshot
                     full.checked.next.certificate |>.length

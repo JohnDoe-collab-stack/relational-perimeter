@@ -207,7 +207,45 @@ LEAN_EXPORT lean_object* l_bad(){ return 0; }
     # may be added beside it by a wrapper or a non-inlined helper.
     for entry, boundary in ((session, request), (session_produce, produced), (session_all, executor)):
         applications(functions, compiled_parameters, entry, live, 0, boundaries=(boundary,))
-    print("AGENT_CODEGEN_OK: actual live step, one request head, no rich archive or extensive enumeration")
+    # L3: the learned transition producer computes exactly one action in each
+    # material branch and feeds that very object to the effect constructor.
+    # The generated C exposes the shared local once; a second action call or an
+    # action call reachable from effect production fails this gate.
+    learned_producer = select(functions, "NeuralAgent_produceLearnedTransitionData___redArg")
+    learned_aligned_action = select(functions, "NeuralAgent_learnedAlignedInstallingActionFor")
+    learned_extended_action = select(functions, "NeuralAgent_learnedExtendedInstallingActionFor")
+    learned_effect = select(functions, "NeuralAgent_produceLearnedEffect___redArg")
+    calls(functions, learned_producer, "NeuralAgent_learnedAlignedInstallingActionFor", 1)
+    calls(functions, learned_producer, "NeuralAgent_learnedExtendedInstallingActionFor", 1)
+    calls(functions, learned_producer, "NeuralAgent_produceLearnedEffect___redArg", 2)
+    absent(functions, learned_effect, [], exact=(learned_aligned_action, learned_extended_action))
+    print("AGENT_LEARNED_SHARING_OK: one action occurrence per material branch; effect consumes it without reconstruction")
+    # L6: the installed incremental successor must be assembled through the
+    # unique fragment constructor whose structural field is the calculated
+    # transport/recompute assembly.  Neither that constructor nor the scaling
+    # incremental analyzer may call a complete checker as an oracle.
+    incremental_builder = select(functions,
+        "NeuralAgent_buildIncrementalCheckedUpdate___redArg")
+    fragment_assembly = select(functions,
+        "NeuralAgent_IncrementalTargetAnalysis_fragments___redArg")
+    calls(functions, incremental_builder,
+        "NeuralAgent_IncrementalTargetAnalysis_fragments___redArg", 1)
+    absent(functions, fragment_assembly,
+        ["checkInitial", "checkFullUpdate", "FullRecheck", "certifyFragments"])
+    structural_assembly = select(functions,
+        "NeuralAgent_calculateIncrementalStructuralAssembly")
+    direct_recomputation = select(functions,
+        "NeuralAgent_recomputeAffectedStructuralObservations")
+    absent(functions, structural_assembly,
+        ["stableStructuralObservationSnapshot", "PreCertificateConstitutiveGraph_targetObservations"])
+    absent(functions, direct_recomputation,
+        ["stableStructuralObservationSnapshot"])
+    scaling_incremental = select(functions,
+        "NeuralAgent_analyzeScalingIncrementalUpdate")
+    absent(functions, scaling_incremental,
+        ["checkInitial", "checkFullUpdate", "FullRecheck", "certifyFragments"])
+    print("AGENT_INCREMENTAL_ASSEMBLY_OK: installed certificate consumes direct transport/recomputation; no regenerated target snapshot or complete-check oracle")
+    print("AGENT_CODEGEN_OK: actual live step, one request head, learned sharing and incremental assembly, no rich archive or extensive enumeration")
 
 
 if __name__ == "__main__":

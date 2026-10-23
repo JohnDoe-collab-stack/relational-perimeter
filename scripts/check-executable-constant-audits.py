@@ -13,7 +13,9 @@ from pathlib import Path
 ROOTS = (
     "Tests.Executables.CompiledNeuralCheckerMeasure",
     "Tests.Executables.CompiledNeuralComparisonAdapters",
+    "Tests.Executables.CompiledCompleteNeuralComparison",
     "Tests.Executables.CompiledParameterizedNeuralCheckerFamily",
+    "Tests.Executables.CompiledCompletePropertyNeuralScaling",
 )
 BLOCK_RE = re.compile(
     r"/- REPOSITORY_CONSTANT_AUDIT_BEGIN -/\s*(.*?)\s*"

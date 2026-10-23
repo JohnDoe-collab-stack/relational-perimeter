@@ -1,0 +1,17 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.LearnedDecodedSuccessiveReceiptCannotMoveToInitialSource
+open ConstitutiveSearch.NeuralAgent
+
+example
+    (decoded : DecodedLearnedSuccessiveUpdate learnedExtendedSerializedUpdate)
+    (decodedExact :
+      decodeLearnedSuccessiveUpdate learnedExtendedSerializedUpdate = .ok decoded) :
+    DecodedLearnedRuntimeUpdateAtCurrent learnedInitialCheckedAgent
+      (.serialized learnedAlignedSerializedUpdate) :=
+  .successive decoded decodedExact
+
+end Tests.ExpectedFailure.LearnedDecodedSuccessiveReceiptCannotMoveToInitialSource
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.DecodedLearnedRuntimeUpdateAtCurrent
+/- AXIOM_AUDIT_END -/

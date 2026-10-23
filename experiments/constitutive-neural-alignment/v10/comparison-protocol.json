@@ -1,0 +1,71 @@
+{
+  "protocol_id": "constitutive-neural-complete-capability-comparison-v10",
+  "status": "frozen-before-confirmatory-run",
+  "predecessor_preserved": "constitutive-neural-joint-capability-comparison-v9",
+  "reason_for_new_version": "The v9 executable emitted only six class adapters. V10 adds executable relational, reference-combination and independent-full-recheck rows without altering v9.",
+  "confirmatory_results_present": false,
+  "confirmatory_run_permitted": false,
+  "run_gate": "Use a clean stable repository commit, validate every frozen hash, then execute the one reserved command.",
+  "shared_material": {
+    "typed_material": "ConstitutiveSearch.NeuralAgent.frozenCompleteComparisonMaterial",
+    "source_artifact": "ConstitutiveSearch.NeuralAgent.independentLearnedInitialNetwork",
+    "aligned_candidate": "ConstitutiveSearch.NeuralAgent.learnedAlignedCandidateAtInitial",
+    "bypass_candidate": "ConstitutiveSearch.NeuralAgent.learnedBypassCandidateAtInitial",
+    "aligned_serialized_update": "ConstitutiveSearch.NeuralAgent.learnedAlignedSerializedUpdate",
+    "bypass_serialized_update": "ConstitutiveSearch.NeuralAgent.learnedBypassSerializedUpdate",
+    "current_domain": "ConstitutiveSearch.NeuralAgent.learnedRuntimeDeclaredCurrentDomain",
+    "current_domain_cardinality": 4,
+    "future_requests": "ConstitutiveSearch.NeuralAgent.learnedOperationalCounterfactualRequests",
+    "future_cardinality": 1,
+    "runtime_api": "ConstitutiveSearch.NeuralAgent.submitUpdate"
+  },
+  "methods": [
+    "extensional-current-behavior-verification",
+    "fixed-network-interventional-causal-analysis",
+    "pre-execution-action-shielding",
+    "guaranteed-self-adaptive-system",
+    "incremental-neural-verification-with-proof-reuse",
+    "deployment-chain-certificate-propagation",
+    "relational-execution-comparison",
+    "explicit-reference-combination",
+    "independent-complete-recheck"
+  ],
+  "fairness_rules": [
+    "All nine methods consume one exact frozen material package.",
+    "Methods receive the artifact, interventions, futures, contracts, versions and serialized updates that their declared interface can consume.",
+    "The reference combination computes current-table, causal dependency, mutation, future-contract and pre-effect observations directly.",
+    "The reference combination does not call the final constitutive checker and receives no target certificate as an oracle.",
+    "The complete recheck reconstructs its successor independently of incremental fragments and compares the produced successor afterwards.",
+    "Arithmetic and the serialized artifact interpreter are shared exactly.",
+    "The six research-class labels denote repository-local typed adapters; equivalence with every external implementation in a class remains not-certified.",
+    "A missing adapter or an out-of-interface property is never interpreted as an impossibility theorem.",
+    "Current-table equality is scoped only to verifiers that factor through that table."
+  ],
+  "covered_probes": ["P1", "P2", "P3", "P4", "P5", "P6", "P7"],
+  "covered_criteria": ["S1", "S2", "S3", "S4", "S5", "S7", "S8"],
+  "excluded_from_this_run": {
+    "P8": "Scaling has its own separately frozen protocol.",
+    "S6": "Cost and reuse have their own separately frozen protocol."
+  },
+  "status_vocabulary": [
+    "certified",
+    "observed",
+    "not-certified",
+    "out-of-interface",
+    "adapter-unavailable"
+  ],
+  "confirmatory_command": ["python3", "scripts/run-neural-complete-comparison-v10.py"],
+  "executed_command": ["lake", "exe", "compiled_complete_neural_comparison"],
+  "reserved_outputs": {
+    "raw": "experiments/constitutive-neural-alignment/v10/comparison-results.ndjson",
+    "record": "experiments/constitutive-neural-alignment/v10/result-record.json"
+  },
+  "output_policy": {
+    "rows": 9,
+    "retain_all_rows_in_order": true,
+    "overwrite": false,
+    "raw_output_hashed_after_production": true,
+    "selection_after_observation": false
+  },
+  "versioning_rule": "Any change to material, methods, translations, probes, criteria, ablations, decision rules, commands or result schema requires a later protocol version."
+}

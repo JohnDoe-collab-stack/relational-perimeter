@@ -1,0 +1,13 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.LearnedSourceRoleCannotBeOmittedFromReconfiguration
+open ConstitutiveSearch.NeuralAgent
+
+def omittedSourceRole :=
+  { learnedAlignedRequiredMechanismTransport with
+    sourceRole := learnedAlignedRequiredMechanismTransport.requirementRole }
+
+end Tests.ExpectedFailure.LearnedSourceRoleCannotBeOmittedFromReconfiguration
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedRequiredMechanismTransport
+/- AXIOM_AUDIT_END -/

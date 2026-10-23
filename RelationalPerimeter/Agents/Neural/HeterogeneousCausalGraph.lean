@@ -154,6 +154,78 @@ abbrev HeterogeneousConstitutiveCausalGraph
     (certificate : StateConstitutiveCertificate contract artifact state) :=
   ConstitutiveDependency certificate
 
+/-- The semantic spine of the heterogeneous graph for one exact installed
+certificate.  Every edge is indexed by that certificate, hence by its exact
+network, decoder, executed causal role, action/effect/successor witnesses,
+memory projection, and operational contract observations. -/
+structure InstalledHeterogeneousCausalChain
+    {contract : ConstitutiveContract}
+    {artifact : DecodedNeuralArtifact contract}
+    {state : ReconfiguredExecutionState contract.family}
+    (certificate : StateConstitutiveCertificate contract artifact state) :
+    Type 4 where
+  causalPropagation : HeterogeneousConstitutiveCausalGraph certificate
+    (.mechanism certificate.causalCoverage.node)
+    (.mechanism (.neuron
+      (artifact.system.outputs.sources.get certificate.causalCoverage.role.output)))
+  outputRead : HeterogeneousConstitutiveCausalGraph certificate
+    (.mechanism (.neuron
+      (artifact.system.outputs.sources.get certificate.causalCoverage.role.output)))
+    (.outputPort
+      (certificate.basis.naming.outputPort certificate.causalCoverage.role.output))
+  outputDecoded : HeterogeneousConstitutiveCausalGraph certificate
+    (.outputPort
+      (certificate.basis.naming.outputPort certificate.causalCoverage.role.output))
+    .decoder
+  decodedProposal : HeterogeneousConstitutiveCausalGraph certificate
+    .decoder .proposal
+  proposalAction : HeterogeneousConstitutiveCausalGraph certificate
+    .proposal .action
+  actionEffect : HeterogeneousConstitutiveCausalGraph certificate
+    .action .effect
+  effectSuccessor : HeterogeneousConstitutiveCausalGraph certificate
+    .effect .successor
+  successorMemory : HeterogeneousConstitutiveCausalGraph certificate
+    .successor .memoryProjection
+  requirementObservation : HeterogeneousConstitutiveCausalGraph certificate
+    (.mechanism certificate.causalCoverage.node)
+    (.contractObservation .requirementEncoding)
+  causalObservation : HeterogeneousConstitutiveCausalGraph certificate
+    (.mechanism certificate.causalCoverage.node)
+    (.contractObservation .causalCondition)
+  actionObservation : HeterogeneousConstitutiveCausalGraph certificate
+    .action (.contractObservation .proposalActionPreservation)
+  authorizationObservation : HeterogeneousConstitutiveCausalGraph certificate
+    .action (.contractObservation .authorizationAdmission)
+  effectObservation : HeterogeneousConstitutiveCausalGraph certificate
+    .effect (.contractObservation .effectSatisfaction)
+  futureObservation : HeterogeneousConstitutiveCausalGraph certificate
+    .memoryProjection (.contractObservation .coveredFuture)
+  historyObservation : HeterogeneousConstitutiveCausalGraph certificate
+    .successor (.contractObservation .historicalPolicy)
+
+def installedHeterogeneousCausalChain
+    {contract : ConstitutiveContract}
+    {artifact : DecodedNeuralArtifact contract}
+    {state : ReconfiguredExecutionState contract.family}
+    (certificate : StateConstitutiveCertificate contract artifact state) :
+    InstalledHeterogeneousCausalChain certificate :=
+  { causalPropagation := .executedCausalPropagation
+    outputRead := .outputRead certificate.causalCoverage.role.output
+    outputDecoded := .outputDecoded certificate.causalCoverage.role.output
+    decodedProposal := .decodedProposal
+    proposalAction := .proposalInterpreted
+    actionEffect := .actionEffectuated
+    effectSuccessor := .effectProducesSuccessor
+    successorMemory := .successorProjectsMemory
+    requirementObservation := .requirementObserved
+    causalObservation := .causalConditionObserved
+    actionObservation := .proposalActionObserved
+    authorizationObservation := .authorizationObserved
+    effectObservation := .effectObserved
+    futureObservation := .futureObserved
+    historyObservation := .historyObserved }
+
 /-- A successful heterogeneous-node transport contains both the new located
 node and the stable-key equation that licenses the transport. -/
 structure TransportedConstitutiveNode
@@ -362,6 +434,8 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.ConstitutiveNodeId.key
 #print axioms ConstitutiveSearch.NeuralAgent.ConstitutiveDependency
 #print axioms ConstitutiveSearch.NeuralAgent.HeterogeneousConstitutiveCausalGraph
+#print axioms ConstitutiveSearch.NeuralAgent.InstalledHeterogeneousCausalChain
+#print axioms ConstitutiveSearch.NeuralAgent.installedHeterogeneousCausalChain
 #print axioms ConstitutiveSearch.NeuralAgent.TransportedConstitutiveNode
 #print axioms ConstitutiveSearch.NeuralAgent.ValidatedStableNodeCorrespondence.transportConstitutiveNode
 #print axioms ConstitutiveSearch.NeuralAgent.ValidatedStableNodeCorrespondence.transportConstitutiveNode_key_exact

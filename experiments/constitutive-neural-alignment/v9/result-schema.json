@@ -1,0 +1,47 @@
+{
+  "$id": "constitutive-neural-joint-capability-result-v9",
+  "type": "object",
+  "required": [
+    "protocol_id",
+    "repository_commit",
+    "environment",
+    "command",
+    "raw_output_path",
+    "rows",
+    "raw_output_sha256"
+  ],
+  "properties": {
+    "protocol_id": {"const": "constitutive-neural-joint-capability-comparison-v9"},
+    "repository_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "environment": {"type": "object"},
+    "command": {
+      "const": ["lake", "exe", "compiled_neural_comparison_adapters"]
+    },
+    "raw_output_path": {
+      "const": "experiments/constitutive-neural-alignment/v9/comparison-results.ndjson"
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["adapter_id"],
+        "properties": {
+          "adapter_id": {
+            "enum": [
+              "extensional-current-behavior-verification",
+              "fixed-network-interventional-causal-analysis",
+              "pre-execution-action-shielding",
+              "guaranteed-self-adaptive-system",
+              "incremental-neural-verification-with-proof-reuse",
+              "deployment-chain-certificate-propagation"
+            ]
+          }
+        }
+      }
+    },
+    "raw_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

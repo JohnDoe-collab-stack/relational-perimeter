@@ -1,0 +1,8 @@
+import RelationalPerimeter.Agents.Neural.AutonomousCheckerClosure
+
+open ConstitutiveSearch.NeuralAgent
+
+def impossible : LearnedPostForgettingLocalConditionData
+    learnedPostForgettingRefusedContinuationRequest :=
+  .continueCurrent learnedRefusedFutureRequest
+    learnedAdmittedFutureRequestWitness

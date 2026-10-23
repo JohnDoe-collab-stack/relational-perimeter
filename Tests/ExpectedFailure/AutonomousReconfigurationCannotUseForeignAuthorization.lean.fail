@@ -1,0 +1,14 @@
+import RelationalPerimeter.Agents.Neural.AutonomousContractTransitions
+
+open ConstitutiveSearch.NeuralAgent
+
+def forbiddenForeignAuthorization : AutonomousReconfigurationConditions
+    publicReconfigurationBuilder publicRequirementSystem
+      publicSubstantiveSource publicSubstantiveNext where
+  sourceRun := publicRequirementSystem.run publicSubstantiveSource
+  sourceRunExact := rfl
+  authorization := publicReconfigurationAuthorization publicSubstantiveSource
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.AutonomousReconfigurationConditions
+/- AXIOM_AUDIT_END -/

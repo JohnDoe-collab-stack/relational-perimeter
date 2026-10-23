@@ -1,0 +1,79 @@
+{
+  "scope_rule": "A certified matrix cell certifies the repository-local typed adapter on the frozen material. It does not certify equivalence with every external method in the named research class.",
+  "shared_arithmetic": "Lean Nat and Activation values interpreted by executeSerializedArtifact",
+  "shared_version_boundary": "The exact frozen source artifact, aligned and bypass candidates, serialized updates and version correspondences named by frozenCompleteComparisonMaterial.",
+  "methods": [
+    {
+      "method_id": "extensional-current-behavior-verification",
+      "domain": "learnedRuntimeDeclaredCurrentDomain",
+      "property": "equality of current output tables only",
+      "trust_boundary": "the typed current-table adapter and executeSerializedArtifact",
+      "external_class_equivalence": "not-certified",
+      "translation_count": 2
+    },
+    {
+      "method_id": "fixed-network-interventional-causal-analysis",
+      "domain": "the exact aligned and bypass artifacts plus the prescribed authorization intervention",
+      "property": "presence or absence of the executed authorization dependency",
+      "trust_boundary": "the typed causal-role witness produced by the local neural execution",
+      "external_class_equivalence": "not-certified",
+      "translation_count": 2
+    },
+    {
+      "method_id": "pre-execution-action-shielding",
+      "domain": "the exact learned candidates under the common operational contract",
+      "property": "allow or refuse before an effect is installed",
+      "trust_boundary": "checkIndependentLearnedUpdate and the closed submitUpdate boundary",
+      "external_class_equivalence": "not-certified",
+      "translation_count": 2
+    },
+    {
+      "method_id": "guaranteed-self-adaptive-system",
+      "domain": "the exact runtime, serialized updates and target contracts",
+      "property": "installed checked transition and contract preservation",
+      "trust_boundary": "the repository-local CertifiedRuntime and submitUpdate semantics",
+      "external_class_equivalence": "not-certified",
+      "translation_count": 3
+    },
+    {
+      "method_id": "incremental-neural-verification-with-proof-reuse",
+      "domain": "the exact serialized updates and their source-to-target version correspondence",
+      "property": "incremental acceptance, rejection and licensed fragment reuse",
+      "trust_boundary": "checkGenericIncrementalUpdate and the typed fragment assembly",
+      "external_class_equivalence": "not-certified",
+      "translation_count": 4
+    },
+    {
+      "method_id": "deployment-chain-certificate-propagation",
+      "domain": "the exact installed runtime history generated from the frozen update",
+      "property": "checked and contract-preserving propagation along that history",
+      "trust_boundary": "the repository-local one-transition runtime witness",
+      "external_class_equivalence": "not-certified",
+      "translation_count": 3
+    },
+    {
+      "method_id": "relational-execution-comparison",
+      "domain": "the common current domain and the same nonempty future request list",
+      "property": "current equality together with future divergence and contract satisfaction",
+      "trust_boundary": "runRelationalExecutionComparison on the frozen material",
+      "external_class_equivalence": "local-exact",
+      "translation_count": 4
+    },
+    {
+      "method_id": "explicit-reference-combination",
+      "domain": "current outputs, intervention dependency, update admission, future contract and pre-effect runtime submission",
+      "property": "the explicit conjunction of the component decisions without a final-certificate oracle",
+      "trust_boundary": "the six direct component computations in runReferenceCombination",
+      "external_class_equivalence": "local-exact",
+      "translation_count": 6
+    },
+    {
+      "method_id": "independent-complete-recheck",
+      "domain": "the exact serialized updates and common source version",
+      "property": "independent full acceptance or rejection and successor agreement checked afterwards",
+      "trust_boundary": "checkFullUpdate without an incremental verdict input",
+      "external_class_equivalence": "local-exact",
+      "translation_count": 4
+    }
+  ]
+}

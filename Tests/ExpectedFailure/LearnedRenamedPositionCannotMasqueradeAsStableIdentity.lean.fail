@@ -1,0 +1,15 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.LearnedRenamedPositionCannotMasqueradeAsStableIdentity
+open ConstitutiveSearch.NeuralAgent
+
+example :
+    (learnedPreCertificateGraphFor
+      learnedRenamedStableNaming).correspondence.inputMap ⟨0, by decide⟩ =
+        some ⟨0, by decide⟩ := by
+  rfl
+
+end Tests.ExpectedFailure.LearnedRenamedPositionCannotMasqueradeAsStableIdentity
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.calculateStableNodeCorrespondence
+/- AXIOM_AUDIT_END -/

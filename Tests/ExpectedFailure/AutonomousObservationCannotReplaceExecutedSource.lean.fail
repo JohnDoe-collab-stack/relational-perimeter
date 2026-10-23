@@ -1,0 +1,14 @@
+import RelationalPerimeter.Agents.Neural.AutonomousContractTransitions
+import RelationalPerimeter.Agents.Neural.ReferenceChecker
+
+open ConstitutiveSearch.NeuralAgent
+
+def forbiddenObservationSource : ContractFutureObservationAt
+    PublicInitialOperationalContract publicInitialCheckedAgent.state where
+  source := PublicReconfiguredOperationalContract.futureSourceOfState
+    publicReferenceNextCheckedAgent.state
+  sourceExact := rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ContractFutureObservationAt
+/- AXIOM_AUDIT_END -/

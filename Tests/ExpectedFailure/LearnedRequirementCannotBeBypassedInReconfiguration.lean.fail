@@ -1,0 +1,13 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.LearnedRequirementCannotBeBypassedInReconfiguration
+open ConstitutiveSearch.NeuralAgent
+
+def bypassedRequirement :=
+  { learnedAlignedRequiredMechanismTransport with
+    requirementRole := learnedAlignedRequiredMechanismTransport.sourceRole }
+
+end Tests.ExpectedFailure.LearnedRequirementCannotBeBypassedInReconfiguration
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedRequiredMechanismTransport
+/- AXIOM_AUDIT_END -/

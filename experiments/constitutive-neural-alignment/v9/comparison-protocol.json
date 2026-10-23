@@ -1,0 +1,113 @@
+{
+  "protocol_id": "constitutive-neural-joint-capability-comparison-v9",
+  "status": "frozen-before-confirmatory-run",
+  "predecessors_preserved": [
+    "constitutive-neural-capability-comparison-v6",
+    "compiled-parameterized-neural-scaling-v8"
+  ],
+  "reason_for_new_version": "The learned local checker now performs source-licensed transport of three structural fragments and recomputes ten. The joint learned closure now consumes the two executed productions, installed successors, licensed reuse, future divergence and executed forgetting on one lineage.",
+  "confirmatory_results_present": false,
+  "confirmatory_run_permitted": false,
+  "run_gate": "Record a stable repository commit and pass the v9 freeze checker before executing the single confirmatory command.",
+  "shared_material": {
+    "learning_protocol": "constitutive-neural-learning-transformation-v9",
+    "typed_material": "ConstitutiveSearch.NeuralAgent.frozenNeuralComparisonMaterial",
+    "joint_certificate": "ConstitutiveSearch.NeuralAgent.learnedConstitutiveAlignmentClosure",
+    "initial_agent": "ConstitutiveSearch.NeuralAgent.learnedInitialCheckedAgent",
+    "initial_runtime": "ConstitutiveSearch.NeuralAgent.learnedInitialCertifiedRuntime",
+    "aligned_update": "ConstitutiveSearch.NeuralAgent.alignedUpdate",
+    "bypass_update": "ConstitutiveSearch.NeuralAgent.bypassUpdate",
+    "admitted_intent": "ConstitutiveSearch.NeuralAgent.AdmittedIndependentLearnedIntent.preserveAuthorizedBehavior",
+    "current_domain": "ConstitutiveSearch.NeuralAgent.learnedRuntimeDeclaredCurrentDomain",
+    "current_domain_cardinality": 4,
+    "discriminating_future": "ConstitutiveSearch.NeuralAgent.learnedOperationalCounterfactualRequests",
+    "future_cardinality": 1,
+    "closed_runtime_api": "ConstitutiveSearch.NeuralAgent.submitUpdate",
+    "incremental_checker": "ConstitutiveSearch.NeuralAgent.learnedIncrementalCheckerEngine",
+    "independent_full_recheck": "ConstitutiveSearch.NeuralAgent.learnedFullRecheckEngine"
+  },
+  "properties_common_to_all_adapters": [
+    "same serialized source artifact",
+    "same aligned and bypass candidate values",
+    "same admitted intention",
+    "same complete canonical current domain",
+    "same nonempty discriminating continuation",
+    "same target operational contract",
+    "same arithmetic and artifact interpreter"
+  ],
+  "translation_rules": [
+    "Each adapter declares exactly which shared fields it consumes.",
+    "No adapter receives a target certificate or the constitutive final verdict as an oracle.",
+    "Out-of-interface and not-certified are reported as such, never as impossibility.",
+    "The relational comparator receives the same current and future executions, not only their current output table.",
+    "The reference combination runs causal, mutation, future and pre-effect checks explicitly and accounts for their translation work."
+  ],
+  "reference_classes": [
+    "extensional-current-behavior-verification",
+    "fixed-network-interventional-causal-analysis",
+    "pre-execution-action-shielding",
+    "guaranteed-self-adaptive-system",
+    "incremental-neural-verification-with-proof-reuse",
+    "deployment-chain-certificate-propagation"
+  ],
+  "literature_references": [
+    {"id": "R1", "topic": "certified self-modifying code", "comparison": "typed mutation and local proof transport"},
+    {"id": "R2", "topic": "interchange intervention training", "comparison": "executed neural causal roles and interventions"},
+    {"id": "R3", "topic": "dynamic assurance for self-adaptive systems", "comparison": "reconfiguration and installed assurance"},
+    {"id": "R4", "topic": "incremental neural verification", "comparison": "source-licensed fragment reuse and full recheck"},
+    {"id": "R5", "topic": "safe reinforcement learning via shielding", "comparison": "pre-effect rejection and future contract"},
+    {"id": "R6", "topic": "authorization of self-modifying agents", "comparison": "fixed authorization boundaries and effect production"},
+    {"id": "R7", "topic": "authorization for self-modifying populations", "comparison": "succession, identity and authorization"},
+    {"id": "R8", "topic": "hyperproperties", "comparison": "relational current and future execution comparison"}
+  ],
+  "comparison_methods": {
+    "relational_method": "Compare the aligned and bypass executions on the shared current domain and the same nonempty future contract while retaining their produced occurrences.",
+    "reference_combination": "Run current-table, intervention, causal dependency, mutation admission, future-contract and pre-effect checks without calling the constitutive checker verdict.",
+    "full_recheck": "Recompute the complete target certificate independently of incremental fragments and compare acceptance and successor with the incremental checker."
+  },
+  "discriminating_probes": [
+    "P1-latent-bypass",
+    "P2-decoder-or-action-change",
+    "P3-contract-change",
+    "P4-forgetting-and-continuation",
+    "P5-post-forgetting-contract",
+    "P6-succession-and-incoherent-fragments",
+    "P7-integration-and-ablations",
+    "P8-scale-and-utility"
+  ],
+  "success_criteria": [
+    "S1-corpus-fidelity",
+    "S2-semantic-comparability",
+    "S3-substantive-comparators",
+    "S4-new-junction-identified",
+    "S5-useful-nonvacuous-separation",
+    "S6-reuse-and-cost",
+    "S7-attribution-and-reproducibility",
+    "S8-controlled-scientific-conclusion"
+  ],
+  "joint_closure": {
+    "requirements": ["RC1", "RC2", "RC3", "RC4", "RC5", "RC6"],
+    "guarantees": ["G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8", "G9", "G10"],
+    "transported_structural_fragments": 3,
+    "recomputed_structural_fragments": 10,
+    "accepted_successive_updates": 2,
+    "bypass_rejection": "missingConstitutiveDependency before any installed successor",
+    "future_rule": "The aligned installed runtime supplies the nonempty discriminating continuation; the bypass is simulated purely and never installed.",
+    "forgetting_rule": "Executed forgetting preserves every covered finite future while separately proving non-recoverability of historical origin."
+  },
+  "confirmatory_command": ["python3", "scripts/run-neural-joint-confirmatory-v9.py"],
+  "executed_adapter_command": ["lake", "exe", "compiled_neural_comparison_adapters"],
+  "output_paths_reserved": {
+    "raw": "experiments/constitutive-neural-alignment/v9/comparison-results.ndjson",
+    "record": "experiments/constitutive-neural-alignment/v9/result-record.json"
+  },
+  "output_policy": {
+    "format": "immutable six-line NDJSON plus a separate post-run JSON record containing its SHA-256",
+    "selection": "all six rows retained in emitted order",
+    "missing_output": "protocol failure, not a negative scientific result",
+    "hash_timing": "output hash recorded after the first permitted production",
+    "self_hashing": false,
+    "overwrite": false
+  },
+  "versioning_rule": "Any change to shared material, adapters, translations, R1-R8, P1-P8, S1-S8, decision rules, commands or schema requires a later version before affected production."
+}

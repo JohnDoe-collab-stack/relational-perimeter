@@ -1,0 +1,16 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+/- The calculated assembly is indexed by its exact source certificate, target
+graph, transported fragments and recomputed fragments.  A different admitted
+version cannot replace it at the real target-analysis assembly boundary. -/
+example : CalculatedIncrementalStructuralAssembly
+    learnedInitialCheckedAgent.certificate learnedPreCertificateGraph
+      learnedTransportedStructuralFragments
+      learnedRecomputedStructuralFragments :=
+  learnedRenamedCalculatedStructuralAssembly
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedCalculatedStructuralAssembly
+/- AXIOM_AUDIT_END -/

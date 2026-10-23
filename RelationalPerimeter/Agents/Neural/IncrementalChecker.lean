@@ -12,6 +12,7 @@ pre-certificate graph and affected cone are calculated; the target certificate
 is assembled only afterwards.
 -/
 set_option genInjectivity false
+set_option maxRecDepth 10000
 namespace ConstitutiveSearch.NeuralAgent
 
 /-- A lower-level utility for experiments that apply explicit network edits.
@@ -217,21 +218,208 @@ def publicIncrementalLicensedRequirementFragment :
   licenseTransportedCertificateFragment
     publicIncrementalRequirementFragmentUnaffected
 
-/-- Structural fragments recomputed from the target are selected by the
-executable cone rather than supplied by the update. -/
+/-- Ordered structural keys of a decoded artifact.  This key plan is
+calculated without constructing any observation payload, so incremental
+assembly does not need a regenerated complete target snapshot in order to
+know which fragments must be assembled. -/
+def stableStructuralKeys
+    {contract : ConstitutiveContract}
+    {artifact : DecodedNeuralArtifact contract}
+    (naming : StableArtifactNaming artifact) : List StableNodeKey :=
+  (structuralLocations artifact.system.inputCount).map (fun index =>
+      (StableNodeId.receivedInput (naming := naming) index).key) ++
+  (structuralLocations artifact.system.producedCount).map (fun index =>
+      (StableNodeId.neuron (naming := naming) index).key) ++
+  (structuralLocations artifact.system.outputs.sources.length).map
+    (fun index => (naming.outputPort index).key)
+
+/-- Every list element paired with its positive occurrence in that exact
+list.  This finite enumeration is used to retain source provenance while the
+incremental checker selects reusable fragments. -/
+def listElementsWithMembership {Element : Type u} :
+    (entries : List Element) -> List { entry // entry ∈ entries }
+  | [] => []
+  | head :: tail =>
+      ⟨head, .head tail⟩ ::
+        (listElementsWithMembership tail).map (fun entry =>
+          ⟨entry.1, .tail head entry.2⟩)
+
+/-- One reusable structural fragment licensed at its exact source.  Equal
+payload values are insufficient: the record carries an occurrence in the
+checked source certificate, a positive result of the calculated version
+correspondence, and exclusion from the calculated affected cone. -/
+structure LicensedStructuralTransport
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    {oldState : ReconfiguredExecutionState oldContract.family}
+    (oldCertificate :
+      StateConstitutiveCertificate oldContract oldArtifact oldState)
+    {newNaming : StableArtifactNaming newArtifact}
+    (graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming) : Type 4 where
+  private mk ::
+  source : { entry // entry ∈ structuralObservationSnapshot oldCertificate }
+  correspondenceAccepted :
+    keyOccurs (.artifactNode source.1.1)
+      (transportedArtifactKeys graph.correspondence) = true
+  outside : affectedConstitutiveNode oldCertificate graph
+    (.artifactNode source.1.1) = false
+
+def LicensedStructuralTransport.entry
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    {oldState : ReconfiguredExecutionState oldContract.family}
+    {oldCertificate :
+      StateConstitutiveCertificate oldContract oldArtifact oldState}
+    {newNaming : StableArtifactNaming newArtifact}
+    {graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming}
+    (transport : LicensedStructuralTransport oldCertificate graph) :
+    StableNodeKey × StableArtifactObservation :=
+  transport.source.1
+
+def licensedStructuralEntries
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    {oldState : ReconfiguredExecutionState oldContract.family}
+    {oldCertificate :
+      StateConstitutiveCertificate oldContract oldArtifact oldState}
+    {newNaming : StableArtifactNaming newArtifact}
+    {graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming}
+    (transports : List (LicensedStructuralTransport oldCertificate graph)) :
+    List (StableNodeKey × StableArtifactObservation) :=
+  transports.map LicensedStructuralTransport.entry
+
+/-- Calculate every reusable fragment from the checked source certificate.
+The two Boolean decisions are retained as positive equations in each result;
+there is no constructor that accepts an unproven target-side value. -/
+def calculateLicensedStructuralTransports
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    {oldState : ReconfiguredExecutionState oldContract.family}
+    (oldCertificate :
+      StateConstitutiveCertificate oldContract oldArtifact oldState)
+    {newNaming : StableArtifactNaming newArtifact}
+    (graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming) :
+    List (LicensedStructuralTransport oldCertificate graph) :=
+  (listElementsWithMembership
+      (structuralObservationSnapshot oldCertificate)).filterMap
+    (fun source =>
+      if correspondenceAccepted :
+          keyOccurs (.artifactNode source.1.1)
+            (transportedArtifactKeys graph.correspondence) = true then
+        if outside : affectedConstitutiveNode oldCertificate graph
+            (.artifactNode source.1.1) = false then
+          some (.mk source correspondenceAccepted outside)
+        else none
+      else none)
+
+/-- The public reusable payload is selected from the exact checked source;
+its provenance, version correspondence and cone exclusion are retained by
+the transport value itself. -/
+def publicLicensedStructuralTransports :
+    List (LicensedStructuralTransport
+      publicInitialStateConstitutiveCertificate
+      publicPreCertificateConstitutiveGraph) :=
+  calculateLicensedStructuralTransports
+    publicInitialStateConstitutiveCertificate
+    publicPreCertificateConstitutiveGraph
+
+/-- Recalculate input observations only when the executable cone invalidates
+them.  Unaffected payloads are never reconstructed on this path. -/
+def recomputeAffectedInputObservations
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    {oldState : ReconfiguredExecutionState oldContract.family}
+    (oldCertificate :
+      StateConstitutiveCertificate oldContract oldArtifact oldState)
+    (newNaming : StableArtifactNaming newArtifact)
+    (graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming) :
+    List (StableNodeKey × StableArtifactObservation) :=
+  (structuralLocations newArtifact.system.inputCount).filterMap (fun index =>
+    let node : StableNodeId newNaming := .receivedInput index
+    if affectedConstitutiveNode oldCertificate graph (.artifactNode node.key)
+    then some (node.key, newNaming.mechanismObservation node)
+    else none)
+
+/-- Recalculate neuron observations only inside the executable cone. -/
+def recomputeAffectedNeuronObservations
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    {oldState : ReconfiguredExecutionState oldContract.family}
+    (oldCertificate :
+      StateConstitutiveCertificate oldContract oldArtifact oldState)
+    (newNaming : StableArtifactNaming newArtifact)
+    (graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming) :
+    List (StableNodeKey × StableArtifactObservation) :=
+  (structuralLocations newArtifact.system.producedCount).filterMap (fun index =>
+    let node : StableNodeId newNaming := .neuron index
+    if affectedConstitutiveNode oldCertificate graph (.artifactNode node.key)
+    then some (node.key, newNaming.mechanismObservation node)
+    else none)
+
+/-- Recalculate output observations only inside the executable cone. -/
+def recomputeAffectedOutputObservations
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    {oldState : ReconfiguredExecutionState oldContract.family}
+    (oldCertificate :
+      StateConstitutiveCertificate oldContract oldArtifact oldState)
+    (newNaming : StableArtifactNaming newArtifact)
+    (graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming) :
+    List (StableNodeKey × StableArtifactObservation) :=
+  (structuralLocations newArtifact.system.outputs.sources.length).filterMap
+    (fun index =>
+      let port := newNaming.outputPort index
+      if affectedConstitutiveNode oldCertificate graph
+          (.artifactNode port.key)
+      then some (port.key, newNaming.outputObservation port)
+      else none)
+
+/-- Exact affected fragments calculated directly from the decoded artifact.
+This function never constructs the complete target observation snapshot. -/
+def recomputeAffectedStructuralObservations
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    {oldState : ReconfiguredExecutionState oldContract.family}
+    (oldCertificate :
+      StateConstitutiveCertificate oldContract oldArtifact oldState)
+    (newNaming : StableArtifactNaming newArtifact)
+    (graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming) :
+    List (StableNodeKey × StableArtifactObservation) :=
+  recomputeAffectedInputObservations oldCertificate newNaming graph ++
+    recomputeAffectedNeuronObservations oldCertificate newNaming graph ++
+    recomputeAffectedOutputObservations oldCertificate newNaming graph
+
+/-- Structural fragments recomputed directly from the decoded target are
+selected by the executable cone rather than supplied by the update or sliced
+from a complete target snapshot. -/
 def publicRecomputedStructuralFragments :
     List (StableNodeKey × StableArtifactObservation) :=
-  publicPreCertificateConstitutiveGraph.targetObservations.filter (fun entry =>
-    affectedConstitutiveNode publicInitialStateConstitutiveCertificate
-      publicPreCertificateConstitutiveGraph
-      (.artifactNode entry.1))
+  recomputeAffectedStructuralObservations
+    publicInitialStateConstitutiveCertificate
+    publicReconfiguredStableNaming
+    publicPreCertificateConstitutiveGraph
 
 /-- The reused list contains the payload transported from the old
 certificate, not a separately recomputed target payload. -/
 def publicTransportedStructuralFragments :
     List (StableNodeKey × StableArtifactObservation) :=
-  [(.receivedInput 1,
-    publicIncrementalLicensedRequirementFragment.target.payload)]
+  licensedStructuralEntries publicLicensedStructuralTransports
 
 theorem publicTransportedStructuralFragmentCount_exact :
     publicTransportedStructuralFragments.length = 1 := by
@@ -249,10 +437,49 @@ inductive IncrementalStructuralAssemblyError where
   | missingRecomputed (key : StableNodeKey)
   deriving DecidableEq
 
-/-- Assemble target structural observations in target order.  Outside-cone
-keys can be read only from the transported list; inside-cone keys can be read
-only from the recomputed list.  The target snapshot supplies keys and order,
-never a fallback payload. -/
+/-- Structural recursion used by the incremental assembly.  Keeping the
+remaining target entries as an explicit argument makes induction over an
+autonomously decoded snapshot possible without unfolding the certificate or
+the causal graph at every recursive step. -/
+def calculateIncrementalStructuralAssemblyVisit
+    {oldContract newContract : ConstitutiveContract}
+    {oldArtifact : DecodedNeuralArtifact oldContract}
+    {newArtifact : DecodedNeuralArtifact newContract}
+    {oldState : ReconfiguredExecutionState oldContract.family}
+    (oldCertificate :
+      StateConstitutiveCertificate oldContract oldArtifact oldState)
+    {newNaming : StableArtifactNaming newArtifact}
+    (graph : PreCertificateConstitutiveGraph
+      oldCertificate.basis.naming newNaming)
+    (transported recomputed :
+      List (StableNodeKey × StableArtifactObservation)) :
+    List StableNodeKey ->
+    Except IncrementalStructuralAssemblyError
+      (List (StableNodeKey × StableArtifactObservation))
+  | [] => .ok []
+  | key :: rest =>
+      if affectedConstitutiveNode oldCertificate graph
+          (.artifactNode key) then
+        match lookupStructuralObservation key recomputed with
+        | none => .error (.missingRecomputed key)
+        | some payload =>
+            match calculateIncrementalStructuralAssemblyVisit oldCertificate
+                graph transported recomputed rest with
+            | .error problem => .error problem
+            | .ok tail => .ok ((key, payload) :: tail)
+      else
+        match lookupStructuralObservation key transported with
+        | none => .error (.missingTransported key)
+        | some payload =>
+            match calculateIncrementalStructuralAssemblyVisit oldCertificate
+                graph transported recomputed rest with
+            | .error problem => .error problem
+            | .ok tail => .ok ((key, payload) :: tail)
+
+/-- Assemble target structural observations in the order of the independently
+calculated key plan.  Outside-cone keys can be read only from the transported
+list; inside-cone keys can be read only from the recomputed list.  No complete
+target observation snapshot is an input to this calculation. -/
 def calculateIncrementalStructuralAssembly
     {oldContract newContract : ConstitutiveContract}
     {oldArtifact : DecodedNeuralArtifact oldContract}
@@ -267,28 +494,8 @@ def calculateIncrementalStructuralAssembly
       List (StableNodeKey × StableArtifactObservation)) :
     Except IncrementalStructuralAssemblyError
       (List (StableNodeKey × StableArtifactObservation)) :=
-  let rec visit :
-      List (StableNodeKey × StableArtifactObservation) ->
-        Except IncrementalStructuralAssemblyError
-          (List (StableNodeKey × StableArtifactObservation))
-    | [] => .ok []
-    | entry :: rest =>
-        if affectedConstitutiveNode oldCertificate graph
-            (.artifactNode entry.1) then
-          match lookupStructuralObservation entry.1 recomputed with
-          | none => .error (.missingRecomputed entry.1)
-          | some payload =>
-              match visit rest with
-              | .error problem => .error problem
-              | .ok tail => .ok ((entry.1, payload) :: tail)
-        else
-          match lookupStructuralObservation entry.1 transported with
-          | none => .error (.missingTransported entry.1)
-          | some payload =>
-              match visit rest with
-              | .error problem => .error problem
-              | .ok tail => .ok ((entry.1, payload) :: tail)
-  visit graph.targetObservations
+  calculateIncrementalStructuralAssemblyVisit oldCertificate graph
+    transported recomputed (stableStructuralKeys newNaming)
 
 /-- Positive result of structural fragment calculation.  It records both the
 executable calculation and its exact agreement with the decoded target
@@ -310,7 +517,7 @@ structure CalculatedIncrementalStructuralAssembly
   calculated :
     calculateIncrementalStructuralAssembly oldCertificate graph
       transported recomputed = .ok observations
-  targetExact : observations = graph.targetObservations
+  targetExact : observations = stableStructuralObservationSnapshot newNaming
 
 /-- Public positive constructor for a structural calculation.  Clients must
 provide both the exact executable calculation and equality with the target
@@ -330,7 +537,8 @@ def certifyCalculatedIncrementalStructuralAssembly
     (calculated :
       calculateIncrementalStructuralAssembly oldCertificate graph
         transported recomputed = .ok observations)
-    (targetExact : observations = graph.targetObservations) :
+    (targetExact : observations =
+      stableStructuralObservationSnapshot newNaming) :
     CalculatedIncrementalStructuralAssembly oldCertificate graph
       transported recomputed :=
   .mk observations calculated targetExact
@@ -341,7 +549,8 @@ def publicCalculatedIncrementalStructuralAssembly :
       publicPreCertificateConstitutiveGraph
       publicTransportedStructuralFragments
       publicRecomputedStructuralFragments :=
-  .mk publicPreCertificateConstitutiveGraph.targetObservations rfl rfl
+  .mk (stableStructuralObservationSnapshot publicReconfiguredStableNaming)
+    rfl rfl
 
 def publicIncrementalStructuralAssembly :
     List (StableNodeKey × StableArtifactObservation) :=
@@ -351,8 +560,7 @@ theorem publicIncrementalStructuralAssembly_exact :
     publicIncrementalStructuralAssembly =
       stableStructuralObservationSnapshot
         publicReconfiguredFiniteCausalBasis.naming :=
-  publicCalculatedIncrementalStructuralAssembly.targetExact.trans
-    publicPreCertificateConstitutiveGraph.targetObservationsExact
+  publicCalculatedIncrementalStructuralAssembly.targetExact
 
 /-- Non-structural target fragments rebuilt from the executed target
 production.  They are kept distinct from transported structural fragments so
@@ -419,9 +627,9 @@ structure PublicIncrementalCertificateAssembly : Type 4 where
   structuralAssembly : CalculatedIncrementalStructuralAssembly
     publicInitialStateConstitutiveCertificate preCertificateGraph
     [(.receivedInput 1, transportedRequirement.target.payload)]
-    (preCertificateGraph.targetObservations.filter (fun entry =>
-      affectedConstitutiveNode publicInitialStateConstitutiveCertificate
-        preCertificateGraph (.artifactNode entry.1)))
+    (recomputeAffectedStructuralObservations
+      publicInitialStateConstitutiveCertificate
+      publicReconfiguredStableNaming preCertificateGraph)
   recomputed : RecomputedStateCertificateFragments
     PublicReconfiguredOperationalContract
     publicDecodedReconfiguredArtifact publicReferenceUpdatedState
@@ -443,9 +651,9 @@ def PublicIncrementalCertificateAssembly.transportedFragments
 def PublicIncrementalCertificateAssembly.recomputedFragments
     (assembly : PublicIncrementalCertificateAssembly) :
     List (StableNodeKey × StableArtifactObservation) :=
-  assembly.preCertificateGraph.targetObservations.filter (fun entry =>
-    affectedConstitutiveNode publicInitialStateConstitutiveCertificate
-      assembly.preCertificateGraph (.artifactNode entry.1))
+  recomputeAffectedStructuralObservations
+    publicInitialStateConstitutiveCertificate
+    publicReconfiguredStableNaming assembly.preCertificateGraph
 
 /-- The only complete fragment package accepted by target assembly is derived
 from the transport/recompute result. -/
@@ -458,9 +666,7 @@ def PublicIncrementalCertificateAssembly.fragments
         systemExact := rfl
         inputDeclared := .head
         observations := assembly.structuralAssembly.observations
-        observationsExact :=
-          assembly.structuralAssembly.targetExact.trans
-            assembly.preCertificateGraph.targetObservationsExact }
+        observationsExact := assembly.structuralAssembly.targetExact }
     requirement := assembly.recomputed.requirement
     causal := assembly.recomputed.causal
     proposalAction := assembly.recomputed.proposalAction
@@ -535,10 +741,10 @@ theorem assemblePublicIncrementalCertificateFromPreCertificate_exact
 /-! ## Generic incremental checker -/
 
 /-- Complete positive analysis required by the generic incremental checker.
-The target certificate and checked successor are deliberately absent.  The
-analysis retains the calculated graph, the transported and recomputed
-structural inputs, their successful assembly, the target fragments, and the
-exact executed transition from the checked source to the analyzed state. -/
+The target certificate, a complete target fragment package, and the checked
+successor are deliberately absent.  The structural fragment can only be
+formed below from the calculated transport/recompute assembly.  The remaining
+semantic fragments are recomputed evidence for the exact produced state. -/
 structure IncrementalTargetAnalysis
     {constitution : ConstitutiveMetaContract}
     {currentContract : constitution.Contract}
@@ -551,22 +757,62 @@ structure IncrementalTargetAnalysis
   targetNaming : StableArtifactNaming artifact
   preCertificateGraph : PreCertificateConstitutiveGraph
     current.certificate.basis.naming targetNaming
-  transportedStructural :
-    List (StableNodeKey × StableArtifactObservation)
+  transportedLicenses :
+    List (LicensedStructuralTransport current.certificate preCertificateGraph)
   recomputedStructural :
     List (StableNodeKey × StableArtifactObservation)
   structuralAssembly : CalculatedIncrementalStructuralAssembly
-    current.certificate preCertificateGraph transportedStructural
+    current.certificate preCertificateGraph
+      (licensedStructuralEntries transportedLicenses)
       recomputedStructural
-  fragments : StateCertificateFragments
+  structuralBasis : FiniteCausalBasis
+    (constitution.operational nextContract) artifact
+  structuralBasisNamingExact : structuralBasis.naming = targetNaming
+  structuralSystemExact : state.system = artifact.system
+  structuralInputDeclared : Listed state.input
+    (constitution.operational nextContract).declaredCurrentInputs
+  recomputedCertificateFragments : RecomputedStateCertificateFragments
     (constitution.operational nextContract) artifact state
-  fragmentNamingExact : fragments.structural.basis.naming = targetNaming
-  fragmentObservationsExact :
-    fragments.structural.observations = structuralAssembly.observations
   transition : OperationalContractTransition constitution
     currentContract nextContract
   execution : constitution.ExecutedStateTransition transition.permission
     current.state state
+
+def IncrementalTargetAnalysis.transportedStructural
+    {constitution : ConstitutiveMetaContract}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (analysis : IncrementalTargetAnalysis current) :
+    List (StableNodeKey × StableArtifactObservation) :=
+  licensedStructuralEntries analysis.transportedLicenses
+
+/-- The sole complete target fragment package of an incremental analysis.
+Its structural observations are the actual output of the calculated
+transport/recompute assembly.  No independently regenerated target snapshot
+or previously completed target certificate is accepted. -/
+def IncrementalTargetAnalysis.fragments
+    {constitution : ConstitutiveMetaContract}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (analysis : IncrementalTargetAnalysis current) :
+    StateCertificateFragments
+      (constitution.operational analysis.nextContract)
+      analysis.artifact analysis.state :=
+  { structural :=
+      { basis := analysis.structuralBasis
+        systemExact := analysis.structuralSystemExact
+        inputDeclared := analysis.structuralInputDeclared
+        observations := analysis.structuralAssembly.observations
+        observationsExact := by
+          rw [analysis.structuralBasisNamingExact]
+          exact analysis.structuralAssembly.targetExact }
+    requirement := analysis.recomputedCertificateFragments.requirement
+    causal := analysis.recomputedCertificateFragments.causal
+    proposalAction := analysis.recomputedCertificateFragments.proposalAction
+    authorization := analysis.recomputedCertificateFragments.authorization
+    effect := analysis.recomputedCertificateFragments.effect
+    historical := analysis.recomputedCertificateFragments.historical
+    futures := analysis.recomputedCertificateFragments.futures }
 
 /-- An incremental engine owns proof-free updates and their executable local
 analysis.  It may decode domain-specific serialized data, but it cannot return a
@@ -758,13 +1004,16 @@ def publicIncrementalTargetAnalysisFromDecision
     targetNaming := publicReconfiguredFiniteCausalBasis.naming
     preCertificateGraph :=
       publicIncrementalCertificateAssembly.preCertificateGraph
-    transportedStructural := publicTransportedStructuralFragments
+    transportedLicenses := publicLicensedStructuralTransports
     recomputedStructural := publicRecomputedStructuralFragments
     structuralAssembly :=
       publicIncrementalCertificateAssembly.structuralAssembly
-    fragments := publicIncrementalCertificateAssembly.fragments
-    fragmentNamingExact := rfl
-    fragmentObservationsExact := rfl
+    structuralBasis := publicReconfiguredFiniteCausalBasis
+    structuralBasisNamingExact := rfl
+    structuralSystemExact := rfl
+    structuralInputDeclared := .head
+    recomputedCertificateFragments :=
+      publicIncrementalCertificateAssembly.recomputed
     transition := transitionDecision.transition
     execution :=
       publicTransitionProductionFromDecision_target_exact transitionDecision ▸
@@ -834,13 +1083,6 @@ structure PublicIncrementalExecutedDependencies
   fragmentObservationsExact :
     publicIncrementalCertificateAssembly.fragments.structural.observations =
       publicIncrementalCertificateAssembly.structuralAssembly.observations
-  targetStateAccepted : ExecutableStateAcceptance
-    publicExecutableMetaContractInterface
-    PublicExecutableDecodedArtifact.reconfigured
-  targetStateChecked :
-    checkInitialState publicExecutableMetaContractInterface
-        PublicExecutableDecodedArtifact.reconfigured =
-      .ok targetStateAccepted
   nextInputExact : update.nextInput = publicSubstantiveNext
   producedSuccessor :
     PublicProducedReconfiguredStateWitness publicReferenceUpdatedState
@@ -903,20 +1145,30 @@ def PublicIncrementalEngineAnalysis.targetAnalysis
     artifact := publicDecodedReconfiguredArtifact
     state := publicReferenceUpdatedState
     targetNaming := publicReconfiguredFiniteCausalBasis.naming
-    preCertificateGraph := analysis.assembly.preCertificateGraph
-    transportedStructural := analysis.assembly.transportedFragments
-    recomputedStructural := analysis.assembly.recomputedFragments
-    structuralAssembly := analysis.assembly.structuralAssembly
-    fragments := analysis.assembly.fragments
-    fragmentNamingExact := rfl
-    fragmentObservationsExact := rfl
+    preCertificateGraph := publicPreCertificateConstitutiveGraph
+    transportedLicenses := publicLicensedStructuralTransports
+    recomputedStructural := publicRecomputedStructuralFragments
+    structuralAssembly := publicCalculatedIncrementalStructuralAssembly
+    structuralBasis := publicReconfiguredFiniteCausalBasis
+    structuralBasisNamingExact := rfl
+    structuralSystemExact := rfl
+    structuralInputDeclared := .head
+    recomputedCertificateFragments :=
+      publicRecomputedStateCertificateFragments
     transition := analysis.executed.transitionDecision.transition
     execution := analysis.executed.executedSuccessor }
 
+theorem PublicIncrementalEngineAnalysis.targetAnalysis_fragments_exact
+    {update : IncrementalNeuralUpdate}
+    (analysis : PublicIncrementalEngineAnalysis update) :
+    analysis.targetAnalysis.fragments = analysis.assembly.fragments := by
+  rw [analysis.assemblyExact]
+  rfl
+
 /-- Executable public analysis.  It consumes only the proof-free update and
-runs every gate needed by the incremental path.  In particular, the complete
-target state's reflected obligations are checked again, but no full target
-certificate and no full-reference checked update are read. -/
+runs the local decoder, transition, graph, cone, transport, recalculation and
+successor gates.  It never invokes the complete target-state checker or a
+full-reference checked update before assembling the incremental result. -/
 def analyzePublicIncrementalUpdate (update : IncrementalNeuralUpdate) :
     Except AlignmentError (PublicIncrementalEngineAnalysis update) :=
   if _transitionExact : update.transition =
@@ -931,51 +1183,44 @@ def analyzePublicIncrementalUpdate (update : IncrementalNeuralUpdate) :
               match calculated : calculateIncrementalPreCertificateResult update with
               | .error problem => .error (.malformedConstitutiveArtifact problem)
               | .ok preCertificateResult =>
-                  match targetStateRun :
-                      checkInitialState publicExecutableMetaContractInterface
-                      PublicExecutableDecodedArtifact.reconfigured with
-                  | .error problem => .error (.targetStateRejected problem)
-                  | .ok targetStateAccepted =>
-                      match publicRequirementInputEquality update.nextInput
-                          publicSubstantiveNext with
-                      | .isFalse _ => .error .successorMismatch
-                      | .isTrue _nextExact =>
-                          have expected :=
-                            calculateIncrementalPreCertificateResult_eq_public_of_target_exact
-                              update decodedTarget.sourceExact
-                          have resultExact : preCertificateResult =
-                              publicIncrementalPreCertificateResult :=
-                            Except.ok.inj (calculated.symm.trans expected)
-                          .ok (.mk
-                            { transitionExact := _transitionExact
-                              decodedTarget := decodedTarget
-                              decodedTargetExact := decodedRun
-                              transitionDecision := transitionDecision
-                              transitionAccepted := transitionRun
-                              preCertificateResult := preCertificateResult
-                              preCertificateCalculated := calculated
-                              preCertificateResultExact := resultExact
-                              affectedConeExact := by
-                                cases resultExact
-                                rfl
-                              transportedOutsideCone :=
-                                publicIncrementalRequirementFragmentUnaffected
-                              structuralRecalculation :=
-                                publicCalculatedIncrementalStructuralAssembly
-                              recomputedFragments :=
-                                publicRecomputedStateCertificateFragments
-                              fragmentNamingExact := rfl
-                              fragmentObservationsExact := rfl
-                              targetStateAccepted := targetStateAccepted
-                              targetStateChecked := targetStateRun
-                              nextInputExact := _nextExact
-                              producedSuccessor :=
-                                publicReferenceProducedStateWitness
-                              executedSuccessor :=
-                                publicTransitionProductionFromDecision_target_exact
-                                    transitionDecision ▸
-                                  (publicTransitionProductionFromDecision
-                                    transitionDecision).execution })
+                  match publicRequirementInputEquality update.nextInput
+                      publicSubstantiveNext with
+                  | .isFalse _ => .error .successorMismatch
+                  | .isTrue _nextExact =>
+                      have expected :=
+                        calculateIncrementalPreCertificateResult_eq_public_of_target_exact
+                          update decodedTarget.sourceExact
+                      have resultExact : preCertificateResult =
+                          publicIncrementalPreCertificateResult :=
+                        Except.ok.inj (calculated.symm.trans expected)
+                      .ok (.mk
+                        { transitionExact := _transitionExact
+                          decodedTarget := decodedTarget
+                          decodedTargetExact := decodedRun
+                          transitionDecision := transitionDecision
+                          transitionAccepted := transitionRun
+                          preCertificateResult := preCertificateResult
+                          preCertificateCalculated := calculated
+                          preCertificateResultExact := resultExact
+                          affectedConeExact := by
+                            cases resultExact
+                            rfl
+                          transportedOutsideCone :=
+                            publicIncrementalRequirementFragmentUnaffected
+                          structuralRecalculation :=
+                            publicCalculatedIncrementalStructuralAssembly
+                          recomputedFragments :=
+                            publicRecomputedStateCertificateFragments
+                          fragmentNamingExact := rfl
+                          fragmentObservationsExact := rfl
+                          nextInputExact := _nextExact
+                          producedSuccessor :=
+                            publicReferenceProducedStateWitness
+                          executedSuccessor :=
+                            publicTransitionProductionFromDecision_target_exact
+                                transitionDecision ▸
+                              (publicTransitionProductionFromDecision
+                                transitionDecision).execution })
   else
     .error .noAdmittedTransition
 
@@ -992,7 +1237,7 @@ def PublicIncrementalEngineLocalConditions
 /-- Build the autonomous public local data from the three proof-free request
 equalities.  The remaining fields are positive outputs of the decoder,
 transition decision, cone calculation, transport licence, fragment
-recalculation, target-state check and executed successor production. -/
+recalculation and executed successor production. -/
 def publicIncrementalLocalConditionDataOfExact
     (update : IncrementalNeuralUpdate)
     (transitionExact : update.transition =
@@ -1019,8 +1264,6 @@ def publicIncrementalLocalConditionDataOfExact
     recomputedFragments := publicRecomputedStateCertificateFragments
     fragmentNamingExact := rfl
     fragmentObservationsExact := rfl
-    targetStateAccepted := publicExecutableStateAcceptance .reconfigured
-    targetStateChecked := rfl
     nextInputExact := inputExact
     producedSuccessor := publicReferenceProducedStateWitness
     executedSuccessor := publicReferenceTransitionProduction.execution }
@@ -1067,21 +1310,9 @@ def analyzePublicIncrementalUpdate_of_conditions
               conditions.preCertificateCalculated)
         cases preCertificateExact
         split
-        · have impossible :=
-            ‹checkInitialState publicExecutableMetaContractInterface
-                PublicExecutableDecodedArtifact.reconfigured = .error _›.symm.trans
-              conditions.targetStateChecked
-          cases impossible
-        · have targetStateExact : _ = conditions.targetStateAccepted :=
-            Except.ok.inj
-              (‹checkInitialState publicExecutableMetaContractInterface
-                  PublicExecutableDecodedArtifact.reconfigured = .ok _›.symm.trans
-                conditions.targetStateChecked)
-          cases targetStateExact
-          split
-          · exact False.elim (‹update.nextInput ≠ publicSubstantiveNext›
-              conditions.nextInputExact)
-          · exact ⟨_, rfl⟩
+        · exact False.elim (‹update.nextInput ≠ publicSubstantiveNext›
+            conditions.nextInputExact)
+        · exact ⟨_, rfl⟩
 
 /-- Autonomous local conditions construct a successful public analysis. -/
 def completePublicIncrementalAnalysis
@@ -1234,8 +1465,9 @@ theorem PublicIncrementalCheckedUpdate.transportedFragmentsExact
 theorem PublicIncrementalCheckedUpdate.recomputedFragmentsExact
     (checked : PublicIncrementalCheckedUpdate) :
     checked.recomputedFragments = publicRecomputedStructuralFragments := by
-  exact congrArg PublicIncrementalCertificateAssembly.recomputedFragments
-    checked.assemblyExact
+  unfold PublicIncrementalCheckedUpdate.recomputedFragments
+  rw [checked.assemblyExact]
+  rfl
 
 theorem PublicIncrementalCheckedUpdate.assembledStructuralFragmentsExact
     (checked : PublicIncrementalCheckedUpdate) :
@@ -1388,9 +1620,21 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalAssembledTargetCertificate
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalTargetCertificate_eq_fullReference
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalLicensedRequirementFragment
+#print axioms ConstitutiveSearch.NeuralAgent.stableStructuralKeys
+#print axioms ConstitutiveSearch.NeuralAgent.listElementsWithMembership
+#print axioms ConstitutiveSearch.NeuralAgent.LicensedStructuralTransport
+#print axioms ConstitutiveSearch.NeuralAgent.LicensedStructuralTransport.entry
+#print axioms ConstitutiveSearch.NeuralAgent.licensedStructuralEntries
+#print axioms ConstitutiveSearch.NeuralAgent.calculateLicensedStructuralTransports
+#print axioms ConstitutiveSearch.NeuralAgent.publicLicensedStructuralTransports
+#print axioms ConstitutiveSearch.NeuralAgent.recomputeAffectedInputObservations
+#print axioms ConstitutiveSearch.NeuralAgent.recomputeAffectedNeuronObservations
+#print axioms ConstitutiveSearch.NeuralAgent.recomputeAffectedOutputObservations
+#print axioms ConstitutiveSearch.NeuralAgent.recomputeAffectedStructuralObservations
 #print axioms ConstitutiveSearch.NeuralAgent.publicRecomputedStructuralFragments
 #print axioms ConstitutiveSearch.NeuralAgent.publicTransportedStructuralFragments
 #print axioms ConstitutiveSearch.NeuralAgent.IncrementalStructuralAssemblyError
+#print axioms ConstitutiveSearch.NeuralAgent.calculateIncrementalStructuralAssemblyVisit
 #print axioms ConstitutiveSearch.NeuralAgent.calculateIncrementalStructuralAssembly
 #print axioms ConstitutiveSearch.NeuralAgent.CalculatedIncrementalStructuralAssembly
 #print axioms ConstitutiveSearch.NeuralAgent.certifyCalculatedIncrementalStructuralAssembly
@@ -1410,6 +1654,8 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.assemblePublicIncrementalCertificateFromPreCertificate
 #print axioms ConstitutiveSearch.NeuralAgent.assemblePublicIncrementalCertificateFromPreCertificate_exact
 #print axioms ConstitutiveSearch.NeuralAgent.IncrementalTargetAnalysis
+#print axioms ConstitutiveSearch.NeuralAgent.IncrementalTargetAnalysis.transportedStructural
+#print axioms ConstitutiveSearch.NeuralAgent.IncrementalTargetAnalysis.fragments
 #print axioms ConstitutiveSearch.NeuralAgent.IncrementalCheckerEngine
 #print axioms ConstitutiveSearch.NeuralAgent.buildIncrementalCheckedUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.GenericIncrementalCheckSuccess
@@ -1425,6 +1671,7 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.PublicIncrementalExecutedDependencies
 #print axioms ConstitutiveSearch.NeuralAgent.PublicIncrementalEngineAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.PublicIncrementalEngineAnalysis.targetAnalysis
+#print axioms ConstitutiveSearch.NeuralAgent.PublicIncrementalEngineAnalysis.targetAnalysis_fragments_exact
 #print axioms ConstitutiveSearch.NeuralAgent.analyzePublicIncrementalUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.PublicIncrementalEngineLocalConditionData
 #print axioms ConstitutiveSearch.NeuralAgent.publicIncrementalCheckerEngine

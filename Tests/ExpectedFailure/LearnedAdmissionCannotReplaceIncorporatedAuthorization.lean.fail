@@ -1,0 +1,14 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.LearnedAdmissionCannotReplaceIncorporatedAuthorization
+open ConstitutiveSearch.NeuralAgent
+
+def unincorporatedReconfiguration :=
+  reconfigure learnedAlignedReconfigurationBuilder
+    independentLearnedCertifiedInput independentLearnedCertifiedInput
+    (learnedReconfigurationAdmission independentLearnedCertifiedInput)
+
+end Tests.ExpectedFailure.LearnedAdmissionCannotReplaceIncorporatedAuthorization
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedReconfiguration
+/- AXIOM_AUDIT_END -/

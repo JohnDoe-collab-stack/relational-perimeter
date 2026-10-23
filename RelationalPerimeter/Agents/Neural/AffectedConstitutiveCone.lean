@@ -659,6 +659,14 @@ theorem calculatePreCertificateConstitutiveGraph_observations_exact
       stableStructuralObservationSnapshot newNaming := by
   exact (calculatePreCertificateConstitutiveGraph oldNaming newNaming).targetObservationsExact
 
+/-- Conservative representation-boundary invalidation.  Output observations
+are recalculated for every received artifact version; this policy is sound but
+is not claimed to be a minimal affected cone. -/
+def outputBoundaryAffected : StableNodeKey -> Bool
+  | .outputPort _ => true
+  | .receivedInput _ => false
+  | .neuron _ => false
+
 /-- The initial affected predicate is entirely derived from the two exact
 certificates and the validated correspondence.  Cross-contract decoding and
 contract observations are conservatively invalidated; downstream operational
@@ -675,14 +683,15 @@ def initiallyAffected
       oldCertificate.basis.naming newNaming) :
     ConstitutiveNodeKey -> Bool
   | .artifactNode key =>
-      structuralInitiallyAffected
-        (keyOccurs (.artifactNode key)
-          (transportedArtifactKeys graph.correspondence))
-        (observationOptionsSame
-          (lookupStructuralObservation key
-            (structuralObservationSnapshot oldCertificate))
-          (lookupStructuralObservation key
-            graph.targetObservations))
+      outputBoundaryAffected key ||
+        structuralInitiallyAffected
+          (keyOccurs (.artifactNode key)
+            (transportedArtifactKeys graph.correspondence))
+          (observationOptionsSame
+            (lookupStructuralObservation key
+              (structuralObservationSnapshot oldCertificate))
+            (lookupStructuralObservation key
+              graph.targetObservations))
   | .decoder => true
   | .contractObservation _ => true
   | .proposal => false
@@ -753,8 +762,9 @@ def backwardAffectedWithin
 /-- Bounded closure is executable.  The graph is finite and acyclic by its
 typed chronological neural edges and fixed downstream chain; the number of
 new-version nodes therefore bounds every dependency path.  The visited set
-makes this computation linear in the explored finite graph rather than in the
-number of repeated dependency paths. -/
+prevents a node from being expanded twice.  No asymptotic time bound is claimed
+for this list implementation: predecessor scans and membership checks remain
+explicit work. -/
 def affectedWithin
     (initial : ConstitutiveNodeKey -> Bool)
     (edges : List ConstitutiveDependencyEdge) :
@@ -844,16 +854,38 @@ theorem outsideAffectedCone_unchanged
     graph.dependencyEdges
     graph.targetKeys.length
     (.artifactNode key) outside
-  change structuralInitiallyAffected
-    (keyOccurs (.artifactNode key)
-      (transportedArtifactKeys graph.correspondence))
-    (observationOptionsSame
-      (lookupStructuralObservation key
-        (structuralObservationSnapshot oldCertificate))
-      (lookupStructuralObservation key
-        graph.targetObservations)) = false at initialFalse
+  have structuralFalse : structuralInitiallyAffected
+      (keyOccurs (.artifactNode key)
+        (transportedArtifactKeys graph.correspondence))
+      (observationOptionsSame
+        (lookupStructuralObservation key
+          (structuralObservationSnapshot oldCertificate))
+        (lookupStructuralObservation key
+          graph.targetObservations)) = false := by
+    change (outputBoundaryAffected key || structuralInitiallyAffected
+      (keyOccurs (.artifactNode key)
+        (transportedArtifactKeys graph.correspondence))
+      (observationOptionsSame
+        (lookupStructuralObservation key
+          (structuralObservationSnapshot oldCertificate))
+        (lookupStructuralObservation key
+          graph.targetObservations))) = false
+      at initialFalse
+    cases structuralExact : structuralInitiallyAffected
+        (keyOccurs (.artifactNode key)
+          (transportedArtifactKeys graph.correspondence))
+        (observationOptionsSame
+          (lookupStructuralObservation key
+            (structuralObservationSnapshot oldCertificate))
+          (lookupStructuralObservation key
+            graph.targetObservations)) with
+    | false => exact rfl
+    | true =>
+        cases boundaryExact : outputBoundaryAffected key <;>
+          rw [boundaryExact, structuralExact] at initialFalse <;>
+          cases initialFalse
   exact observationOptionsSame_true _ _
-    (structuralInitiallyAffected_false_unchanged_true _ _ initialFalse)
+    (structuralInitiallyAffected_false_unchanged_true _ _ structuralFalse)
 
 /-- Public pre-certificate graph.  It is calculated from the source
 certificate naming and the decoded target naming; the target certificate is
@@ -920,6 +952,7 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.heterogeneousDependencyEdges
 #print axioms ConstitutiveSearch.NeuralAgent.PreCertificateConstitutiveGraph
 #print axioms ConstitutiveSearch.NeuralAgent.calculatePreCertificateConstitutiveGraph
+#print axioms ConstitutiveSearch.NeuralAgent.outputBoundaryAffected
 #print axioms ConstitutiveSearch.NeuralAgent.initiallyAffected
 #print axioms ConstitutiveSearch.NeuralAgent.insertConstitutiveKeys
 #print axioms ConstitutiveSearch.NeuralAgent.constitutivePredecessors

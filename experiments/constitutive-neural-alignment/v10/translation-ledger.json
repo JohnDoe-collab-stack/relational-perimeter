@@ -1,0 +1,14 @@
+{
+  "definition": "One translation is one explicit conversion of a shared frozen field into a method-interface input. Counts are bookkeeping, not cost or capability scores.",
+  "methods": [
+    {"method_id":"extensional-current-behavior-verification","inputs":["artifact","current-domain"],"translation_count":2},
+    {"method_id":"fixed-network-interventional-causal-analysis","inputs":["artifact","interventions"],"translation_count":2},
+    {"method_id":"pre-execution-action-shielding","inputs":["artifact","contracts"],"translation_count":2},
+    {"method_id":"guaranteed-self-adaptive-system","inputs":["artifact","contracts","serialized-updates"],"translation_count":3},
+    {"method_id":"incremental-neural-verification-with-proof-reuse","inputs":["artifact","contracts","serialized-updates","version-correspondence"],"translation_count":4},
+    {"method_id":"deployment-chain-certificate-propagation","inputs":["artifact","contracts","runtime-history"],"translation_count":3},
+    {"method_id":"relational-execution-comparison","inputs":["artifact","current-domain","future-requests","contracts"],"translation_count":4},
+    {"method_id":"explicit-reference-combination","inputs":["artifact","current-domain","interventions","future-requests","contracts","serialized-updates"],"translation_count":6},
+    {"method_id":"independent-complete-recheck","inputs":["artifact","contracts","serialized-updates","version-correspondence"],"translation_count":4}
+  ]
+}

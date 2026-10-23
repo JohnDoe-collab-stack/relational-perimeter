@@ -8,10 +8,12 @@ neural graph grows with the parameter.  It is not a repetition counter around
 the fixed public example.  Every member is consumed through the generic
 compiled initial, incremental, and full-reference checker interfaces.
 
-The family is an experimental workload.  Its deliberately small operational
-contract does not replace the independent learned artifact or the public
-alignment instance.  It exists to compare the two checker paths on the same
-growing artifact, certificate property, and executed transition.
+The family is an experimental workload.  Its operational contract carries
+the same seven distinct classes of substantive certificate obligation as the
+compiled checker architecture.  It does not replace the independent learned
+artifact or the public alignment instance.  It exists to compare the two
+checker paths on the same growing artifact, complete certificate property,
+and executed transition.
 -/
 set_option genInjectivity false
 set_option maxHeartbeats 4000000
@@ -29,18 +31,111 @@ abbrev ScalingUnit4 := ULift.{4} Unit
 
 def scalingUnit4 : ScalingUnit4 := ULift.up ()
 
-def scalingUnitObligation : ContractObligationFamily where
-  Statement := ScalingUnit3
-  Witness := fun _ => ScalingUnit3
+/-! ## Substantive obligations measured by the family
 
-def scalingFutureContract :
-    ContinuationSignatures.FutureContract
-      ScalingUnit3 ScalingUnit3 ScalingUnit3 ScalingUnit3 where
-  next := fun _ _ => scalingUnit3
-  event := fun _ _ => scalingUnit3
-  read := fun _ => scalingUnit3
-  Allow := fun _ _ => ScalingUnit3
-  decision := fun _ _ => .inl scalingUnit3
+The parameterized family used to place `Unit` in all seven semantic fragments.
+That was sufficient for structural checker tests, but it was not a measurement
+of the complete certificate property.  The following obligations are indexed
+by the exact decoded state.  Their witnesses consume the requirement encoding,
+one executed causal role, the produced action and effect, the incorporated
+authorization, every requested finite continuation, and the exact native run.
+-/
+
+structure ScalingRequirementEncodingWitness
+    (state : ReconfiguredExecutionState publicRequirementFamily) : Type 3 where
+  incorporation : RequirementIncorporation publicRequirementEncoding state.input
+  port : Fin state.system.inputCount
+  encodedValue : Activation
+  encodedExact :
+    encodedValue = (state.system.run state.input).inputs.read port
+
+structure ScalingExecutedCausalWitness
+    (state : ReconfiguredExecutionState publicRequirementFamily) : Type 3 where
+  port : Fin state.system.inputCount
+  role : CausalRole state.system state.input (.receivedInput port)
+
+structure ScalingActionWitness
+    (state : ReconfiguredExecutionState publicRequirementFamily) : Type 3 where
+  private mk ::
+  request : Agent.Request
+  requestExact : request = publicAgentActionChannel.command
+    (state.system.proposal state.input)
+  result : Agent.Memory × Agent.Event
+  evidence : Agent.RequestEvidence state.memory request result
+  resultExact : result = Agent.executeInput state.memory request
+
+def executeScalingAction
+    (state : ReconfiguredExecutionState publicRequirementFamily) :
+    ScalingActionWitness state :=
+  let request := publicAgentActionChannel.command
+    (state.system.proposal state.input)
+  let produced := Agent.executeProducedInput state.memory request
+  .mk request rfl produced.1 produced.2 rfl
+
+structure ScalingAuthorizationWitness
+    (state : ReconfiguredExecutionState publicRequirementFamily) : Type 3 where
+  incorporated : IncorporatedReconfigurationPermission
+    publicRequirementFamily publicReconfigurationBuilder.permissionVariable
+      state.input
+
+structure ScalingEffectWitness
+    (state : ReconfiguredExecutionState publicRequirementFamily) : Type 3 where
+  action : ScalingActionWitness state
+  successor : Agent.Memory
+  event : Agent.Event
+  successorExact : successor = action.result.1
+  eventExact : event = action.result.2
+
+def produceScalingEffect
+    (state : ReconfiguredExecutionState publicRequirementFamily) :
+    ScalingEffectWitness state :=
+  let action := executeScalingAction state
+  { action := action
+    successor := action.result.1
+    event := action.result.2
+    successorExact := rfl
+    eventExact := rfl }
+
+structure ScalingCoveredFutureStatement : Type 3 where
+  state : ReconfiguredExecutionState publicRequirementFamily
+  requests : List PublicRequirementInput
+
+def scalingCoveredFutureObligations : ContractObligationFamily where
+  Statement := ScalingCoveredFutureStatement
+  Witness := fun statement =>
+    InteractionHistory publicRequirementIncorporation
+      publicRequirementSignalTransformation publicAgentActionChannel
+      statement.state.memory statement.requests
+
+structure ScalingHistoricalWitness
+    (state : ReconfiguredExecutionState publicRequirementFamily) : Type 3 where
+  run : NativeRun state.system.program
+  runExact : run = state.system.run state.input
+
+def scalingStateObligation
+    (Witness : ReconfiguredExecutionState publicRequirementFamily -> Type 3) :
+    ContractObligationFamily where
+  Statement := ULift.{3}
+    (ReconfiguredExecutionState publicRequirementFamily)
+  Witness := fun state => Witness state.down
+
+def scalingRequirementEncodingObligations : ContractObligationFamily :=
+  scalingStateObligation ScalingRequirementEncodingWitness
+
+def scalingCausalObligations : ContractObligationFamily :=
+  scalingStateObligation ScalingExecutedCausalWitness
+
+def scalingActionObligations : ContractObligationFamily :=
+  scalingStateObligation ScalingActionWitness
+
+def scalingAuthorizationObligations : ContractObligationFamily :=
+  scalingStateObligation ScalingAuthorizationWitness
+
+def scalingEffectObligations : ContractObligationFamily :=
+  scalingStateObligation ScalingEffectWitness
+
+def scalingHistoricalObligations : ContractObligationFamily :=
+  scalingStateObligation ScalingHistoricalWitness
 
 def scalingContract : ConstitutiveContract where
   RequirementCase := PublicRequirementCase
@@ -53,26 +148,28 @@ def scalingContract : ConstitutiveContract where
   actionChannel := publicAgentActionChannel
   declaredCurrentInputs := [scalingInput]
   declaredReplacementValues := [3]
-  FutureSource := ScalingUnit3
-  FutureInput := ScalingUnit3
-  FutureEvent := ScalingUnit3
-  FutureObservation := ScalingUnit3
-  futureContract := scalingFutureContract
-  futureSourceOfState := fun _ => scalingUnit3
-  requirementEncoding := scalingUnitObligation
-  requirementEncodingAt := fun _ => scalingUnit3
-  causalCondition := scalingUnitObligation
-  causalConditionAt := fun _ => scalingUnit3
-  proposalActionPreservation := scalingUnitObligation
-  proposalActionPreservationAt := fun _ => scalingUnit3
-  authorizationAdmission := scalingUnitObligation
-  authorizationAdmissionAt := fun _ => scalingUnit3
-  effectSatisfaction := scalingUnitObligation
-  effectSatisfactionAt := fun _ => scalingUnit3
-  coveredFuture := scalingUnitObligation
-  coveredFutureAt := fun _ _ => scalingUnit3
-  historicalPolicy := scalingUnitObligation
-  historicalPolicyAt := fun _ => scalingUnit3
+  FutureSource := ReconfiguredExecutionState publicRequirementFamily
+  FutureInput := ULift.{3} Agent.Request
+  FutureEvent := Agent.Event
+  FutureObservation := OperationalMemoryReadout
+  futureContract := reconfiguredOperationalStateFutureContract
+    (family := publicRequirementFamily)
+  futureSourceOfState := fun state => state
+  requirementEncoding := scalingRequirementEncodingObligations
+  requirementEncodingAt := fun state => ULift.up state
+  causalCondition := scalingCausalObligations
+  causalConditionAt := fun state => ULift.up state
+  proposalActionPreservation := scalingActionObligations
+  proposalActionPreservationAt := fun state => ULift.up state
+  authorizationAdmission := scalingAuthorizationObligations
+  authorizationAdmissionAt := fun state => ULift.up state
+  effectSatisfaction := scalingEffectObligations
+  effectSatisfactionAt := fun state => ULift.up state
+  coveredFuture := scalingCoveredFutureObligations
+  coveredFutureAt := fun state requests =>
+    { state := state, requests := requests }
+  historicalPolicy := scalingHistoricalObligations
+  historicalPolicyAt := fun state => ULift.up state
 
 inductive ScalingArtifactVersion where
   | source
@@ -95,11 +192,26 @@ def scalingTailNeuron (prior : Nat) : NeuronSpec 1 (prior + 1) :=
     bias := 0
     threshold := ⟨1⟩ }
 
-def scalingLocalTailNeuron (prior : Nat) : NeuronSpec 1 (prior + 1) :=
-  { inputs :=
-      [{ source := .priorNeuron (Fin.last prior), weight := 1 }]
-    bias := 0
-    threshold := ⟨2⟩ }
+def scalingFinalNeuron (prior : Nat) :
+    ScalingArtifactVersion -> NeuronSpec 1 (prior + 1)
+  | .source =>
+      { inputs :=
+          [{ source := .receivedInput publicRequirementPort, weight := 1 },
+           { source := .priorNeuron (Fin.last prior), weight := 1 }]
+        bias := 0
+        threshold := ⟨4⟩ }
+  | .local =>
+      { inputs :=
+          [{ source := .receivedInput publicRequirementPort, weight := 1 },
+           { source := .priorNeuron (Fin.last prior), weight := 2 }]
+        bias := 0
+        threshold := ⟨4⟩ }
+  | .extended =>
+      { inputs :=
+          [{ source := .receivedInput publicRequirementPort, weight := 1 },
+           { source := .priorNeuron (Fin.last prior), weight := 1 }]
+        bias := 0
+        threshold := ⟨4⟩ }
 
 def scalingPrefix (base : NeuronSpec 1 0) :
     (extra : Nat) -> NetworkProgram 1 (extra + 1)
@@ -110,19 +222,22 @@ def scalingProgram (size : Nat) :
     ScalingArtifactVersion -> NetworkProgram 1 (size + 2)
   | .source =>
       .extend (scalingPrefix (scalingBaseNeuron .source) size)
-        (scalingTailNeuron size)
+        (scalingFinalNeuron size .source)
   | .local =>
       .extend (scalingPrefix (scalingBaseNeuron .local) size)
-        (scalingLocalTailNeuron size)
+        (scalingFinalNeuron size .local)
   | .extended =>
       .extend (scalingPrefix (scalingBaseNeuron .extended) size)
-        (scalingTailNeuron size)
+        (scalingFinalNeuron size .extended)
 
 def scalingFirstNeuron (size : Nat) : Fin (size + 2) :=
   ⟨0, Nat.zero_lt_succ (size + 1)⟩
 
+def scalingLastNeuron (size : Nat) : Fin (size + 2) :=
+  Fin.last (size + 1)
+
 def scalingOutputs (size : Nat) : OutputPorts (size + 2) where
-  sources := [scalingFirstNeuron size]
+  sources := [scalingLastNeuron size]
   nonempty := by intro impossible; cases impossible
 
 def scalingSystem (size : Nat) (version : ScalingArtifactVersion) :
@@ -212,6 +327,27 @@ theorem scalingProgram_neuronAt_first
     unfold scalingProgram NetworkProgram.neuronAt scalingFirstNeuron <;>
     rw [dif_pos (Nat.zero_lt_succ size)] <;>
     exact scalingPrefix_neuronAt_first _ _
+
+theorem scalingProgram_neuronAt_last
+    (size : Nat) (version : ScalingArtifactVersion) :
+    (scalingProgram size version).neuronAt (scalingLastNeuron size) =
+      scalingFinalNeuron size version := by
+  have lastNotBefore :
+      ¬(scalingLastNeuron size).val < size + 1 := by
+    unfold scalingLastNeuron
+    exact Nat.lt_irrefl (size + 1)
+  cases version <;>
+    unfold scalingProgram NetworkProgram.neuronAt <;>
+    rw [dif_neg lastNotBefore]
+
+theorem executeProgram_extend_exact
+    (prior : NetworkProgram inputCount produced)
+    (neuron : NeuronSpec inputCount produced)
+    (inputs : SizedActivations inputCount) :
+    executeProgram (.extend prior neuron) inputs =
+      SizedActivations.snoc (executeProgram prior inputs)
+        (fireNeuron neuron inputs (executeProgram prior inputs)) := by
+  rfl
 
 theorem sizedActivations_zero_eq_empty
     (values : SizedActivations 0) : values = SizedActivations.empty := by
@@ -342,22 +478,237 @@ theorem scalingFirstOutput_changed
       rw [scalingFirstOutput_intervened, scalingFirstOutput_original]
       decide }
 
+theorem scalingTailOutput_zero
+    (size : Nat) (inputs : SizedActivations 1)
+    (prior : SizedActivations (size + 1))
+    (priorExact : prior.read (Fin.last size) = 0) :
+    fireNeuron (scalingTailNeuron size) inputs prior = 0 := by
+  change
+    asActivation (fires ⟨1⟩
+      (prior.read (Fin.last size) * 1 + 0 + 0)) = 0
+  rw [priorExact]
+  rfl
+
+theorem scalingTailOutput_one
+    (size : Nat) (inputs : SizedActivations 1)
+    (prior : SizedActivations (size + 1))
+    (priorExact : prior.read (Fin.last size) = 1) :
+    fireNeuron (scalingTailNeuron size) inputs prior = 1 := by
+  change
+    asActivation (fires ⟨1⟩
+      (prior.read (Fin.last size) * 1 + 0 + 0)) = 1
+  rw [priorExact]
+  rfl
+
+theorem scalingFinalOutput_zero
+    (size : Nat) (version : ScalingArtifactVersion)
+    (inputs : SizedActivations 1)
+    (prior : SizedActivations (size + 1))
+    (inputExact : inputs.read publicRequirementPort = 2)
+    (priorExact : prior.read (Fin.last size) = 0) :
+    fireNeuron (scalingFinalNeuron size version) inputs prior = 0 := by
+  cases version
+  · change
+      asActivation (fires ⟨4⟩
+        (inputs.read publicRequirementPort * 1 +
+          (prior.read (Fin.last size) * 1 + 0) + 0)) = 0
+    rw [inputExact, priorExact]
+    rfl
+  · change
+      asActivation (fires ⟨4⟩
+        (inputs.read publicRequirementPort * 1 +
+          (prior.read (Fin.last size) * 2 + 0) + 0)) = 0
+    rw [inputExact, priorExact]
+    rfl
+  · change
+      asActivation (fires ⟨4⟩
+        (inputs.read publicRequirementPort * 1 +
+          (prior.read (Fin.last size) * 1 + 0) + 0)) = 0
+    rw [inputExact, priorExact]
+    rfl
+
+theorem scalingFinalOutput_one
+    (size : Nat) (version : ScalingArtifactVersion)
+    (inputs : SizedActivations 1)
+    (prior : SizedActivations (size + 1))
+    (inputExact : inputs.read publicRequirementPort = 3)
+    (priorExact : prior.read (Fin.last size) = 1) :
+    fireNeuron (scalingFinalNeuron size version) inputs prior = 1 := by
+  cases version
+  · change
+      asActivation (fires ⟨4⟩
+        (inputs.read publicRequirementPort * 1 +
+          (prior.read (Fin.last size) * 1 + 0) + 0)) = 1
+    rw [inputExact, priorExact]
+    rfl
+  · change
+      asActivation (fires ⟨4⟩
+        (inputs.read publicRequirementPort * 1 +
+          (prior.read (Fin.last size) * 2 + 0) + 0)) = 1
+    rw [inputExact, priorExact]
+    rfl
+  · change
+      asActivation (fires ⟨4⟩
+        (inputs.read publicRequirementPort * 1 +
+          (prior.read (Fin.last size) * 1 + 0) + 0)) = 1
+    rw [inputExact, priorExact]
+    rfl
+
+/-- The received input change is insufficient by itself: with the intervened
+input but without the value carried through the generated causal chain, the
+final neuron still does not fire.  Together with `scalingFinalOutput_one`,
+this makes the preceding chain operationally necessary for the measured
+output, rather than irrelevant size padding. -/
+theorem scalingFinalWithoutPrior_zero
+    (size : Nat) (version : ScalingArtifactVersion)
+    (inputs : SizedActivations 1)
+    (prior : SizedActivations (size + 1))
+    (inputExact : inputs.read publicRequirementPort = 3)
+    (priorExact : prior.read (Fin.last size) = 0) :
+    fireNeuron (scalingFinalNeuron size version) inputs prior = 0 := by
+  cases version
+  · change
+      asActivation (fires ⟨4⟩
+        (inputs.read publicRequirementPort * 1 +
+          (prior.read (Fin.last size) * 1 + 0) + 0)) = 0
+    rw [inputExact, priorExact]
+    rfl
+  · change
+      asActivation (fires ⟨4⟩
+        (inputs.read publicRequirementPort * 1 +
+          (prior.read (Fin.last size) * 2 + 0) + 0)) = 0
+    rw [inputExact, priorExact]
+    rfl
+  · change
+      asActivation (fires ⟨4⟩
+        (inputs.read publicRequirementPort * 1 +
+          (prior.read (Fin.last size) * 1 + 0) + 0)) = 0
+    rw [inputExact, priorExact]
+    rfl
+
+theorem scalingPrefixLast_original
+    (size : Nat) (version : ScalingArtifactVersion) :
+    (executeProgram
+      (scalingPrefix (scalingBaseNeuron version) size)
+      (encodePublicRequirement scalingInput)).read (Fin.last size) = 0 := by
+  induction size with
+  | zero => cases version <;> rfl
+  | succ size ih =>
+      unfold scalingPrefix
+      rw [executeProgram_extend_exact, SizedActivations.read_snoc_last]
+      exact scalingTailOutput_zero size _ _ ih
+
+theorem scalingPrefixLast_intervened
+    (size : Nat) (version : ScalingArtifactVersion) :
+    (executeProgram
+      (scalingPrefix (scalingBaseNeuron version) size)
+      ((encodePublicRequirement scalingInput).replace
+        publicRequirementPort 3)).read (Fin.last size) = 1 := by
+  induction size with
+  | zero => cases version <;> rfl
+  | succ size ih =>
+      unfold scalingPrefix
+      rw [executeProgram_extend_exact, SizedActivations.read_snoc_last]
+      exact scalingTailOutput_one size _ _ ih
+
+theorem scalingLastOutput_original
+    (size : Nat) (version : ScalingArtifactVersion) :
+    ((scalingSystem size version).run scalingInput).activations.read
+      (scalingLastNeuron size) = 0 := by
+  change
+    (executeProgram (scalingProgram size version)
+      (encodePublicRequirement scalingInput)).read
+        (scalingLastNeuron size) = 0
+  cases version <;>
+    unfold scalingProgram scalingLastNeuron <;>
+    rw [executeProgram_extend_exact, SizedActivations.read_snoc_last]
+  all_goals
+    apply scalingFinalOutput_zero
+    · rfl
+    · exact scalingPrefixLast_original size _
+
+theorem scalingLastOutput_intervened
+    (size : Nat) (version : ScalingArtifactVersion) :
+    (executeIntervened (scalingIntervention size version)).read
+      (scalingLastNeuron size) = 1 := by
+  change
+    (executeProgram (scalingProgram size version)
+      ((encodePublicRequirement scalingInput).replace
+        publicRequirementPort 3)).read
+          (scalingLastNeuron size) = 1
+  cases version <;>
+    unfold scalingProgram scalingLastNeuron <;>
+    rw [executeProgram_extend_exact, SizedActivations.read_snoc_last]
+  all_goals
+    apply scalingFinalOutput_one
+    · rfl
+    · exact scalingPrefixLast_intervened size _
+
+def scalingLastEdge
+    (size : Nat) (version : ScalingArtifactVersion) :
+    EffectiveReadsFrom ((scalingSystem size version).run scalingInput)
+      (.receivedInput publicRequirementPort)
+      (.neuronOutput (scalingLastNeuron size)) := by
+  cases version
+  · exact .executedEdge (scalingLastNeuron size)
+      { source := .receivedInput publicRequirementPort, weight := 1 }
+      (by
+        change
+          ({ source := .receivedInput publicRequirementPort, weight := 1 } :
+            WeightedInput 1 (size + 1)) ∈
+            ((scalingProgram size .source).neuronAt
+              (scalingLastNeuron size)).inputs
+        rw [scalingProgram_neuronAt_last]
+        exact List.Mem.head _)
+      (show (1 : Int) ≠ 0 by decide)
+  · exact .executedEdge (scalingLastNeuron size)
+      { source := .receivedInput publicRequirementPort, weight := 1 }
+      (by
+        change
+          ({ source := .receivedInput publicRequirementPort, weight := 1 } :
+            WeightedInput 1 (size + 1)) ∈
+            ((scalingProgram size .local).neuronAt
+              (scalingLastNeuron size)).inputs
+        rw [scalingProgram_neuronAt_last]
+        exact List.Mem.head _)
+      (show (1 : Int) ≠ 0 by decide)
+  · exact .executedEdge (scalingLastNeuron size)
+      { source := .receivedInput publicRequirementPort, weight := 1 }
+      (by
+        change
+          ({ source := .receivedInput publicRequirementPort, weight := 1 } :
+            WeightedInput 1 (size + 1)) ∈
+            ((scalingProgram size .extended).neuronAt
+              (scalingLastNeuron size)).inputs
+        rw [scalingProgram_neuronAt_last]
+        exact List.Mem.head _)
+      (show (1 : Int) ≠ 0 by decide)
+
+theorem scalingLastOutput_changed
+    (size : Nat) (version : ScalingArtifactVersion) :
+    OccurrenceChanged (scalingIntervention size version)
+      (.neuronOutput (scalingLastNeuron size)) :=
+  { different := by
+      simp only [intervenedValue, ActivationOccurrence.value]
+      rw [scalingLastOutput_intervened, scalingLastOutput_original]
+      decide }
+
 def scalingPropagation
     (size : Nat) (version : ScalingArtifactVersion) :
     NontrivialExecutedChangePath (scalingIntervention size version)
-      (.neuronOutput (scalingFirstNeuron size)) :=
+      (.neuronOutput (scalingLastNeuron size)) :=
   let edge : EffectiveReadsFrom
       ((scalingSystem size version).run scalingInput)
       (scalingIntervention size version).focusOccurrence
-      (.neuronOutput (scalingFirstNeuron size)) :=
+      (.neuronOutput (scalingLastNeuron size)) :=
     Eq.mp
       (congrArg
         (fun source => EffectiveReadsFrom
           ((scalingSystem size version).run scalingInput) source
-          (.neuronOutput (scalingFirstNeuron size)))
+          (.neuronOutput (scalingLastNeuron size)))
         (scalingIntervention_focus_exact size version).symm)
-      (scalingFirstEdge size version)
-  .step .origin edge (scalingFirstOutput_changed size version)
+      (scalingLastEdge size version)
+  .step .origin edge (scalingLastOutput_changed size version)
 
 theorem scalingTarget_changed
     (size : Nat) (version : ScalingArtifactVersion) :
@@ -366,10 +717,10 @@ theorem scalingTarget_changed
   { different := by
       change
         [(executeIntervened (scalingIntervention size version)).read
-          (scalingFirstNeuron size)] ≠
+          (scalingLastNeuron size)] ≠
         [((scalingSystem size version).run scalingInput).activations.read
-          (scalingFirstNeuron size)]
-      rw [scalingFirstOutput_intervened, scalingFirstOutput_original]
+          (scalingLastNeuron size)]
+      rw [scalingLastOutput_intervened, scalingLastOutput_original]
       decide }
 
 theorem scalingProposal_changed
@@ -380,11 +731,11 @@ theorem scalingProposal_changed
       change
         decodePublicRequirement
             [(executeIntervened (scalingIntervention size version)).read
-              (scalingFirstNeuron size)] ≠
+              (scalingLastNeuron size)] ≠
           decodePublicRequirement
             [((scalingSystem size version).run scalingInput).activations.read
-              (scalingFirstNeuron size)]
-      rw [scalingFirstOutput_intervened, scalingFirstOutput_original]
+              (scalingLastNeuron size)]
+      rw [scalingLastOutput_intervened, scalingLastOutput_original]
       decide }
 
 def scalingCausalRole
@@ -431,17 +782,12 @@ def scalingState (size : Nat) (version : ScalingArtifactVersion) :
     memory := publicActionMemory }
 
 def scalingFutureRealization : CoveredFutureRealization scalingContract where
-  ReducedMemory := ScalingUnit3
-  reducedContract := scalingFutureContract
-  project := fun source => source
-  simulation :=
-    { forward := fun _ _ witness => witness
-      backward := fun _ _ witness => witness
-      backwardForward := by intro source input witness; rfl
-      forwardBackward := by intro source input witness; rfl
-      nextExact := by intro source input; rfl
-      eventExact := by intro source input; rfl
-      readExact := by intro source; rfl }
+  ReducedMemory := Agent.Memory
+  reducedContract := reconfiguredOperationalMemoryFutureContract
+  project := ReconfiguredExecutionState.memory
+  simulation := FutureContractSimulationData.ofExactRealization
+    (reconfiguredOperationalMemoryRealization
+      (family := publicRequirementFamily))
 
 def scalingStateFragments
     (size : Nat) (version : ScalingArtifactVersion) :
@@ -454,15 +800,48 @@ def scalingStateFragments
         inputDeclared := .head
         observations := stableStructuralObservationSnapshot basis.naming
         observationsExact := rfl }
-    requirement := { witness := scalingUnit3 }
-    causal := { witness := scalingUnit3 }
-    proposalAction := { witness := scalingUnit3 }
-    authorization := { witness := scalingUnit3 }
-    effect := { witness := scalingUnit3 }
-    historical := { witness := scalingUnit3 }
+    requirement :=
+      { witness :=
+          { incorporation := publicRequirementIncorporation scalingInput
+            port := publicRequirementPort
+            encodedValue := 2
+            encodedExact := rfl } }
+    causal :=
+      { witness :=
+          { port := publicRequirementPort
+            role := scalingCausalRole size version } }
+    proposalAction :=
+      { witness := executeScalingAction (scalingState size version) }
+    authorization :=
+      { witness :=
+          { incorporated := publicReconfigurationAuthorization scalingInput } }
+    effect :=
+      { witness := produceScalingEffect (scalingState size version) }
+    historical :=
+      { witness :=
+          { run := (scalingState size version).system.run
+              (scalingState size version).input
+            runExact := rfl } }
     futures :=
-      { covered := fun _ => scalingUnit3
+      { covered := fun requests =>
+          publicInteractionHistory (scalingState size version).memory requests
         realization := scalingFutureRealization } }
+
+/-- Semantic obligations recalculated for the exact scaling target.  This
+package deliberately omits the structural snapshot: that component is
+constructed later from the incremental transport/recompute assembly. -/
+def scalingRecomputedCertificateFragments
+    (size : Nat) (version : ScalingArtifactVersion) :
+    RecomputedStateCertificateFragments scalingContract
+      (scalingDecodedArtifact size version) (scalingState size version) :=
+  let fragments := scalingStateFragments size version
+  { requirement := fragments.requirement
+    causal := fragments.causal
+    proposalAction := fragments.proposalAction
+    authorization := fragments.authorization
+    effect := fragments.effect
+    historical := fragments.historical
+    futures := fragments.futures }
 
 def scalingStateCertificate
     (size : Nat) (version : ScalingArtifactVersion) :
@@ -547,14 +926,36 @@ def scalingExecutableInterface :
     scalingReflectedTrue (scalingFiniteCausalBasis source.size source.version)
   systemDecision := fun _ => scalingReflectedTrue rfl
   declaredInputDecision := fun _ => scalingReflectedTrue Listed.head
-  requirementDecision := fun _ => scalingReflectedTrue scalingUnit3
-  contextDecision := fun _ => scalingReflectedTrue scalingUnit3
-  authorizationDecision := fun _ => scalingReflectedTrue scalingUnit3
-  actionDecision := fun _ => scalingReflectedTrue scalingUnit3
-  effectDecision := fun _ => scalingReflectedTrue scalingUnit3
-  historicalDecision := fun _ => scalingReflectedTrue scalingUnit3
-  coveredFuturesDecision := fun _ =>
-    scalingReflectedTrue (fun _ => scalingUnit3)
+  requirementDecision := fun {source} _ =>
+    scalingReflectedTrue
+      { incorporation := publicRequirementIncorporation
+          (scalingState source.size source.version).input
+        port := publicRequirementPort
+        encodedValue := 2
+        encodedExact := rfl }
+  contextDecision := fun {source} _ =>
+    scalingReflectedTrue
+      { port := publicRequirementPort
+        role := scalingCausalRole source.size source.version }
+  authorizationDecision := fun {source} _ =>
+    scalingReflectedTrue
+      { incorporated := publicReconfigurationAuthorization
+          (scalingState source.size source.version).input }
+  actionDecision := fun {source} _ =>
+    scalingReflectedTrue
+      (executeScalingAction (scalingState source.size source.version))
+  effectDecision := fun {source} _ =>
+    scalingReflectedTrue
+      (produceScalingEffect (scalingState source.size source.version))
+  historicalDecision := fun {source} _ =>
+    scalingReflectedTrue
+      { run := (scalingState source.size source.version).system.run
+          (scalingState source.size source.version).input
+        runExact := rfl }
+  coveredFuturesDecision := fun {source} _ =>
+    scalingReflectedTrue (fun requests =>
+      publicInteractionHistory
+        (scalingState source.size source.version).memory requests)
   futureRealizationDecision := fun _ =>
     scalingReflectedTrue scalingFutureRealization
 
@@ -575,6 +976,27 @@ inductive ScalingCheckerError where
   | structuralAssembly
   | structuralMismatch
   deriving DecidableEq
+
+/-- The incremental path decodes the received target without certifying its
+complete state first.  This receipt contains only the value returned by the
+artifact decoder and the equation tying it to the exact received update. -/
+structure ScalingIncrementalDecodedTarget
+    (update : ScalingReceivedArtifact) : Type 5 where
+  decodedArtifact : scalingExecutableInterface.DecodedArtifact
+    update
+  decodedExact :
+    scalingExecutableInterface.decodeReceivedArtifact update =
+      .ok decodedArtifact
+
+/-- Target decoding is a local pre-certificate check.  In particular this
+function does not call `checkInitial`, `checkInitialState`, or either complete
+recheck interface. -/
+def decodeScalingIncrementalTarget
+    (update : ScalingReceivedArtifact) :
+    Except ScalingCheckerError (ScalingIncrementalDecodedTarget update) :=
+  match exact : scalingExecutableInterface.decodeReceivedArtifact update with
+  | .error _ => .error .target
+  | .ok decoded => .ok { decodedArtifact := decoded, decodedExact := exact }
 
 def scalingFullRecheckEngine
     (current : CheckedAgent scalingMetaContract ()) :
@@ -597,7 +1019,7 @@ not a graph supplied by the caller. -/
 def scalingIncrementalGraph
     (current : CheckedAgent scalingMetaContract ())
     {update : ScalingReceivedArtifact}
-    (target : InitialCheckSuccess scalingExecutableInterface update) :
+    (target : ScalingIncrementalDecodedTarget update) :
     PreCertificateConstitutiveGraph
       current.certificate.basis.naming
       (scalingExecutableInterface.decodedStableNaming
@@ -607,20 +1029,37 @@ def scalingIncrementalGraph
     (scalingExecutableInterface.decodedStableNaming
       target.decodedArtifact).naming
 
-/-- The old snapshot inspected by the incremental structural calculation. -/
-def scalingIncrementalTransported
-    (current : CheckedAgent scalingMetaContract ()) :
-    List (StableNodeKey × StableArtifactObservation) :=
-  structuralObservationSnapshot current.certificate
+/-- Reusable occurrences selected from the exact current certificate by the
+calculated version correspondence and affected cone. -/
+def scalingIncrementalTransportLicenses
+    (current : CheckedAgent scalingMetaContract ())
+    {update : ScalingReceivedArtifact}
+    (target : ScalingIncrementalDecodedTarget update) :
+    List (LicensedStructuralTransport current.certificate
+      (scalingIncrementalGraph current target)) :=
+  calculateLicensedStructuralTransports current.certificate
+    (scalingIncrementalGraph current target)
 
-/-- The target observations selected for recalculation by the calculated
-pre-certificate graph. -/
+def scalingIncrementalTransported
+    (current : CheckedAgent scalingMetaContract ())
+    {update : ScalingReceivedArtifact}
+    (target : ScalingIncrementalDecodedTarget update) :
+    List (StableNodeKey × StableArtifactObservation) :=
+  licensedStructuralEntries
+    (scalingIncrementalTransportLicenses current target)
+
+/-- The target observations selected for direct recalculation by the
+calculated pre-certificate graph.  A complete target snapshot is not built on
+the incremental path. -/
 def scalingIncrementalRecomputed
     (current : CheckedAgent scalingMetaContract ())
     {update : ScalingReceivedArtifact}
-    (target : InitialCheckSuccess scalingExecutableInterface update) :
+    (target : ScalingIncrementalDecodedTarget update) :
     List (StableNodeKey × StableArtifactObservation) :=
-  (scalingIncrementalGraph current target).targetObservations
+  recomputeAffectedStructuralObservations current.certificate
+    (scalingExecutableInterface.decodedStableNaming
+      target.decodedArtifact).naming
+    (scalingIncrementalGraph current target)
 
 /-- One named executable boundary for the structural calculation.  Keeping
 this calculation distinct from its later certificate makes its receipt a
@@ -628,10 +1067,10 @@ local condition rather than a preassembled target certificate. -/
 def calculateScalingIncrementalStructuralAssembly
     (current : CheckedAgent scalingMetaContract ())
     {update : ScalingReceivedArtifact}
-    (target : InitialCheckSuccess scalingExecutableInterface update) :=
+    (target : ScalingIncrementalDecodedTarget update) :=
   calculateIncrementalStructuralAssembly current.certificate
     (scalingIncrementalGraph current target)
-    (scalingIncrementalTransported current)
+    (scalingIncrementalTransported current target)
     (scalingIncrementalRecomputed current target)
 
 /-- Execute only the structural assembly subcheck.  Its successful value is
@@ -640,11 +1079,11 @@ result. -/
 def checkScalingIncrementalStructuralAssembly
     (current : CheckedAgent scalingMetaContract ())
     {update : ScalingReceivedArtifact}
-    (target : InitialCheckSuccess scalingExecutableInterface update) :
+    (target : ScalingIncrementalDecodedTarget update) :
     Except ScalingCheckerError
       (CalculatedIncrementalStructuralAssembly current.certificate
         (scalingIncrementalGraph current target)
-        (scalingIncrementalTransported current)
+        (scalingIncrementalTransported current target)
         (scalingIncrementalRecomputed current target)) :=
   let graph := scalingIncrementalGraph current target
   match calculated :
@@ -662,10 +1101,10 @@ checks do not live here: they belong to the autonomous specification below. -/
 structure ScalingIncrementalAnalysis
     (current : CheckedAgent scalingMetaContract ())
     (update : ScalingReceivedArtifact) : Type 6 where
-  target : InitialCheckSuccess scalingExecutableInterface update
+  target : ScalingIncrementalDecodedTarget update
   assembly : CalculatedIncrementalStructuralAssembly current.certificate
     (scalingIncrementalGraph current target)
-    (scalingIncrementalTransported current)
+    (scalingIncrementalTransported current target)
     (scalingIncrementalRecomputed current target)
   transitionDecision : AcceptedTransitionDecision scalingExecutableInterface
     { current := ()
@@ -680,11 +1119,11 @@ equation saying that the whole incremental analyzer has already succeeded. -/
 structure ScalingIncrementalLocalConditions
     (current : CheckedAgent scalingMetaContract ())
     (update : ScalingReceivedArtifact) : Type 6 where
-  target : InitialCheckSuccess scalingExecutableInterface update
-  targetChecked : checkInitial scalingExecutableInterface update = .ok target
+  target : ScalingIncrementalDecodedTarget update
+  targetChecked : decodeScalingIncrementalTarget update = .ok target
   assembly : CalculatedIncrementalStructuralAssembly current.certificate
     (scalingIncrementalGraph current target)
-    (scalingIncrementalTransported current)
+    (scalingIncrementalTransported current target)
     (scalingIncrementalRecomputed current target)
   assemblyChecked :
     checkScalingIncrementalStructuralAssembly current target = .ok assembly
@@ -705,8 +1144,14 @@ def ScalingIncrementalAnalysis.graph
 def ScalingIncrementalAnalysis.transported
     {current : CheckedAgent scalingMetaContract ()}
     {update : ScalingReceivedArtifact}
-    (_analysis : ScalingIncrementalAnalysis current update) :=
-  scalingIncrementalTransported current
+    (analysis : ScalingIncrementalAnalysis current update) :=
+  scalingIncrementalTransported current analysis.target
+
+def ScalingIncrementalAnalysis.transportedLicenses
+    {current : CheckedAgent scalingMetaContract ()}
+    {update : ScalingReceivedArtifact}
+    (analysis : ScalingIncrementalAnalysis current update) :=
+  scalingIncrementalTransportLicenses current analysis.target
 
 def ScalingIncrementalAnalysis.recomputed
     {current : CheckedAgent scalingMetaContract ()}
@@ -719,7 +1164,7 @@ def analyzeScalingIncrementalUpdate
     (update : ScalingReceivedArtifact) :
     Except ScalingCheckerError
       (ScalingIncrementalAnalysis current update) :=
-  match _targetChecked : checkInitial scalingExecutableInterface update with
+  match _targetChecked : decodeScalingIncrementalTarget update with
   | .error _ => .error .target
   | .ok target =>
       match checkScalingIncrementalStructuralAssembly current target with
@@ -748,12 +1193,12 @@ def completeScalingIncrementalAnalysis
   unfold analyzeScalingIncrementalUpdate
   split
   · have impossible :=
-      ‹checkInitial scalingExecutableInterface update = .error _›.symm.trans
+      ‹decodeScalingIncrementalTarget update = .error _›.symm.trans
         conditions.targetChecked
     cases impossible
   · have targetExact : _ = conditions.target :=
       Except.ok.inj
-        (‹checkInitial scalingExecutableInterface update = .ok _›.symm.trans
+        (‹decodeScalingIncrementalTarget update = .ok _›.symm.trans
           conditions.targetChecked)
     cases targetExact
     rw [conditions.assemblyChecked]
@@ -799,8 +1244,6 @@ def scalingIncrementalTargetAnalysis
     {update : ScalingReceivedArtifact}
     (conditions : ScalingIncrementalAnalysis current update) :
     IncrementalTargetAnalysis current :=
-  let fragments := scalingExecutableInterface.certifyFragments
-    conditions.target.stateAccepted
   { nextContract := ()
     contractAdmitted := ()
     artifact := scalingExecutableInterface.decodedNeuralArtifact
@@ -811,17 +1254,36 @@ def scalingIncrementalTargetAnalysis
       (scalingExecutableInterface.decodedStableNaming
         conditions.target.decodedArtifact).naming
     preCertificateGraph := conditions.graph
-    transportedStructural := conditions.transported
+    transportedLicenses := conditions.transportedLicenses
     recomputedStructural := conditions.recomputed
     structuralAssembly := conditions.assembly
-    fragments := fragments
-    fragmentNamingExact := rfl
-    fragmentObservationsExact := by
-      exact
-        (conditions.assembly.targetExact.trans
-          conditions.graph.targetObservationsExact).symm
+    structuralBasis := scalingFiniteCausalBasis update.size update.version
+    structuralBasisNamingExact := rfl
+    structuralSystemExact := rfl
+    structuralInputDeclared := .head
+    recomputedCertificateFragments :=
+      scalingRecomputedCertificateFragments update.size update.version
     transition := conditions.transitionDecision.transition
     execution := scalingUnit4 }
+
+theorem scalingIncrementalFragments_eq_full
+    {current : CheckedAgent scalingMetaContract ()}
+    {update : ScalingReceivedArtifact}
+    (analysis : ScalingIncrementalAnalysis current update) :
+    (scalingIncrementalTargetAnalysis analysis).fragments =
+      scalingStateFragments update.size update.version := by
+  apply StateCertificateFragments.eq_of_components
+  · apply StableStructuralCertificateFragment.eq_of_basis_observations
+    · rfl
+    · rfl
+    · exact analysis.assembly.targetExact
+  · rfl
+  · rfl
+  · rfl
+  · rfl
+  · rfl
+  · rfl
+  · rfl
 
 def scalingIncrementalCheckerEngine
     (current : CheckedAgent scalingMetaContract ()) :
@@ -854,6 +1316,11 @@ structure ScalingPairMetrics where
   affectedConeCount : Nat
   transportedFragmentCount : Nat
   recomputedFragmentCount : Nat
+  /-- Separately reported non-fragment work units: one target decode plus the
+  material graph keys, dependency edges, and affected nodes inspected by this
+  executable analysis.  This is an accounting convention, not an asymptotic
+  running-time or allocation bound. -/
+  otherNecessaryCalculationCount : Nat
   deriving DecidableEq, Repr
 
 def scalingPairMetrics
@@ -863,19 +1330,20 @@ def scalingPairMetrics
     ScalingPairMetrics :=
   let targetKeys := analysis.graph.targetKeys
   let affected := affectedConstitutiveCone current.certificate analysis.graph
-  let transported := analysis.graph.targetObservations.filter (fun entry =>
-    !(affectedConstitutiveNode current.certificate analysis.graph
-      (.artifactNode entry.1)))
-  let recomputed := analysis.graph.targetObservations.filter (fun entry =>
-    affectedConstitutiveNode current.certificate analysis.graph
-      (.artifactNode entry.1))
+  let structuralKeys := stableStructuralKeys
+    (scalingExecutableInterface.decodedStableNaming
+      analysis.target.decodedArtifact).naming
+  let recomputed := analysis.recomputed
   { neuralNodeCount := update.size + 2
-    profileWidth := analysis.graph.targetObservations.length
+    profileWidth := structuralKeys.length
     causalGraphNodeCount := targetKeys.length
     causalGraphEdgeCount := analysis.graph.dependencyEdges.length
     affectedConeCount := affected.length
-    transportedFragmentCount := transported.length
-    recomputedFragmentCount := recomputed.length }
+    transportedFragmentCount := analysis.transportedLicenses.length
+    recomputedFragmentCount := recomputed.length
+    otherNecessaryCalculationCount :=
+      1 + targetKeys.length + analysis.graph.dependencyEdges.length +
+        affected.length }
 
 structure ScalingPairedCheckResult
     (size : Nat) (version : ScalingArtifactVersion) : Type 7 where
@@ -885,20 +1353,18 @@ structure ScalingPairedCheckResult
     (scalingTargetArtifact size version)
   full : FullRecheckSuccess (scalingFullRecheckEngine current)
     (scalingTargetArtifact size version)
-  successorExact : incremental.checked.next = full.checked.next
   metrics : ScalingPairMetrics
   metricsExact : metrics = scalingPairMetrics incremental.analysis
 
 /-- Paired execution from one exact master state.  Both checker paths consume
-the same received artifact, and the resulting successor is identified in the
-type rather than compared after measurement. -/
+the same received artifact.  The full path remains an independent reference;
+its result is not an input to the incremental analysis or its metrics. -/
 structure ScalingPairedStepResult
     (current : CheckedAgent scalingMetaContract ())
     (update : ScalingReceivedArtifact) : Type 7 where
   incremental : GenericIncrementalCheckSuccess
     (scalingIncrementalCheckerEngine current) update
   full : FullRecheckSuccess (scalingFullRecheckEngine current) update
-  successorExact : incremental.checked.next = full.checked.next
   metrics : ScalingPairMetrics
   metricsExact : metrics = scalingPairMetrics incremental.analysis
 
@@ -916,7 +1382,6 @@ def checkScalingStep
           .ok
             { incremental := incremental
               full := full
-              successorExact := rfl
               metrics := scalingPairMetrics incremental.analysis
               metricsExact := rfl }
 
@@ -933,7 +1398,6 @@ def checkScalingPair (size : Nat) (version : ScalingArtifactVersion) :
             { current := current
               incremental := checked.incremental
               full := checked.full
-              successorExact := checked.successorExact
               metrics := checked.metrics
               metricsExact := checked.metricsExact }
 
@@ -1011,8 +1475,26 @@ def scalingFamilyMetrics
   | .ok result => .ok result.observations
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingRequirementEncodingWitness
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingExecutedCausalWitness
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingActionWitness
+#print axioms ConstitutiveSearch.NeuralAgent.executeScalingAction
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingAuthorizationWitness
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingEffectWitness
+#print axioms ConstitutiveSearch.NeuralAgent.produceScalingEffect
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingCoveredFutureStatement
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingHistoricalWitness
 #print axioms ConstitutiveSearch.NeuralAgent.scalingContract
 #print axioms ConstitutiveSearch.NeuralAgent.scalingProgram
+#print axioms ConstitutiveSearch.NeuralAgent.scalingPrefixLast_original
+#print axioms ConstitutiveSearch.NeuralAgent.scalingPrefixLast_intervened
+#print axioms ConstitutiveSearch.NeuralAgent.scalingFinalWithoutPrior_zero
+#print axioms ConstitutiveSearch.NeuralAgent.scalingLastOutput_original
+#print axioms ConstitutiveSearch.NeuralAgent.scalingLastOutput_intervened
+#print axioms ConstitutiveSearch.NeuralAgent.scalingLastOutput_changed
+#print axioms ConstitutiveSearch.NeuralAgent.scalingPropagation
+#print axioms ConstitutiveSearch.NeuralAgent.scalingTarget_changed
+#print axioms ConstitutiveSearch.NeuralAgent.scalingProposal_changed
 #print axioms ConstitutiveSearch.NeuralAgent.scalingSystem
 #print axioms ConstitutiveSearch.NeuralAgent.scalingDecodedArtifact
 #print axioms ConstitutiveSearch.NeuralAgent.descendingSerialLayout
@@ -1024,13 +1506,21 @@ def scalingFamilyMetrics
 #print axioms ConstitutiveSearch.NeuralAgent.scalingExecutableInterface
 #print axioms ConstitutiveSearch.NeuralAgent.checkScalingInitial
 #print axioms ConstitutiveSearch.NeuralAgent.scalingFullRecheckEngine
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingIncrementalDecodedTarget
+#print axioms ConstitutiveSearch.NeuralAgent.decodeScalingIncrementalTarget
+#print axioms ConstitutiveSearch.NeuralAgent.scalingIncrementalTransportLicenses
+#print axioms ConstitutiveSearch.NeuralAgent.scalingIncrementalTransported
+#print axioms ConstitutiveSearch.NeuralAgent.scalingRecomputedCertificateFragments
 #print axioms ConstitutiveSearch.NeuralAgent.checkScalingIncrementalStructuralAssembly
 #print axioms ConstitutiveSearch.NeuralAgent.ScalingIncrementalAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.ScalingIncrementalLocalConditions
 #print axioms ConstitutiveSearch.NeuralAgent.completeScalingIncrementalAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.scalingIncrementalLocalConditionsOfSuccess
 #print axioms ConstitutiveSearch.NeuralAgent.scalingIncrementalCheckerEngine
+#print axioms ConstitutiveSearch.NeuralAgent.scalingIncrementalFragments_eq_full
 #print axioms ConstitutiveSearch.NeuralAgent.analyzeScalingIncrementalUpdate_complete
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingPairMetrics
+#print axioms ConstitutiveSearch.NeuralAgent.scalingPairMetrics
 #print axioms ConstitutiveSearch.NeuralAgent.checkScalingStep
 #print axioms ConstitutiveSearch.NeuralAgent.checkScalingPair
 #print axioms ConstitutiveSearch.NeuralAgent.ScalingFamilyParameters

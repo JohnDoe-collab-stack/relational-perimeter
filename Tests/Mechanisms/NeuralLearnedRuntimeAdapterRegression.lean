@@ -120,22 +120,25 @@ example (decision : LearnedAlignedTransitionDecision) :
 
 example {source : LearnedSerializedConstitutiveUpdate}
     (analysis : LearnedIncrementalEngineAnalysis source) :
-    analysis.target.transition =
+    HEq analysis.target.transition
       (analysis.executed.receivedDecision.transportRequest
-        analysis.executed.decoded.transitionExact).transition := by
-  rfl
+        analysis.executed.decoded.transitionExact).transition :=
+  analysis.receivedTransition_installed
 
 example {source : LearnedSerializedConstitutiveUpdate}
     (analysis : LearnedIncrementalEngineAnalysis source) :
-    analysis.target.execution = learnedExecutedSuccessorFromDecision
-      analysis.executed.decoded analysis.executed.receivedDecision := by
-  rfl
+    HEq analysis.target.execution
+      (learnedAlignedTargetAnalysisForAdmittedNamingFromDecision
+        analysis.executed.decoded.admittedStableNaming
+        (analysis.executed.receivedDecision.transportRequest
+          analysis.executed.decoded.transitionExact)).execution :=
+  analysis.receivedExecution_installed
 
 example {source : LearnedSerializedConstitutiveUpdate}
     (analysis : LearnedIncrementalEngineAnalysis source) :
-    analysis.target.structuralAssembly =
-      analysis.executed.decoded.admittedStableNaming.structuralAssembly := by
-  rfl
+    HEq analysis.target.structuralAssembly
+      analysis.executed.decoded.admittedStableNaming.structuralAssembly :=
+  analysis.receivedStructuralAssembly_installed
 
 /-- A positive learned update may retain stable identities while adding one
 new node.  The checker installs exactly the naming received in the admitted

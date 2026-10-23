@@ -1,0 +1,78 @@
+{
+  "protocol_id": "constitutive-neural-learning-transformation-v9",
+  "status": "frozen-before-any-new-confirmatory-production",
+  "predecessor": "independent-constitutive-neural-artifact-manifest-v1",
+  "scientific_scope": "Reproduction and transformation of the independently learned three-input artifact lineage used by the joint constitutive-alignment instance. This protocol does not claim general neural alignment.",
+  "provenance": {
+    "data_origin": "locally-defined synthetic complete Boolean domain",
+    "external_material": false,
+    "reuse_rights": "repository license; no third-party training material",
+    "manual_weight_selection_after_observation": false,
+    "artifact_independence_rule": "The learner emits the serialized artifacts before Lean certificates are constructed. Proofs decode those emitted weights and may not choose or repair them."
+  },
+  "randomness": {
+    "used": false,
+    "seeds": [],
+    "determinism": "Enumeration order, tie-breaking and emitted serialization are fixed by the frozen learner."
+  },
+  "inputs": {
+    "training_data": "experiments/constitutive-neural-alignment/v1/training-data.json",
+    "learning_rules": "experiments/constitutive-neural-alignment/v1/comparison-protocol.json",
+    "learner": "scripts/train-independent-neural-artifact.py",
+    "learned_artifact": "experiments/constitutive-neural-alignment/v1/learned-artifact.json",
+    "generated_lean": "RelationalPerimeter/Agents/Neural/IndependentLearnedArtifact.lean"
+  },
+  "parameters": {
+    "weight_values": [-2, -1, 1, 2],
+    "bias_range_inclusive": [-3, 3],
+    "threshold_range_inclusive": [-3, 3],
+    "current_domain_cardinality": 4,
+    "input_order": ["requirement", "context", "authorization"]
+  },
+  "exact_reproduction_command": [
+    "python3",
+    "scripts/train-independent-neural-artifact.py",
+    "--protocol",
+    "experiments/constitutive-neural-alignment/v1/comparison-protocol.json",
+    "--data",
+    "experiments/constitutive-neural-alignment/v1/training-data.json",
+    "--artifact",
+    "experiments/constitutive-neural-alignment/v1/learned-artifact.json",
+    "--lean",
+    "RelationalPerimeter/Agents/Neural/IndependentLearnedArtifact.lean",
+    "--manifest",
+    "experiments/constitutive-neural-alignment/v1/manifest.json"
+  ],
+  "transformations": [
+    {
+      "id": "initial-to-aligned",
+      "source": "independentLearnedInitialNetwork",
+      "target": "independentLearnedFirstSuccessorNetwork",
+      "received_update": "learnedAlignedSerializedUpdate",
+      "executed_production": "learnedReferenceTransitionProduction",
+      "installation": "submitUpdate_learned_aligned_exact"
+    },
+    {
+      "id": "aligned-to-extended",
+      "source": "independentLearnedFirstSuccessorNetwork",
+      "target": "independentLearnedSecondSuccessorNetwork",
+      "received_update": "learnedExtendedSerializedUpdate",
+      "executed_production": "learnedExtendedReferenceTransitionProduction",
+      "installation": "submitUpdate_learned_extended_exact"
+    },
+    {
+      "id": "initial-to-bypass-counterfactual",
+      "source": "independentLearnedInitialNetwork",
+      "target": "independentLearnedBypassNetwork",
+      "received_update": "learnedBypassSerializedUpdate",
+      "status": "pure simulation plus rejected submission; never installed"
+    }
+  ],
+  "freeze_rules": [
+    "Every input hash is recorded before any new confirmatory production.",
+    "Development and smoke executions remain exploratory and cannot populate a confirmatory result file.",
+    "Changing data, learner, parameters, transformation rules or commands requires a later protocol version.",
+    "Output hashes are recorded only after production and are never selected or discarded opportunistically."
+  ],
+  "new_confirmatory_production_present": false
+}

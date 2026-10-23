@@ -47,7 +47,7 @@ foreach ($line in Get-Content -LiteralPath $manifestPath) {
   $module, $stratum, $status, $responsibility = $parts
   if ($entries.ContainsKey($module)) { throw "$manifestPath`:${lineNumber}: duplicate module $module" }
   if ($stratum -notin @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14','A15','A16','A17','A18','A19') -and
-      $stratum -notmatch '^M([0-9]|[1-3][0-9]|4[0-4])$') {
+      $stratum -notmatch '^M([0-9]|[1-3][0-9]|4[0-8])$') {
     throw "$manifestPath`:${lineNumber}: unknown stratum $stratum"
   }
   if ($status -ne 'enforced') {
@@ -127,10 +127,10 @@ $allowed = @{
   A19 = @('U','F','G','S','B','E','M','R','X','P','K','D','Q','N','A0','A1','A2','A3','A4','A5','A6','A7','A8','A9','A10','A11','A12','A13','A14','A15','A16','A17','A18')
 }
 
-# Machine strata are strictly downstream of scientific strata. M0..M44 can
+# Machine strata are strictly downstream of scientific strata. M0..M48 can
 # only read an earlier machine stratum; none is an unconstrained bucket.
 $scientificStrata = @($allowed.Keys)
-foreach ($rank in 0..44) {
+foreach ($rank in 0..48) {
   $lowerMachine = @(0..($rank - 1) | Where-Object { $_ -ge 0 -and $_ -lt $rank } | ForEach-Object { "M$_" })
   $allowed["M$rank"] = @($scientificStrata) + $lowerMachine
 }

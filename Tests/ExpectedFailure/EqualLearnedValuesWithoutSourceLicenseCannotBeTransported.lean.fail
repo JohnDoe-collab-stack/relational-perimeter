@@ -1,0 +1,18 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+/- Equal-looking key/payload values are not reusable transport licenses.  The
+real assembly boundary requires an occurrence in the exact source certificate,
+the accepted version correspondence and exclusion from the affected cone. -/
+def acceptLicensedLearnedTransport
+    (transports : List (LicensedStructuralTransport
+      learnedInitialCheckedAgent.certificate learnedPreCertificateGraph)) :=
+  transports
+
+example :=
+  acceptLicensedLearnedTransport learnedTransportedStructuralFragments
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedTransportedStructuralFragments
+/- AXIOM_AUDIT_END -/

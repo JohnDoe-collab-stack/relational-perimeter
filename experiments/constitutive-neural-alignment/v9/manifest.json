@@ -1,0 +1,31 @@
+{
+  "manifest_id": "constitutive-neural-joint-capability-manifest-v9",
+  "hash_algorithm": "sha256",
+  "status": "inputs-frozen-not-run",
+  "files": {
+    "experiments/constitutive-neural-alignment/v9/learning-transformation-protocol.json": "ca37f4e514318d8bc4eca19a4094bf152d766bda44e2658e17fdb107d38c65f5",
+    "experiments/constitutive-neural-alignment/v9/comparison-protocol.json": "a62dde82ce790e5c8810613c313b86a82757724b89621c8a55755de934048710",
+    "experiments/constitutive-neural-alignment/v9/result-schema.json": "6e47178ee8ccfeadb28f309b91653bb549897a73a199f36d3478f1b4f3a9160e",
+    "experiments/constitutive-neural-alignment/v9/README.md": "3d1d57c44bdfeb302627881aea7b854135b53eb1d6f8acf23d85872c53ac35f0",
+    "scripts/check-neural-joint-protocol-v9.py": "f8285860df65b74d70da7b605e0a512a96f16eccbc723c42c741fea7460f9000",
+    "scripts/run-neural-joint-confirmatory-v9.py": "047edd69357793604cde65161aa530cb622974cd05f357c6162e51d47a82bfda",
+    "scripts/train-independent-neural-artifact.py": "070136b53a76aca4774a47a099169782be4bce58a3ffe9ecdb9999710615a98e",
+    "experiments/constitutive-neural-alignment/v1/training-data.json": "4ff37fb2056fb8d874d3103647babc22f1395dc626aec6d46947e2d9fc7ca807",
+    "experiments/constitutive-neural-alignment/v1/comparison-protocol.json": "82e747de52ca4bcffd0c760895176029d9bc1b3ce7ce32dc1b111efe59ea697a",
+    "experiments/constitutive-neural-alignment/v1/learned-artifact.json": "4e00058b0bb3f5e84f7b730202f9682d4d39a02b98e7a0971da4ab49dee24918",
+    "experiments/constitutive-neural-alignment/v1/manifest.json": "1eea987d63aa5d4ba9afdd05f65f14cf479d30319dd6c1f791c56bfa41299e05",
+    "RelationalPerimeter/Agents/Neural/IndependentLearnedArtifact.lean": "b1cbe1803365710734c2a8936fb58297fa0c42035e1671617689aa5d3d821dc9",
+    "RelationalPerimeter/Agents/Neural/LearnedRuntimeAdapter.lean": "4bb3f1eebe4d8e72f00cddb746568814aee5a85514ae28e64582ba45c69ef636",
+    "RelationalPerimeter/Agents/Neural/LearnedUpdateSeparation.lean": "0770182ac88d9005bb7d2050ad7e984a3baf51dd192cbb183126188851f9c9fa",
+    "RelationalPerimeter/Agents/Neural/LearnedContractFutureDivergence.lean": "cce56e113394fe9136163918ff96936782d010a279a69ec22d6e7b839ecede4e",
+    "RelationalPerimeter/Agents/Neural/AutonomousCheckerClosure.lean": "287b04816e088e1d5b5240adc21658bbbee7f6afe6d48b515f950ddc58728474",
+    "RelationalPerimeter/Agents/Neural/LearnedFutureConstitutiveClosure.lean": "d6629ce262997fdb3934d05b41d0818afdb3d98e9a0497e285756d108d65dd54",
+    "RelationalPerimeter/Agents/Neural/CapabilityComparisonAdapters.lean": "2998e87f17be1d3af445f0337d48011048b959798154a2c8cd13a875b7a065ff",
+    "Tests/Executables/CompiledNeuralComparisonAdapters.lean": "94e6421afca31196b53338935b09413ab7b054fb9a7bb5c925a3fbfbe9b5506d",
+    "Tests/Mechanisms/NeuralLearnedFutureConstitutiveClosureRegression.lean": "64dce86d3a56f59e385d2303b9dcf24c040325ddc11d3f5a568acf72a9c7c1d1"
+  },
+  "frozen_on": "2026-10-23",
+  "randomness": "none",
+  "result_status": "absent-by-protocol",
+  "repository_commit_status": "required-before-confirmatory-run"
+}

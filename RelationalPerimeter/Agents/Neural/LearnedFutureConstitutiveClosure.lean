@@ -1,5 +1,6 @@
 import RelationalPerimeter.Agents.Neural.LearnedContractFutureDivergence
 import RelationalPerimeter.Agents.Neural.ReconfiguredExactForgetting
+import RelationalPerimeter.Agents.Neural.AutonomousContractTransitions
 import RelationalPerimeter.Constitution.Continuation.ExactSeparation
 
 /-!
@@ -23,6 +24,51 @@ open NativeMechanism
 open ContinuationSignatures
 
 /-! ## Admission, refusal, and a necessary nonempty continuation -/
+
+/-! The observations below are indexed by the exact states produced by the
+single transition kernel used in L3.  No independently reconstructed state or
+future source is accepted. -/
+
+abbrev LearnedAlignedProducedState :=
+  learnedReferenceTransitionProduction.targetState
+
+abbrev LearnedExtendedProducedState :=
+  learnedExtendedReferenceTransitionProduction.targetState
+
+theorem learnedAlignedProducedState_exact :
+    LearnedAlignedProducedState = learnedAlignedState := by
+  rfl
+
+theorem learnedExtendedProducedState_exact :
+    LearnedExtendedProducedState = learnedExtendedState := by
+  rfl
+
+def learnedAlignedProducedFutureObservation :
+    ContractFutureObservationAt LearnedAlignedOperationalContract
+      LearnedAlignedProducedState :=
+  contractFutureObservationAt LearnedAlignedProducedState
+
+def learnedExtendedProducedFutureObservation :
+    ContractFutureObservationAt LearnedExtendedOperationalContract
+      LearnedExtendedProducedState :=
+  contractFutureObservationAt LearnedExtendedProducedState
+
+theorem learnedAlignedProducedFutureSource_exact :
+    learnedAlignedProducedFutureObservation.source =
+      learnedCandidateFutureSource learnedAlignedCandidateAtInitial := by
+  rfl
+
+theorem learnedAlignedRuntimeFutureSource_is_produced :
+    LearnedAlignedOperationalContract.futureSourceOfState
+        learnedAlignedCertifiedRuntime.current.state =
+      learnedAlignedProducedFutureObservation.source := by
+  rfl
+
+theorem learnedExtendedRuntimeFutureSource_is_produced :
+    LearnedExtendedOperationalContract.futureSourceOfState
+        learnedExtendedCertifiedRuntime.current.state =
+      learnedExtendedProducedFutureObservation.source := by
+  rfl
 
 def learnedAdmittedFutureRequest : IndependentLearnedFutureInput :=
   { input := independentLearnedCounterfactualInput }
@@ -194,15 +240,58 @@ theorem learnedHistoricalStableOrigin_identities_distinct :
       LearnedHistoricalStableOrigin.renamed.firstInputSerial := by
   decide
 
-structure LearnedHistoricalFutureForgettingTrace
+/-! The origin-bearing state exists before the action.  The action in the
+forgetting trace is indexed by this exact value, so historical identity is not
+added retrospectively to an already reduced execution. -/
+structure LearnedHistoricalPreActionState
     (origin : LearnedHistoricalStableOrigin) : Type 3 where
   historicalNaming : SerializedStableArtifactNaming
   historicalNamingExact : historicalNaming = origin.serializedNaming
-  runtimeStateExact : origin.runtime.current.state = learnedAlignedState
-  installedIdentityExact : origin.runtimeFirstInputSerial =
+  installedIdentity : Nat
+  installedIdentityExact : installedIdentity =
     origin.firstInputSerial
-  action : LearnedActionWitness origin.runtime.current.state
-  effect : LearnedEffectWitness origin.runtime.current.state
+
+def LearnedHistoricalPreActionState.executionState
+    {origin : LearnedHistoricalStableOrigin}
+    (_state : LearnedHistoricalPreActionState origin) :
+    ReconfiguredExecutionState independentLearnedRequirementFamily :=
+  origin.runtime.current.state
+
+def executeLearnedHistoricalPreActionState
+    (origin : LearnedHistoricalStableOrigin) :
+    LearnedHistoricalPreActionState origin := by
+  cases origin with
+  | aligned =>
+      exact
+        { historicalNaming := learnedAlignedSerializedNaming
+          historicalNamingExact := rfl
+          installedIdentity := 0
+          installedIdentityExact := rfl }
+  | renamed =>
+      exact
+        { historicalNaming := learnedRenamedSerializedNaming
+          historicalNamingExact := rfl
+          installedIdentity := 1100
+          installedIdentityExact := rfl }
+
+theorem learnedHistoricalPreActionIdentities_distinct :
+    (executeLearnedHistoricalPreActionState .aligned).installedIdentity ≠
+      (executeLearnedHistoricalPreActionState .renamed).installedIdentity := by
+  decide
+
+theorem learnedHistoricalPreAction_runtimeIdentity_exact
+    (origin : LearnedHistoricalStableOrigin) :
+    (executeLearnedHistoricalPreActionState origin).installedIdentity =
+      origin.runtimeFirstInputSerial := by
+  exact
+    (executeLearnedHistoricalPreActionState origin).installedIdentityExact.trans
+      (origin.runtime_identity_exact).symm
+
+structure LearnedHistoricalFutureForgettingTrace
+    (origin : LearnedHistoricalStableOrigin) : Type 3 where
+  preAction : LearnedHistoricalPreActionState origin
+  action : LearnedActionWitness preAction.executionState
+  effect : LearnedEffectWitness preAction.executionState action
   effectExact : effect = produceLearnedEffect action
 
 def executeLearnedHistoricalFutureForgettingTrace
@@ -211,19 +300,13 @@ def executeLearnedHistoricalFutureForgettingTrace
   cases origin with
   | aligned =>
       exact
-        { historicalNaming := learnedAlignedSerializedNaming
-          historicalNamingExact := rfl
-          runtimeStateExact := rfl
-          installedIdentityExact := rfl
+        { preAction := executeLearnedHistoricalPreActionState .aligned
           action := learnedAlignedAction
           effect := learnedAlignedEffect
           effectExact := rfl }
   | renamed =>
       exact
-        { historicalNaming := learnedRenamedSerializedNaming
-          historicalNamingExact := rfl
-          runtimeStateExact := rfl
-          installedIdentityExact := rfl
+        { preAction := executeLearnedHistoricalPreActionState .renamed
           action := learnedAlignedAction
           effect := learnedAlignedEffect
           effectExact := rfl }
@@ -303,58 +386,91 @@ theorem learnedExecutedFutureForgetting_origin_not_recoverable
     learnedExecutedFutureForgetting_outputs_equal
     recover recoversAligned recoversRenamed
 
-/-! ## Contract change after forgetting -/
+/-! ## Continuation and contract transition after forgetting
 
-inductive LearnedPostForgettingRequest : Type 3 where
-  | continueFuture (input : IndependentLearnedFutureInput)
-  | recoverHistoricalIdentity
+This section deliberately uses the unique meta-contract interface introduced
+in L1.  It does not define a learned-only permission language.  Installation
+remains a later L5--L8 obligation. -/
 
-inductive LearnedPostForgettingPermission
-    (memory : IndependentLearnedOperationalMemory) :
-    LearnedPostForgettingRequest -> Type 3 where
-  | continueFuture
-      (input : IndependentLearnedFutureInput)
-      (admitted : independentLearnedReducedFutureContract.Allow memory input) :
-      LearnedPostForgettingPermission memory (.continueFuture input)
+abbrev LearnedAlignedCurrentAgent :=
+  learnedAlignedCertifiedRuntime.current
 
-def decideLearnedPostForgettingRequest
-    (memory : IndependentLearnedOperationalMemory)
-    (request : LearnedPostForgettingRequest) :
-    PSum (LearnedPostForgettingPermission memory request)
-      (LearnedPostForgettingPermission memory request -> False) :=
-  match request with
-  | .recoverHistoricalIdentity => .inr (fun witness => nomatch witness)
-  | .continueFuture input =>
-      match independentLearnedReducedFutureContract.decision memory input with
-      | .inl admitted => .inl (.continueFuture input admitted)
-      | .inr refused => .inr (fun witness => by
-          cases witness with
-          | continueFuture _ admitted => exact refused admitted)
+def learnedAlignedForgottenCurrentAgent :
+    ForgottenCurrentAgent LearnedAlignedCurrentAgent :=
+  forgetCurrentAgent LearnedAlignedCurrentAgent
+
+theorem learnedAlignedForgottenMemory_is_executedReduction :
+    learnedAlignedForgottenCurrentAgent.memory =
+      learnedAlignedExecutedFutureForgetting.output := by
+  rfl
 
 def learnedPostForgettingContinuationPermission :
-    LearnedPostForgettingPermission
-      learnedAlignedExecutedFutureForgetting.output
-      (.continueFuture learnedAdmittedFutureRequest) :=
-  .continueFuture learnedAdmittedFutureRequest
-    learnedAdmittedFutureRequestWitness
-
-theorem learnedPostForgettingRecovery_refused
-    (permission : LearnedPostForgettingPermission
-      learnedAlignedExecutedFutureForgetting.output
-      .recoverHistoricalIdentity) : False := by
-  nomatch permission
+    PostForgettingPermission LearnedAlignedCurrentAgent
+      learnedAlignedForgottenCurrentAgent
+      (.continueCurrent learnedAdmittedFutureRequest) :=
+  @PostForgettingPermission.continueCurrent learnedConstitutiveMetaContract
+    .aligned LearnedAlignedCurrentAgent learnedAlignedForgottenCurrentAgent
+    learnedAdmittedFutureRequest
+    (LearnedAlignedCurrentAgent.certificate.futureRealization.exact.forward
+      (LearnedAlignedOperationalContract.futureSourceOfState
+        LearnedAlignedCurrentAgent.state)
+      learnedAdmittedFutureRequest learnedAdmittedFutureRequestWitness)
 
 theorem learnedPostForgettingRefusedFuture_stays_refused
-    (permission : LearnedPostForgettingPermission
-      learnedAlignedExecutedFutureForgetting.output
-      (.continueFuture learnedRefusedFutureRequest)) : False := by
+    (permission : PostForgettingPermission LearnedAlignedCurrentAgent
+      learnedAlignedForgottenCurrentAgent
+      (.continueCurrent learnedRefusedFutureRequest)) : False := by
   cases permission with
-  | continueFuture _ admitted =>
-      exact learnedRefusedFutureRequest_has_no_witness admitted
+  | continueCurrent _ admitted =>
+      exact learnedRefusedFutureRequest_has_no_witness
+        (LearnedAlignedCurrentAgent.certificate.futureRealization.exact.backward
+          (LearnedAlignedOperationalContract.futureSourceOfState
+            LearnedAlignedCurrentAgent.state)
+          learnedRefusedFutureRequest admitted)
+
+def learnedJustifiedExtendedTransitionAfterForgetting :
+    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent .extended :=
+  { transition := learnedExtendedOperationalTransition
+    persistentSource := fun obligation => by
+      cases obligation
+      exact ULift.up
+        AdmittedIndependentLearnedIntent.preserveAuthorizedBehavior }
+
+def learnedPostForgettingContractChangePermission :
+    PostForgettingPermission LearnedAlignedCurrentAgent
+      learnedAlignedForgottenCurrentAgent (.changeContract .extended) :=
+  @PostForgettingPermission.changeContract learnedConstitutiveMetaContract
+    .aligned LearnedAlignedCurrentAgent learnedAlignedForgottenCurrentAgent
+    .extended learnedJustifiedExtendedTransitionAfterForgetting
+
+def learnedPostForgettingTransportedIntent :
+    learnedConstitutiveMetaContract.TargetPersistentWitness .aligned .extended
+      .admittedIntent :=
+  learnedJustifiedExtendedTransitionAfterForgetting.transportedPersistent
+    .admittedIntent
+
+def learnedPostForgettingRecheckedAuthorization :
+    learnedConstitutiveMetaContract.RecheckedWitness .aligned .extended
+      .authorizationConsumption :=
+  learnedJustifiedExtendedTransitionAfterForgetting.rechecked
+    .authorizationConsumption
+
+theorem learnedPostForgettingReturnToInitial_refused
+    (justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent .initial) : False := by
+  nomatch justification.transition.permission
 
 /-! ## One closed L4 / RC4 witness -/
 
-structure LearnedFutureForgettingRC4Certificate : Type 5 where
+structure LearnedFutureForgettingRC4Certificate : Type 8 where
+  alignedFutureSourceProduced :
+    LearnedAlignedOperationalContract.futureSourceOfState
+        learnedAlignedCertifiedRuntime.current.state =
+      learnedAlignedProducedFutureObservation.source
+  extendedFutureSourceProduced :
+    LearnedExtendedOperationalContract.futureSourceOfState
+        learnedExtendedCertifiedRuntime.current.state =
+      learnedExtendedProducedFutureObservation.source
   futureSourceExact :
     LearnedAlignedOperationalContract.futureSourceOfState
         learnedAlignedCertifiedRuntime.current.state =
@@ -405,18 +521,34 @@ structure LearnedFutureForgettingRC4Certificate : Type 5 where
           learnedAlignedHistoricalForgettingInput.origin ->
         recover learnedRenamedExecutedFutureForgetting.output =
           learnedRenamedHistoricalForgettingInput.origin -> False
-  continuationTransported : LearnedPostForgettingPermission
+  reducedMemoryConsumed : learnedAlignedForgottenCurrentAgent.memory =
     learnedAlignedExecutedFutureForgetting.output
-    (.continueFuture learnedAdmittedFutureRequest)
-  refusedContinuationRejected : LearnedPostForgettingPermission
-      learnedAlignedExecutedFutureForgetting.output
-      (.continueFuture learnedRefusedFutureRequest) -> False
-  recoveryRefused : LearnedPostForgettingPermission
-      learnedAlignedExecutedFutureForgetting.output
-      .recoverHistoricalIdentity -> False
+  continuationTransported : PostForgettingPermission
+    LearnedAlignedCurrentAgent learnedAlignedForgottenCurrentAgent
+    (.continueCurrent learnedAdmittedFutureRequest)
+  refusedContinuationRejected : PostForgettingPermission
+      LearnedAlignedCurrentAgent learnedAlignedForgottenCurrentAgent
+      (.continueCurrent learnedRefusedFutureRequest) -> False
+  contractChangeJustified : JustifiedPostForgettingTransition
+    LearnedAlignedCurrentAgent .extended
+  contractChangeAuthorized : PostForgettingPermission
+    LearnedAlignedCurrentAgent learnedAlignedForgottenCurrentAgent
+    (.changeContract .extended)
+  persistentIntentTransported :
+    learnedConstitutiveMetaContract.TargetPersistentWitness .aligned .extended
+      .admittedIntent
+  authorizationRechecked :
+    learnedConstitutiveMetaContract.RecheckedWitness .aligned .extended
+      .authorizationConsumption
+  forbiddenHistoricalReturn : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent .initial -> False
 
 def learnedFutureForgettingRC4 : LearnedFutureForgettingRC4Certificate :=
-  { futureSourceExact := learnedAlignedRuntime_futureSource_exact
+  { alignedFutureSourceProduced :=
+      learnedAlignedRuntimeFutureSource_is_produced
+    extendedFutureSourceProduced :=
+      learnedExtendedRuntimeFutureSource_is_produced
+    futureSourceExact := learnedAlignedRuntime_futureSource_exact
     admittedRequest := learnedAdmittedFutureRequestWitness
     refusedRequest := learnedRefusedFutureRequest_disabled
     immediateReadEqual := learnedAlignedBypass_immediate_read_equal
@@ -434,10 +566,19 @@ def learnedFutureForgettingRC4 : LearnedFutureForgettingRC4Certificate :=
       learnedExecutedFutureForgetting_preserves_every_finite_future
     originNotRecoverable :=
       learnedExecutedFutureForgetting_origin_not_recoverable
+    reducedMemoryConsumed :=
+      learnedAlignedForgottenMemory_is_executedReduction
     continuationTransported := learnedPostForgettingContinuationPermission
     refusedContinuationRejected :=
       learnedPostForgettingRefusedFuture_stays_refused
-    recoveryRefused := learnedPostForgettingRecovery_refused }
+    contractChangeJustified :=
+      learnedJustifiedExtendedTransitionAfterForgetting
+    contractChangeAuthorized :=
+      learnedPostForgettingContractChangePermission
+    persistentIntentTransported := learnedPostForgettingTransportedIntent
+    authorizationRechecked := learnedPostForgettingRecheckedAuthorization
+    forbiddenHistoricalReturn :=
+      learnedPostForgettingReturnToInitial_refused }
 
 /-! ## Joint closure on the independently learned artifact lineage -/
 
@@ -528,6 +669,10 @@ being substituted into the package. -/
 structure LearnedConstitutiveAlignmentClosureCertificate : Type 12 where
   learningProtocol : String
   learningProtocolExact : learningProtocol = independentLearningProtocolSha256
+  learningData : String
+  learningDataExact : learningData = independentLearningDataSha256
+  learningGenerator : String
+  learningGeneratorExact : learningGenerator = independentLearningGeneratorSha256
   learnedArtifact : String
   learnedArtifactExact : learnedArtifact = independentLearnedArtifactSha256
   initialArtifactAccepted : independentLearnedInitialNetworkAccepted = true
@@ -536,8 +681,56 @@ structure LearnedConstitutiveAlignmentClosureCertificate : Type 12 where
   alignedExtendedNonidentity :
     independentLearnedFirstSuccessorNetwork.neurons.length ≠
       independentLearnedSecondSuccessorNetwork.neurons.length
+  alignedReconfiguration : CertifiedReconfiguration
+    (builder := learnedAlignedReconfigurationBuilder)
+    (sourceSystem := learnedDecodedInitialArtifact.system)
+    (sourceInput := independentLearnedCertifiedInput)
+    (nextInput := independentLearnedCertifiedInput)
+  alignedReconfigurationExact :
+    alignedReconfiguration = learnedAlignedCertifiedReconfiguration
+  extendedReconfiguration : CertifiedReconfiguration
+    (builder := learnedExtendedReconfigurationBuilder)
+    (sourceSystem := learnedDecodedAlignedArtifact.system)
+    (sourceInput := independentLearnedCertifiedInput)
+    (nextInput := independentLearnedCertifiedInput)
+  extendedReconfigurationExact :
+    extendedReconfiguration = learnedExtendedCertifiedReconfiguration
+  alignedSourceTransformationNonidentity :
+    learnedAlignedComposedSourceTransformation 0 = 1
+  alignedSourceTransformationExact :
+    (ActivationOccurrence.neuronOutput learnedAlignedPrimaryNeuron :
+      ActivationOccurrence
+        (learnedDecodedAlignedArtifact.system.run
+          independentLearnedCertifiedInput)).value =
+      learnedAlignedComposedSourceTransformation
+        (ActivationOccurrence.receivedInput learnedAlignedContextPort :
+          ActivationOccurrence
+            (learnedDecodedAlignedArtifact.system.run
+              independentLearnedCertifiedInput)).value
+  extendedSourceTransformationNonidentity :
+    learnedExtendedComposedSourceTransformation 0 = 1
+  extendedSourceTransformationExact :
+    (ActivationOccurrence.neuronOutput learnedExtendedPrimaryNeuron :
+      ActivationOccurrence
+        (learnedDecodedExtendedArtifact.system.run
+          independentLearnedCertifiedInput)).value =
+      learnedExtendedComposedSourceTransformation
+        (ActivationOccurrence.receivedInput learnedExtendedContextPort :
+          ActivationOccurrence
+            (learnedDecodedExtendedArtifact.system.run
+              independentLearnedCertifiedInput)).value
   declaredInputCoverage : forall current : IndependentLearnedCurrentCase,
     Listed current.input.toRequirementInput independentLearnedDeclaredInputs
+  firstProduction : ExecutedTransitionProduction
+    learnedTransitionProductionKernel learnedInitialCheckedAgent
+      learnedOperationalTransition learnedReferenceTransitionMaterial
+  firstProductionExact : firstProduction = learnedReferenceTransitionProduction
+  secondProduction : ExecutedTransitionProduction
+    learnedTransitionProductionKernel LearnedAlignedCheckedAgent
+      learnedExtendedOperationalTransition
+      learnedExtendedReferenceTransitionMaterial
+  secondProductionExact :
+    secondProduction = learnedExtendedReferenceTransitionProduction
   lineage : LearnedArtifactExecutionLineage
   lineageExact : lineage = learnedArtifactExecutionLineage
   lineageSound : EveryCheckedStepSatisfies lineage.trace
@@ -564,10 +757,24 @@ structure LearnedConstitutiveAlignmentClosureCertificate : Type 12 where
   alignedCausalExact : alignedCausal = learnedAlignedCausalWitness
   extendedCausal : LearnedExecutedCausalWitness learnedExtendedState
   extendedCausalExact : extendedCausal = learnedExtendedCausalWitness
+  localReuseLicenses : List (LicensedStructuralTransport
+    learnedInitialCheckedAgent.certificate learnedPreCertificateGraph)
+  localReuseLicensesExact :
+    localReuseLicenses = learnedLicensedStructuralTransports
+  localReusePayloadFromLicenses :
+    licensedStructuralEntries localReuseLicenses =
+      learnedTransportedStructuralFragments
   localReuse : CalculatedIncrementalStructuralAssembly
     learnedInitialCheckedAgent.certificate learnedPreCertificateGraph
       learnedTransportedStructuralFragments learnedRecomputedStructuralFragments
   localReuseExact : localReuse = learnedCalculatedStructuralAssembly
+  localReuseInstalled :
+    HEq alignedRuntime.current.certificate
+      (assembleStateConstitution learnedAlignedTargetAnalysis.fragments)
+  firstProducedStateInstalled :
+    firstProduction.targetState = alignedRuntime.current.state
+  secondProducedStateInstalled :
+    secondProduction.targetState = extendedRuntime.current.state
   incrementalFullSuccessorExact :
     learnedAlignedGenericIncrementalSuccess.checked.next =
       learnedAlignedFullRecheckSuccess.checked.next
@@ -604,12 +811,32 @@ def learnedConstitutiveAlignmentClosure :
     LearnedConstitutiveAlignmentClosureCertificate :=
   { learningProtocol := independentLearningProtocolSha256
     learningProtocolExact := rfl
+    learningData := independentLearningDataSha256
+    learningDataExact := rfl
+    learningGenerator := independentLearningGeneratorSha256
+    learningGeneratorExact := rfl
     learnedArtifact := independentLearnedArtifactSha256
     learnedArtifactExact := rfl
     initialArtifactAccepted := independentLearnedInitialNetwork_decodes
     initialAlignedNonidentity := learnedInitialAlignedNeuronCounts_distinct
     alignedExtendedNonidentity := learnedAlignedExtendedNeuronCounts_distinct
+    alignedReconfiguration := learnedAlignedCertifiedReconfiguration
+    alignedReconfigurationExact := rfl
+    extendedReconfiguration := learnedExtendedCertifiedReconfiguration
+    extendedReconfigurationExact := rfl
+    alignedSourceTransformationNonidentity :=
+      learnedAlignedComposedSourceTransformation_nonidentity
+    alignedSourceTransformationExact :=
+      learnedAlignedComposedSourceTransformation_output_exact
+    extendedSourceTransformationNonidentity :=
+      learnedExtendedComposedSourceTransformation_nonidentity
+    extendedSourceTransformationExact :=
+      learnedExtendedComposedSourceTransformation_output_exact
     declaredInputCoverage := independentLearnedDeclaredInputs_complete
+    firstProduction := learnedReferenceTransitionProduction
+    firstProductionExact := rfl
+    secondProduction := learnedExtendedReferenceTransitionProduction
+    secondProductionExact := rfl
     lineage := learnedArtifactExecutionLineage
     lineageExact := rfl
     lineageSound := learnedArtifactExecutionLineage.sound
@@ -630,8 +857,14 @@ def learnedConstitutiveAlignmentClosure :
     alignedCausalExact := rfl
     extendedCausal := learnedExtendedCausalWitness
     extendedCausalExact := rfl
+    localReuseLicenses := learnedLicensedStructuralTransports
+    localReuseLicensesExact := rfl
+    localReusePayloadFromLicenses := rfl
     localReuse := learnedCalculatedStructuralAssembly
     localReuseExact := rfl
+    localReuseInstalled := HEq.rfl
+    firstProducedStateInstalled := rfl
+    secondProducedStateInstalled := rfl
     incrementalFullSuccessorExact :=
       learnedAlignedIncrementalAndFullSuccessor_exact
     incrementalFullCertificateExact :=
@@ -654,12 +887,27 @@ def learnedConstitutiveAlignmentClosure :
 end ConstitutiveSearch.NeuralAgent
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedBypassFutureSeparator
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedProducedFutureObservation
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedProducedFutureObservation
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedRuntimeFutureSource_is_produced
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedRuntimeFutureSource_is_produced
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedProducedFutureSource_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedEveryExactRealizationSeparatesAlignedFromBypass
 #print axioms ConstitutiveSearch.NeuralAgent.learnedBehavioralFutureRealization
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedHistoricalPreActionState
+#print axioms ConstitutiveSearch.NeuralAgent.executeLearnedHistoricalPreActionState
+#print axioms ConstitutiveSearch.NeuralAgent.learnedHistoricalPreActionIdentities_distinct
+#print axioms ConstitutiveSearch.NeuralAgent.learnedHistoricalPreAction_runtimeIdentity_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedHistoricalFutureForgettingProgram
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExecutedFutureForgetting_preserves_every_finite_future
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExecutedFutureForgetting_origin_not_recoverable
-#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingRecovery_refused
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedForgottenMemory_is_executedReduction
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingContinuationPermission
+#print axioms ConstitutiveSearch.NeuralAgent.learnedJustifiedExtendedTransitionAfterForgetting
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingContractChangePermission
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingTransportedIntent
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingRecheckedAuthorization
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingReturnToInitial_refused
 #print axioms ConstitutiveSearch.NeuralAgent.LearnedFutureForgettingRC4Certificate
 #print axioms ConstitutiveSearch.NeuralAgent.learnedFutureForgettingRC4
 #print axioms ConstitutiveSearch.NeuralAgent.LearnedArtifactExecutionLineage

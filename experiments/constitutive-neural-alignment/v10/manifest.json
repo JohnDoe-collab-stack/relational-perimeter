@@ -1,0 +1,29 @@
+{
+  "manifest_id": "constitutive-neural-complete-capability-manifest-v10",
+  "status": "inputs-frozen-not-run",
+  "hash_algorithm": "sha256",
+  "repository_commit_status": "required-before-confirmatory-run",
+  "result_status": "absent-by-protocol",
+  "files": {
+    "experiments/constitutive-neural-alignment/v10/README.md": "2e5b32b1d8bae9e64f5a29626186ced4c225483ad64d7d58280543561f36105d",
+    "experiments/constitutive-neural-alignment/v10/comparison-protocol.json": "8d6e7261b08bd132a6b756d094669162dafdae4093d0e8c648ae5001800a7c3a",
+    "experiments/constitutive-neural-alignment/v10/translation-ledger.json": "f29d67d6d5bfa522a8f1f232f404aa503d1391450ce30084849f0ba302d8d69b",
+    "experiments/constitutive-neural-alignment/v10/method-correspondence.json": "10cd0fa1745c00b546d8147f5f9176ef34e5e702b2ced61048204b94bdedad08",
+    "experiments/constitutive-neural-alignment/v10/authorized-ablations.json": "e05f6e1086b8b98526adc381ec1c28a968d39dc8b5601e56e0217c782d078544",
+    "experiments/constitutive-neural-alignment/v10/capability-matrix.json": "2fc0c9f42bb5d23bff7d6441fbbd8d893e4c69495063d680ff097a7ce597efae",
+    "experiments/constitutive-neural-alignment/v10/success-criteria.json": "ee7c8e8bfa7a294a7bad9bf15e6648fb7d7b3a60380adb7c3fdd22925858b3d2",
+    "experiments/constitutive-neural-alignment/v10/COMPARATIVE_SCOPE.md": "2133283c47cb27f9db22906ec597b22ec32f72c41b7a54e436bb05991f36cdb2",
+    "experiments/constitutive-neural-alignment/v10/result-schema.json": "455aeb1d7ccf8f3f16adaa1904263c0c909e7b2403339c5dd2f3ad3a3581f0f4",
+    "experiments/constitutive-neural-alignment/v9/learning-transformation-protocol.json": "ca37f4e514318d8bc4eca19a4094bf152d766bda44e2658e17fdb107d38c65f5",
+    "RelationalPerimeter/Agents/Neural/IndependentLearnedArtifact.lean": "b1cbe1803365710734c2a8936fb58297fa0c42035e1671617689aa5d3d821dc9",
+    "RelationalPerimeter/Agents/Neural/LearnedRuntimeAdapter.lean": "4bb3f1eebe4d8e72f00cddb746568814aee5a85514ae28e64582ba45c69ef636",
+    "RelationalPerimeter/Agents/Neural/LearnedContractFutureDivergence.lean": "cce56e113394fe9136163918ff96936782d010a279a69ec22d6e7b839ecede4e",
+    "RelationalPerimeter/Agents/Neural/AutonomousCheckerClosure.lean": "287b04816e088e1d5b5240adc21658bbbee7f6afe6d48b515f950ddc58728474",
+    "RelationalPerimeter/Agents/Neural/CapabilityComparisonAdapters.lean": "2998e87f17be1d3af445f0337d48011048b959798154a2c8cd13a875b7a065ff",
+    "RelationalPerimeter/Agents/Neural/CompleteCapabilityComparison.lean": "7a4b0b556e1cf3d224a844695002c0f55e0fb8d2e7be88dea4793ac7107b4d6e",
+    "Tests/Mechanisms/NeuralCompleteCapabilityComparisonRegression.lean": "4317f7b5c0385e526f6f96fbf11b921a178adc88a3757947be97ebd4b7c2da78",
+    "Tests/Executables/CompiledCompleteNeuralComparison.lean": "75ad089869917842b8d2bbe341cd5998f89b9b2d1619fe8f2ee0e4d28e6ff18b",
+    "scripts/check-neural-complete-comparison-v10.py": "fac3b15bfa57c605d49c6ae59d81ff223d33e914b6a6b00e018281dc9554d10f",
+    "scripts/run-neural-complete-comparison-v10.py": "cd4b1bca2c6af0c8395e8db1b78acf21a3ae0bc08894a2b8d10c65fce4132150"
+  }
+}

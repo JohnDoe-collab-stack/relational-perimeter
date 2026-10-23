@@ -32,10 +32,14 @@ theorem upstream_change_replaces_the_upstream_neuron :
   exact (show (5 : Int) ≠ 3 by decide) thresholdSame
 
 theorem local_change_replaces_the_terminal_neuron (prior : Nat) :
-    scalingLocalTailNeuron prior ≠ scalingTailNeuron prior := by
+    scalingFinalNeuron prior .local ≠ scalingFinalNeuron prior .source := by
   intro same
-  have thresholdSame := congrArg (fun neuron => neuron.threshold.level) same
-  exact (show (2 : Int) ≠ 1 by decide) thresholdSame
+  have inputsSame := congrArg (fun neuron => neuron.inputs) same
+  simp only [scalingFinalNeuron] at inputsSame
+  have tailSame := (List.cons.inj inputsSame).2
+  have secondSame := (List.cons.inj tailSame).1
+  have weightSame := congrArg (fun input => input.weight) secondSame
+  exact (show (2 : Int) ≠ 1 by decide) weightSame
 
 theorem profile_width_is_computed_by_the_checker :
     (scalingFamilyMetrics { size := 2, traceLength := 1 }).map

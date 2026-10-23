@@ -1,0 +1,16 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.LearnedHistoricalPreActionCannotBeReplaced
+open ConstitutiveSearch.NeuralAgent
+
+def forgedRenamedTrace :
+    LearnedHistoricalFutureForgettingTrace .renamed where
+  preAction := executeLearnedHistoricalPreActionState .aligned
+  action := learnedAlignedAction
+  effect := learnedAlignedEffect
+  effectExact := rfl
+
+end Tests.ExpectedFailure.LearnedHistoricalPreActionCannotBeReplaced
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedHistoricalFutureForgettingTrace
+/- AXIOM_AUDIT_END -/

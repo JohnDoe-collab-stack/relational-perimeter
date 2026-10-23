@@ -75,9 +75,14 @@ import Tests.Mechanisms.NeuralExecutableMetaContractRegression
 import Tests.Mechanisms.NeuralLearnedRuntimeAdapterRegression
 import Tests.Mechanisms.NeuralLearnedContractFutureDivergenceRegression
 import Tests.Mechanisms.NeuralLearnedFutureConstitutiveClosureRegression
+import Tests.Mechanisms.NeuralL5AutonomousCheckers
+import Tests.Mechanisms.NeuralL6IncrementalReuse
 import Tests.Mechanisms.NeuralCapabilityComparisonAdaptersRegression
 import Tests.Mechanisms.NeuralParameterizedCompiledCheckerFamilyRegression
+import Tests.Mechanisms.NeuralCompletePropertyScalingRegression
 import RelationalPerimeter.Agents.Neural.CapabilityComparisonAdapters
+import RelationalPerimeter.Agents.Neural.CompleteCapabilityComparison
+import Tests.Mechanisms.NeuralCompleteCapabilityComparisonRegression
 import Tests.Mechanisms.NeuralSerializedConstitutiveArtifactRegression
 import Tests.Mechanisms.NeuralStateCertificateFragmentsRegression
 import Tests.Mechanisms.NeuralTransitionProductionRegression
@@ -86,6 +91,9 @@ import Tests.Mechanisms.NeuralLearnedUpdateSeparationRegression
 import Tests.Mechanisms.NeuralExactForgettingRegression
 import Tests.Mechanisms.NeuralInteractionHistoryRegression
 import Tests.Mechanisms.NeuralReconfigurationRegression
+import Tests.Mechanisms.NeuralL1AutonomousObligations
+import Tests.Mechanisms.NeuralL2ExactSerializedIdentity
+import Tests.Mechanisms.NeuralL3CausalProduction
 
 /-! Build-time tooling, not a mathematical hypothesis or a new production
 dependency. Scan every constant in every imported repository module, including

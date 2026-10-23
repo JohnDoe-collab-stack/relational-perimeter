@@ -216,6 +216,60 @@ structure StateCertificateFragments
   historical : HistoricalPolicyCertificateFragment contract artifact state
   futures : CoveredFutureCertificateFragment contract artifact state
 
+/-- Structural fragments are determined by their material basis and
+observation list; the remaining fields are proofs indexed by those data. -/
+theorem StableStructuralCertificateFragment.eq_of_basis_observations
+    {contract : ConstitutiveContract}
+    {artifact : DecodedNeuralArtifact contract}
+    {state : ReconfiguredExecutionState contract.family}
+    (left right : StableStructuralCertificateFragment contract artifact state)
+    (basisExact : left.basis = right.basis)
+    (inputExact : HEq left.inputDeclared right.inputDeclared)
+    (observationsExact : left.observations = right.observations) :
+    left = right := by
+  cases left with
+  | mk leftBasis leftSystem leftInput leftObservations leftExact =>
+      cases right with
+      | mk rightBasis rightSystem rightInput rightObservations rightExact =>
+          cases basisExact
+          cases observationsExact
+          have systemProof : leftSystem = rightSystem :=
+            Subsingleton.elim _ _
+          have observationProof : leftExact = rightExact :=
+            Subsingleton.elim _ _
+          cases systemProof
+          cases inputExact
+          cases observationProof
+          rfl
+
+/-- A fragment package is determined componentwise.  This explicit
+constructive extensionality lemma avoids replacing dependent fragments by an
+unindexed snapshot. -/
+theorem StateCertificateFragments.eq_of_components
+    {contract : ConstitutiveContract}
+    {artifact : DecodedNeuralArtifact contract}
+    {state : ReconfiguredExecutionState contract.family}
+    (left right : StateCertificateFragments contract artifact state)
+    (structuralExact : left.structural = right.structural)
+    (requirementExact : left.requirement = right.requirement)
+    (causalExact : left.causal = right.causal)
+    (proposalActionExact : left.proposalAction = right.proposalAction)
+    (authorizationExact : left.authorization = right.authorization)
+    (effectExact : left.effect = right.effect)
+    (historicalExact : left.historical = right.historical)
+    (futuresExact : left.futures = right.futures) : left = right := by
+  cases left
+  cases right
+  cases structuralExact
+  cases requirementExact
+  cases causalExact
+  cases proposalActionExact
+  cases authorizationExact
+  cases effectExact
+  cases historicalExact
+  cases futuresExact
+  rfl
+
 /-- Assemble a target certificate from its dependent fragments only.  No
 already-built target certificate is accepted as an argument. -/
 def assembleStateConstitution
@@ -509,6 +563,8 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.CoveredFutureCertificateFragment
 #print axioms ConstitutiveSearch.NeuralAgent.StateConstitutiveCertificate
 #print axioms ConstitutiveSearch.NeuralAgent.StateCertificateFragments
+#print axioms ConstitutiveSearch.NeuralAgent.StableStructuralCertificateFragment.eq_of_basis_observations
+#print axioms ConstitutiveSearch.NeuralAgent.StateCertificateFragments.eq_of_components
 #print axioms ConstitutiveSearch.NeuralAgent.assembleStateConstitution
 #print axioms ConstitutiveSearch.NeuralAgent.StateConstitutiveCertificate.fragments
 #print axioms ConstitutiveSearch.NeuralAgent.assemble_fragments_exact

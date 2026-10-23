@@ -1,4 +1,4 @@
-import RelationalPerimeter.Agents.Neural.LearnedFutureConstitutiveClosure
+import RelationalPerimeter.Agents.Neural.AutonomousCheckerClosure
 
 /-!
 # Named regression floor for G1--G10
@@ -33,29 +33,53 @@ def g2_executed_chain_is_constructed :
   learnedConstitutiveAlignmentClosure.lineage
 
 theorem g2_internal_transformation_is_nonidentity :
-    independentLearnedInitialNetwork.neurons.length ≠
-      independentLearnedFirstSuccessorNetwork.neurons.length :=
-  learnedConstitutiveAlignmentClosure.initialAlignedNonidentity
+    learnedAlignedComposedSourceTransformation 0 = 1 :=
+  learnedConstitutiveAlignmentClosure.alignedSourceTransformationNonidentity
+
+theorem g2_extended_internal_transformation_is_nonidentity :
+    learnedExtendedComposedSourceTransformation 0 = 1 :=
+  learnedConstitutiveAlignmentClosure.extendedSourceTransformationNonidentity
 
 /-! ## G3 -- effective causal dependencies -/
 
 def g3_source_resource_changes_the_reconfiguration :
-    CausalRole learnedInitialState.system learnedInitialState.input
+    CausalRole
+      learnedConstitutiveAlignmentClosure.alignedReconfiguration.configuration.targetSystem
+      independentLearnedCertifiedInput
       (.receivedInput
-        learnedConstitutiveAlignmentClosure.initialCausal.requirementPort) :=
-  learnedConstitutiveAlignmentClosure.initialCausal.requirementRole
+        learnedConstitutiveAlignmentClosure.alignedReconfiguration.transport.sourcePort) :=
+  learnedConstitutiveAlignmentClosure.alignedReconfiguration.transport.sourceRole
 
 def g3_requirement_resource_changes_the_reconfiguration :
-    CausalRole learnedInitialState.system learnedInitialState.input
+    CausalRole
+      learnedConstitutiveAlignmentClosure.alignedReconfiguration.configuration.targetSystem
+      independentLearnedCertifiedInput
       (.receivedInput
-        learnedConstitutiveAlignmentClosure.initialCausal.contextPort) :=
-  learnedConstitutiveAlignmentClosure.initialCausal.contextRole
+        learnedConstitutiveAlignmentClosure.alignedReconfiguration.transport.requirementPort) :=
+  learnedConstitutiveAlignmentClosure.alignedReconfiguration.transport.requirementRole
 
 def g3_authorization_is_constitutively_consumed :
-    CausalRole learnedInitialState.system learnedInitialState.input
+    CausalRole
+      learnedConstitutiveAlignmentClosure.alignedReconfiguration.configuration.targetSystem
+      independentLearnedCertifiedInput
       (.receivedInput
-        learnedConstitutiveAlignmentClosure.initialCausal.authorizationPort) :=
-  learnedConstitutiveAlignmentClosure.initialCausal.authorizationRole
+        learnedConstitutiveAlignmentClosure.alignedReconfiguration.transport.authorizationPort) :=
+  learnedConstitutiveAlignmentClosure.alignedReconfiguration.transport.authorizationRole
+
+theorem g3_source_occurrence_is_the_transformed_prior_proposal :
+    (learnedConstitutiveAlignmentClosure.alignedReconfiguration.configuration.targetSystem.encode
+        independentLearnedCertifiedInput).read
+        learnedConstitutiveAlignmentClosure.alignedReconfiguration.transport.sourcePort =
+      learnedAlignedReconfigurationBuilder.sourceCode
+        (learnedDecodedInitialArtifact.system.proposal
+          independentLearnedCertifiedInput) :=
+  learnedConstitutiveAlignmentClosure.alignedReconfiguration.transport.sourceExact
+
+def g3_context_resource_changes_the_reconfiguration :
+    CausalRole learnedDecodedAlignedArtifact.system
+      independentLearnedCertifiedInput
+      (.receivedInput learnedAlignedContextPort) :=
+  learnedConstitutiveAlignmentClosure.alignedCausal.contextRole
 
 /-! ## G4 -- arbitrary finite dependent traces -/
 
@@ -135,6 +159,32 @@ theorem g7_learned_success_iff_autonomous_local_conditions :
       LearnedFullUpdateAccepted learnedAlignedSerializedUpdate :=
   learnedAlignedIncrementalAndFullAcceptance_equivalent
 
+theorem g7_successive_incremental_and_full_recheck_agree :
+    GenericIncrementalUpdateAccepted learnedSuccessiveIncrementalCheckerEngine
+        learnedExtendedSerializedUpdate ↔
+      FullRecheckAccepted learnedSuccessiveFullRecheckEngine
+        learnedExtendedSerializedUpdate :=
+  learnedSuccessiveIncrementalAndFullAcceptance_equivalent
+
+theorem g7_successive_incremental_and_full_successor_exact :
+    learnedSuccessiveIncrementalSuccess.checked.next =
+      learnedSuccessiveFullRecheckSuccess.checked.next :=
+  learnedSuccessiveIncrementalAndFullSuccessor_exact
+
+theorem g7_post_forgetting_continuation_is_relatively_complete :
+    LearnedPostForgettingIncrementalAccepted
+        learnedPostForgettingAdmittedContinuationRequest ↔
+      Nonempty (LearnedPostForgettingLocalConditionData
+        learnedPostForgettingAdmittedContinuationRequest) :=
+  learnedPostForgettingRequiredRelativeCompleteness.1
+
+theorem g7_post_forgetting_contract_change_is_relatively_complete :
+    LearnedPostForgettingFullRecheckAccepted
+        learnedPostForgettingExtendedChangeRequest ↔
+      Nonempty (LearnedPostForgettingLocalConditionData
+        learnedPostForgettingExtendedChangeRequest) :=
+  learnedPostForgettingRequiredRelativeCompleteness.2.2.2
+
 /-! ## G8 -- exact local reuse and independent full recheck -/
 
 theorem g8_unaffected_fragment_is_transported :
@@ -170,9 +220,12 @@ end Tests.Mechanisms.NeuralG1G10RegressionFloor
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g1_every_installed_step_preserves_contracts
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g2_executed_chain_is_constructed
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g2_internal_transformation_is_nonidentity
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g2_extended_internal_transformation_is_nonidentity
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g3_source_resource_changes_the_reconfiguration
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g3_requirement_resource_changes_the_reconfiguration
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g3_authorization_is_constitutively_consumed
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g3_source_occurrence_is_the_transformed_prior_proposal
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g3_context_resource_changes_the_reconfiguration
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g4_every_finite_executed_program_is_accepted
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g5_installed_runtime_is_accessible
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g5_rejected_update_has_no_installed_successor
@@ -182,6 +235,10 @@ end Tests.Mechanisms.NeuralG1G10RegressionFloor
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g6_every_covered_finite_future_is_preserved
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_public_success_iff_autonomous_local_conditions
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_learned_success_iff_autonomous_local_conditions
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_successive_incremental_and_full_recheck_agree
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_successive_incremental_and_full_successor_exact
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_continuation_is_relatively_complete
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_contract_change_is_relatively_complete
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g8_unaffected_fragment_is_transported
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g8_incremental_and_full_recheck_are_equal
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g9_independent_learned_artifact_is_decodable

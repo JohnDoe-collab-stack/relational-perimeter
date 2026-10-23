@@ -1,0 +1,12 @@
+import RelationalPerimeter.Agents.Neural.ParameterizedCompiledCheckerFamily
+
+open ConstitutiveSearch.NeuralAgent
+
+def forbiddenUnitScalingRequirement :
+    scalingContract.requirementEncoding.Witness
+      (scalingContract.requirementEncodingAt (scalingState 2 .local)) :=
+  scalingUnit3
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.ScalingRequirementEncodingWitness
+/- AXIOM_AUDIT_END -/

@@ -32,5 +32,13 @@ name = "compiled_neural_comparison_adapters"
 root = "Tests.Executables.CompiledNeuralComparisonAdapters"
 
 [[lean_exe]]
+name = "compiled_complete_neural_comparison"
+root = "Tests.Executables.CompiledCompleteNeuralComparison"
+
+[[lean_exe]]
 name = "compiled_parameterized_neural_checker"
 root = "Tests.Executables.CompiledParameterizedNeuralCheckerFamily"
+
+[[lean_exe]]
+name = "compiled_complete_property_neural_scaling"
+root = "Tests.Executables.CompiledCompletePropertyNeuralScaling"

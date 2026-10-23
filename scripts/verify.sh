@@ -20,10 +20,15 @@ fi
 "${python_command[@]}" scripts/check-neural-comparison-protocol-v4.py --self-test
 "${python_command[@]}" scripts/check-neural-comparison-adapters-v6-archive.py --self-test
 "${python_command[@]}" scripts/check-neural-comparison-adapters-v6-archive.py
+"${python_command[@]}" scripts/check-neural-joint-protocol-v9.py --self-test
+"${python_command[@]}" scripts/check-neural-joint-protocol-v9.py
+"${python_command[@]}" scripts/check-neural-complete-comparison-v10.py --self-test --allow-results
+"${python_command[@]}" scripts/check-neural-complete-comparison-v10.py --allow-results
 "${python_command[@]}" scripts/check-compiled-neural-checker-measurement.py --self-test
 "${python_command[@]}" scripts/check-compiled-neural-checker-measurement.py
 "${python_command[@]}" scripts/check-compiled-parameterized-neural-scaling-v8.py --archive-metadata --self-test
 "${python_command[@]}" scripts/check-compiled-parameterized-neural-scaling-v8.py --archive-metadata
+"${python_command[@]}" scripts/check-complete-property-scaling-v11.py --allow-draft --self-test
 "${python_command[@]}" scripts/check-independent-neural-artifact.py
 "${python_command[@]}" scripts/check-final-neural-campaign.py
 

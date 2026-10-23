@@ -1,0 +1,17 @@
+import RelationalPerimeter
+
+namespace Tests.ExpectedFailure.ReconstructedLearnedEffectCannotReplaceProducedEffect
+open ConstitutiveSearch.NeuralAgent
+
+def reconstructedEffect :
+    LearnedEffectWitness learnedAlignedActionSourceState
+      learnedAlignedInstallingAction :=
+  { successor := learnedAlignedInstallingAction.result.1
+    event := learnedAlignedInstallingAction.result.2
+    successorExact := rfl
+    eventExact := rfl }
+
+end Tests.ExpectedFailure.ReconstructedLearnedEffectCannotReplaceProducedEffect
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.produceLearnedEffect
+/- AXIOM_AUDIT_END -/

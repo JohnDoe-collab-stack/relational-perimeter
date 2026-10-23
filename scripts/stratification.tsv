@@ -60,7 +60,7 @@ SegmentedResidualRole	F	enforced	Primitive residual roles and exact internal rea
 AbstractSegmentedTurning	F	enforced	Abstract segmented boundary and turning
 ExactTypeTransport	U	enforced	Constructive exact transport between carriers
 StrongPerimetralTurning	F	enforced	Strong relational perimeter and affirmative turning
-RelationalPerimeter	M44	enforced	Public root joining scientific production the integrated master machine and the frozen neural capability comparison interfaces
+RelationalPerimeter	M48	enforced	Public root joining scientific production the integrated master machine and the complete frozen neural capability comparison interfaces
 RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement
 RelationalPerimeter.Agents.Constitutive.ProducedEvidence	A11	enforced	Constitutive agent ProducedEvidence
 RelationalPerimeter.Agents.Constitutive.State	A12	enforced	Constitutive agent State
@@ -340,6 +340,7 @@ RelationalPerimeter.Agents.Neural.CoveredFutureRealization	M23	enforced	Exact re
 RelationalPerimeter.Agents.Neural.StateConstitutiveCertificate	M24	enforced	Exact state-indexed consumption of causal contract historical and future obligations
 RelationalPerimeter.Agents.Neural.ExecutableMetaContract	M25	enforced	Executable reflected decisions indexed by the fixed meta-contract decoded artifact and exact state
 RelationalPerimeter.Agents.Neural.CheckedState	M26	enforced	Privately constructed checked agents and meta-contract-indexed executed updates
+RelationalPerimeter.Agents.Neural.AutonomousContractTransitions	M27	enforced	RC1 and RC3 autonomous state obligations future observations and current-agent-indexed post-forgetting transition permissions
 RelationalPerimeter.Agents.Neural.TransitionProduction	M27	enforced	Single semantic successor production consumed by complete and incremental transition checkers
 RelationalPerimeter.Agents.Neural.ReferenceChecker	M28	enforced	Executable initial decoding and complete reference-update verification
 RelationalPerimeter.Agents.Neural.StableNodeCorrespondence	M29	enforced	Validated partial stable-key correspondence across decoded artifact versions
@@ -357,5 +358,10 @@ RelationalPerimeter.Agents.Neural.FiniteCounterfactualDivergence	M40	enforced	Ex
 RelationalPerimeter.Agents.Neural.LearnedRuntimeAdapter	M41	enforced	Independently learned artifacts adapted to the generic initial checker incremental checker and certified runtime
 RelationalPerimeter.Agents.Neural.LearnedContractFutureDivergence	M42	enforced	Current equivalence and finite future divergence calculated inside the exact learned operational contract and closed runtime API
 RelationalPerimeter.Agents.Neural.LearnedFutureConstitutiveClosure	M43	enforced	Learned future admission exact realization executed forgetting and universal separation closed on one produced chain
+RelationalPerimeter.Agents.Neural.LearnedSuccessiveAffectedCone	M44	enforced	Exact successive pre-certificate graph and source-transported versus target-recomputed structural supplies
+RelationalPerimeter.Agents.Neural.LearnedSuccessiveStructuralCone	M45	enforced	Exact successive input and neuron cone equations used by the material structural assembly
+RelationalPerimeter.Agents.Neural.AutonomousCheckerClosure	M46	enforced	Autonomous successive and post-forgetting checkers with independent full recheck and finite local-condition completeness
 RelationalPerimeter.Agents.Neural.CapabilityComparisonAdapters	M43	enforced	Six frozen typed comparison adapters consuming one exact learned material package without comparative overclaim
+RelationalPerimeter.Agents.Neural.CompleteCapabilityComparison	M47	enforced	Complete nine-method comparison with relational execution reference combination independent full recheck and explicit translations
 RelationalPerimeter.Agents.Neural.ParameterizedCompiledCheckerFamily	M43	enforced	Parameterized growing neural artifacts consumed by the same compiled initial incremental and full-reference checkers
+RelationalPerimeter.Agents.Neural.CompletePropertyScalingMeasurement	M44	enforced	Complete substantive contract accounting and canonical certificate delta size model for scaling measurements

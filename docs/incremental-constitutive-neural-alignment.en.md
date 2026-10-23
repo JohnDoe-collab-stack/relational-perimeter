@@ -2,13 +2,14 @@
 
 ## Scientific status
 
-Proposed claim identifier:
+Registered claim identifier:
 `CONSTITUTIVE_NEURAL_ALIGNMENT_CLOSED_RUNTIME`.
 
-This is the English canonical passage prepared before the evidence commit,
-claim registration, and independent audits. It describes the results present
-in the working tree; it does not yet declare C18 satisfied and does not replace
-the exact revision that must be recorded after the freeze.
+The registry already contains this identifier for a historical revision. The
+changes in the current candidate nevertheless reopen the scientific reading,
+translation comparison, and independent audit. This text describes the
+results present in the working tree; it does not declare C18 satisfied and it
+does not transfer any earlier verdict to the future evidence revision.
 
 ## Canonical claim
 
@@ -17,8 +18,8 @@ alone. It is relative to a received and fixed constitutive meta-contract that
 separates admitted operational contracts, authorized transitions between them,
 and the obligations that must be preserved or rechecked. For a serialized
 neural artifact accepted by the initial checker and any finite update sequence
-accepted by the dependent checker, the runtime continues only the chain that
-was actually certified: decoding of the received artifact, execution of the
+accepted by the dependent checker, the formalized runtime continues only the
+chain that was actually certified: decoding of the received artifact, execution of the
 neural mechanism, proposal, action, effect, successor, contract transition,
 and future obligations. Every step consumes exactly the certified state
 produced by the preceding step; a rejected update supplies no successor that
@@ -26,10 +27,11 @@ the closed API can install.
 
 Certification does not receive its conclusion as input. Contract obligations
 are defined independently of checker success, instantiated on the produced
-state and occurrences, and then decided by executable analyses. The complete
-checker recomputes every fragment; the incremental checker transports only
-fragments outside the affected cone and recomputes the others. On their stated
-local domain, their acceptance results are equivalent and their successful
+state and occurrences, and then decided by executable analyses. The independent
+complete-reference checker reconstructs its fragments without receiving the
+incremental path's verdict or fragments; the incremental checker transports
+licensed fragments outside the affected cone and recomputes the others. On
+their stated finite domain, their acceptance results are equivalent and their successful
 runs produce the same certified successor.
 
 The learned instance closes a separation that observation of current behavior
@@ -79,7 +81,7 @@ The chain explicitly distinguishes:
 | Status | Content |
 | --- | --- |
 | Received and fixed | Meta-contract, admitted contract, requirements, contexts, authorizations, serialized artifacts, and future schema. |
-| Produced by execution | Decoding, neural activations, transformations, proposals, actions, effects, successors, local decisions, and affected cones. |
+| Produced by execution | Decoding, neural activations, transformations, proposals, actions, effects, successors, and local decisions; the affected cone is then computed from the decoded graph and delta. |
 | Derived | State certificates, checker soundness, incremental/complete equivalence, contract preservation, and runtime reachability. |
 | Authorized | Contract transitions and updates admitted by the meta-contract; admission remains distinct from satisfaction of the target contract. |
 | Transported | Fragments outside the cone, persistent obligations, and futures explicitly covered by the contract. |
@@ -104,32 +106,34 @@ The chain explicitly distinguishes:
 | Separation for every exact realization and preservation of every covered finite sequence | `learnedEveryExactRealizationSeparatesAlignedFromBypass`, `learnedExecutedFutureForgetting_preserves_every_finite_future` in [LearnedFutureConstitutiveClosure.lean](../RelationalPerimeter/Agents/Neural/LearnedFutureConstitutiveClosure.lean) |
 | Joint certificate over the same learned lineage | `learnedConstitutiveAlignmentClosure` in [LearnedFutureConstitutiveClosure.lean](../RelationalPerimeter/Agents/Neural/LearnedFutureConstitutiveClosure.lean) |
 
-These declarations remain subject to the repository's complete gates and the
-future evidence commit. The table identifies claim entry points; it does not
-replace an audit of their transitive dependencies.
+These declarations remain subject to the repository's complete gates, linkage
+to an existing evidence revision, and distinct validity and scope audits. The
+table identifies claim entry points; it replaces neither an audit of their
+transitive dependencies nor a generalization beyond the interfaces and
+quantifiers actually stated.
 
 ## Comparative evidence package
 
 ### Capability comparison
 
 The
-[`constitutive-neural-capability-comparison-v6`](../experiments/constitutive-neural-alignment/v6/comparison-protocol.json)
-protocol freezes one learned artifact, one exact update pair, six typed
-adapters, and eight capabilities. The six classes are extensional verification
-of current behavior, interventional causal analysis of a fixed network,
-pre-execution action shielding, guaranteed self-adaptive systems, incremental
-neural verification with proof reuse, and certificate propagation through a
-deployment chain.
+[`constitutive-neural-complete-capability-comparison-v10`](../experiments/constitutive-neural-alignment/v10/comparison-protocol.json)
+protocol freezes one learned artifact and one exact update pair for nine local
+computations: six typed adapters, the relational method, an explicit reference
+combination, and the independent complete recheck. Each method receives the
+interventions, futures, contracts, and versions that its declared interface
+can consume. The reference combination computes its observations without
+receiving the final verdict or target certificate as an oracle.
 
-The current status is strict: v6 is a historical protocol whose fingerprints
-no longer match the current candidate sources. No v6 confirmatory run has been
-executed and no comparative result file exists. A new version must freeze the
-adapters and their references before any confirmatory execution. No general
-superiority, baseline incapacity, or novelty conclusion may therefore be
-drawn. The only formal contrast already closed at this level concerns
-verifiers whose verdict factors exclusively through the finite current table:
-they cannot distinguish the two candidates, whereas the constitutive checker
-distinguishes them through executed dependency and the future contract.
+The current status remains strict: v10 is frozen before execution, but no
+confirmatory run has yet been produced and its reserved outputs are absent.
+The package also preregisters that no unique P1 discriminatory advantage is
+currently certified: the reference combination and complete recheck also
+distinguish the candidates. The closed formal result is the local conjunction
+of executed dependencies, contract transitions, licensed reuse, future
+divergence, and forgetting over one typed lineage. No general superiority,
+baseline incapacity, or novelty conclusion may be drawn before the planned run
+and audits.
 
 ### Scaling of the compiled checker
 
@@ -148,10 +152,14 @@ preserved rather than rewritten; they do not validate the current candidate.
 The complete v8 source snapshot was not committed and is no longer
 reconstructible from Git history; the gate can therefore revalidate only the
 protocol, raw results, their aggregation, and their archived fingerprints, not
-re-elaborate that exact snapshot. The exploratory campaign rerun on the current
-candidate confirms structural reuse but remains unfrozen, lacks a usable memory
-measurement, and has unfavorable incremental timings. P8 and S6 therefore
-remain open for a new preregistered campaign over a recoverable source commit.
+re-elaborate that exact snapshot. The
+[`compiled-complete-property-scaling-v11`](../experiments/constitutive-neural-alignment/v11/scaling-protocol.json)
+campaign now preregisters a complete constitutive property, a family with
+growing graphs, obligations, and traces, all phase costs, memory, serialized
+sizes, and an independent recheck. It remains a draft awaiting a stable source
+commit: no freeze fingerprints or confirmatory results exist yet. P8 and S6
+therefore remain open, and exploratory runs are not promoted to scientific
+evidence.
 
 ## Explicit exclusions
 

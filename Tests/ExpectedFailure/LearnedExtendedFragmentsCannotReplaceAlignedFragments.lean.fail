@@ -1,0 +1,14 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+/- Equal-looking witness payloads do not permit semantic fragments indexed by
+the extended contract, artifact and state to enter the aligned assembly. -/
+example : RecomputedStateCertificateFragments
+    LearnedAlignedOperationalContract learnedDecodedAlignedArtifact
+      learnedAlignedState :=
+  learnedExtendedRecomputedCertificateFragments
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedRecomputedCertificateFragments
+/- AXIOM_AUDIT_END -/

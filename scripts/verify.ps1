@@ -22,6 +22,14 @@ if ($LASTEXITCODE -ne 0) { throw "neural comparison protocol v4 self-test failed
 if ($LASTEXITCODE -ne 0) { throw "neural comparison adapters v6 archive self-test failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-neural-comparison-adapters-v6-archive.py")
 if ($LASTEXITCODE -ne 0) { throw "neural comparison adapters v6 archive check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-neural-joint-protocol-v9.py") --self-test
+if ($LASTEXITCODE -ne 0) { throw "neural joint protocol v9 self-test failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-neural-joint-protocol-v9.py")
+if ($LASTEXITCODE -ne 0) { throw "neural joint protocol v9 check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-neural-complete-comparison-v10.py") --self-test --allow-results
+if ($LASTEXITCODE -ne 0) { throw "neural complete comparison v10 self-test failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-neural-complete-comparison-v10.py") --allow-results
+if ($LASTEXITCODE -ne 0) { throw "neural complete comparison v10 check failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-compiled-neural-checker-measurement.py") --self-test
 if ($LASTEXITCODE -ne 0) { throw "compiled neural checker measurement self-test failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-compiled-neural-checker-measurement.py")
@@ -30,6 +38,8 @@ if ($LASTEXITCODE -ne 0) { throw "compiled neural checker measurement check fail
 if ($LASTEXITCODE -ne 0) { throw "parameterized neural scaling v8 self-test failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-compiled-parameterized-neural-scaling-v8.py") --archive-metadata
 if ($LASTEXITCODE -ne 0) { throw "parameterized neural scaling v8 check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-complete-property-scaling-v11.py") --allow-draft --self-test
+if ($LASTEXITCODE -ne 0) { throw "complete-property neural scaling v11 check failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-independent-neural-artifact.py")
 if ($LASTEXITCODE -ne 0) { throw "independent neural artifact check failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-final-neural-campaign.py")

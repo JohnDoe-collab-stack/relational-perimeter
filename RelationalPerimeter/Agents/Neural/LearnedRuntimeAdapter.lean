@@ -1,5 +1,6 @@
 import RelationalPerimeter.Agents.Neural.CertifiedRuntimeAccessibility
 import RelationalPerimeter.Agents.Neural.FiniteCounterfactualDivergence
+import RelationalPerimeter.Agents.Neural.Reconfiguration
 
 /-!
 # Learned artifact adapter for the generic checker and runtime
@@ -17,6 +18,7 @@ the counterfactual interpreter is the future contract actually carried by the
 certified runtime state.
 -/
 set_option genInjectivity false
+set_option maxRecDepth 10000
 set_option maxHeartbeats 4000000
 namespace ConstitutiveSearch.NeuralAgent
 open NativeMechanism
@@ -273,10 +275,9 @@ theorem LearnedActionWitness.execution_exact
 /-- Effect satisfaction is the effect produced by the sealed action above.
 It is not a proposition about the proposal value. -/
 structure LearnedEffectWitness
-    (state : ReconfiguredExecutionState independentLearnedRequirementFamily) :
-    Type 3 where
+    (state : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (action : LearnedActionWitness state) : Type 3 where
   private mk ::
-  action : LearnedActionWitness state
   successor : Agent.Memory
   event : Agent.Event
   successorExact : successor = action.result.1
@@ -284,20 +285,22 @@ structure LearnedEffectWitness
 
 def produceLearnedEffect
     {state : ReconfiguredExecutionState independentLearnedRequirementFamily}
-    (action : LearnedActionWitness state) : LearnedEffectWitness state :=
-  .mk action action.result.1 action.result.2 rfl rfl
+    (action : LearnedActionWitness state) : LearnedEffectWitness state action :=
+  .mk action.result.1 action.result.2 rfl rfl
 
 theorem LearnedEffectWitness.effect_exact
     {state : ReconfiguredExecutionState independentLearnedRequirementFamily}
-    (effect : LearnedEffectWitness state) :
+    {action : LearnedActionWitness state}
+    (effect : LearnedEffectWitness state action) :
     (effect.successor, effect.event) =
-      Agent.executeInput state.memory effect.action.request := by
+      Agent.executeInput state.memory action.request := by
   rw [effect.successorExact, effect.eventExact]
-  exact effect.action.execution_exact
+  exact action.execution_exact
 
 def LearnedEffectWitness.targetState
     {state : ReconfiguredExecutionState independentLearnedRequirementFamily}
-    (effect : LearnedEffectWitness state) :
+    {action : LearnedActionWitness state}
+    (effect : LearnedEffectWitness state action) :
     ReconfiguredExecutionState independentLearnedRequirementFamily :=
   { system := state.system
     input := state.input
@@ -339,10 +342,16 @@ def learnedAuthorizationObligations : ContractObligationFamily where
     (ReconfiguredExecutionState independentLearnedRequirementFamily)
   Witness := fun state => LearnedAuthorizationWitness state.down
 
+structure LearnedEffectSatisfaction
+    (state : ReconfiguredExecutionState independentLearnedRequirementFamily) :
+    Type 3 where
+  action : LearnedActionWitness state
+  effect : LearnedEffectWitness state action
+
 def learnedEffectObligations : ContractObligationFamily where
   Statement := ULift.{3}
     (ReconfiguredExecutionState independentLearnedRequirementFamily)
-  Witness := fun state => LearnedEffectWitness state.down
+  Witness := fun state => LearnedEffectSatisfaction state.down
 
 def learnedFutureObligations : ContractObligationFamily where
   Statement := LearnedCoveredFutureStatement
@@ -1251,6 +1260,397 @@ theorem learnedFin_ne_of_val_ne {size : Nat} {left right : Fin size}
   intro same
   exact different (congrArg Fin.val same)
 
+/-! ## Requirement-directed production of the learned successors
+
+The learned transition reuses the generic reconfiguration boundary.  The
+builder reads the exact preceding run, the next requirement and context, and
+the incorporated permission before selecting the already learned target
+system.  The learned weights are never modified.  The exact target execution
+then carries three distinct effective occurrences: the transformed preceding
+proposal, the received requirement, and the incorporated authorization.
+-/
+
+def learnedBoolCode : Bool -> Activation
+  | false => 0
+  | true => 1
+
+def learnedPriorProposalCode : Bool -> Activation
+  | false => 1
+  | true => 0
+
+def learnedReconfigurationPermissionVariable : Bool -> SAT.Var
+  | false => 0
+  | true => 1
+
+def learnedReconfigurationAuthorizationCode
+    (next : IndependentLearnedRequirementInput)
+    (permission : ReconfigurationPermission independentLearnedRequirementFamily
+      learnedReconfigurationPermissionVariable next) : Activation :=
+  Int.ofNat (permission.position + 1)
+
+def learnedProposalFromRun
+    (system : NativeSystem IndependentLearnedRequirementInput Bool)
+    (run : NativeRun system.program) : Bool :=
+  system.decode (readOutputs system.outputs run.activations)
+
+/-- Select the learned target only after consuming all four prescribed
+materials.  A failure of any condition retains the exact source system; the
+learned target is therefore not an independently supplied certificate. -/
+def buildLearnedReconfiguredSystem
+    (target : NativeSystem IndependentLearnedRequirementInput Bool)
+    (sourceSystem : NativeSystem IndependentLearnedRequirementInput Bool)
+    (sourceRun : NativeRun sourceSystem.program)
+    (next : IndependentLearnedRequirementInput)
+    (authorization : IncorporatedReconfigurationPermission
+      independentLearnedRequirementFamily
+      learnedReconfigurationPermissionVariable next) :
+    NativeSystem IndependentLearnedRequirementInput Bool :=
+  if learnedProposalFromRun sourceSystem sourceRun then
+    if next.requirement then
+      if next.context.1 then sourceSystem
+      else if next.context.2 then
+        if learnedReconfigurationAuthorizationCode next
+            authorization.admission.permission = 1 then target
+        else sourceSystem
+      else sourceSystem
+    else sourceSystem
+  else sourceSystem
+
+def learnedAlignedReconfigurationBuilder :
+    ReconfigurationBuilder independentLearnedRequirementFamily where
+  permissionVariable := learnedReconfigurationPermissionVariable
+  sourceCode := learnedPriorProposalCode
+  requirementCode := fun requirement _ => learnedBoolCode requirement
+  authorizationCode := learnedReconfigurationAuthorizationCode
+  build := buildLearnedReconfiguredSystem learnedDecodedAlignedArtifact.system
+
+def learnedExtendedReconfigurationBuilder :
+    ReconfigurationBuilder independentLearnedRequirementFamily where
+  permissionVariable := learnedReconfigurationPermissionVariable
+  sourceCode := learnedPriorProposalCode
+  requirementCode := fun requirement _ => learnedBoolCode requirement
+  authorizationCode := learnedReconfigurationAuthorizationCode
+  build := buildLearnedReconfiguredSystem learnedDecodedExtendedArtifact.system
+
+def learnedReconfigurationPermission
+    (next : IndependentLearnedRequirementInput) :
+    ReconfigurationPermission independentLearnedRequirementFamily
+      learnedReconfigurationPermissionVariable next := by
+  cases next with
+  | mk requirement context =>
+      cases requirement <;> exact .here
+
+def learnedReconfigurationAdmission
+    (next : IndependentLearnedRequirementInput) :
+    AdmittedReconfigurationPermission independentLearnedRequirementFamily
+      learnedReconfigurationPermissionVariable next :=
+  admitReconfigurationPermission (learnedReconfigurationPermission next) (by
+    cases next with
+    | mk requirement context =>
+        cases context with
+        | mk context authorization =>
+            cases requirement <;> cases context <;> cases authorization <;> rfl)
+
+def learnedReconfigurationAuthorization
+    (next : IndependentLearnedRequirementInput) :
+    IncorporatedReconfigurationPermission independentLearnedRequirementFamily
+      learnedReconfigurationPermissionVariable next :=
+  incorporateReconfigurationPermission (learnedReconfigurationAdmission next)
+
+def learnedAlignedReconfiguration :
+    Reconfiguration learnedAlignedReconfigurationBuilder
+      learnedDecodedInitialArtifact.system independentLearnedCertifiedInput
+      independentLearnedCertifiedInput :=
+  reconfigure learnedAlignedReconfigurationBuilder
+    independentLearnedCertifiedInput independentLearnedCertifiedInput
+    (learnedReconfigurationAuthorization independentLearnedCertifiedInput)
+
+def learnedExtendedReconfiguration :
+    Reconfiguration learnedExtendedReconfigurationBuilder
+      learnedDecodedAlignedArtifact.system independentLearnedCertifiedInput
+      independentLearnedCertifiedInput :=
+  reconfigure learnedExtendedReconfigurationBuilder
+    independentLearnedCertifiedInput independentLearnedCertifiedInput
+    (learnedReconfigurationAuthorization independentLearnedCertifiedInput)
+
+theorem learnedAlignedReconfiguration_target_exact :
+    learnedAlignedReconfiguration.targetSystem =
+      learnedDecodedAlignedArtifact.system := by
+  rfl
+
+theorem learnedExtendedReconfiguration_target_exact :
+    learnedExtendedReconfiguration.targetSystem =
+      learnedDecodedExtendedArtifact.system := by
+  rfl
+
+def learnedThreeSignalInputs
+    (source requirement authorization : Activation) : SizedActivations 3 :=
+  ((SizedActivations.snoc SizedActivations.empty requirement).snoc source).snoc
+    authorization
+
+def learnedAlignedReconfigurationCombinedOutputs
+    (source requirement authorization : Activation) : List Activation :=
+  readOutputs learnedDecodedAlignedArtifact.system.outputs
+    (executeProgram learnedDecodedAlignedArtifact.system.program
+      (learnedThreeSignalInputs source requirement authorization))
+
+def learnedExtendedReconfigurationCombinedOutputs
+    (source requirement authorization : Activation) : List Activation :=
+  readOutputs learnedDecodedExtendedArtifact.system.outputs
+    (executeProgram learnedDecodedExtendedArtifact.system.program
+      (learnedThreeSignalInputs source requirement authorization))
+
+def learnedAlignedRequiredMechanismTransport :
+    RequiredMechanismTransport learnedAlignedReconfiguration where
+  sourcePort := learnedAlignedContextPort
+  requirementPort := learnedAlignedRequirementPort
+  authorizationPort := learnedAlignedAuthorizationPort
+  portsDistinct := learnedFin_ne_of_val_ne (by decide)
+  sourceAuthorizationDistinct := learnedFin_ne_of_val_ne (by decide)
+  requirementAuthorizationDistinct := learnedFin_ne_of_val_ne (by decide)
+  sourceExact := by rfl
+  requirementExact := by rfl
+  authorizationExact := by rfl
+  sourceRole := learnedAlignedContextRole
+  requirementRole := learnedAlignedCurrentRole .requirementOnly
+  authorizationRole := learnedAlignedAuthorizationRole
+
+def learnedExtendedRequiredMechanismTransport :
+    RequiredMechanismTransport learnedExtendedReconfiguration where
+  sourcePort := learnedExtendedContextPort
+  requirementPort := learnedExtendedRequirementPort
+  authorizationPort := learnedExtendedAuthorizationPort
+  portsDistinct := learnedFin_ne_of_val_ne (by decide)
+  sourceAuthorizationDistinct := learnedFin_ne_of_val_ne (by decide)
+  requirementAuthorizationDistinct := learnedFin_ne_of_val_ne (by decide)
+  sourceExact := by rfl
+  requirementExact := by rfl
+  authorizationExact := by rfl
+  sourceRole := learnedExtendedContextRole
+  requirementRole := learnedExtendedCurrentRole .requirementOnly
+  authorizationRole := learnedExtendedAuthorizationRole
+
+def learnedAlignedReconfiguredProposalDerivation :
+    ReconfiguredProposalDerivation learnedAlignedReconfiguration
+      learnedAlignedRequiredMechanismTransport where
+  combine := learnedAlignedReconfigurationCombinedOutputs
+  combinationExecuted := by rfl
+  decoderExact := by rfl
+
+def learnedExtendedReconfiguredProposalDerivation :
+    ReconfiguredProposalDerivation learnedExtendedReconfiguration
+      learnedExtendedRequiredMechanismTransport where
+  combine := learnedExtendedReconfigurationCombinedOutputs
+  combinationExecuted := by rfl
+  decoderExact := by rfl
+
+def learnedAlignedCertifiedReconfiguration :
+    CertifiedReconfiguration
+      (builder := learnedAlignedReconfigurationBuilder)
+      (sourceSystem := learnedDecodedInitialArtifact.system)
+      (sourceInput := independentLearnedCertifiedInput)
+      (nextInput := independentLearnedCertifiedInput) :=
+  certifyReconfiguration learnedAlignedReconfiguration
+    learnedAlignedRequiredMechanismTransport
+    learnedAlignedReconfiguredProposalDerivation
+
+def learnedExtendedCertifiedReconfiguration :
+    CertifiedReconfiguration
+      (builder := learnedExtendedReconfigurationBuilder)
+      (sourceSystem := learnedDecodedAlignedArtifact.system)
+      (sourceInput := independentLearnedCertifiedInput)
+      (nextInput := independentLearnedCertifiedInput) :=
+  certifyReconfiguration learnedExtendedReconfiguration
+    learnedExtendedRequiredMechanismTransport
+    learnedExtendedReconfiguredProposalDerivation
+
+def learnedAlignedSourceInputTransformation :
+    ExecutedSignalTransformation
+      (learnedDecodedAlignedArtifact.system.run independentLearnedCertifiedInput)
+      (.receivedInput learnedAlignedContextPort)
+      (.neuronOutput ⟨0, by decide⟩) :=
+  { edge := learnedAlignedContextInputEdge }
+
+def learnedAlignedSourceXorTransformation :
+    ExecutedSignalTransformation
+      (learnedDecodedAlignedArtifact.system.run independentLearnedCertifiedInput)
+      (.neuronOutput ⟨0, by decide⟩)
+      (.neuronOutput learnedAlignedXorNeuron) :=
+  { edge := learnedAlignedCurrentXorEdge .requirementOnly }
+
+def learnedAlignedSourceIntermediateTransformation :
+    ExecutedSignalTransformation
+      (learnedDecodedAlignedArtifact.system.run independentLearnedCertifiedInput)
+      (.neuronOutput learnedAlignedXorNeuron)
+      (.neuronOutput learnedAlignedIntermediateNeuron) :=
+  { edge := learnedAlignedCurrentIntermediateEdge .requirementOnly }
+
+def learnedAlignedSourceOutputTransformation :
+    ExecutedSignalTransformation
+      (learnedDecodedAlignedArtifact.system.run independentLearnedCertifiedInput)
+      (.neuronOutput learnedAlignedIntermediateNeuron)
+      (.neuronOutput learnedAlignedPrimaryNeuron) :=
+  { edge := learnedAlignedCurrentPrimaryEdge .requirementOnly }
+
+def learnedAlignedComposedSourceTransformation : Activation -> Activation :=
+  fun value => learnedAlignedSourceOutputTransformation.transform
+    (learnedAlignedSourceIntermediateTransformation.transform
+      (learnedAlignedSourceXorTransformation.transform
+        (learnedAlignedSourceInputTransformation.transform value)))
+
+theorem learnedAlignedSourceInputTransformation_nonidentity :
+    learnedAlignedSourceInputTransformation.transform 0 = 1 := by
+  rfl
+
+theorem learnedAlignedComposedSourceTransformation_nonidentity :
+    learnedAlignedComposedSourceTransformation 0 = 1 := by
+  rfl
+
+theorem learnedAlignedComposedSourceTransformation_output_exact :
+    (ActivationOccurrence.neuronOutput learnedAlignedPrimaryNeuron :
+      ActivationOccurrence
+        (learnedDecodedAlignedArtifact.system.run
+          independentLearnedCertifiedInput)).value =
+      learnedAlignedComposedSourceTransformation
+        (ActivationOccurrence.receivedInput learnedAlignedContextPort :
+          ActivationOccurrence
+            (learnedDecodedAlignedArtifact.system.run
+              independentLearnedCertifiedInput)).value := by
+  calc
+    _ = learnedAlignedSourceOutputTransformation.transform
+        (ActivationOccurrence.neuronOutput learnedAlignedIntermediateNeuron :
+          ActivationOccurrence
+            (learnedDecodedAlignedArtifact.system.run
+              independentLearnedCertifiedInput)).value :=
+      learnedAlignedSourceOutputTransformation.outputExact
+    _ = learnedAlignedSourceOutputTransformation.transform
+        (learnedAlignedSourceIntermediateTransformation.transform
+          (ActivationOccurrence.neuronOutput learnedAlignedXorNeuron :
+            ActivationOccurrence
+              (learnedDecodedAlignedArtifact.system.run
+                independentLearnedCertifiedInput)).value) :=
+      congrArg learnedAlignedSourceOutputTransformation.transform
+        learnedAlignedSourceIntermediateTransformation.outputExact
+    _ = learnedAlignedSourceOutputTransformation.transform
+        (learnedAlignedSourceIntermediateTransformation.transform
+          (learnedAlignedSourceXorTransformation.transform
+            (ActivationOccurrence.neuronOutput ⟨0, by decide⟩ :
+              ActivationOccurrence
+                (learnedDecodedAlignedArtifact.system.run
+                  independentLearnedCertifiedInput)).value)) :=
+      congrArg (fun value => learnedAlignedSourceOutputTransformation.transform
+        (learnedAlignedSourceIntermediateTransformation.transform value))
+        learnedAlignedSourceXorTransformation.outputExact
+    _ = _ :=
+      congrArg (fun value => learnedAlignedSourceOutputTransformation.transform
+        (learnedAlignedSourceIntermediateTransformation.transform
+          (learnedAlignedSourceXorTransformation.transform value)))
+        learnedAlignedSourceInputTransformation.outputExact
+
+def learnedExtendedSourceInputTransformation :
+    ExecutedSignalTransformation
+      (learnedDecodedExtendedArtifact.system.run independentLearnedCertifiedInput)
+      (.receivedInput learnedExtendedContextPort)
+      (.neuronOutput ⟨0, by decide⟩) :=
+  { edge := learnedExtendedContextInputEdge }
+
+def learnedExtendedSourceXorTransformation :
+    ExecutedSignalTransformation
+      (learnedDecodedExtendedArtifact.system.run independentLearnedCertifiedInput)
+      (.neuronOutput ⟨0, by decide⟩)
+      (.neuronOutput learnedExtendedXorNeuron) :=
+  { edge := learnedExtendedCurrentXorEdge .requirementOnly }
+
+def learnedExtendedSourceIntermediateTransformation :
+    ExecutedSignalTransformation
+      (learnedDecodedExtendedArtifact.system.run independentLearnedCertifiedInput)
+      (.neuronOutput learnedExtendedXorNeuron)
+      (.neuronOutput learnedExtendedIntermediateNeuron) :=
+  { edge := learnedExtendedCurrentIntermediateEdge .requirementOnly }
+
+def learnedExtendedSourcePenultimateTransformation :
+    ExecutedSignalTransformation
+      (learnedDecodedExtendedArtifact.system.run independentLearnedCertifiedInput)
+      (.neuronOutput learnedExtendedIntermediateNeuron)
+      (.neuronOutput learnedExtendedPenultimateNeuron) :=
+  { edge := learnedExtendedCurrentPenultimateEdge .requirementOnly }
+
+def learnedExtendedSourceOutputTransformation :
+    ExecutedSignalTransformation
+      (learnedDecodedExtendedArtifact.system.run independentLearnedCertifiedInput)
+      (.neuronOutput learnedExtendedPenultimateNeuron)
+      (.neuronOutput learnedExtendedPrimaryNeuron) :=
+  { edge := learnedExtendedCurrentPrimaryEdge .requirementOnly }
+
+def learnedExtendedComposedSourceTransformation : Activation -> Activation :=
+  fun value => learnedExtendedSourceOutputTransformation.transform
+    (learnedExtendedSourcePenultimateTransformation.transform
+      (learnedExtendedSourceIntermediateTransformation.transform
+        (learnedExtendedSourceXorTransformation.transform
+          (learnedExtendedSourceInputTransformation.transform value))))
+
+theorem learnedExtendedSourceInputTransformation_nonidentity :
+    learnedExtendedSourceInputTransformation.transform 0 = 1 := by
+  rfl
+
+theorem learnedExtendedComposedSourceTransformation_nonidentity :
+    learnedExtendedComposedSourceTransformation 0 = 1 := by
+  rfl
+
+theorem learnedExtendedComposedSourceTransformation_output_exact :
+    (ActivationOccurrence.neuronOutput learnedExtendedPrimaryNeuron :
+      ActivationOccurrence
+        (learnedDecodedExtendedArtifact.system.run
+          independentLearnedCertifiedInput)).value =
+      learnedExtendedComposedSourceTransformation
+        (ActivationOccurrence.receivedInput learnedExtendedContextPort :
+          ActivationOccurrence
+            (learnedDecodedExtendedArtifact.system.run
+              independentLearnedCertifiedInput)).value := by
+  calc
+    _ = learnedExtendedSourceOutputTransformation.transform
+        (ActivationOccurrence.neuronOutput learnedExtendedPenultimateNeuron :
+          ActivationOccurrence
+            (learnedDecodedExtendedArtifact.system.run
+              independentLearnedCertifiedInput)).value :=
+      learnedExtendedSourceOutputTransformation.outputExact
+    _ = learnedExtendedSourceOutputTransformation.transform
+        (learnedExtendedSourcePenultimateTransformation.transform
+          (ActivationOccurrence.neuronOutput learnedExtendedIntermediateNeuron :
+            ActivationOccurrence
+              (learnedDecodedExtendedArtifact.system.run
+                independentLearnedCertifiedInput)).value) :=
+      congrArg learnedExtendedSourceOutputTransformation.transform
+        learnedExtendedSourcePenultimateTransformation.outputExact
+    _ = learnedExtendedSourceOutputTransformation.transform
+        (learnedExtendedSourcePenultimateTransformation.transform
+          (learnedExtendedSourceIntermediateTransformation.transform
+            (ActivationOccurrence.neuronOutput learnedExtendedXorNeuron :
+              ActivationOccurrence
+                (learnedDecodedExtendedArtifact.system.run
+                  independentLearnedCertifiedInput)).value)) :=
+      congrArg (fun value => learnedExtendedSourceOutputTransformation.transform
+        (learnedExtendedSourcePenultimateTransformation.transform value))
+        learnedExtendedSourceIntermediateTransformation.outputExact
+    _ = learnedExtendedSourceOutputTransformation.transform
+        (learnedExtendedSourcePenultimateTransformation.transform
+          (learnedExtendedSourceIntermediateTransformation.transform
+            (learnedExtendedSourceXorTransformation.transform
+              (ActivationOccurrence.neuronOutput ⟨0, by decide⟩ :
+                ActivationOccurrence
+                  (learnedDecodedExtendedArtifact.system.run
+                    independentLearnedCertifiedInput)).value))) :=
+      congrArg (fun value => learnedExtendedSourceOutputTransformation.transform
+        (learnedExtendedSourcePenultimateTransformation.transform
+          (learnedExtendedSourceIntermediateTransformation.transform value)))
+        learnedExtendedSourceXorTransformation.outputExact
+    _ = _ :=
+      congrArg (fun value => learnedExtendedSourceOutputTransformation.transform
+        (learnedExtendedSourcePenultimateTransformation.transform
+          (learnedExtendedSourceIntermediateTransformation.transform
+            (learnedExtendedSourceXorTransformation.transform value))))
+        learnedExtendedSourceInputTransformation.outputExact
+
 def learnedInitialCausalWitness :
     LearnedExecutedCausalWitness learnedInitialState :=
   { requirementPort := learnedInitialRequirementPort
@@ -1281,7 +1681,8 @@ def learnedInitialAction : LearnedActionWitness learnedInitialState :=
   executeLearnedAction learnedInitialState learnedInitialProposalPreservation
     learnedInitialCausalWitness learnedInitialAuthorizationWitness rfl
 
-def learnedInitialEffect : LearnedEffectWitness learnedInitialState :=
+def learnedInitialEffect :
+    LearnedEffectWitness learnedInitialState learnedInitialAction :=
   produceLearnedEffect learnedInitialAction
 
 /-- The target program and exact next input are combined with the memory of
@@ -1332,7 +1733,8 @@ def learnedAlignedInstallingProposalPreservationFor (memory : Agent.Memory) :
     LearnedProposalPreservation
       (learnedAlignedActionSourceStateFor memory) where
   admittedIntent := .preserveAuthorizedBehavior
-  proposalExact := by rfl
+  proposalExact :=
+    learnedAlignedReconfiguredProposalDerivation.proposal_exact
 
 def learnedAlignedInstallingProposalPreservation :
     LearnedProposalPreservation learnedAlignedActionSourceState :=
@@ -1349,12 +1751,22 @@ def learnedAlignedInstallingAction :
     LearnedActionWitness learnedAlignedActionSourceState :=
   learnedAlignedInstallingActionFor learnedInitialState.memory
 
+def learnedAlignedInstallingEffectFrom
+    (memory : Agent.Memory)
+    (action : LearnedActionWitness
+      (learnedAlignedActionSourceStateFor memory)) :
+    LearnedEffectWitness (learnedAlignedActionSourceStateFor memory) action :=
+  produceLearnedEffect action
+
 def learnedAlignedInstallingEffectFor (memory : Agent.Memory) :
-    LearnedEffectWitness (learnedAlignedActionSourceStateFor memory) :=
-  produceLearnedEffect (learnedAlignedInstallingActionFor memory)
+    LearnedEffectWitness (learnedAlignedActionSourceStateFor memory)
+      (learnedAlignedInstallingActionFor memory) :=
+  learnedAlignedInstallingEffectFrom memory
+    (learnedAlignedInstallingActionFor memory)
 
 def learnedAlignedInstallingEffect :
-    LearnedEffectWitness learnedAlignedActionSourceState :=
+    LearnedEffectWitness learnedAlignedActionSourceState
+      learnedAlignedInstallingAction :=
   learnedAlignedInstallingEffectFor learnedInitialState.memory
 
 def learnedAlignedInstalledStateFor (memory : Agent.Memory) :
@@ -1391,13 +1803,15 @@ def learnedAlignedAuthorizationWitness :
 def learnedAlignedProposalPreservation :
     LearnedProposalPreservation learnedAlignedState where
   admittedIntent := .preserveAuthorizedBehavior
-  proposalExact := by rfl
+  proposalExact :=
+    learnedAlignedReconfiguredProposalDerivation.proposal_exact
 
 def learnedAlignedAction : LearnedActionWitness learnedAlignedState :=
   executeLearnedAction learnedAlignedState learnedAlignedProposalPreservation
     learnedAlignedCausalWitness learnedAlignedAuthorizationWitness rfl
 
-def learnedAlignedEffect : LearnedEffectWitness learnedAlignedState :=
+def learnedAlignedEffect :
+    LearnedEffectWitness learnedAlignedState learnedAlignedAction :=
   produceLearnedEffect learnedAlignedAction
 
 theorem learnedAlignedState_memory_is_produced :
@@ -1443,7 +1857,8 @@ def learnedExtendedInstallingProposalPreservationFor (memory : Agent.Memory) :
     LearnedProposalPreservation
       (learnedExtendedActionSourceStateFor memory) where
   admittedIntent := .preserveAuthorizedBehavior
-  proposalExact := by rfl
+  proposalExact :=
+    learnedExtendedReconfiguredProposalDerivation.proposal_exact
 
 def learnedExtendedInstallingActionFor (memory : Agent.Memory) :
     LearnedActionWitness (learnedExtendedActionSourceStateFor memory) :=
@@ -1452,9 +1867,18 @@ def learnedExtendedInstallingActionFor (memory : Agent.Memory) :
     (learnedExtendedActionSourceCausalWitnessFor memory)
     (learnedExtendedActionAuthorizationWitnessFor memory) rfl
 
+def learnedExtendedInstallingEffectFrom
+    (memory : Agent.Memory)
+    (action : LearnedActionWitness
+      (learnedExtendedActionSourceStateFor memory)) :
+    LearnedEffectWitness (learnedExtendedActionSourceStateFor memory) action :=
+  produceLearnedEffect action
+
 def learnedExtendedInstallingEffectFor (memory : Agent.Memory) :
-    LearnedEffectWitness (learnedExtendedActionSourceStateFor memory) :=
-  produceLearnedEffect (learnedExtendedInstallingActionFor memory)
+    LearnedEffectWitness (learnedExtendedActionSourceStateFor memory)
+      (learnedExtendedInstallingActionFor memory) :=
+  learnedExtendedInstallingEffectFrom memory
+    (learnedExtendedInstallingActionFor memory)
 
 def learnedExtendedInstalledStateFor (memory : Agent.Memory) :
     ReconfiguredExecutionState independentLearnedRequirementFamily :=
@@ -1487,13 +1911,15 @@ def learnedExtendedAuthorizationWitness :
 def learnedExtendedProposalPreservation :
     LearnedProposalPreservation learnedExtendedState where
   admittedIntent := .preserveAuthorizedBehavior
-  proposalExact := by rfl
+  proposalExact :=
+    learnedExtendedReconfiguredProposalDerivation.proposal_exact
 
 def learnedExtendedAction : LearnedActionWitness learnedExtendedState :=
   executeLearnedAction learnedExtendedState learnedExtendedProposalPreservation
     learnedExtendedCausalWitness learnedExtendedAuthorizationWitness rfl
 
-def learnedExtendedEffect : LearnedEffectWitness learnedExtendedState :=
+def learnedExtendedEffect :
+    LearnedEffectWitness learnedExtendedState learnedExtendedAction :=
   produceLearnedEffect learnedExtendedAction
 
 theorem learnedExtendedState_memory_is_produced :
@@ -1595,6 +2021,29 @@ def LearnedAdmittedStableNaming.naming
       StableArtifactNaming learnedDecodedAlignedArtifact
   | .aligned => learnedAlignedStableNaming
   | .renamed => learnedRenamedStableNaming
+
+/-- Positive decoder result for the exact serialized naming admitted by this
+instance.  Keeping the result itself prevents the admission case from being
+reduced to a bare proposition about serial values. -/
+def LearnedAdmittedStableNaming.decoded
+    {source : SerializedStableArtifactNaming} :
+    (admitted : LearnedAdmittedStableNaming source) ->
+      DecodedStableArtifactNaming learnedDecodedAlignedArtifact source
+  | .aligned => learnedDecodedAlignedStableNaming
+  | .renamed => learnedDecodedRenamedStableNaming
+
+theorem LearnedAdmittedStableNaming.decoded_exact
+    {source : SerializedStableArtifactNaming}
+    (admitted : LearnedAdmittedStableNaming source) :
+    decodeStableArtifactNaming learnedDecodedAlignedArtifact source =
+      .ok admitted.decoded := by
+  cases admitted <;> rfl
+
+theorem LearnedAdmittedStableNaming.decoded_naming_exact
+    {source : SerializedStableArtifactNaming}
+    (admitted : LearnedAdmittedStableNaming source) :
+    admitted.decoded.naming = admitted.naming := by
+  cases admitted <;> rfl
 
 def independentLearnedRequirementInputEquality
     (left right : IndependentLearnedRequirementInput) :
@@ -1802,7 +2251,10 @@ def learnedInitialStateFragments : StateCertificateFragments
     causal := { witness := learnedInitialCausalWitness }
     proposalAction := { witness := learnedInitialAction }
     authorization := { witness := learnedInitialAuthorizationWitness }
-    effect := { witness := learnedInitialEffect }
+    effect :=
+      { witness :=
+          { action := learnedInitialAction
+            effect := learnedInitialEffect } }
     historical := { witness := { exact := by rfl } }
     futures :=
       { covered := fun requests =>
@@ -1831,7 +2283,10 @@ def learnedAlignedStateFragmentsFor
     causal := { witness := learnedAlignedCausalWitness }
     proposalAction := { witness := learnedAlignedAction }
     authorization := { witness := learnedAlignedAuthorizationWitness }
-    effect := { witness := learnedAlignedEffect }
+    effect :=
+      { witness :=
+          { action := learnedAlignedAction
+            effect := learnedAlignedEffect } }
     historical := { witness := { exact := by rfl } }
     futures :=
       { covered := fun requests =>
@@ -1850,6 +2305,32 @@ def learnedAlignedStateFragments : StateCertificateFragments
       learnedAlignedState :=
   learnedAlignedStateFragmentsFor learnedAlignedStableNaming
 
+/-- Semantic evidence for the aligned state, recomputed without constructing
+a complete structural target snapshot. -/
+def learnedAlignedRecomputedCertificateFragments :
+    RecomputedStateCertificateFragments LearnedAlignedOperationalContract
+      learnedDecodedAlignedArtifact learnedAlignedState :=
+  { requirement := { witness := { inputExact := rfl } }
+    causal := { witness := learnedAlignedCausalWitness }
+    proposalAction := { witness := learnedAlignedAction }
+    authorization := { witness := learnedAlignedAuthorizationWitness }
+    effect :=
+      { witness :=
+          { action := learnedAlignedAction
+            effect := learnedAlignedEffect } }
+    historical := { witness := { exact := by rfl } }
+    futures :=
+      { covered := fun requests =>
+          { outcome := independentLearnedFutureContract.outcome
+              { network :=
+                  (LearnedAlignedOperationalContract.coveredFutureAt
+                    learnedAlignedState requests).source }
+              ((LearnedAlignedOperationalContract.coveredFutureAt
+                learnedAlignedState requests).requests.map fun input =>
+                  { input := input })
+            outcomeExact := rfl }
+        realization := independentLearnedCoveredFutureRealization .aligned } }
+
 def learnedExtendedStateFragments : StateCertificateFragments
     LearnedExtendedOperationalContract learnedDecodedExtendedArtifact
       learnedExtendedState :=
@@ -1864,7 +2345,36 @@ def learnedExtendedStateFragments : StateCertificateFragments
     causal := { witness := learnedExtendedCausalWitness }
     proposalAction := { witness := learnedExtendedAction }
     authorization := { witness := learnedExtendedAuthorizationWitness }
-    effect := { witness := learnedExtendedEffect }
+    effect :=
+      { witness :=
+          { action := learnedExtendedAction
+            effect := learnedExtendedEffect } }
+    historical := { witness := { exact := by rfl } }
+    futures :=
+      { covered := fun requests =>
+          { outcome := independentLearnedFutureContract.outcome
+              { network :=
+                  (LearnedExtendedOperationalContract.coveredFutureAt
+                    learnedExtendedState requests).source }
+              ((LearnedExtendedOperationalContract.coveredFutureAt
+                learnedExtendedState requests).requests.map fun input =>
+                  { input := input })
+            outcomeExact := rfl }
+        realization := independentLearnedCoveredFutureRealization .extended } }
+
+/-- Semantic evidence for the successive extended state, kept independent of
+the structural transport/recompute assembly. -/
+def learnedExtendedRecomputedCertificateFragments :
+    RecomputedStateCertificateFragments LearnedExtendedOperationalContract
+      learnedDecodedExtendedArtifact learnedExtendedState :=
+  { requirement := { witness := { inputExact := rfl } }
+    causal := { witness := learnedExtendedCausalWitness }
+    proposalAction := { witness := learnedExtendedAction }
+    authorization := { witness := learnedExtendedAuthorizationWitness }
+    effect :=
+      { witness :=
+          { action := learnedExtendedAction
+            effect := learnedExtendedEffect } }
     historical := { witness := { exact := by rfl } }
     futures :=
       { covered := fun requests =>
@@ -1926,9 +2436,8 @@ inductive LearnedExecutedStateTransition :
       (installingActionExact : installingAction =
         learnedAlignedInstallingActionFor currentState.memory)
       (installingEffect : LearnedEffectWitness
-        (learnedAlignedActionSourceStateFor currentState.memory))
-      (installingEffectExact : installingEffect =
-        produceLearnedEffect installingAction) :
+        (learnedAlignedActionSourceStateFor currentState.memory)
+        installingAction) :
       LearnedExecutedStateTransition
         LearnedContractTransitionPermission.installAligned
         currentState installingEffect.targetState
@@ -1940,9 +2449,8 @@ inductive LearnedExecutedStateTransition :
       (installingActionExact : installingAction =
         learnedExtendedInstallingActionFor currentState.memory)
       (installingEffect : LearnedEffectWitness
-        (learnedExtendedActionSourceStateFor currentState.memory))
-      (installingEffectExact : installingEffect =
-        produceLearnedEffect installingAction) :
+        (learnedExtendedActionSourceStateFor currentState.memory)
+        installingAction) :
       LearnedExecutedStateTransition
         LearnedContractTransitionPermission.installExtended
         currentState installingEffect.targetState
@@ -1952,7 +2460,7 @@ def executeLearnedAlignedStateTransition :
       LearnedContractTransitionPermission.installAligned
       learnedInitialState learnedAlignedState :=
   .executed learnedInitialState learnedAlignedInstallingAction rfl
-    learnedAlignedInstallingEffect rfl
+    learnedAlignedInstallingEffect
 
 def executeLearnedExtendedStateTransition :
     LearnedExecutedStateTransition
@@ -1960,7 +2468,7 @@ def executeLearnedExtendedStateTransition :
       learnedAlignedState learnedExtendedState :=
   .executedExtended learnedAlignedState
     (learnedExtendedInstallingActionFor learnedAlignedState.memory) rfl
-    (learnedExtendedInstallingEffectFor learnedAlignedState.memory) rfl
+    (learnedExtendedInstallingEffectFor learnedAlignedState.memory)
 
 def learnedConstitutiveMetaContract : ConstitutiveMetaContract where
   Contract := LearnedOperationalContract
@@ -2007,8 +2515,7 @@ structure LearnedTransitionProductionData
   actionExact : action =
     learnedAlignedInstallingActionFor current.state.memory
   effect : LearnedEffectWitness
-    (learnedAlignedActionSourceStateFor current.state.memory)
-  effectExact : effect = produceLearnedEffect action
+    (learnedAlignedActionSourceStateFor current.state.memory) action
 
 structure LearnedExtendedTransitionProductionData
     (current : CheckedAgent learnedConstitutiveMetaContract .aligned) : Type 3 where
@@ -2018,8 +2525,7 @@ structure LearnedExtendedTransitionProductionData
   actionExact : action =
     learnedExtendedInstallingActionFor current.state.memory
   effect : LearnedEffectWitness
-    (learnedExtendedActionSourceStateFor current.state.memory)
-  effectExact : effect = produceLearnedEffect action
+    (learnedExtendedActionSourceStateFor current.state.memory) action
 
 def learnedTransitionProductionData
     {currentContract nextContract : LearnedOperationalContract}
@@ -2039,12 +2545,12 @@ def produceLearnedTransitionData
       learnedTransitionProductionData current _transition material := by
   intro material
   cases material
-  · exact
-      .mk (learnedAlignedInstallingActionFor current.state.memory) rfl
-        (learnedAlignedInstallingEffectFor current.state.memory) rfl
-  · exact
-      .mk (learnedExtendedInstallingActionFor current.state.memory) rfl
-        (learnedExtendedInstallingEffectFor current.state.memory) rfl
+  · let action := learnedAlignedInstallingActionFor current.state.memory
+    let effect := learnedAlignedInstallingEffectFrom current.state.memory action
+    exact .mk action rfl effect
+  · let action := learnedExtendedInstallingActionFor current.state.memory
+    let effect := learnedExtendedInstallingEffectFrom current.state.memory action
+    exact .mk action rfl effect
 
 def learnedProducedTransitionTarget
     {currentContract nextContract : LearnedOperationalContract}
@@ -2073,11 +2579,11 @@ def learnedProducedTransitionExecution
   | installAligned =>
       cases transition.permission
       exact .executed current.state production.action production.actionExact
-        production.effect production.effectExact
+        production.effect
   | installExtended =>
       cases transition.permission
       exact .executedExtended current.state production.action
-        production.actionExact production.effect production.effectExact
+        production.actionExact production.effect
 
 def learnedTransitionProductionKernel :
     TransitionProductionKernel learnedConstitutiveMetaContract where
@@ -2192,58 +2698,154 @@ theorem learnedBypassSerializedUpdate_target_exact :
 
 inductive LearnedExecutableDecodedArtifact :
     LearnedReceivedArtifact -> Type 4 where
-  | initial : LearnedExecutableDecodedArtifact learnedReceivedInitialArtifact
-  | aligned : LearnedExecutableDecodedArtifact learnedReceivedAlignedArtifact
-  | extended : LearnedExecutableDecodedArtifact learnedReceivedExtendedArtifact
-  | renamed : LearnedExecutableDecodedArtifact learnedReceivedRenamedArtifact
+  | initial
+      (artifact : DecodedNeuralArtifact LearnedInitialOperationalContract)
+      (artifactDecodedExact :
+        decodeArtifact LearnedInitialOperationalContract
+          learnedReceivedInitialArtifact.network = .ok artifact)
+      (artifactExact : artifact = learnedDecodedInitialArtifact)
+      (stable : DecodedStableArtifactNaming artifact
+        learnedReceivedInitialArtifact.stableNaming)
+      (stableDecodedExact :
+        decodeStableArtifactNaming artifact
+          learnedReceivedInitialArtifact.stableNaming = .ok stable) :
+      LearnedExecutableDecodedArtifact learnedReceivedInitialArtifact
+  | aligned
+      (artifact : DecodedNeuralArtifact LearnedAlignedOperationalContract)
+      (artifactDecodedExact :
+        decodeArtifact LearnedAlignedOperationalContract
+          learnedReceivedAlignedArtifact.network = .ok artifact)
+      (artifactExact : artifact = learnedDecodedAlignedArtifact)
+      (stable : DecodedStableArtifactNaming artifact
+        learnedReceivedAlignedArtifact.stableNaming)
+      (stableDecodedExact :
+        decodeStableArtifactNaming artifact
+          learnedReceivedAlignedArtifact.stableNaming = .ok stable) :
+      LearnedExecutableDecodedArtifact learnedReceivedAlignedArtifact
+  | extended
+      (artifact : DecodedNeuralArtifact LearnedExtendedOperationalContract)
+      (artifactDecodedExact :
+        decodeArtifact LearnedExtendedOperationalContract
+          learnedReceivedExtendedArtifact.network = .ok artifact)
+      (artifactExact : artifact = learnedDecodedExtendedArtifact)
+      (stable : DecodedStableArtifactNaming artifact
+        learnedReceivedExtendedArtifact.stableNaming)
+      (stableDecodedExact :
+        decodeStableArtifactNaming artifact
+          learnedReceivedExtendedArtifact.stableNaming = .ok stable) :
+      LearnedExecutableDecodedArtifact learnedReceivedExtendedArtifact
+  | renamed
+      (artifact : DecodedNeuralArtifact LearnedAlignedOperationalContract)
+      (artifactDecodedExact :
+        decodeArtifact LearnedAlignedOperationalContract
+          learnedReceivedRenamedArtifact.network = .ok artifact)
+      (artifactExact : artifact = learnedDecodedAlignedArtifact)
+      (stable : DecodedStableArtifactNaming artifact
+        learnedReceivedRenamedArtifact.stableNaming)
+      (stableDecodedExact :
+        decodeStableArtifactNaming artifact
+          learnedReceivedRenamedArtifact.stableNaming = .ok stable) :
+      LearnedExecutableDecodedArtifact learnedReceivedRenamedArtifact
 
 def LearnedExecutableDecodedArtifact.contract
     {source : LearnedReceivedArtifact} :
     LearnedExecutableDecodedArtifact source -> LearnedOperationalContract
-  | .initial => .initial
-  | .aligned => .aligned
-  | .extended => .extended
-  | .renamed => .aligned
+  | .initial _ _ _ _ _ => .initial
+  | .aligned _ _ _ _ _ => .aligned
+  | .extended _ _ _ _ _ => .extended
+  | .renamed _ _ _ _ _ => .aligned
 
 def LearnedExecutableDecodedArtifact.artifact
     {source : LearnedReceivedArtifact} :
     (decoded : LearnedExecutableDecodedArtifact source) ->
       DecodedNeuralArtifact
         (learnedOperationalContract decoded.contract)
-  | .initial => learnedDecodedInitialArtifact
-  | .aligned => learnedDecodedAlignedArtifact
-  | .extended => learnedDecodedExtendedArtifact
-  | .renamed => learnedDecodedAlignedArtifact
+  | .initial artifact _ _ _ _ => artifact
+  | .aligned artifact _ _ _ _ => artifact
+  | .extended artifact _ _ _ _ => artifact
+  | .renamed artifact _ _ _ _ => artifact
+
+/-- The executable checker retains the positive receipt for the artifact
+returned by decoding the exact received network.  It does not replace that
+artifact with a separately selected canonical value after admission. -/
+theorem LearnedExecutableDecodedArtifact.artifact_decoded_exact
+    {source : LearnedReceivedArtifact}
+    (decoded : LearnedExecutableDecodedArtifact source) :
+    decodeArtifact (learnedOperationalContract decoded.contract)
+        source.network = .ok decoded.artifact := by
+  cases decoded with
+  | initial artifact artifactDecodedExact artifactExact stable stableDecodedExact =>
+      exact artifactDecodedExact
+  | aligned artifact artifactDecodedExact artifactExact stable stableDecodedExact =>
+      exact artifactDecodedExact
+  | extended artifact artifactDecodedExact artifactExact stable stableDecodedExact =>
+      exact artifactDecodedExact
+  | renamed artifact artifactDecodedExact artifactExact stable stableDecodedExact =>
+      exact artifactDecodedExact
 
 def LearnedExecutableDecodedArtifact.stableNaming
     {source : LearnedReceivedArtifact} :
     (decoded : LearnedExecutableDecodedArtifact source) ->
       DecodedStableArtifactNaming decoded.artifact source.stableNaming
-  | .initial => learnedDecodedInitialStableNaming
-  | .aligned => learnedDecodedAlignedStableNaming
-  | .extended => learnedDecodedExtendedStableNaming
-  | .renamed => learnedDecodedRenamedStableNaming
+  | .initial _ _ _ stable _ => stable
+  | .aligned _ _ _ stable _ => stable
+  | .extended _ _ _ stable _ => stable
+  | .renamed _ _ _ stable _ => stable
+
+theorem LearnedExecutableDecodedArtifact.stable_naming_decoded_exact
+    {source : LearnedReceivedArtifact}
+    (decoded : LearnedExecutableDecodedArtifact source) :
+    decodeStableArtifactNaming decoded.artifact source.stableNaming =
+      .ok decoded.stableNaming := by
+  cases decoded with
+  | initial artifact artifactDecodedExact artifactExact stable stableDecodedExact =>
+      exact stableDecodedExact
+  | aligned artifact artifactDecodedExact artifactExact stable stableDecodedExact =>
+      exact stableDecodedExact
+  | extended artifact artifactDecodedExact artifactExact stable stableDecodedExact =>
+      exact stableDecodedExact
+  | renamed artifact artifactDecodedExact artifactExact stable stableDecodedExact =>
+      exact stableDecodedExact
 
 def LearnedExecutableDecodedArtifact.state
     {source : LearnedReceivedArtifact} :
     (decoded : LearnedExecutableDecodedArtifact source) ->
       ReconfiguredExecutionState
         (learnedOperationalContract decoded.contract).family
-  | .initial => learnedInitialState
-  | .aligned => learnedAlignedState
-  | .extended => learnedExtendedState
-  | .renamed => learnedAlignedState
+  | .initial _ _ _ _ _ => learnedInitialState
+  | .aligned _ _ _ _ _ => learnedAlignedState
+  | .extended _ _ _ _ _ => learnedExtendedState
+  | .renamed _ _ _ _ _ => learnedAlignedState
 
 def LearnedExecutableDecodedArtifact.fragments
     {source : LearnedReceivedArtifact} :
     (decoded : LearnedExecutableDecodedArtifact source) ->
       StateCertificateFragments (learnedOperationalContract decoded.contract)
         decoded.artifact decoded.state
-  | .initial => learnedInitialStateFragments
-  | .aligned => learnedAlignedStateFragments
-  | .extended => learnedExtendedStateFragments
-  | .renamed =>
-      learnedAlignedStateFragmentsFor learnedRenamedStableNaming
+  | .initial artifact _ artifactExact stable stableDecodedExact => by
+      cases artifactExact
+      have stableExact : stable = learnedDecodedInitialStableNaming :=
+        Except.ok.inj (stableDecodedExact.symm.trans (by rfl))
+      cases stableExact
+      exact learnedInitialStateFragments
+  | .aligned artifact _ artifactExact stable stableDecodedExact => by
+      cases artifactExact
+      have stableExact : stable = learnedDecodedAlignedStableNaming :=
+        Except.ok.inj (stableDecodedExact.symm.trans (by rfl))
+      cases stableExact
+      exact learnedAlignedStateFragments
+  | .extended artifact _ artifactExact stable stableDecodedExact => by
+      cases artifactExact
+      have stableExact : stable = learnedDecodedExtendedStableNaming :=
+        Except.ok.inj (stableDecodedExact.symm.trans (by rfl))
+      cases stableExact
+      exact learnedExtendedStateFragments
+  | .renamed artifact _ artifactExact stable stableDecodedExact => by
+      cases artifactExact
+      have stableExact : stable = learnedDecodedRenamedStableNaming :=
+        Except.ok.inj (stableDecodedExact.symm.trans (by rfl))
+      cases stableExact
+      exact learnedAlignedStateFragmentsFor learnedRenamedStableNaming
 
 inductive LearnedExecutableArtifactError where
   | malformed (problem : ArtifactError)
@@ -2251,27 +2853,88 @@ inductive LearnedExecutableArtifactError where
   | unsupportedArtifact
   deriving DecidableEq
 
+private def decodeLearnedInitialExecutableArtifact :
+    Except LearnedExecutableArtifactError
+      (LearnedExecutableDecodedArtifact learnedReceivedInitialArtifact) :=
+  match artifactDecodedExact :
+      decodeArtifact LearnedInitialOperationalContract
+        learnedReceivedInitialArtifact.network with
+  | .error problem => .error (.malformed problem)
+  | .ok artifact =>
+      match stableDecodedExact : decodeStableArtifactNaming artifact
+          learnedReceivedInitialArtifact.stableNaming with
+      | .error problem => .error (.invalidNaming problem)
+      | .ok stable =>
+          have artifactExact : artifact = learnedDecodedInitialArtifact :=
+            Except.ok.inj (artifactDecodedExact.symm.trans (by rfl))
+          .ok (.initial artifact artifactDecodedExact artifactExact stable
+            stableDecodedExact)
+
+private def decodeLearnedAlignedExecutableArtifact :
+    Except LearnedExecutableArtifactError
+      (LearnedExecutableDecodedArtifact learnedReceivedAlignedArtifact) :=
+  match artifactDecodedExact :
+      decodeArtifact LearnedAlignedOperationalContract
+        learnedReceivedAlignedArtifact.network with
+  | .error problem => .error (.malformed problem)
+  | .ok artifact =>
+      match stableDecodedExact : decodeStableArtifactNaming artifact
+          learnedReceivedAlignedArtifact.stableNaming with
+      | .error problem => .error (.invalidNaming problem)
+      | .ok stable =>
+          have artifactExact : artifact = learnedDecodedAlignedArtifact :=
+            Except.ok.inj (artifactDecodedExact.symm.trans (by rfl))
+          .ok (.aligned artifact artifactDecodedExact artifactExact stable
+            stableDecodedExact)
+
+private def decodeLearnedExtendedExecutableArtifact :
+    Except LearnedExecutableArtifactError
+      (LearnedExecutableDecodedArtifact learnedReceivedExtendedArtifact) :=
+  match artifactDecodedExact :
+      decodeArtifact LearnedExtendedOperationalContract
+        learnedReceivedExtendedArtifact.network with
+  | .error problem => .error (.malformed problem)
+  | .ok artifact =>
+      match stableDecodedExact : decodeStableArtifactNaming artifact
+          learnedReceivedExtendedArtifact.stableNaming with
+      | .error problem => .error (.invalidNaming problem)
+      | .ok stable =>
+          have artifactExact : artifact = learnedDecodedExtendedArtifact :=
+            Except.ok.inj (artifactDecodedExact.symm.trans (by rfl))
+          .ok (.extended artifact artifactDecodedExact artifactExact stable
+            stableDecodedExact)
+
+private def decodeLearnedRenamedExecutableArtifact :
+    Except LearnedExecutableArtifactError
+      (LearnedExecutableDecodedArtifact learnedReceivedRenamedArtifact) :=
+  match artifactDecodedExact :
+      decodeArtifact LearnedAlignedOperationalContract
+        learnedReceivedRenamedArtifact.network with
+  | .error problem => .error (.malformed problem)
+  | .ok artifact =>
+      match stableDecodedExact : decodeStableArtifactNaming artifact
+          learnedReceivedRenamedArtifact.stableNaming with
+      | .error problem => .error (.invalidNaming problem)
+      | .ok stable =>
+          have artifactExact : artifact = learnedDecodedAlignedArtifact :=
+            Except.ok.inj (artifactDecodedExact.symm.trans (by rfl))
+          .ok (.renamed artifact artifactDecodedExact artifactExact stable
+            stableDecodedExact)
+
 def decodeLearnedExecutableArtifact
     (source : LearnedReceivedArtifact) :
     Except LearnedExecutableArtifactError
       (LearnedExecutableDecodedArtifact source) :=
-  match decodeArtifact (learnedOperationalContract source.contract)
-      source.network with
-  | .error problem => .error (.malformed problem)
-  | .ok artifact =>
-      match decodeStableArtifactNaming artifact source.stableNaming with
-      | .error problem => .error (.invalidNaming problem)
-      | .ok _ =>
-          if initialExact : source = learnedReceivedInitialArtifact then
-            initialExact ▸ .ok .initial
-          else if alignedExact : source = learnedReceivedAlignedArtifact then
-            alignedExact ▸ .ok .aligned
-          else if extendedExact : source = learnedReceivedExtendedArtifact then
-            extendedExact ▸ .ok .extended
-          else if renamedExact : source = learnedReceivedRenamedArtifact then
-            renamedExact ▸ .ok .renamed
-          else
-            .error .unsupportedArtifact
+  if initialExact : source = learnedReceivedInitialArtifact then
+    initialExact.symm ▸ decodeLearnedInitialExecutableArtifact
+  else if alignedExact : source = learnedReceivedAlignedArtifact then
+    alignedExact.symm ▸ decodeLearnedAlignedExecutableArtifact
+  else if extendedExact : source = learnedReceivedExtendedArtifact then
+    extendedExact.symm ▸ decodeLearnedExtendedExecutableArtifact
+  else if renamedExact : source = learnedReceivedRenamedArtifact then
+    renamedExact.symm ▸ decodeLearnedRenamedExecutableArtifact
+  else
+    .error .unsupportedArtifact
 
 def learnedAdmissionDecision (contract : LearnedOperationalContract) :
     ReflectedDecision (LearnedContractAdmission contract) :=
@@ -2312,7 +2975,21 @@ def learnedExecutableMetaContractInterface :
   decodedContract := LearnedExecutableDecodedArtifact.contract
   decodedContractExact := by intro source decoded; cases decoded <;> rfl
   decodedNeuralArtifact := LearnedExecutableDecodedArtifact.artifact
-  decodedNetworkExact := by intro source decoded; cases decoded <;> rfl
+  decodedNetworkExact := by
+    intro source decoded
+    cases decoded with
+    | initial artifact artifactDecodedExact artifactExact stable stableDecodedExact =>
+        cases artifactExact
+        rfl
+    | aligned artifact artifactDecodedExact artifactExact stable stableDecodedExact =>
+        cases artifactExact
+        rfl
+    | extended artifact artifactDecodedExact artifactExact stable stableDecodedExact =>
+        cases artifactExact
+        rfl
+    | renamed artifact artifactDecodedExact artifactExact stable stableDecodedExact =>
+        cases artifactExact
+        rfl
   decodedStableNaming := LearnedExecutableDecodedArtifact.stableNaming
   decodeReceivedArtifact := decodeLearnedExecutableArtifact
   stateOfArtifact := LearnedExecutableDecodedArtifact.state
@@ -2476,19 +3153,30 @@ theorem learnedAlignedOutput120_affected :
       learnedPreCertificateGraph (.artifactNode (.outputPort 120)) = true := by
   rfl
 
-/-- The local learned update retains the three interface inputs.  Every
-transported payload is read from the certified source snapshot. -/
+/-- The local learned update licenses reusable interface inputs from the
+checked source certificate, the calculated version correspondence and the
+calculated cone. -/
+def learnedLicensedStructuralTransports :
+    List (LicensedStructuralTransport
+      learnedInitialCheckedAgent.certificate learnedPreCertificateGraph) :=
+  calculateLicensedStructuralTransports
+    learnedInitialCheckedAgent.certificate learnedPreCertificateGraph
+
+/-- Every transported payload is the projection of a licensed occurrence in
+the certified source snapshot; equal target-side data cannot enter here. -/
 def learnedTransportedStructuralFragments :
     List (StableNodeKey × StableArtifactObservation) :=
-  let source := structuralObservationSnapshot
-    learnedInitialCheckedAgent.certificate
-  source.take 3
+  licensedStructuralEntries learnedLicensedStructuralTransports
 
 /-- Internal neurons and outputs carry new stable identities in this version
-and are therefore recalculated from the target. -/
+and are therefore recalculated directly from their decoded mechanisms.  The
+incremental path does not first construct and slice a complete target
+snapshot. -/
 def learnedRecomputedStructuralFragments :
     List (StableNodeKey × StableArtifactObservation) :=
-  learnedPreCertificateGraph.targetObservations.drop 3
+  recomputeAffectedStructuralObservations
+    learnedInitialCheckedAgent.certificate learnedAlignedStableNaming
+    learnedPreCertificateGraph
 
 def learnedCalculatedStructuralAssembly :
     CalculatedIncrementalStructuralAssembly
@@ -2504,19 +3192,36 @@ def learnedRenamedPreCertificateGraph : PreCertificateConstitutiveGraph
 
 def learnedRenamedRecomputedStructuralFragments :
     List (StableNodeKey × StableArtifactObservation) :=
-  learnedRenamedPreCertificateGraph.targetObservations
+  recomputeAffectedStructuralObservations
+    learnedInitialCheckedAgent.certificate learnedRenamedStableNaming
+    learnedRenamedPreCertificateGraph
+
+def learnedRenamedLicensedStructuralTransports :
+    List (LicensedStructuralTransport
+      learnedInitialCheckedAgent.certificate
+      learnedRenamedPreCertificateGraph) :=
+  calculateLicensedStructuralTransports
+    learnedInitialCheckedAgent.certificate
+    learnedRenamedPreCertificateGraph
 
 def learnedRenamedTransportedStructuralFragments :
     List (StableNodeKey × StableArtifactObservation) :=
-  []
+  licensedStructuralEntries learnedRenamedLicensedStructuralTransports
+
+def LearnedAdmittedStableNaming.transportedLicenses
+    {source : SerializedStableArtifactNaming}
+    (admitted : LearnedAdmittedStableNaming source) :
+    List (LicensedStructuralTransport learnedInitialCheckedAgent.certificate
+      (learnedPreCertificateGraphFor admitted.naming)) :=
+  match admitted with
+  | .aligned => learnedLicensedStructuralTransports
+  | .renamed => learnedRenamedLicensedStructuralTransports
 
 def LearnedAdmittedStableNaming.transportedStructuralFragments
     {source : SerializedStableArtifactNaming}
     (admitted : LearnedAdmittedStableNaming source) :
     List (StableNodeKey × StableArtifactObservation) :=
-  match admitted with
-  | .aligned => learnedTransportedStructuralFragments
-  | .renamed => learnedRenamedTransportedStructuralFragments
+  licensedStructuralEntries admitted.transportedLicenses
 
 def LearnedAdmittedStableNaming.recomputedStructuralFragments
     {source : SerializedStableArtifactNaming}
@@ -2546,27 +3251,112 @@ def LearnedAdmittedStableNaming.structuralAssembly
   | .aligned => learnedCalculatedStructuralAssembly
   | .renamed => learnedRenamedCalculatedStructuralAssembly
 
-def learnedAlignedTargetAnalysisFromDecision
+def learnedAlignedTargetAnalysisForAdmittedNamingFromDecision
+    {source : SerializedStableArtifactNaming}
+    (admitted : LearnedAdmittedStableNaming source)
     (transitionDecision : LearnedAlignedTransitionDecision) :
     IncrementalTargetAnalysis learnedInitialCheckedAgent :=
+  let naming := admitted.naming
   { nextContract := .aligned
     contractAdmitted := .aligned
     artifact := learnedDecodedAlignedArtifact
     state := learnedAlignedState
-    targetNaming := learnedAlignedFiniteCausalBasis.naming
-    preCertificateGraph := learnedPreCertificateGraph
-    transportedStructural := learnedTransportedStructuralFragments
-    recomputedStructural := learnedRecomputedStructuralFragments
-    structuralAssembly := learnedCalculatedStructuralAssembly
-    fragments := learnedAlignedStateFragments
-    fragmentNamingExact := rfl
-    fragmentObservationsExact := rfl
+    targetNaming := naming
+    preCertificateGraph := learnedPreCertificateGraphFor naming
+    transportedLicenses := admitted.transportedLicenses
+    recomputedStructural := admitted.recomputedStructuralFragments
+    structuralAssembly := admitted.structuralAssembly
+    structuralBasis := learnedAlignedFiniteCausalBasisFor naming
+    structuralBasisNamingExact := rfl
+    structuralSystemExact := rfl
+    structuralInputDeclared := .tail (.tail .head)
+    recomputedCertificateFragments :=
+      learnedAlignedRecomputedCertificateFragments
     transition := transitionDecision.transition
     execution := by
       have decisionExact :=
         transitionDecision.unique learnedAlignedTransitionDecision
       cases decisionExact
       exact executeLearnedAlignedStateTransition }
+
+def learnedAlignedTargetAnalysisFromDecision
+    (transitionDecision : LearnedAlignedTransitionDecision) :
+    IncrementalTargetAnalysis learnedInitialCheckedAgent :=
+  learnedAlignedTargetAnalysisForAdmittedNamingFromDecision
+    .aligned transitionDecision
+
+/-- Reindex the canonical positive construction by the artifact value that
+was actually returned by decoding the received network.  The equality is not
+used to replace that value in the result: it only transports the already
+proved target obligations to its exact decoded index. -/
+def learnedReceivedAlignedTargetAnalysis
+    (target : DecodedNeuralArtifact LearnedAlignedOperationalContract)
+    (targetExact : target = learnedDecodedAlignedArtifact)
+    {source : SerializedStableArtifactNaming}
+    (admitted : LearnedAdmittedStableNaming source)
+    (transitionDecision : LearnedAlignedTransitionDecision) :
+    IncrementalTargetAnalysis learnedInitialCheckedAgent :=
+  match targetExact with
+  | rfl =>
+      learnedAlignedTargetAnalysisForAdmittedNamingFromDecision
+        admitted transitionDecision
+
+theorem learnedReceivedAlignedTargetAnalysis_artifact_exact
+    (target : DecodedNeuralArtifact LearnedAlignedOperationalContract)
+    (targetExact : target = learnedDecodedAlignedArtifact)
+    {source : SerializedStableArtifactNaming}
+    (admitted : LearnedAdmittedStableNaming source)
+    (transitionDecision : LearnedAlignedTransitionDecision) :
+    HEq (learnedReceivedAlignedTargetAnalysis target targetExact admitted
+      transitionDecision).artifact target := by
+  cases targetExact
+  rfl
+
+theorem learnedReceivedAlignedTargetAnalysis_naming_exact
+    (target : DecodedNeuralArtifact LearnedAlignedOperationalContract)
+    (targetExact : target = learnedDecodedAlignedArtifact)
+    {source : SerializedStableArtifactNaming}
+    (admitted : LearnedAdmittedStableNaming source)
+    (transitionDecision : LearnedAlignedTransitionDecision) :
+    HEq (learnedReceivedAlignedTargetAnalysis target targetExact admitted
+      transitionDecision).targetNaming admitted.naming := by
+  cases targetExact
+  rfl
+
+theorem learnedReceivedAlignedTargetAnalysis_transition_exact
+    (target : DecodedNeuralArtifact LearnedAlignedOperationalContract)
+    (targetExact : target = learnedDecodedAlignedArtifact)
+    {source : SerializedStableArtifactNaming}
+    (admitted : LearnedAdmittedStableNaming source)
+    (transitionDecision : LearnedAlignedTransitionDecision) :
+    HEq (learnedReceivedAlignedTargetAnalysis target targetExact admitted
+      transitionDecision).transition transitionDecision.transition := by
+  cases targetExact
+  rfl
+
+theorem learnedReceivedAlignedTargetAnalysis_execution_exact
+    (target : DecodedNeuralArtifact LearnedAlignedOperationalContract)
+    (targetExact : target = learnedDecodedAlignedArtifact)
+    {source : SerializedStableArtifactNaming}
+    (admitted : LearnedAdmittedStableNaming source)
+    (transitionDecision : LearnedAlignedTransitionDecision) :
+    HEq (learnedReceivedAlignedTargetAnalysis target targetExact admitted
+      transitionDecision).execution
+      (learnedAlignedTargetAnalysisForAdmittedNamingFromDecision admitted
+        transitionDecision).execution := by
+  cases targetExact
+  rfl
+
+theorem learnedReceivedAlignedTargetAnalysis_assembly_exact
+    (target : DecodedNeuralArtifact LearnedAlignedOperationalContract)
+    (targetExact : target = learnedDecodedAlignedArtifact)
+    {source : SerializedStableArtifactNaming}
+    (admitted : LearnedAdmittedStableNaming source)
+    (transitionDecision : LearnedAlignedTransitionDecision) :
+    HEq (learnedReceivedAlignedTargetAnalysis target targetExact admitted
+      transitionDecision).structuralAssembly admitted.structuralAssembly := by
+  cases targetExact
+  rfl
 
 def learnedAlignedTargetAnalysis :
     IncrementalTargetAnalysis learnedInitialCheckedAgent :=
@@ -2607,11 +3397,20 @@ structure DecodedLearnedSerializedConstitutiveUpdate
   transitionExact : source.transition =
     ({ current := .initial, next := .aligned } :
       ContractTransitionRequest learnedConstitutiveMetaContract)
+  authorizationExact :
+    primaryAuthorizationConstitutivelyConsumed source.targetNetwork = true
+  targetNetworkExact :
+    source.targetNetwork = independentLearnedFirstSuccessorNetwork
   target : DecodedNeuralArtifact LearnedAlignedOperationalContract
   targetDecodedExact :
     decodeArtifact LearnedAlignedOperationalContract source.targetNetwork =
       .ok target
-  stable : DecodedStableArtifactNaming target source.targetStableNaming
+  targetExact : target = learnedDecodedAlignedArtifact
+  stable : DecodedStableArtifactNaming learnedDecodedAlignedArtifact
+    source.targetStableNaming
+  stableDecodedExact :
+    decodeStableArtifactNaming learnedDecodedAlignedArtifact
+      source.targetStableNaming = .ok stable
   admittedStableNaming :
     LearnedAdmittedStableNaming source.targetStableNaming
   nextInputExact : source.nextInput = independentLearnedCertifiedInput
@@ -2619,27 +3418,17 @@ structure DecodedLearnedSerializedConstitutiveUpdate
 
 theorem DecodedLearnedSerializedConstitutiveUpdate.targetArtifactExact
     {source : LearnedSerializedConstitutiveUpdate}
-    (decoded : DecodedLearnedSerializedConstitutiveUpdate source)
-    (targetExact :
-      source.targetNetwork = independentLearnedFirstSuccessorNetwork) :
-    decoded.target = learnedDecodedAlignedArtifact := by
-  have decodedExact := decoded.targetDecodedExact
-  rw [targetExact] at decodedExact
-  have canonicalExact :
-      decodeArtifact LearnedAlignedOperationalContract
-          independentLearnedFirstSuccessorNetwork =
-        .ok learnedDecodedAlignedArtifact := by
-    rfl
-  exact (Except.ok.inj (canonicalExact.symm.trans decodedExact)).symm
+    (decoded : DecodedLearnedSerializedConstitutiveUpdate source) :
+    decoded.target = learnedDecodedAlignedArtifact :=
+  decoded.targetExact
 
-def DecodedLearnedSerializedConstitutiveUpdate.stableAtExactTarget
+theorem DecodedLearnedSerializedConstitutiveUpdate.stable_exact
     {source : LearnedSerializedConstitutiveUpdate}
-    (decoded : DecodedLearnedSerializedConstitutiveUpdate source)
-    (targetExact :
-      source.targetNetwork = independentLearnedFirstSuccessorNetwork) :
-    DecodedStableArtifactNaming learnedDecodedAlignedArtifact
-      source.targetStableNaming :=
-  decoded.targetArtifactExact targetExact ▸ decoded.stable
+    (decoded : DecodedLearnedSerializedConstitutiveUpdate source) :
+    decoded.stable = decoded.admittedStableNaming.decoded :=
+  Except.ok.inj
+    (decoded.stableDecodedExact.symm.trans
+      decoded.admittedStableNaming.decoded_exact)
 
 def learnedTransitionRequestEquality
     (left right : ContractTransitionRequest learnedConstitutiveMetaContract) :
@@ -2673,26 +3462,40 @@ def decodeLearnedSerializedConstitutiveUpdate
         ContractTransitionRequest learnedConstitutiveMetaContract) with
   | .isFalse _ => .error .unexpectedTransition
   | .isTrue transitionExact =>
-      match targetDecodedExact : decodeArtifact LearnedAlignedOperationalContract
-          source.targetNetwork with
-      | .error problem => .error (.malformedArtifact problem)
-      | .ok target =>
-          match decodeStableArtifactNaming target source.targetStableNaming with
-          | .error problem => .error (.invalidStableNaming problem)
-          | .ok stable =>
-              match decodeLearnedAdmittedStableNaming
-                  source.targetStableNaming with
-              | .error _ => .error .unsupportedStableNaming
-              | .ok admittedStableNaming =>
-                  match independentLearnedRequirementInputEquality
-                      source.nextInput independentLearnedCertifiedInput with
-                  | .isFalse _ => .error .unexpectedNextInput
-                  | .isTrue nextInputExact =>
-                      match source.intent with
-                      | .preserveAuthorizedBehavior =>
-                          .ok (.mk transitionExact target targetDecodedExact
-                            stable admittedStableNaming nextInputExact
-                              .preserveAuthorizedBehavior)
+      if authorizationExact :
+          primaryAuthorizationConstitutivelyConsumed
+            source.targetNetwork = true then
+        if targetNetworkExact : source.targetNetwork =
+            independentLearnedFirstSuccessorNetwork then
+          let target := learnedDecodedAlignedArtifact
+          have targetDecodedExact :
+              decodeArtifact LearnedAlignedOperationalContract
+                  source.targetNetwork = .ok target := by
+            rw [targetNetworkExact]
+            rfl
+          match stableDecodedExact :
+              decodeStableArtifactNaming learnedDecodedAlignedArtifact
+                source.targetStableNaming with
+            | .error problem => .error (.invalidStableNaming problem)
+            | .ok stable =>
+                match decodeLearnedAdmittedStableNaming
+                    source.targetStableNaming with
+                | .error _ => .error .unsupportedStableNaming
+                | .ok admittedStableNaming =>
+                    match independentLearnedRequirementInputEquality
+                        source.nextInput independentLearnedCertifiedInput with
+                    | .isFalse _ => .error .unexpectedNextInput
+                    | .isTrue nextInputExact =>
+                        match source.intent with
+                        | .preserveAuthorizedBehavior =>
+                            .ok (.mk transitionExact authorizationExact
+                              targetNetworkExact target targetDecodedExact rfl
+                              stable stableDecodedExact admittedStableNaming
+                              nextInputExact .preserveAuthorizedBehavior)
+        else
+          .error .unsupportedTargetArtifact
+      else
+        .error .missingConstitutiveDependency
 
 def learnedExecutedSuccessorFromDecision
     {source : LearnedSerializedConstitutiveUpdate}
@@ -2721,10 +3524,6 @@ structure LearnedIncrementalExecutedDependencies
   transitionAccepted :
     decideTransition learnedExecutableMetaContractInterface source.transition =
       some receivedDecision
-  dependencyExact :
-    primaryAuthorizationConstitutivelyConsumed source.targetNetwork = true
-  targetExact :
-    source.targetNetwork = independentLearnedFirstSuccessorNetwork
 
 /-- The learned analysis contains the executed dependencies and no completed
 `IncrementalTargetAnalysis`. -/
@@ -2740,31 +3539,12 @@ def LearnedIncrementalEngineAnalysis.target
     {source : LearnedSerializedConstitutiveUpdate}
     (analysis : LearnedIncrementalEngineAnalysis source) :
     IncrementalTargetAnalysis learnedInitialCheckedAgent :=
-  let naming :=
-    analysis.executed.decoded.admittedStableNaming.naming
-  { nextContract := .aligned
-    contractAdmitted := .aligned
-    artifact := learnedDecodedAlignedArtifact
-    state := learnedAlignedState
-    targetNaming := naming
-    preCertificateGraph := learnedPreCertificateGraphFor naming
-    transportedStructural :=
-      analysis.executed.decoded.admittedStableNaming.transportedStructuralFragments
-    recomputedStructural :=
-      analysis.executed.decoded.admittedStableNaming.recomputedStructuralFragments
-    structuralAssembly :=
-      analysis.executed.decoded.admittedStableNaming.structuralAssembly
-    fragments := learnedAlignedStateFragmentsFor naming
-    fragmentNamingExact := rfl
-    fragmentObservationsExact :=
-      (learnedAlignedStateFragmentsFor naming).structural.observationsExact |>.trans
-        ((learnedPreCertificateGraphFor naming).targetObservationsExact.symm.trans
-          analysis.executed.decoded.admittedStableNaming.structuralAssembly.targetExact.symm)
-    transition :=
-      (analysis.executed.receivedDecision.transportRequest
-        analysis.executed.decoded.transitionExact).transition
-    execution := learnedExecutedSuccessorFromDecision
-      analysis.executed.decoded analysis.executed.receivedDecision }
+  let decoded := analysis.executed.decoded
+  learnedReceivedAlignedTargetAnalysis decoded.target
+    decoded.targetArtifactExact
+    decoded.admittedStableNaming
+    (analysis.executed.receivedDecision.transportRequest
+      decoded.transitionExact)
 
 /-- Any learned analysis accepted by the generic checker carries the exact
 serialized target network that its certificate installs. -/
@@ -2772,15 +3552,81 @@ theorem LearnedIncrementalEngineAnalysis.receivedTargetNetwork_exact
     {source : LearnedSerializedConstitutiveUpdate}
     (analysis : LearnedIncrementalEngineAnalysis source) :
     source.targetNetwork = independentLearnedFirstSuccessorNetwork :=
-  analysis.executed.targetExact
+  analysis.executed.decoded.targetNetworkExact
 
 theorem LearnedIncrementalEngineAnalysis.receivedStableNaming_installed
     {source : LearnedSerializedConstitutiveUpdate}
     (analysis : LearnedIncrementalEngineAnalysis source) :
     HEq analysis.target.targetNaming
       analysis.executed.decoded.admittedStableNaming.naming := by
-  unfold LearnedIncrementalEngineAnalysis.target
-  rfl
+  exact learnedReceivedAlignedTargetAnalysis_naming_exact _ _ _ _
+
+/-- The installed naming is the exact result of decoding the received stable
+serials against the exact received target network.  It is not another naming
+rebuilt from `Fin` positions after admission. -/
+theorem LearnedIncrementalEngineAnalysis.receivedDecodedStableNaming_installed
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedIncrementalEngineAnalysis source) :
+    HEq analysis.target.targetNaming analysis.executed.decoded.stable.naming := by
+  have decodedNamingExact :
+      analysis.executed.decoded.stable.naming =
+        analysis.executed.decoded.admittedStableNaming.naming :=
+    congrArg DecodedStableArtifactNaming.naming
+      analysis.executed.decoded.stable_exact |>.trans
+      analysis.executed.decoded.admittedStableNaming.decoded_naming_exact
+  exact analysis.receivedStableNaming_installed.trans
+    (heq_of_eq decodedNamingExact.symm)
+
+/-- The checked successor keeps the artifact value emitted by the decoder,
+not a separately selected canonical artifact. -/
+theorem LearnedIncrementalEngineAnalysis.receivedDecodedArtifact_installed
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedIncrementalEngineAnalysis source) :
+    HEq analysis.target.artifact analysis.executed.decoded.target :=
+  learnedReceivedAlignedTargetAnalysis_artifact_exact _ _ _ _
+
+theorem LearnedIncrementalEngineAnalysis.receivedTransition_installed
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedIncrementalEngineAnalysis source) :
+    HEq analysis.target.transition
+      (analysis.executed.receivedDecision.transportRequest
+        analysis.executed.decoded.transitionExact).transition := by
+  exact learnedReceivedAlignedTargetAnalysis_transition_exact _ _ _ _
+
+theorem LearnedIncrementalEngineAnalysis.receivedExecution_installed
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedIncrementalEngineAnalysis source) :
+    HEq analysis.target.execution
+      (learnedAlignedTargetAnalysisForAdmittedNamingFromDecision
+        analysis.executed.decoded.admittedStableNaming
+        (analysis.executed.receivedDecision.transportRequest
+          analysis.executed.decoded.transitionExact)).execution := by
+  exact learnedReceivedAlignedTargetAnalysis_execution_exact _ _ _ _
+
+theorem LearnedIncrementalEngineAnalysis.receivedStructuralAssembly_installed
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedIncrementalEngineAnalysis source) :
+    HEq analysis.target.structuralAssembly
+      analysis.executed.decoded.admittedStableNaming.structuralAssembly := by
+  exact learnedReceivedAlignedTargetAnalysis_assembly_exact _ _ _ _
+
+def analyzeDecodedLearnedRuntimeUpdate
+    (source : LearnedSerializedConstitutiveUpdate)
+    (decoded : DecodedLearnedSerializedConstitutiveUpdate source)
+    (decodedRun :
+      decodeLearnedSerializedConstitutiveUpdate source = .ok decoded) :
+    Except LearnedRuntimeUpdateError
+      (LearnedIncrementalEngineAnalysis source) :=
+  match decisionRun : decideTransition learnedExecutableMetaContractInterface
+      source.transition with
+  | none => .error .unexpectedTransition
+  | some receivedDecision =>
+      .ok (.mk
+        { decoded := decoded
+          decodedExact := decodedRun
+          receivedDecision := receivedDecision
+          transitionAccepted := decisionRun
+        })
 
 def analyzeLearnedRuntimeUpdate
     (source : LearnedSerializedConstitutiveUpdate) :
@@ -2788,28 +3634,7 @@ def analyzeLearnedRuntimeUpdate
       (LearnedIncrementalEngineAnalysis source) :=
   match decodedRun : decodeLearnedSerializedConstitutiveUpdate source with
   | .error problem => .error problem
-  | .ok decoded =>
-      match decisionRun : decideTransition learnedExecutableMetaContractInterface
-          source.transition with
-      | none => .error .unexpectedTransition
-      | some receivedDecision =>
-          if _dependencyExact :
-              primaryAuthorizationConstitutivelyConsumed
-                source.targetNetwork = true then
-            if _targetExact : source.targetNetwork =
-                independentLearnedFirstSuccessorNetwork then
-              .ok (.mk
-                { decoded := decoded
-                  decodedExact := decodedRun
-                  receivedDecision := receivedDecision
-                  transitionAccepted := decisionRun
-                  dependencyExact := _dependencyExact
-                  targetExact := _targetExact
-                })
-            else
-              .error .unsupportedTargetArtifact
-          else
-            .error .missingConstitutiveDependency
+  | .ok decoded => analyzeDecodedLearnedRuntimeUpdate source decoded decodedRun
 
 /-- Learned local conditions and learned analyses share the same executed
 dependency object, while remaining different wrapper types. -/
@@ -2842,6 +3667,7 @@ def completeLearnedIncrementalAnalysis
         (‹decodeLearnedSerializedConstitutiveUpdate source = .ok _›.symm.trans
           conditions.decodedExact)
     cases decodedExact
+    unfold analyzeDecodedLearnedRuntimeUpdate
     split
     · have impossible :=
         ‹decideTransition learnedExecutableMetaContractInterface
@@ -2854,8 +3680,6 @@ def completeLearnedIncrementalAnalysis
               source.transition = some _›.symm.trans
             conditions.transitionAccepted)
       cases decisionExact
-      rw [dif_pos conditions.dependencyExact]
-      rw [dif_pos conditions.targetExact]
       exact ⟨.mk conditions, rfl⟩
 
 /-- Extract the same autonomous local decisions from any successful learned
@@ -2894,17 +3718,19 @@ theorem learnedGenericChecker_accepts_aligned :
   exact ⟨
     { decoded :=
         { transitionExact := rfl
+          authorizationExact := rfl
+          targetNetworkExact := rfl
           target := learnedDecodedAlignedArtifact
           targetDecodedExact := rfl
+          targetExact := rfl
           stable := learnedDecodedAlignedStableNaming
+          stableDecodedExact := rfl
           admittedStableNaming := .aligned
           nextInputExact := rfl
           intentAdmitted := .preserveAuthorizedBehavior }
       decodedExact := rfl
       receivedDecision := learnedAlignedTransitionDecision
       transitionAccepted := rfl
-      dependencyExact := rfl
-      targetExact := rfl
       }⟩
 
 theorem learnedGenericChecker_accepts_renamed :
@@ -2915,17 +3741,19 @@ theorem learnedGenericChecker_accepts_renamed :
   exact ⟨
     { decoded :=
         { transitionExact := rfl
+          authorizationExact := rfl
+          targetNetworkExact := rfl
           target := learnedDecodedAlignedArtifact
           targetDecodedExact := rfl
+          targetExact := rfl
           stable := learnedDecodedRenamedStableNaming
+          stableDecodedExact := rfl
           admittedStableNaming := .renamed
           nextInputExact := rfl
           intentAdmitted := .preserveAuthorizedBehavior }
       decodedExact := rfl
       receivedDecision := learnedAlignedTransitionDecision
       transitionAccepted := rfl
-      dependencyExact := rfl
-      targetExact := rfl
       }⟩
 
 theorem learnedGenericChecker_rejects_bypass :
@@ -3062,6 +3890,15 @@ theorem learnedAlignedIncrementalAndFullCertificate_exact :
       learnedAlignedFullRecheckSuccess.checked.next.certificate := by
   rfl
 
+/-- The structural component installed by the local learned update is the
+actual calculated transport/recompute assembly.  It is not a separately
+regenerated target snapshot. -/
+theorem learnedAlignedInstalledStructuralAssembly_exact :
+    (learnedAlignedGenericIncrementalSuccess.checked.next.certificate
+        ).structuralObservations =
+      learnedCalculatedStructuralAssembly.observations := by
+  rfl
+
 def learnedRenamedGenericIncrementalSuccess :
     GenericIncrementalCheckSuccess learnedIncrementalCheckerEngine
       learnedRenamedSerializedUpdate :=
@@ -3100,6 +3937,15 @@ theorem learnedRenamedIncrementalAndFullSuccessor_exact :
 theorem learnedRenamedIncrementalAndFullCertificate_exact :
     learnedRenamedGenericIncrementalSuccess.checked.next.certificate =
       learnedRenamedFullRecheckSuccess.checked.next.certificate := by
+  rfl
+
+/-- The renamed case legitimately recalculates every structural observation:
+its transported list is empty and the installed certificate consumes that
+full recalculation assembly. -/
+theorem learnedRenamedInstalledStructuralAssembly_exact :
+    (learnedRenamedGenericIncrementalSuccess.checked.next.certificate
+        ).structuralObservations =
+      learnedRenamedCalculatedStructuralAssembly.observations := by
   rfl
 
 /-- Incremental verification and independent full reconstruction agree on the
@@ -3214,9 +4060,26 @@ structure DecodedLearnedSuccessiveUpdate
     decodeArtifact LearnedExtendedOperationalContract source.targetNetwork =
       .ok target
   stable : DecodedStableArtifactNaming target source.targetStableNaming
+  stableDecodedExact :
+    decodeStableArtifactNaming target source.targetStableNaming = .ok stable
   stableNamingExact : source.targetStableNaming = learnedExtendedSerializedNaming
   nextInputExact : source.nextInput = independentLearnedCertifiedInput
   intentAdmitted : AdmittedIndependentLearnedIntent source.intent
+
+theorem DecodedLearnedSuccessiveUpdate.targetArtifactExact
+    {source : LearnedSerializedConstitutiveUpdate}
+    (decoded : DecodedLearnedSuccessiveUpdate source)
+    (targetExact :
+      source.targetNetwork = independentLearnedSecondSuccessorNetwork) :
+    decoded.target = learnedDecodedExtendedArtifact := by
+  have decodedExact := decoded.targetDecodedExact
+  rw [targetExact] at decodedExact
+  have canonicalExact :
+      decodeArtifact LearnedExtendedOperationalContract
+          independentLearnedSecondSuccessorNetwork =
+        .ok learnedDecodedExtendedArtifact := by
+    rfl
+  exact (Except.ok.inj (canonicalExact.symm.trans decodedExact)).symm
 
 def decodeLearnedSuccessiveUpdate
     (source : LearnedSerializedConstitutiveUpdate) :
@@ -3230,7 +4093,8 @@ def decodeLearnedSuccessiveUpdate
           source.targetNetwork with
       | .error problem => .error (.malformedArtifact problem)
       | .ok target =>
-          match decodeStableArtifactNaming target source.targetStableNaming with
+          match stableDecodedExact :
+              decodeStableArtifactNaming target source.targetStableNaming with
           | .error problem => .error (.invalidStableNaming problem)
           | .ok stable =>
               if stableNamingExact : source.targetStableNaming =
@@ -3242,10 +4106,100 @@ def decodeLearnedSuccessiveUpdate
                     match source.intent with
                     | .preserveAuthorizedBehavior =>
                         .ok (.mk transitionExact target targetDecodedExact stable
-                          stableNamingExact nextInputExact
+                          stableDecodedExact stableNamingExact nextInputExact
                           .preserveAuthorizedBehavior)
               else
                 .error .unsupportedStableNaming
+
+/-- The second installation is transported to the artifact value returned by
+decoding this exact update.  The stable-naming equation is consumed in the
+same construction, so an update for another version cannot reuse the checked
+successor. -/
+def learnedReceivedExtendedCheckedUpdateForArtifact
+    (target : DecodedNeuralArtifact LearnedExtendedOperationalContract)
+    (targetExact : target = learnedDecodedExtendedArtifact) :
+    CheckedUpdate LearnedAlignedCheckedAgent .extended :=
+  match targetExact with
+  | rfl => learnedExtendedCheckedUpdate
+
+theorem learnedReceivedExtendedCheckedUpdateForArtifact_artifact_exact
+    (target : DecodedNeuralArtifact LearnedExtendedOperationalContract)
+    (targetExact : target = learnedDecodedExtendedArtifact) :
+    HEq (learnedReceivedExtendedCheckedUpdateForArtifact target
+      targetExact).next.artifact target := by
+  cases targetExact
+  rfl
+
+theorem learnedReceivedExtendedCheckedUpdateForArtifact_naming_exact
+    (target : DecodedNeuralArtifact LearnedExtendedOperationalContract)
+    (targetExact : target = learnedDecodedExtendedArtifact)
+    {sourceNaming : SerializedStableArtifactNaming}
+    (stable : DecodedStableArtifactNaming target sourceNaming)
+    (stableDecodedExact :
+      decodeStableArtifactNaming target sourceNaming = .ok stable)
+    (stableNamingExact :
+      sourceNaming = learnedExtendedSerializedNaming) :
+    HEq (learnedReceivedExtendedCheckedUpdateForArtifact target
+      targetExact).next.certificate.basis.naming stable.naming := by
+  cases targetExact
+  cases stableNamingExact
+  have canonicalExact :
+      decodeStableArtifactNaming learnedDecodedExtendedArtifact
+          learnedExtendedSerializedNaming =
+        .ok learnedDecodedExtendedStableNaming := by
+    rfl
+  have stableExact : stable = learnedDecodedExtendedStableNaming :=
+    Except.ok.inj (stableDecodedExact.symm.trans canonicalExact)
+  cases stableExact
+  rfl
+
+def learnedReceivedExtendedCheckedUpdate
+    {source : LearnedSerializedConstitutiveUpdate}
+    (decoded : DecodedLearnedSuccessiveUpdate source)
+    (targetExact :
+      source.targetNetwork = independentLearnedSecondSuccessorNetwork) :
+    CheckedUpdate LearnedAlignedCheckedAgent .extended :=
+  learnedReceivedExtendedCheckedUpdateForArtifact decoded.target
+    (decoded.targetArtifactExact targetExact)
+
+theorem learnedReceivedExtendedCheckedUpdate_artifact_exact
+    {source : LearnedSerializedConstitutiveUpdate}
+    (decoded : DecodedLearnedSuccessiveUpdate source)
+    (targetExact :
+      source.targetNetwork = independentLearnedSecondSuccessorNetwork) :
+    HEq (learnedReceivedExtendedCheckedUpdate decoded targetExact).next.artifact
+      decoded.target := by
+  exact learnedReceivedExtendedCheckedUpdateForArtifact_artifact_exact _ _
+
+theorem learnedReceivedExtendedCheckedUpdate_naming_exact
+    {source : LearnedSerializedConstitutiveUpdate}
+    (decoded : DecodedLearnedSuccessiveUpdate source)
+    (targetExact :
+      source.targetNetwork = independentLearnedSecondSuccessorNetwork) :
+    HEq (learnedReceivedExtendedCheckedUpdate decoded targetExact).next.certificate.basis.naming
+      decoded.stable.naming := by
+  exact learnedReceivedExtendedCheckedUpdateForArtifact_naming_exact _ _
+    decoded.stable decoded.stableDecodedExact decoded.stableNamingExact
+
+def checkDecodedLearnedExtendedSerializedUpdate
+    (source : LearnedSerializedConstitutiveUpdate)
+    (decoded : DecodedLearnedSuccessiveUpdate source) :
+    Except LearnedRuntimeUpdateError
+      (DependentCheckedUpdateResult LearnedAlignedCheckedAgent) :=
+  match decideTransition learnedExecutableMetaContractInterface
+      source.transition with
+  | none => .error .unexpectedTransition
+  | some _decision =>
+      if _dependencyExact : primaryAuthorizationConstitutivelyConsumed
+          source.targetNetwork = true then
+        if _targetExact : source.targetNetwork =
+            independentLearnedSecondSuccessorNetwork then
+          .ok (dependentCheckedUpdateResult
+            (learnedReceivedExtendedCheckedUpdate decoded _targetExact))
+        else
+          .error .unsupportedTargetArtifact
+      else
+        .error .missingConstitutiveDependency
 
 def checkLearnedExtendedSerializedUpdate
     (source : LearnedSerializedConstitutiveUpdate) :
@@ -3253,20 +4207,7 @@ def checkLearnedExtendedSerializedUpdate
       (DependentCheckedUpdateResult LearnedAlignedCheckedAgent) :=
   match decodeLearnedSuccessiveUpdate source with
   | .error problem => .error problem
-  | .ok _decoded =>
-      match decideTransition learnedExecutableMetaContractInterface
-          source.transition with
-      | none => .error .unexpectedTransition
-      | some _decision =>
-          if _dependencyExact : primaryAuthorizationConstitutivelyConsumed
-              source.targetNetwork = true then
-            if _targetExact : source.targetNetwork =
-                independentLearnedSecondSuccessorNetwork then
-              .ok (dependentCheckedUpdateResult learnedExtendedCheckedUpdate)
-            else
-              .error .unsupportedTargetArtifact
-          else
-            .error .missingConstitutiveDependency
+  | .ok decoded => checkDecodedLearnedExtendedSerializedUpdate source decoded
 
 theorem checkLearnedExtendedSerializedUpdate_accepts :
     checkLearnedExtendedSerializedUpdate learnedExtendedSerializedUpdate =
@@ -3290,6 +4231,68 @@ inductive LearnedRuntimeUpdate :
   | successive (update : LearnedSerializedConstitutiveUpdate) :
       LearnedRuntimeUpdate LearnedAlignedCheckedAgent
 
+/-- A decoded runtime request is indexed by the exact checked source that may
+consume it.  The two constructors retain the positive decoder result and its
+execution equation; no unindexed artifact can be moved between versions. -/
+inductive DecodedLearnedRuntimeUpdateAtCurrent :
+    {contract : LearnedOperationalContract} ->
+      (current : CheckedAgent learnedConstitutiveMetaContract contract) ->
+      LearnedRuntimeUpdate current -> Type 6 where
+  | initial
+      {source : LearnedSerializedConstitutiveUpdate}
+      (decoded : DecodedLearnedSerializedConstitutiveUpdate source)
+      (decodedExact :
+        decodeLearnedSerializedConstitutiveUpdate source = .ok decoded) :
+      DecodedLearnedRuntimeUpdateAtCurrent learnedInitialCheckedAgent
+        (.serialized source)
+  | successive
+      {source : LearnedSerializedConstitutiveUpdate}
+      (decoded : DecodedLearnedSuccessiveUpdate source)
+      (decodedExact : decodeLearnedSuccessiveUpdate source = .ok decoded) :
+      DecodedLearnedRuntimeUpdateAtCurrent LearnedAlignedCheckedAgent
+        (.successive source)
+
+def decodeLearnedRuntimeUpdateAtCurrent
+    {contract : LearnedOperationalContract}
+    {current : CheckedAgent learnedConstitutiveMetaContract contract}
+    (update : LearnedRuntimeUpdate current) :
+    Except LearnedRuntimeUpdateError
+      (DecodedLearnedRuntimeUpdateAtCurrent current update) :=
+  match update with
+  | .serialized source =>
+      match decodedExact : decodeLearnedSerializedConstitutiveUpdate source with
+      | .error problem => .error problem
+      | .ok decoded => .ok (.initial decoded decodedExact)
+  | .successive source =>
+      match decodedExact : decodeLearnedSuccessiveUpdate source with
+      | .error problem => .error problem
+      | .ok decoded => .ok (.successive decoded decodedExact)
+
+def checkDecodedLearnedRuntimeUpdateAtCurrent
+    {contract : LearnedOperationalContract}
+    {current : CheckedAgent learnedConstitutiveMetaContract contract}
+    {update : LearnedRuntimeUpdate current}
+    (decoded : DecodedLearnedRuntimeUpdateAtCurrent current update) :
+    Except LearnedRuntimeUpdateError (DependentCheckedUpdateResult current) :=
+  match decoded with
+  | .initial target decodedExact =>
+      match analyzeDecodedLearnedRuntimeUpdate _ target decodedExact with
+      | .error problem => .error problem
+      | .ok analysis =>
+          .ok (dependentCheckedUpdateResult
+            (buildIncrementalCheckedUpdate analysis.target))
+  | .successive target _decodedExact =>
+      checkDecodedLearnedExtendedSerializedUpdate _ target
+
+def checkLearnedRuntimeUpdateAtCurrent
+    {contract : LearnedOperationalContract}
+    {current : CheckedAgent learnedConstitutiveMetaContract contract}
+    (update : LearnedRuntimeUpdate current) :
+    Except LearnedRuntimeUpdateError (DependentCheckedUpdateResult current) :=
+  match decodeLearnedRuntimeUpdateAtCurrent update with
+  | .error problem => .error problem
+  | .ok decoded => checkDecodedLearnedRuntimeUpdateAtCurrent decoded
+
 def learnedAlignedCheckedUpdate : CheckedUpdate
     learnedInitialCheckedAgent .aligned :=
   buildIncrementalCheckedUpdate learnedAlignedTargetAnalysis
@@ -3308,15 +4311,7 @@ def learnedDependentIncrementalChecker :
   Update := LearnedRuntimeUpdate
   check := by
     intro contract current update
-    cases update with
-    | serialized serialized =>
-        match accepted : checkGenericIncrementalUpdate
-            learnedIncrementalCheckerEngine serialized with
-        | .error problem => exact .error problem
-        | .ok success =>
-            exact .ok (dependentCheckedUpdateResult success.checked)
-    | successive serialized =>
-        exact checkLearnedExtendedSerializedUpdate serialized
+    exact checkLearnedRuntimeUpdateAtCurrent update
 
 def learnedInitialCertifiedRuntime : CertifiedRuntime
     learnedDependentIncrementalChecker learnedInitialCheckedAgent :=
@@ -3566,10 +4561,12 @@ def learnedExtendedRuntime_preservedContracts :
 #print axioms ConstitutiveSearch.NeuralAgent.learnedInitialAuthorizationWitness
 #print axioms ConstitutiveSearch.NeuralAgent.learnedInitialAction
 #print axioms ConstitutiveSearch.NeuralAgent.learnedInitialEffect
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedEffectSatisfaction
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedActionSourceState
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedActionSourceCausalWitness
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedActionAuthorizationWitness
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedInstallingAction
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedInstallingEffectFrom
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedInstallingEffect
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedState
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedAuthorizationWitness
@@ -3577,6 +4574,16 @@ def learnedExtendedRuntime_preservedContracts :
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedEffect
 #print axioms ConstitutiveSearch.NeuralAgent.learnedInitialCausalWitness
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedCausalWitness
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedReconfigurationBuilder
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedReconfigurationBuilder
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedCertifiedReconfiguration
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedCertifiedReconfiguration
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedComposedSourceTransformation
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedComposedSourceTransformation_nonidentity
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedComposedSourceTransformation_output_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedComposedSourceTransformation
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedComposedSourceTransformation_nonidentity
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedComposedSourceTransformation_output_exact
 #print axioms ConstitutiveSearch.NeuralAgent.executeLearnedAlignedStateTransition
 #print axioms ConstitutiveSearch.NeuralAgent.learnedInitialFiniteCausalBasis
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedFiniteCausalBasis
@@ -3609,9 +4616,17 @@ def learnedExtendedRuntime_preservedContracts :
 #print axioms ConstitutiveSearch.NeuralAgent.completeLearnedIncrementalAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.learnedIncrementalLocalConditionsOfSuccess
 #print axioms ConstitutiveSearch.NeuralAgent.learnedTransitionProductionKernel
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedTransitionProductionData
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedExtendedTransitionProductionData
+#print axioms ConstitutiveSearch.NeuralAgent.produceLearnedTransitionData
 #print axioms ConstitutiveSearch.NeuralAgent.learnedReferenceTransitionProduction
+#print axioms ConstitutiveSearch.NeuralAgent.learnedLicensedStructuralTransports
 #print axioms ConstitutiveSearch.NeuralAgent.learnedTransportedStructuralFragments
+#print axioms ConstitutiveSearch.NeuralAgent.learnedRenamedLicensedStructuralTransports
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedAdmittedStableNaming.transportedLicenses
 #print axioms ConstitutiveSearch.NeuralAgent.learnedRecomputedStructuralFragments
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedRecomputedCertificateFragments
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedRecomputedCertificateFragments
 #print axioms ConstitutiveSearch.NeuralAgent.learnedRenamedCalculatedStructuralAssembly
 #print axioms ConstitutiveSearch.NeuralAgent.learnedFullRecheckEngine
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedIncrementalAndFullAcceptance_equivalent
@@ -3646,6 +4661,7 @@ def learnedExtendedRuntime_preservedContracts :
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedCausalWitness
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedStateFragments
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedOperationalTransition
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedInstallingEffectFrom
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedReferenceTransitionProduction
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedCheckedUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.checkLearnedExtendedSerializedUpdate_accepts
@@ -3666,4 +4682,26 @@ def learnedExtendedRuntime_preservedContracts :
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedCertifiedRuntime_accessibility
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedRuntime_checkedHistory
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedRuntime_preservedContracts
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedExecutableDecodedArtifact.artifact_decoded_exact
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedExecutableDecodedArtifact.stable_naming_decoded_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedReceivedAlignedTargetAnalysis_artifact_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedReceivedAlignedTargetAnalysis_naming_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedReceivedAlignedTargetAnalysis_transition_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedReceivedAlignedTargetAnalysis_execution_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedReceivedAlignedTargetAnalysis_assembly_exact
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedIncrementalEngineAnalysis.receivedDecodedArtifact_installed
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedAdmittedStableNaming.decoded
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedAdmittedStableNaming.decoded_exact
+#print axioms ConstitutiveSearch.NeuralAgent.DecodedLearnedSerializedConstitutiveUpdate.stable_exact
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedIncrementalEngineAnalysis.receivedDecodedStableNaming_installed
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedIncrementalEngineAnalysis.receivedTransition_installed
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedIncrementalEngineAnalysis.receivedExecution_installed
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedIncrementalEngineAnalysis.receivedStructuralAssembly_installed
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedInstalledStructuralAssembly_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedRenamedInstalledStructuralAssembly_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedReceivedExtendedCheckedUpdate_artifact_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedReceivedExtendedCheckedUpdate_naming_exact
+#print axioms ConstitutiveSearch.NeuralAgent.DecodedLearnedRuntimeUpdateAtCurrent
+#print axioms ConstitutiveSearch.NeuralAgent.decodeLearnedRuntimeUpdateAtCurrent
+#print axioms ConstitutiveSearch.NeuralAgent.checkLearnedRuntimeUpdateAtCurrent
 /- AXIOM_AUDIT_END -/

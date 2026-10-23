@@ -1,0 +1,18 @@
+{
+  "$id": "constitutive-neural-complete-capability-result-v10",
+  "type": "object",
+  "required": ["protocol_id","repository_commit","environment","command","raw_output_path","rows","raw_output_sha256"],
+  "properties": {
+    "protocol_id": {"const":"constitutive-neural-complete-capability-comparison-v10"},
+    "repository_commit": {"type":"string","pattern":"^[0-9a-f]{40}$"},
+    "environment": {"type":"object"},
+    "command": {"const":["lake","exe","compiled_complete_neural_comparison"]},
+    "raw_output_path": {"const":"experiments/constitutive-neural-alignment/v10/comparison-results.ndjson"},
+    "rows": {
+      "type":"array","minItems":9,"maxItems":9,
+      "items":{"type":"object","required":["method_id","translation_count"]}
+    },
+    "raw_output_sha256": {"type":"string","pattern":"^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

@@ -313,6 +313,97 @@ theorem checkFullUpdate_sound
         interface.certifyState success.target.stateAccepted := by
   exact ⟨rfl, rfl, rfl⟩
 
+/-- The autonomous finite data that make one complete recheck succeed.  This
+contains the positive receipts of the three operations performed by
+`checkFullUpdate` (complete target checking, transition decision, and fresh
+semantic execution), but neither a full-check verdict nor an incremental
+analysis. -/
+structure FullRecheckLocalConditionData
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (engine : FullRecheckEngine interface current)
+    (update : engine.Update) : Type 7 where
+  target : InitialCheckSuccess interface (engine.targetArtifact update)
+  targetAccepted :
+    checkInitial interface (engine.targetArtifact update) = .ok target
+  transitionDecision : AcceptedTransitionDecision interface
+    { current := currentContract
+      next := interface.decodedContract target.decodedArtifact }
+  transitionAccepted :
+    decideDecodedTransition interface currentContract target.decodedArtifact =
+      some transitionDecision
+  execution : FullRecheckExecution interface engine.kernel current
+    target.decodedArtifact transitionDecision
+  executionAccepted :
+    engine.recomputeExecution update target transitionDecision = .ok execution
+
+def FullRecheckLocalConditions
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (engine : FullRecheckEngine interface current)
+    (update : engine.Update) : Prop :=
+  Nonempty (FullRecheckLocalConditionData engine update)
+
+def FullRecheckAccepted
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (engine : FullRecheckEngine interface current)
+    (update : engine.Update) : Prop :=
+  Exists fun success => checkFullUpdate engine update = .ok success
+
+/-- Relative completeness of the independent complete checker.  The right
+side consists only of the finite positive receipts produced by its decoder,
+transition decider, and semantic execution kernel; it is not a restatement of
+the global checker result. -/
+theorem checkFullUpdate_complete_for_local_conditions
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (engine : FullRecheckEngine interface current)
+    (update : engine.Update) :
+    FullRecheckAccepted engine update ↔
+      FullRecheckLocalConditions engine update := by
+  constructor
+  · rintro ⟨success, accepted⟩
+    unfold checkFullUpdate at accepted
+    split at accepted
+    · cases accepted
+    · rename_i target targetAccepted
+      split at accepted
+      · cases accepted
+      · rename_i transitionDecision transitionAccepted
+        split at accepted
+        · cases accepted
+        · rename_i execution executionAccepted
+          have successExact :
+              FullRecheckSuccess.mk target transitionDecision execution =
+                success :=
+            Except.ok.inj accepted
+          cases successExact
+          exact ⟨
+            { target := target
+              targetAccepted := targetAccepted
+              transitionDecision := transitionDecision
+              transitionAccepted := transitionAccepted
+              execution := execution
+              executionAccepted := executionAccepted }⟩
+  · rintro ⟨conditions⟩
+    refine ⟨.mk conditions.target conditions.transitionDecision
+      conditions.execution, ?_⟩
+    unfold checkFullUpdate
+    rw [conditions.targetAccepted]
+    simp only
+    rw [conditions.transitionAccepted]
+    simp only
+    rw [conditions.executionAccepted]
+
 inductive AlignmentError where
   | malformedArtifact (problem : ArtifactError)
   | malformedConstitutiveArtifact
@@ -1221,6 +1312,10 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.FullRecheckSuccess.checked
 #print axioms ConstitutiveSearch.NeuralAgent.checkFullUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.checkFullUpdate_sound
+#print axioms ConstitutiveSearch.NeuralAgent.FullRecheckLocalConditionData
+#print axioms ConstitutiveSearch.NeuralAgent.FullRecheckLocalConditions
+#print axioms ConstitutiveSearch.NeuralAgent.FullRecheckAccepted
+#print axioms ConstitutiveSearch.NeuralAgent.checkFullUpdate_complete_for_local_conditions
 #print axioms ConstitutiveSearch.NeuralAgent.AlignmentError
 #print axioms ConstitutiveSearch.NeuralAgent.PublicExecutableDecodedArtifact
 #print axioms ConstitutiveSearch.NeuralAgent.decodePublicExecutableArtifact
