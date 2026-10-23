@@ -569,56 +569,91 @@ renouvelée, relative à son propre contrat, est donc dérivable.
 
 \section{Contribution et portée exacte du résultat}
 
-La contribution formellement présentée est la chaîne constitutive complète
+Notons d'abord l'obligation documentaire dérivée d'une exécution $e$ :
 \[
-\boxed{\begin{gathered}
-e\longmapsto\bigl(C(e),\Gamma_e,\sigma_e\bigr)\\[3pt]
-\downarrow\\[3pt]
-\forall M,\;\forall A:\ExactRealization(C(e),M),\\[2pt]
+\mathcal O(e):=
+\forall M,\;\forall A:\ExactRealization(C(e),M),\quad
 q_A(t_e^{\mathrm v})\neq q_A(t_e^{\mathrm p}).
-\end{gathered}}
 \]
-Elle est réalisée par la production gödelienne, son séparateur fini, le
-théorème universel de séparation et leur renouvellement à toute hauteur finie.
+La contribution formelle se concentre alors dans la chaîne
+\[
+\boxed{
+e\longmapsto\bigl(C(e),\Gamma_e,\sigma_e\bigr)
+\longmapsto\mathcal O(e).
+}
+\]
+Les symboles $\mathcal O(e)$ et $(C(e),\Gamma_e,\sigma_e)$ sont des notations
+du manuscrit pour une proposition et plusieurs constructions Lean existantes ;
+ils ne désignent pas de nouvelles structures primitives.
 
-\paragraph{Découverte présentée.}
-Une exécution gödelienne certifiée ne fournit pas seulement une phrase et
-des propriétés relatives à sa prouvabilité. À partir du même témoin exécuté,
-elle constitue son contrat de futurs, produit deux runs et leurs terminaux,
-construit une collision opérationnelle sous le régime qui n'impose pas
-l'exactitude globale des readouts, puis construit sur ces mêmes terminaux un
-séparateur fini. Cette donnée particulière engendre alors une conséquence
-indépendante de tout choix ultérieur de mémoire : chaque réalisation exacte
-admissible du contrat doit maintenir distinctes les projections des deux
-terminaux. La progression conserve les exécutions produites et renouvelle
-cette génération d'une obligation universelle à chaque étage naturel fini.
+\paragraph{Unité des trois déplacements.}
+Ces trois déplacements ne sont pas indépendants. Ils décrivent le changement
+de domaine de l'obstruction, sa constitution depuis une exécution particulière
+et son renouvellement le long de la progression effectivement produite.
 
-Le passage décisif n'est pas la seule inégalité finale entre deux mémoires.
-À partir d'une exécution singulière sont construits le contrat, les runs, les
-terminaux et le séparateur auxquels s'applique ensuite la loi générique
-d'exactitude. La distinction particulière imposée aux réalisations n'est donc
-ni un champ de \code{ExactRealization}, ni une séparation choisie avant
-l'exécution. Elle est engendrée par les objets effectivement produits, puis
-devient universelle relativement au contrat ainsi constitué. Le résultat
-transforme donc les témoins gödeliens certifiés en une obligation
-représentationnelle portant sur toute réalisation exacte admissible.
+\paragraph{Premier déplacement : de la non-prouvabilité à la
+non-identification sous exactitude.}
+L'exécution fournit conjointement les termes
+\[
+t:\Truth(G),
+\qquad
+u:\Proof_T(G)\longrightarrow\Empty.
+\]
+Combinés aux égalités de readout fournies par les runs, ils certifient le
+désaccord des readouts terminaux et construisent le séparateur fini
+$\sigma_e$. Les lois d'exactitude transforment ensuite ce séparateur en
+$\mathcal O(e)$. On
+passe ainsi de l'impossibilité d'habiter $\Proof_T(G)$ à l'impossibilité
+d'identifier les projections terminales dans toute réalisation exacte
+admissible de $C(e)$. Cette seconde obstruction conserve sa provenance
+gödelienne, mais elle consomme également le témoin de vérité et les lois de
+préservation exacte : elle ne dérive pas de la non-prouvabilité seule.
 
-La contribution ne réside donc ni dans le seul lemme abstrait affirmant
-qu'une observation préservée doit rester distinguable, ni dans la seule
-production d'une phrase gödelienne. Elle réside dans leur articulation
-constitutive complète : les données auxquelles s'applique l'obligation
-universelle sont précisément celles qu'a produites et retenues l'exécution
-gödelienne qui constitue le contrat.
+\paragraph{Deuxième déplacement : de la phrase à l'exécution comme source
+de l'obligation.}
+La phrase $G$, considérée isolément, ne constitue pas le contrat. L'exécution
+certifiée $e$ paramètre les constructions qui dérivent $C(e)$ avant tout choix
+de mémoire ou de réalisation. Le runtime exécute ensuite les deux runs
+autorisés non vides et calcule leurs terminaux. Le paquet $\Gamma_e$ retient
+ces runs, leurs terminaux et leur collision dans la réalisation opérationnelle
+sans exactitude globale des readouts ; $\sigma_e$ sépare ces mêmes terminaux
+après leur calcul.
+Le contrat fixe ainsi les lois génériques de préservation, tandis que
+l'exécution produit la distinction particulière que ces lois rendent
+obligatoire. Puisque $\sigma_e$ est construit avant tout choix de $M$ ou de
+$A$, l'application du principe de séparation exacte donne la portée
+universelle de $\mathcal O(e)$.
 
-Le résultat peut être résumé en une phrase :
+\paragraph{Troisième déplacement : du renouvellement de la frontière de
+preuve au renouvellement des obligations.}
+La progression ne stocke pas les obligations comme des champs supplémentaires.
+Elle conserve les histoires, les étapes et les exécutions effectivement
+produites, depuis lesquelles elles restent dérivables. Pour l'exécution $e_n$
+retenue à une hauteur naturelle finie, le théorème de séparation fournit
+$\mathcal O(e_n)$ relativement à $C(e_n)$. Chaque étage possède donc son
+propre domaine d'universalité, sans réalisation exacte commune supposée entre
+$C(e_n)$ et $C(e_{n+1})$, ni étage limite ou union transfinie.
+
+\paragraph{Articulation.}
 \begin{quote}
-Une exécution gödelienne certifiée dérive canoniquement un contrat, deux runs
-et leurs terminaux, une collision opérationnelle ainsi qu'un séparateur fini
-de ces mêmes terminaux. Sans postuler d'inégalité entre leurs mémoires
-projetées, ce séparateur impose leur séparation dans toute réalisation exacte
-admissible ; la progression des théories renouvelle cette obligation à chaque
-étage fini constitué.
+L'universalité de l'obligation ne dépend pas de l'universalité de l'exécution :
+une exécution particulière produit la distinction particulière qui s'impose
+ensuite à toute réalisation exacte admissible de son contrat.
 \end{quote}
+L'exécution, le contrat, les terminaux et le séparateur sont particuliers ; la
+quantification de $\mathcal O(e)$ porte pourtant sur tout type mémoire et toute
+réalisation exacte admissible de ce contrat particulier. Il s'agit donc d'une
+universalité engendrée à partir du singulier, et non d'une universalité obtenue
+en effaçant la provenance de l'exécution. Chaque nouvelle exécution inscrite
+dans l'histoire effective de la progression renouvelle cette universalité
+contractuelle.
+
+La contribution ne réside ainsi ni dans le seul lemme abstrait de séparation,
+ni dans la seule production d'une phrase gödelienne. Elle réside dans leur
+articulation constitutive complète : une obstruction gödelienne certifiée est
+incorporée à une exécution qui dérive les données auxquelles les lois
+d'exactitude donnent une portée universelle, puis la progression renouvelle
+cette construction à chaque étage naturel fini.
 
 \paragraph{Portée exacte.}
 Le théorème porte sur les contrats constitués par les exécutions certifiées
