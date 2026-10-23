@@ -128,15 +128,16 @@ son interface déclarée sait consommer. La combinaison de référence calcule
 ses observations sans recevoir le verdict final ni le certificat cible comme
 oracle.
 
-Le statut actuel reste strict : v10 est figé avant exécution, mais aucun run
-confirmatoire n’a encore été produit et ses sorties réservées sont absentes.
-Le dossier préenregistre en outre qu’aucun avantage discriminant propre à P1
-n’est actuellement certifié : la combinaison de référence et le recheck
-complet distinguent eux aussi les deux candidats. Le résultat formel fermé est
+Le [run confirmatoire v10](../experiments/constitutive-neural-alignment/v10/COMPARISON_ANALYSIS.md)
+a conservé les neuf sorties préenregistrées sur la révision d’évidence
+`cb8d9e17b7b9db60c057d1617f1d56321e03ee3c`. Il confirme qu’aucun avantage
+discriminant propre à P1 n’est certifié : la combinaison de référence et le
+recheck complet distinguent eux aussi les deux candidats. Le résultat formel fermé est
 la conjonction locale des dépendances exécutées, transitions contractuelles,
 réutilisation licenciée, divergence future et oubli sur une même lignée typée.
 Il est interdit d’en déduire une supériorité générale, une incapacité d’une
-baseline ou une nouveauté scientifique avant le run et les audits prévus.
+baseline ou une nouveauté scientifique avant l’audit distinct de portée et de
+nouveauté.
 
 ### Passage à l’échelle du checker compilé
 
@@ -158,12 +159,16 @@ peut donc revalider que le protocole, les résultats bruts, leur agrégation et
 leurs empreintes archivées, pas réélaborer exactement ce snapshot. Le protocole
 de la campagne v11,
 [`compiled-complete-property-scaling-v11`](../experiments/constitutive-neural-alignment/v11/scaling-protocol.json),
-préenregistre désormais une propriété constitutive complète, une famille dont
+préenregistre une propriété constitutive complète, une famille dont
 les graphes, obligations et traces croissent, les coûts de toutes les phases,
-la mémoire, les tailles sérialisées et un recheck indépendant. Elle reste un
-brouillon en attente d’un commit source stable : aucune empreinte de gel ni
-aucun résultat confirmatoire n’existe encore. P8 et S6 demeurent donc ouverts ;
-les essais exploratoires ne sont pas promus en évidence scientifique.
+la mémoire, les tailles sérialisées et un recheck indépendant. Son
+[run confirmatoire](../experiments/constitutive-neural-alignment/v11/SCALING_ANALYSIS.md)
+a accepté 25 répétitions sur 25. Les structures et obligations enregistrées
+croissent et la réutilisation transporte effectivement des fragments, mais le
+critère pratique préenregistré est faux : selon la taille, la médiane
+incrémentale cumulée vaut de 3,76 à 1 056,52 fois celle du recheck complet.
+P8/S6 sont donc évalués défavorablement pour cette implémentation ; aucun gain
+de temps ou de mémoire n’est revendiqué.
 
 ## Exclusions explicites
 

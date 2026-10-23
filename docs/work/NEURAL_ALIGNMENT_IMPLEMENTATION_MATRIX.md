@@ -1243,10 +1243,14 @@ positivement ses succès : elle distingue elle aussi les deux candidats, de
 même que le recheck complet. Il n'existe donc pas, à ce stade, de gain
 discriminant propre certifié pour P1.
 
-V10 est figé avant son run confirmatoire, mais ce run n'a pas encore été
-exécuté. Ses sorties réservées sont absentes et aucun statut `observed` ne doit
-être inventé. Cette absence relève du gel et de la livraison scientifique de
-L12, pas d'une preuve Lean manquante dans la chaîne C/G/RC.
+Le run confirmatoire v10 a été exécuté une seule fois sur
+`cb8d9e17b7b9db60c057d1617f1d56321e03ee3c`. Les neuf sorties attendues sont
+conservées sans sélection dans `comparison-results.ndjson`. Elles confirment
+les succès locaux déjà annoncés et, surtout, que la combinaison explicite de
+références et le recheck complet distinguent eux aussi les candidats. P1 ne
+fournit donc aucun avantage discriminant exclusif. La comparaison ne certifie
+ni équivalence avec toutes les implémentations externes des six classes, ni
+nouveauté bibliographique.
 
 ## Propriété complète de passage à l'échelle après L10
 
@@ -1258,14 +1262,28 @@ le graphe causal, les sept familles d'obligations et la longueur de trace. Les
 cas locaux transportent des fragments non vides et les cas étendus en
 recalculent ; une obligation `Unit` ne peut remplacer l'exigence substantielle.
 
-Le protocole v11 enregistre les phases, le temps, le pic résident et les
-tailles sérialisées, mais reste volontairement
-`draft-awaiting-stable-source-commit`. Il ne possède ni empreinte de commit
-source ni résultat confirmatoire. Les essais de développement restent des
-smoke tests et ne ferment ni P8 ni S6.
+Le protocole v11 a été gelé sur
+`f9471ceab8d1af85d51eae8d2c6ab31959f41686`, puis exécuté une seule fois. Les
+25 répétitions sont acceptées, les structures, obligations et traces
+croissent, les cas locaux transportent un ensemble non vide et les cas
+étendus recalculent un ensemble non vide. Le critère de gain pratique
+préenregistré est toutefois faux : l'incrémental est plus lent que le recheck
+complet sur les cinq tailles, avec un ratio médian cumulé de 3,76 à 1 056,52.
+P8/S6 sont donc évalués défavorablement pour cette implémentation ; la
+réutilisation formelle n'est pas présentée comme une économie de temps ou de
+mémoire.
 
 ## Prévalidation L11
 
 La prévalidation exhaustive du candidat, ses raccords C1--C17, G1--G10 et
 RC1--RC6, les contrôles exécutés et les limites réservées à L12 sont consignés
 dans [L11_PREVALIDATION_CANDIDAT_ALIGNEMENT_CONSTITUTIF.fr.md](L11_PREVALIDATION_CANDIDAT_ALIGNEMENT_CONSTITUTIF.fr.md).
+
+## Production scientifique L12
+
+Le commit `cb8d9e17b7b9db60c057d1617f1d56321e03ee3c` gèle les sources, contrôles,
+textes et protocoles du candidat formel. Le résultat v10 vise exactement ce
+commit. Le protocole v11 a ensuite été gelé et son résultat défavorable a été
+conservé sans réécriture. Le registre doit encore être raccordé à la révision
+d'évidence finale qui contient ces textes et résultats, puis les deux audits
+indépendants distincts doivent être reçus et lus avant toute clôture de C18.

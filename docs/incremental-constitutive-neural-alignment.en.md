@@ -125,15 +125,15 @@ interventions, futures, contracts, and versions that its declared interface
 can consume. The reference combination computes its observations without
 receiving the final verdict or target certificate as an oracle.
 
-The current status remains strict: v10 is frozen before execution, but no
-confirmatory run has yet been produced and its reserved outputs are absent.
-The package also preregisters that no unique P1 discriminatory advantage is
-currently certified: the reference combination and complete recheck also
-distinguish the candidates. The closed formal result is the local conjunction
+The [v10 confirmatory run](../experiments/constitutive-neural-alignment/v10/COMPARISON_ANALYSIS.md)
+retained all nine preregistered outputs on evidence revision
+`cb8d9e17b7b9db60c057d1617f1d56321e03ee3c`. It confirms that no unique P1
+discriminatory advantage is certified: the reference combination and complete
+recheck also distinguish the candidates. The closed formal result is the local conjunction
 of executed dependencies, contract transitions, licensed reuse, future
 divergence, and forgetting over one typed lineage. No general superiority,
-baseline incapacity, or novelty conclusion may be drawn before the planned run
-and audits.
+baseline incapacity, or novelty conclusion may be drawn before the separate
+scope and novelty audit.
 
 ### Scaling of the compiled checker
 
@@ -154,12 +154,15 @@ reconstructible from Git history; the gate can therefore revalidate only the
 protocol, raw results, their aggregation, and their archived fingerprints, not
 re-elaborate that exact snapshot. The
 [`compiled-complete-property-scaling-v11`](../experiments/constitutive-neural-alignment/v11/scaling-protocol.json)
-campaign now preregisters a complete constitutive property, a family with
+campaign preregisters a complete constitutive property, a family with
 growing graphs, obligations, and traces, all phase costs, memory, serialized
-sizes, and an independent recheck. It remains a draft awaiting a stable source
-commit: no freeze fingerprints or confirmatory results exist yet. P8 and S6
-therefore remain open, and exploratory runs are not promoted to scientific
-evidence.
+sizes, and an independent recheck. Its
+[confirmatory run](../experiments/constitutive-neural-alignment/v11/SCALING_ANALYSIS.md)
+accepted all 25 of 25 repetitions. Registered structures and obligations grow
+and reuse does transport fragments, but the preregistered practical criterion
+is false: depending on size, cumulative incremental median time is 3.76 to
+1,056.52 times the complete-recheck median. P8/S6 are therefore unfavorable
+for this implementation; no time or memory gain is claimed.
 
 ## Explicit exclusions
 
