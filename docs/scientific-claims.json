@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "document_relocations": {},
-  "evidence_revision": "a020dc3267c0670b1316b2b2f8d5b3259ab40d91",
+  "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a",
   "immutable_target": {
     "revision": "a344cdee1a7eb556a8c9b0bf1790710922e1300b",
     "anchors": [
@@ -97,7 +97,7 @@
         "SEARCH_CONTEXTS",
         "MASTER_COUPLING"
       ],
-      "source_sha256": "5a69e2217115909a80770431fb92cb242b281ac83489d80581061377dc6cae04",
+      "source_sha256": "f5c4c6c4cf158ce1b8adb53083d642c2774edd30924bf333e3aeb523a39c3174",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -108,7 +108,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "TARGET_2",
@@ -172,7 +173,7 @@
         "TARGET_4",
         "PROFILE_FORGETTING"
       ],
-      "source_sha256": "d0b053c12e4eb13cba63001ed721d88e6b3efeb2de14cf1d233610511ca80e83",
+      "source_sha256": "e46961f291c0a629a8aef95172faebeb536aa41ebee7d4e93705b5c6fc274f4a",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -183,7 +184,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "TARGET_3",
@@ -237,7 +239,7 @@
         "TARGET_4",
         "PARTIAL_WIDTHS"
       ],
-      "source_sha256": "3aa28d7e2e286f9eae3f092424538952dd48c918ccdc290424da0027051c0312",
+      "source_sha256": "41f72d6b9892607f08248628ce4e3a6bfd30c6423ece726b31712f9e15e7f357",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -248,7 +250,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "TARGET_4",
@@ -304,7 +307,7 @@
         "transport": "La non-conservation indépendante n'efface pas les identités ; la portée reste celle de largeur, non du temps."
       },
       "consumers": [],
-      "source_sha256": "d0b053c12e4eb13cba63001ed721d88e6b3efeb2de14cf1d233610511ca80e83",
+      "source_sha256": "e46961f291c0a629a8aef95172faebeb536aa41ebee7d4e93705b5c6fc274f4a",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -315,7 +318,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "ROLE_READOUT",
@@ -379,7 +383,7 @@
         "TARGET_1",
         "TARGET_3"
       ],
-      "source_sha256": "3f8b48e04b9f61baaab9f7c5e6b3c23ae9f26111f4c0a118c6cad7e3240f64aa",
+      "source_sha256": "e3c82bc88d7b9bd90d6ac3c76dba172d5a5f106c3ea577f2c7df3ff1427a88bb",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -390,7 +394,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "SEARCH_CONTEXTS",
@@ -453,7 +458,7 @@
         "MASTER_COUPLING",
         "MACHINE_EXAMPLE"
       ],
-      "source_sha256": "0ce024d307bed5ccd453e503221925c81aef8ae7e8b8863c356f55140c64abe5",
+      "source_sha256": "6ef0e271069ed940f5b8167532f439e3e07cd7534d43c1b4c6ea1d85653cf63d",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -464,7 +469,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "STAGE_SHARING",
@@ -533,7 +539,7 @@
         "MASTER_COUPLING",
         "SINGLE_EXECUTION"
       ],
-      "source_sha256": "c7ac84aa789d60377a43f785dc4082d4367c81fc8629486a4b93fe5c1d44cbad",
+      "source_sha256": "95963766b27267dc392cec495a8750caec20fb3275c49f568c8439e58e984cee",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -544,7 +550,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "MASTER_COUPLING",
@@ -646,7 +653,7 @@
         "FULL_FUTURES",
         "SINGLE_EXECUTION"
       ],
-      "source_sha256": "ede445b457f9329ecf9dc0d927c3df36897149bf07c0e867e5f39218d1a85dac",
+      "source_sha256": "3e36ac9eb5800e977fc3bab69d9cdcbb0df05704d94e2e1cd4c088557b79e19f",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -657,7 +664,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "CONFIGURED_ACTION",
@@ -722,7 +730,7 @@
         "FULL_FUTURES",
         "MACHINE_EXAMPLE"
       ],
-      "source_sha256": "7c772a9033d131294ebf07b517f467758a7820d667d82efdb9d29b2ea9cd160b",
+      "source_sha256": "c1c94ee7692696961b93e449df8bc98b851aa9906a2180e98e92a6cdfaf85f98",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -733,7 +741,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "FULL_FUTURES",
@@ -797,7 +806,7 @@
       "consumers": [
         "SINGLE_EXECUTION"
       ],
-      "source_sha256": "556375a130de7eb0303434d2dd8a7b8a9c7e6ac234a5351484ca903ebfe5b04d",
+      "source_sha256": "9fa59998889ae710fdf51b8abd70fc3246e264df1e44ba8662098de905234adc",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -808,7 +817,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "MACHINE_EXAMPLE",
@@ -895,7 +905,7 @@
         "transport": "L'échec des deux directions du chercheur ne démontre pas l'absence universelle d'une relation."
       },
       "consumers": [],
-      "source_sha256": "36f660d8480c816e07edc89bb5c99ba6542d0f3f8b6a1380f7e3f78e32199a12",
+      "source_sha256": "207213ac2a96b6deb3a6f66f62987192ccfc030c9f8407f40d356d9dc96c2b7a",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -906,7 +916,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "SINGLE_EXECUTION",
@@ -977,7 +988,7 @@
         "transport": "Les gates restent représentées par constructeurs logiciels ; ni FPGA ni coût de routage physique prouvé."
       },
       "consumers": [],
-      "source_sha256": "e7c36553da7101788552ddc9cc25e57ec31b6fdf461c84ef029dcd3132619634",
+      "source_sha256": "97a649a91f7773d213b075b5f4e223dff440b3ed902c7bdc7748d57b30e5f4b9",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -988,7 +999,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "ASSIGNMENT_FORGETTING",
@@ -1050,7 +1062,7 @@
         "transport": "L'oubli est relatif aux futurs permis, sans identification des sources ni suppression d'une demande du contrat."
       },
       "consumers": [],
-      "source_sha256": "2c62244972e2f8094d8a4d102373e036166d639214965bd5d81aa067c0de6ab3",
+      "source_sha256": "5761289ae996094711d5f61e17f671e1d5a7a068c03862acfc6bc87e9385014b",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1061,7 +1073,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "PROFILE_FORGETTING",
@@ -1125,7 +1138,7 @@
       "consumers": [
         "REACHABLE_SIGNATURE"
       ],
-      "source_sha256": "d0b053c12e4eb13cba63001ed721d88e6b3efeb2de14cf1d233610511ca80e83",
+      "source_sha256": "e46961f291c0a629a8aef95172faebeb536aa41ebee7d4e93705b5c6fc274f4a",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1136,7 +1149,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "REACHABLE_SIGNATURE",
@@ -1196,7 +1210,7 @@
         "transport": "Les droits ont deux lois de retour ; la réalisation par nombre n'est pas une gratuité physique."
       },
       "consumers": [],
-      "source_sha256": "650101f22467c9ea72601049c88008b54201865d650263865accf6ae6359dbe4",
+      "source_sha256": "49be0c469cb2f1afea4cf1b6d125154d166e005b7e075312e2f40c222f2a1361",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1207,7 +1221,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "RESTRICTED_FUTURES",
@@ -1264,7 +1279,7 @@
         "transport": "Cette réduction ne retire aucune demande d'un autre contrat complet."
       },
       "consumers": [],
-      "source_sha256": "ee043ecc02a48919c572ccd452a2da8ab37d42a26045c42b3f8d3d324bdabe79",
+      "source_sha256": "81cca46e18f8e4ef29ce186b294c1027ad40c5e434cfa6b120c366ee551720d2",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1275,7 +1290,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "PARTIAL_WIDTHS",
@@ -1341,7 +1357,7 @@
         "transport": "Comparer 4, 2, 1 sur les mêmes rôles n'identifie pas leurs occurrences."
       },
       "consumers": [],
-      "source_sha256": "7f37b9f73f5bc0ab2cf0d802eea584b64fb0310c3f4eb47d04dc5ca92cf361db",
+      "source_sha256": "fe6513defaf2670e8c1ca84a1f5e4d15d1b1a0784175e2b3aed0375cac03f15b",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1352,7 +1368,8 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "CORE_MINIMALITY",
@@ -1405,7 +1422,7 @@
       "consumers": [
         "FULL_FUTURES"
       ],
-      "source_sha256": "36f62f46a9564280d2a9df705a94df72795c2a543a75be6c515eeb7a9b9ff837",
+      "source_sha256": "e2b49f3f37e798cf72067f0ef3e4c46e77578050c17413a31c0ece4fdfd5946c",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1416,12 +1433,13 @@
         "independent": {
           "status": "not_recorded"
         }
-      }
+      },
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a"
     },
     {
       "id": "GODEL_INTERNAL_CLOSURE_OBSTRUCTION",
       "kind": "causal",
-      "evidence_revision": "7812298003f433c9eb87c0fd9223bfd4edd38fcf",
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a",
       "scope": "Pour toute réalisation de EffectivelyPresentedSoundGodelSystem : production exécutée et certification du même témoin diagonal ; constitution affirmative d'un tout et d'une continuation stricte avec occurrences et provenance conservées ; rejet constructif de l'admission de cette continuation dans le même régime par tentative bilatérale, totalisation, contraction, conversion Truth(G) vers Proof(G), puis non-prouvabilité du même G. HA ferme concrètement les contrats de l'interface mais demeure une instance, non le cadre. Résultat métathéorique conditionnel, sans revendication de renforcement de Gödel, d'unicité architecturale ni de priorité historique.",
       "anchors": [
         {
@@ -1502,7 +1520,7 @@
         "transport": "La correspondance conserve séparément les occurrences, la ressource certifiée et la provenance du même témoin à travers la constitution et la continuation ; le rejet porte uniquement sur l'admission totalisante dans le même régime et n'efface ni le tout ni la continuation positive."
       },
       "consumers": [],
-      "source_sha256": "cc0639c95304f2d989e1d015c8e1cd2b952816fe37b116130248383f94eec539",
+      "source_sha256": "33ebb006528363a26fe8c408c78c8e930d46123bec8acd10982621b4e7eda76c",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1518,7 +1536,7 @@
     {
       "id": "GODEL_OPERATIONAL_RUNTIME_CLOSURE_OBSTRUCTION",
       "kind": "causal",
-      "evidence_revision": "13f9e0977fcd79ae47504fc32400a90a3b17eeb1",
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a",
       "scope": "Pour une production gödelienne exécutée unique, une ressource positive maître construit H1 sans présentation circulaire et est partagée avec son pont périmétral aval. Deux sources constitutives distinctes reçoivent ce même H1 ; leurs mémoires opérationnelles actives sont distinctes. La requête close autorisée sur la trace positivement non vide produit une phase terminale et une collision mémoire dans une réalisation préservant autorisations, transitions et événements sans readout exact, tandis que les sources restent distinctes. Les deux runs non vides produisent aussi deux terminaux dont trueWitness et unprovable certifient la séparation immédiate des readouts : la liste vide n'exécute pas close de nouveau, elle observe les terminaux déjà calculés. Toute ExactRealization doit donc conserver cette distinction dans ses mémoires projetées. Ce dernier résultat utilise seulement même mémoire projetée → mêmes futurs et sa contraposée constructive ; il n'établit ni la réciproque ni un quotient canonique de la mémoire. La collision est calculée dans GodelOperationalGroupingWithoutRead sous godelOperationalRealizationWithoutRead, puis exposée sans reconstruction des runs ni de la collision comme ExecutedOperationalGrouping sous l’adaptateur godelOperationalRealization. Une préservation terminale dirigée fixée sur cet adaptateur concret et ce regroupement calculé dérive directement Truth(G) → Proof(G) sans supposer ni dériver Truth(G) = Proof(G), sans transport inverse, read_exact global ni fait négatif ; les conversions utilisées sont les égalités de lecture des terminaux fournies par les runs et la conversion memoryRead le long de la collision calculée, interne à directedReadout. L’ancienne réalisation exacte dérive en outre Truth(G) = Proof(G). Dans les chaînes dirigée et historique, seul le rejet final consomme trueWitness et unprovable du même témoin ; le chemin du séparateur les consomme séparément pour certifier l’inégalité des readouts. Le noyau dirigé ne dépend pas de event_exact ; le transport et le rejet gödeliens ne projettent pas event_exact, qui n’apparaît que comme champ copié de la réalisation adaptée indexant le regroupement. La collision sous correspondance de readout reste une hypothèse, non une conséquence de Gödel ; aucun résultat sur tout regroupement, le continuum, AC ou CH, aucune borne de coût, aucun renforcement strict ni revendication de nouveauté.",
       "anchors": [
         {
@@ -1878,7 +1896,7 @@
       "consumers": [
         "GODEL_CONSTITUTIVE_THEORY_PROGRESSION"
       ],
-      "source_sha256": "5b827f1bab56e0418df6596c884929c5fe5e45180012128e6d786db30dce209e",
+      "source_sha256": "2be009ef163dd32d588fb74663c0ddc7dce864cfa28ba5157c083a19d0d867c5",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -1894,7 +1912,7 @@
     {
       "id": "TARSKI_RELATIONAL_OPERATIONAL_CLOSURE_OBSTRUCTION",
       "kind": "causal",
-      "evidence_revision": "13f9e0977fcd79ae47504fc32400a90a3b17eeb1",
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a",
       "scope": "Pour tout prédicat arithmétique candidat de l'instance HA, une production syntaxique exécutée unique calcule le corps, la substitution à son propre code, la phrase diagonale et leurs occurrences avant tout readout. La certification issue de diagonal_spec rejette constructivement l'adéquation globale bilatérale sans cohérence, preuve ni tiers exclu. Elle réfute aussi l'égalité des deux types de readout terminaux et construit un séparateur fini dont la liste de requêtes est vide ; toute ExactRealization du contrat fixé doit donc projeter les deux terminaux vers des mémoires distinctes. Ce résultat utilise seulement même mémoire projetée → mêmes futurs et sa contraposée constructive ; il n'établit ni la réciproque ni un quotient canonique de la mémoire. Le séparateur ne consomme ni regroupement opérationnel, ni collision, ni correspondance terminale, ni événement ; le corollaire sur toute ExactRealization utilise seulement les lois génériques de cette réalisation. Deux sources issues de la même production exécutent par ailleurs close et collisionnent dans une mémoire opérationnelle commune sans loi de préservation du readout ; une correspondance terminale bilatérale sur la même réalisation dérive l'adéquation locale et donc Empty. Chaque direction seule produit seulement les conséquences partielles formalisées, qui expriment au seul diagonal produit une cohérence locale minimale et ne construisent pas un prédicat de vérité partiel global non trivial. Une réalisation identité conserve positivement les readouts mais garde les terminaux distincts. La cécité au pôle sert uniquement à l'égalité des traces observées : une réalisation alternative à événements polaires conserve event_exact et la collision, avec traces distinctes. Portée limitée à la sémantique constructive HA et à ce runtime ; aucune hiérarchie tarskienne, théorie de Kripke ou de la révision, aucun résultat sur les réels, AC, CH, le coût ou la nouveauté.",
       "anchors": [
         {
@@ -2100,7 +2118,7 @@
         "transport": "ExactRealization préserve exactement les futurs, dont le readout terminal observé par la liste vide ; elle doit donc garder distinctes les mémoires de terminaux séparés par le contrat. Le sens inverse, mêmes futurs → même mémoire, n'est pas établi et aucun quotient canonique n'est revendiqué. DirectedTerminalReadoutPreservation transporte séparément une observation source vers une observation cible à travers l'égalité des mémoires calculées, sans égalité entre les types de readout gauche et droit, loi inverse ni propext ; les seules égalités de types utilisées comme conversions sont les lois de lecture locales tarskiTerminalRead_value et tarskiTerminalRead_candidate fournies par les runs et la conversion memoryRead induite par la collision. TerminalReadoutCorrespondence regroupe deux directions indépendantes. La réalisation identité fournit positivement la correspondance exacte tout en gardant les terminaux distincts. Une réalisation de test dont l'événement actif expose le pôle satisfait event_exact et conserve la collision terminale, mais ses traces close restent distinctes ; la cécité au pôle n'est donc nécessaire qu'à l'égalité des traces observées."
       },
       "consumers": [],
-      "source_sha256": "1afbd321645b6ff923f002d56a9672a5f0106961629828784c7d483123302846",
+      "source_sha256": "60b4fc3a7bc63b17f2c71a0794adfacc61d333c2583b649511c1b5cb85a84e58",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -2116,7 +2134,7 @@
     {
       "id": "DIRECTED_OPERATIONAL_READOUT_COMPOSITION",
       "kind": "behavioral",
-      "evidence_revision": "13f9e0977fcd79ae47504fc32400a90a3b17eeb1",
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a",
       "scope": "Deux noyaux constructifs purs rejettent respectivement un transport dirigé incompatible avec des témoins d’extrémité et deux transports opposés incompatibles avec un certificat bilatéral de négation. Leurs wrappers opérationnels ne reçoivent pas ces transports transversaux : ils les dérivent de factorisations locales le long de la collision terminale portée par un ExecutedOperationalGrouping. Une instance positive non diagonale complète utilise deux sources acceptées distinctes déjà constituées dans un même rôle et un même run maître, exécute deux close non vides aux traces distinctes, calcule l’égalité de leurs bits par la chaîne de production existante, regroupe leurs mémoires terminales et transporte un témoin entre deux readouts dépendants par encodage et décodage explicites. Elle ne construit aucun terme de type Empty ni aucune preuve de False. Le résultat ne fournit ni réciproque futurs–mémoire, ni quotient canonique, ni minimalité universelle, ni impossibilité de tout regroupement, ni raccord automatique aux régimes abstraits de totalisation. Il ne porte ni sur tous les réels, ni sur AC ou CH, ni sur un coût physique ou une nouveauté bibliographique.",
       "anchors": [
         {
@@ -2337,7 +2355,7 @@
         "TARSKI_RELATIONAL_OPERATIONAL_CLOSURE_OBSTRUCTION",
         "GODEL_CONSTITUTIVE_THEORY_PROGRESSION"
       ],
-      "source_sha256": "602a8b32bb138fa9778a33b4d209e232a8d9d7b4123a8e3f9b84db01d8f78e8b",
+      "source_sha256": "50d1770c8be745e683713175576a585fbd282ca81ee44b9e84ad1e35ab5975c5",
       "reviews": {
         "reader": {
           "status": "pending"
@@ -2353,7 +2371,7 @@
     {
       "id": "GODEL_CONSTITUTIVE_THEORY_PROGRESSION",
       "kind": "causal",
-      "evidence_revision": "13f9e0977fcd79ae47504fc32400a90a3b17eeb1",
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a",
       "scope": "À partir d’une histoire arithmétique finie munie d’un certificat positif de correction standard, un vérificateur effectif indexé par cette histoire réalise le système gödelien générique et en exécute la production canonique. Une étape conserve l’exécution source maîtresse, ajoute exactement la phrase G_T qu’elle produit, consomme le témoin Truth(G_T) de cette même exécution pour certifier l’histoire étendue T⁺, construit Proof_T⁺(G_T) depuis l’occurrence newest ajoutée, puis exécute une nouvelle production maîtresse G_T⁺ dans T⁺. Elle établit simultanément Proof_T(G_T) → Empty, Proof_T⁺(G_T), le transport dirigé des anciennes preuves, G_T ≠ G_T⁺ et le rejet d’un transport uniforme inverse. Les contraintes runtime de regroupement positif, d’incompatibilité dirigée et de séparation exacte sont instanciées séparément pour les exécutions source et cible. Une trace dépendante finie retient chaque étape effectivement produite et transporte les preuves anciennes en consommant récursivement ces étapes avant toute comparaison avec l’itérateur simplifié. La conversion exposée Truth(G_T) → Proof_T⁺(G_T) est constante en son argument : la vérité certifie l’extension et la preuve cible provient séparément de l’occurrence ajoutée ; aucun calcul vérité-vers-preuve transversal n’est revendiqué. Le résultat ne construit ni limite infinie, ni union extensive, ni théorie finale complète, ni non-réfutabilité automatique, ni runtime transversal entre Proof_T et Proof_T⁺, ni priorité bibliographique.",
       "anchors": [
         {
@@ -2541,7 +2559,100 @@
         "transport": "L’extension transporte uniquement les anciennes preuves dans le sens source vers cible. Aucun transport uniforme inverse n’est disponible. Les runtimes source et cible réutilisent séparément les constructions génériques de regroupement, d’incompatibilité dirigée et de séparation exacte, chacun avec son ExecutedGodelProduction propre. Aucun runtime n’identifie Proof_T et Proof_T⁺, et aucune limite infinie des histoires finies n’est formée."
       },
       "consumers": [],
-      "source_sha256": "afd433c36a084c43470bc01d4c76ee04238eace88bc10e7602d8ad65b58d81dd",
+      "source_sha256": "89c556d45c1d292885c1350f60c1484dc6d687a8827e7105e3731b1353501df9",
+      "reviews": {
+        "reader": {
+          "status": "pending"
+        },
+        "translation": {
+          "status": "pending"
+        },
+        "independent": {
+          "status": "not_recorded"
+        }
+      }
+    },
+    {
+      "id": "CONSTITUTIVE_NEURAL_ALIGNMENT_CLOSED_RUNTIME",
+      "kind": "causal",
+      "evidence_revision": "f4a68e1e8e35434255f491c291cf0c8cd9b79e5a",
+      "scope": "Garantie relative au méta-contrat reçu : sur toute trace finie acceptée, l'API poursuit la lignée certifiée et refuse sans successeur une mise à jour dépourvue de dépendance requise. L'instance apprise réunit sur une même lignée deux transitions installées, la séparation aligné/contournement pour toute réalisation future exacte du contrat fixé, la préservation de toute suite finie couverte et un oubli exécuté de l'identité historique. Le claim ne fournit ni valeurs humaines, ni alignement universel, ni gain de performance, ni conclusion comparative ou de nouveauté.",
+      "anchors": [
+        {
+          "path": "docs/alignement-constitutif-neuronal-incremental.fr.md",
+          "heading": "Claim canonique",
+          "paragraph": null,
+          "sha256": "c85d42f783045dabb73676c47c142ff32564568d1832cc8d61400ae4d1c7c88a"
+        },
+        {
+          "path": "docs/incremental-constitutive-neural-alignment.en.md",
+          "heading": "Canonical claim",
+          "paragraph": null,
+          "sha256": "2e3b6658b5dd77e983edb378aec2c62c0af3999feb1fdcd58779fcaa4317dc70"
+        }
+      ],
+      "proofs": [
+        {
+          "module": "RelationalPerimeter.Agents.Neural.CheckedUpdateTrace",
+          "name": "ConstitutiveSearch.NeuralAgent.checkUpdates_sound",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.Neural.CertifiedRuntime",
+          "name": "ConstitutiveSearch.NeuralAgent.EveryRuntimeStepPreservesContracts",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.Neural.LearnedRuntimeAdapter",
+          "name": "ConstitutiveSearch.NeuralAgent.learnedAlignedIncrementalAndFullAcceptance_equivalent",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.Neural.LearnedRuntimeAdapter",
+          "name": "ConstitutiveSearch.NeuralAgent.submitUpdate_learned_bypass_rejected",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.Neural.LearnedRuntimeAdapter",
+          "name": "ConstitutiveSearch.NeuralAgent.learned_bypass_rejected_without_successor",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.Neural.LearnedFutureConstitutiveClosure",
+          "name": "ConstitutiveSearch.NeuralAgent.learnedEveryExactRealizationSeparatesAlignedFromBypass",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.Neural.LearnedFutureConstitutiveClosure",
+          "name": "ConstitutiveSearch.NeuralAgent.learnedExecutedFutureForgetting_preserves_every_finite_future",
+          "role": "production"
+        },
+        {
+          "module": "RelationalPerimeter.Agents.Neural.LearnedFutureConstitutiveClosure",
+          "name": "ConstitutiveSearch.NeuralAgent.learnedConstitutiveAlignmentClosure",
+          "role": "production"
+        },
+        {
+          "module": "Tests.Mechanisms.NeuralG1G10RegressionFloor",
+          "name": "Tests.Mechanisms.NeuralG1G10RegressionFloor.g9_positive_continuation_has_two_executed_steps",
+          "role": "test"
+        }
+      ],
+      "checks": [
+        "scripts/check-neural-c1-c17-regression-floor.py",
+        "scripts/check-neural-g1-g10-regression-floor.py",
+        "scripts/check-neural-block-negative-fixtures.py",
+        "scripts/expected-failures.tsv",
+        "scripts/stratification.tsv"
+      ],
+      "dependencies": {
+        "formation": "Le méta-contrat, les contrats admis, les exigences, contextes, autorisations et artefacts sérialisés sont reçus. Les occurrences, certificats d'état et fragments sont indexés par les états et transitions effectivement produits.",
+        "execution": "Le décodage, l'exécution neuronale, la proposition, l'action, l'effet, le successeur et la transition contractuelle sont consommés dans cet ordre par les checkers et le runtime fermé. La seconde transition part du successeur installé par la première.",
+        "proof": "Le checker complet et le checker incrémental décident des conditions locales autonomes et coïncident sur leur domaine déclaré. Le certificat conjoint impose la même lignée aux installations, au futur exact, à l'oubli et au rejet du contournement.",
+        "transport": "Seuls les fragments hors du cône affecté, les obligations persistantes et les futurs couverts sont transportés. Les fragments affectés sont recalculés ; l'origine oubliée ne peut pas être reconstruite depuis la mémoire réduite."
+      },
+      "consumers": [],
+      "source_sha256": "b9e5eecbce40b5e6e549d41cbc83dc8a5e7da331486e9168213952d4e16619b2",
       "reviews": {
         "reader": {
           "status": "pending"

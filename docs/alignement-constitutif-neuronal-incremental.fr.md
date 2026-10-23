@@ -148,10 +148,14 @@ trace incrémentale est de 70 777,626 ms, contre 10,522 ms pour le recheck
 complet ; le critère de gain préenregistré est faux. Aucune loi asymptotique,
 aucune économie générale et aucune généralisation à d’autres familles ne sont
 revendiquées. Ses empreintes sont conservées sans être réécrites ; elles ne
-valident pas le candidat courant. La campagne exploratoire rejouée sur celui-ci
-confirme la réutilisation structurelle mais reste non figée, sans mesure mémoire
-exploitable et avec des temps incrémentaux défavorables. P8 et S6 restent donc
-ouverts pour une nouvelle campagne préenregistrée.
+valident pas le candidat courant. Le snapshot complet de sources v8 n’avait pas
+été commité et n’est plus reconstructible depuis l’historique Git ; la gate ne
+peut donc revalider que le protocole, les résultats bruts, leur agrégation et
+leurs empreintes archivées, pas réélaborer exactement ce snapshot. La campagne
+exploratoire rejouée sur le candidat courant confirme la réutilisation
+structurelle mais reste non figée, sans mesure mémoire exploitable et avec des
+temps incrémentaux défavorables. P8 et S6 restent donc ouverts pour une nouvelle
+campagne préenregistrée sur un commit de sources récupérable.
 
 ## Exclusions explicites
 

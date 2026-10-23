@@ -18,12 +18,12 @@ fi
 "${python_command[@]}" scripts/check-neural-g1-g10-regression-floor.py
 "${python_command[@]}" scripts/check-neural-block-negative-fixtures.py
 "${python_command[@]}" scripts/check-neural-comparison-protocol-v4.py --self-test
-"${python_command[@]}" scripts/check-neural-comparison-adapters-v6.py --self-test
-"${python_command[@]}" scripts/check-neural-comparison-adapters-v6.py
+"${python_command[@]}" scripts/check-neural-comparison-adapters-v6-archive.py --self-test
+"${python_command[@]}" scripts/check-neural-comparison-adapters-v6-archive.py
 "${python_command[@]}" scripts/check-compiled-neural-checker-measurement.py --self-test
 "${python_command[@]}" scripts/check-compiled-neural-checker-measurement.py
-"${python_command[@]}" scripts/check-compiled-parameterized-neural-scaling-v8.py --self-test
-"${python_command[@]}" scripts/check-compiled-parameterized-neural-scaling-v8.py
+"${python_command[@]}" scripts/check-compiled-parameterized-neural-scaling-v8.py --archive-metadata --self-test
+"${python_command[@]}" scripts/check-compiled-parameterized-neural-scaling-v8.py --archive-metadata
 "${python_command[@]}" scripts/check-independent-neural-artifact.py
 "${python_command[@]}" scripts/check-final-neural-campaign.py
 

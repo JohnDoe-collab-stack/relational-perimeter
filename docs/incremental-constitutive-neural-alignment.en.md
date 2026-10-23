@@ -145,10 +145,13 @@ trace takes 70,777.626 ms, versus 10.522 ms for the complete recheck; the
 pre-registered gain criterion is false. No asymptotic law, general resource
 saving, or generalization to other families is claimed. Its fingerprints are
 preserved rather than rewritten; they do not validate the current candidate.
-The exploratory campaign rerun on that candidate confirms structural reuse but
-remains unfrozen, lacks a usable memory measurement, and has unfavorable
-incremental timings. P8 and S6 therefore remain open for a new preregistered
-campaign.
+The complete v8 source snapshot was not committed and is no longer
+reconstructible from Git history; the gate can therefore revalidate only the
+protocol, raw results, their aggregation, and their archived fingerprints, not
+re-elaborate that exact snapshot. The exploratory campaign rerun on the current
+candidate confirms structural reuse but remains unfrozen, lacks a usable memory
+measurement, and has unfavorable incremental timings. P8 and S6 therefore
+remain open for a new preregistered campaign over a recoverable source commit.
 
 ## Explicit exclusions
 

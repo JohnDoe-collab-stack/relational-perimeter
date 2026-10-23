@@ -5,10 +5,12 @@ from __future__ import annotations
 
 import argparse
 import copy
+from functools import lru_cache
 import hashlib
 import json
 import statistics
 from pathlib import Path
+import subprocess
 from typing import Any
 
 
@@ -39,6 +41,45 @@ def tree_digest(files: list[Path]) -> str:
     for path in sorted(files):
         relative = path.relative_to(ROOT).as_posix().encode("utf-8")
         payload = path.read_bytes()
+        state.update(len(relative).to_bytes(8, "big"))
+        state.update(relative)
+        state.update(len(payload).to_bytes(8, "big"))
+        state.update(payload)
+    return state.hexdigest()
+
+
+@lru_cache(maxsize=None)
+def frozen_bytes(revision: str, relative: str) -> bytes:
+    result = subprocess.run(
+        ["git", "show", f"{revision}:{relative}"], cwd=ROOT,
+        capture_output=True, check=False)
+    if result.returncode != 0:
+        raise ValueError(f"frozen source is unavailable: {relative}")
+    payload = result.stdout
+    if relative == "lean-toolchain":
+        payload = payload.replace(b"\n", b"\r\n")
+    return payload
+
+
+@lru_cache(maxsize=None)
+def frozen_lean_tree(revision: str) -> tuple[tuple[str, bytes], ...]:
+    listing = subprocess.run(
+        ["git", "ls-tree", "-r", "--name-only", revision, "--",
+         "RelationalPerimeter"], cwd=ROOT, capture_output=True, text=True,
+        check=False)
+    if listing.returncode != 0:
+        raise ValueError("frozen Lean tree is unavailable")
+    paths = sorted(path for path in listing.stdout.splitlines()
+                   if path.endswith(".lean"))
+    paths.append("Tests/Executables/CompiledParameterizedNeuralCheckerFamily.lean")
+    paths.extend(("lakefile.toml", "lake-manifest.json", "lean-toolchain"))
+    return tuple((path, frozen_bytes(revision, path)) for path in paths)
+
+
+def frozen_tree_digest(entries: tuple[tuple[str, bytes], ...]) -> str:
+    state = hashlib.sha256()
+    for relative_text, payload in sorted(entries):
+        relative = relative_text.encode("utf-8")
         state.update(len(relative).to_bytes(8, "big"))
         state.update(relative)
         state.update(len(payload).to_bytes(8, "big"))
@@ -95,7 +136,8 @@ def recompute_summary(size: int, runs: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def validate(protocol: dict[str, Any], results: dict[str, Any]) -> None:
+def validate(protocol: dict[str, Any], results: dict[str, Any],
+             require_source: bool = True) -> None:
     if protocol.get("protocol_id") != "compiled-parameterized-neural-scaling-v8":
         raise ValueError("wrong protocol id")
     if protocol.get("status") != "frozen-before-single-confirmatory-run":
@@ -109,16 +151,20 @@ def validate(protocol: dict[str, Any], results: dict[str, Any]) -> None:
     if protocol.get("runner_sha256") != digest(RUNNER) or \
             results.get("runner_sha256") != digest(RUNNER):
         raise ValueError("runner hash mismatch")
-    tree = lean_tree()
-    actual_tree = tree_digest(tree)
-    if protocol.get("lean_tree_file_count") != len(tree) or \
-            results.get("lean_tree_file_count") != len(tree) or \
-            protocol.get("lean_tree_sha256") != actual_tree or \
-            results.get("lean_tree_sha256") != actual_tree:
-        raise ValueError("Lean tree hash mismatch")
-    for relative, expected in protocol["source_sha256"].items():
-        if digest(ROOT / relative) != expected:
-            raise ValueError(f"frozen source differs: {relative}")
+    if require_source:
+        revision = protocol.get("frozen_base_commit")
+        if not isinstance(revision, str) or len(revision) != 40:
+            raise ValueError("missing frozen source commit")
+        tree = frozen_lean_tree(revision)
+        actual_tree = frozen_tree_digest(tree)
+        if protocol.get("lean_tree_file_count") != len(tree) or \
+                results.get("lean_tree_file_count") != len(tree) or \
+                protocol.get("lean_tree_sha256") != actual_tree or \
+                results.get("lean_tree_sha256") != actual_tree:
+            raise ValueError("Lean tree hash mismatch")
+        for relative, expected in protocol["source_sha256"].items():
+            if hashlib.sha256(frozen_bytes(revision, relative)).hexdigest() != expected:
+                raise ValueError(f"frozen source is not recoverable: {relative}")
 
     parameters = protocol["parameters"]
     sizes = parameters["sizes"]
@@ -194,8 +240,9 @@ def validate(protocol: dict[str, Any], results: dict[str, Any]) -> None:
         raise ValueError("observation/theorem boundary changed")
 
 
-def self_test(protocol: dict[str, Any], results: dict[str, Any]) -> None:
-    validate(protocol, results)
+def self_test(protocol: dict[str, Any], results: dict[str, Any],
+              require_source: bool = True) -> None:
+    validate(protocol, results, require_source=require_source)
     mutations = []
     for name, mutation in (
         ("protocol", lambda item: item.__setitem__("protocol_sha256", "0" * 64)),
@@ -210,7 +257,7 @@ def self_test(protocol: dict[str, Any], results: dict[str, Any]) -> None:
         mutations.append((name, changed))
     for name, changed in mutations:
         try:
-            validate(protocol, changed)
+            validate(protocol, changed, require_source=require_source)
         except ValueError:
             continue
         raise ValueError(f"negative self-test survived: {name}")
@@ -220,15 +267,23 @@ def self_test(protocol: dict[str, Any], results: dict[str, Any]) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--self-test", action="store_true")
+    parser.add_argument("--archive-metadata", action="store_true")
     arguments = parser.parse_args()
     protocol = json.loads(PROTOCOL.read_text(encoding="utf-8"))
     results = json.loads(RESULTS.read_text(encoding="utf-8"))
-    validate(protocol, results)
+    require_source = not arguments.archive_metadata
+    validate(protocol, results, require_source=require_source)
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     if manifest.get("status") != "frozen-before-confirmatory-run":
         raise ValueError("wrong frozen manifest status")
+    frozen_paths = set(protocol["source_sha256"])
     for relative, expected in manifest.get("files", {}).items():
-        if digest(ROOT / relative) != expected:
+        if arguments.archive_metadata and relative in frozen_paths:
+            continue
+        actual = (hashlib.sha256(frozen_bytes(
+            protocol["frozen_base_commit"], relative)).hexdigest()
+            if relative in frozen_paths else digest(ROOT / relative))
+        if actual != expected:
             raise ValueError(f"manifest mismatch: {relative}")
     evidence = json.loads(EVIDENCE.read_text(encoding="utf-8"))
     if evidence.get("status") != "confirmatory-run-complete":
@@ -239,9 +294,11 @@ def main() -> None:
     if not ANALYSIS.exists():
         raise ValueError("analysis is absent")
     if arguments.self_test:
-        self_test(protocol, results)
+        self_test(protocol, results, require_source=require_source)
     else:
         print("PARAMETERIZED_NEURAL_SCALING_V8_OK "
+              f"archive_commit={protocol['frozen_base_commit'][:8]} "
+              f"source_reconstructable={str(require_source).lower()} "
               f"sizes={len(protocol['parameters']['sizes'])} "
               f"runs={len(results['raw_runs'])} "
               f"practical_gain={str(results['pre_registered_practical_gain']).lower()}")

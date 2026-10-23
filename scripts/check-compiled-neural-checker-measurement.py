@@ -8,6 +8,7 @@ import copy
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -20,10 +21,27 @@ LEAN_SOURCE = ROOT / "Tests/Executables/CompiledNeuralCheckerMeasure.lean"
 RUNNER = ROOT / "scripts/run-compiled-neural-checker-measurement.py"
 LAKEFILE = ROOT / "lakefile.toml"
 PORTALS = (ROOT / "scripts/verify.sh", ROOT / "scripts/verify.ps1")
+FROZEN_SOURCE_COMMIT = "fafd739b7f4718ab9939ccd870eb4983a4655d2e"
 
 
 def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def frozen_bytes(relative: str) -> bytes:
+    result = subprocess.run(
+        ["git", "show", f"{FROZEN_SOURCE_COMMIT}:{relative}"],
+        cwd=ROOT, capture_output=True, check=False)
+    if result.returncode != 0:
+        raise ValueError(f"frozen source is unavailable: {relative}")
+    return result.stdout
+
+
+def frozen_matches(relative: str, expected: str) -> bool:
+    payload = frozen_bytes(relative)
+    candidates = (payload, payload.replace(b"\n", b"\r\n"))
+    return any(hashlib.sha256(candidate).hexdigest() == expected
+               for candidate in candidates)
 
 
 def fail(message: str) -> None:
@@ -123,10 +141,11 @@ def main() -> None:
     if digest(RUNNER) != protocol["runner_sha256"]:
         fail("runner hash differs from the frozen protocol")
     for relative, expected in protocol["source_sha256"].items():
-        if digest(ROOT / relative) != expected:
-            fail(f"frozen source hash changed: {relative}")
+        if not frozen_matches(relative, expected):
+            fail(f"frozen source hash is not recoverable: {relative}")
 
-    lean_text = LEAN_SOURCE.read_text(encoding="utf-8")
+    lean_text = frozen_bytes(
+        "Tests/Executables/CompiledNeuralCheckerMeasure.lean").decode("utf-8")
     for required in (
         "checkIncrementalUpdate update",
         "checkReferenceUpdate update",
@@ -142,7 +161,7 @@ def main() -> None:
     for forbidden in ("def check_incremental", "def check_reference"):
         if forbidden in runner_text:
             fail("runner contains a parallel checker implementation")
-    lake_text = LAKEFILE.read_text(encoding="utf-8")
+    lake_text = frozen_bytes("lakefile.toml").decode("utf-8")
     if 'name = "compiled_neural_checker_measure"' not in lake_text or \
             'root = "Tests.Executables.CompiledNeuralCheckerMeasure"' not in lake_text:
         fail("Lake executable target is missing or redirected")
@@ -160,8 +179,13 @@ def main() -> None:
     })
     if set(manifest.get("files", {})) != expected_paths:
         fail("manifest file set differs from the frozen campaign")
+    frozen_paths = set(protocol["source_sha256"]) | {
+        "scripts/check-compiled-neural-checker-measurement.py",
+    }
     for relative, expected in manifest["files"].items():
-        if digest(ROOT / relative) != expected:
+        valid = (frozen_matches(relative, expected) if relative in frozen_paths
+                 else digest(ROOT / relative) == expected)
+        if not valid:
             fail(f"manifest hash changed: {relative}")
 
     gate = Path(__file__).name
@@ -172,6 +196,7 @@ def main() -> None:
     observation = result["observation"]
     print(
         "COMPILED_NEURAL_CHECKER_MEASUREMENT_OK "
+        f"archive_commit={FROZEN_SOURCE_COMMIT[:8]} "
         f"runs={observation['measured_count']} "
         f"affected={observation['incremental']['affected_cone_size']} "
         f"transported={observation['incremental']['transported_fragments']} "
