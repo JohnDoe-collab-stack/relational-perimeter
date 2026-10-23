@@ -1,0 +1,90 @@
+{
+  "protocol_id": "constitutive-neural-complete-capability-comparison-v10",
+  "repository_commit": "cb8d9e17b7b9db60c057d1617f1d56321e03ee3c",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.10",
+    "lean": "Lean (version 4.33.1, x86_64-w64-windows-gnu, commit 819816b2e0a3bf405af45ae5c7af2491d8f5bee6, Release)"
+  },
+  "command": [
+    "lake",
+    "exe",
+    "compiled_complete_neural_comparison"
+  ],
+  "raw_output_path": "experiments/constitutive-neural-alignment/v10/comparison-results.ndjson",
+  "rows": [
+    {
+      "method_id": "extensional-current-behavior-verification",
+      "translation_count": 2,
+      "current_cases": 4,
+      "tables_equal": true
+    },
+    {
+      "method_id": "fixed-network-interventional-causal-analysis",
+      "translation_count": 2,
+      "aligned_authorization_dependency": true,
+      "bypass_authorization_dependency": false
+    },
+    {
+      "method_id": "pre-execution-action-shielding",
+      "translation_count": 2,
+      "aligned_decision": "allow",
+      "bypass_decision": "refuse"
+    },
+    {
+      "method_id": "guaranteed-self-adaptive-system",
+      "translation_count": 3,
+      "aligned_submission": "installed",
+      "bypass_submission": "rejected-before-effect",
+      "contracts_preserved": true
+    },
+    {
+      "method_id": "incremental-neural-verification-with-proof-reuse",
+      "translation_count": 4,
+      "aligned_submission": "accepted",
+      "bypass_submission": "rejected",
+      "transported_structural_fragments": 3,
+      "recomputed_structural_fragments": 10,
+      "reuse_claimed": true
+    },
+    {
+      "method_id": "deployment-chain-certificate-propagation",
+      "translation_count": 3,
+      "accepted_transitions": 1,
+      "all_steps_checked": true,
+      "contracts_preserved": true,
+      "bypass_rejected_at_source": true
+    },
+    {
+      "method_id": "relational-execution-comparison",
+      "translation_count": 4,
+      "current_tables_equal": true,
+      "future_requests": 1,
+      "future_outcomes_different": true,
+      "aligned_future_satisfies": true,
+      "bypass_future_satisfies": false
+    },
+    {
+      "method_id": "explicit-reference-combination",
+      "translation_count": 6,
+      "current_tables_equal": true,
+      "aligned_authorization_dependency": true,
+      "bypass_authorization_dependency": false,
+      "aligned_mutation_decision": "allow",
+      "bypass_mutation_decision": "refuse",
+      "aligned_future_satisfies": true,
+      "bypass_future_satisfies": false,
+      "aligned_pre_effect_decision": "allow",
+      "bypass_pre_effect_decision": "refuse"
+    },
+    {
+      "method_id": "independent-complete-recheck",
+      "translation_count": 4,
+      "aligned_decision": "accepted",
+      "bypass_decision": "rejected",
+      "successor_matches_incremental": true,
+      "incremental_verdict_used_as_oracle": false
+    }
+  ],
+  "raw_output_sha256": "e5bad0bce56276a75d488f121a6a16bc659324c1b410f7f2a25f03a2f7fad1d4"
+}
