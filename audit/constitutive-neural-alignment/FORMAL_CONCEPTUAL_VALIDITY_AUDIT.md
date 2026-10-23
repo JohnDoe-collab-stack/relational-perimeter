@@ -40,9 +40,12 @@ Read these files completely before testing the implementation:
 - `docs/scientific-claims.json`
 - `docs/reports/revue-interne-alignement-constitutif-neuronal-1cb2d91.md`
 
-Treat C1–C18, G1–G10 and RC1–RC6 exactly as written. Do not substitute a
-weaker target, and do not promote an implementation-plan obligation into a
-result. The canonical French and English claims are relative to a received
+Treat C1–C18, G1–G10 and RC1–RC6 exactly as written. C18 is a delivery and
+review obligation: this formal audit contributes one of its two required
+reports but cannot, by itself, close C18. Evaluate C18's current process status
+separately from the formal verdict on C1–C17, G1–G10 and RC1–RC6. Do not
+substitute a weaker target, and do not promote an implementation-plan
+obligation into a result. The canonical French and English claims are relative to a received
 meta-contract and their declared finite interfaces. They do not claim to
 discover human values, justify the norm, align every AI system, or prove a
 resource advantage.
@@ -190,7 +193,8 @@ Produce a self-contained audit directory containing:
   wherever possible;
 - mutation patches and machine-readable outcomes;
 - raw build, portal, axiom, reachability, stratification and hash logs;
-- a table for every C1–C18, G1–G10 and RC1–RC6 obligation;
+- a table for every C1–C18, G1–G10 and RC1–RC6 obligation, marking C18 as a
+  delivery status that remains open until both independent reports are received;
 - a clause-by-clause table for the French and English canonical claims.
 
 Use exactly one final verdict:
@@ -199,8 +203,10 @@ Use exactly one final verdict:
 - `FORMAL AND CONCEPTUAL TARGET REQUIRES CORRECTIONS`
 - `FORMAL AND CONCEPTUAL TARGET NOT ESTABLISHED`
 
-The first verdict is permitted only if every mandatory target clause is
-verified and every required causal substitution is substantively rejected.
-Any false clause entails `NOT ESTABLISHED`. Qualifications must be stated and
-cannot silently become verification. Do not make a novelty or superiority
-verdict in this audit.
+The first verdict is permitted only if every formal target clause in C1–C17,
+G1–G10 and RC1–RC6 is verified and every required causal substitution is
+substantively rejected. C18's still-pending second report does not make the
+formal target false; report it separately as an unfinished delivery condition.
+Any false formal clause entails `NOT ESTABLISHED`. Qualifications must be
+stated and cannot silently become verification. Do not make a novelty or
+superiority verdict in this audit.
