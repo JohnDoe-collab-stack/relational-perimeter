@@ -1,6 +1,6 @@
 {
   "protocol_id": "compiled-causal-complete-property-scaling-v12",
-  "status": "draft-awaiting-stable-source-commit",
+  "status": "frozen-before-confirmatory-run",
   "historical_evidence_preserved": {
     "experiments/constitutive-neural-alignment/v5/measurement-results.json": "82e71aa5a39a512fc0893c01e3f440cae84089d25d72822c851d290a50f95aa2",
     "experiments/constitutive-neural-alignment/v7/RUN_FAILURE.md": "e31da3f1b0f57b2a509fe8ce93e3f4ed68ab88ee876b85624e483951ba111f47",
@@ -46,11 +46,26 @@
   },
   "parameters": {
     "points": [
-      {"size": 0, "trace_length": 3},
-      {"size": 4, "trace_length": 6},
-      {"size": 8, "trace_length": 9},
-      {"size": 16, "trace_length": 12},
-      {"size": 32, "trace_length": 15}
+      {
+        "size": 0,
+        "trace_length": 3
+      },
+      {
+        "size": 4,
+        "trace_length": 6
+      },
+      {
+        "size": 8,
+        "trace_length": 9
+      },
+      {
+        "size": 16,
+        "trace_length": 12
+      },
+      {
+        "size": 32,
+        "trace_length": 15
+      }
     ],
     "schedule": "local, source, extended, repeated",
     "warmup_repetitions": 1,
@@ -59,27 +74,47 @@
     "determinism": "The family, transition producer, schedule and both compiled checkers are deterministic."
   },
   "uncertainty": {
-    "reported_statistics": ["minimum", "q1", "median", "q3", "maximum"],
+    "reported_statistics": [
+      "minimum",
+      "q1",
+      "median",
+      "q3",
+      "maximum"
+    ],
     "outlier_policy": "No measured run is removed.",
     "failed_run_policy": "Every failure remains in raw_runs and makes the gain verdict false for its point."
   },
   "accounting": {
     "phase_units": [
-      "conversion_units", "initialization_units", "construction_units",
-      "verification_units", "assembly_units", "installation_units",
-      "execution_units", "full_conversion_units",
-      "full_initialization_units", "full_construction_units",
-      "full_verification_units", "full_assembly_units",
-      "full_installation_units", "full_execution_units"
+      "conversion_units",
+      "initialization_units",
+      "construction_units",
+      "verification_units",
+      "assembly_units",
+      "installation_units",
+      "execution_units",
+      "full_conversion_units",
+      "full_initialization_units",
+      "full_construction_units",
+      "full_verification_units",
+      "full_assembly_units",
+      "full_installation_units",
+      "full_execution_units"
     ],
     "elapsed": [
-      "initial_nanoseconds", "incremental_nanoseconds",
-      "full_recheck_nanoseconds", "process_wall_nanoseconds"
+      "initial_nanoseconds",
+      "incremental_nanoseconds",
+      "full_recheck_nanoseconds",
+      "process_wall_nanoseconds"
     ],
-    "memory": ["peak_resident_bytes"],
+    "memory": [
+      "peak_resident_bytes"
+    ],
     "serialized_sizes": [
-      "certificate_serialized_bytes", "delta_serialized_bytes",
-      "transported_serialized_bytes", "recomputed_serialized_bytes"
+      "certificate_serialized_bytes",
+      "delta_serialized_bytes",
+      "transported_serialized_bytes",
+      "recomputed_serialized_bytes"
     ],
     "publication": "Raw rows, cumulative and amortized totals, all failures, transition checksums and state readouts are mandatory."
   },
@@ -95,15 +130,30 @@
     "resident_memory_limit_bytes": 2147483648,
     "failure_policy": "Timeout, memory excess and rejection are published as unfavorable observations."
   },
-  "build_command": ["lake", "-K", "moreLeanArgs=[\"-M=8192\"]", "build", "compiled_causal_complete_property_neural_scaling"],
-  "freeze_command": ["python", "scripts/freeze-causal-complete-property-scaling-v12.py"],
+  "build_command": [
+    "lake",
+    "-K",
+    "moreLeanArgs=[\"-M=8192\"]",
+    "build",
+    "compiled_causal_complete_property_neural_scaling"
+  ],
+  "freeze_command": [
+    "python",
+    "scripts/freeze-causal-complete-property-scaling-v12.py"
+  ],
   "confirmatory_command": [
-    "python", "scripts/run-compiled-causal-complete-property-scaling-v12.py",
-    "--protocol", "experiments/constitutive-neural-alignment/v12/scaling-protocol.json",
-    "--output", "experiments/constitutive-neural-alignment/v12/scaling-results.json"
+    "python",
+    "scripts/run-compiled-causal-complete-property-scaling-v12.py",
+    "--protocol",
+    "experiments/constitutive-neural-alignment/v12/scaling-protocol.json",
+    "--output",
+    "experiments/constitutive-neural-alignment/v12/scaling-results.json"
   ],
   "negative_control": {
-    "arguments": ["invalid", "1"],
+    "arguments": [
+      "invalid",
+      "1"
+    ],
     "required_outcome": "nonzero exit before an accepted observation"
   },
   "interpretation_rules": [
@@ -113,5 +163,30 @@
     "Fragment reuse and elapsed-time gain are distinct claims.",
     "The confirmatory result file is written once and never overwritten.",
     "The protocol must be frozen at a recoverable clean commit before the run."
-  ]
+  ],
+  "frozen_source_commit": "090820d4786d68787f730c5e77cc91220a8075de",
+  "frozen_source_git_tree": "1cadf026d4c8a932d1d5f3d53e16adac695f9ab2",
+  "source_tree_file_count": 481,
+  "source_tree_sha256": "0995861ebb8db8998f11fc1baf68faffa98c82e5fd6a5c68c2eba738d59e5193",
+  "runner_sha256": "9b890e726ca84810bdc4dc1565c4650308e1cce3a4bcb307ebc0314ee41fccee",
+  "source_sha256": {
+    "scripts/run-compiled-causal-complete-property-scaling-v12.py": "9b890e726ca84810bdc4dc1565c4650308e1cce3a4bcb307ebc0314ee41fccee",
+    "scripts/check-causal-complete-property-scaling-v12.py": "194690eab3834c883ea0502815b0d3a32c0f8489b37326600d436e41436d1362",
+    "scripts/check-agent-codegen.py": "7339cdcd66bbfe2e9c8b35323ea0aa87f5eccbec2b798bde2c94b53a1c3d81f3",
+    "scripts/freeze-causal-complete-property-scaling-v12.py": "150cce32490ec0f32051e3326147d7461eeac526c18a5b46a71d3ee74a969e30",
+    "scripts/run-compiled-complete-property-scaling-v11.py": "82cf8b9c107a950ac053e91865fdbd9a8948a14c1f08a55f0c19e76aeab3a090",
+    "scripts/check-complete-property-scaling-v11.py": "2900a2c9c1b40d5ce86156f042edb241d7fd53b262723733d81a4f310423fac1",
+    "RelationalPerimeter/Agents/Neural/CausalParameterizedCompiledCheckerFamily.lean": "7e236e27d4502b4106ad719eae36fef9fc621e6cb65839885ffebfb45f35ddae",
+    "RelationalPerimeter/Agents/Neural/CausalCompletePropertyScalingMeasurement.lean": "af67e005cadd41a09685d7c7bc2bac129c27502caba89f0507e0936013f02ced",
+    "Tests/Executables/CompiledCausalCompletePropertyNeuralScaling.lean": "2cae5938016d1598e2ae1636733ddec9b6a71713d6c2248234a8473568c12a72",
+    "Tests/Mechanisms/NeuralCausalCompletePropertyScalingRegression.lean": "c4fb333cef77656cd927da790af425945fe4f72f31717d35c75b1ce2381a1580",
+    "Tests/ExpectedFailure/CausalScalingProductionCannotMoveToForeignSource.lean.fail": "5a694e49944d0d802bb9f7efb63a4934f4b451e0ee281d07d0db1a29c7824e86",
+    "Tests/ExpectedFailure/CausalScalingProductionCannotChangeCommand.lean.fail": "9f30061afefd0f8ba24888a310d229e15a4f5734d0572c453297c50e2dafb254",
+    "Tests/ExpectedFailure/CausalScalingActionCannotReplaceProposalRequest.lean.fail": "5a1c1f876ab36544abdd91c1a28db8f1c066d60a592bf4b75af2392e70cd3603",
+    "scripts/expected-failures.tsv": "19d1a725262e4dddb67cdf080c43029ae0168da6358dd2c1dce67f91c57bd5f4",
+    "scripts/stratification.tsv": "f7df4aa006fd4ca397bc4ac9742b64795ea6206e170c14b0dc1477f3d012785a",
+    "lakefile.toml": "1babcb426e3bb64ddffc8138233e20539a1edfc5fb0ce3806f2321b2d0c50e9a",
+    "lake-manifest.json": "558a6999b82d0fac6c385da1a5cabeb50a594d6ecc7996f0be33014cfb68afa8",
+    "lean-toolchain": "a0ada3782cd088719516bbfdf37b9e7032230e211bf424b85d952ee650c51091"
+  }
 }
