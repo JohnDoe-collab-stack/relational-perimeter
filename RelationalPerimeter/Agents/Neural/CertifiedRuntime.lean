@@ -140,6 +140,85 @@ def submitUpdate
       .ok (.mk result.nextContract result.checked.next
         (.submitted runtime.history update result accepted))
 
+/-- Materialize the exact runtime successor licensed by one already executed
+checker result.  The accepted equation is retained in the history, so this
+constructor cannot install a separately reconstructed successor. -/
+def installAcceptedUpdate
+    {constitution : ConstitutiveMetaContract}
+    {checker : DependentIncrementalChecker constitution}
+    {initialContract : constitution.Contract}
+    {initial : CheckedAgent constitution initialContract}
+    (runtime : CertifiedRuntime checker initial)
+    (update : checker.Update runtime.current)
+    (result : DependentCheckedUpdateResult runtime.current)
+    (accepted : checker.check runtime.current update = .ok result) :
+    CertifiedRuntime checker initial :=
+  .mk result.nextContract result.checked.next
+    (.submitted runtime.history update result accepted)
+
+theorem submitUpdate_of_accepted
+    {constitution : ConstitutiveMetaContract}
+    {checker : DependentIncrementalChecker constitution}
+    {initialContract : constitution.Contract}
+    {initial : CheckedAgent constitution initialContract}
+    (runtime : CertifiedRuntime checker initial)
+    (update : checker.Update runtime.current)
+    (result : DependentCheckedUpdateResult runtime.current)
+    (accepted : checker.check runtime.current update = .ok result) :
+    submitUpdate runtime update =
+      .ok (installAcceptedUpdate runtime update result accepted) := by
+  unfold submitUpdate
+  split
+  · have impossible :=
+      ‹checker.check runtime.current update = .error _›.symm.trans accepted
+    cases impossible
+  · rename_i actual actualAccepted
+    have actualExact : actual = result :=
+      Except.ok.inj (actualAccepted.symm.trans accepted)
+    cases actualExact
+    rfl
+
+/-- A successful submission receipt whose material field is the runtime
+returned by `submitUpdate` itself.  The checker result supplied to close the
+impossible error branch is proof material only: it cannot be substituted for
+the runtime occurrence extracted from the executed submission. -/
+structure AcceptedRuntimeSubmission
+    {constitution : ConstitutiveMetaContract}
+    {checker : DependentIncrementalChecker constitution}
+    {initialContract : constitution.Contract}
+    {initial : CheckedAgent constitution initialContract}
+    (runtime : CertifiedRuntime checker initial)
+    (update : checker.Update runtime.current)
+    (result : DependentCheckedUpdateResult runtime.current)
+    (accepted : checker.check runtime.current update = .ok result) where
+  next : CertifiedRuntime checker initial
+  submitted : submitUpdate runtime update = .ok next
+  nextExact : next = installAcceptedUpdate runtime update result accepted
+
+/-- Execute the submission and retain its returned runtime.  A previously
+proved successful checker result is used only to eliminate the impossible
+error branch; the data branch never reconstructs a runtime from that result. -/
+@[noinline] def acceptedRuntimeSubmissionOfCheck
+    {constitution : ConstitutiveMetaContract}
+    {checker : DependentIncrementalChecker constitution}
+    {initialContract : constitution.Contract}
+    {initial : CheckedAgent constitution initialContract}
+    (runtime : CertifiedRuntime checker initial)
+    (update : checker.Update runtime.current)
+    (result : DependentCheckedUpdateResult runtime.current)
+    (accepted : checker.check runtime.current update = .ok result) :
+    AcceptedRuntimeSubmission runtime update result accepted :=
+  match submitted : submitUpdate runtime update with
+  | .ok next =>
+      ⟨next, submitted,
+        Except.ok.inj (submitted.symm.trans
+          (submitUpdate_of_accepted runtime update result accepted))⟩
+  | .error problem => False.elim (by
+      have expected :=
+        submitUpdate_of_accepted runtime update result accepted
+      have impossible := submitted.symm.trans expected
+      cases impossible)
+
 def CertifiedRuntime.checkedHistory
     {constitution : ConstitutiveMetaContract}
     {checker : DependentIncrementalChecker constitution}
@@ -296,6 +375,10 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.runtimeHistory_preservesContracts
 #print axioms ConstitutiveSearch.NeuralAgent.initialCertifiedRuntime
 #print axioms ConstitutiveSearch.NeuralAgent.submitUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.installAcceptedUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.submitUpdate_of_accepted
+#print axioms ConstitutiveSearch.NeuralAgent.AcceptedRuntimeSubmission
+#print axioms ConstitutiveSearch.NeuralAgent.acceptedRuntimeSubmissionOfCheck
 #print axioms ConstitutiveSearch.NeuralAgent.submitUpdate_sound
 #print axioms ConstitutiveSearch.NeuralAgent.submitUpdate_rejected_cannot_install
 #print axioms ConstitutiveSearch.NeuralAgent.CertifiedRuntime.preservedContracts

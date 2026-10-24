@@ -125,12 +125,12 @@ theorem post_forgetting_runtime_checker_consumes_closed_change :
   checkLearnedPostForgettingExtendedRuntimeUpdate_exact
 
 theorem post_forgetting_runtime_starts_from_prior_successor :
-    learnedPostForgettingInitialRuntime.current =
+    HEq learnedPostForgettingInitialRuntime.current
       learnedAlignedCertifiedRuntime.current :=
   learnedPostForgettingRuntime_starts_at_installedAlignedState
 
 theorem post_forgetting_runtime_installs_exact_successor :
-    learnedPostForgettingExtendedRuntime.current =
+    HEq learnedPostForgettingExtendedRuntime.current
       learnedExtendedCertifiedRuntime.current :=
   learnedPostForgettingExtendedRuntime_successor_exact
 

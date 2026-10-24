@@ -62,12 +62,14 @@ theorem learnedAlignedRuntimeFutureSource_is_produced :
     LearnedAlignedOperationalContract.futureSourceOfState
         learnedAlignedCertifiedRuntime.current.state =
       learnedAlignedProducedFutureObservation.source := by
+  rw [learnedAlignedRuntime_state_exact]
   rfl
 
 theorem learnedExtendedRuntimeFutureSource_is_produced :
     LearnedExtendedOperationalContract.futureSourceOfState
         learnedExtendedCertifiedRuntime.current.state =
       learnedExtendedProducedFutureObservation.source := by
+  rw [learnedExtendedRuntime_state_exact]
   rfl
 
 def learnedAdmittedFutureRequest : IndependentLearnedFutureInput :=
@@ -210,11 +212,43 @@ def LearnedHistoricalStableOrigin.firstInputSerial :
   | .aligned => 0
   | .renamed => 1100
 
+def transportLearnedRuntimeInputIndex
+    {source target : CertifiedRuntime learnedDependentIncrementalChecker
+      learnedInitialCheckedAgent}
+    (exact : source = target)
+    (index : Fin source.current.artifact.system.inputCount) :
+    Fin target.current.artifact.system.inputCount := by
+  cases exact
+  exact index
+
+theorem learnedRuntimeInputSerial_transport_exact
+    {source target : CertifiedRuntime learnedDependentIncrementalChecker
+      learnedInitialCheckedAgent}
+    (exact : source = target)
+    (index : Fin source.current.artifact.system.inputCount) :
+    target.current.certificate.basis.naming.inputSerial
+        (transportLearnedRuntimeInputIndex exact index) =
+      source.current.certificate.basis.naming.inputSerial index := by
+  cases exact
+  rfl
+
+def learnedAlignedInstalledFirstInputIndex :
+    Fin (installAcceptedUpdate learnedInitialCertifiedRuntime
+      learnedAlignedRuntimeUpdate learnedAlignedDependentResult
+      learnedDependentChecker_accepts_aligned).current.artifact.system.inputCount :=
+  ⟨0, by decide⟩
+
+def learnedAlignedRuntimeFirstInputIndex :
+    Fin learnedAlignedCertifiedRuntime.current.artifact.system.inputCount :=
+  transportLearnedRuntimeInputIndex
+    learnedAlignedCertifiedRuntime_eq_installed.symm
+    learnedAlignedInstalledFirstInputIndex
+
 def LearnedHistoricalStableOrigin.runtimeFirstInputSerial :
     LearnedHistoricalStableOrigin -> Nat
-  | .aligned =>
-      learnedAlignedCertifiedRuntime.current.certificate.basis.naming.inputSerial
-        ⟨0, by decide⟩
+  | .aligned => by
+      exact learnedAlignedCertifiedRuntime.current.certificate.basis.naming.inputSerial
+        learnedAlignedRuntimeFirstInputIndex
   | .renamed =>
       learnedRenamedIdentityCertifiedRuntime.current.certificate.basis.naming.inputSerial
         ⟨0, by decide⟩
@@ -222,12 +256,19 @@ def LearnedHistoricalStableOrigin.runtimeFirstInputSerial :
 theorem LearnedHistoricalStableOrigin.runtime_state_exact
     (origin : LearnedHistoricalStableOrigin) :
     origin.runtime.current.state = learnedAlignedState := by
-  cases origin <;> rfl
+  cases origin with
+  | aligned => exact learnedAlignedRuntime_state_exact
+  | renamed => rfl
 
 theorem LearnedHistoricalStableOrigin.runtime_identity_exact
     (origin : LearnedHistoricalStableOrigin) :
     origin.runtimeFirstInputSerial = origin.firstInputSerial := by
-  cases origin <;> rfl
+  cases origin with
+  | aligned =>
+      exact (learnedRuntimeInputSerial_transport_exact
+        learnedAlignedCertifiedRuntime_eq_installed.symm
+        learnedAlignedInstalledFirstInputIndex).trans (by rfl)
+  | renamed => rfl
 
 theorem learnedHistoricalStableOrigins_distinct :
     LearnedHistoricalStableOrigin.aligned ≠
@@ -294,22 +335,53 @@ structure LearnedHistoricalFutureForgettingTrace
   effect : LearnedEffectWitness preAction.executionState action
   effectExact : effect = produceLearnedEffect action
 
+def transportLearnedAction
+    {source target :
+      ReconfiguredExecutionState independentLearnedRequirementFamily}
+    (exact : source = target)
+    (action : LearnedActionWitness source) : LearnedActionWitness target := by
+  cases exact
+  exact action
+
+theorem transportLearnedAction_heq
+    {source target :
+      ReconfiguredExecutionState independentLearnedRequirementFamily}
+    (exact : source = target)
+    (action : LearnedActionWitness source) :
+    HEq (transportLearnedAction exact action) action := by
+  cases exact
+  rfl
+
+theorem transportLearnedAction_effect_targetState
+    {source target :
+      ReconfiguredExecutionState independentLearnedRequirementFamily}
+    (exact : source = target)
+    (action : LearnedActionWitness source) :
+    (produceLearnedEffect (transportLearnedAction exact action)).targetState =
+      (produceLearnedEffect action).targetState := by
+  cases exact
+  rfl
+
+def learnedHistoricalActionFor
+    (origin : LearnedHistoricalStableOrigin) :
+    LearnedActionWitness
+      (executeLearnedHistoricalPreActionState origin).executionState :=
+  transportLearnedAction origin.runtime_state_exact.symm learnedAlignedAction
+
 def executeLearnedHistoricalFutureForgettingTrace
     (origin : LearnedHistoricalStableOrigin) :
     LearnedHistoricalFutureForgettingTrace origin := by
-  cases origin with
-  | aligned =>
-      exact
-        { preAction := executeLearnedHistoricalPreActionState .aligned
-          action := learnedAlignedAction
-          effect := learnedAlignedEffect
-          effectExact := rfl }
-  | renamed =>
-      exact
-        { preAction := executeLearnedHistoricalPreActionState .renamed
-          action := learnedAlignedAction
-          effect := learnedAlignedEffect
-          effectExact := rfl }
+  exact
+  { preAction := executeLearnedHistoricalPreActionState origin
+    action := learnedHistoricalActionFor origin
+    effect := produceLearnedEffect (learnedHistoricalActionFor origin)
+    effectExact := rfl }
+
+theorem learnedHistoricalActionFor_exact
+    (origin : LearnedHistoricalStableOrigin) :
+    HEq (learnedHistoricalActionFor origin) learnedAlignedAction := by
+  exact transportLearnedAction_heq origin.runtime_state_exact.symm
+    learnedAlignedAction
 
 def learnedHistoricalFutureForgettingProgram :
     HistoricalForgettingProgram LearnedHistoricalStableOrigin
@@ -336,6 +408,13 @@ def learnedRenamedExecutedFutureForgetting :=
   executeHistoricalForgetting learnedHistoricalFutureForgettingProgram
     learnedRenamedHistoricalForgettingInput
 
+theorem learnedHistoricalFutureForgetting_targetState_exact
+    (origin : LearnedHistoricalStableOrigin) :
+    (executeLearnedHistoricalFutureForgettingTrace origin).effect.targetState =
+      learnedAlignedEffect.targetState := by
+  exact transportLearnedAction_effect_targetState
+    origin.runtime_state_exact.symm learnedAlignedAction
+
 theorem learnedHistoricalForgettingInputs_distinct :
     learnedAlignedHistoricalForgettingInput ≠
       learnedRenamedHistoricalForgettingInput :=
@@ -345,7 +424,14 @@ theorem learnedHistoricalForgettingInputs_distinct :
 theorem learnedExecutedFutureForgetting_outputs_equal :
     learnedAlignedExecutedFutureForgetting.output =
       learnedRenamedExecutedFutureForgetting.output := by
-  rfl
+  change independentLearnedFutureProjection
+      (LearnedAlignedOperationalContract.futureSourceOfState
+        (executeLearnedHistoricalFutureForgettingTrace .aligned).effect.targetState) =
+    independentLearnedFutureProjection
+      (LearnedAlignedOperationalContract.futureSourceOfState
+        (executeLearnedHistoricalFutureForgettingTrace .renamed).effect.targetState)
+  rw [learnedHistoricalFutureForgetting_targetState_exact .aligned]
+  rw [learnedHistoricalFutureForgetting_targetState_exact .renamed]
 
 theorem learnedExecutedFutureForgetting_output_exact
     (origin : LearnedHistoricalStableOrigin) :
@@ -354,7 +440,10 @@ theorem learnedExecutedFutureForgetting_output_exact
       independentLearnedFutureProjection
         (LearnedAlignedOperationalContract.futureSourceOfState
           learnedAlignedEffect.targetState) := by
-  cases origin <;> rfl
+  change independentLearnedFutureProjection
+      (LearnedAlignedOperationalContract.futureSourceOfState
+        (executeLearnedHistoricalFutureForgettingTrace origin).effect.targetState) = _
+  rw [learnedHistoricalFutureForgetting_targetState_exact]
 
 theorem learnedExecutedFutureForgetting_preserves_every_finite_future
     (origin : LearnedHistoricalStableOrigin)
@@ -392,8 +481,16 @@ This section deliberately uses the unique meta-contract interface introduced
 in L1.  It does not define a learned-only permission language.  Installation
 remains a later L5--L8 obligation. -/
 
+/-- The current aligned agent is the exact successor returned by the accepted
+first checker result.  The certified runtime installs this very value; using
+the result projection here keeps later dependent interfaces tied to the
+executed transition without recomputing the runtime match. -/
 abbrev LearnedAlignedCurrentAgent :=
-  learnedAlignedCertifiedRuntime.current
+  learnedAlignedDependentResult.checked.next
+
+theorem learnedAlignedRuntime_current_is_checkedResult :
+    HEq learnedAlignedCertifiedRuntime.current LearnedAlignedCurrentAgent :=
+  learnedAlignedCertifiedRuntime_current_exact
 
 def learnedAlignedForgottenCurrentAgent :
     ForgottenCurrentAgent LearnedAlignedCurrentAgent :=
@@ -402,7 +499,15 @@ def learnedAlignedForgottenCurrentAgent :
 theorem learnedAlignedForgottenMemory_is_executedReduction :
     learnedAlignedForgottenCurrentAgent.memory =
       learnedAlignedExecutedFutureForgetting.output := by
-  rfl
+  let projected : IndependentLearnedOperationalMemory :=
+    independentLearnedFutureProjection
+      (LearnedAlignedOperationalContract.futureSourceOfState
+        learnedAlignedEffect.targetState)
+  have forgottenExact : learnedAlignedForgottenCurrentAgent.memory = projected := by
+    rfl
+  have executionExact : learnedAlignedExecutedFutureForgetting.output = projected :=
+    learnedExecutedFutureForgetting_output_exact .aligned
+  exact forgottenExact.trans executionExact.symm
 
 def learnedPostForgettingContinuationPermission :
     PostForgettingPermission LearnedAlignedCurrentAgent
@@ -627,7 +732,7 @@ def learnedArtifactExecutionLineage : LearnedArtifactExecutionLineage :=
     firstResultExact := HEq.rfl
     secondUpdate := learnedExtendedRuntimeUpdate
     secondResult := learnedExtendedDependentResult
-    secondAccepted := rfl
+    secondAccepted := learnedDependentChecker_accepts_extended
     secondUpdateExact := HEq.rfl
     secondResultExact := HEq.rfl
     finalExact := HEq.rfl }
@@ -748,7 +853,8 @@ structure LearnedConstitutiveAlignmentClosureCertificate : Type 12 where
     submitUpdate learnedInitialCertifiedRuntime learnedAlignedRuntimeUpdate =
       .ok learnedAlignedCertifiedRuntime
   extendedInstalled :
-    submitUpdate learnedAlignedCertifiedRuntime learnedExtendedRuntimeUpdate =
+    submitUpdate learnedAlignedCertifiedRuntime
+      learnedExtendedSubmittedRuntimeUpdate =
       .ok learnedExtendedCertifiedRuntime
   extendedAccessible : CertifiedRuntimeAccessibility extendedRuntime
   initialCausal : LearnedExecutedCausalWitness learnedInitialState
@@ -862,9 +968,13 @@ def learnedConstitutiveAlignmentClosure :
     localReusePayloadFromLicenses := rfl
     localReuse := learnedCalculatedStructuralAssembly
     localReuseExact := rfl
-    localReuseInstalled := HEq.rfl
-    firstProducedStateInstalled := rfl
-    secondProducedStateInstalled := rfl
+    localReuseInstalled :=
+      learnedAlignedRuntime_certificate_from_generic_checker
+    firstProducedStateInstalled := by
+      exact Eq.trans (by rfl) learnedAlignedRuntime_state_exact.symm
+    secondProducedStateInstalled := by
+      rw [learnedExtendedRuntime_state_exact]
+      rfl
     incrementalFullSuccessorExact :=
       learnedAlignedIncrementalAndFullSuccessor_exact
     incrementalFullCertificateExact :=
@@ -896,12 +1006,21 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.learnedBehavioralFutureRealization
 #print axioms ConstitutiveSearch.NeuralAgent.LearnedHistoricalPreActionState
 #print axioms ConstitutiveSearch.NeuralAgent.executeLearnedHistoricalPreActionState
+#print axioms ConstitutiveSearch.NeuralAgent.transportLearnedRuntimeInputIndex
+#print axioms ConstitutiveSearch.NeuralAgent.learnedRuntimeInputSerial_transport_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedRuntimeFirstInputIndex
 #print axioms ConstitutiveSearch.NeuralAgent.learnedHistoricalPreActionIdentities_distinct
 #print axioms ConstitutiveSearch.NeuralAgent.learnedHistoricalPreAction_runtimeIdentity_exact
+#print axioms ConstitutiveSearch.NeuralAgent.transportLearnedAction
+#print axioms ConstitutiveSearch.NeuralAgent.transportLearnedAction_heq
+#print axioms ConstitutiveSearch.NeuralAgent.transportLearnedAction_effect_targetState
+#print axioms ConstitutiveSearch.NeuralAgent.learnedHistoricalActionFor
+#print axioms ConstitutiveSearch.NeuralAgent.learnedHistoricalFutureForgetting_targetState_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedHistoricalFutureForgettingProgram
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExecutedFutureForgetting_preserves_every_finite_future
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExecutedFutureForgetting_origin_not_recoverable
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedForgottenMemory_is_executedReduction
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedRuntime_current_is_checkedResult
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingContinuationPermission
 #print axioms ConstitutiveSearch.NeuralAgent.learnedJustifiedExtendedTransitionAfterForgetting
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingContractChangePermission

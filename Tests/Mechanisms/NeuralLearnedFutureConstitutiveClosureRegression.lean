@@ -218,7 +218,8 @@ theorem learned_joint_closure_lineage_is_canonical :
   learnedConstitutiveAlignmentClosure.lineageExact
 
 theorem learned_joint_closure_installs_both_successors :
-    submitUpdate learnedAlignedCertifiedRuntime learnedExtendedRuntimeUpdate =
+    submitUpdate learnedAlignedCertifiedRuntime
+      learnedExtendedSubmittedRuntimeUpdate =
       .ok learnedExtendedCertifiedRuntime :=
   learnedConstitutiveAlignmentClosure.extendedInstalled
 

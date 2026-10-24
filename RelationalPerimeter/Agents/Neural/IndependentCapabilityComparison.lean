@@ -159,6 +159,7 @@ def runIndependentReferenceCombination
     rw [material.base.alignedCandidateExact,
       material.base.futureRequestsExact,
       ← learnedAlignedInstalledFuture_is_candidateFuture]
+    rw [learnedAlignedInstalledFuture_satisfies]
     rfl
   · dsimp only [observation, computeIndependentReferenceObservation,
       independentReferenceDecision]

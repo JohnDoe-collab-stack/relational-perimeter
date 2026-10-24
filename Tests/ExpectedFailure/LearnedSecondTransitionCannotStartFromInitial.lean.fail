@@ -6,7 +6,8 @@ open ConstitutiveSearch.NeuralAgent
 def forbiddenSecondTransitionAtInitial :
     learnedDependentIncrementalChecker.Update
       learnedInitialCertifiedRuntime.current :=
-  LearnedRuntimeUpdate.successive learnedExtendedSerializedUpdate
+  LearnedRuntimeUpdate.successive LearnedAlignedCheckedAgent rfl rfl (HEq.rfl)
+    learnedExtendedSerializedUpdate
 
 end ConstitutiveSearch.NeuralAgent.Tests
 /- AXIOM_AUDIT_BEGIN -/

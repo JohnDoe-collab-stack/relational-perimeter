@@ -105,7 +105,7 @@ def main() -> None:
         if PROHIBITED.search(source):
             raise ValueError(f'{fixture}: executable diagnostic imitation is forbidden')
         try:
-            run = subprocess.run([args.lake, 'env', 'lean', '--json', fixture], cwd=ROOT,
+            run = subprocess.run([args.lake, 'env', 'lean', '-M', '8192', '--json', fixture], cwd=ROOT,
                                  capture_output=True, text=True, encoding='utf-8', timeout=90)
         except subprocess.TimeoutExpired as error:
             raise ValueError(f'{fixture}: interrupted or timed out') from error

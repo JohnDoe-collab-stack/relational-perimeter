@@ -339,6 +339,54 @@ structure FullRecheckLocalConditionData
   executionAccepted :
     engine.recomputeExecution update target transitionDecision = .ok execution
 
+/-- Package the three independently obtained complete-check receipts.  The
+checker equation remains a separate theorem, so this does not turn local
+conditions into an oracle for acceptance. -/
+def FullRecheckSuccess.ofLocalConditions
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    {engine : FullRecheckEngine interface current}
+    {update : engine.Update}
+    (conditions : FullRecheckLocalConditionData engine update) :
+    FullRecheckSuccess engine update :=
+  .mk conditions.target conditions.transitionDecision conditions.execution
+
+theorem checkFullUpdate_of_local_conditions
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (engine : FullRecheckEngine interface current)
+    (update : engine.Update)
+    (conditions : FullRecheckLocalConditionData engine update) :
+    checkFullUpdate engine update =
+      .ok (FullRecheckSuccess.ofLocalConditions conditions) := by
+  unfold checkFullUpdate
+  rw [conditions.targetAccepted]
+  simp only
+  rw [conditions.transitionAccepted]
+  simp only
+  rw [conditions.executionAccepted]
+  rfl
+
+/-- Retain the exact complete-recheck result obtained from its three
+independent local receipts.  This construction never receives an incremental
+analysis, verdict, or target certificate. -/
+def completeFullRecheck
+    {constitution : ConstitutiveMetaContract}
+    {interface : ExecutableMetaContractInterface constitution}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (engine : FullRecheckEngine interface current)
+    (update : engine.Update)
+    (conditions : FullRecheckLocalConditionData engine update) :
+    { success : FullRecheckSuccess engine update //
+      checkFullUpdate engine update = .ok success } :=
+  ⟨FullRecheckSuccess.ofLocalConditions conditions,
+    checkFullUpdate_of_local_conditions engine update conditions⟩
+
 def FullRecheckLocalConditions
     {constitution : ConstitutiveMetaContract}
     {interface : ExecutableMetaContractInterface constitution}
@@ -1313,6 +1361,9 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.checkFullUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.checkFullUpdate_sound
 #print axioms ConstitutiveSearch.NeuralAgent.FullRecheckLocalConditionData
+#print axioms ConstitutiveSearch.NeuralAgent.FullRecheckSuccess.ofLocalConditions
+#print axioms ConstitutiveSearch.NeuralAgent.checkFullUpdate_of_local_conditions
+#print axioms ConstitutiveSearch.NeuralAgent.completeFullRecheck
 #print axioms ConstitutiveSearch.NeuralAgent.FullRecheckLocalConditions
 #print axioms ConstitutiveSearch.NeuralAgent.FullRecheckAccepted
 #print axioms ConstitutiveSearch.NeuralAgent.checkFullUpdate_complete_for_local_conditions

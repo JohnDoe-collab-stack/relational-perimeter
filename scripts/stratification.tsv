@@ -60,7 +60,7 @@ SegmentedResidualRole	F	enforced	Primitive residual roles and exact internal rea
 AbstractSegmentedTurning	F	enforced	Abstract segmented boundary and turning
 ExactTypeTransport	U	enforced	Constructive exact transport between carriers
 StrongPerimetralTurning	F	enforced	Strong relational perimeter and affirmative turning
-RelationalPerimeter	M49	enforced	Public root joining scientific production the integrated master machine and the oracle-independent neural capability comparison interfaces
+RelationalPerimeter	M58	enforced	Public root joining scientific production the integrated master machine and the oracle-independent neural capability comparison interfaces
 RelationalPerimeter.Agents.Constitutive.Requirement	A10	enforced	Constitutive agent Requirement
 RelationalPerimeter.Agents.Constitutive.ProducedEvidence	A11	enforced	Constitutive agent ProducedEvidence
 RelationalPerimeter.Agents.Constitutive.State	A12	enforced	Constitutive agent State
@@ -355,15 +355,24 @@ RelationalPerimeter.Agents.Neural.CertifiedRuntimeAccessibility	M37	enforced	Gen
 RelationalPerimeter.Agents.Neural.IndependentLearnedArtifact	M38	enforced	Externally learned multi-path artifact series reproduced from the frozen comparison protocol
 RelationalPerimeter.Agents.Neural.LearnedUpdateSeparation	M39	enforced	Same-intent learned candidates separated by executed authorization consumption rather than current behavior
 RelationalPerimeter.Agents.Neural.FiniteCounterfactualDivergence	M40	enforced	Explicit nonempty future exposing the latent contract divergence of the rejected bypass candidate
-RelationalPerimeter.Agents.Neural.LearnedRuntimeAdapter	M41	enforced	Independently learned artifacts adapted to the generic initial checker incremental checker and certified runtime
-RelationalPerimeter.Agents.Neural.LearnedContractFutureDivergence	M42	enforced	Current equivalence and finite future divergence calculated inside the exact learned operational contract and closed runtime API
-RelationalPerimeter.Agents.Neural.LearnedFutureConstitutiveClosure	M43	enforced	Learned future admission exact realization executed forgetting and universal separation closed on one produced chain
-RelationalPerimeter.Agents.Neural.LearnedSuccessiveAffectedCone	M44	enforced	Exact successive pre-certificate graph and source-transported versus target-recomputed structural supplies
-RelationalPerimeter.Agents.Neural.LearnedSuccessiveStructuralCone	M45	enforced	Exact successive input and neuron cone equations used by the material structural assembly
-RelationalPerimeter.Agents.Neural.AutonomousCheckerClosure	M46	enforced	Autonomous successive and post-forgetting checkers with independent full recheck and finite local-condition completeness
-RelationalPerimeter.Agents.Neural.CapabilityComparisonAdapters	M43	enforced	Six frozen typed comparison adapters consuming one exact learned material package without comparative overclaim
-RelationalPerimeter.Agents.Neural.CompleteCapabilityComparison	M47	enforced	Complete nine-method comparison with relational execution reference combination independent full recheck and explicit translations
-RelationalPerimeter.Agents.Neural.IndependentCapabilityComparison	M48	enforced	Oracle-independent reference combination and corrected nine-method comparison observations preserving v10 as historical evidence
+RelationalPerimeter.Agents.Neural.LearnedRuntimeAdapterCore	M41	enforced	Independently learned artifacts decoded and connected to exact produced reconfigurations and received updates
+RelationalPerimeter.Agents.Neural.LearnedSuccessiveEngine	M42	enforced	Predecessor-indexed successive production structural transport recomputation and target analysis
+RelationalPerimeter.Agents.Neural.LearnedSuccessiveLocalCompleteness	M43	enforced	Autonomous local-condition interface and constructive completion for the successive engine
+RelationalPerimeter.Agents.Neural.LearnedSuccessiveReference	M44	enforced	Exact public successive member assembled from its executed local conditions
+RelationalPerimeter.Agents.Neural.LearnedSuccessiveGenericChecker	M45	enforced	Generic incremental checker consuming the completed successive engine analysis
+RelationalPerimeter.Agents.Neural.LearnedSuccessiveDecodedChecker	M46	enforced	Decoded successive checker with a predecessor-consuming runtime entry point
+RelationalPerimeter.Agents.Neural.LearnedSuccessiveCanonicalChecker	M47	enforced	Compatibility entry point restricted to the exact canonical predecessor
+RelationalPerimeter.Agents.Neural.LearnedSuccessiveCompleteness	M48	enforced	Positive and negative regression closure for the canonical compatibility entry point
+RelationalPerimeter.Agents.Neural.LearnedSuccessiveCurrentReference	M49	enforced	Exact public equation through the material predecessor-consuming runtime checker
+RelationalPerimeter.Agents.Neural.LearnedRuntimeAdapter	M50	enforced	Dependent checker and certified runtime carrying and consuming the predecessor returned by the prior submission
+RelationalPerimeter.Agents.Neural.LearnedContractFutureDivergence	M51	enforced	Current equivalence and finite future divergence calculated inside the exact learned operational contract and closed runtime API
+RelationalPerimeter.Agents.Neural.LearnedFutureConstitutiveClosure	M52	enforced	Learned future admission exact realization executed forgetting and universal separation closed on one produced chain
+RelationalPerimeter.Agents.Neural.LearnedSuccessiveAffectedCone	M53	enforced	Exact successive pre-certificate graph and source-transported versus target-recomputed structural supplies
+RelationalPerimeter.Agents.Neural.LearnedSuccessiveStructuralCone	M54	enforced	Exact successive input and neuron cone equations used by the material structural assembly
+RelationalPerimeter.Agents.Neural.AutonomousCheckerClosure	M55	enforced	Autonomous successive and post-forgetting checkers with independent full recheck and finite local-condition completeness
+RelationalPerimeter.Agents.Neural.CapabilityComparisonAdapters	M53	enforced	Six frozen typed comparison adapters consuming one exact learned material package without comparative overclaim
+RelationalPerimeter.Agents.Neural.CompleteCapabilityComparison	M56	enforced	Complete nine-method comparison with relational execution reference combination independent full recheck and explicit translations
+RelationalPerimeter.Agents.Neural.IndependentCapabilityComparison	M57	enforced	Oracle-independent reference combination and corrected nine-method comparison observations preserving v10 as historical evidence
 RelationalPerimeter.Agents.Neural.ParameterizedCompiledCheckerFamily	M43	enforced	Parameterized growing neural artifacts consumed by the same compiled initial incremental and full-reference checkers
 RelationalPerimeter.Agents.Neural.CompletePropertyScalingMeasurement	M44	enforced	Complete substantive contract accounting and canonical certificate delta size model for scaling measurements
 RelationalPerimeter.Agents.Neural.CausalParameterizedCompiledCheckerFamily	M45	enforced	Source-indexed action effect and successor production consumed by paired incremental and independent full checkers

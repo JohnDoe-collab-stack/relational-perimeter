@@ -121,7 +121,7 @@ foreach ($file in $leanFiles) {
 
 Push-Location $repoRoot
 try {
-  $buildOutput = @(& lake build 2>&1)
+  $buildOutput = @(& lake -K 'moreLeanArgs=["-M=8192"]' build 2>&1)
   $buildOutput | ForEach-Object { Write-Output $_ }
   if ($LASTEXITCODE -ne 0) {
     throw "lake build failed with exit code $LASTEXITCODE"

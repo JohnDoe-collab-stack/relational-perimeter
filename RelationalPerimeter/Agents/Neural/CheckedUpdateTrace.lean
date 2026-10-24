@@ -41,7 +41,7 @@ structure DependentIncrementalChecker
     (constitution : ConstitutiveMetaContract) : Type 7 where
   Error : Type
   Update : {contract : constitution.Contract} ->
-    CheckedAgent constitution contract -> Type
+    CheckedAgent constitution contract -> Type 6
   check : {contract : constitution.Contract} ->
     (current : CheckedAgent constitution contract) ->
     Update current -> Except Error (DependentCheckedUpdateResult current)
@@ -333,7 +333,7 @@ reconfigured successor reflects the public meta-contract; it is not a length
 test in the generic trace algorithm. -/
 inductive PublicDependentIncrementalUpdate :
     {contract : PublicOperationalContract} ->
-      CheckedAgent publicConstitutiveMetaContract contract -> Type
+      CheckedAgent publicConstitutiveMetaContract contract -> Type 6
   | reconfigure (update : IncrementalNeuralUpdate) :
       PublicDependentIncrementalUpdate publicInitialCheckedAgent
 

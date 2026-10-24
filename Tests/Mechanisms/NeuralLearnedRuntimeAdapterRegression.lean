@@ -86,8 +86,8 @@ example : checkInitial learnedExecutableMetaContractInterface
   checkInitial_accepts_learned_extended_artifact
 
 example : checkLearnedExtendedSerializedUpdate learnedExtendedSerializedUpdate =
-    .ok learnedExtendedDependentResult := by
-  rfl
+    .ok learnedExtendedDependentResult :=
+  checkLearnedExtendedSerializedUpdate_accepts
 
 example : learnedDependentIncrementalChecker.check LearnedAlignedCheckedAgent
       learnedExtendedRuntimeUpdate =
@@ -213,6 +213,7 @@ theorem learned_successor_input_is_received_input :
 theorem learned_runtime_installs_executed_successor_memory :
     learnedAlignedCertifiedRuntime.current.state.memory =
       learnedAlignedInstallingEffect.successor := by
+  rw [learnedAlignedRuntime_state_exact]
   rfl
 
 def substitutedLearnedStableNamingUpdate :
@@ -287,15 +288,23 @@ example : submitUpdate learnedInitialCertifiedRuntime
   submitUpdate_learned_aligned_exact
 
 example : submitUpdate learnedAlignedCertifiedRuntime
-      learnedExtendedRuntimeUpdate =
+      learnedExtendedSubmittedRuntimeUpdate =
     .ok learnedExtendedCertifiedRuntime :=
   submitUpdate_learned_extended_exact
+
+example :
+    learnedExtendedSubmittedRuntimeUpdate =
+      .successive learnedAlignedCertifiedRuntime.current rfl
+        learnedAlignedSubmittedCurrentContract_eq
+        learnedAlignedCertifiedRuntime_current_exact
+        learnedExtendedSerializedUpdate :=
+  learnedExtendedSubmittedRuntimeUpdate_predecessor_exact
 
 example : learnedExtendedCertifiedRuntime.current.state =
     learnedExtendedState :=
   learnedExtendedRuntime_state_exact
 
-example : learnedExtendedCertifiedRuntime.current.artifact =
+example : HEq learnedExtendedCertifiedRuntime.current.artifact
     learnedDecodedExtendedArtifact :=
   learnedExtendedRuntime_artifact_exact
 
@@ -343,7 +352,7 @@ example : Not (Exists fun result =>
 
 example : Not (Exists fun next =>
     submitUpdate learnedAlignedCertifiedRuntime
-      learnedWrongSuccessiveRuntimeUpdate = .ok next) :=
+      learnedWrongSuccessiveSubmittedRuntimeUpdate = .ok next) :=
   learned_wrong_successive_rejected_without_successor
 
 example : submitUpdate learnedInitialCertifiedRuntime
@@ -360,12 +369,12 @@ example : learnedAlignedCertifiedRuntime.current.state =
     learnedAlignedState :=
   learnedAlignedRuntime_state_exact
 
-example : learnedAlignedCertifiedRuntime.current.artifact =
+example : HEq learnedAlignedCertifiedRuntime.current.artifact
     learnedDecodedAlignedArtifact :=
   learnedAlignedRuntime_artifact_exact
 
-example : learnedAlignedCertifiedRuntime.current.certificate =
-    assembleStateConstitution learnedAlignedTargetAnalysis.fragments :=
+example : HEq learnedAlignedCertifiedRuntime.current.certificate
+    (assembleStateConstitution learnedAlignedTargetAnalysis.fragments) :=
   learnedAlignedRuntime_certificate_from_generic_checker
 
 example : EveryRuntimeStepSatisfies
@@ -528,6 +537,7 @@ end ConstitutiveSearch.NeuralAgent.Tests
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedStep_transportsIntent_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedCertificateAuthorization_is_rechecked
 #print axioms ConstitutiveSearch.NeuralAgent.submitUpdate_learned_extended_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedSubmittedRuntimeUpdate_predecessor_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedRuntime_consumes_first_successor_memory
 #print axioms ConstitutiveSearch.NeuralAgent.learned_wrong_successive_rejected_without_checked_action
 #print axioms ConstitutiveSearch.NeuralAgent.learned_wrong_successive_rejected_without_successor

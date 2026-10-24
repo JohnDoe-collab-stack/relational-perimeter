@@ -16,10 +16,14 @@ namespace ConstitutiveSearch.NeuralAgent
 open NativeMechanism
 open ContinuationSignatures
 
-/-! The successive incremental engine is defined beside the dependent runtime
-checker in `LearnedRuntimeAdapter`.  Consequently the runtime and the generic
-checker consume the same executed analysis and the same structural assembly;
-this module adds only the independent full recheck and comparison theorems. -/
+/-! The canonical successive incremental engine is defined independently from
+the dependent runtime path. The generic comparison theorems below use that
+canonical engine, while the runtime checker reconstructs its analysis from the
+predecessor it receives through
+`analyzeDecodedLearnedSuccessiveUpdateAtCurrent`. Both establish the same
+declared property on their explicit domains; they do not share one executed
+analysis occurrence. This module adds the independent full recheck and the
+comparison theorems. -/
 
 /-! ## Independent complete recheck of the successive domain -/
 
@@ -102,20 +106,6 @@ theorem decodeLearnedExtendedSuccessive_exact :
       .ok learnedExtendedSuccessiveDecoded := by
   rfl
 
-theorem learnedSuccessiveIncrementalAccepted :
-    GenericIncrementalUpdateAccepted learnedSuccessiveIncrementalCheckerEngine
-      learnedExtendedSerializedUpdate := by
-  apply (checkGenericIncrementalUpdate_complete_for_local_conditions
-    learnedSuccessiveIncrementalCheckerEngine
-      learnedExtendedSerializedUpdate).2
-  exact ⟨
-    { decoded := learnedExtendedSuccessiveDecoded
-      decodedExact := decodeLearnedExtendedSuccessive_exact
-      receivedDecision := learnedExtendedTransitionDecision
-      transitionAccepted := rfl
-      authorizationConsumed := rfl
-      targetNetworkExact := rfl }⟩
-
 theorem learnedSuccessiveFullRecheckAccepted :
     FullRecheckAccepted learnedSuccessiveFullRecheckEngine
       learnedExtendedSerializedUpdate := by
@@ -131,58 +121,92 @@ theorem learnedSuccessiveFullRecheckAccepted :
           targetExact := rfl }
       executionAccepted := rfl }⟩
 
+def learnedSuccessiveFullRecheckLocalConditions :
+    FullRecheckLocalConditionData learnedSuccessiveFullRecheckEngine
+      learnedExtendedSerializedUpdate :=
+  { target := learnedExtendedCheckSuccess
+    targetAccepted := checkInitial_accepts_learned_extended_artifact
+    transitionDecision := learnedExtendedTransitionDecision
+    transitionAccepted := rfl
+    execution :=
+      { material := .installExtended
+        targetExact := rfl }
+    executionAccepted := rfl }
+
 /-- The concrete incremental success is obtained by executing the incremental
 checker.  It is a downstream readout of that computation, never an input to
 the complete reference checker. -/
+def learnedSuccessiveIncrementalReceipt :
+    { success : GenericIncrementalCheckSuccess
+        learnedSuccessiveIncrementalCheckerEngine
+        learnedExtendedSerializedUpdate //
+      checkGenericIncrementalUpdate learnedSuccessiveIncrementalCheckerEngine
+          learnedExtendedSerializedUpdate = .ok success } :=
+  completeGenericIncrementalCheck learnedSuccessiveIncrementalCheckerEngine
+    learnedExtendedSerializedUpdate learnedReferenceSuccessiveLocalConditions
+
 def learnedSuccessiveIncrementalSuccess :
     GenericIncrementalCheckSuccess learnedSuccessiveIncrementalCheckerEngine
       learnedExtendedSerializedUpdate :=
-  match exact : checkGenericIncrementalUpdate
-      learnedSuccessiveIncrementalCheckerEngine
-      learnedExtendedSerializedUpdate with
-  | .ok success => success
-  | .error problem => False.elim (by
-      have accepted := learnedSuccessiveIncrementalAccepted
-      rcases accepted with ⟨success, successExact⟩
-      rw [exact] at successExact
-      cases successExact)
+  GenericIncrementalCheckSuccess.ofAnalysis learnedReferenceSuccessiveAnalysis
 
 theorem checkLearnedSuccessiveIncremental_exact :
     checkGenericIncrementalUpdate learnedSuccessiveIncrementalCheckerEngine
         learnedExtendedSerializedUpdate =
       .ok learnedSuccessiveIncrementalSuccess := by
-  rfl
+  exact learnedSuccessiveIncrementalReceipt.2
 
 /-- The complete success is obtained by independently executing the complete
 checker from the same serialized update. -/
+def learnedSuccessiveFullRecheckReceipt :
+    { success : FullRecheckSuccess learnedSuccessiveFullRecheckEngine
+        learnedExtendedSerializedUpdate //
+      checkFullUpdate learnedSuccessiveFullRecheckEngine
+          learnedExtendedSerializedUpdate = .ok success } :=
+  completeFullRecheck learnedSuccessiveFullRecheckEngine
+    learnedExtendedSerializedUpdate learnedSuccessiveFullRecheckLocalConditions
+
 def learnedSuccessiveFullRecheckSuccess :
     FullRecheckSuccess learnedSuccessiveFullRecheckEngine
       learnedExtendedSerializedUpdate :=
-  match exact : checkFullUpdate learnedSuccessiveFullRecheckEngine
-      learnedExtendedSerializedUpdate with
-  | .ok success => success
-  | .error problem => False.elim (by
-      have accepted := learnedSuccessiveFullRecheckAccepted
-      rcases accepted with ⟨success, successExact⟩
-      rw [exact] at successExact
-      cases successExact)
+  FullRecheckSuccess.ofLocalConditions
+    learnedSuccessiveFullRecheckLocalConditions
 
 theorem checkLearnedSuccessiveFullRecheck_exact :
     checkFullUpdate learnedSuccessiveFullRecheckEngine
         learnedExtendedSerializedUpdate =
       .ok learnedSuccessiveFullRecheckSuccess := by
-  rfl
+  exact learnedSuccessiveFullRecheckReceipt.2
 
 /-- Both independent executions install the same exact successor. -/
+theorem learnedSuccessiveIncrementalSuccess_next_exact :
+    learnedSuccessiveIncrementalSuccess.checked.next =
+      learnedExtendedCheckedAgent := by
+  change
+    (buildIncrementalCheckedUpdate
+      learnedReferenceSuccessiveAnalysis.target).next =
+        learnedExtendedCheckedAgent
+  rfl
+
+theorem learnedSuccessiveFullRecheckSuccess_next_exact :
+    learnedSuccessiveFullRecheckSuccess.checked.next =
+      learnedExtendedCheckedAgent := by
+  change learnedExtendedCheckSuccess.checkedAgent = learnedExtendedCheckedAgent
+  rfl
+
 theorem learnedSuccessiveIncrementalAndFullSuccessor_exact :
     learnedSuccessiveIncrementalSuccess.checked.next =
       learnedSuccessiveFullRecheckSuccess.checked.next := by
-  rfl
+  exact learnedSuccessiveIncrementalSuccess_next_exact.trans
+    learnedSuccessiveFullRecheckSuccess_next_exact.symm
 
 /-- In particular, neither path substitutes a different target certificate. -/
 theorem learnedSuccessiveIncrementalAndFullCertificate_exact :
     learnedSuccessiveIncrementalSuccess.checked.next.certificate =
       learnedSuccessiveFullRecheckSuccess.checked.next.certificate := by
+  change
+    assembleStateConstitution learnedReferenceSuccessiveAnalysis.target.fragments =
+      assembleStateConstitution learnedExtendedStateFragments
   rfl
 
 /-- The successive incremental certificate also consumes the assembly whose
@@ -191,6 +215,8 @@ theorem learnedSuccessiveInstalledStructuralAssembly_exact :
     (learnedSuccessiveIncrementalSuccess.checked.next.certificate
         ).structuralObservations =
       learnedSuccessiveCalculatedStructuralAssembly.observations := by
+  change learnedReferenceSuccessiveStructuralAssembly.observations =
+    learnedSuccessiveCalculatedStructuralAssembly.observations
   rfl
 
 theorem learnedSuccessiveTransport_reads_checked_source :
@@ -208,6 +234,59 @@ theorem learnedSuccessiveIncrementalAndFullAcceptance_equivalent :
   constructor <;> intro _
   · exact learnedSuccessiveFullRecheckAccepted
   · exact learnedSuccessiveIncrementalAccepted
+
+/-- The declared successive domain is fixed by the proof-free request fields
+checked by the decoder: transition, received network, stable naming, next
+input, and intent.  This theorem makes that boundary explicit instead of
+silently replacing the domain by the concrete example in later statements. -/
+theorem learnedSuccessiveDeclaredDomain_source_exact
+    (source : LearnedSerializedConstitutiveUpdate)
+    (conditions : LearnedSuccessiveLocalConditionData source) :
+    source = learnedExtendedSerializedUpdate := by
+  cases source with
+  | mk transition targetNetwork targetStableNaming nextInput intent =>
+      cases conditions.executed.decoded.transitionExact
+      cases conditions.executed.targetNetworkExact
+      cases conditions.executed.decoded.stableNamingExact
+      cases conditions.executed.decoded.nextInputExact
+      cases intent
+      rfl
+
+/-- Acceptance agreement holds for every received update in the exact
+successive domain, not merely for a theorem stated at the canonical spelling
+of its unique supported value.  The full checker remains independent: its
+acceptance is obtained through `checkFullUpdate` and its own completeness
+boundary, never from the incremental verdict or certificate. -/
+theorem learnedSuccessiveIncrementalAndFullAcceptance_equivalent_on_declared_domain
+    (source : LearnedSerializedConstitutiveUpdate)
+    (conditions : LearnedSuccessiveLocalConditionData source) :
+    GenericIncrementalUpdateAccepted learnedSuccessiveIncrementalCheckerEngine
+        source ↔
+      FullRecheckAccepted learnedSuccessiveFullRecheckEngine source := by
+  cases learnedSuccessiveDeclaredDomain_source_exact source conditions
+  exact learnedSuccessiveIncrementalAndFullAcceptance_equivalent
+
+/-- On the same declared domain, the two independently constructed reference
+successes install the same successor; neither checker receives the other's
+success value, verdict, or certificate. -/
+theorem learnedSuccessiveIncrementalAndFullSuccessor_exact_on_declared_domain
+    (source : LearnedSerializedConstitutiveUpdate)
+    (conditions : LearnedSuccessiveLocalConditionData source) :
+    Exists fun incrementalSuccess : GenericIncrementalCheckSuccess
+        learnedSuccessiveIncrementalCheckerEngine source =>
+      checkGenericIncrementalUpdate learnedSuccessiveIncrementalCheckerEngine
+          source = .ok incrementalSuccess ∧
+      Exists fun fullSuccess : FullRecheckSuccess
+          learnedSuccessiveFullRecheckEngine source =>
+        checkFullUpdate learnedSuccessiveFullRecheckEngine source =
+            .ok fullSuccess ∧
+        HEq incrementalSuccess.checked.next fullSuccess.checked.next := by
+  cases learnedSuccessiveDeclaredDomain_source_exact source conditions
+  exact ⟨learnedSuccessiveIncrementalSuccess,
+    checkLearnedSuccessiveIncremental_exact,
+    learnedSuccessiveFullRecheckSuccess,
+    checkLearnedSuccessiveFullRecheck_exact,
+    heq_of_eq learnedSuccessiveIncrementalAndFullSuccessor_exact⟩
 
 /-! ## Autonomous post-forgetting continuation and contract change -/
 
@@ -273,6 +352,23 @@ inductive LearnedPostForgettingFullLocalConditions :
         learnedSuccessiveFullRecheckEngine update) :
       LearnedPostForgettingFullLocalConditions (.changeContract update)
 
+def liftLearnedPostForgettingIncrementalChange
+    (update : LearnedSerializedConstitutiveUpdate) :
+    Except LearnedRuntimeUpdateError (LearnedSuccessiveEngineAnalysis update) →
+      Except LearnedPostForgettingCheckError
+        (LearnedPostForgettingLocalConditionData (.changeContract update))
+  | .error problem => .error (.updateRefused problem)
+  | .ok analysis => .ok (.changeContract update analysis)
+
+theorem liftLearnedPostForgettingIncrementalChange_of_ok
+    {update : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis update}
+    (accepted : analyzeLearnedSuccessiveUpdate update = .ok analysis) :
+    liftLearnedPostForgettingIncrementalChange update
+        (analyzeLearnedSuccessiveUpdate update) =
+      .ok (.changeContract update analysis) :=
+  congrArg (liftLearnedPostForgettingIncrementalChange update) accepted
+
 def analyzeLearnedPostForgettingIncrementally
     (source : SerializedLearnedPostForgettingRequest) :
     Except LearnedPostForgettingCheckError
@@ -283,9 +379,8 @@ def analyzeLearnedPostForgettingIncrementally
       | .inl admitted => .ok (.continueCurrent input admitted)
       | .inr _ => .error .futureRefused
   | .changeContract update =>
-      match analyzeLearnedSuccessiveUpdate update with
-      | .error problem => .error (.updateRefused problem)
-      | .ok analysis => .ok (.changeContract update analysis)
+      liftLearnedPostForgettingIncrementalChange update
+        (analyzeLearnedSuccessiveUpdate update)
 
 def learnedPostForgettingContinuationFromAdmission
     (input : IndependentLearnedFutureInput)
@@ -386,13 +481,46 @@ def ExceptAccepted {Error Result : Type _} : Except Error Result → Prop
   | .ok _ => True
   | .error _ => False
 
-abbrev LearnedPostForgettingIncrementalAccepted
-    (source : SerializedLearnedPostForgettingRequest) : Prop :=
-  ExceptAccepted (analyzeLearnedPostForgettingIncrementally source)
+structure LearnedPostForgettingIncrementalAccepted
+    (source : SerializedLearnedPostForgettingRequest) : Prop where
+  accepted : ExceptAccepted (analyzeLearnedPostForgettingIncrementally source)
 
-abbrev LearnedPostForgettingFullRecheckAccepted
-    (source : SerializedLearnedPostForgettingRequest) : Prop :=
-  ExceptAccepted (analyzeLearnedPostForgettingCompletely source)
+theorem learnedPostForgettingIncrementalAccepted_iff
+    (source : SerializedLearnedPostForgettingRequest) :
+    LearnedPostForgettingIncrementalAccepted source ↔
+      ExceptAccepted (analyzeLearnedPostForgettingIncrementally source) :=
+  ⟨fun accepted => accepted.accepted, fun accepted => ⟨accepted⟩⟩
+
+structure LearnedPostForgettingFullRecheckAccepted
+    (source : SerializedLearnedPostForgettingRequest) : Prop where
+  accepted : ExceptAccepted (analyzeLearnedPostForgettingCompletely source)
+
+theorem learnedPostForgettingFullRecheckAccepted_iff
+    (source : SerializedLearnedPostForgettingRequest) :
+    LearnedPostForgettingFullRecheckAccepted source ↔
+      ExceptAccepted (analyzeLearnedPostForgettingCompletely source) :=
+  ⟨fun accepted => accepted.accepted, fun accepted => ⟨accepted⟩⟩
+
+theorem learnedPostForgettingIncrementalChange_accepts_of_analysis
+    {update : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedSuccessiveEngineAnalysis update) :
+    LearnedPostForgettingIncrementalAccepted (.changeContract update) := by
+  have accepted : analyzeLearnedSuccessiveUpdate update = .ok analysis := by
+    simpa only [learnedSuccessiveAnalysisOfLocalConditions_localConditions] using
+        analyzeLearnedSuccessiveUpdate_of_local_conditions update
+          analysis.localConditions
+  refine ⟨?_⟩
+  change ExceptAccepted
+    (liftLearnedPostForgettingIncrementalChange update
+      (analyzeLearnedSuccessiveUpdate update))
+  rw [liftLearnedPostForgettingIncrementalChange_of_ok accepted]
+  trivial
+
+theorem learnedPostForgettingIncrementalChange_accepts
+    {update : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedSuccessiveEngineAnalysis update) :
+    LearnedPostForgettingIncrementalAccepted (.changeContract update) := by
+  exact learnedPostForgettingIncrementalChange_accepts_of_analysis analysis
 
 theorem learnedPostForgettingFullContinuation_accepts
     {input : IndependentLearnedFutureInput}
@@ -408,8 +536,8 @@ theorem learnedPostForgettingFullContinuation_accepts
         learnedAlignedForgottenCurrentAgent.memory input with
     | inl witness => trivial
     | inr refused => exact False.elim (refused admitted)
-  simpa only [LearnedPostForgettingFullRecheckAccepted,
-    analyzeLearnedPostForgettingCompletely] using accepted
+  exact ⟨by
+    simpa only [analyzeLearnedPostForgettingCompletely] using accepted⟩
 
 theorem learnedPostForgettingFullChange_accepts
     {update : LearnedSerializedConstitutiveUpdate}
@@ -430,8 +558,8 @@ theorem learnedPostForgettingFullChange_accepts
               checkedSuccess)) := by
     rw [successExact]
     trivial
-  simpa only [LearnedPostForgettingFullRecheckAccepted,
-    analyzeLearnedPostForgettingCompletely] using accepted
+  exact ⟨by
+    simpa only [analyzeLearnedPostForgettingCompletely] using accepted⟩
 
 def learnedPostForgettingAdmittedContinuationRequest :
     SerializedLearnedPostForgettingRequest :=
@@ -448,22 +576,24 @@ def learnedPostForgettingRefusedContinuationRequest :
 theorem learnedPostForgettingAdmittedContinuation_incremental :
     LearnedPostForgettingIncrementalAccepted
       learnedPostForgettingAdmittedContinuationRequest := by
-  trivial
+  exact ⟨by trivial⟩
 
 theorem learnedPostForgettingAdmittedContinuation_full :
     LearnedPostForgettingFullRecheckAccepted
       learnedPostForgettingAdmittedContinuationRequest := by
-  trivial
+  exact ⟨by trivial⟩
 
 theorem learnedPostForgettingExtendedChange_incremental :
     LearnedPostForgettingIncrementalAccepted
-      learnedPostForgettingExtendedChangeRequest := by
-  trivial
+      (.changeContract learnedExtendedSerializedUpdate) := by
+  exact learnedPostForgettingIncrementalChange_accepts_of_analysis
+    learnedReferenceSuccessiveAnalysis
 
 theorem learnedPostForgettingExtendedChange_full :
     LearnedPostForgettingFullRecheckAccepted
       learnedPostForgettingExtendedChangeRequest := by
-  trivial
+  exact learnedPostForgettingFullChange_accepts
+    ⟨learnedSuccessiveFullRecheckLocalConditions⟩
 
 theorem learnedPostForgettingIncrementalContinuation_accepts
     {input : IndependentLearnedFutureInput}
@@ -477,26 +607,8 @@ theorem learnedPostForgettingIncrementalContinuation_accepts
     cases decided : decideIndependentLearnedFutureAdmission input with
     | inl witness => trivial
     | inr refused => exact False.elim (refused admitted)
-  simpa only [LearnedPostForgettingIncrementalAccepted,
-    analyzeLearnedPostForgettingIncrementally] using accepted
-
-theorem learnedPostForgettingIncrementalChange_accepts
-    {update : LearnedSerializedConstitutiveUpdate}
-    (analysis : LearnedSuccessiveEngineAnalysis update) :
-    LearnedPostForgettingIncrementalAccepted (.changeContract update) := by
-  rcases completeLearnedSuccessiveAnalysis update analysis.executed with
-    ⟨computed, acceptedExact⟩
-  have accepted : ExceptAccepted
-      (match analyzeLearnedSuccessiveUpdate update with
-        | .error problem => Except.error
-            (LearnedPostForgettingCheckError.updateRefused problem)
-        | .ok checkedAnalysis => Except.ok
-            (LearnedPostForgettingLocalConditionData.changeContract update
-              checkedAnalysis)) := by
-    rw [acceptedExact]
-    trivial
-  simpa only [LearnedPostForgettingIncrementalAccepted,
-    analyzeLearnedPostForgettingIncrementally] using accepted
+  exact ⟨by
+    simpa only [analyzeLearnedPostForgettingIncrementally] using accepted⟩
 
 /-- The incremental post-forgetting checker is complete for every request in
 its proof-free domain relative to its autonomous local receipts. -/
@@ -506,19 +618,20 @@ theorem learnedPostForgettingIncremental_complete
       Nonempty (LearnedPostForgettingLocalConditionData source) := by
   constructor
   · intro accepted
-    unfold LearnedPostForgettingIncrementalAccepted ExceptAccepted at accepted
+    have accepted' := accepted.accepted
+    unfold ExceptAccepted at accepted'
     cases exact : analyzeLearnedPostForgettingIncrementally source with
     | error problem =>
-        rw [exact] at accepted
-        exact False.elim accepted
+        rw [exact] at accepted'
+        exact False.elim accepted'
     | ok conditions => exact ⟨conditions⟩
   · intro available
     rcases available with ⟨conditions⟩
     cases conditions with
     | continueCurrent input admitted =>
         exact learnedPostForgettingIncrementalContinuation_accepts admitted
-    | changeContract update analysis =>
-        exact learnedPostForgettingIncrementalChange_accepts analysis
+    | changeContract update conditions =>
+        exact learnedPostForgettingIncrementalChange_accepts conditions
 
 /-- The independent full recheck has the corresponding all-request relative
 completeness theorem and receives no incremental verdict. -/
@@ -528,6 +641,7 @@ theorem learnedPostForgettingFullRecheck_complete
       LearnedPostForgettingFullLocalConditions source := by
   constructor
   · intro accepted
+    have acceptedValue := accepted.accepted
     cases source with
     | continueCurrent input =>
         have accepted' : ExceptAccepted
@@ -539,7 +653,7 @@ theorem learnedPostForgettingFullRecheck_complete
               | .inr _ => Except.error
                   LearnedPostForgettingCheckError.futureRefused) := by
           simpa only [LearnedPostForgettingFullRecheckAccepted,
-            analyzeLearnedPostForgettingCompletely] using accepted
+            analyzeLearnedPostForgettingCompletely] using acceptedValue
         cases decided : independentLearnedReducedFutureContract.decision
             learnedAlignedForgottenCurrentAgent.memory input with
         | inl admitted => exact .continueCurrent input admitted
@@ -555,7 +669,7 @@ theorem learnedPostForgettingFullRecheck_complete
                   (LearnedPostForgettingFullConditionData.changeContract
                     update success)) := by
           simpa only [LearnedPostForgettingFullRecheckAccepted,
-            analyzeLearnedPostForgettingCompletely] using accepted
+            analyzeLearnedPostForgettingCompletely] using acceptedValue
         cases checked : checkFullUpdate learnedSuccessiveFullRecheckEngine update with
         | error problem =>
             rw [checked] at accepted'
@@ -657,9 +771,10 @@ theorem submitLearnedPostForgettingContinuation_complete
   · intro installed
     have accepted : LearnedPostForgettingIncrementalAccepted
         (.continueCurrent input) := by
+      refine ⟨?_⟩
       unfold submitLearnedPostForgettingContinuation
         checkLearnedPostForgettingIncremental ExceptAccepted at installed
-      unfold LearnedPostForgettingIncrementalAccepted ExceptAccepted
+      unfold ExceptAccepted
       cases analyzed : analyzeLearnedPostForgettingIncrementally
           (.continueCurrent input) with
       | error problem =>
@@ -672,14 +787,15 @@ theorem submitLearnedPostForgettingContinuation_complete
     have accepted : LearnedPostForgettingIncrementalAccepted
         (.continueCurrent input) :=
       (learnedPostForgettingIncremental_complete _).2 conditions
-    unfold LearnedPostForgettingIncrementalAccepted ExceptAccepted at accepted
+    have acceptedValue := accepted.accepted
+    unfold ExceptAccepted at acceptedValue
     unfold submitLearnedPostForgettingContinuation
       checkLearnedPostForgettingIncremental ExceptAccepted
     cases analyzed : analyzeLearnedPostForgettingIncrementally
         (.continueCurrent input) with
     | error problem =>
-        rw [analyzed] at accepted
-        exact False.elim accepted
+        rw [analyzed] at acceptedValue
+        exact False.elim acceptedValue
     | ok conditions =>
         exact True.intro
 
@@ -700,7 +816,22 @@ theorem learnedInstalledPostForgettingContinuation_consumes_reducedMemory :
       independentLearnedReducedFutureContract.outcome
         learnedAlignedExecutedFutureForgetting.output
         [learnedAdmittedFutureRequest] := by
-  rfl
+  let expected : LearnedOperationalFutureOutcome :=
+    independentLearnedReducedFutureContract.outcome
+      learnedAlignedForgottenCurrentAgent.memory
+      [learnedAdmittedFutureRequest]
+  have executionExact :
+      learnedInstalledPostForgettingContinuation.execution.outcome = expected :=
+    learnedInstalledPostForgettingContinuation.execution.outcomeExact
+  have memoryExact : expected =
+      independentLearnedReducedFutureContract.outcome
+        learnedAlignedExecutedFutureForgetting.output
+        [learnedAdmittedFutureRequest] :=
+    congrArg
+      (fun memory => independentLearnedReducedFutureContract.outcome
+        memory [learnedAdmittedFutureRequest])
+      learnedAlignedForgottenMemory_is_executedReduction
+  exact executionExact.trans memoryExact
 
 theorem submitLearnedPostForgettingRefusedContinuation_rejected :
     submitLearnedPostForgettingContinuation learnedRefusedFutureRequest =
@@ -720,7 +851,7 @@ theorem learnedPostForgettingRefusal_has_no_continuationResult :
 agent produced by the first installed transition. -/
 inductive LearnedPostForgettingRuntimeUpdate :
     {contract : LearnedOperationalContract} ->
-      CheckedAgent learnedConstitutiveMetaContract contract -> Type where
+      CheckedAgent learnedConstitutiveMetaContract contract -> Type 6 where
   | changeContract (update : LearnedSerializedConstitutiveUpdate) :
       LearnedPostForgettingRuntimeUpdate LearnedAlignedCurrentAgent
 
@@ -760,22 +891,56 @@ def closeLearnedPostForgettingContractChange
     checked := buildIncrementalCheckedUpdate analysis.target
     checkedExact := rfl }
 
+/-- The post-forgetting justification is constructed from the same received
+successive analysis that supplies the decoded intent and transition decision.
+No canonical target analysis is substituted at this boundary. -/
+def learnedPostForgettingJustificationFromAnalysis
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent .extended :=
+  learnedPostForgettingJustificationFromDecision
+    analysis.executed.decoded.intentAdmitted
+    (analysis.executed.receivedDecision.transportRequest
+      analysis.executed.decoded.transitionExact)
+
+/-- Close the contract-changing transition by consuming one and the same
+received analysis for the justification, checked successor, and installation
+material. -/
+def closeLearnedPostForgettingContractChangeFromAnalysis
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    ClosedLearnedPostForgettingContractChange analysis
+      (learnedPostForgettingJustificationFromAnalysis analysis) :=
+  closeLearnedPostForgettingContractChange analysis
+    (learnedPostForgettingJustificationFromAnalysis analysis)
+
 /-- The concrete P5 transition material is reconstructed from the exact
 analysis returned for the received aligned-to-extended update. -/
 def learnedPostForgettingExtendedJustification :
     JustifiedPostForgettingTransition LearnedAlignedCurrentAgent .extended :=
-  learnedPostForgettingJustificationFromDecision
-    learnedSuccessiveIncrementalSuccess.analysis.executed.decoded.intentAdmitted
-    (learnedSuccessiveIncrementalSuccess.analysis.executed.receivedDecision.transportRequest
-      learnedSuccessiveIncrementalSuccess.analysis.executed.decoded.transitionExact)
+  learnedPostForgettingJustificationFromAnalysis
+    learnedReferenceSuccessiveAnalysis
 
 def learnedClosedPostForgettingExtendedChange :
     ClosedLearnedPostForgettingContractChange
-      learnedSuccessiveIncrementalSuccess.analysis
+      learnedReferenceSuccessiveAnalysis
       learnedPostForgettingExtendedJustification :=
-  closeLearnedPostForgettingContractChange
-    learnedSuccessiveIncrementalSuccess.analysis
-    learnedPostForgettingExtendedJustification
+  closeLearnedPostForgettingContractChangeFromAnalysis
+    learnedReferenceSuccessiveAnalysis
+
+/-- Translate the received successive-analysis result into the exact checked
+post-forgetting successor.  The accepted branch consumes the analysis value it
+receives; it has no argument for a canonical replacement or a prefabricated
+target certificate. -/
+def closeReceivedLearnedPostForgettingAnalysis
+    (source : LearnedSerializedConstitutiveUpdate) :
+    Except LearnedRuntimeUpdateError (LearnedSuccessiveEngineAnalysis source) →
+      Except LearnedPostForgettingCheckError
+        (DependentCheckedUpdateResult LearnedAlignedCurrentAgent)
+  | .error problem => .error (.updateRefused problem)
+  | .ok analysis =>
+      .ok (dependentCheckedUpdateResult
+        (closeLearnedPostForgettingContractChangeFromAnalysis analysis).checked)
 
 def checkLearnedPostForgettingRuntimeUpdate
     {contract : LearnedOperationalContract}
@@ -785,16 +950,8 @@ def checkLearnedPostForgettingRuntimeUpdate
       (DependentCheckedUpdateResult current) :=
   match update with
   | .changeContract source =>
-      match analyzeLearnedPostForgettingIncrementally (.changeContract source) with
-      | .error problem => .error problem
-      | .ok conditions =>
-          match _permissionExact : conditions.permission with
-          | .changeContract _ justification =>
-              match conditions with
-              | .changeContract _ analysis =>
-                  let closed := closeLearnedPostForgettingContractChange
-                    analysis justification
-                  .ok (dependentCheckedUpdateResult closed.checked)
+      closeReceivedLearnedPostForgettingAnalysis source
+        (analyzeLearnedSuccessiveUpdate source)
 
 def learnedPostForgettingDependentChecker :
     DependentIncrementalChecker learnedConstitutiveMetaContract where
@@ -803,6 +960,28 @@ def learnedPostForgettingDependentChecker :
   check := by
     intro contract current update
     exact checkLearnedPostForgettingRuntimeUpdate update
+
+/-- If the successive analyzer returned a particular received analysis, the
+runtime checker consumes precisely that analysis to construct its checked
+successor.  This is the generic raccord used by the concrete public update;
+it avoids proving equality with, or rebuilding, a canonical analysis. -/
+theorem checkLearnedPostForgettingRuntimeUpdate_change_of_analysis
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    (accepted : analyzeLearnedSuccessiveUpdate source = .ok analysis) :
+    checkLearnedPostForgettingRuntimeUpdate
+        (LearnedPostForgettingRuntimeUpdate.changeContract source) =
+      .ok (dependentCheckedUpdateResult
+        (closeLearnedPostForgettingContractChangeFromAnalysis analysis).checked) := by
+  exact congrArg (closeReceivedLearnedPostForgettingAnalysis source) accepted
+
+theorem learnedPostForgettingDependentChecker_change_exact
+    (source : LearnedSerializedConstitutiveUpdate) :
+    learnedPostForgettingDependentChecker.check LearnedAlignedCurrentAgent
+        (LearnedPostForgettingRuntimeUpdate.changeContract source) =
+      checkLearnedPostForgettingRuntimeUpdate
+        (LearnedPostForgettingRuntimeUpdate.changeContract source) := by
+  rfl
 
 def learnedPostForgettingInitialRuntime : CertifiedRuntime
     learnedPostForgettingDependentChecker LearnedAlignedCurrentAgent :=
@@ -819,14 +998,26 @@ theorem checkLearnedPostForgettingExtendedRuntimeUpdate_exact :
         learnedPostForgettingExtendedRuntimeUpdate =
       .ok (dependentCheckedUpdateResult
         learnedClosedPostForgettingExtendedChange.checked) := by
-  rfl
+  dsimp only [learnedPostForgettingExtendedRuntimeUpdate]
+  exact checkLearnedPostForgettingRuntimeUpdate_change_of_analysis
+    analyzeLearnedSuccessiveUpdate_reference_exact
+
+theorem learnedPostForgettingDependentChecker_accepts_extended :
+    learnedPostForgettingDependentChecker.check LearnedAlignedCurrentAgent
+        (LearnedPostForgettingRuntimeUpdate.changeContract
+          learnedExtendedSerializedUpdate) =
+      .ok (dependentCheckedUpdateResult
+        learnedClosedPostForgettingExtendedChange.checked) :=
+  (learnedPostForgettingDependentChecker_change_exact _).trans
+    checkLearnedPostForgettingExtendedRuntimeUpdate_exact
 
 def learnedPostForgettingExtendedRuntime : CertifiedRuntime
     learnedPostForgettingDependentChecker LearnedAlignedCurrentAgent :=
-  match submitUpdate learnedPostForgettingInitialRuntime
-      learnedPostForgettingExtendedRuntimeUpdate with
-  | .ok runtime => runtime
-  | .error _ => learnedPostForgettingInitialRuntime
+  installAcceptedUpdate learnedPostForgettingInitialRuntime
+    learnedPostForgettingExtendedRuntimeUpdate
+    (dependentCheckedUpdateResult
+      learnedClosedPostForgettingExtendedChange.checked)
+    learnedPostForgettingDependentChecker_accepts_extended
 
 def learnedPostForgettingInitialRuntime_reachable :
     CertifiedRuntimeReachable learnedPostForgettingDependentChecker
@@ -837,7 +1028,11 @@ theorem submitUpdate_postForgettingExtended_exact :
     submitUpdate learnedPostForgettingInitialRuntime
         learnedPostForgettingExtendedRuntimeUpdate =
       .ok learnedPostForgettingExtendedRuntime := by
-  rfl
+  exact submitUpdate_of_accepted learnedPostForgettingInitialRuntime
+    learnedPostForgettingExtendedRuntimeUpdate
+    (dependentCheckedUpdateResult
+      learnedClosedPostForgettingExtendedChange.checked)
+    learnedPostForgettingDependentChecker_accepts_extended
 
 def learnedPostForgettingExtendedRuntime_reachable :
     CertifiedRuntimeReachable learnedPostForgettingDependentChecker
@@ -849,14 +1044,18 @@ def learnedPostForgettingExtendedRuntime_reachable :
     submitUpdate_postForgettingExtended_exact
 
 theorem learnedPostForgettingRuntime_starts_at_installedAlignedState :
-    learnedPostForgettingInitialRuntime.current =
-      learnedAlignedCertifiedRuntime.current := by
-  rfl
+    HEq learnedPostForgettingInitialRuntime.current
+      learnedAlignedCertifiedRuntime.current :=
+  (by rfl : HEq learnedPostForgettingInitialRuntime.current
+    LearnedAlignedCurrentAgent).trans
+      learnedAlignedCertifiedRuntime_current_exact.symm
 
 theorem learnedPostForgettingExtendedRuntime_successor_exact :
-    learnedPostForgettingExtendedRuntime.current =
-      learnedExtendedCertifiedRuntime.current := by
-  rfl
+    HEq learnedPostForgettingExtendedRuntime.current
+      learnedExtendedCertifiedRuntime.current :=
+  (by rfl : HEq learnedPostForgettingExtendedRuntime.current
+    learnedExtendedDependentResult.checked.next).trans
+      learnedExtendedCertifiedRuntime_current_exact.symm
 
 def learnedPostForgettingExtendedRuntime_checkedHistory :
     EveryRuntimeStepSatisfies learnedPostForgettingExtendedRuntime.history :=
@@ -967,7 +1166,8 @@ def learnedPostForgettingOperationalClosure :
     contractUpdateExact := HEq.rfl
     installedRuntime := learnedPostForgettingExtendedRuntime
     installedExact := submitUpdate_postForgettingExtended_exact
-    installedSuccessorExact := HEq.rfl
+    installedSuccessorExact :=
+      learnedPostForgettingExtendedRuntime_successor_exact
     installedReachable := learnedPostForgettingExtendedRuntime_reachable
     checkedHistory := learnedPostForgettingExtendedRuntime_checkedHistory
     preservedContracts := learnedPostForgettingExtendedRuntime_preservedContracts
@@ -989,18 +1189,29 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveFullRecheckEngine
 #print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveIncrementalAccepted
 #print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveFullRecheckAccepted
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveFullRecheckLocalConditions
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveIncrementalReceipt
 #print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveIncrementalSuccess
 #print axioms ConstitutiveSearch.NeuralAgent.checkLearnedSuccessiveIncremental_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveFullRecheckReceipt
 #print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveFullRecheckSuccess
 #print axioms ConstitutiveSearch.NeuralAgent.checkLearnedSuccessiveFullRecheck_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveIncrementalSuccess_next_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveFullRecheckSuccess_next_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveIncrementalAndFullSuccessor_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveIncrementalAndFullCertificate_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveIncrementalAndFullAcceptance_equivalent
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveDeclaredDomain_source_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveIncrementalAndFullAcceptance_equivalent_on_declared_domain
+#print axioms ConstitutiveSearch.NeuralAgent.learnedSuccessiveIncrementalAndFullSuccessor_exact_on_declared_domain
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingIncrementalChange_accepts_of_analysis
 #print axioms ConstitutiveSearch.NeuralAgent.SerializedLearnedPostForgettingRequest
 #print axioms ConstitutiveSearch.NeuralAgent.decodeLearnedPostForgettingRequest
 #print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingLocalConditionData
 #print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingFullConditionData
 #print axioms ConstitutiveSearch.NeuralAgent.analyzeLearnedPostForgettingIncrementally
+#print axioms ConstitutiveSearch.NeuralAgent.liftLearnedPostForgettingIncrementalChange
+#print axioms ConstitutiveSearch.NeuralAgent.liftLearnedPostForgettingIncrementalChange_of_ok
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingContinuationFromAdmission
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingJustificationFromDecision
 #print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingLocalConditionData.permission
@@ -1019,10 +1230,16 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingRuntimeUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.ClosedLearnedPostForgettingContractChange
 #print axioms ConstitutiveSearch.NeuralAgent.closeLearnedPostForgettingContractChange
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingJustificationFromAnalysis
+#print axioms ConstitutiveSearch.NeuralAgent.closeLearnedPostForgettingContractChangeFromAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingExtendedJustification
 #print axioms ConstitutiveSearch.NeuralAgent.learnedClosedPostForgettingExtendedChange
+#print axioms ConstitutiveSearch.NeuralAgent.closeReceivedLearnedPostForgettingAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.checkLearnedPostForgettingRuntimeUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingDependentChecker
+#print axioms ConstitutiveSearch.NeuralAgent.checkLearnedPostForgettingRuntimeUpdate_change_of_analysis
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingDependentChecker_change_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingDependentChecker_accepts_extended
 #print axioms ConstitutiveSearch.NeuralAgent.checkLearnedPostForgettingExtendedRuntimeUpdate_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingInitialRuntime_reachable
 #print axioms ConstitutiveSearch.NeuralAgent.submitUpdate_postForgettingExtended_exact

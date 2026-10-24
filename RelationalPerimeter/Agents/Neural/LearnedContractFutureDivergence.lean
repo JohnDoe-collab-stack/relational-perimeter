@@ -137,6 +137,7 @@ theorem learnedAlignedRuntime_futureSource_exact :
     LearnedAlignedOperationalContract.futureSourceOfState
         learnedAlignedCertifiedRuntime.current.state =
       learnedCandidateFutureSource learnedAlignedCandidateAtInitial := by
+  rw [learnedAlignedRuntime_state_exact]
   rfl
 
 def learnedAlignedInstalledOperationalFuture
@@ -161,7 +162,7 @@ theorem learnedAlignedInstalledCoveredFutureWitness_outcome_exact :
     learnedAlignedInstalledCoveredFutureWitness.outcome =
       learnedAlignedInstalledOperationalFuture
         learnedOperationalCounterfactualRequests := by
-  rfl
+  exact learnedAlignedInstalledCoveredFutureWitness.outcomeExact
 
 theorem learnedAlignedInstalledFuture_is_candidateFuture
     (requests : List IndependentLearnedFutureInput) :
@@ -203,6 +204,8 @@ theorem learnedAlignedInstalledFuture_satisfies :
     learnedFutureNormSatisfied learnedOperationalCounterfactualRequests
       (learnedAlignedInstalledOperationalFuture
         learnedOperationalCounterfactualRequests) = true := by
+  unfold learnedAlignedInstalledOperationalFuture
+  rw [learnedAlignedRuntime_state_exact]
   rfl
 
 theorem learnedBypassCandidateFuture_violates :

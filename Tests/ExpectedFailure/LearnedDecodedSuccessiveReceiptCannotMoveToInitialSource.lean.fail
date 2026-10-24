@@ -9,7 +9,7 @@ example
       decodeLearnedSuccessiveUpdate learnedExtendedSerializedUpdate = .ok decoded) :
     DecodedLearnedRuntimeUpdateAtCurrent learnedInitialCheckedAgent
       (.serialized learnedAlignedSerializedUpdate) :=
-  .successive decoded decodedExact
+  .successive LearnedAlignedCheckedAgent rfl rfl (HEq.rfl) decoded decodedExact
 
 end Tests.ExpectedFailure.LearnedDecodedSuccessiveReceiptCannotMoveToInitialSource
 /- AXIOM_AUDIT_BEGIN -/

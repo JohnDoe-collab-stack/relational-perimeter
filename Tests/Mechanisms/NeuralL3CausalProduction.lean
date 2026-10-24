@@ -21,6 +21,46 @@ theorem extended_reconfiguration_is_produced_target :
       learnedDecodedExtendedArtifact.system :=
   learnedExtendedReconfiguration_target_exact
 
+theorem aligned_state_configuration_is_exact_producer_output
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    (executeLearnedAlignedReconfigurationFromState source encoding
+        sourceAction).certificate.configuration =
+      learnedAlignedRawReconfigurationForState source :=
+  executeLearnedAlignedReconfigurationFromState_configuration_is_produced
+    source encoding sourceAction
+
+theorem aligned_state_successor_uses_exact_producer_target
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    (executeLearnedAlignedReconfigurationFromState source encoding
+        sourceAction).targetState.system =
+      (learnedAlignedRawReconfigurationForState source).targetSystem :=
+  executeLearnedAlignedReconfigurationFromState_target_is_produced
+    source encoding sourceAction
+
+theorem extended_state_configuration_is_exact_producer_output
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    (executeLearnedExtendedReconfigurationFromState source encoding
+        sourceAction).certificate.configuration =
+      learnedExtendedRawReconfigurationForState source :=
+  executeLearnedExtendedReconfigurationFromState_configuration_is_produced
+    source encoding sourceAction
+
+theorem extended_state_successor_uses_exact_producer_target
+    (source : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (encoding : LearnedRequirementEncodingWitness source)
+    (sourceAction : LearnedActionWitness source) :
+    (executeLearnedExtendedReconfigurationFromState source encoding
+        sourceAction).targetState.system =
+      (learnedExtendedRawReconfigurationForState source).targetSystem :=
+  executeLearnedExtendedReconfigurationFromState_target_is_produced
+    source encoding sourceAction
+
 theorem aligned_proposal_is_derived_from_same_execution :
     learnedAlignedReconfiguration.targetSystem.proposal
         independentLearnedCertifiedInput =
@@ -151,10 +191,94 @@ theorem extended_production_successor_is_same_effect :
       extendedProduction.action.targetState := by
   rfl
 
+/-! ## F2 regression: the successive path consumes received data -/
+
+theorem successive_analysis_installs_received_artifact
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    HEq analysis.target.artifact analysis.executed.decoded.target :=
+  analysis.receivedDecodedArtifact_installed
+
+theorem successive_analysis_installs_received_naming
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    HEq analysis.target.targetNaming analysis.executed.decoded.stable.naming :=
+  analysis.receivedDecodedStableNaming_installed
+
+theorem successive_analysis_installs_received_production
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    HEq analysis.target.state analysis.executed.production.targetState :=
+  analysis.receivedProductionTarget_installed
+
+theorem successive_analysis_installs_received_assembly
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    HEq analysis.target.structuralAssembly analysis.structuralAssembly :=
+  analysis.receivedStructuralAssembly_installed
+
+theorem successive_checker_consumes_returned_analysis
+    (source : LearnedSerializedConstitutiveUpdate)
+    (decoded : DecodedLearnedSuccessiveUpdate source)
+    (decodedExact : decodeLearnedSuccessiveUpdate source = .ok decoded)
+    (analysis : LearnedSuccessiveEngineAnalysis source)
+    (accepted : analyzeDecodedLearnedSuccessiveUpdate source decoded decodedExact =
+      .ok analysis) :
+    checkDecodedLearnedExtendedSerializedUpdate source decoded decodedExact =
+      .ok (dependentCheckedUpdateResult
+        (buildIncrementalCheckedUpdate analysis.target)) :=
+  checkDecodedLearnedExtendedSerializedUpdate_of_analysis source decoded
+    decodedExact analysis accepted
+
+theorem successive_declared_domain_acceptance_agrees
+    (source : LearnedSerializedConstitutiveUpdate)
+    (conditions : LearnedSuccessiveLocalConditionData source) :
+    GenericIncrementalUpdateAccepted learnedSuccessiveIncrementalCheckerEngine
+        source ↔
+      FullRecheckAccepted learnedSuccessiveFullRecheckEngine source :=
+  learnedSuccessiveIncrementalAndFullAcceptance_equivalent_on_declared_domain
+    source conditions
+
+theorem successive_declared_domain_successors_agree
+    (source : LearnedSerializedConstitutiveUpdate)
+    (conditions : LearnedSuccessiveLocalConditionData source) :
+    Exists fun incrementalSuccess : GenericIncrementalCheckSuccess
+        learnedSuccessiveIncrementalCheckerEngine source =>
+      checkGenericIncrementalUpdate learnedSuccessiveIncrementalCheckerEngine
+          source = .ok incrementalSuccess ∧
+      Exists fun fullSuccess : FullRecheckSuccess
+          learnedSuccessiveFullRecheckEngine source =>
+        checkFullUpdate learnedSuccessiveFullRecheckEngine source =
+            .ok fullSuccess ∧
+        HEq incrementalSuccess.checked.next fullSuccess.checked.next :=
+  learnedSuccessiveIncrementalAndFullSuccessor_exact_on_declared_domain
+    source conditions
+
+theorem successive_runtime_installs_calculated_assembly :
+    learnedExtendedCertifiedRuntime.current.certificate.structuralObservations =
+      learnedSuccessiveCalculatedStructuralAssembly.observations :=
+  learnedExtendedRuntime_certificate_consumes_successiveAssembly
+
+/-- The named first runtime is the material payload retained by its executed
+submission receipt, not a separately reconstructed equal runtime. -/
+theorem aligned_named_runtime_is_submitted_payload :
+    learnedAlignedCertifiedRuntime = learnedAlignedRuntimeSubmission.next := by
+  rfl
+
+/-- The named successive runtime is likewise the exact payload retained from
+the second executed submission. -/
+theorem successive_named_runtime_is_submitted_payload :
+    learnedExtendedCertifiedRuntime = learnedExtendedRuntimeSubmission.next := by
+  rfl
+
 end Tests.Mechanisms.NeuralL3CausalProduction
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.aligned_reconfiguration_is_produced_target
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_reconfiguration_is_produced_target
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.aligned_state_configuration_is_exact_producer_output
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.aligned_state_successor_uses_exact_producer_target
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_state_configuration_is_exact_producer_output
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_state_successor_uses_exact_producer_target
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.aligned_proposal_is_derived_from_same_execution
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_proposal_is_derived_from_same_execution
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.aligned_local_composition_is_nonidentity
@@ -173,4 +297,14 @@ end Tests.Mechanisms.NeuralL3CausalProduction
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_production_action_is_exact
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_production_event_memory_are_same_effect
 #print axioms Tests.Mechanisms.NeuralL3CausalProduction.extended_production_successor_is_same_effect
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.successive_analysis_installs_received_artifact
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.successive_analysis_installs_received_naming
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.successive_analysis_installs_received_production
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.successive_analysis_installs_received_assembly
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.successive_checker_consumes_returned_analysis
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.successive_declared_domain_acceptance_agrees
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.successive_declared_domain_successors_agree
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.successive_runtime_installs_calculated_assembly
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.aligned_named_runtime_is_submitted_payload
+#print axioms Tests.Mechanisms.NeuralL3CausalProduction.successive_named_runtime_is_submitted_payload
 /- AXIOM_AUDIT_END -/

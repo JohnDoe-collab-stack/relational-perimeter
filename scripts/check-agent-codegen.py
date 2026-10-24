@@ -75,6 +75,193 @@ def recursive_tail_applications(functions, compiled_parameters, entry):
     applications(augmented, params, alias, entry, 1)
 
 
+def forwarded_result(functions, entry, producer, consumer, argument_index):
+    """Require the exact object returned by `producer` to reach `consumer`.
+
+    A mere call to the producer is insufficient: a wrapper could call it,
+    discard its target field, rebuild an equal canonical object and pass that
+    replacement onward.  Generated Lean C names every intermediate object, so
+    this check follows the produced occurrence to the selected consumer slot.
+    """
+    body = functions.get(entry, '')
+    produced = re.findall(
+        rf'\b((?:v|l|lp)_\w+)\s*=\s*{re.escape(producer)}\s*\(', body)
+    if len(produced) != 1:
+        raise ValueError(
+            f'{entry}: expected one assigned result from {producer}, found {len(produced)}')
+    consumer_calls = re.findall(
+        rf'{re.escape(consumer)}\s*\((.*?)\)\s*;', body, re.S)
+    if len(consumer_calls) != 1:
+        raise ValueError(
+            f'{entry}: expected one call to {consumer}, found {len(consumer_calls)}')
+    arguments = split_arguments(consumer_calls[0])
+    if argument_index >= len(arguments):
+        raise ValueError(
+            f'{entry}: consumer argument {argument_index} is absent')
+    normalized = re.sub(r'\(\(lean_object\*\)\(([^()]+)\)\)', r'\1',
+                        arguments[argument_index]).strip()
+    if normalized != produced[0]:
+        raise ValueError(
+            f'{entry}: {producer} result {produced[0]} is not consumer '
+            f'argument {argument_index}; found {normalized}')
+    print(f'AGENT_FORWARDING_OK {entry}: exact {producer} result -> '
+          f'{consumer}[{argument_index}]')
+
+
+def returned_except_payload(functions, entry, producer):
+    """Require `entry` to return the payload of the exact `Except` produced.
+
+    This detects the runtime-level bypass where the checker is executed but a
+    separately prepared, propositionally equal successor is returned instead
+    of the successful payload obtained from that execution.
+    """
+    body = functions.get(entry, '')
+    produced = re.findall(
+        rf'\b((?:v|l|lp)_\w+)\s*=\s*{re.escape(producer)}\s*\(', body)
+    if len(produced) != 1:
+        raise ValueError(
+            f'{entry}: expected one assigned Except from {producer}, found {len(produced)}')
+    payload = re.findall(
+        rf'\b((?:v|l|lp)_\w+)\s*=\s*lean_ctor_get\s*\(\s*'
+        rf'{re.escape(produced[0])}\s*,\s*0\s*\)', body)
+    if len(payload) != 1:
+        raise ValueError(
+            f'{entry}: expected the payload of {produced[0]} to be extracted once; '
+            f'found {len(payload)}')
+    returned = re.findall(r'\breturn\s+((?:v|l|lp)_\w+)\s*;', body)
+    if returned != [payload[0]]:
+        raise ValueError(
+            f'{entry}: expected exact produced payload {payload[0]} to be returned; '
+            f'found {returned}')
+    print(f'AGENT_EXCEPT_PAYLOAD_OK {entry}: exact {producer} payload returned')
+
+
+def forwarded_parameter(functions, compiled_parameters, entry, parameter_index,
+                        consumer, argument_index):
+    """Require one runtime parameter occurrence to reach a consumer slot."""
+    params = compiled_parameters.get(entry, ())
+    if parameter_index >= len(params):
+        raise ValueError(f'{entry}: parameter {parameter_index} is absent')
+    body = functions.get(entry, '')
+    calls = re.findall(rf'{re.escape(consumer)}\s*\((.*?)\)\s*;', body, re.S)
+    if len(calls) != 1:
+        raise ValueError(
+            f'{entry}: expected one call to {consumer}, found {len(calls)}')
+    args = split_arguments(calls[0])
+    if argument_index >= len(args):
+        raise ValueError(f'{entry}: consumer argument {argument_index} is absent')
+    if args[argument_index].strip() != params[parameter_index]:
+        raise ValueError(
+            f'{entry}: parameter {params[parameter_index]} is not {consumer}'
+            f'[{argument_index}]; found {args[argument_index].strip()}')
+    print(f'AGENT_PARAMETER_FORWARDING_OK {entry}: parameter '
+          f'{parameter_index} -> {consumer}[{argument_index}]')
+
+
+def forwarded_ctor_field(functions, compiled_parameters, entry, parameter_index,
+                         field_index, consumer, argument_index):
+    """Require a field read from the received value to reach a consumer slot."""
+    params = compiled_parameters.get(entry, ())
+    if parameter_index >= len(params):
+        raise ValueError(f'{entry}: parameter {parameter_index} is absent')
+    body = functions.get(entry, '')
+    extracted = re.findall(
+        rf'\b([A-Za-z_]\w*)\s*=\s*lean_ctor_get\s*\(\s*'
+        rf'{re.escape(params[parameter_index])}\s*,\s*{field_index}\s*\)', body)
+    if not extracted:
+        raise ValueError(
+            f'{entry}: expected an extraction of received field {field_index}, '
+            'found none')
+    calls = re.findall(rf'{re.escape(consumer)}\s*\((.*?)\)\s*;', body, re.S)
+    if len(calls) != 1:
+        raise ValueError(
+            f'{entry}: expected one call to {consumer}, found {len(calls)}')
+    args = split_arguments(calls[0])
+    if argument_index >= len(args):
+        raise ValueError(f'{entry}: consumer argument {argument_index} is absent')
+    forwarded = args[argument_index].strip()
+    if forwarded not in extracted:
+        raise ValueError(
+            f'{entry}: no received field {field_index} in {extracted} is '
+            f'{consumer}[{argument_index}]; found {args[argument_index].strip()}')
+    print(f'AGENT_FIELD_FORWARDING_OK {entry}: received field {field_index} -> '
+          f'{consumer}[{argument_index}]')
+
+
+def global_field_to_constructor(functions, entry, source, field_index,
+                                constructor_fields):
+    """Require fields of one returned constructor to share a field of `source`.
+
+    This is the generated-code guard for a named dependent request: the
+    predecessor stored in that request must be projected from the preceding
+    executed submission, not reconstructed from an equal global agent.
+    """
+    body = functions.get(entry, '')
+    source_values = re.findall(
+        rf'\b([A-Za-z_]\w*)\s*=\s*{re.escape(source)}\s*;', body)
+    if len(source_values) != 1:
+        raise ValueError(
+            f'{entry}: expected one material read of {source}, found '
+            f'{len(source_values)}')
+    extracted = re.findall(
+        rf'\b([A-Za-z_]\w*)\s*=\s*lean_ctor_get\s*\(\s*'
+        rf'{re.escape(source_values[0])}\s*,\s*{field_index}\s*\)', body)
+    if len(extracted) != 1:
+        raise ValueError(
+            f'{entry}: expected source field {field_index} once, found '
+            f'{len(extracted)}')
+    returned = re.findall(r'\breturn\s+([A-Za-z_]\w*)\s*;', body)
+    if len(returned) != 1:
+        raise ValueError(f'{entry}: expected one returned constructor')
+    for output_field in constructor_fields:
+        assignments = re.findall(
+            rf'lean_ctor_set\s*\(\s*{re.escape(returned[0])}\s*,\s*'
+            rf'{output_field}\s*,\s*([A-Za-z_]\w*)\s*\)', body)
+        if assignments != [extracted[0]]:
+            raise ValueError(
+                f'{entry}: constructor field {output_field} does not receive '
+                f'exact {source} field {field_index}; found {assignments}')
+    print(f'AGENT_GLOBAL_FIELD_SHARING_OK {entry}: {source}[{field_index}] '
+          f'-> constructor fields {list(constructor_fields)}')
+
+
+def forwarded_global(functions, entry, source, consumer, argument_index):
+    """Require the exact named global occurrence to reach a consumer slot."""
+    body = functions.get(entry, '')
+    received = re.findall(
+        rf'\b([A-Za-z_]\w*)\s*=\s*{re.escape(source)}\s*;', body)
+    if len(received) != 1:
+        raise ValueError(
+            f'{entry}: expected one material read of {source}, found '
+            f'{len(received)}')
+    calls = re.findall(rf'{re.escape(consumer)}\s*\((.*?)\)\s*;', body, re.S)
+    if len(calls) != 1:
+        raise ValueError(
+            f'{entry}: expected one call to {consumer}, found {len(calls)}')
+    arguments = split_arguments(calls[0])
+    if argument_index >= len(arguments):
+        raise ValueError(
+            f'{entry}: consumer argument {argument_index} is absent')
+    normalized = re.sub(r'\(\(lean_object\*\)\(([^()]+)\)\)', r'\1',
+                        arguments[argument_index]).strip()
+    if normalized != received[0]:
+        raise ValueError(
+            f'{entry}: exact global {source} occurrence {received[0]} is not '
+            f'{consumer}[{argument_index}]; found {normalized}')
+    print(f'AGENT_GLOBAL_FORWARDING_OK {entry}: exact {source} occurrence -> '
+          f'{consumer}[{argument_index}]')
+
+
+def select_initializer(functions, suffix):
+    """Select one generated initializer, including opaque closed values."""
+    matches = [name for name in functions
+               if name.startswith('_init_') and name.endswith(suffix)]
+    if len(matches) != 1:
+        raise ValueError(
+            f'Expected one generated initializer for {suffix}; found {matches}')
+    return matches[0]
+
+
 def bodies_with_objects(text):
     result = shared["bodies"](text)
     clean = shared["LITERALS"].sub(lambda match: " " * len(match.group()), text)
@@ -118,6 +305,165 @@ def self_test():
             'l_entry', [Value()])
         if (low, high) != expected:
             raise ValueError(f'{name}: expected {expected}, found {(low, high)}')
+    forwarded = bodies_with_objects('''
+LEAN_EXPORT lean_object* l_producer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_consumer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_entry(lean_object* x){
+  lean_object* v_produced; lean_object* v_result;
+  v_produced = l_producer(x); v_result = l_consumer(v_produced); return v_result;
+}''')
+    forwarded_result(forwarded, 'l_entry', 'l_producer', 'l_consumer', 0)
+    substituted = bodies_with_objects('''
+LEAN_EXPORT lean_object* l_producer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_consumer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_canonical(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_entry(lean_object* x){
+  lean_object* v_produced; lean_object* v_replacement; lean_object* v_result;
+  v_produced = l_producer(x); v_replacement = l_canonical(x);
+  v_result = l_consumer(v_replacement); return v_result;
+}''')
+    try:
+        forwarded_result(substituted, 'l_entry', 'l_producer', 'l_consumer', 0)
+    except ValueError:
+        pass
+    else:
+        raise ValueError('Produced-field substitution self-check failed')
+    except_payload = bodies_with_objects('''
+LEAN_EXPORT lean_object* l_producer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_entry(lean_object* x){
+  lean_object* v_produced; lean_object* v_payload;
+  v_produced = l_producer(x); v_payload = lean_ctor_get(v_produced, 0);
+  return v_payload;
+}''')
+    returned_except_payload(except_payload, 'l_entry', 'l_producer')
+    replaced_payload = bodies_with_objects('''
+LEAN_EXPORT lean_object* l_producer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_replacement(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_entry(lean_object* x){
+  lean_object* v_produced; lean_object* v_payload; lean_object* v_rebuilt;
+  v_produced = l_producer(x); v_payload = lean_ctor_get(v_produced, 0);
+  v_rebuilt = l_replacement(x); return v_rebuilt;
+}''')
+    try:
+        returned_except_payload(replaced_payload, 'l_entry', 'l_producer')
+    except ValueError:
+        pass
+    else:
+        raise ValueError('Except-payload substitution self-check failed')
+    received_field = bodies_with_objects('''
+LEAN_EXPORT lean_object* l_consumer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_entry(lean_object* update){
+  lean_object* current; current = lean_ctor_get(update, 0);
+  return l_consumer(current);
+}''')
+    received_params = parameters(['''
+LEAN_EXPORT lean_object* l_consumer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_entry(lean_object* update){
+  lean_object* current; current = lean_ctor_get(update, 0);
+  return l_consumer(current);
+}'''])
+    forwarded_ctor_field(received_field, received_params, 'l_entry', 0, 0,
+                         'l_consumer', 0)
+    substituted_field = bodies_with_objects('''
+LEAN_EXPORT lean_object* l_consumer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_global(){ return lean_box(0); }
+LEAN_EXPORT lean_object* l_entry(lean_object* update){
+  lean_object* current; lean_object* replacement;
+  current = lean_ctor_get(update, 0); replacement = l_global();
+  return l_consumer(replacement);
+}''')
+    substituted_params = parameters(['''
+LEAN_EXPORT lean_object* l_consumer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_global(){ return lean_box(0); }
+LEAN_EXPORT lean_object* l_entry(lean_object* update){
+  lean_object* current; lean_object* replacement;
+  current = lean_ctor_get(update, 0); replacement = l_global();
+  return l_consumer(replacement);
+}'''])
+    try:
+        forwarded_ctor_field(substituted_field, substituted_params, 'l_entry',
+                             0, 0, 'l_consumer', 0)
+    except ValueError:
+        pass
+    else:
+        raise ValueError('Received-predecessor substitution self-check failed')
+    received_parameter_text = '''
+LEAN_EXPORT lean_object* l_consumer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_entry(lean_object* current){
+  return l_consumer(current);
+}'''
+    received_parameter = bodies_with_objects(received_parameter_text)
+    received_parameter_params = parameters([received_parameter_text])
+    forwarded_parameter(received_parameter, received_parameter_params, 'l_entry',
+                        0, 'l_consumer', 0)
+    substituted_parameter_text = '''
+LEAN_EXPORT lean_object* l_consumer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_global(){ return lean_box(0); }
+LEAN_EXPORT lean_object* l_entry(lean_object* current){
+  lean_object* replacement; replacement = l_global();
+  return l_consumer(replacement);
+}'''
+    substituted_parameter = bodies_with_objects(substituted_parameter_text)
+    substituted_parameter_params = parameters([substituted_parameter_text])
+    try:
+        forwarded_parameter(substituted_parameter, substituted_parameter_params,
+                            'l_entry', 0, 'l_consumer', 0)
+    except ValueError:
+        pass
+    else:
+        raise ValueError('Received-parameter substitution self-check failed')
+    shared_global_field = bodies_with_objects('''
+LEAN_EXPORT lean_object* l_submission;
+LEAN_EXPORT lean_object* l_entry(){
+  lean_object* runtime; lean_object* current; lean_object* request;
+  runtime = l_submission; current = lean_ctor_get(runtime, 1);
+  request = lean_alloc_ctor(1, 2, 0);
+  lean_ctor_set(request, 0, current); lean_ctor_set(request, 1, current);
+  return request;
+}''')
+    global_field_to_constructor(shared_global_field, 'l_entry', 'l_submission',
+                                1, (0, 1))
+    replaced_global_field = bodies_with_objects('''
+LEAN_EXPORT lean_object* l_submission;
+LEAN_EXPORT lean_object* l_canonical;
+LEAN_EXPORT lean_object* l_entry(){
+  lean_object* runtime; lean_object* current; lean_object* request;
+  runtime = l_submission; current = lean_ctor_get(runtime, 1);
+  request = lean_alloc_ctor(1, 2, 0);
+  lean_ctor_set(request, 0, l_canonical); lean_ctor_set(request, 1, l_canonical);
+  return request;
+}''')
+    try:
+        global_field_to_constructor(replaced_global_field, 'l_entry',
+                                    'l_submission', 1, (0, 1))
+    except ValueError:
+        pass
+    else:
+        raise ValueError('Submitted-predecessor substitution self-check failed')
+    forwarded_global_source = bodies_with_objects('''
+LEAN_EXPORT lean_object* l_source;
+LEAN_EXPORT lean_object* l_consumer(lean_object* x, lean_object* y){ return y; }
+LEAN_EXPORT lean_object* l_entry(){
+  lean_object* received; lean_object* result;
+  received = l_source; result = l_consumer(lean_box(0), received); return result;
+}''')
+    forwarded_global(forwarded_global_source, 'l_entry', 'l_source',
+                     'l_consumer', 1)
+    replaced_global_source = bodies_with_objects('''
+LEAN_EXPORT lean_object* l_source;
+LEAN_EXPORT lean_object* l_replacement;
+LEAN_EXPORT lean_object* l_consumer(lean_object* x, lean_object* y){ return y; }
+LEAN_EXPORT lean_object* l_entry(){
+  lean_object* received; lean_object* result;
+  received = l_source; result = l_consumer(lean_box(0), l_replacement); return result;
+}''')
+    try:
+        forwarded_global(replaced_global_source, 'l_entry', 'l_source',
+                         'l_consumer', 1)
+    except ValueError:
+        pass
+    else:
+        raise ValueError('Submitted-global forwarding self-check failed')
     print('AGENT_ANALYSIS_SELFTEST_OK: sharing, hidden helper and repeated closure application')
 
 
@@ -222,6 +568,12 @@ LEAN_EXPORT lean_object* l_bad(){ return 0; }
         "NeuralAgent_learnedAlignedRawReconfigurationForState")
     learned_extended_raw = select(functions,
         "NeuralAgent_learnedExtendedRawReconfigurationForState")
+    learned_aligned_certificate = select(functions,
+        "NeuralAgent_learnedAlignedCertifiedReconfigurationForState")
+    learned_extended_certificate = select(functions,
+        "NeuralAgent_learnedExtendedCertifiedReconfigurationForState")
+    produced_certificate = select(functions,
+        "NeuralAgent_certifyProducedReconfiguration___redArg")
     reconfigured_action = select(functions,
         "NeuralAgent_executeReconfiguredAction___redArg")
     learned_target = select(functions,
@@ -236,6 +588,14 @@ LEAN_EXPORT lean_object* l_bad(){ return 0; }
         "NeuralAgent_executeReconfiguredAction___redArg", 1)
     calls(functions, learned_aligned_raw, "NeuralAgent_reconfigure___redArg", 1)
     calls(functions, learned_extended_raw, "NeuralAgent_reconfigure___redArg", 1)
+    forwarded_result(functions, learned_aligned_certificate,
+        learned_aligned_raw, produced_certificate, 0)
+    forwarded_result(functions, learned_extended_certificate,
+        learned_extended_raw, produced_certificate, 0)
+    forwarded_result(functions, learned_aligned_action,
+        learned_aligned_certificate, reconfigured_action, 3)
+    forwarded_result(functions, learned_extended_action,
+        learned_extended_certificate, reconfigured_action, 3)
     calls(functions, reconfigured_action, "Agent_executeProducedInput", 1)
     absent(functions, learned_target,
         ["executeLearnedAlignedReconfigurationFromState",
@@ -246,25 +606,115 @@ LEAN_EXPORT lean_object* l_bad(){ return 0; }
     # analysis and build the installed checked update from that analysis.  A
     # return of the separately named canonical checked update would recreate
     # the bypass found by the audit even if extensional equality tests passed.
+    successive_analysis = select(functions,
+        "NeuralAgent_analyzeDecodedLearnedSuccessiveUpdateAtCurrent___redArg")
     successive_decoded = select(functions,
-        "NeuralAgent_checkDecodedLearnedExtendedSerializedUpdate___redArg")
-    successive_serialized = select(functions,
-        "NeuralAgent_checkLearnedExtendedSerializedUpdate")
+        "NeuralAgent_checkDecodedLearnedExtendedSerializedUpdateAtCurrent___redArg")
     successive_runtime = select(functions,
-        "NeuralAgent_checkDecodedLearnedRuntimeUpdateAtCurrent___redArg")
+        "NeuralAgent_checkLearnedRuntimeUpdateAtCurrent___redArg")
     calls(functions, successive_decoded,
-        "NeuralAgent_analyzeDecodedLearnedSuccessiveUpdate___redArg", 1)
-    calls(functions, successive_decoded,
-        "NeuralAgent_LearnedSuccessiveEngineAnalysis_target___redArg", 1)
+        "NeuralAgent_analyzeDecodedLearnedSuccessiveUpdateAtCurrent___redArg", 1)
     calls(functions, successive_decoded,
         "NeuralAgent_buildIncrementalCheckedUpdate___redArg", 1)
-    calls(functions, successive_serialized,
-        "NeuralAgent_checkDecodedLearnedExtendedSerializedUpdate___redArg", 1)
+    forwarded_parameter(functions, compiled_parameters, successive_decoded,
+        0, successive_analysis, 0)
     calls(functions, successive_runtime,
-        "NeuralAgent_checkDecodedLearnedExtendedSerializedUpdate___redArg", 1)
+        "NeuralAgent_checkDecodedLearnedExtendedSerializedUpdateAtCurrent___redArg", 1)
+    forwarded_parameter(functions, compiled_parameters, successive_runtime,
+        0, successive_decoded, 0)
+    transition_producer = select(functions,
+        "NeuralAgent_produceTransition___redArg")
+    structural_graph = select(functions,
+        "NeuralAgent_calculatePreCertificateConstitutiveGraph___redArg")
+    structural_transports = select(functions,
+        "NeuralAgent_calculateLicensedStructuralTransports")
+    structural_recomputation = select(functions,
+        "NeuralAgent_recomputeAffectedStructuralObservations")
+    structural_calculation = select(functions,
+        "NeuralAgent_calculateIncrementalStructuralAssembly")
+    forwarded_parameter(functions, compiled_parameters, successive_analysis,
+        0, transition_producer, 3)
+    forwarded_ctor_field(functions, compiled_parameters, successive_analysis,
+        0, 1, structural_graph, 1)
+    for consumer, artifact_slot, state_slot, certificate_slot in (
+            (structural_transports, 2, 4, 5),
+            (structural_recomputation, 2, 4, 5),
+            (structural_calculation, 2, 4, 5)):
+        forwarded_ctor_field(functions, compiled_parameters, successive_analysis,
+            0, 1, consumer, artifact_slot)
+        forwarded_ctor_field(functions, compiled_parameters, successive_analysis,
+            0, 2, consumer, state_slot)
+        forwarded_ctor_field(functions, compiled_parameters, successive_analysis,
+            0, 3, consumer, certificate_slot)
     absent(functions, successive_decoded, ["learnedExtendedCheckedUpdate"])
-    absent(functions, successive_serialized, ["learnedExtendedCheckedUpdate"])
-    print("AGENT_SUCCESSIVE_RUNTIME_OK: decoded update -> executed successive analysis -> transported/recomputed target -> installed checked update; no canonical-update bypass")
+    absent(functions, successive_analysis,
+        ["LearnedAlignedCheckedAgent", "learnedExtendedCheckedUpdate"])
+    # The two named material runtimes must consume the successful payload of
+    # `submitUpdate`; equality with a prepared result is not a data route.
+    submission_consumer = select(functions,
+        "NeuralAgent_acceptedRuntimeSubmissionOfCheck___redArg")
+    submit_update = select(functions, "NeuralAgent_submitUpdate___redArg")
+    aligned_submission = select_initializer(functions,
+        "NeuralAgent_learnedAlignedRuntimeSubmission___closed__0")
+    extended_submission = select_initializer(functions,
+        "NeuralAgent_learnedExtendedRuntimeSubmission___closed__0")
+    aligned_runtime = select_initializer(functions,
+        "NeuralAgent_learnedAlignedCertifiedRuntime")
+    extended_runtime = select_initializer(functions,
+        "NeuralAgent_learnedExtendedCertifiedRuntime")
+    submitted_update = select_initializer(functions,
+        "NeuralAgent_learnedExtendedSubmittedRuntimeUpdate")
+    aligned_submission_values = sorted(set(re.findall(
+        r'\b(?:l|lp)_\w*NeuralAgent_learnedAlignedRuntimeSubmission\b',
+        functions[submitted_update])))
+    if len(aligned_submission_values) != 1:
+        raise ValueError(
+            f'{submitted_update}: expected one aligned submission value, found '
+            f'{aligned_submission_values}')
+    aligned_submission_value = aligned_submission_values[0]
+    global_field_to_constructor(functions, submitted_update,
+        aligned_submission_value, 1, (0, 1))
+    returned_except_payload(functions, submission_consumer, submit_update)
+    aligned_update_values = sorted(set(re.findall(
+        r'\b(?:l|lp)_\w*NeuralAgent_learnedAlignedRuntimeUpdate\b',
+        functions[aligned_submission])))
+    initial_runtime_values = sorted(set(re.findall(
+        r'\b(?:l|lp)_\w*NeuralAgent_learnedInitialCertifiedRuntime\b',
+        functions[aligned_submission])))
+    submitted_update_values = sorted(set(re.findall(
+        r'\b(?:l|lp)_\w*NeuralAgent_learnedExtendedSubmittedRuntimeUpdate\b',
+        functions[extended_submission])))
+    extended_source_values = sorted(set(re.findall(
+        r'\b(?:l|lp)_\w*NeuralAgent_learnedAlignedRuntimeSubmission\b',
+        functions[extended_submission])))
+    for label, values in (
+            ('initial runtime', initial_runtime_values),
+            ('aligned update', aligned_update_values),
+            ('extended source', extended_source_values),
+            ('submitted successive update', submitted_update_values)):
+        if len(values) != 1:
+            raise ValueError(
+                f'named runtime submission: expected one {label}, found {values}')
+    forwarded_global(functions, aligned_submission, initial_runtime_values[0],
+        submission_consumer, 1)
+    forwarded_global(functions, aligned_submission, aligned_update_values[0],
+        submission_consumer, 2)
+    forwarded_global(functions, extended_submission, extended_source_values[0],
+        submission_consumer, 1)
+    forwarded_global(functions, extended_submission, submitted_update_values[0],
+        submission_consumer, 2)
+    for submission in (aligned_submission, extended_submission):
+        calls(functions, submission,
+            "NeuralAgent_acceptedRuntimeSubmissionOfCheck___redArg", 1)
+        absent(functions, submission, ["installAcceptedUpdate"])
+    for runtime, submission in ((aligned_runtime, aligned_submission),
+                                (extended_runtime, extended_submission)):
+        graph = shared["reachable"](functions, runtime)
+        if submission not in graph:
+            raise ValueError(
+                f'{runtime}: named runtime does not consume its executed submission')
+        absent(functions, runtime, ["installAcceptedUpdate"])
+    print("AGENT_SUCCESSIVE_RUNTIME_OK: decoded update -> executed successive analysis -> transported/recomputed target -> submitUpdate result -> named installed runtime; no canonical-update or prepared-result bypass")
     # F3: an admitted ordinary continuation must execute the reduced future
     # contract, while a contract change must pass through the post-forgetting
     # analyzer and build the checked successor from that returned analysis.
@@ -274,16 +724,26 @@ LEAN_EXPORT lean_object* l_bad(){ return 0; }
         "NeuralAgent_submitLearnedPostForgettingContinuation")
     post_runtime = select(functions,
         "NeuralAgent_checkLearnedPostForgettingRuntimeUpdate___redArg")
+    post_received = select(functions,
+        "NeuralAgent_closeReceivedLearnedPostForgettingAnalysis")
+    post_from_analysis = select(functions,
+        "NeuralAgent_closeLearnedPostForgettingContractChangeFromAnalysis")
     post_closed_change = select(functions,
-        "NeuralAgent_closeLearnedPostForgettingContractChange___redArg")
+        "NeuralAgent_closeLearnedPostForgettingContractChange")
     calls(functions, post_continuation,
         "NeuralAgent_checkLearnedPostForgettingIncremental", 1)
     calls(functions, post_continuation,
         "NeuralAgent_executePostForgettingContinuation___redArg", 1)
     calls(functions, post_runtime,
-        "NeuralAgent_analyzeLearnedPostForgettingIncrementally", 1)
+        "NeuralAgent_analyzeLearnedSuccessiveUpdate", 1)
     calls(functions, post_runtime,
-        "NeuralAgent_closeLearnedPostForgettingContractChange___redArg", 1)
+        "NeuralAgent_closeReceivedLearnedPostForgettingAnalysis", 1)
+    calls(functions, post_received,
+        "NeuralAgent_closeLearnedPostForgettingContractChangeFromAnalysis", 1)
+    calls(functions, post_from_analysis,
+        "NeuralAgent_learnedPostForgettingJustificationFromAnalysis___redArg", 1)
+    calls(functions, post_from_analysis,
+        "NeuralAgent_closeLearnedPostForgettingContractChange", 1)
     calls(functions, post_closed_change,
         "NeuralAgent_JustifiedPostForgettingTransition_transportedPersistent___redArg", 1)
     calls(functions, post_closed_change,

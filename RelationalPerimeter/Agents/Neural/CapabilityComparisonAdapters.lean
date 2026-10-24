@@ -281,7 +281,9 @@ def runDeploymentChainPropagationAdapter
     materialExact := material.exact
     transitionCount :=
       certifiedRuntimeHistoryLength learnedAlignedCertifiedRuntime.history
-    transitionCountExact := rfl
+    transitionCountExact := by
+      rw [learnedAlignedCertifiedRuntime_eq_installed]
+      rfl
     checkedHistory := learnedAlignedCertifiedRuntime.checkedHistory
     preservedContracts := learnedAlignedCertifiedRuntime.preservedContracts
     exactReachability := learnedAlignedCertifiedRuntime_reachable

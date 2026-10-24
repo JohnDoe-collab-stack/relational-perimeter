@@ -868,6 +868,19 @@ structure GenericIncrementalCheckSuccess
   private mk ::
   analysis : engine.Analysis update
 
+/-- Package one analysis that has already been returned by the engine.  This
+constructor is intentionally one-way: it does not assert acceptance without
+the separate executable equation below. -/
+def GenericIncrementalCheckSuccess.ofAnalysis
+    {constitution : ConstitutiveMetaContract}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    {engine : IncrementalCheckerEngine current}
+    {update : engine.Update}
+    (analysis : engine.Analysis update) :
+    GenericIncrementalCheckSuccess engine update :=
+  .mk analysis
+
 def GenericIncrementalCheckSuccess.target
     {constitution : ConstitutiveMetaContract}
     {currentContract : constitution.Contract}
@@ -901,6 +914,38 @@ def checkGenericIncrementalUpdate
   match engine.analyze update with
   | .error problem => .error problem
   | .ok analysis => .ok (.mk analysis)
+
+theorem checkGenericIncrementalUpdate_of_analysis
+    {constitution : ConstitutiveMetaContract}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (engine : IncrementalCheckerEngine current)
+    (update : engine.Update)
+    (analysis : engine.Analysis update)
+    (analyzed : engine.analyze update = .ok analysis) :
+    checkGenericIncrementalUpdate engine update =
+      .ok (GenericIncrementalCheckSuccess.ofAnalysis analysis) := by
+  unfold checkGenericIncrementalUpdate
+  rw [analyzed]
+  rfl
+
+/-- Execute constructive relative completeness once and retain the exact
+successful checker equation with the analysis it produced.  This receipt is
+generic: it contains no domain-specific canonical target and does not inspect
+any reference checker. -/
+def completeGenericIncrementalCheck
+    {constitution : ConstitutiveMetaContract}
+    {currentContract : constitution.Contract}
+    {current : CheckedAgent constitution currentContract}
+    (engine : IncrementalCheckerEngine current)
+    (update : engine.Update)
+    (conditions : engine.LocalConditions update) :
+    { success : GenericIncrementalCheckSuccess engine update //
+      checkGenericIncrementalUpdate engine update = .ok success } :=
+  let completed := engine.complete update conditions
+  ⟨GenericIncrementalCheckSuccess.ofAnalysis completed.1,
+    checkGenericIncrementalUpdate_of_analysis engine update completed.1
+      completed.2⟩
 
 theorem checkGenericIncrementalUpdate_sound
     {constitution : ConstitutiveMetaContract}
@@ -1659,7 +1704,10 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.IncrementalCheckerEngine
 #print axioms ConstitutiveSearch.NeuralAgent.buildIncrementalCheckedUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.GenericIncrementalCheckSuccess
+#print axioms ConstitutiveSearch.NeuralAgent.GenericIncrementalCheckSuccess.ofAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.checkGenericIncrementalUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.checkGenericIncrementalUpdate_of_analysis
+#print axioms ConstitutiveSearch.NeuralAgent.completeGenericIncrementalCheck
 #print axioms ConstitutiveSearch.NeuralAgent.checkGenericIncrementalUpdate_sound
 #print axioms ConstitutiveSearch.NeuralAgent.checkGenericIncrementalUpdate_constitutively_sound
 #print axioms ConstitutiveSearch.NeuralAgent.GenericIncrementalUpdateLocalConditions
