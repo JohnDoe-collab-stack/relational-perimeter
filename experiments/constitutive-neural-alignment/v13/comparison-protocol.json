@@ -1,8 +1,8 @@
 {
   "protocol_id": "constitutive-neural-oracle-independent-capability-comparison-v13",
-  "status": "draft-awaiting-stable-source-commit",
+  "status": "frozen-before-confirmatory-run",
   "confirmatory_results_present": false,
-  "confirmatory_run_permitted": false,
+  "confirmatory_run_permitted": true,
   "scientific_scope": "Nine repository-local computations on one exact learned material package. Six are local adapters to named capability classes; the other three are the relational method, an explicit reference combination and an independent complete recheck. The run does not establish equivalence with every external method in those classes, universal superiority, an impossibility theorem or an asymptotic cost theorem.",
   "historical_v10_preserved": {
     "experiments/constitutive-neural-alignment/v10/comparison-protocol.json": "8d6e7261b08bd132a6b756d094669162dafdae4093d0e8c648ae5001800a7c3a",
@@ -38,7 +38,17 @@
     "explicit-reference-combination",
     "independent-complete-recheck"
   ],
-  "translation_counts": [2, 2, 2, 3, 4, 3, 4, 6, 4],
+  "translation_counts": [
+    2,
+    2,
+    2,
+    3,
+    4,
+    3,
+    4,
+    6,
+    4
+  ],
   "common_material": "FrozenCompleteComparisonMaterial and its exact aligned/bypass serialized updates, future requests, contracts and learned lineage",
   "common_property": "Each matrix cell answers only the corresponding fixed P1-P8 probe through the method's declared repository-local interface; an out-of-interface cell is not converted into failure.",
   "trust_boundaries": {
@@ -53,8 +63,25 @@
     "independent-complete-recheck": "trusts serialized source material but receives neither incremental verdict nor incremental fragment assembly"
   },
   "cost_policy": "V13 reports translation counts only as interface bookkeeping. It makes no runtime, memory, speedup or asymptotic claim; P8 and S6 remain delegated to the separate frozen complete-property scaling protocol.",
-  "covered_probes": ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8"],
-  "covered_criteria": ["S1", "S2", "S3", "S4", "S5", "S7", "S8"],
+  "covered_probes": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8"
+  ],
+  "covered_criteria": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S7",
+    "S8"
+  ],
   "delegated_without_reclassification": {
     "P8": "experiments/constitutive-neural-alignment/v12/scaling-protocol.json (currently draft, no confirmatory result)",
     "S6": "experiments/constitutive-neural-alignment/v12/scaling-protocol.json (currently draft, no confirmatory result)"
@@ -70,14 +97,41 @@
     "Missing adapters, translations or out-of-interface properties never count as general impossibility results.",
     "Translation counts are bookkeeping and not runtime cost."
   ],
-  "build_command": ["lake", "-K", "moreLeanArgs=[\"-M=8192\"]", "build", "compiled_independent_complete_neural_comparison"],
-  "reference_audit_command": ["lake", "env", "lean", "-M", "8192", "Tests/Mechanisms/NeuralIndependentCapabilityComparisonRegression.lean"],
-  "executed_command": ["lake", "-K", "moreLeanArgs=[\"-M=8192\"]", "exe", "compiled_independent_complete_neural_comparison"],
-  "freeze_command": ["py", "-3", "scripts/freeze-independent-capability-comparison-v13.py"],
+  "build_command": [
+    "lake",
+    "-K",
+    "moreLeanArgs=[\"-M=8192\"]",
+    "build",
+    "compiled_independent_complete_neural_comparison"
+  ],
+  "reference_audit_command": [
+    "lake",
+    "env",
+    "lean",
+    "-M",
+    "8192",
+    "Tests/Mechanisms/NeuralIndependentCapabilityComparisonRegression.lean"
+  ],
+  "executed_command": [
+    "lake",
+    "-K",
+    "moreLeanArgs=[\"-M=8192\"]",
+    "exe",
+    "compiled_independent_complete_neural_comparison"
+  ],
+  "freeze_command": [
+    "py",
+    "-3",
+    "scripts/freeze-independent-capability-comparison-v13.py"
+  ],
   "snapshot_builder": "scripts/independent_capability_snapshot_v13.py",
   "probe_specification": "experiments/constitutive-neural-alignment/v13/probe-specification.json",
   "authorized_ablations": "experiments/constitutive-neural-alignment/v13/authorized-ablations.json",
-  "confirmatory_command": ["py", "-3", "scripts/run-independent-capability-comparison-v13.py"],
+  "confirmatory_command": [
+    "py",
+    "-3",
+    "scripts/run-independent-capability-comparison-v13.py"
+  ],
   "reserved_outputs": {
     "raw": "experiments/constitutive-neural-alignment/v13/comparison-results.ndjson",
     "record": "experiments/constitutive-neural-alignment/v13/result-record.json",
@@ -96,5 +150,12 @@
     "The run establishes only the observations it emits and the proof consequences separately named in the evidence ledger.",
     "P8 and S6 retain the exact draft/no-result status of v12 and are not inferred from this comparison.",
     "Any change to material, methods, decisions, fields, evidence mapping, translations, command or schema requires a later protocol version."
-  ]
+  ],
+  "frozen_source_commit": "9bdfa304f0f54a2cac6b0295937c171d11e6609d",
+  "frozen_source_git_tree": "5072b400defc922744df770757956d27e9e94011",
+  "frozen_source_remote_url": "https://github.com/JohnDoe-collab-stack/relational-perimeter.git",
+  "frozen_source_remote_ref": "origin/codex/constitutive-neural-alignment-implementation",
+  "frozen_snapshot": "experiments/constitutive-neural-alignment/v13/frozen-snapshot.json",
+  "frozen_snapshot_sha256": "c7a006f4ab87a99d54bc21e90a041498cad3667e8a3c9c843e4eb968760c1ec4",
+  "protocol_sha256": "66dbdfe6bec89f9deb071b840b11d792bfa5a6114455705f80c6f24b6dcc20f4"
 }
