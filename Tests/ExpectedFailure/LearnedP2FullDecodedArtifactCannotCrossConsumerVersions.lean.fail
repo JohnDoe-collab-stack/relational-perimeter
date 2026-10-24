@@ -1,0 +1,11 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+def forgedFullDecodedArtifact : LearnedP2DecodedArtifact .admissible :=
+  { learnedP2AdmissibleFullRecheckSuccess.target.decodedArtifact with
+    fragment := learnedP2CanonicalFragment }
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleFullRecheckSuccess
+/- AXIOM_AUDIT_END -/

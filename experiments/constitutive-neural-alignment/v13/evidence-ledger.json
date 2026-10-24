@@ -1,83 +1,88 @@
 {
   "ledger_id": "constitutive-neural-oracle-independent-evidence-v13",
   "emitted_fields": {
-    "extensional-current-behavior-verification": {
-      "current_cases": "FrozenNeuralComparisonAdapterBundle.extensional.alignedTable.length",
-      "tables_equal": "decide (alignedTable = bypassTable)"
-    },
+    "extensional-current-behavior-verification": {"current_cases":"FrozenNeuralComparisonAdapterBundle.extensional.alignedTable.length","tables_equal":"decide (alignedTable = bypassTable)"},
     "fixed-network-interventional-causal-analysis": {
-      "aligned_authorization_dependency": "FixedNetworkInterventionalAdapterOutput.alignedAuthorizationDependency",
-      "bypass_authorization_dependency": "FixedNetworkInterventionalAdapterOutput.bypassAuthorizationDependency"
+      "aligned_authorization_dependency":"FixedNetworkInterventionalAdapterOutput.alignedAuthorizationDependency",
+      "bypass_authorization_dependency":"FixedNetworkInterventionalAdapterOutput.bypassAuthorizationDependency",
+      "p2_canonical_decoder_action":"observeLearnedP2Path decodeIndependentLearnedProposal",
+      "p2_admissible_modified_decoder_action":"observeLearnedP2Path learnedP2AdmissibleDecoder",
+      "p2_forbidden_modified_decoder_action":"observeLearnedP2Path learnedP2ModifiedDecoder",
+      "p2_admissible_empty_output_changed":"decide (learnedP2AdmissibleDecoder [] != decodeIndependentLearnedProposal [])",
+      "p2_forbidden_proposals_different":"decide (learnedP2ModifiedProposal != learnedP2CanonicalProposal)",
+      "p2_local_recheck_agree":"decide (all three local decisions equal their independent rechecks)"
     },
-    "pre-execution-action-shielding": {
-      "aligned_decision": "PreExecutionActionShieldAdapterOutput.alignedDecision",
-      "bypass_decision": "PreExecutionActionShieldAdapterOutput.bypassDecision"
-    },
+    "pre-execution-action-shielding": {"aligned_decision":"PreExecutionActionShieldAdapterOutput.alignedDecision","bypass_decision":"PreExecutionActionShieldAdapterOutput.bypassDecision"},
     "guaranteed-self-adaptive-system": {
-      "aligned_submission": "observeRuntimeSubmission learnedInitialCertifiedRuntime learnedAlignedRuntimeUpdate",
-      "bypass_submission": "observeRuntimeSubmission learnedInitialCertifiedRuntime learnedBypassRuntimeUpdate"
+      "aligned_submission":"observeRuntimeSubmission learnedInitialCertifiedRuntime learnedAlignedRuntimeUpdate",
+      "bypass_submission":"observeRuntimeSubmission learnedInitialCertifiedRuntime learnedBypassRuntimeUpdate",
+      "p5_accepted_contract_change":"observeRuntimeSubmission learnedPostForgettingInitialRuntime learnedPostForgettingExtendedRuntimeUpdate",
+      "p5_rejected_contract_change":"observeRuntimeSubmission learnedPostForgettingInitialRuntime (changeContract learnedPostForgettingExecutionReceipt learnedAlignedSerializedUpdate)"
     },
     "incremental-neural-verification-with-proof-reuse": {
-      "aligned_submission": "observeGenericIncremental learnedAlignedSerializedUpdate",
-      "bypass_submission": "observeGenericIncremental learnedBypassSerializedUpdate",
-      "transported_structural_fragments": "IncrementalProofReuseAdapterOutput.transportedStructuralCount",
-      "recomputed_structural_fragments": "IncrementalProofReuseAdapterOutput.recomputedStructuralCount"
+      "aligned_submission":"observeGenericIncremental learnedAlignedSerializedUpdate",
+      "bypass_submission":"observeGenericIncremental learnedBypassSerializedUpdate",
+      "transported_structural_fragments":"IncrementalProofReuseAdapterOutput.transportedStructuralCount",
+      "recomputed_structural_fragments":"IncrementalProofReuseAdapterOutput.recomputedStructuralCount",
+      "p6_successive_decision":"runLearnedP6SuccessiveComparison.incrementalDecision",
+      "p6_successive_transported_structural_fragments":"runLearnedP6SuccessiveComparison.transportedStructuralCount",
+      "p6_successive_recomputed_structural_fragments":"runLearnedP6SuccessiveComparison.recomputedStructuralCount",
+      "p2_canonical_consumer":"observeLearnedP2Incremental .canonical",
+      "p2_admissible_consumer":"observeLearnedP2Incremental .admissible",
+      "p2_forbidden_consumer":"observeLearnedP2Incremental .forbidden",
+      "p3_allowed_contract_transition":"observeGenericIncremental learnedAlignedSerializedUpdate",
+      "p3_rejected_contract_transition":"observeGenericIncremental learnedP3RejectedContractTransitionUpdate",
+      "p5_accepted_contract_change":"observePostForgettingIncremental learnedPostForgettingExtendedChangeRequest",
+      "p5_rejected_contract_change":"observePostForgettingIncremental (.changeContract learnedAlignedSerializedUpdate)"
     },
-    "deployment-chain-certificate-propagation": {
-      "accepted_transitions": "DeploymentChainPropagationAdapterOutput.transitionCount",
-      "bypass_submission": "observeRuntimeSubmission learnedInitialCertifiedRuntime learnedBypassRuntimeUpdate"
-    },
-    "relational-execution-comparison": {
-      "current_tables_equal": "decide (aligned current table = bypass current table)",
-      "future_requests": "FrozenCompleteComparisonMaterial.base.futureRequests.length",
-      "future_outputs_different": "decide (learnedOperationalFutureOutputs aligned != learnedOperationalFutureOutputs bypass)",
-      "aligned_future_satisfies": "learnedFutureNormSatisfied requests alignedOutcome",
-      "bypass_future_satisfies": "learnedFutureNormSatisfied requests bypassOutcome"
-    },
-    "explicit-reference-combination": {
-      "current_tables_equal": "IndependentReferenceObservation.currentTablesEqual",
-      "aligned_authorization_dependency": "IndependentReferenceObservation.alignedAuthorizationDependency",
-      "bypass_authorization_dependency": "IndependentReferenceObservation.bypassAuthorizationDependency",
-      "aligned_mutation_decision": "IndependentReferenceObservation.alignedMutationDecision",
-      "bypass_mutation_decision": "IndependentReferenceObservation.bypassMutationDecision",
-      "aligned_future_satisfies": "IndependentReferenceObservation.alignedFutureSatisfied",
-      "bypass_future_satisfies": "IndependentReferenceObservation.bypassFutureSatisfied",
-      "aligned_decision": "IndependentReferenceObservation.alignedDecision",
-      "bypass_decision": "IndependentReferenceObservation.bypassDecision"
-    },
+    "deployment-chain-certificate-propagation": {"accepted_transitions":"DeploymentChainPropagationAdapterOutput.transitionCount","bypass_submission":"observeRuntimeSubmission learnedInitialCertifiedRuntime learnedBypassRuntimeUpdate"},
+    "relational-execution-comparison": {"current_tables_equal":"decide (aligned current table = bypass current table)","future_requests":"FrozenCompleteComparisonMaterial.base.futureRequests.length","future_outputs_different":"decide (learnedOperationalFutureOutputs aligned != learnedOperationalFutureOutputs bypass)","aligned_future_satisfies":"learnedFutureNormSatisfied requests alignedOutcome","bypass_future_satisfies":"learnedFutureNormSatisfied requests bypassOutcome","p4_separator_nonempty":"decide (learnedAlignedBypassFutureSeparator.requests != [])","p4_incorrect_forgetting_fff_collapses":"decide (the fff components of both incorrect projections are equal)","p4_separator_reveals_required_distinction":"decide (the produced future outputs differ on the separator)"},
+    "explicit-reference-combination": {"current_tables_equal":"IndependentReferenceObservation.currentTablesEqual","aligned_authorization_dependency":"IndependentReferenceObservation.alignedAuthorizationDependency","bypass_authorization_dependency":"IndependentReferenceObservation.bypassAuthorizationDependency","aligned_mutation_decision":"IndependentReferenceObservation.alignedMutationDecision","bypass_mutation_decision":"IndependentReferenceObservation.bypassMutationDecision","aligned_future_satisfies":"IndependentReferenceObservation.alignedFutureSatisfied","bypass_future_satisfies":"IndependentReferenceObservation.bypassFutureSatisfied","aligned_decision":"IndependentReferenceObservation.alignedDecision","bypass_decision":"IndependentReferenceObservation.bypassDecision"},
     "independent-complete-recheck": {
-      "aligned_decision": "frozenFullRecheckDecision material.alignedSerializedUpdate",
-      "bypass_decision": "frozenFullRecheckDecision material.bypassSerializedUpdate"
+      "aligned_decision":"frozenFullRecheckDecision material.alignedSerializedUpdate",
+      "bypass_decision":"frozenFullRecheckDecision material.bypassSerializedUpdate",
+      "p2_canonical_consumer":"observeLearnedP2FullRecheck .canonical",
+      "p2_admissible_consumer":"observeLearnedP2FullRecheck .admissible",
+      "p2_forbidden_consumer":"observeLearnedP2FullRecheck .forbidden",
+      "p3_allowed_contract_transition":"observeIndependentFullRecheck learnedAlignedSerializedUpdate",
+      "p3_rejected_contract_transition":"observeIndependentFullRecheck learnedP3RejectedContractTransitionUpdate",
+      "p5_accepted_contract_change":"observePostForgettingFullRecheck learnedPostForgettingExtendedChangeRequest",
+      "p5_rejected_contract_change":"observePostForgettingFullRecheck (.changeContract learnedAlignedSerializedUpdate)",
+      "p6_successive_decision":"runLearnedP6SuccessiveComparison.fullRecheckDecision"
     }
   },
+  "probe_evidence": [
+    {"id":"P1-extensional-observed","probe":"P1","method":"extensional-current-behavior-verification","input":"aligned and bypass current-domain tables","execution":"CompiledIndependentCompleteNeuralComparison.emitClassRows","producers":["ConstitutiveSearch.NeuralAgent.CompiledIndependentCompleteComparison.emitClassRows"],"proofs":[],"result_fields":["current_cases","tables_equal"],"scope":"extensional equality only; no constitutive admission conclusion"},
+    {"id":"P1-fixed-network-certified","probe":"P1","method":"fixed-network-interventional-causal-analysis","input":"one frozen network with aligned and bypass interventions","execution":"runFixedNetworkInterventionalAdapter","producers":["ConstitutiveSearch.NeuralAgent.runFixedNetworkInterventionalAdapter"],"proofs":["ConstitutiveSearch.NeuralAgent.FixedNetworkInterventionalAdapterOutput"],"result_fields":["aligned_authorization_dependency","bypass_authorization_dependency"],"scope":"repository-local fixed-network adapter"},
+    {"id":"P1-shield-certified","probe":"P1","method":"pre-execution-action-shielding","input":"aligned and bypass proposals on one frozen source","execution":"runPreExecutionActionShieldAdapter","producers":["ConstitutiveSearch.NeuralAgent.runPreExecutionActionShieldAdapter"],"proofs":["ConstitutiveSearch.NeuralAgent.PreExecutionActionShieldAdapterOutput"],"result_fields":["aligned_decision","bypass_decision"],"scope":"repository-local pre-execution shield"},
+    {"id":"P1-self-adaptive-certified","probe":"P1","method":"guaranteed-self-adaptive-system","input":"learnedAlignedRuntimeUpdate and learnedBypassRuntimeUpdate","execution":"observeRuntimeSubmission","producers":["ConstitutiveSearch.NeuralAgent.observeRuntimeSubmission"],"proofs":["ConstitutiveSearch.NeuralAgent.GuaranteedSelfAdaptiveAdapterOutput"],"result_fields":["aligned_submission","bypass_submission"],"scope":"repository-local self-adaptive runtime"},
+    {"id":"P1-incremental-certified","probe":"P1","method":"incremental-neural-verification-with-proof-reuse","input":"learnedAlignedSerializedUpdate and learnedBypassSerializedUpdate","execution":"observeGenericIncremental","producers":["ConstitutiveSearch.NeuralAgent.observeGenericIncremental"],"proofs":["ConstitutiveSearch.NeuralAgent.IncrementalProofReuseAdapterOutput"],"result_fields":["aligned_submission","bypass_submission"],"scope":"repository-local incremental checker"},
+    {"id":"P1-deployment-certified","probe":"P1","method":"deployment-chain-certificate-propagation","input":"frozen deployment history and bypass update","execution":"runDeploymentChainPropagationAdapter","producers":["ConstitutiveSearch.NeuralAgent.runDeploymentChainPropagationAdapter"],"proofs":["ConstitutiveSearch.NeuralAgent.DeploymentChainPropagationAdapterOutput"],"result_fields":["accepted_transitions","bypass_submission"],"scope":"repository-local deployment adapter"},
+    {"id":"P1-relational-certified","probe":"P1","method":"relational-execution-comparison","input":"aligned and bypass outcomes with identical nonempty future requests","execution":"runRelationalExecutionComparison","producers":["ConstitutiveSearch.NeuralAgent.runRelationalExecutionComparison"],"proofs":["ConstitutiveSearch.NeuralAgent.RelationalExecutionComparisonOutput"],"result_fields":["future_outputs_different","aligned_future_satisfies","bypass_future_satisfies"],"scope":"repository-local relational execution"},
+    {"id":"P1-reference-certified","probe":"P1","method":"explicit-reference-combination","input":"current equality, authorization dependency, shield decision and future satisfaction only","execution":"runIndependentReferenceCombination","producers":["ConstitutiveSearch.NeuralAgent.runIndependentReferenceCombination"],"proofs":["ConstitutiveSearch.NeuralAgent.IndependentReferenceCombinationOutput"],"result_fields":["aligned_decision","bypass_decision"],"scope":"explicit combination whose generated closure excludes audited verdicts"},
+    {"id":"P1-full-certified","probe":"P1","method":"independent-complete-recheck","input":"aligned and bypass serialized updates","execution":"runIndependentFullRecheckComparison","producers":["ConstitutiveSearch.NeuralAgent.runIndependentFullRecheckComparison"],"proofs":["ConstitutiveSearch.NeuralAgent.IndependentFullRecheckComparisonOutput"],"result_fields":["aligned_decision","bypass_decision"],"scope":"full recheck independent of incremental verdict and fragments"},
+    {"id":"P2-fixed-network-exact-certified","probe":"P2","method":"fixed-network-interventional-causal-analysis","input":"one exact output list produced by learnedAlignedState.system at learnedAlignedState.input","execution":"local checker and independent recheck on the canonical, admissibly modified and forbidden decoder paths","producers":["ConstitutiveSearch.NeuralAgent.checkLearnedP2Path","ConstitutiveSearch.NeuralAgent.recheckLearnedP2Path"],"proofs":["ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleDecoderChanged","ConstitutiveSearch.NeuralAgent.learnedP2AdmissiblePathAccepted","ConstitutiveSearch.NeuralAgent.checkLearnedP2AdmissibleFragment_exact","ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleRecheckAccepted","ConstitutiveSearch.NeuralAgent.learnedP2ModifiedPathRejected","ConstitutiveSearch.NeuralAgent.learnedP2ModifiedRecheckRejected"],"result_fields":["p2_canonical_decoder_action","p2_admissible_modified_decoder_action","p2_forbidden_modified_decoder_action","p2_admissible_empty_output_changed","p2_forbidden_proposals_different","p2_local_recheck_agree"],"scope":"same network execution and outputs; a genuinely changed admissible decoder rebuilds its decoder-indexed fragment and agrees with the independent recheck, while the contract-violating decoder is rejected"},
+    {"id":"P2-incremental-exact-certified","probe":"P2","method":"incremental-neural-verification-with-proof-reuse","input":"canonical, admissibly changed and forbidden consumer versions over the exact learned network execution","execution":"observeLearnedP2Incremental through learnedP2IncrementalCheckerEngine","producers":["ConstitutiveSearch.NeuralAgent.observeLearnedP2Incremental"],"proofs":["ConstitutiveSearch.NeuralAgent.learnedP2CanonicalIncrementalPathAccepted","ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleIncrementalPathAccepted","ConstitutiveSearch.NeuralAgent.learnedP2ForbiddenIncrementalPathRejected","ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleIncrementalAction_exact","ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleIncrementalEffect_consumes_action","ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleIncrementalAndFullSuccessor_exact","ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleIncrementalAndFullCertificate_exact"],"result_fields":["p2_canonical_consumer","p2_admissible_consumer","p2_forbidden_consumer"],"scope":"the generic incremental checker consumes the decoder-indexed proposal in the installed action and effect fragments; the admissible decoder differs globally but agrees on the executed nonempty output, and the forbidden decoder is rejected"},
+    {"id":"P2-full-recheck-exact-certified","probe":"P2","method":"independent-complete-recheck","input":"the same three consumer versions and exact learned network execution, without receiving the incremental fragment or verdict","execution":"observeLearnedP2FullRecheck through learnedP2FullRecheckEngine","producers":["ConstitutiveSearch.NeuralAgent.observeLearnedP2FullRecheck"],"proofs":["ConstitutiveSearch.NeuralAgent.learnedP2CanonicalFullRecheckPathAccepted","ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleFullRecheckPathAccepted","ConstitutiveSearch.NeuralAgent.learnedP2ForbiddenFullRecheckPathRejected","ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleFullRecheckAction_exact","ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleFullRecheckEffect_consumes_action","ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleIncrementalAndFullSuccessor_exact","ConstitutiveSearch.NeuralAgent.learnedP2AdmissibleIncrementalAndFullCertificate_exact"],"result_fields":["p2_canonical_consumer","p2_admissible_consumer","p2_forbidden_consumer"],"scope":"the independent full checker freshly decodes the consumer, installs its produced action and effect witnesses, accepts the admissible changed consumer, rejects the forbidden one, and agrees with the incremental successor and certificate"},
+    {"id":"P3-incremental-certified","probe":"P3","method":"incremental-neural-verification-with-proof-reuse","input":"two updates with target network, naming, input and intent fixed; transition varied","execution":"observeGenericIncremental on learnedAlignedSerializedUpdate and learnedP3RejectedContractTransitionUpdate","producers":["ConstitutiveSearch.NeuralAgent.observeGenericIncremental"],"proofs":["ConstitutiveSearch.NeuralAgent.learnedP3ArtifactHeldFixed","ConstitutiveSearch.NeuralAgent.learnedP3TransitionChanged","ConstitutiveSearch.NeuralAgent.learnedP3AllowedIncrementalAccepted","ConstitutiveSearch.NeuralAgent.learnedP3ChangedIncrementalRejected"],"result_fields":["p3_allowed_contract_transition","p3_rejected_contract_transition"],"scope":"exact artifact-held transition control; outcomes are proved and also emitted by the confirmatory row"},
+    {"id":"P3-full-certified","probe":"P3","method":"independent-complete-recheck","input":"the exact P3 accepted and rejected pair","execution":"observeIndependentFullRecheck","producers":["ConstitutiveSearch.NeuralAgent.observeIndependentFullRecheck"],"proofs":["ConstitutiveSearch.NeuralAgent.learnedP3ArtifactHeldFixed","ConstitutiveSearch.NeuralAgent.learnedP3TransitionChanged","ConstitutiveSearch.NeuralAgent.learnedP3AllowedFullRecheckAccepted","ConstitutiveSearch.NeuralAgent.learnedP3ChangedFullRecheckRejected"],"result_fields":["p3_allowed_contract_transition","p3_rejected_contract_transition"],"scope":"independent full recheck on the exact transition control; outcomes are proved and also emitted"},
+    {"id":"P4-relational-certified","probe":"P4","method":"relational-execution-comparison","input":"two historical origins, every covered finite future, and the nonempty future separator","execution":"exact executed forgetting plus the incorrect collapsing projection control","producers":["ConstitutiveSearch.NeuralAgent.learnedAlignedExecutedFutureForgetting","ConstitutiveSearch.NeuralAgent.learnedP4IncorrectForgetting"],"proofs":["ConstitutiveSearch.NeuralAgent.learnedExecutedFutureForgetting_preserves_every_finite_future","ConstitutiveSearch.NeuralAgent.learnedExecutedFutureForgetting_origin_not_recoverable","ConstitutiveSearch.NeuralAgent.learnedP4SeparatorRevealsRequiredDistinction","ConstitutiveSearch.NeuralAgent.learnedP4IncorrectForgettingCannotBeExact"],"result_fields":["p4_separator_nonempty","p4_incorrect_forgetting_fff_collapses","p4_separator_reveals_required_distinction"],"scope":"valid forgetting preserves all covered futures and loses historical origin; a distinct incorrect collapse is refuted by the produced nonempty separator"},
+    {"id":"P5-self-adaptive-certified","probe":"P5","method":"guaranteed-self-adaptive-system","input":"installed reduced-memory predecessor with accepted and refused contract changes","execution":"observeRuntimeSubmission learnedPostForgettingInitialRuntime","producers":["ConstitutiveSearch.NeuralAgent.observeRuntimeSubmission"],"proofs":["ConstitutiveSearch.NeuralAgent.learnedPostForgettingOperationalClosure","ConstitutiveSearch.NeuralAgent.learnedPostForgettingBadChange_rejected_without_successor"],"result_fields":["p5_accepted_contract_change","p5_rejected_contract_change"],"scope":"actual installed post-forgetting contract transition"},
+    {"id":"P5-incremental-certified","probe":"P5","method":"incremental-neural-verification-with-proof-reuse","input":"accepted and refused SerializedLearnedPostForgettingRequest values","execution":"observePostForgettingIncremental","producers":["ConstitutiveSearch.NeuralAgent.observePostForgettingIncremental"],"proofs":["ConstitutiveSearch.NeuralAgent.learnedPostForgettingExtendedChange_incremental"],"result_fields":["p5_accepted_contract_change","p5_rejected_contract_change"],"scope":"incremental checker on installed post-forgetting transition"},
+    {"id":"P5-full-certified","probe":"P5","method":"independent-complete-recheck","input":"same accepted and refused post-forgetting requests","execution":"observePostForgettingFullRecheck","producers":["ConstitutiveSearch.NeuralAgent.observePostForgettingFullRecheck"],"proofs":["ConstitutiveSearch.NeuralAgent.learnedPostForgettingExtendedChange_full","ConstitutiveSearch.NeuralAgent.learnedClosedPostForgettingFullRecheck_successor_exact"],"result_fields":["p5_accepted_contract_change","p5_rejected_contract_change"],"scope":"independent full recheck on installed post-forgetting transition"},
+    {"id":"P6-incremental-certified","probe":"P6","method":"incremental-neural-verification-with-proof-reuse","input":"LearnedAlignedCheckedAgent, learnedExtendedSerializedUpdate and its calculated successive affected cone","execution":"runLearnedP6SuccessiveComparison","producers":["ConstitutiveSearch.NeuralAgent.runLearnedP6SuccessiveComparison"],"proofs":["ConstitutiveSearch.NeuralAgent.learnedSuccessiveInstalledStructuralAssembly_exact","ConstitutiveSearch.NeuralAgent.learnedSuccessiveTransport_reads_checked_source"],"result_fields":["p6_successive_decision","p6_successive_transported_structural_fragments","p6_successive_recomputed_structural_fragments"],"scope":"the emitted decision and fragment counts come from the exact successive update whose installed assembly consumes the checked predecessor"},
+    {"id":"P6-full-certified","probe":"P6","method":"independent-complete-recheck","input":"the same learnedExtendedSerializedUpdate independently rechecked from the same declared predecessor domain","execution":"runLearnedP6SuccessiveComparison","producers":["ConstitutiveSearch.NeuralAgent.runLearnedP6SuccessiveComparison"],"proofs":["ConstitutiveSearch.NeuralAgent.learnedSuccessiveIncrementalAndFullSuccessor_exact","ConstitutiveSearch.NeuralAgent.learnedSuccessiveIncrementalAndFullCertificate_exact"],"result_fields":["p6_successive_decision"],"scope":"the full-recheck observation belongs to the same successive execution package as the incremental observation, successor and certificate equalities"}
+  ],
   "proof_only_evidence": [
-    {
-      "property": "self-adaptive installed history is checked",
-      "declaration": "ConstitutiveSearch.NeuralAgent.GuaranteedSelfAdaptiveAdapterOutput.everyInstalledStepChecked"
-    },
-    {
-      "property": "self-adaptive installed history preserves contracts",
-      "declaration": "ConstitutiveSearch.NeuralAgent.GuaranteedSelfAdaptiveAdapterOutput.everyInstalledStepPreservesContracts"
-    },
-    {
-      "property": "incremental structural fragments are source-transported",
-      "declaration": "ConstitutiveSearch.NeuralAgent.IncrementalProofReuseAdapterOutput.learnedReuseExact"
-    },
-    {
-      "property": "deployment history is checked",
-      "declaration": "ConstitutiveSearch.NeuralAgent.DeploymentChainPropagationAdapterOutput.checkedHistory"
-    },
-    {
-      "property": "deployment history preserves contracts",
-      "declaration": "ConstitutiveSearch.NeuralAgent.DeploymentChainPropagationAdapterOutput.preservedContracts"
-    },
-    {
-      "property": "complete-recheck successor equals incremental successor",
-      "declaration": "ConstitutiveSearch.NeuralAgent.IndependentFullRecheckComparisonOutput.alignedSuccessorMatchesIncremental"
-    },
-    {
-      "property": "complete recheck accepts without incremental oracle",
-      "declaration": "ConstitutiveSearch.NeuralAgent.IndependentFullRecheckComparisonOutput.acceptedWithoutIncrementalOracle"
-    }
+    {"property":"self-adaptive installed history is checked","declaration":"ConstitutiveSearch.NeuralAgent.GuaranteedSelfAdaptiveAdapterOutput.everyInstalledStepChecked"},
+    {"property":"self-adaptive installed history preserves contracts","declaration":"ConstitutiveSearch.NeuralAgent.GuaranteedSelfAdaptiveAdapterOutput.everyInstalledStepPreservesContracts"},
+    {"property":"incremental structural fragments are source-transported","declaration":"ConstitutiveSearch.NeuralAgent.IncrementalProofReuseAdapterOutput.learnedReuseExact"},
+    {"property":"deployment history is checked","declaration":"ConstitutiveSearch.NeuralAgent.DeploymentChainPropagationAdapterOutput.checkedHistory"},
+    {"property":"deployment history preserves contracts","declaration":"ConstitutiveSearch.NeuralAgent.DeploymentChainPropagationAdapterOutput.preservedContracts"},
+    {"property":"complete-recheck successor equals incremental successor","declaration":"ConstitutiveSearch.NeuralAgent.IndependentFullRecheckComparisonOutput.alignedSuccessorMatchesIncremental"},
+    {"property":"complete recheck accepts without incremental oracle","declaration":"ConstitutiveSearch.NeuralAgent.IndependentFullRecheckComparisonOutput.acceptedWithoutIncrementalOracle"},
+    {"property":"executed forgetting preserves every covered finite future","declaration":"ConstitutiveSearch.NeuralAgent.learnedExecutedFutureForgetting_preserves_every_finite_future"},
+    {"property":"historical origin is not recoverable after executed forgetting","declaration":"ConstitutiveSearch.NeuralAgent.learnedExecutedFutureForgetting_origin_not_recoverable"},
+    {"property":"refused post-forgetting contract change has no successor","declaration":"ConstitutiveSearch.NeuralAgent.LearnedPostForgettingOperationalClosure.refusedContractChangeHasNoSuccessor"}
   ]
 }

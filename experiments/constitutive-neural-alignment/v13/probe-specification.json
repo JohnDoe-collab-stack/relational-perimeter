@@ -1,0 +1,66 @@
+{
+  "specification_id": "constitutive-neural-independent-capability-probes-v13",
+  "probes": [
+    {
+      "id": "P1",
+      "question": "Does the method distinguish the admitted aligned update from the equal-current-behavior bypass on the frozen learned material?",
+      "held_fixed": ["current input domain", "current extensional behavior", "learned lineage"],
+      "varied": ["constitutive authorization dependency"],
+      "required_outcomes": ["aligned accepted or satisfied", "bypass rejected or unsatisfied"]
+    },
+    {
+      "id": "P2",
+      "question": "With the network artifact fixed, does the method detect a decoder/action-path modification and invalidate exactly the affected evidence?",
+      "held_fixed": ["received network artifact", "contract transition"],
+      "varied": ["decoder or action path"],
+      "required_outcomes": ["canonical path accepted", "genuinely changed admissible consumer accepted with rebuilt dependent fragment", "the decoder-produced proposal supplies the installed action and effect witnesses", "contract-violating consumer rejected", "cross-version fragment reuse rejected", "generic incremental checker and independent complete recheck agree on accepted successor and certificate"],
+      "exact_control": "One execution of learnedAlignedState.system produces the shared output list. The canonical decoder, a genuinely changed admissible decoder and a contract-violating decoder consume that same list. The admissible modification rebuilds a decoder-indexed fragment; its proposal produces the action and effect witnesses installed by both the generic incremental checker and an independently decoded complete recheck. The forbidden modification changes the action request and is rejected by both.",
+      "interface_limit": "Certification is restricted to the exact learned network execution and its nonempty output. It does not claim that the admissible decoder is installed as the consumer for every possible future network output."
+    },
+    {
+      "id": "P3",
+      "question": "With every artifact field fixed, does changing only the requested contract transition yield the required accepted and rejected outcomes?",
+      "held_fixed": ["target network", "stable naming", "next input", "intent"],
+      "varied": ["contract transition"],
+      "required_outcomes": ["authorized transition accepted", "unauthorized transition rejected"]
+    },
+    {
+      "id": "P4",
+      "question": "Does valid executed forgetting preserve every covered finite future and prevent reconstruction of historical identity, while an incorrect collapse is exposed by a nonempty future separator?",
+      "held_fixed": ["future contract", "covered future requests"],
+      "varied": ["historical origin"],
+      "required_outcomes": ["all covered futures preserved", "origin not recoverable", "nonempty separator produced", "incorrect collapsing projection cannot be an exact realization"]
+    },
+    {
+      "id": "P5",
+      "question": "After executed forgetting, is an authorized contract change actually installed and is an unauthorized change refused without a successor?",
+      "held_fixed": ["installed reduced-memory predecessor", "runtime update API"],
+      "varied": ["contract-change request"],
+      "required_outcomes": ["authorized change installed", "unauthorized change rejected without successor"]
+    },
+    {
+      "id": "P6",
+      "question": "Across successive versions, are outside-cone fragments transported from the checked predecessor and affected fragments recomputed before installing the same successor as full recheck?",
+      "held_fixed": ["source checked agent", "target property", "version correspondence"],
+      "varied": ["affected cone"],
+      "required_outcomes": ["nonempty licensed transport", "affected recomputation", "same accepted successor as independent recheck", "other-version certificate rejected", "substituted successor rejected", "incompatible fragments rejected before effect"]
+    },
+    {
+      "id": "P7",
+      "question": "Does the frozen confirmatory campaign execute every method and semantic ablation without an audited-system verdict entering the independent reference method?",
+      "held_fixed": ["frozen material snapshot", "method interfaces", "output schema"],
+      "varied": ["method", "authorized semantic mutation"],
+      "required_outcomes": ["nine ordered rows", "all authorized mutations rejected for their exact obligations", "transitive oracle closure absent"],
+      "current_status": "not-certified until the frozen confirmatory run exists"
+    },
+    {
+      "id": "P8",
+      "question": "On the frozen complete-property scaling family, what are the observed costs of the incremental checker and the independent full recheck under the preregistered rule?",
+      "held_fixed": ["same complete property", "same source states", "same compiled checker version"],
+      "varied": ["declared family size and affected cone"],
+      "required_outcomes": ["all raw costs published", "unfavorable observations retained", "no asymptotic theorem inferred"],
+      "delegated_protocol": "experiments/constitutive-neural-alignment/v12/scaling-protocol.json",
+      "current_status": "not-certified because v12 remains draft and has no confirmatory result"
+    }
+  ]
+}

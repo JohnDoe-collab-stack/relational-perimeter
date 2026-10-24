@@ -31,6 +31,14 @@ def load_functions() -> dict[str, str]:
     return functions
 
 
+def require_reaches(functions: dict[str, str], start: str,
+                    suffixes: tuple[str, ...], label: str) -> None:
+    graph = SHARED["reachable"](functions, start)
+    for suffix in suffixes:
+        require(any(name.endswith(suffix) for name in graph),
+                f"{label} execution does not reach {suffix}")
+
+
 def validate_graph(functions: dict[str, str]) -> None:
     start = SHARED["select"](
         functions, "NeuralAgent_computeIndependentReferenceObservation")
@@ -49,6 +57,30 @@ def validate_graph(functions: dict[str, str]) -> None:
             "learnedConstitutiveAlignmentClosure",
         ],
     )
+    p2_incremental = SHARED["select"](
+        functions, "NeuralAgent_observeLearnedP2Incremental")
+    require_reaches(functions, p2_incremental, (
+        "NeuralAgent_checkGenericIncrementalUpdate___redArg",
+        "NeuralAgent_analyzeLearnedP2Incrementally",
+        "NeuralAgent_checkLearnedP2Path",
+        "NeuralAgent_learnedP2TargetAnalysisForAdmittedNamingFromDecision___redArg",
+        "NeuralAgent_LearnedP2ConsumerFragment_action___redArg",
+        "NeuralAgent_LearnedP2ConsumerFragment_effect___redArg",
+        "NeuralAgent_learnedP2RecomputedCertificateFragments___redArg",
+    ), "P2 incremental")
+    p2_full = SHARED["select"](
+        functions, "NeuralAgent_observeLearnedP2FullRecheck")
+    require_reaches(functions, p2_full, (
+        "NeuralAgent_checkFullUpdate___redArg",
+        "NeuralAgent_recomputeLearnedP2FullRecheckExecution",
+        "NeuralAgent_decodeLearnedP2Artifact",
+        "NeuralAgent_checkLearnedP2Path",
+        "NeuralAgent_LearnedP2DecodedArtifact_fragments___redArg",
+        "NeuralAgent_LearnedP2ConsumerFragment_action___redArg",
+        "NeuralAgent_LearnedP2ConsumerFragment_effect___redArg",
+    ), "P2 full recheck")
+    print("INDEPENDENT_COMPARISON_P2_CODEGEN_OK "
+          "incremental-and-full-consumers=reachable")
 
 
 def validate_emitter_source() -> None:
@@ -66,7 +98,24 @@ def validate_emitter_source() -> None:
     for required in [
         "observeRuntimeSubmission",
         "observeGenericIncremental",
+        "observeIndependentFullRecheck",
+        "observePostForgettingIncremental",
+        "observePostForgettingFullRecheck",
+        "observeLearnedP2Path",
+        "recheckLearnedP2Path",
+        "observeLearnedP2Incremental",
+        "observeLearnedP2FullRecheck",
+        "learnedP2AdmissibleDecoder",
+        "learnedP2ModifiedDecoder",
+        "learnedP3RejectedContractTransitionUpdate",
+        "learnedPostForgettingExtendedRuntimeUpdate",
+        "learnedP4IncorrectForgetting",
         "learnedOperationalFutureOutputs",
+        "runLearnedP6SuccessiveComparison",
+        "p6.incrementalDecision",
+        "p6.fullRecheckDecision",
+        "p6.transportedStructuralCount",
+        "p6.recomputedStructuralCount",
         "observation.alignedDecision",
         "frozenFullRecheckDecision",
     ]:
@@ -86,7 +135,20 @@ def self_test() -> None:
         pass
     else:
         raise ValueError("indirect-oracle mutation survived")
-    print("INDEPENDENT_COMPARISON_CODEGEN_SELFTEST_OK mutations=1")
+    incomplete_p2 = {
+        "l_incremental": "{ l_check(); }",
+        "l_check": "{}",
+    }
+    try:
+        require_reaches(
+            incomplete_p2, "l_incremental",
+            ("check", "LearnedP2ConsumerFragment_action___redArg"),
+            "mutated P2 incremental")
+    except ValueError:
+        pass
+    else:
+        raise ValueError("P2 installed-consumer mutation survived")
+    print("INDEPENDENT_COMPARISON_CODEGEN_SELFTEST_OK mutations=2")
 
 
 def main() -> None:

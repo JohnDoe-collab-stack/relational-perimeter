@@ -3,7 +3,7 @@
   "status": "draft-awaiting-stable-source-commit",
   "confirmatory_results_present": false,
   "confirmatory_run_permitted": false,
-  "scientific_scope": "Nine repository-local computations on one exact learned material package. The run compares executable local adapters; it does not establish equivalence with every external method in the named research classes, universal superiority or an impossibility theorem.",
+  "scientific_scope": "Nine repository-local computations on one exact learned material package. Six are local adapters to named capability classes; the other three are the relational method, an explicit reference combination and an independent complete recheck. The run does not establish equivalence with every external method in those classes, universal superiority, an impossibility theorem or an asymptotic cost theorem.",
   "historical_v10_preserved": {
     "experiments/constitutive-neural-alignment/v10/comparison-protocol.json": "8d6e7261b08bd132a6b756d094669162dafdae4093d0e8c648ae5001800a7c3a",
     "experiments/constitutive-neural-alignment/v10/comparison-results.ndjson": "e5bad0bce56276a75d488f121a6a16bc659324c1b410f7f2a25f03a2f7fad1d4",
@@ -20,7 +20,12 @@
       "final constitutive closure"
     ],
     "transitive_codegen_gate": "scripts/check-independent-comparison-codegen.py",
-    "observation_policy": "Every emitted scientific value is computed in the executable. Lean-only consequences remain in evidence-ledger.json and are never emitted as runtime observations."
+    "observation_policy": "Every emitted scientific value is computed in the executable. Lean-only consequences remain in evidence-ledger.json and are never emitted as runtime observations.",
+    "cell_evidence_policy": "Every positive matrix cell must resolve to a structured evidence record naming its exact input, execution, proofs, result fields and scope. Negative cells identify the missing obligation.",
+    "p2_scope": "The exact P2 control applies canonical, genuinely changed admissible, and contract-violating decoder/action paths to the same executed network outputs. Decoder-indexed fragments are rebuilt for the admissible version and cannot cross versions. The generic incremental checker and the independent complete checker both construct the installed action and effect witnesses from their exact decoder-produced proposal; their accepted successors and certificates agree. This scope is the exact learned execution; it is not a claim about installing the modified decoder for every future input.",
+    "p4_scope": "P4 separately requires valid executed forgetting, preservation of every covered finite future, historical-origin nonrecoverability, and rejection of an incorrect collapsing projection by the produced nonempty future separator.",
+    "p5_scope": "Only the installed post-forgetting contract-change path and its refusal without successor count as P5 evidence. Ordinary continuation and permission alone do not.",
+    "p6_scope": "P6 observations, transported and recomputed fragments, accepted successor, and complete-recheck agreement must all refer to LearnedAlignedCheckedAgent and learnedExtendedSerializedUpdate; version, successor and incompatible-fragment substitutions are negative controls."
   },
   "methods": [
     "extensional-current-behavior-verification",
@@ -34,14 +39,28 @@
     "independent-complete-recheck"
   ],
   "translation_counts": [2, 2, 2, 3, 4, 3, 4, 6, 4],
-  "covered_probes": ["P1", "P2", "P3", "P4", "P5", "P6", "P7"],
+  "common_material": "FrozenCompleteComparisonMaterial and its exact aligned/bypass serialized updates, future requests, contracts and learned lineage",
+  "common_property": "Each matrix cell answers only the corresponding fixed P1-P8 probe through the method's declared repository-local interface; an out-of-interface cell is not converted into failure.",
+  "trust_boundaries": {
+    "extensional-current-behavior-verification": "trusts the supplied finite current-domain table construction and compares only its computed values",
+    "fixed-network-interventional-causal-analysis": "trusts the fixed received network artifact; interventions, decoder variants and induced action requests are computed locally",
+    "pre-execution-action-shielding": "trusts its declared proposal observation and computes the pre-effect shield decision",
+    "guaranteed-self-adaptive-system": "trusts the serialized request boundary and installs only a successor returned by submitUpdate",
+    "incremental-neural-verification-with-proof-reuse": "trusts the checked predecessor; transported and recomputed fragments remain distinguished",
+    "deployment-chain-certificate-propagation": "trusts the checked initial runtime and verifies every installed transition in the finite history",
+    "relational-execution-comparison": "trusts the exact learned artifact and compares executed covered futures rather than an external verdict",
+    "explicit-reference-combination": "trusts only its four declared local observations; generated-code closure must exclude audited-system verdicts and certificates",
+    "independent-complete-recheck": "trusts serialized source material but receives neither incremental verdict nor incremental fragment assembly"
+  },
+  "cost_policy": "V13 reports translation counts only as interface bookkeeping. It makes no runtime, memory, speedup or asymptotic claim; P8 and S6 remain delegated to the separate frozen complete-property scaling protocol.",
+  "covered_probes": ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8"],
   "covered_criteria": ["S1", "S2", "S3", "S4", "S5", "S7", "S8"],
   "delegated_without_reclassification": {
-    "P8": "experiments/constitutive-neural-alignment/v12/scaling-protocol.json",
-    "S6": "experiments/constitutive-neural-alignment/v12/scaling-protocol.json"
+    "P8": "experiments/constitutive-neural-alignment/v12/scaling-protocol.json (currently draft, no confirmatory result)",
+    "S6": "experiments/constitutive-neural-alignment/v12/scaling-protocol.json (currently draft, no confirmatory result)"
   },
   "fairness_rules": [
-    "All nine computations consume the same exact frozen material package.",
+    "All nine computations consume the same exact frozen material package; the package is frozen through its complete repository-local Lean import closure and every executable scientific support file.",
     "Each adapter receives every artifact, intervention, future, contract, version or serialized update in its declared repository-local interface.",
     "The explicit reference combination receives no verdict or certificate produced by the system it compares.",
     "The complete recheck receives no incremental verdict or incremental fragment assembly as an oracle.",
@@ -51,13 +70,18 @@
     "Missing adapters, translations or out-of-interface properties never count as general impossibility results.",
     "Translation counts are bookkeeping and not runtime cost."
   ],
-  "build_command": ["lake", "build", "compiled_independent_complete_neural_comparison"],
-  "executed_command": ["lake", "exe", "compiled_independent_complete_neural_comparison"],
+  "build_command": ["lake", "-K", "moreLeanArgs=[\"-M=8192\"]", "build", "compiled_independent_complete_neural_comparison"],
+  "reference_audit_command": ["lake", "env", "lean", "-M", "8192", "Tests/Mechanisms/NeuralIndependentCapabilityComparisonRegression.lean"],
+  "executed_command": ["lake", "-K", "moreLeanArgs=[\"-M=8192\"]", "exe", "compiled_independent_complete_neural_comparison"],
   "freeze_command": ["py", "-3", "scripts/freeze-independent-capability-comparison-v13.py"],
+  "snapshot_builder": "scripts/independent_capability_snapshot_v13.py",
+  "probe_specification": "experiments/constitutive-neural-alignment/v13/probe-specification.json",
+  "authorized_ablations": "experiments/constitutive-neural-alignment/v13/authorized-ablations.json",
   "confirmatory_command": ["py", "-3", "scripts/run-independent-capability-comparison-v13.py"],
   "reserved_outputs": {
     "raw": "experiments/constitutive-neural-alignment/v13/comparison-results.ndjson",
-    "record": "experiments/constitutive-neural-alignment/v13/result-record.json"
+    "record": "experiments/constitutive-neural-alignment/v13/result-record.json",
+    "ablations": "experiments/constitutive-neural-alignment/v13/ablation-results.json"
   },
   "output_policy": {
     "rows": 9,
@@ -70,7 +94,7 @@
     "V10 remains historical evidence at its recorded revision and is not silently repaired or reclassified.",
     "No confirmatory result exists until this protocol is frozen at a recoverable source commit and the reserved command is executed once.",
     "The run establishes only the observations it emits and the proof consequences separately named in the evidence ledger.",
-    "P8 and S6 retain the exact status of v12 and are not inferred from this comparison.",
+    "P8 and S6 retain the exact draft/no-result status of v12 and are not inferred from this comparison.",
     "Any change to material, methods, decisions, fields, evidence mapping, translations, command or schema requires a later protocol version."
   ]
 }

@@ -1,0 +1,11 @@
+import RelationalPerimeter
+
+open ConstitutiveSearch.NeuralAgent
+
+def forgedIncrementalAnalysis :
+    LearnedP2IncrementalAnalysis .admissible :=
+  learnedP2CanonicalIncrementalSuccess.analysis
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedP2CanonicalIncrementalSuccess
+/- AXIOM_AUDIT_END -/

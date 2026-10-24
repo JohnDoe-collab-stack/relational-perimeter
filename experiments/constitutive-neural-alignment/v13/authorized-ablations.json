@@ -1,0 +1,91 @@
+{
+  "campaign_id": "constitutive-neural-independent-capability-ablations-v13",
+  "policy": "Every Lean mutation is a registered exact-diagnostic fixture for the semantic obligation named here. The generated-code oracle mutation is executed by the separate transitive closure gate.",
+  "ablations": [
+    {
+      "probe": "P1",
+      "mutation": "bypass the learned requirement used by reconfiguration",
+      "fixture": "Tests/ExpectedFailure/LearnedRequirementCannotBeBypassedInReconfiguration.lean.fail"
+    },
+    {
+      "probe": "P2",
+      "mutation": "claim that the modified decoder/action path satisfies the canonical evidence equation on the same executed network output",
+      "fixture": "Tests/ExpectedFailure/LearnedP2ModifiedDecoderCannotSatisfyCanonicalPath.lean.fail"
+    },
+    {
+      "probe": "P2",
+      "mutation": "reuse the dependent fragment of the canonical consumer after an admissible but genuine decoder modification",
+      "fixture": "Tests/ExpectedFailure/LearnedP2FragmentCannotCrossConsumerVersions.lean.fail"
+    },
+    {
+      "probe": "P2",
+      "mutation": "reuse the complete generic incremental analysis of the canonical consumer for the admissible changed consumer version",
+      "fixture": "Tests/ExpectedFailure/LearnedP2IncrementalAnalysisCannotCrossConsumerVersions.lean.fail"
+    },
+    {
+      "probe": "P2",
+      "mutation": "replace the admissible consumer fragment inside the independently decoded complete-recheck artifact by the canonical fragment",
+      "fixture": "Tests/ExpectedFailure/LearnedP2FullDecodedArtifactCannotCrossConsumerVersions.lean.fail"
+    },
+    {
+      "probe": "P2",
+      "mutation": "replace the installing action by an action from another execution",
+      "fixture": "Tests/ExpectedFailure/ForeignLearnedActionCannotReplaceInstallingAction.lean.fail"
+    },
+    {
+      "probe": "P2",
+      "mutation": "replace aligned structural fragments by fragments from another contract version",
+      "fixture": "Tests/ExpectedFailure/LearnedExtendedFragmentsCannotReplaceAlignedFragments.lean.fail"
+    },
+    {
+      "probe": "P3",
+      "mutation": "reverse the authorized post-forgetting contract transition",
+      "fixture": "Tests/ExpectedFailure/PostForgettingTransitionCannotReverseMetaContract.lean.fail"
+    },
+    {
+      "probe": "P4",
+      "mutation": "recover the historical identity after executed forgetting",
+      "fixture": "Tests/ExpectedFailure/PostForgettingCannotRecoverHistoricalIdentity.lean.fail"
+    },
+    {
+      "probe": "P4",
+      "mutation": "collapse two future-separated learned sources into one exact memory",
+      "fixture": "Tests/ExpectedFailure/SeparatedLearnedFutureCannotShareExactMemory.lean.fail"
+    },
+    {
+      "probe": "P5",
+      "mutation": "substitute ordinary continuation for an installed contract-changing update",
+      "fixture": "Tests/ExpectedFailure/PostForgettingContinuationCannotMasqueradeAsContractUpdate.lean.fail"
+    },
+    {
+      "probe": "P5",
+      "mutation": "substitute permission for the receipt produced by the reduced-memory continuation",
+      "fixture": "Tests/ExpectedFailure/PostForgettingPermissionCannotReplaceClosedChange.lean.fail"
+    },
+    {
+      "probe": "P6",
+      "mutation": "replace licensed transported fragments by target-side recomputation",
+      "fixture": "Tests/ExpectedFailure/RecomputedFragmentCannotReplaceLicensedTransport.lean.fail"
+    },
+    {
+      "probe": "P6",
+      "mutation": "replay structural fragments indexed by a different contract version",
+      "fixture": "Tests/ExpectedFailure/LearnedExtendedFragmentsCannotReplaceAlignedFragments.lean.fail"
+    },
+    {
+      "probe": "P6",
+      "mutation": "substitute a reconstructed successor for the successor produced by the installing effect",
+      "fixture": "Tests/ExpectedFailure/ReconstructedLearnedSuccessorCannotInstall.lean.fail"
+    },
+    {
+      "probe": "P7",
+      "mutation": "inject the audited runtime verdict transitively into the independent reference computation",
+      "gate": "scripts/check-independent-comparison-codegen.py"
+    },
+    {
+      "probe": "P8",
+      "mutation": "replace a complete growing obligation by Unit",
+      "fixture": "Tests/ExpectedFailure/ScalingUnitCannotReplaceSubstantiveRequirement.lean.fail"
+    }
+  ]
+}

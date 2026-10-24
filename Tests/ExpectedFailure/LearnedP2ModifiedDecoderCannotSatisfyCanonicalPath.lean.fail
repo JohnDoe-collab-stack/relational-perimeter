@@ -1,0 +1,12 @@
+import RelationalPerimeter.Agents.Neural.IndependentCapabilityProbeControls
+
+namespace Tests.ExpectedFailure.LearnedP2ModifiedDecoderCannotSatisfyCanonicalPath
+open ConstitutiveSearch.NeuralAgent
+
+example :
+    learnedP2ModifiedProposal = learnedP2CanonicalProposal := rfl
+
+end Tests.ExpectedFailure.LearnedP2ModifiedDecoderCannotSatisfyCanonicalPath
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedP2ModifiedPathRejected
+/- AXIOM_AUDIT_END -/

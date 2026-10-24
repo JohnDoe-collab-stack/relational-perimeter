@@ -1,12 +1,20 @@
 {
   "$id": "constitutive-neural-oracle-independent-result-v13",
   "type": "object",
-  "required": ["protocol_id", "repository_commit", "command", "rows", "raw_output_sha256"],
+  "required": ["protocol_id", "repository_commit", "frozen_source_commit", "frozen_source_tree", "snapshot_sha256", "protocol_sha256", "command", "build_command", "reference_audit_command", "environment", "rows", "raw_output_sha256", "ablation_results", "ablation_output_sha256"],
   "properties": {
     "protocol_id": {"const": "constitutive-neural-oracle-independent-capability-comparison-v13"},
     "repository_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
-    "command": {"const": ["lake", "exe", "compiled_independent_complete_neural_comparison"]},
+    "frozen_source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "frozen_source_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "snapshot_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "protocol_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "command": {"const": ["lake", "-K", "moreLeanArgs=[\"-M=8192\"]", "exe", "compiled_independent_complete_neural_comparison"]},
+    "build_command": {"const": ["lake", "-K", "moreLeanArgs=[\"-M=8192\"]", "build", "compiled_independent_complete_neural_comparison"]},
+    "reference_audit_command": {"const": ["lake", "env", "lean", "-M", "8192", "Tests/Mechanisms/NeuralIndependentCapabilityComparisonRegression.lean"]},
     "rows": {"type": "array", "minItems": 9, "maxItems": 9},
-    "raw_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    "raw_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "ablation_results": {"type": "array", "minItems": 17, "maxItems": 17},
+    "ablation_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
   }
 }
