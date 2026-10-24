@@ -52,4 +52,3 @@ complexity bound. It does not negate the formal transport, recomputation,
 acceptance-equivalence or causal-chain theorems. It shows that this current
 incremental implementation does more measured work than the independent full
 recheck on the frozen family, even though it genuinely transports fragments.
-

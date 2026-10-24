@@ -55,4 +55,3 @@ establish that competing methods fail, general superiority, or scientific
 novelty. Those conclusions remain explicitly uncertified. P8 is evaluated by
 the separate frozen v12 scaling campaign and is not inferred from these nine
 capability rows.
-
