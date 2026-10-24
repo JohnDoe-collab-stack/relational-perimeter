@@ -118,57 +118,50 @@ interfaces et quantifications effectivement énoncées.
 
 ### Comparaison de capacité
 
-Le protocole
-[`constitutive-neural-complete-capability-comparison-v10`](../experiments/constitutive-neural-alignment/v10/comparison-protocol.json)
-fige un même artefact appris et une même paire de mises à jour pour neuf
-calculs locaux : six adaptateurs typés, la méthode relationnelle, une
-combinaison explicite de références et le recheck complet indépendant. Il
-fournit à chaque méthode les interventions, futurs, contrats et versions que
-son interface déclarée sait consommer. La combinaison de référence calcule
-ses observations sans recevoir le verdict final ni le certificat cible comme
-oracle.
+Le protocole gelé
+[`constitutive-neural-oracle-independent-capability-comparison-v13`](../experiments/constitutive-neural-alignment/v13/comparison-protocol.json)
+compare neuf calculs locaux au dépôt : six adaptateurs typés, la méthode
+relationnelle, une combinaison explicite de références et le recheck complet
+indépendant. Il fournit à chaque méthode les interventions, futurs, contrats
+et versions que son interface déclarée sait consommer. La combinaison de
+référence calcule ses observations sans recevoir le verdict final ni le
+certificat cible comme oracle.
 
-Le [run confirmatoire v10](../experiments/constitutive-neural-alignment/v10/COMPARISON_ANALYSIS.md)
-a conservé les neuf sorties préenregistrées sur la révision d’évidence
-`cb8d9e17b7b9db60c057d1617f1d56321e03ee3c`. Il confirme qu’aucun avantage
-discriminant propre à P1 n’est certifié : la combinaison de référence et le
-recheck complet distinguent eux aussi les deux candidats. Le résultat formel fermé est
-la conjonction locale des dépendances exécutées, transitions contractuelles,
-réutilisation licenciée, divergence future et oubli sur une même lignée typée.
-Il est interdit d’en déduire une supériorité générale, une incapacité d’une
-baseline ou une nouveauté scientifique avant l’audit distinct de portée et de
-nouveauté.
+Le [run confirmatoire v13](../experiments/constitutive-neural-alignment/v13/COMPARISON_ANALYSIS.md)
+a émis les neuf lignes préenregistrées et rejeté les dix-sept ablations
+sémantiques. P2 transporte un consommateur admissible réellement modifié et
+un consommateur interdit depuis la même exécution exacte du réseau à travers
+le checker incrémental générique et un recheck complet indépendant ; les deux
+s’accordent sur le successeur et le certificat acceptés. P3, P4, P5 et P6
+émettent aussi leurs résultats positifs et négatifs déclarés. Les succès des
+méthodes concurrentes restent visibles : la combinaison explicite de
+références et le recheck complet distinguent eux aussi la mise à jour alignée
+du contournement. P7 est ainsi fermé dans sa portée locale au dépôt. Cela
+n’établit ni l’équivalence avec toute méthode externe des classes nommées, ni
+une supériorité générale, une incapacité des baselines ou une nouveauté
+scientifique.
 
 ### Passage à l’échelle du checker compilé
 
-La campagne historique
-[`compiled-parameterized-neural-scaling-v8`](../experiments/constitutive-neural-alignment/v8/SCALING_ANALYSIS.md)
-porte sur le même checker Lean compilé, pour sept tailles de 0 à 80, cinq
-répétitions mesurées et 210 mises à jour acceptées. Elle établit une
-réutilisation structurelle réelle : lors d’une transition locale à la taille
-80, 83 fragments sont transportés et un seul est recalculé.
+La campagne gelée
+[`compiled-causal-complete-property-scaling-v12`](../experiments/constitutive-neural-alignment/v12/scaling-protocol.json)
+mesure le même checker compilé de propriété complète et un recheck complet
+indépendant sur une chaîne causale de successeurs. Ses graphes, obligations et
+traces croissent ; elle enregistre les coûts de toutes les phases, la mémoire,
+les tailles sérialisées et les fragments effectivement transportés ou
+recalculés. Le
+[run confirmatoire](../experiments/constitutive-neural-alignment/v12/SCALING_ANALYSIS.md)
+a accepté les 25 répétitions préenregistrées aux tailles 0, 4, 8, 16 et 32 et
+rejeté le contrôle négatif. La réutilisation est réelle : la première
+transition locale à la taille 32 transporte 34 fragments et en recalcule deux,
+tandis qu’une transition étendue en transporte un et en recalcule 35.
 
-Elle n’établit aucun gain pratique de temps. À la taille 80, la médiane de la
-trace incrémentale est de 70 777,626 ms, contre 10,522 ms pour le recheck
-complet ; le critère de gain préenregistré est faux. Aucune loi asymptotique,
-aucune économie générale et aucune généralisation à d’autres familles ne sont
-revendiquées. Ses empreintes sont conservées sans être réécrites ; elles ne
-valident pas le candidat courant. Le snapshot complet de sources v8 n’avait pas
-été commité et n’est plus reconstructible depuis l’historique Git ; la gate ne
-peut donc revalider que le protocole, les résultats bruts, leur agrégation et
-leurs empreintes archivées, pas réélaborer exactement ce snapshot. Le protocole
-de la campagne v11,
-[`compiled-complete-property-scaling-v11`](../experiments/constitutive-neural-alignment/v11/scaling-protocol.json),
-préenregistre une propriété constitutive complète, une famille dont
-les graphes, obligations et traces croissent, les coûts de toutes les phases,
-la mémoire, les tailles sérialisées et un recheck indépendant. Son
-[run confirmatoire](../experiments/constitutive-neural-alignment/v11/SCALING_ANALYSIS.md)
-a accepté 25 répétitions sur 25. Les structures et obligations enregistrées
-croissent et la réutilisation transporte effectivement des fragments, mais le
-critère pratique préenregistré est faux : selon la taille, la médiane
-incrémentale cumulée vaut de 3,76 à 1 056,52 fois celle du recheck complet.
-P8/S6 sont donc évalués défavorablement pour cette implémentation ; aucun gain
-de temps ou de mémoire n’est revendiqué.
+Le critère pratique préenregistré est néanmoins faux. Selon la taille, la
+médiane incrémentale cumulée vaut de 3,865 à 760,445 fois celle du recheck
+complet. P8 est donc évalué et P8/S6 sont défavorables pour cette
+implémentation ; aucun gain de temps ou de mémoire n’est revendiqué. Cette
+campagne observationnelle n’est ni un théorème Lean ni un résultat de
+complexité asymptotique.
 
 ## Exclusions explicites
 

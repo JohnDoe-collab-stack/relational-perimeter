@@ -116,53 +116,47 @@ quantifiers actually stated.
 
 ### Capability comparison
 
-The
-[`constitutive-neural-complete-capability-comparison-v10`](../experiments/constitutive-neural-alignment/v10/comparison-protocol.json)
-protocol freezes one learned artifact and one exact update pair for nine local
-computations: six typed adapters, the relational method, an explicit reference
-combination, and the independent complete recheck. Each method receives the
-interventions, futures, contracts, and versions that its declared interface
-can consume. The reference combination computes its observations without
-receiving the final verdict or target certificate as an oracle.
+The frozen
+[`constitutive-neural-oracle-independent-capability-comparison-v13`](../experiments/constitutive-neural-alignment/v13/comparison-protocol.json)
+protocol compares nine repository-local computations: six typed adapters, the
+relational method, an explicit reference combination, and the independent
+complete recheck. Each method receives the interventions, futures, contracts,
+and versions that its declared interface can consume. The reference
+combination computes its observations without receiving the final verdict or
+target certificate as an oracle.
 
-The [v10 confirmatory run](../experiments/constitutive-neural-alignment/v10/COMPARISON_ANALYSIS.md)
-retained all nine preregistered outputs on evidence revision
-`cb8d9e17b7b9db60c057d1617f1d56321e03ee3c`. It confirms that no unique P1
-discriminatory advantage is certified: the reference combination and complete
-recheck also distinguish the candidates. The closed formal result is the local conjunction
-of executed dependencies, contract transitions, licensed reuse, future
-divergence, and forgetting over one typed lineage. No general superiority,
-baseline incapacity, or novelty conclusion may be drawn before the separate
-scope and novelty audit.
+The [v13 confirmatory run](../experiments/constitutive-neural-alignment/v13/COMPARISON_ANALYSIS.md)
+emitted all nine preregistered rows and rejected all seventeen semantic
+ablations. P2 carries one genuinely changed admissible consumer and one
+forbidden consumer from the same exact network execution through the generic
+incremental checker and an independent complete recheck; both agree on the
+accepted successor and certificate. P3, P4, P5 and P6 also emit their declared
+positive and negative outcomes. Competing successes remain visible: the
+explicit reference combination and complete recheck also distinguish the
+aligned update from the bypass. This closes P7 in its declared
+repository-local scope. It establishes neither equivalence with every external
+method in the named classes, nor general superiority, baseline incapacity or
+scientific novelty.
 
 ### Scaling of the compiled checker
 
-The historical
-[`compiled-parameterized-neural-scaling-v8`](../experiments/constitutive-neural-alignment/v8/SCALING_ANALYSIS.md)
-campaign runs the same compiled Lean checker at seven sizes from 0 to 80, with
-five measured repetitions and 210 accepted updates. It establishes actual
-structural reuse: on a local transition at size 80, 83 fragments are
-transported and one is recomputed.
+The frozen
+[`compiled-causal-complete-property-scaling-v12`](../experiments/constitutive-neural-alignment/v12/scaling-protocol.json)
+campaign measures the same compiled complete-property checker and an
+independent complete recheck on a causal successor chain. Its graphs,
+obligations and traces grow; it records every phase cost, memory, serialized
+size and the fragments actually transported or recomputed. The
+[confirmatory run](../experiments/constitutive-neural-alignment/v12/SCALING_ANALYSIS.md)
+accepted all 25 preregistered repetitions across sizes 0, 4, 8, 16 and 32 and
+rejected the negative control. Real reuse occurs: the first local transition
+at size 32 transports 34 fragments and recomputes two, while an extended
+transition transports one and recomputes 35.
 
-It establishes no practical time gain. At size 80, the median incremental
-trace takes 70,777.626 ms, versus 10.522 ms for the complete recheck; the
-pre-registered gain criterion is false. No asymptotic law, general resource
-saving, or generalization to other families is claimed. Its fingerprints are
-preserved rather than rewritten; they do not validate the current candidate.
-The complete v8 source snapshot was not committed and is no longer
-reconstructible from Git history; the gate can therefore revalidate only the
-protocol, raw results, their aggregation, and their archived fingerprints, not
-re-elaborate that exact snapshot. The
-[`compiled-complete-property-scaling-v11`](../experiments/constitutive-neural-alignment/v11/scaling-protocol.json)
-campaign preregisters a complete constitutive property, a family with
-growing graphs, obligations, and traces, all phase costs, memory, serialized
-sizes, and an independent recheck. Its
-[confirmatory run](../experiments/constitutive-neural-alignment/v11/SCALING_ANALYSIS.md)
-accepted all 25 of 25 repetitions. Registered structures and obligations grow
-and reuse does transport fragments, but the preregistered practical criterion
-is false: depending on size, cumulative incremental median time is 3.76 to
-1,056.52 times the complete-recheck median. P8/S6 are therefore unfavorable
-for this implementation; no time or memory gain is claimed.
+The preregistered practical criterion is nevertheless false. Depending on
+size, cumulative incremental median time is 3.865 to 760.445 times the
+complete-recheck median. P8 is therefore evaluated and P8/S6 are unfavorable
+for this implementation; no time or memory gain is claimed. This observational
+campaign is neither a Lean theorem nor an asymptotic complexity result.
 
 ## Explicit exclusions
 
