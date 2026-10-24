@@ -22,14 +22,10 @@ if ($LASTEXITCODE -ne 0) { throw "neural comparison protocol v4 self-test failed
 if ($LASTEXITCODE -ne 0) { throw "neural comparison adapters v6 archive self-test failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-neural-comparison-adapters-v6-archive.py")
 if ($LASTEXITCODE -ne 0) { throw "neural comparison adapters v6 archive check failed" }
-& $pythonCommand (Join-Path $PSScriptRoot "check-neural-joint-protocol-v9.py") --self-test
-if ($LASTEXITCODE -ne 0) { throw "neural joint protocol v9 self-test failed" }
-& $pythonCommand (Join-Path $PSScriptRoot "check-neural-joint-protocol-v9.py")
-if ($LASTEXITCODE -ne 0) { throw "neural joint protocol v9 check failed" }
-& $pythonCommand (Join-Path $PSScriptRoot "check-neural-complete-comparison-v10.py") --self-test --allow-results
-if ($LASTEXITCODE -ne 0) { throw "neural complete comparison v10 self-test failed" }
-& $pythonCommand (Join-Path $PSScriptRoot "check-neural-complete-comparison-v10.py") --allow-results
-if ($LASTEXITCODE -ne 0) { throw "neural complete comparison v10 check failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-neural-v9-v10-archive.py") --self-test
+if ($LASTEXITCODE -ne 0) { throw "neural v9/v10 archive self-test failed" }
+& $pythonCommand (Join-Path $PSScriptRoot "check-neural-v9-v10-archive.py")
+if ($LASTEXITCODE -ne 0) { throw "neural v9/v10 archive check failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-compiled-neural-checker-measurement.py") --self-test
 if ($LASTEXITCODE -ne 0) { throw "compiled neural checker measurement self-test failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-compiled-neural-checker-measurement.py")
@@ -40,11 +36,11 @@ if ($LASTEXITCODE -ne 0) { throw "parameterized neural scaling v8 self-test fail
 if ($LASTEXITCODE -ne 0) { throw "parameterized neural scaling v8 check failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-complete-property-scaling-v11.py") --allow-draft --self-test
 if ($LASTEXITCODE -ne 0) { throw "complete-property neural scaling v11 check failed" }
-& $pythonCommand (Join-Path $PSScriptRoot "check-causal-complete-property-scaling-v12.py") --allow-draft --self-test
+& $pythonCommand (Join-Path $PSScriptRoot "check-causal-complete-property-scaling-v12.py") --require-results --self-test
 if ($LASTEXITCODE -ne 0) { throw "causal complete-property neural scaling v12 check failed" }
-& $pythonCommand (Join-Path $PSScriptRoot "check-independent-capability-comparison-v13.py") --allow-draft --self-test
+& $pythonCommand (Join-Path $PSScriptRoot "check-independent-capability-comparison-v13.py") --allow-results --self-test
 if ($LASTEXITCODE -ne 0) { throw "oracle-independent capability comparison v13 self-test failed" }
-& $pythonCommand (Join-Path $PSScriptRoot "check-independent-capability-comparison-v13.py") --allow-draft
+& $pythonCommand (Join-Path $PSScriptRoot "check-independent-capability-comparison-v13.py") --allow-results
 if ($LASTEXITCODE -ne 0) { throw "oracle-independent capability comparison v13 check failed" }
 & $pythonCommand (Join-Path $PSScriptRoot "check-independent-neural-artifact.py")
 if ($LASTEXITCODE -ne 0) { throw "independent neural artifact check failed" }
