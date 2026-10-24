@@ -33,44 +33,24 @@ def causalScalingActionState
     ReconfiguredExecutionState publicRequirementFamily :=
   causalScalingStateWithMemory size version source.memory
 
-/-- The transition protocol consumes the request occurrence produced by the
-neural proposal and selects one effective live step for this scaling family.
-The match is exhaustive: the measured transition cannot inherit a zero-step
-request or silently reuse the source memory. -/
-def causalScalingTransitionRequest {state : ReconfiguredExecutionState
-    publicRequirementFamily} (proposalAction : ScalingActionWitness state) :
-    Agent.Request :=
-  match proposalAction.request with
-  | .advance _ => .advance 1
-  | .inspect _ _ => .advance 1
-  | .propose _ _ _ => .advance 1
-  | .obtain _ _ => .advance 1
-
-structure CausalScalingActionWitness
-    (state : ReconfiguredExecutionState publicRequirementFamily) : Type 3 where
-  private mk ::
-  proposalAction : ScalingActionWitness state
-  request : Agent.Request
-  requestExact : request = causalScalingTransitionRequest proposalAction
-  result : Agent.Memory × Agent.Event
-  evidence : Agent.RequestEvidence state.memory request result
-  resultExact : result = Agent.executeInput state.memory request
+/-- The measured action is the action produced by the proposal channel itself.
+There is no second request-selection layer between the neural proposal and the
+executor.  In particular, a proposal for `.advance 0` remains `.advance 0`;
+structural progress of an accepted artifact update is never simulated by
+rewriting its operational request. -/
+abbrev CausalScalingActionWitness
+    (state : ReconfiguredExecutionState publicRequirementFamily) :=
+  ScalingActionWitness state
 
 def causalScalingAction
     (source : ReconfiguredExecutionState publicRequirementFamily)
     (size : Nat) (version : ScalingArtifactVersion) :
     CausalScalingActionWitness (causalScalingActionState source size version) :=
-  let proposalAction := executeScalingAction
-    (causalScalingActionState source size version)
-  let request := causalScalingTransitionRequest proposalAction
-  let produced := Agent.executeProducedInput
-    (causalScalingActionState source size version).memory request
-  .mk proposalAction request rfl produced.1 produced.2 rfl
+  executeScalingAction (causalScalingActionState source size version)
 
-/-- Effect produced from the exact causal action witness.  This is deliberately
-distinct from `ScalingEffectWitness`: the latter records the proposal action,
-whereas this witness records the effective transition action that executes the
-successor request derived from that proposal. -/
+/-- Effect produced from the exact proposal action occurrence.  The action
+stored here is the one that was executed; no extensionally equal request is
+executed again to manufacture the successor. -/
 structure CausalScalingEffectWitness
     (state : ReconfiguredExecutionState publicRequirementFamily) : Type 3 where
   private mk ::
@@ -195,48 +175,75 @@ theorem causalScalingProducedTarget_exact
         causalScalingTargetState current.state command.size command.version := by
   rfl
 
+def causalScalingStateFragmentsOfProducedState
+    (size : Nat) (version : ScalingArtifactVersion)
+    (memory : Agent.Memory)
+    (state : ReconfiguredExecutionState publicRequirementFamily)
+    (stateExact : state =
+      causalScalingStateWithMemory size version memory) :
+    StateCertificateFragments scalingContract
+      (scalingDecodedArtifact size version)
+      state :=
+  let basis := scalingFiniteCausalBasis size version
+  let action := executeScalingAction state
+  let effect : ScalingEffectWitness state :=
+    { action := action
+      successor := action.result.1
+      event := action.result.2
+      successorExact := rfl
+      eventExact := rfl }
+  {
+    structural :=
+      { basis := basis
+        systemExact := by rw [stateExact]; rfl
+        inputDeclared := by rw [stateExact]; exact .head
+        observations := stableStructuralObservationSnapshot basis.naming
+        observationsExact := rfl },
+    requirement :=
+      { witness := by
+          rw [stateExact]
+          exact
+            { incorporation := publicRequirementIncorporation scalingInput
+              port := publicRequirementPort
+              encodedValue := 2
+              encodedExact := rfl } },
+    causal :=
+      { witness := by
+          rw [stateExact]
+          exact
+            { port := publicRequirementPort
+              role := scalingCausalRole size version } },
+    proposalAction := { witness := action },
+    authorization :=
+      { witness :=
+          { incorporated := publicReconfigurationAuthorization state.input } },
+    effect := { witness := effect },
+    historical :=
+      { witness :=
+          { run := state.system.run state.input
+            runExact := rfl } },
+    futures :=
+      { covered := fun requests => publicInteractionHistory state.memory requests
+        realization := scalingFutureRealization } }
+
 def causalScalingStateFragments
     (size : Nat) (version : ScalingArtifactVersion) (memory : Agent.Memory) :
     StateCertificateFragments scalingContract
       (scalingDecodedArtifact size version)
       (causalScalingStateWithMemory size version memory) :=
-  let state := causalScalingStateWithMemory size version memory
-  let basis := scalingFiniteCausalBasis size version
-  { structural :=
-      { basis := basis
-        systemExact := rfl
-        inputDeclared := .head
-        observations := stableStructuralObservationSnapshot basis.naming
-        observationsExact := rfl }
-    requirement :=
-      { witness :=
-          { incorporation := publicRequirementIncorporation state.input
-            port := publicRequirementPort
-            encodedValue := 2
-            encodedExact := rfl } }
-    causal :=
-      { witness :=
-          { port := publicRequirementPort
-            role := scalingCausalRole size version } }
-    proposalAction := { witness := executeScalingAction state }
-    authorization :=
-      { witness :=
-          { incorporated := publicReconfigurationAuthorization state.input } }
-    effect := { witness := produceScalingEffect state }
-    historical :=
-      { witness :=
-          { run := state.system.run state.input
-            runExact := rfl } }
-    futures :=
-      { covered := fun requests => publicInteractionHistory state.memory requests
-        realization := scalingFutureRealization } }
+  causalScalingStateFragmentsOfProducedState size version
+    memory (causalScalingStateWithMemory size version memory) rfl
 
-def causalScalingRecomputedCertificateFragments
-    (size : Nat) (version : ScalingArtifactVersion) (memory : Agent.Memory) :
+def causalScalingRecomputedCertificateFragmentsOfProducedState
+    (size : Nat) (version : ScalingArtifactVersion)
+    (memory : Agent.Memory)
+    (state : ReconfiguredExecutionState publicRequirementFamily)
+    (stateExact : state =
+      causalScalingStateWithMemory size version memory) :
     RecomputedStateCertificateFragments scalingContract
-      (scalingDecodedArtifact size version)
-      (causalScalingStateWithMemory size version memory) :=
-  let fragments := causalScalingStateFragments size version memory
+      (scalingDecodedArtifact size version) state :=
+  let fragments := causalScalingStateFragmentsOfProducedState size version memory
+    state stateExact
   { requirement := fragments.requirement
     causal := fragments.causal
     proposalAction := fragments.proposalAction
@@ -244,6 +251,14 @@ def causalScalingRecomputedCertificateFragments
     effect := fragments.effect
     historical := fragments.historical
     futures := fragments.futures }
+
+def causalScalingRecomputedCertificateFragments
+    (size : Nat) (version : ScalingArtifactVersion) (memory : Agent.Memory) :
+    RecomputedStateCertificateFragments scalingContract
+      (scalingDecodedArtifact size version)
+      (causalScalingStateWithMemory size version memory) :=
+  causalScalingRecomputedCertificateFragmentsOfProducedState size version
+    memory (causalScalingStateWithMemory size version memory) rfl
 
 def causalScalingStateCertificate
     (size : Nat) (version : ScalingArtifactVersion) (memory : Agent.Memory) :
@@ -498,6 +513,22 @@ def causalScalingIncrementalLocalConditionsOfSuccess
         exact CausalScalingIncrementalLocalConditions.mk target targetChecked
           assembly assemblyChecked decision transitionAccepted
 
+theorem causalScalingIncrementalProducedStateExact
+    {current : CheckedAgent causalScalingMetaContract ()}
+    {update : CausalScalingReceivedArtifact}
+    (analysis : CausalScalingIncrementalAnalysis current update) :
+    analysis.production.targetState =
+      causalScalingStateWithMemory update.size update.version
+        analysis.production.targetState.memory := by
+  have stateProduced : analysis.production.targetState =
+      causalScalingTargetState current.state update.size update.version :=
+    (congrArg ExecutedTransitionProduction.targetState
+      analysis.productionExact).trans
+      (causalScalingProducedTarget_exact (current := current)
+        analysis.transitionDecision.transition update)
+  rw [stateProduced]
+  rfl
+
 def causalScalingIncrementalTargetAnalysis
     {current : CheckedAgent causalScalingMetaContract ()}
     {update : CausalScalingReceivedArtifact}
@@ -523,10 +554,10 @@ def causalScalingIncrementalTargetAnalysis
     structuralBasisNamingExact := rfl
     structuralSystemExact := by rw [stateExact]; rfl
     structuralInputDeclared := by rw [stateExact]; exact .head
-    recomputedCertificateFragments := by
-      rw [stateExact]
-      exact causalScalingRecomputedCertificateFragments update.size update.version
-        (causalScalingTargetState current.state update.size update.version).memory
+    recomputedCertificateFragments :=
+      causalScalingRecomputedCertificateFragmentsOfProducedState
+        update.size update.version state.memory state
+        (causalScalingIncrementalProducedStateExact analysis)
     transition := analysis.transitionDecision.transition
     execution := analysis.production.execution }
 
@@ -582,28 +613,72 @@ theorem causalScalingAction_reads_exact_source
     (causalScalingActionState source size version).memory = source.memory := by
   rfl
 
-theorem causalScalingTransitionRequest_is_advance_one
-    (source : ReconfiguredExecutionState publicRequirementFamily)
-    (size : Nat) (version : ScalingArtifactVersion) :
-    causalScalingTransitionRequest
-      (causalScalingAction source size version).proposalAction =
-        .advance 1 := by
-  unfold causalScalingAction
-  change causalScalingTransitionRequest (executeScalingAction _) = _
-  unfold causalScalingTransitionRequest
-  cases (executeScalingAction
-    (causalScalingActionState source size version)).request <;> rfl
+theorem causalScalingStateFragments_share_proposal_action
+    (size : Nat) (version : ScalingArtifactVersion) (memory : Agent.Memory) :
+    (causalScalingStateFragments size version memory).effect.witness.action =
+      (causalScalingStateFragments size version memory).proposalAction.witness := by
+  rfl
 
-theorem causalScalingAction_register_progress
+theorem causalScalingProducedStateFragments_use_received_state
+    (size : Nat) (version : ScalingArtifactVersion)
+    (memory : Agent.Memory)
+    (state : ReconfiguredExecutionState publicRequirementFamily)
+    (stateExact : state =
+      causalScalingStateWithMemory size version memory) :
+    (causalScalingStateFragmentsOfProducedState size version memory state
+      stateExact).proposalAction.witness =
+        executeScalingAction state := by
+  cases stateExact
+  rfl
+
+theorem causalScalingIncrementalFragments_use_produced_state
+    {current : CheckedAgent causalScalingMetaContract ()}
+    {update : CausalScalingReceivedArtifact}
+    (analysis : CausalScalingIncrementalAnalysis current update) :
+    (causalScalingIncrementalTargetAnalysis analysis).recomputedCertificateFragments.proposalAction.witness =
+      executeScalingAction analysis.production.targetState := by
+  change
+    (causalScalingRecomputedCertificateFragmentsOfProducedState update.size
+      update.version analysis.production.targetState.memory
+      analysis.production.targetState
+      (causalScalingIncrementalProducedStateExact analysis)).proposalAction.witness =
+        executeScalingAction analysis.production.targetState
+  simpa only [causalScalingRecomputedCertificateFragmentsOfProducedState] using
+      (causalScalingProducedStateFragments_use_received_state update.size
+        update.version analysis.production.targetState.memory
+        analysis.production.targetState
+        (causalScalingIncrementalProducedStateExact analysis))
+
+theorem causalScalingAction_is_exact_proposal_action
     (source : ReconfiguredExecutionState publicRequirementFamily)
     (size : Nat) (version : ScalingArtifactVersion) :
-    (causalScalingAction source size version).result.1.register.length =
-      source.memory.register.length + 1 := by
-  rw [(causalScalingAction source size version).resultExact]
-  rw [(causalScalingAction source size version).requestExact]
-  rw [causalScalingTransitionRequest_is_advance_one]
-  change (Agent.runSteps 1 source.memory).1.register.length = _
-  exact Agent.runSteps_length 1 source.memory
+    causalScalingAction source size version =
+      executeScalingAction (causalScalingActionState source size version) := by
+  rfl
+
+theorem causalScalingAction_request_is_proposal_request
+    (source : ReconfiguredExecutionState publicRequirementFamily)
+    (size : Nat) (version : ScalingArtifactVersion) :
+    (causalScalingAction source size version).request =
+      publicAgentActionChannel.command
+        ((causalScalingActionState source size version).system.proposal
+          (causalScalingActionState source size version).input) := by
+  exact (causalScalingAction source size version).requestExact
+
+/-- At the concrete first local update, the network proposes no memory advance.
+The executed action preserves that decision instead of replacing it by a
+synthetic positive step. -/
+theorem causalScalingFirstLocalAction_is_advance_zero
+    (source : ReconfiguredExecutionState publicRequirementFamily) :
+    (causalScalingAction source 0 .local).request = .advance 0 := by
+  rfl
+
+/-- The first accepted update is structurally nontrivial even though its exact
+proposal action is allowed to request zero memory steps.  Positivity is carried
+by the received artifact transition, not fabricated in the action channel. -/
+theorem causalScalingFirstUpdate_changes_serialized_system :
+    scalingSerializedNetwork 0 .source ≠ scalingSerializedNetwork 0 .local := by
+  decide
 
 theorem causalScalingEffect_consumes_produced_action
     (source : ReconfiguredExecutionState publicRequirementFamily)
@@ -742,7 +817,6 @@ def checkCausalScalingFamily (parameters : ScalingFamilyParameters) :
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingTargetState
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingEffectOfAction
-#print axioms ConstitutiveSearch.NeuralAgent.causalScalingTransitionRequest
 #print axioms ConstitutiveSearch.NeuralAgent.CausalScalingActionWitness
 #print axioms ConstitutiveSearch.NeuralAgent.CausalScalingEffectWitness
 #print axioms ConstitutiveSearch.NeuralAgent.CausalScalingExecutedStateTransition
@@ -751,17 +825,25 @@ def checkCausalScalingFamily (parameters : ScalingFamilyParameters) :
 #print axioms ConstitutiveSearch.NeuralAgent.produceCausalScalingTransition
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingTransitionKernel
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingProducedTarget_exact
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingStateFragmentsOfProducedState
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingStateFragments
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingRecomputedCertificateFragmentsOfProducedState
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingInitialAgent
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingExecutableInterface
 #print axioms ConstitutiveSearch.NeuralAgent.analyzeCausalScalingIncrementalUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingIncrementalProducedStateExact
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingIncrementalTargetAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingFullRecheckEngine
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingIncrementalTarget_is_produced
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingIncrementalProduction_consumes_source
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingAction_reads_exact_source
-#print axioms ConstitutiveSearch.NeuralAgent.causalScalingTransitionRequest_is_advance_one
-#print axioms ConstitutiveSearch.NeuralAgent.causalScalingAction_register_progress
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingStateFragments_share_proposal_action
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingProducedStateFragments_use_received_state
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingIncrementalFragments_use_produced_state
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingAction_is_exact_proposal_action
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingAction_request_is_proposal_request
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingFirstLocalAction_is_advance_zero
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingFirstUpdate_changes_serialized_system
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingEffect_consumes_produced_action
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingTarget_consumes_produced_effect
 #print axioms ConstitutiveSearch.NeuralAgent.causalScalingProduction_effect_exact

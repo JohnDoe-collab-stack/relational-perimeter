@@ -24,6 +24,18 @@ def errorText : ScalingCheckerError -> String
   | .structuralAssembly => "structural-assembly"
   | .structuralMismatch => "structural-mismatch"
 
+def requestKindText : Agent.Request -> String
+  | .advance _ => "advance"
+  | .inspect _ _ => "inspect"
+  | .propose _ _ _ => "propose"
+  | .obtain _ _ => "obtain"
+
+def requestPrimaryArgument : Agent.Request -> Nat
+  | .advance steps => steps
+  | .inspect handle _ => handle
+  | .propose handle _ _ => handle
+  | .obtain handle _ => handle
+
 structure ParsedNat where
   accepted : Bool
   value : Nat
@@ -75,6 +87,7 @@ def emitObservation
     (size step initialNanoseconds incrementalNanoseconds fullNanoseconds
       initialCertificateEntries initialSemanticChecksum transitionForce : Nat)
     (version : ScalingArtifactVersion)
+    (actionRequest : Agent.Request)
     (metrics : ScalingPairMetrics)
     (cost : ScalingCompleteCost)
     (incrementalSemanticChecksum fullSemanticChecksum sourceRegisterLength
@@ -86,7 +99,11 @@ def emitObservation
   IO.print (Nat.repr step)
   IO.print ",\"version\":\""
   IO.print (versionText version)
-  IO.print "\",\"initial_nanoseconds\":"
+  IO.print "\",\"action_request_kind\":\""
+  IO.print (requestKindText actionRequest)
+  IO.print "\",\"action_request_primary_argument\":"
+  IO.print (Nat.repr (requestPrimaryArgument actionRequest))
+  IO.print ",\"initial_nanoseconds\":"
   IO.print (Nat.repr initialNanoseconds)
   IO.print ",\"incremental_nanoseconds\":"
   IO.print (Nat.repr incrementalNanoseconds)
@@ -183,7 +200,8 @@ def runTrace
                   emitObservation size step initialNanoseconds
                     (incrementalFinished - incrementalStarted)
                     (fullFinished - fullStarted) initialCertificateEntries
-                    initialSemanticChecksum transitionForce version metrics cost
+                    initialSemanticChecksum transitionForce version
+                    incremental.analysis.production.production.action.request metrics cost
                     incrementalSemanticChecksum fullSemanticChecksum
                     current.state.memory.register.length
                     incremental.checked.next.state.memory.register.length
@@ -229,6 +247,8 @@ def main (arguments : List String) : IO Unit := do
         sizeText remaining
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.CompiledCausalCompletePropertyScaling.requestKindText
+#print axioms ConstitutiveSearch.NeuralAgent.CompiledCausalCompletePropertyScaling.requestPrimaryArgument
 #print axioms ConstitutiveSearch.NeuralAgent.CompiledCausalCompletePropertyScaling.transitionChecksum
 #print axioms ConstitutiveSearch.NeuralAgent.CompiledCausalCompletePropertyScaling.emitObservation
 #print axioms ConstitutiveSearch.NeuralAgent.CompiledCausalCompletePropertyScaling.runTrace

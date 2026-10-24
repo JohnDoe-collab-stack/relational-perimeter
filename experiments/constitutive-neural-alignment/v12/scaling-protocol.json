@@ -14,7 +14,7 @@
   "scientific_scope": "Observed finite scaling of paired compiled checkers on a growing complete certificate property whose successor is produced by an action and effect from the exact checked source. This is neither an asymptotic theorem nor a claim about all neural systems.",
   "causal_transition_property": {
     "source_consumed_by_action": true,
-    "effective_register_progress": true,
+    "action_request_equals_proposal_request": true,
     "action_consumed_by_effect": true,
     "effect_consumed_by_successor": true,
     "trace_continues_from_installed_successor": true,
@@ -37,7 +37,8 @@
       "complete_obligations strictly grow across points and trace steps",
       "future_trace_length equals step plus one",
       "every emitted transition checksum forces source action effect and successor",
-      "target register length equals source register length plus one at every step",
+      "the observed action request is the proposal-channel request without rewriting",
+      "target register length follows the observed request; for this family's advance-zero proposals it equals source register length",
       "at least one local cone transports a nonempty fragment set",
       "at least one extended cone recalculates a nonempty fragment set"
     ],

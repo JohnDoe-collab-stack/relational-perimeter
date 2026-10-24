@@ -33,8 +33,8 @@ def validate_protocol(protocol: dict[str, Any], allow_draft: bool) -> None:
     causal = protocol.get("causal_transition_property", {})
     CHECKER.require(causal.get("source_consumed_by_action") is True,
                     "action is not required to consume the checked source")
-    CHECKER.require(causal.get("effective_register_progress") is True,
-                    "transition is not required to change the produced state")
+    CHECKER.require(causal.get("action_request_equals_proposal_request") is True,
+                    "executed action may rewrite the proposal request")
     CHECKER.require(causal.get("action_consumed_by_effect") is True,
                     "effect is not required to consume the produced action")
     CHECKER.require(causal.get("effect_consumed_by_successor") is True,
@@ -57,10 +57,14 @@ def validate_result(protocol: dict[str, Any], result: dict[str, Any]) -> None:
                             "source state was not observed")
             CHECKER.require(isinstance(row.get("target_register_length"), int),
                             "produced successor was not observed")
+            CHECKER.require(row.get("action_request_kind") == "advance",
+                            "observed action is not the proposal advance request")
+            CHECKER.require(row.get("action_request_primary_argument") == 0,
+                            "proposal advance count was rewritten")
             CHECKER.require(
                 row["target_register_length"] ==
-                row["source_register_length"] + 1,
-                "produced successor did not execute exactly one live step")
+                row["source_register_length"],
+                "produced successor does not reflect the advance-zero proposal")
 
 
 def self_test(protocol: dict[str, Any]) -> None:
@@ -84,7 +88,7 @@ def self_test(protocol: dict[str, Any]) -> None:
     changed = copy.deepcopy(protocol)
     changed["practical_gain_rule"]["selection_counts_never_establish_gain"] = False
     mutations.append(("selection-count-gain", changed))
-    for field in ("source_consumed_by_action", "effective_register_progress",
+    for field in ("source_consumed_by_action", "action_request_equals_proposal_request",
                   "action_consumed_by_effect",
                   "effect_consumed_by_successor",
                   "trace_continues_from_installed_successor",

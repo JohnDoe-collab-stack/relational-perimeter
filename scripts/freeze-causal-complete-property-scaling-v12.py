@@ -66,6 +66,7 @@ def main() -> None:
         ROOT / "Tests/Mechanisms/NeuralCausalCompletePropertyScalingRegression.lean",
         ROOT / "Tests/ExpectedFailure/CausalScalingProductionCannotMoveToForeignSource.lean.fail",
         ROOT / "Tests/ExpectedFailure/CausalScalingProductionCannotChangeCommand.lean.fail",
+        ROOT / "Tests/ExpectedFailure/CausalScalingActionCannotReplaceProposalRequest.lean.fail",
         ROOT / "scripts/expected-failures.tsv", ROOT / "scripts/stratification.tsv",
         ROOT / "lakefile.toml", ROOT / "lake-manifest.json", ROOT / "lean-toolchain",
     )

@@ -1036,38 +1036,63 @@ LEAN_EXPORT lean_object* l_bad(){ return 0; }
     absent(functions, scaling_incremental,
         ["checkInitial", "checkFullUpdate", "FullRecheck", "certifyFragments"])
     print("AGENT_INCREMENTAL_ASSEMBLY_OK: installed certificate consumes direct transport/recomputation; no regenerated target snapshot or complete-check oracle")
-    # F4: the successor campaign must produce one action from the exact source,
-    # pass that same produced object to the effect constructor, and build the
-    # successor from that effect.  Re-executing an extensionally equal action
-    # here would hide an occurrence substitution behind value equality.
+    # F4: the successor campaign must execute the proposal action itself from
+    # the exact source, pass that same produced object to the effect constructor,
+    # and build the successor from that effect.  A request-rewriting layer or
+    # an extensionally equal re-execution would hide an occurrence substitution.
     causal_producer = select(functions,
         "NeuralAgent_produceCausalScalingTransition")
     causal_action = select(functions,
         "NeuralAgent_causalScalingAction")
     causal_target_analysis = select(functions,
         "NeuralAgent_causalScalingIncrementalTargetAnalysis")
+    causal_produced_state = select(functions,
+        "NeuralAgent_ExecutedTransitionProduction_targetState___redArg")
+    causal_produced_fragments = select(functions,
+        "NeuralAgent_causalScalingRecomputedCertificateFragmentsOfProducedState___redArg")
+    causal_state_fragments = select(functions,
+        "NeuralAgent_causalScalingStateFragmentsOfProducedState___redArg")
+    scaling_action = select(functions, "NeuralAgent_executeScalingAction")
     calls(functions, causal_producer, "NeuralAgent_causalScalingAction", 1)
     calls(functions, causal_action,
-        "NeuralAgent_causalScalingTransitionRequest___redArg", 1)
-    calls(functions, causal_action,
-        "Agent_executeProducedInput", 1)
+        "NeuralAgent_executeScalingAction", 1)
+    for forbidden in ("Agent_executeProducedInput", "causalScalingTransitionRequest"):
+        if forbidden in functions[causal_action]:
+            raise ValueError(
+                f"{causal_action}: direct request substitution through {forbidden}")
     calls(functions, causal_producer,
         "NeuralAgent_causalScalingEffectOfAction___redArg", 1)
+    calls(functions, causal_state_fragments,
+        "NeuralAgent_executeScalingAction", 1)
+    forwarded_parameter(functions, compiled_parameters, causal_state_fragments,
+        2, scaling_action, 0)
+    if "NeuralAgent_produceScalingEffect" in functions[causal_state_fragments]:
+        raise ValueError(
+            f"{causal_state_fragments}: certificate effect reconstructs its action")
     absent(functions, causal_producer, [], exact=(
         select(functions, "NeuralAgent_causalScalingEffect"),
         select(functions, "NeuralAgent_produceScalingEffect"),
     ))
     calls(functions, causal_target_analysis,
         "NeuralAgent_ExecutedTransitionProduction_targetState___redArg", 1)
+    forwarded_result(functions, causal_target_analysis, causal_produced_state,
+        causal_produced_fragments, 2)
+    result_to_constructor(functions, causal_target_analysis,
+        causal_produced_state, 3)
+    for forbidden in ("causalScalingTargetState", "causalScalingStateWithMemory",
+                      "causalScalingAction", "causalScalingEffect"):
+        if forbidden in functions[causal_target_analysis]:
+            raise ValueError(
+                f"{causal_target_analysis}: produced successor replaced through {forbidden}")
     causal_trace = select(functions,
         "NeuralAgent_CompiledCausalCompletePropertyScaling_runTrace")
     calls(functions, causal_trace,
         "NeuralAgent_checkGenericIncrementalUpdate___redArg", 1)
     calls(functions, causal_trace,
         "NeuralAgent_checkFullUpdate___redArg", 1)
-    print("AGENT_CAUSAL_SCALING_OK: one source-indexed action occurrence is consumed by one effect occurrence and the produced successor")
+    print("AGENT_CAUSAL_SCALING_OK: the exact source-indexed proposal action occurrence is consumed by one effect occurrence and the produced successor; that same successor occurrence is passed to certificate-fragment recomputation and installed, with no request rewriting, target reconstruction or second transition execution")
     print("AGENT_CAUSAL_SCALING_PAIRED_OK: the compiled runner executes one incremental check and one independent full recheck on each current state before continuing from the checked successor")
-    print("AGENT_CODEGEN_OK: actual live step, one request head, learned sharing and incremental assembly, no rich archive or extensive enumeration")
+    print("AGENT_CODEGEN_OK: actual proposal action, one request head, learned sharing and incremental assembly, no rich archive or extensive enumeration")
 
 
 if __name__ == "__main__":

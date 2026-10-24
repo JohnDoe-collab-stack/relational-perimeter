@@ -19,12 +19,36 @@ theorem action_reads_exact_source
     (causalScalingActionState source size version).memory = source.memory :=
   causalScalingAction_reads_exact_source source size version
 
-theorem action_effectively_advances_the_source
+theorem action_is_the_exact_proposal_action
     (source : ReconfiguredExecutionState publicRequirementFamily)
     (size : Nat) (version : ScalingArtifactVersion) :
-    (causalScalingAction source size version).result.1.register.length =
-      source.memory.register.length + 1 :=
-  causalScalingAction_register_progress source size version
+    causalScalingAction source size version =
+      executeScalingAction (causalScalingActionState source size version) :=
+  causalScalingAction_is_exact_proposal_action source size version
+
+theorem first_local_action_preserves_zero_advance
+    (source : ReconfiguredExecutionState publicRequirementFamily) :
+    (causalScalingAction source 0 .local).request = .advance 0 :=
+  causalScalingFirstLocalAction_is_advance_zero source
+
+theorem first_local_artifact_transition_is_nontrivial :
+    scalingSerializedNetwork 0 .source ≠ scalingSerializedNetwork 0 .local :=
+  causalScalingFirstUpdate_changes_serialized_system
+
+theorem certificate_effect_consumes_its_proposal_action
+    (size : Nat) (version : ScalingArtifactVersion)
+    (memory : ConstitutiveSearch.Agent.Memory) :
+    (causalScalingStateFragments size version memory).effect.witness.action =
+      (causalScalingStateFragments size version memory).proposalAction.witness :=
+  causalScalingStateFragments_share_proposal_action size version memory
+
+theorem incremental_certificate_consumes_produced_successor
+    {current : CheckedAgent causalScalingMetaContract ()}
+    {update : CausalScalingReceivedArtifact}
+    (analysis : CausalScalingIncrementalAnalysis current update) :
+    (causalScalingIncrementalTargetAnalysis analysis).recomputedCertificateFragments.proposalAction.witness =
+      executeScalingAction analysis.production.targetState :=
+  causalScalingIncrementalFragments_use_produced_state analysis
 
 theorem effect_consumes_exact_action
     (source : ReconfiguredExecutionState publicRequirementFamily)
@@ -70,7 +94,11 @@ theorem causal_cost_counts_the_real_assembly
 end Tests.Mechanisms.NeuralCausalCompletePropertyScalingRegression
 /- AXIOM_AUDIT_BEGIN -/
 #print axioms Tests.Mechanisms.NeuralCausalCompletePropertyScalingRegression.action_reads_exact_source
-#print axioms Tests.Mechanisms.NeuralCausalCompletePropertyScalingRegression.action_effectively_advances_the_source
+#print axioms Tests.Mechanisms.NeuralCausalCompletePropertyScalingRegression.action_is_the_exact_proposal_action
+#print axioms Tests.Mechanisms.NeuralCausalCompletePropertyScalingRegression.first_local_action_preserves_zero_advance
+#print axioms Tests.Mechanisms.NeuralCausalCompletePropertyScalingRegression.first_local_artifact_transition_is_nontrivial
+#print axioms Tests.Mechanisms.NeuralCausalCompletePropertyScalingRegression.certificate_effect_consumes_its_proposal_action
+#print axioms Tests.Mechanisms.NeuralCausalCompletePropertyScalingRegression.incremental_certificate_consumes_produced_successor
 #print axioms Tests.Mechanisms.NeuralCausalCompletePropertyScalingRegression.effect_consumes_exact_action
 #print axioms Tests.Mechanisms.NeuralCausalCompletePropertyScalingRegression.successor_consumes_exact_effect
 #print axioms Tests.Mechanisms.NeuralCausalCompletePropertyScalingRegression.paired_step_accepts_the_produced_successor

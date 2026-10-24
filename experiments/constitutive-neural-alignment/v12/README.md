@@ -10,9 +10,13 @@ The transition kernel executes an action from the exact checked source memory,
 produces an effect from that action, constructs the successor from that effect,
 and gives the same source and command independently to the incremental checker
 and full recheck. The next trace step consumes the installed incremental
-successor. The effective transition executes exactly one live step: the
-protocol rejects any accepted observation whose target register length is not
-the source register length plus one.
+successor. The effective transition executes exactly the request produced by
+the proposal channel.  For the current generated inputs that request is
+`advance 0`; the protocol therefore rejects a fabricated positive step and
+requires the target register length to remain equal to the source register
+length.  Nontrivial progress in this campaign is the decoded artifact and
+system transition (`source`, `local`, `extended`), not a manufactured memory
+advance.
 
 This generated family is only the workload of the scaling campaign. It does
 not replace the repository's independent learned artifact and establishes no

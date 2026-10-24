@@ -1,0 +1,13 @@
+import RelationalPerimeter.Agents.Neural.CausalParameterizedCompiledCheckerFamily
+namespace Tests.ExpectedFailure.CausalScalingActionCannotReplaceProposalRequest
+open ConstitutiveSearch.NeuralAgent
+
+def fabricatedPositiveStep
+    (source : ReconfiguredExecutionState publicRequirementFamily) :
+    (causalScalingAction source 0 .local).request = .advance 1 := by
+  rfl
+
+end Tests.ExpectedFailure.CausalScalingActionCannotReplaceProposalRequest
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.causalScalingFirstLocalAction_is_advance_zero
+/- AXIOM_AUDIT_END -/
