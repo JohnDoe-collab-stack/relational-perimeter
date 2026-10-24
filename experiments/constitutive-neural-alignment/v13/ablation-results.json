@@ -1,0 +1,123 @@
+{
+  "campaign_id": "constitutive-neural-independent-capability-ablations-v13",
+  "results": [
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedRequirementCannotBeBypassedInReconfiguration.lean.fail",
+      "obligation": "The received requirement must retain its own causal role and cannot be replaced by the transformed-source role.",
+      "outcome": "rejected",
+      "probe": "P1",
+      "mutation": "bypass the learned requirement used by reconfiguration"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedP2ModifiedDecoderCannotSatisfyCanonicalPath.lean.fail",
+      "obligation": "A modified decoder over the exact same executed network output cannot satisfy the canonical decoder/action-path evidence equation.",
+      "outcome": "rejected",
+      "probe": "P2",
+      "mutation": "claim that the modified decoder/action path satisfies the canonical evidence equation on the same executed network output"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedP2FragmentCannotCrossConsumerVersions.lean.fail",
+      "obligation": "A dependent consumer fragment produced for the canonical decoder cannot certify a genuinely changed admissible decoder version.",
+      "outcome": "rejected",
+      "probe": "P2",
+      "mutation": "reuse the dependent fragment of the canonical consumer after an admissible but genuine decoder modification"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedP2IncrementalAnalysisCannotCrossConsumerVersions.lean.fail",
+      "obligation": "The generic incremental analysis produced for the canonical consumer cannot certify the admissible changed consumer version.",
+      "outcome": "rejected",
+      "probe": "P2",
+      "mutation": "reuse the complete generic incremental analysis of the canonical consumer for the admissible changed consumer version"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedP2FullDecodedArtifactCannotCrossConsumerVersions.lean.fail",
+      "obligation": "The independent full recheck cannot replace the exact admissible consumer fragment by the canonical consumer fragment after decoding.",
+      "outcome": "rejected",
+      "probe": "P2",
+      "mutation": "replace the admissible consumer fragment inside the independently decoded complete-recheck artifact by the canonical fragment"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/ForeignLearnedActionCannotReplaceInstallingAction.lean.fail",
+      "obligation": "An action produced by another learned execution cannot replace the action calculated from the decoded target system and preceding memory.",
+      "outcome": "rejected",
+      "probe": "P2",
+      "mutation": "replace the installing action by an action from another execution"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedExtendedFragmentsCannotReplaceAlignedFragments.lean.fail",
+      "obligation": "Semantic fragments indexed by the extended contract artifact and state cannot replace the aligned fragments at final certificate assembly.",
+      "outcome": "rejected",
+      "probe": "P2",
+      "mutation": "replace aligned structural fragments by fragments from another contract version"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/PostForgettingTransitionCannotReverseMetaContract.lean.fail",
+      "obligation": "A post-forgetting contract change must use a transition authorized at the exact current agent and cannot reverse the fixed meta-contract permission.",
+      "outcome": "rejected",
+      "probe": "P3",
+      "mutation": "reverse the authorized post-forgetting contract transition"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/PostForgettingCannotRecoverHistoricalIdentity.lean.fail",
+      "obligation": "The learned meta-contract has no transition from the forgotten aligned state back to a historical initial identity.",
+      "outcome": "rejected",
+      "probe": "P4",
+      "mutation": "recover the historical identity after executed forgetting"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/SeparatedLearnedFutureCannotShareExactMemory.lean.fail",
+      "obligation": "An exact realization cannot assign one memory to the two sources separated by the produced nonempty continuation.",
+      "outcome": "rejected",
+      "probe": "P4",
+      "mutation": "collapse two future-separated learned sources into one exact memory"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/PostForgettingContinuationCannotMasqueradeAsContractUpdate.lean.fail",
+      "obligation": "An ordinary continuation after forgetting is not a meta-contract update and cannot enter the contract-changing runtime API.",
+      "outcome": "rejected",
+      "probe": "P5",
+      "mutation": "substitute ordinary continuation for an installed contract-changing update"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/PostForgettingPermissionCannotReplaceClosedChange.lean.fail",
+      "obligation": "A post-forgetting permission cannot replace the private receipt emitted by the installed reduced-memory continuation.",
+      "outcome": "rejected",
+      "probe": "P5",
+      "mutation": "substitute permission for the receipt produced by the reduced-memory continuation"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/RecomputedFragmentCannotReplaceLicensedTransport.lean.fail",
+      "obligation": "A target observation recomputed independently cannot replace a source fragment transported under the required outside-cone licence.",
+      "outcome": "rejected",
+      "probe": "P6",
+      "mutation": "replace licensed transported fragments by target-side recomputation"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedExtendedFragmentsCannotReplaceAlignedFragments.lean.fail",
+      "obligation": "Semantic fragments indexed by the extended contract artifact and state cannot replace the aligned fragments at final certificate assembly.",
+      "outcome": "rejected",
+      "probe": "P6",
+      "mutation": "replay structural fragments indexed by a different contract version"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/ReconstructedLearnedSuccessorCannotInstall.lean.fail",
+      "obligation": "A successor reconstructed with a fixed public memory cannot replace the state calculated from the installing effect.",
+      "outcome": "rejected",
+      "probe": "P6",
+      "mutation": "substitute a reconstructed successor for the successor produced by the installing effect"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/ScalingUnitCannotReplaceSubstantiveRequirement.lean.fail",
+      "obligation": "The complete-property scaling family rejects a Unit placeholder where the exact state-indexed requirement-incorporation witness is required.",
+      "outcome": "rejected",
+      "probe": "P8",
+      "mutation": "replace a complete growing obligation by Unit"
+    },
+    {
+      "probe": "P7",
+      "mutation": "transitive audited-verdict injection",
+      "gate": "scripts/check-independent-comparison-codegen.py",
+      "outcome": "rejected"
+    }
+  ]
+}

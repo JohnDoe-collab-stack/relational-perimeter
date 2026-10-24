@@ -1,0 +1,254 @@
+{
+  "protocol_id": "constitutive-neural-oracle-independent-capability-comparison-v13",
+  "repository_commit": "fcabf434e9fcb7f174bb6857a624f31f212f175c",
+  "frozen_source_commit": "9bdfa304f0f54a2cac6b0295937c171d11e6609d",
+  "frozen_source_tree": "5072b400defc922744df770757956d27e9e94011",
+  "snapshot_sha256": "c7a006f4ab87a99d54bc21e90a041498cad3667e8a3c9c843e4eb968760c1ec4",
+  "protocol_sha256": "66dbdfe6bec89f9deb071b840b11d792bfa5a6114455705f80c6f24b6dcc20f4",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.10",
+    "lean": "Lean (version 4.33.1, x86_64-w64-windows-gnu, commit 819816b2e0a3bf405af45ae5c7af2491d8f5bee6, Release)"
+  },
+  "command": [
+    "lake",
+    "-K",
+    "moreLeanArgs=[\"-M=8192\"]",
+    "exe",
+    "compiled_independent_complete_neural_comparison"
+  ],
+  "build_command": [
+    "lake",
+    "-K",
+    "moreLeanArgs=[\"-M=8192\"]",
+    "build",
+    "compiled_independent_complete_neural_comparison"
+  ],
+  "reference_audit_command": [
+    "lake",
+    "env",
+    "lean",
+    "-M",
+    "8192",
+    "Tests/Mechanisms/NeuralIndependentCapabilityComparisonRegression.lean"
+  ],
+  "rows": [
+    {
+      "method_id": "extensional-current-behavior-verification",
+      "translation_count": 2,
+      "current_cases": 4,
+      "tables_equal": true
+    },
+    {
+      "method_id": "fixed-network-interventional-causal-analysis",
+      "translation_count": 2,
+      "aligned_authorization_dependency": true,
+      "bypass_authorization_dependency": false,
+      "p2_canonical_decoder_action": "accepted",
+      "p2_admissible_modified_decoder_action": "accepted",
+      "p2_forbidden_modified_decoder_action": "rejected",
+      "p2_admissible_empty_output_changed": true,
+      "p2_forbidden_proposals_different": true,
+      "p2_local_recheck_agree": true
+    },
+    {
+      "method_id": "pre-execution-action-shielding",
+      "translation_count": 2,
+      "aligned_decision": "allow",
+      "bypass_decision": "refuse"
+    },
+    {
+      "method_id": "guaranteed-self-adaptive-system",
+      "translation_count": 3,
+      "aligned_submission": "installed",
+      "bypass_submission": "rejected",
+      "p5_accepted_contract_change": "installed",
+      "p5_rejected_contract_change": "rejected"
+    },
+    {
+      "method_id": "incremental-neural-verification-with-proof-reuse",
+      "translation_count": 4,
+      "aligned_submission": "accepted",
+      "bypass_submission": "rejected",
+      "transported_structural_fragments": 3,
+      "recomputed_structural_fragments": 10,
+      "p6_successive_decision": "accepted",
+      "p6_successive_transported_structural_fragments": 10,
+      "p6_successive_recomputed_structural_fragments": 4,
+      "p2_canonical_consumer": "accepted",
+      "p2_admissible_consumer": "accepted",
+      "p2_forbidden_consumer": "rejected",
+      "p3_allowed_contract_transition": "accepted",
+      "p3_rejected_contract_transition": "rejected",
+      "p5_accepted_contract_change": "accepted",
+      "p5_rejected_contract_change": "rejected"
+    },
+    {
+      "method_id": "deployment-chain-certificate-propagation",
+      "translation_count": 3,
+      "accepted_transitions": 1,
+      "bypass_submission": "rejected"
+    },
+    {
+      "method_id": "relational-execution-comparison",
+      "translation_count": 4,
+      "current_tables_equal": true,
+      "future_requests": 1,
+      "future_outputs_different": true,
+      "aligned_future_satisfies": true,
+      "bypass_future_satisfies": false,
+      "p4_separator_nonempty": true,
+      "p4_incorrect_forgetting_fff_collapses": true,
+      "p4_separator_reveals_required_distinction": true
+    },
+    {
+      "method_id": "explicit-reference-combination",
+      "translation_count": 6,
+      "current_tables_equal": true,
+      "aligned_authorization_dependency": true,
+      "bypass_authorization_dependency": false,
+      "aligned_mutation_decision": "allow",
+      "bypass_mutation_decision": "refuse",
+      "aligned_future_satisfies": true,
+      "bypass_future_satisfies": false,
+      "aligned_decision": "allow",
+      "bypass_decision": "refuse"
+    },
+    {
+      "method_id": "independent-complete-recheck",
+      "translation_count": 4,
+      "aligned_decision": "accepted",
+      "bypass_decision": "rejected",
+      "p2_canonical_consumer": "accepted",
+      "p2_admissible_consumer": "accepted",
+      "p2_forbidden_consumer": "rejected",
+      "p3_allowed_contract_transition": "accepted",
+      "p3_rejected_contract_transition": "rejected",
+      "p5_accepted_contract_change": "accepted",
+      "p5_rejected_contract_change": "rejected",
+      "p6_successive_decision": "accepted"
+    }
+  ],
+  "raw_output_sha256": "781deed1c5e09100817572734e35779fd18ad940cb6faa9b35646a5f4e6ff2d5",
+  "ablation_results": [
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedRequirementCannotBeBypassedInReconfiguration.lean.fail",
+      "obligation": "The received requirement must retain its own causal role and cannot be replaced by the transformed-source role.",
+      "outcome": "rejected",
+      "probe": "P1",
+      "mutation": "bypass the learned requirement used by reconfiguration"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedP2ModifiedDecoderCannotSatisfyCanonicalPath.lean.fail",
+      "obligation": "A modified decoder over the exact same executed network output cannot satisfy the canonical decoder/action-path evidence equation.",
+      "outcome": "rejected",
+      "probe": "P2",
+      "mutation": "claim that the modified decoder/action path satisfies the canonical evidence equation on the same executed network output"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedP2FragmentCannotCrossConsumerVersions.lean.fail",
+      "obligation": "A dependent consumer fragment produced for the canonical decoder cannot certify a genuinely changed admissible decoder version.",
+      "outcome": "rejected",
+      "probe": "P2",
+      "mutation": "reuse the dependent fragment of the canonical consumer after an admissible but genuine decoder modification"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedP2IncrementalAnalysisCannotCrossConsumerVersions.lean.fail",
+      "obligation": "The generic incremental analysis produced for the canonical consumer cannot certify the admissible changed consumer version.",
+      "outcome": "rejected",
+      "probe": "P2",
+      "mutation": "reuse the complete generic incremental analysis of the canonical consumer for the admissible changed consumer version"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedP2FullDecodedArtifactCannotCrossConsumerVersions.lean.fail",
+      "obligation": "The independent full recheck cannot replace the exact admissible consumer fragment by the canonical consumer fragment after decoding.",
+      "outcome": "rejected",
+      "probe": "P2",
+      "mutation": "replace the admissible consumer fragment inside the independently decoded complete-recheck artifact by the canonical fragment"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/ForeignLearnedActionCannotReplaceInstallingAction.lean.fail",
+      "obligation": "An action produced by another learned execution cannot replace the action calculated from the decoded target system and preceding memory.",
+      "outcome": "rejected",
+      "probe": "P2",
+      "mutation": "replace the installing action by an action from another execution"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedExtendedFragmentsCannotReplaceAlignedFragments.lean.fail",
+      "obligation": "Semantic fragments indexed by the extended contract artifact and state cannot replace the aligned fragments at final certificate assembly.",
+      "outcome": "rejected",
+      "probe": "P2",
+      "mutation": "replace aligned structural fragments by fragments from another contract version"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/PostForgettingTransitionCannotReverseMetaContract.lean.fail",
+      "obligation": "A post-forgetting contract change must use a transition authorized at the exact current agent and cannot reverse the fixed meta-contract permission.",
+      "outcome": "rejected",
+      "probe": "P3",
+      "mutation": "reverse the authorized post-forgetting contract transition"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/PostForgettingCannotRecoverHistoricalIdentity.lean.fail",
+      "obligation": "The learned meta-contract has no transition from the forgotten aligned state back to a historical initial identity.",
+      "outcome": "rejected",
+      "probe": "P4",
+      "mutation": "recover the historical identity after executed forgetting"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/SeparatedLearnedFutureCannotShareExactMemory.lean.fail",
+      "obligation": "An exact realization cannot assign one memory to the two sources separated by the produced nonempty continuation.",
+      "outcome": "rejected",
+      "probe": "P4",
+      "mutation": "collapse two future-separated learned sources into one exact memory"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/PostForgettingContinuationCannotMasqueradeAsContractUpdate.lean.fail",
+      "obligation": "An ordinary continuation after forgetting is not a meta-contract update and cannot enter the contract-changing runtime API.",
+      "outcome": "rejected",
+      "probe": "P5",
+      "mutation": "substitute ordinary continuation for an installed contract-changing update"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/PostForgettingPermissionCannotReplaceClosedChange.lean.fail",
+      "obligation": "A post-forgetting permission cannot replace the private receipt emitted by the installed reduced-memory continuation.",
+      "outcome": "rejected",
+      "probe": "P5",
+      "mutation": "substitute permission for the receipt produced by the reduced-memory continuation"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/RecomputedFragmentCannotReplaceLicensedTransport.lean.fail",
+      "obligation": "A target observation recomputed independently cannot replace a source fragment transported under the required outside-cone licence.",
+      "outcome": "rejected",
+      "probe": "P6",
+      "mutation": "replace licensed transported fragments by target-side recomputation"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/LearnedExtendedFragmentsCannotReplaceAlignedFragments.lean.fail",
+      "obligation": "Semantic fragments indexed by the extended contract artifact and state cannot replace the aligned fragments at final certificate assembly.",
+      "outcome": "rejected",
+      "probe": "P6",
+      "mutation": "replay structural fragments indexed by a different contract version"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/ReconstructedLearnedSuccessorCannotInstall.lean.fail",
+      "obligation": "A successor reconstructed with a fixed public memory cannot replace the state calculated from the installing effect.",
+      "outcome": "rejected",
+      "probe": "P6",
+      "mutation": "substitute a reconstructed successor for the successor produced by the installing effect"
+    },
+    {
+      "fixture": "Tests/ExpectedFailure/ScalingUnitCannotReplaceSubstantiveRequirement.lean.fail",
+      "obligation": "The complete-property scaling family rejects a Unit placeholder where the exact state-indexed requirement-incorporation witness is required.",
+      "outcome": "rejected",
+      "probe": "P8",
+      "mutation": "replace a complete growing obligation by Unit"
+    },
+    {
+      "probe": "P7",
+      "mutation": "transitive audited-verdict injection",
+      "gate": "scripts/check-independent-comparison-codegen.py",
+      "outcome": "rejected"
+    }
+  ],
+  "ablation_output_sha256": "90c923fb105c3935c319190f06c83d0c624a75cd2420e7fb16cb2421cdda03e7"
+}
