@@ -266,4 +266,3 @@ def validate_snapshot(snapshot: dict, check_worktree: bool) -> None:
         if check_worktree:
             require(material_digest(working_reader(relative)) == expected,
                     f"executed material differs from snapshot: {relative}")
-
