@@ -1,0 +1,17 @@
+import RelationalPerimeter.Agents.Neural.AutonomousCheckerClosure
+
+open ConstitutiveSearch ConstitutiveSearch.NeuralAgent
+
+def targetAnalysisCannotIgnoreExecutionReceipt
+    (left right : LearnedPostForgettingExecutionReceipt) :
+    (executeLearnedPostForgettingContractResources
+      learnedSuccessiveIncrementalSuccess.analysis
+      learnedPostForgettingExtendedJustification left).targetAnalysis =
+    (executeLearnedPostForgettingContractResources
+      learnedSuccessiveIncrementalSuccess.analysis
+      learnedPostForgettingExtendedJustification right).targetAnalysis := by
+  rfl
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingExecutionReceipt
+/- AXIOM_AUDIT_END -/

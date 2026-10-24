@@ -494,20 +494,29 @@ theorem learnedAlignedRuntime_current_is_checkedResult :
 
 def learnedAlignedForgottenCurrentAgent :
     ForgottenCurrentAgent LearnedAlignedCurrentAgent :=
-  forgetCurrentAgent LearnedAlignedCurrentAgent
+  { memory := learnedAlignedExecutedFutureForgetting.output
+    memoryExact := learnedExecutedFutureForgetting_output_exact .aligned }
 
 theorem learnedAlignedForgottenMemory_is_executedReduction :
     learnedAlignedForgottenCurrentAgent.memory =
       learnedAlignedExecutedFutureForgetting.output := by
-  let projected : IndependentLearnedOperationalMemory :=
-    independentLearnedFutureProjection
-      (LearnedAlignedOperationalContract.futureSourceOfState
-        learnedAlignedEffect.targetState)
-  have forgottenExact : learnedAlignedForgottenCurrentAgent.memory = projected := by
-    rfl
-  have executionExact : learnedAlignedExecutedFutureForgetting.output = projected :=
-    learnedExecutedFutureForgetting_output_exact .aligned
-  exact forgottenExact.trans executionExact.symm
+  rfl
+
+/-- The request consumed by the post-forgetting contract change is evaluated
+by the exact memory emitted by the historical-forgetting execution.  This is
+the concrete result later decoded by the contract-changing action; it is not a
+table entry reconstructed by that action. -/
+theorem learnedAlignedExecutedFutureForgetting_admitted_output_exact :
+    learnedAlignedExecutedFutureForgetting.output.execute
+        independentLearnedCounterfactualInput = [0, 0, 1] := by
+  have outputExact := congrArg
+    (fun memory : IndependentLearnedOperationalMemory =>
+      memory.execute independentLearnedCounterfactualInput)
+    (learnedExecutedFutureForgetting_output_exact .aligned)
+  unfold learnedAlignedExecutedFutureForgetting
+    learnedAlignedHistoricalForgettingInput
+  rw [outputExact]
+  exact alignedCounterfactualResult_exact
 
 def learnedPostForgettingContinuationPermission :
     PostForgettingPermission LearnedAlignedCurrentAgent
@@ -534,8 +543,11 @@ theorem learnedPostForgettingRefusedFuture_stays_refused
           learnedRefusedFutureRequest admitted)
 
 def learnedJustifiedExtendedTransitionAfterForgetting :
-    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent .extended :=
-  { transition := learnedExtendedOperationalTransition
+    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent
+      (forgotten := learnedAlignedForgottenCurrentAgent) .extended :=
+  { reducedMemory := learnedAlignedForgottenCurrentAgent.memory
+    reducedMemoryExact := rfl
+    transition := learnedExtendedOperationalTransition
     persistentSource := fun obligation => by
       cases obligation
       exact ULift.up
@@ -562,7 +574,9 @@ def learnedPostForgettingRecheckedAuthorization :
 
 theorem learnedPostForgettingReturnToInitial_refused
     (justification : JustifiedPostForgettingTransition
-      LearnedAlignedCurrentAgent .initial) : False := by
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .initial) : False := by
   nomatch justification.transition.permission
 
 /-! ## One closed L4 / RC4 witness -/
@@ -635,7 +649,8 @@ structure LearnedFutureForgettingRC4Certificate : Type 8 where
       LearnedAlignedCurrentAgent learnedAlignedForgottenCurrentAgent
       (.continueCurrent learnedRefusedFutureRequest) -> False
   contractChangeJustified : JustifiedPostForgettingTransition
-    LearnedAlignedCurrentAgent .extended
+    LearnedAlignedCurrentAgent
+      (forgotten := learnedAlignedForgottenCurrentAgent) .extended
   contractChangeAuthorized : PostForgettingPermission
     LearnedAlignedCurrentAgent learnedAlignedForgottenCurrentAgent
     (.changeContract .extended)
@@ -646,7 +661,9 @@ structure LearnedFutureForgettingRC4Certificate : Type 8 where
     learnedConstitutiveMetaContract.RecheckedWitness .aligned .extended
       .authorizationConsumption
   forbiddenHistoricalReturn : JustifiedPostForgettingTransition
-      LearnedAlignedCurrentAgent .initial -> False
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .initial -> False
 
 def learnedFutureForgettingRC4 : LearnedFutureForgettingRC4Certificate :=
   { alignedFutureSourceProduced :=
@@ -1020,6 +1037,7 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExecutedFutureForgetting_preserves_every_finite_future
 #print axioms ConstitutiveSearch.NeuralAgent.learnedExecutedFutureForgetting_origin_not_recoverable
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedForgottenMemory_is_executedReduction
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedExecutedFutureForgetting_admitted_output_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedRuntime_current_is_checkedResult
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingContinuationPermission
 #print axioms ConstitutiveSearch.NeuralAgent.learnedJustifiedExtendedTransitionAfterForgetting

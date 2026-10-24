@@ -4,4 +4,5 @@ open ConstitutiveSearch.NeuralAgent
 
 def impossible : learnedPostForgettingDependentChecker.Update
     learnedInitialCertifiedRuntime.current :=
-  .changeContract learnedExtendedSerializedUpdate
+  .changeContract learnedPostForgettingExecutionReceipt
+    learnedExtendedSerializedUpdate

@@ -109,13 +109,73 @@ theorem post_forgetting_contract_change_consumes_persistent_transport :
     learnedClosedPostForgettingExtendedChange.transportedIntent =
       learnedPostForgettingExtendedJustification.transportedPersistent
         .admittedIntent :=
-  learnedClosedPostForgettingExtendedChange.transportedIntentExact
+  learnedClosedPostForgettingExtendedChange.resources.transportedIntentExact
 
 theorem post_forgetting_contract_change_consumes_authorization_recheck :
     learnedClosedPostForgettingExtendedChange.recheckedAuthorization =
       learnedPostForgettingExtendedJustification.rechecked
         .authorizationConsumption :=
-  learnedClosedPostForgettingExtendedChange.recheckedAuthorizationExact
+  learnedClosedPostForgettingExtendedChange.resources.recheckedAuthorizationExact
+
+theorem post_forgetting_contract_change_consumes_executed_reduction :
+    learnedPostForgettingExtendedJustification.reducedMemory =
+      learnedAlignedExecutedFutureForgetting.output :=
+  LearnedPostForgettingContractResources.reducedMemory_is_executed
+    learnedClosedPostForgettingExtendedChange.resources
+
+def post_forgetting_contract_change_preserves_reduced_continuation :
+    independentLearnedReducedFutureContract.Allow
+      learnedPostForgettingExtendedJustification.reducedMemory
+      learnedAdmittedFutureRequest :=
+  learnedClosedPostForgettingExtendedChange.resources.preservedContinuation
+
+theorem post_forgetting_resource_phase_consumes_executed_reduced_outcome :
+    learnedClosedPostForgettingExtendedChange.resources.receipt.outcome =
+      independentLearnedReducedFutureContract.outcome
+        learnedPostForgettingExtendedJustification.reducedMemory
+        [learnedAdmittedFutureRequest] :=
+  LearnedPostForgettingContractResources.resourcePhase_consumes_reducedMemory
+    learnedClosedPostForgettingExtendedChange.resources
+
+theorem post_forgetting_receipt_consumes_installed_continuation :
+    learnedPostForgettingExecutionReceipt.outcome =
+        learnedInstalledPostForgettingContinuation.execution.outcome ∧
+      learnedPostForgettingExecutionReceipt.nextMemory =
+        learnedInstalledPostForgettingContinuation.execution.nextMemory :=
+  ⟨learnedPostForgettingExecutionReceipt_outcome_is_installed,
+    learnedPostForgettingExecutionReceipt_nextMemory_is_installed⟩
+
+theorem post_forgetting_target_action_consumes_execution_receipt :
+    learnedClosedPostForgettingExtendedChange.resources.targetAnalysis.recomputedCertificateFragments.proposalAction.witness.request =
+      publicAgentActionChannel.command
+        learnedClosedPostForgettingExtendedChange.resources.receipt.producedProposal :=
+  LearnedPostForgettingContractResources.target_action_consumes_receipt
+    learnedClosedPostForgettingExtendedChange.resources
+
+theorem post_forgetting_target_consumes_transported_intent :
+    LearnedProposalPreservation.admittedIntent
+      (LearnedActionWitness.preservation
+        (ProposalActionCertificateFragment.witness
+          learnedClosedPostForgettingExtendedChange.resources.targetAnalysis.recomputedCertificateFragments.proposalAction)) =
+      learnedClosedPostForgettingExtendedChange.resources.transportedIntent.down :=
+  LearnedPostForgettingContractResources.target_consumes_transportedIntent
+    learnedClosedPostForgettingExtendedChange.resources
+
+theorem post_forgetting_target_consumes_rechecked_authorization :
+    learnedClosedPostForgettingExtendedChange.resources.targetAnalysis.recomputedCertificateFragments.authorization.witness =
+      learnedClosedPostForgettingExtendedChange.resources.authorizationAtTarget :=
+  LearnedPostForgettingContractResources.target_consumes_recheckedAuthorization
+    learnedClosedPostForgettingExtendedChange.resources
+
+theorem post_forgetting_target_shares_action_with_effect :
+    learnedClosedPostForgettingExtendedChange.resources.targetAnalysis.recomputedCertificateFragments.effect.witness.action =
+      learnedClosedPostForgettingExtendedChange.resources.targetAnalysis.recomputedCertificateFragments.proposalAction.witness :=
+  learnedPostForgettingOperationalClosure.targetSharesActionWithEffect
+
+theorem post_forgetting_incremental_and_full_install_same_successor :
+    HEq learnedClosedPostForgettingExtendedChange.checked.next
+      learnedSuccessiveFullRecheckSuccess.checked.next :=
+  learnedClosedPostForgettingFullRecheck_successor_exact
 
 theorem post_forgetting_runtime_checker_consumes_closed_change :
     checkLearnedPostForgettingRuntimeUpdate
@@ -162,6 +222,7 @@ theorem post_forgetting_bad_change_has_no_successor :
     Not (Exists fun next =>
       submitUpdate learnedPostForgettingInitialRuntime
         (LearnedPostForgettingRuntimeUpdate.changeContract
+          learnedPostForgettingExecutionReceipt
           learnedAlignedSerializedUpdate) = .ok next) :=
   learnedPostForgettingBadChange_rejected_without_successor
 
@@ -189,6 +250,15 @@ end Tests.Mechanisms.NeuralL5AutonomousCheckers
 #print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_contract_change_is_installed
 #print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_contract_change_consumes_persistent_transport
 #print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_contract_change_consumes_authorization_recheck
+#print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_contract_change_consumes_executed_reduction
+#print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_contract_change_preserves_reduced_continuation
+#print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_resource_phase_consumes_executed_reduced_outcome
+#print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_receipt_consumes_installed_continuation
+#print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_target_action_consumes_execution_receipt
+#print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_target_consumes_transported_intent
+#print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_target_consumes_rechecked_authorization
+#print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_target_shares_action_with_effect
+#print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_incremental_and_full_install_same_successor
 #print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_runtime_checker_consumes_closed_change
 #print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_runtime_starts_from_prior_successor
 #print axioms Tests.Mechanisms.NeuralL5AutonomousCheckers.post_forgetting_runtime_installs_exact_successor

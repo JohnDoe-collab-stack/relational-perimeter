@@ -1,0 +1,12 @@
+import RelationalPerimeter.Agents.Neural.AutonomousCheckerClosure
+
+open ConstitutiveSearch ConstitutiveSearch.NeuralAgent
+
+def continuationCannotReplaceExecutionReceipt :=
+  LearnedPostForgettingRuntimeUpdate.changeContract
+    learnedInstalledPostForgettingContinuation
+    learnedExtendedSerializedUpdate
+
+/- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingExecutionReceipt
+/- AXIOM_AUDIT_END -/

@@ -225,6 +225,114 @@ def global_field_to_constructor(functions, entry, source, field_index,
           f'-> constructor fields {list(constructor_fields)}')
 
 
+def global_to_constructor(functions, entry, source, constructor_field):
+    """Require a constructor field to contain the exact named global value."""
+    body = functions.get(entry, '')
+    received = re.findall(
+        rf'\b([A-Za-z_]\w*)\s*=\s*{re.escape(source)}\s*;', body)
+    if len(received) != 1:
+        raise ValueError(
+            f'{entry}: expected one material read of {source}, found '
+            f'{len(received)}')
+    returned = re.findall(r'\breturn\s+([A-Za-z_]\w*)\s*;', body)
+    if len(returned) != 1:
+        raise ValueError(f'{entry}: expected one returned constructor')
+    assignments = re.findall(
+        rf'lean_ctor_set\s*\(\s*{re.escape(returned[0])}\s*,\s*'
+        rf'{constructor_field}\s*,\s*([A-Za-z_]\w*)\s*\)', body)
+    if assignments != [received[0]]:
+        raise ValueError(
+            f'{entry}: constructor field {constructor_field} does not receive '
+            f'exact {source}; found {assignments}')
+    print(f'AGENT_GLOBAL_CONSTRUCTOR_OK {entry}: exact {source} occurrence '
+          f'-> constructor field {constructor_field}')
+
+
+def result_to_constructor(functions, entry, producer, constructor_field):
+    """Require the exact producer result in one returned constructor field."""
+    body = functions.get(entry, '')
+    produced = re.findall(
+        rf'\b([A-Za-z_]\w*)\s*=\s*{re.escape(producer)}\s*\(', body)
+    if len(produced) != 1:
+        raise ValueError(
+            f'{entry}: expected one assigned result from {producer}, found '
+            f'{len(produced)}')
+    returned = re.findall(r'\breturn\s+([A-Za-z_]\w*)\s*;', body)
+    if len(returned) != 1:
+        raise ValueError(f'{entry}: expected one returned constructor')
+    assignments = re.findall(
+        rf'lean_ctor_set\s*\(\s*{re.escape(returned[0])}\s*,\s*'
+        rf'{constructor_field}\s*,\s*([A-Za-z_]\w*)\s*\)', body)
+    if assignments != [produced[0]]:
+        raise ValueError(
+            f'{entry}: constructor field {constructor_field} does not receive '
+            f'exact {producer} result {produced[0]}; found {assignments}')
+    print(f'AGENT_RESULT_CONSTRUCTOR_OK {entry}: exact {producer} result '
+          f'-> constructor field {constructor_field}')
+
+
+def result_field_to_constructor(functions, entry, producer, source_field,
+                                constructor_field):
+    """Require a field of the exact producer result in the returned value."""
+    body = functions.get(entry, '')
+    produced = re.findall(
+        rf'\b([A-Za-z_]\w*)\s*=\s*{re.escape(producer)}\s*\(', body)
+    if len(produced) != 1:
+        raise ValueError(
+            f'{entry}: expected one assigned result from {producer}, found '
+            f'{len(produced)}')
+    extracted = re.findall(
+        rf'\b([A-Za-z_]\w*)\s*=\s*lean_ctor_get\s*\(\s*'
+        rf'{re.escape(produced[0])}\s*,\s*{source_field}\s*\)', body)
+    if len(extracted) != 1:
+        raise ValueError(
+            f'{entry}: expected field {source_field} of {producer} result once, '
+            f'found {len(extracted)}')
+    returned = re.findall(r'\breturn\s+([A-Za-z_]\w*)\s*;', body)
+    if len(returned) != 1:
+        raise ValueError(f'{entry}: expected one returned constructor')
+    assignments = re.findall(
+        rf'lean_ctor_set\s*\(\s*{re.escape(returned[0])}\s*,\s*'
+        rf'{constructor_field}\s*,\s*([A-Za-z_]\w*)\s*\)', body)
+    if assignments != [extracted[0]]:
+        raise ValueError(
+            f'{entry}: constructor field {constructor_field} does not receive '
+            f'{producer} result field {source_field}; found {assignments}')
+    print(f'AGENT_RESULT_FIELD_CONSTRUCTOR_OK {entry}: exact {producer}'
+          f'[{source_field}] -> constructor field {constructor_field}')
+
+
+def parameter_field_to_constructor(functions, compiled_parameters, entry,
+                                   parameter_index, source_field,
+                                   constructor_field):
+    """Require a received parameter field in the returned constructor."""
+    params = compiled_parameters.get(entry, ())
+    if parameter_index >= len(params):
+        raise ValueError(f'{entry}: parameter {parameter_index} is absent')
+    body = functions.get(entry, '')
+    extracted = re.findall(
+        rf'\b([A-Za-z_]\w*)\s*=\s*lean_ctor_get\s*\(\s*'
+        rf'{re.escape(params[parameter_index])}\s*,\s*{source_field}\s*\)', body)
+    if len(extracted) != 1:
+        raise ValueError(
+            f'{entry}: expected parameter field {source_field} once, found '
+            f'{len(extracted)}')
+    returned = re.findall(r'\breturn\s+([A-Za-z_]\w*)\s*;', body)
+    if len(returned) != 1:
+        raise ValueError(f'{entry}: expected one returned constructor')
+    assignments = re.findall(
+        rf'lean_ctor_set\s*\(\s*{re.escape(returned[0])}\s*,\s*'
+        rf'{constructor_field}\s*,\s*([A-Za-z_]\w*)\s*\)', body)
+    if assignments != [extracted[0]]:
+        raise ValueError(
+            f'{entry}: constructor field {constructor_field} does not receive '
+            f'parameter {parameter_index} field {source_field}; found '
+            f'{assignments}')
+    print(f'AGENT_PARAMETER_FIELD_CONSTRUCTOR_OK {entry}: parameter '
+          f'{parameter_index}[{source_field}] -> constructor field '
+          f'{constructor_field}')
+
+
 def forwarded_global(functions, entry, source, consumer, argument_index):
     """Require the exact named global occurrence to reach a consumer slot."""
     body = functions.get(entry, '')
@@ -423,6 +531,37 @@ LEAN_EXPORT lean_object* l_entry(){
 }''')
     global_field_to_constructor(shared_global_field, 'l_entry', 'l_submission',
                                 1, (0, 1))
+    global_constructed = bodies_with_objects('''
+LEAN_EXPORT lean_object* l_source;
+LEAN_EXPORT lean_object* l_entry;
+static lean_object* _init_l_entry(void){
+  lean_object* source; lean_object* result;
+  source = l_source; result = lean_alloc_ctor(0, 1, 0);
+  lean_ctor_set(result, 0, source); return result;
+}''')
+    global_to_constructor(global_constructed, '_init_l_entry', 'l_source', 0)
+    produced_constructor_text = '''
+LEAN_EXPORT lean_object* l_producer(lean_object* x){ return x; }
+LEAN_EXPORT lean_object* l_entry(lean_object* received){
+  lean_object* produced; lean_object* projectedResult;
+  lean_object* projectedParameter; lean_object* result;
+  produced = l_producer(received);
+  projectedResult = lean_ctor_get(produced, 0);
+  projectedParameter = lean_ctor_get(received, 1);
+  result = lean_alloc_ctor(0, 3, 0);
+  lean_ctor_set(result, 0, produced);
+  lean_ctor_set(result, 1, projectedResult);
+  lean_ctor_set(result, 2, projectedParameter);
+  return result;
+}'''
+    produced_constructor = bodies_with_objects(produced_constructor_text)
+    produced_constructor_params = parameters([produced_constructor_text])
+    result_to_constructor(produced_constructor, 'l_entry', 'l_producer', 0)
+    result_field_to_constructor(produced_constructor, 'l_entry', 'l_producer',
+                                0, 1)
+    parameter_field_to_constructor(produced_constructor,
+                                   produced_constructor_params, 'l_entry',
+                                   0, 1, 2)
     replaced_global_field = bodies_with_objects('''
 LEAN_EXPORT lean_object* l_submission;
 LEAN_EXPORT lean_object* l_canonical;
@@ -726,33 +865,152 @@ LEAN_EXPORT lean_object* l_bad(){ return 0; }
         "NeuralAgent_checkLearnedPostForgettingRuntimeUpdate___redArg")
     post_received = select(functions,
         "NeuralAgent_closeReceivedLearnedPostForgettingAnalysis")
-    post_from_analysis = select(functions,
-        "NeuralAgent_closeLearnedPostForgettingContractChangeFromAnalysis")
     post_closed_change = select(functions,
         "NeuralAgent_closeLearnedPostForgettingContractChange")
+    post_resources = select(functions,
+        "NeuralAgent_executeLearnedPostForgettingContractResources___redArg")
+    post_target_analysis = select(functions,
+        "NeuralAgent_LearnedPostForgettingContractResources_targetAnalysis___redArg")
+    post_action = select(functions,
+        "NeuralAgent_LearnedPostForgettingContractResources_action___redArg")
+    post_action_effect = select(functions,
+        "NeuralAgent_LearnedPostForgettingContractResources_actionEffect___redArg")
+    post_recomputed = select(functions,
+        "NeuralAgent_LearnedPostForgettingContractResources_recomputedFragments___redArg")
+    post_produced_proposal = select(functions,
+        "NeuralAgent_LearnedPostForgettingExecutionReceipt_producedProposal")
+    post_execute_action = select(functions,
+        "NeuralAgent_executeLearnedActionFromProducedProposal___redArg")
+    post_produce_effect = select(functions,
+        "NeuralAgent_produceLearnedEffect___redArg")
+    post_justification = select(functions,
+        "NeuralAgent_learnedPostForgettingJustificationFromLocalConditions___redArg")
+    post_builder = select(functions,
+        "NeuralAgent_buildIncrementalCheckedUpdate___redArg")
+    post_receipt_init = select_initializer(functions,
+        "NeuralAgent_learnedPostForgettingExecutionReceipt___closed__0")
+    post_update_init = select_initializer(functions,
+        "NeuralAgent_learnedPostForgettingExtendedRuntimeUpdate___closed__0")
+    post_submission_init = select_initializer(functions,
+        "NeuralAgent_learnedPostForgettingExtendedRuntimeSubmission___closed__0")
+    post_runtime_init = select_initializer(functions,
+        "NeuralAgent_learnedPostForgettingExtendedRuntime")
+    post_receipt_producer = select(functions,
+        "NeuralAgent_executionReceiptOfInstalledPostForgettingContinuation")
+    post_submission_consumer = select(functions,
+        "NeuralAgent_acceptedRuntimeSubmissionOfCheck___redArg")
     calls(functions, post_continuation,
         "NeuralAgent_checkLearnedPostForgettingIncremental", 1)
     calls(functions, post_continuation,
         "NeuralAgent_executePostForgettingContinuation___redArg", 1)
     calls(functions, post_runtime,
-        "NeuralAgent_analyzeLearnedSuccessiveUpdate", 1)
+        "NeuralAgent_analyzeLearnedPostForgettingIncrementally", 1)
     calls(functions, post_runtime,
         "NeuralAgent_closeReceivedLearnedPostForgettingAnalysis", 1)
     calls(functions, post_received,
-        "NeuralAgent_closeLearnedPostForgettingContractChangeFromAnalysis", 1)
-    calls(functions, post_from_analysis,
-        "NeuralAgent_learnedPostForgettingJustificationFromAnalysis___redArg", 1)
-    calls(functions, post_from_analysis,
+        "NeuralAgent_learnedPostForgettingJustificationFromLocalConditions___redArg", 1)
+    calls(functions, post_received,
         "NeuralAgent_closeLearnedPostForgettingContractChange", 1)
+    forwarded_result(functions, post_received, post_justification,
+        post_closed_change, 3)
+    forwarded_ctor_field(functions, compiled_parameters, post_runtime, 0, 0,
+        post_received, 0)
+    forwarded_parameter(functions, compiled_parameters, post_received, 0,
+        post_closed_change, 2)
+    forwarded_parameter(functions, compiled_parameters, post_closed_change, 2,
+        post_resources, 1)
+    forwarded_parameter(functions, compiled_parameters, post_closed_change, 3,
+        post_resources, 0)
     calls(functions, post_closed_change,
+        "NeuralAgent_executeLearnedPostForgettingContractResources___redArg", 1)
+    calls(functions, post_resources,
         "NeuralAgent_JustifiedPostForgettingTransition_transportedPersistent___redArg", 1)
-    calls(functions, post_closed_change,
+    calls(functions, post_resources,
         "NeuralAgent_JustifiedPostForgettingTransition_rechecked___redArg", 1)
     calls(functions, post_closed_change,
+        "NeuralAgent_LearnedPostForgettingContractResources_targetAnalysis___redArg", 1)
+    calls(functions, post_target_analysis,
+        "NeuralAgent_LearnedPostForgettingContractResources_recomputedFragments___redArg", 1)
+    calls(functions, post_action,
+        "NeuralAgent_LearnedPostForgettingExecutionReceipt_producedProposal", 1)
+    forwarded_ctor_field(functions, compiled_parameters, post_action, 2, 0,
+        post_produced_proposal, 0)
+    calls(functions, post_action,
+        "NeuralAgent_executeLearnedActionFromProducedProposal___redArg", 1)
+    forwarded_result(functions, post_action, post_produced_proposal,
+        post_execute_action, 1)
+    forwarded_ctor_field(functions, compiled_parameters, post_action, 2, 2,
+        post_execute_action, 2)
+    forwarded_ctor_field(functions, compiled_parameters, post_action, 2, 3,
+        post_execute_action, 4)
+    calls(functions, post_action_effect,
+        "NeuralAgent_LearnedPostForgettingContractResources_action___redArg", 1)
+    calls(functions, post_action_effect,
+        "NeuralAgent_produceLearnedEffect___redArg", 1)
+    forwarded_result(functions, post_action_effect, post_action,
+        post_produce_effect, 0)
+    result_to_constructor(functions, post_action_effect, post_action, 0)
+    result_to_constructor(functions, post_action_effect, post_produce_effect, 1)
+    calls(functions, post_recomputed,
+        "NeuralAgent_LearnedPostForgettingContractResources_actionEffect___redArg", 1)
+    result_to_constructor(functions, post_recomputed, post_action_effect, 4)
+    result_field_to_constructor(functions, post_recomputed, post_action_effect,
+        0, 2)
+    parameter_field_to_constructor(functions, compiled_parameters,
+        post_recomputed, 2, 3, 3)
+    calls(functions, post_closed_change,
         "NeuralAgent_buildIncrementalCheckedUpdate___redArg", 1)
+    forwarded_result(functions, post_closed_change, post_resources,
+        post_target_analysis, 2)
+    forwarded_result(functions, post_closed_change, post_target_analysis,
+        post_builder, 0)
+    installed_continuation_values = sorted(set(re.findall(
+        r'\b(?:l|lp)_\w*NeuralAgent_learnedInstalledPostForgettingContinuation\b',
+        functions[post_receipt_init])))
+    receipt_values = sorted(set(re.findall(
+        r'\b(?:l|lp)_\w*NeuralAgent_learnedPostForgettingExecutionReceipt\b',
+        functions[post_update_init])))
+    initial_runtime_values = sorted(set(re.findall(
+        r'\b(?:l|lp)_\w*NeuralAgent_learnedPostForgettingInitialRuntime\b',
+        functions[post_submission_init])))
+    update_values = sorted(set(re.findall(
+        r'\b(?:l|lp)_\w*NeuralAgent_learnedPostForgettingExtendedRuntimeUpdate\b',
+        functions[post_submission_init])))
+    submission_values = sorted(set(re.findall(
+        r'\b(?:l|lp)_\w*NeuralAgent_learnedPostForgettingExtendedRuntimeSubmission\b',
+        functions[post_runtime_init])))
+    for label, values in (
+            ('installed continuation', installed_continuation_values),
+            ('execution receipt', receipt_values),
+            ('initial post-forgetting runtime', initial_runtime_values),
+            ('post-forgetting runtime update', update_values),
+            ('post-forgetting runtime submission', submission_values)):
+        if len(values) != 1:
+            raise ValueError(
+                f'post-forgetting route: expected one {label}, found {values}')
+    forwarded_global(functions, post_receipt_init,
+        installed_continuation_values[0], post_receipt_producer, 0)
+    global_to_constructor(functions, post_update_init, receipt_values[0], 0)
+    calls(functions, post_submission_init,
+        "NeuralAgent_acceptedRuntimeSubmissionOfCheck___redArg", 1)
+    forwarded_global(functions, post_submission_init, initial_runtime_values[0],
+        post_submission_consumer, 1)
+    forwarded_global(functions, post_submission_init, update_values[0],
+        post_submission_consumer, 2)
+    if post_submission_init not in shared["reachable"](
+            functions, post_runtime_init):
+        raise ValueError(
+            f'{post_runtime_init}: named runtime does not consume its executed submission')
+    if submission_values[0] not in functions[post_runtime_init]:
+        raise ValueError(
+            f'{post_runtime_init}: exact post-forgetting submission is absent')
     absent(functions, post_runtime,
         ["learnedExtendedCheckedUpdate", "learnedPostForgettingExtendedRuntime"])
-    print("AGENT_POST_FORGETTING_RUNTIME_OK: reduced-memory continuation is executed; contract change consumes its persistent transport and authorization recheck before building and installing the returned checked update; no canonical-successor bypass")
+    absent(functions, post_target_analysis,
+        ["learnedExtendedCheckedUpdate", "learnedPostForgettingExtendedRuntime"])
+    absent(functions, post_submission_init, ["installAcceptedUpdate"])
+    absent(functions, post_runtime_init, ["installAcceptedUpdate"])
+    print("AGENT_POST_FORGETTING_RUNTIME_OK: the installed reduced-memory continuation emits the exact receipt carried by the runtime update; its outcome and next memory compute the proposal passed to the action, transport and recheck feed the installed certificate, and the named runtime consumes the actual submitUpdate result; no canonical-successor or receipt-erasure bypass")
     # L6: the installed incremental successor must be assembled through the
     # unique fragment constructor whose structural field is the calculated
     # transport/recompute assembly.  Neither that constructor nor the scaling

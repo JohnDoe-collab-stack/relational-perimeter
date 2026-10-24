@@ -198,13 +198,61 @@ theorem g7_post_forgetting_contract_change_consumes_transport_and_recheck :
       learnedClosedPostForgettingExtendedChange.recheckedAuthorization =
         learnedPostForgettingExtendedJustification.rechecked
           .authorizationConsumption :=
-  ⟨learnedClosedPostForgettingExtendedChange.transportedIntentExact,
-    learnedClosedPostForgettingExtendedChange.recheckedAuthorizationExact⟩
+  ⟨learnedClosedPostForgettingExtendedChange.resources.transportedIntentExact,
+    learnedClosedPostForgettingExtendedChange.resources.recheckedAuthorizationExact⟩
+
+theorem g7_post_forgetting_contract_change_consumes_executed_reduction :
+    learnedPostForgettingExtendedJustification.reducedMemory =
+      learnedAlignedExecutedFutureForgetting.output :=
+  learnedPostForgettingOperationalClosure.reducedMemoryProduced
+
+theorem g7_post_forgetting_resource_phase_consumes_reduced_outcome :
+    learnedClosedPostForgettingExtendedChange.resources.receipt.outcome =
+      independentLearnedReducedFutureContract.outcome
+        learnedPostForgettingExtendedJustification.reducedMemory
+        [learnedAdmittedFutureRequest] :=
+  learnedPostForgettingOperationalClosure.resourcePhaseConsumesReducedMemory
+
+theorem g7_post_forgetting_receipt_is_installed_continuation_output :
+    learnedPostForgettingOperationalClosure.receipt.outcome =
+        learnedPostForgettingOperationalClosure.continuation.execution.outcome ∧
+      learnedPostForgettingOperationalClosure.receipt.nextMemory =
+        learnedPostForgettingOperationalClosure.continuation.execution.nextMemory :=
+  ⟨learnedPostForgettingOperationalClosure.receiptOutcomeIsContinuationOutput,
+    learnedPostForgettingOperationalClosure.receiptNextMemoryIsContinuationOutput⟩
+
+theorem g7_post_forgetting_target_action_consumes_receipt :
+    learnedClosedPostForgettingExtendedChange.resources.targetAnalysis.recomputedCertificateFragments.proposalAction.witness.request =
+      publicAgentActionChannel.command
+        learnedClosedPostForgettingExtendedChange.resources.receipt.producedProposal :=
+  learnedPostForgettingOperationalClosure.targetActionConsumesReceipt
+
+theorem g7_post_forgetting_contract_change_resources_feed_installed_certificate :
+    LearnedProposalPreservation.admittedIntent
+        (LearnedActionWitness.preservation
+          (ProposalActionCertificateFragment.witness
+            learnedClosedPostForgettingExtendedChange.resources.targetAnalysis.recomputedCertificateFragments.proposalAction)) =
+        learnedClosedPostForgettingExtendedChange.resources.transportedIntent.down ∧
+      learnedClosedPostForgettingExtendedChange.resources.targetAnalysis.recomputedCertificateFragments.authorization.witness =
+        learnedClosedPostForgettingExtendedChange.resources.authorizationAtTarget :=
+  ⟨learnedPostForgettingOperationalClosure.targetConsumesTransportedIntent,
+    learnedPostForgettingOperationalClosure.targetConsumesRecheckedAuthorization⟩
+
+theorem g7_post_forgetting_contract_change_matches_full_recheck :
+    HEq learnedClosedPostForgettingExtendedChange.checked.next
+      learnedSuccessiveFullRecheckSuccess.checked.next :=
+  learnedPostForgettingOperationalClosure.fullRecheckSuccessorExact
+
+theorem g7_post_forgetting_contract_change_shares_action_with_effect :
+    learnedClosedPostForgettingExtendedChange.resources.targetAnalysis.recomputedCertificateFragments.effect.witness.action =
+      learnedClosedPostForgettingExtendedChange.resources.targetAnalysis.recomputedCertificateFragments.proposalAction.witness :=
+  learnedPostForgettingOperationalClosure.targetSharesActionWithEffect
 
 theorem g7_post_forgetting_bad_change_has_no_successor :
     Not (Exists fun next =>
       submitUpdate learnedPostForgettingInitialRuntime
         (LearnedPostForgettingRuntimeUpdate.changeContract
+          learnedPostForgettingExecutionReceipt
           learnedAlignedSerializedUpdate) = .ok next) :=
   learnedPostForgettingBadChange_rejected_without_successor
 
@@ -264,6 +312,13 @@ end Tests.Mechanisms.NeuralG1G10RegressionFloor
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_contract_change_is_relatively_complete
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_contract_change_is_effectfully_installed
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_contract_change_consumes_transport_and_recheck
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_contract_change_consumes_executed_reduction
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_resource_phase_consumes_reduced_outcome
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_receipt_is_installed_continuation_output
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_target_action_consumes_receipt
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_contract_change_resources_feed_installed_certificate
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_contract_change_matches_full_recheck
+#print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_contract_change_shares_action_with_effect
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g7_post_forgetting_bad_change_has_no_successor
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g8_unaffected_fragment_is_transported
 #print axioms Tests.Mechanisms.NeuralG1G10RegressionFloor.g8_incremental_and_full_recheck_are_equal

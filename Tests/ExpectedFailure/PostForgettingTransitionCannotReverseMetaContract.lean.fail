@@ -5,7 +5,10 @@ open ConstitutiveSearch.NeuralAgent
 
 def forbiddenReversePostForgettingTransition :
     JustifiedPostForgettingTransition publicReferenceNextCheckedAgent
+      (forgotten := forgetCurrentAgent publicReferenceNextCheckedAgent)
       PublicOperationalContract.initial where
+  reducedMemory := (forgetCurrentAgent publicReferenceNextCheckedAgent).memory
+  reducedMemoryExact := rfl
   transition := publicOperationalTransition
   persistentSource := fun obligation => by
     cases obligation

@@ -99,8 +99,11 @@ def publicContinuationAfterForgetting
 
 def publicJustifiedContractChangeAfterForgetting :
     JustifiedPostForgettingTransition publicInitialCheckedAgent
-      PublicOperationalContract.reconfigured :=
-  { transition := publicOperationalTransition
+      (forgotten := publicForgottenCurrentAgent)
+        PublicOperationalContract.reconfigured :=
+  { reducedMemory := publicForgottenCurrentAgent.memory
+    reducedMemoryExact := rfl
+    transition := publicOperationalTransition
     persistentSource := fun obligation => by
       cases obligation
       exact { exact := public_required_action_distinction } }
@@ -116,7 +119,9 @@ def publicContractChangeAfterForgetting :
 
 theorem reverseContractChangeAfterForgetting_refused
     (justification : JustifiedPostForgettingTransition
-      publicReferenceNextCheckedAgent PublicOperationalContract.initial) :
+      publicReferenceNextCheckedAgent
+        (forgotten := forgetCurrentAgent publicReferenceNextCheckedAgent)
+        PublicOperationalContract.initial) :
     False := by
   nomatch justification.transition.permission
 

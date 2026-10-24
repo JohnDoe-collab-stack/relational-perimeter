@@ -4,7 +4,10 @@ namespace Tests.ExpectedFailure.PostForgettingCannotRecoverHistoricalIdentity
 open ConstitutiveSearch.NeuralAgent
 
 def forgedRecoveryTransition :
-    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent .initial where
+    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent
+      (forgotten := learnedAlignedForgottenCurrentAgent) .initial where
+  reducedMemory := learnedAlignedForgottenCurrentAgent.memory
+  reducedMemoryExact := rfl
   transition := learnedExtendedOperationalTransition
   persistentSource := fun obligation => by
     cases obligation

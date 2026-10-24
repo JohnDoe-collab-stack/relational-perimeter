@@ -400,13 +400,16 @@ def learnedPostForgettingJustificationFromDecision
     (decision : AcceptedTransitionDecision
       learnedExecutableMetaContractInterface
       { current := LearnedOperationalContract.aligned, next := next }) :
-    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent next := by
+    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent
+      (forgotten := learnedAlignedForgottenCurrentAgent) next := by
   cases next with
   | initial => cases decision.accepted
   | aligned => cases decision.accepted
   | extended =>
       exact
-        { transition := decision.transition
+        { reducedMemory := learnedAlignedForgottenCurrentAgent.memory
+          reducedMemoryExact := rfl
+          transition := decision.transition
           persistentSource := fun obligation => by
             cases obligation
             exact ULift.up intentAdmitted }
@@ -801,10 +804,9 @@ theorem submitLearnedPostForgettingContinuation_complete
 
 def learnedInstalledPostForgettingContinuation :
     InstalledLearnedPostForgettingContinuation learnedAdmittedFutureRequest :=
-  match exact : submitLearnedPostForgettingContinuation
-      learnedAdmittedFutureRequest with
-  | .ok installed => installed
-  | .error problem => False.elim (by cases exact)
+  { permission := learnedPostForgettingContinuationPermission
+    execution := executePostForgettingContinuation
+      learnedPostForgettingContinuationPermission }
 
 theorem submitLearnedPostForgettingContinuation_exact :
     submitLearnedPostForgettingContinuation learnedAdmittedFutureRequest =
@@ -833,6 +835,135 @@ theorem learnedInstalledPostForgettingContinuation_consumes_reducedMemory :
       learnedAlignedForgottenMemory_is_executedReduction
   exact executionExact.trans memoryExact
 
+theorem learnedInstalledPostForgettingContinuation_nextMemory_consumes_reducedMemory :
+    learnedInstalledPostForgettingContinuation.execution.nextMemory =
+      independentLearnedReducedFutureContract.next
+        learnedAlignedExecutedFutureForgetting.output
+        learnedAdmittedFutureRequest := by
+  let expected : IndependentLearnedOperationalMemory :=
+    independentLearnedReducedFutureContract.next
+      learnedAlignedForgottenCurrentAgent.memory
+      learnedAdmittedFutureRequest
+  have executionExact :
+      learnedInstalledPostForgettingContinuation.execution.nextMemory = expected :=
+    learnedInstalledPostForgettingContinuation.execution.nextMemoryExact
+  have memoryExact : expected =
+      independentLearnedReducedFutureContract.next
+        learnedAlignedExecutedFutureForgetting.output
+        learnedAdmittedFutureRequest :=
+    congrArg
+      (fun memory => independentLearnedReducedFutureContract.next
+        memory learnedAdmittedFutureRequest)
+      learnedAlignedForgottenMemory_is_executedReduction
+  exact executionExact.trans memoryExact
+
+/-- Low-universe material receipt emitted from the installed continuation.
+Its constructor is private: runtime updates can carry the executed reduced
+memory result, but callers cannot fabricate such a receipt independently of
+the continuation producer. -/
+structure LearnedPostForgettingExecutionReceipt : Type 6 where
+  private mk ::
+  nextMemory : IndependentLearnedOperationalMemory
+  outcome : LearnedOperationalFutureOutcome
+  allowed : independentLearnedReducedFutureContract.Allow
+    learnedAlignedForgottenCurrentAgent.memory learnedAdmittedFutureRequest
+  nextMemoryExact : nextMemory =
+    independentLearnedReducedFutureContract.next
+      learnedAlignedForgottenCurrentAgent.memory learnedAdmittedFutureRequest
+  outcomeExact : outcome = independentLearnedReducedFutureContract.outcome
+    learnedAlignedForgottenCurrentAgent.memory [learnedAdmittedFutureRequest]
+
+def executionReceiptOfInstalledPostForgettingContinuation
+    (installed : InstalledLearnedPostForgettingContinuation
+      learnedAdmittedFutureRequest) : LearnedPostForgettingExecutionReceipt :=
+  { nextMemory := installed.execution.nextMemory
+    outcome := installed.execution.outcome
+    allowed := by
+      cases installed.permission with
+      | continueCurrent _ allowed => exact allowed
+    nextMemoryExact := installed.execution.nextMemoryExact
+    outcomeExact := installed.execution.outcomeExact }
+
+/-- The canonical receipt is projected from the result of the continuation that
+was actually submitted and installed.  It does not independently recompute a
+canonical future from the forgetting input. -/
+def learnedPostForgettingExecutionReceipt :
+    LearnedPostForgettingExecutionReceipt :=
+  executionReceiptOfInstalledPostForgettingContinuation
+    learnedInstalledPostForgettingContinuation
+
+theorem learnedPostForgettingExecutionReceipt_outcome_is_installed :
+    learnedPostForgettingExecutionReceipt.outcome =
+      learnedInstalledPostForgettingContinuation.execution.outcome := by
+  rfl
+
+theorem learnedPostForgettingExecutionReceipt_nextMemory_is_installed :
+    learnedPostForgettingExecutionReceipt.nextMemory =
+      learnedInstalledPostForgettingContinuation.execution.nextMemory := by
+  rfl
+
+theorem learnedPostForgettingExecutionReceipt_outcome_consumes_forgettingOutput :
+    learnedPostForgettingExecutionReceipt.outcome =
+      independentLearnedReducedFutureContract.outcome
+        learnedAlignedExecutedFutureForgetting.output
+        [learnedAdmittedFutureRequest] :=
+  learnedPostForgettingExecutionReceipt_outcome_is_installed.trans
+    learnedInstalledPostForgettingContinuation_consumes_reducedMemory
+
+theorem learnedPostForgettingExecutionReceipt_nextMemory_consumes_forgettingOutput :
+    learnedPostForgettingExecutionReceipt.nextMemory =
+      independentLearnedReducedFutureContract.next
+        learnedAlignedExecutedFutureForgetting.output
+        learnedAdmittedFutureRequest :=
+  learnedPostForgettingExecutionReceipt_nextMemory_is_installed.trans
+    learnedInstalledPostForgettingContinuation_nextMemory_consumes_reducedMemory
+
+/-- The contract-changing proposal is read from the result emitted by the
+executed reduced-memory continuation.  The transition applies its nonidentity
+Boolean complement to the decoded prior proposal.  The read is accepted only
+when that result is admitted and its event agrees with the memory actually
+produced by the same continuation.  Both `outcome` and `nextMemory` are
+therefore material inputs to the subsequent action. -/
+def LearnedPostForgettingExecutionReceipt.producedProposal
+    (receipt : LearnedPostForgettingExecutionReceipt) : Bool :=
+  match receipt.outcome with
+  | .stop _ => false
+  | .step _ allowed event _ =>
+      if allowed then
+        if event.outputs = receipt.nextMemory.execute
+            learnedAdmittedFutureRequest.input then
+          !decodeIndependentLearnedProposal event.outputs
+        else false
+      else false
+
+theorem LearnedPostForgettingExecutionReceipt.producedProposal_exact
+    (receipt : LearnedPostForgettingExecutionReceipt) :
+    receipt.producedProposal =
+      learnedExtendedState.system.proposal learnedExtendedState.input := by
+  rw [LearnedPostForgettingExecutionReceipt.producedProposal,
+    receipt.outcomeExact, receipt.nextMemoryExact]
+  simp only [FutureContract.outcome]
+  rw [FutureContract.enabled_of_admitted _ _ _ receipt.allowed]
+  rw [if_pos rfl]
+  change (if learnedAlignedForgottenCurrentAgent.memory.execute
+        learnedAdmittedFutureRequest.input =
+      learnedAlignedForgottenCurrentAgent.memory.execute
+        learnedAdmittedFutureRequest.input then
+        !decodeIndependentLearnedProposal
+          (learnedAlignedForgottenCurrentAgent.memory.execute
+            learnedAdmittedFutureRequest.input)
+      else false) = _
+  rw [if_pos rfl]
+  rw [learnedAlignedForgottenMemory_is_executedReduction,
+    show learnedAdmittedFutureRequest.input =
+        independentLearnedCounterfactualInput by rfl,
+    learnedAlignedExecutedFutureForgetting_admitted_output_exact]
+  have targetProposalExact :
+      learnedExtendedState.system.proposal learnedExtendedState.input = true :=
+    learnedExtendedProposalPreservation.proposalExact.trans (by rfl)
+  rw [targetProposalExact]
+  rfl
+
 theorem submitLearnedPostForgettingRefusedContinuation_rejected :
     submitLearnedPostForgettingContinuation learnedRefusedFutureRequest =
       .error .futureRefused := by
@@ -848,23 +979,36 @@ theorem learnedPostForgettingRefusal_has_no_continuationResult :
   cases alleged
 
 /-- Contract-changing runtime inputs are accepted only at the exact aligned
-agent produced by the first installed transition. -/
+agent produced by the first installed transition.  The update carries the
+private material receipt emitted from the ordinary continuation installed over
+the reduced memory, so the contract-changing checker cannot reconstruct that
+predecessor after the fact. -/
 inductive LearnedPostForgettingRuntimeUpdate :
     {contract : LearnedOperationalContract} ->
       CheckedAgent learnedConstitutiveMetaContract contract -> Type 6 where
-  | changeContract (update : LearnedSerializedConstitutiveUpdate) :
+  | changeContract
+      (receipt : LearnedPostForgettingExecutionReceipt)
+      (update : LearnedSerializedConstitutiveUpdate) :
       LearnedPostForgettingRuntimeUpdate LearnedAlignedCurrentAgent
 
-/-- Exact post-forgetting transition material consumed before installation.
-The persistent intent is transported and the invalidated authorization is
-rechecked through the same justified transition that licensed the contract
-change.  The checked update is then built from the independently executed
-successive analysis; it is not received as a field. -/
-structure ClosedLearnedPostForgettingContractChange
+/-- Material produced by the exact post-forgetting lineage.  Formation consumes
+the installed ordinary continuation over the reduced memory occurrence, then
+uses the same justified contract transition to transport the persistent intent
+and recheck the invalidated authorization. -/
+structure LearnedPostForgettingContractResources
     {source : LearnedSerializedConstitutiveUpdate}
     (analysis : LearnedSuccessiveEngineAnalysis source)
     (justification : JustifiedPostForgettingTransition
-      LearnedAlignedCurrentAgent .extended) : Type 7 where
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended) : Type 9 where
+  private mk ::
+  receipt : LearnedPostForgettingExecutionReceipt
+  preservedContinuation : independentLearnedReducedFutureContract.Allow
+    justification.reducedMemory learnedAdmittedFutureRequest
+  reducedOutcomeExact : receipt.outcome =
+    independentLearnedReducedFutureContract.outcome
+      justification.reducedMemory [learnedAdmittedFutureRequest]
   transportedIntent : learnedConstitutiveMetaContract.TargetPersistentWitness
     .aligned .extended .admittedIntent
   transportedIntentExact : transportedIntent =
@@ -873,22 +1017,330 @@ structure ClosedLearnedPostForgettingContractChange
     .aligned .extended .authorizationConsumption
   recheckedAuthorizationExact : recheckedAuthorization =
     justification.rechecked .authorizationConsumption
-  checked : CheckedUpdate LearnedAlignedCurrentAgent analysis.target.nextContract
-  checkedExact : checked = buildIncrementalCheckedUpdate analysis.target
 
-def closeLearnedPostForgettingContractChange
+/-- Execute the resource phase from the exact reduced-memory continuation and
+the exact justified transition.  No target certificate is accepted here. -/
+def executeLearnedPostForgettingContractResources
     {source : LearnedSerializedConstitutiveUpdate}
     (analysis : LearnedSuccessiveEngineAnalysis source)
     (justification : JustifiedPostForgettingTransition
-      LearnedAlignedCurrentAgent .extended) :
-    ClosedLearnedPostForgettingContractChange analysis justification :=
-  { transportedIntent :=
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended)
+    (receipt : LearnedPostForgettingExecutionReceipt) :
+    LearnedPostForgettingContractResources analysis justification :=
+  { receipt := receipt
+    preservedContinuation := by
+      rw [justification.reducedMemoryExact]
+      exact receipt.allowed
+    reducedOutcomeExact := receipt.outcomeExact.trans
+      (congrArg
+        (fun memory => independentLearnedReducedFutureContract.outcome
+          memory [learnedAdmittedFutureRequest])
+        justification.reducedMemoryExact).symm
+    transportedIntent :=
       justification.transportedPersistent .admittedIntent
     transportedIntentExact := rfl
     recheckedAuthorization :=
       justification.rechecked .authorizationConsumption
-    recheckedAuthorizationExact := rfl
-    checked := buildIncrementalCheckedUpdate analysis.target
+    recheckedAuthorizationExact := rfl }
+
+theorem LearnedPostForgettingContractResources.reducedMemory_is_executed
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (_resources : LearnedPostForgettingContractResources analysis justification) :
+    justification.reducedMemory =
+      learnedAlignedExecutedFutureForgetting.output :=
+  justification.reducedMemoryExact.trans
+    learnedAlignedForgottenMemory_is_executedReduction
+
+def LearnedPostForgettingContractResources.baseFragments
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (_resources : LearnedPostForgettingContractResources analysis justification) :
+    RecomputedStateCertificateFragments LearnedExtendedOperationalContract
+      analysis.executed.decoded.target
+      analysis.executed.production.targetState :=
+  learnedExtendedRecomputedCertificateFragmentsFromReceived
+    analysis.executed.decoded.target analysis.executed.production.targetState
+    (analysis.executed.decoded.targetArtifactExact
+      analysis.executed.targetNetworkExact)
+    analysis.executed.production_target_exact
+
+def LearnedPostForgettingContractResources.authorizationAtTarget
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    LearnedAuthorizationWitness analysis.executed.production.targetState := by
+  rw [analysis.executed.production_target_exact]
+  exact resources.recheckedAuthorization
+
+theorem learnedAlignedExtendedOperationalTransition_unique
+    (transition : OperationalContractTransition learnedConstitutiveMetaContract
+      .aligned .extended) :
+    transition = learnedExtendedOperationalTransition := by
+  cases transition
+  next sourceAdmission targetAdmission permission =>
+    cases sourceAdmission
+    cases targetAdmission
+    cases permission
+    rfl
+
+def learnedExtendedAuthorizationWitnessFromReceived
+    (state : ReconfiguredExecutionState
+      LearnedExtendedOperationalContract.family)
+    (stateExact : state = learnedExtendedState) :
+    LearnedAuthorizationWitness state := by
+  subst state
+  exact learnedExtendedAuthorizationWitness
+
+theorem learnedExtendedReceivedCausalAuthorizationPort_exact
+    (target : DecodedNeuralArtifact LearnedExtendedOperationalContract)
+    (state : ReconfiguredExecutionState
+      LearnedExtendedOperationalContract.family)
+    (targetExact : target = learnedDecodedExtendedArtifact)
+    (stateExact : state = learnedExtendedState) :
+    (learnedExtendedRecomputedCertificateFragmentsFromReceived target state
+      targetExact stateExact).causal.witness.authorizationPort =
+      (learnedExtendedAuthorizationWitnessFromReceived state
+        stateExact).authorizationPort := by
+  subst target
+  subst state
+  rfl
+
+def LearnedPostForgettingContractResources.preservationAtTarget
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    LearnedProposalPreservation analysis.executed.production.targetState :=
+  { admittedIntent := resources.transportedIntent.down
+    proposalExact :=
+      resources.baseFragments.proposalAction.witness.preservation.proposalExact }
+
+theorem LearnedPostForgettingContractResources.authorizationPortExact
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    resources.baseFragments.causal.witness.authorizationPort =
+      resources.authorizationAtTarget.authorizationPort := by
+  have transitionExact := learnedAlignedExtendedOperationalTransition_unique
+    justification.transition
+  have authorizationExact : resources.recheckedAuthorization =
+      learnedExtendedAuthorizationWitness := by
+    rw [resources.recheckedAuthorizationExact]
+    unfold JustifiedPostForgettingTransition.rechecked
+      OperationalContractTransition.recheck
+    rw [transitionExact]
+    rfl
+  have authorizationAtTargetExact : resources.authorizationAtTarget =
+      learnedExtendedAuthorizationWitnessFromReceived
+        analysis.executed.production.targetState
+        analysis.executed.production_target_exact := by
+    unfold LearnedPostForgettingContractResources.authorizationAtTarget
+      learnedExtendedAuthorizationWitnessFromReceived
+    cases analysis.executed.production_target_exact
+    exact authorizationExact
+  exact (learnedExtendedReceivedCausalAuthorizationPort_exact
+    analysis.executed.decoded.target analysis.executed.production.targetState
+    (analysis.executed.decoded.targetArtifactExact
+      analysis.executed.targetNetworkExact)
+    analysis.executed.production_target_exact).trans
+      (congrArg LearnedAuthorizationWitness.authorizationPort
+        authorizationAtTargetExact).symm
+
+/-- The action certified after forgetting is reconstructed from the transported
+intent, the rechecked authorization, and the proposal decoded from the actual
+post-forgetting continuation receipt.  These values are inputs to the sealed
+action constructor, not fields stored beside a pre-existing action. -/
+def LearnedPostForgettingContractResources.action
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    LearnedActionWitness analysis.executed.production.targetState :=
+  executeLearnedActionFromProducedProposal
+    analysis.executed.production.targetState
+    resources.receipt.producedProposal
+    (resources.receipt.producedProposal_exact.trans
+      (congrArg
+        (fun state : ReconfiguredExecutionState
+          independentLearnedRequirementFamily =>
+            state.system.proposal state.input)
+        analysis.executed.production_target_exact).symm)
+    resources.preservationAtTarget
+    resources.baseFragments.causal.witness
+    resources.authorizationAtTarget resources.authorizationPortExact
+
+/-- One material action/effect occurrence produced from the transported intent
+and rechecked authorization.  The effect is indexed by that exact action, so
+the installed fragments cannot replace it with an equal reconstruction. -/
+def LearnedPostForgettingContractResources.actionEffect
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    LearnedEffectSatisfaction analysis.executed.production.targetState :=
+  { action := resources.action
+    effect := produceLearnedEffect resources.action }
+
+def LearnedPostForgettingContractResources.effect
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    LearnedEffectWitness analysis.executed.production.targetState
+      resources.actionEffect.action :=
+  resources.actionEffect.effect
+
+/-- Recomputed semantic fragments for the installed successor.  The action,
+authorization, and effect fragments are produced from the post-forgetting
+resources above; the remaining exact target fragments are retained from the
+received analysis. -/
+def LearnedPostForgettingContractResources.recomputedFragments
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    RecomputedStateCertificateFragments LearnedExtendedOperationalContract
+      analysis.executed.decoded.target
+      analysis.executed.production.targetState :=
+  { requirement :=
+      resources.baseFragments.requirement
+    causal := resources.baseFragments.causal
+    proposalAction := { witness := resources.actionEffect.action }
+    authorization := { witness := resources.authorizationAtTarget }
+    effect := { witness := resources.actionEffect }
+    historical := resources.baseFragments.historical
+    futures := resources.baseFragments.futures }
+
+/-- The target analysis installed after forgetting is rebuilt with the
+resource-derived fragments.  In particular, it is not the original analysis
+with two independent justification fields attached afterwards. -/
+def LearnedPostForgettingContractResources.targetAnalysis
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    IncrementalTargetAnalysis LearnedAlignedCurrentAgent :=
+  { nextContract := .extended
+    contractAdmitted := .extended
+    artifact := analysis.executed.decoded.target
+    state := analysis.executed.production.targetState
+    targetNaming := analysis.executed.decoded.stable.naming
+    preCertificateGraph := analysis.executed.preCertificateGraph
+    transportedLicenses := analysis.executed.transportedLicenses
+    recomputedStructural := analysis.executed.recomputedStructural
+    structuralAssembly := analysis.structuralAssembly
+    structuralBasis := learnedExtendedFiniteCausalBasisFromReceived
+      analysis.executed.decoded.target analysis.executed.decoded.stable.naming
+      (analysis.executed.decoded.targetArtifactExact
+        analysis.executed.targetNetworkExact)
+    structuralBasisNamingExact :=
+      learnedExtendedFiniteCausalBasisFromReceived_naming_exact
+        analysis.executed.decoded.target
+        analysis.executed.decoded.stable.naming
+        (analysis.executed.decoded.targetArtifactExact
+          analysis.executed.targetNetworkExact)
+    structuralSystemExact := learnedExtendedReceivedState_system_exact
+      analysis.executed.decoded.target
+      analysis.executed.production.targetState
+      (analysis.executed.decoded.targetArtifactExact
+        analysis.executed.targetNetworkExact)
+      analysis.executed.production_target_exact
+    structuralInputDeclared := learnedExtendedReceivedState_input_declared
+      analysis.executed.production.targetState
+      analysis.executed.production_target_exact
+    recomputedCertificateFragments := resources.recomputedFragments
+    transition := analysis.executed.extendedDecision.transition
+    execution := analysis.executed.production.execution }
+
+/-- Closed post-forgetting installation material.  The checked update is built
+only from the target analysis whose semantic fragments consume the executed
+post-forgetting resources. -/
+structure ClosedLearnedPostForgettingContractChange
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedSuccessiveEngineAnalysis source)
+    (justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended) : Type 10 where
+  private mk ::
+  resources : LearnedPostForgettingContractResources analysis justification
+  checked : CheckedUpdate LearnedAlignedCurrentAgent .extended
+  checkedExact : checked = buildIncrementalCheckedUpdate resources.targetAnalysis
+
+def ClosedLearnedPostForgettingContractChange.transportedIntent
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (closed : ClosedLearnedPostForgettingContractChange analysis justification) :
+    learnedConstitutiveMetaContract.TargetPersistentWitness
+      .aligned .extended .admittedIntent :=
+  closed.resources.transportedIntent
+
+def ClosedLearnedPostForgettingContractChange.recheckedAuthorization
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (closed : ClosedLearnedPostForgettingContractChange analysis justification) :
+    learnedConstitutiveMetaContract.RecheckedWitness
+      .aligned .extended .authorizationConsumption :=
+  closed.resources.recheckedAuthorization
+
+def closeLearnedPostForgettingContractChange
+    {source : LearnedSerializedConstitutiveUpdate}
+    (analysis : LearnedSuccessiveEngineAnalysis source)
+    (receipt : LearnedPostForgettingExecutionReceipt)
+    (justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended) :
+    ClosedLearnedPostForgettingContractChange analysis justification :=
+  let resources := executeLearnedPostForgettingContractResources analysis
+    justification receipt
+  { resources := resources
+    checked := buildIncrementalCheckedUpdate resources.targetAnalysis
     checkedExact := rfl }
 
 /-- The post-forgetting justification is constructed from the same received
@@ -897,7 +1349,8 @@ No canonical target analysis is substituted at this boundary. -/
 def learnedPostForgettingJustificationFromAnalysis
     {source : LearnedSerializedConstitutiveUpdate}
     (analysis : LearnedSuccessiveEngineAnalysis source) :
-    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent .extended :=
+    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent
+      (forgotten := learnedAlignedForgottenCurrentAgent) .extended :=
   learnedPostForgettingJustificationFromDecision
     analysis.executed.decoded.intentAdmitted
     (analysis.executed.receivedDecision.transportRequest
@@ -908,16 +1361,18 @@ received analysis for the justification, checked successor, and installation
 material. -/
 def closeLearnedPostForgettingContractChangeFromAnalysis
     {source : LearnedSerializedConstitutiveUpdate}
-    (analysis : LearnedSuccessiveEngineAnalysis source) :
+    (analysis : LearnedSuccessiveEngineAnalysis source)
+    (receipt : LearnedPostForgettingExecutionReceipt) :
     ClosedLearnedPostForgettingContractChange analysis
       (learnedPostForgettingJustificationFromAnalysis analysis) :=
-  closeLearnedPostForgettingContractChange analysis
+  closeLearnedPostForgettingContractChange analysis receipt
     (learnedPostForgettingJustificationFromAnalysis analysis)
 
 /-- The concrete P5 transition material is reconstructed from the exact
 analysis returned for the received aligned-to-extended update. -/
 def learnedPostForgettingExtendedJustification :
-    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent .extended :=
+    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent
+      (forgotten := learnedAlignedForgottenCurrentAgent) .extended :=
   learnedPostForgettingJustificationFromAnalysis
     learnedReferenceSuccessiveAnalysis
 
@@ -927,20 +1382,163 @@ def learnedClosedPostForgettingExtendedChange :
       learnedPostForgettingExtendedJustification :=
   closeLearnedPostForgettingContractChangeFromAnalysis
     learnedReferenceSuccessiveAnalysis
+    learnedPostForgettingExecutionReceipt
+
+theorem LearnedPostForgettingContractResources.target_consumes_transportedIntent
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    LearnedProposalPreservation.admittedIntent
+      (LearnedActionWitness.preservation
+        (ProposalActionCertificateFragment.witness
+          resources.targetAnalysis.recomputedCertificateFragments.proposalAction)) =
+      resources.transportedIntent.down := by
+  rfl
+
+theorem LearnedPostForgettingContractResources.target_consumes_recheckedAuthorization
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    resources.targetAnalysis.recomputedCertificateFragments.authorization.witness =
+      resources.authorizationAtTarget := by
+  rfl
+
+theorem LearnedPostForgettingContractResources.target_shares_action_with_effect
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    resources.targetAnalysis.recomputedCertificateFragments.effect.witness.action =
+      resources.targetAnalysis.recomputedCertificateFragments.proposalAction.witness := by
+  rfl
+
+theorem LearnedPostForgettingContractResources.target_action_consumes_receipt
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    resources.targetAnalysis.recomputedCertificateFragments.proposalAction.witness.request =
+      publicAgentActionChannel.command resources.receipt.producedProposal := by
+  rfl
+
+theorem LearnedPostForgettingContractResources.resourcePhase_consumes_reducedMemory
+    {source : LearnedSerializedConstitutiveUpdate}
+    {analysis : LearnedSuccessiveEngineAnalysis source}
+    {justification : JustifiedPostForgettingTransition
+      LearnedAlignedCurrentAgent
+        (forgotten := learnedAlignedForgottenCurrentAgent)
+        .extended}
+    (resources : LearnedPostForgettingContractResources analysis justification) :
+    resources.receipt.outcome =
+      independentLearnedReducedFutureContract.outcome
+        justification.reducedMemory [learnedAdmittedFutureRequest] := by
+  exact resources.reducedOutcomeExact
+
+theorem learnedClosedPostForgettingTargetAnalysis_exact :
+    learnedClosedPostForgettingExtendedChange.resources.targetAnalysis =
+      learnedReferenceSuccessiveAnalysis.target := by
+  have actionExact :
+      learnedClosedPostForgettingExtendedChange.resources.action =
+        executeLearnedAction
+          learnedReferenceSuccessiveAnalysis.executed.production.targetState
+          learnedClosedPostForgettingExtendedChange.resources.preservationAtTarget
+          learnedClosedPostForgettingExtendedChange.resources.baseFragments.causal.witness
+          learnedClosedPostForgettingExtendedChange.resources.authorizationAtTarget
+          learnedClosedPostForgettingExtendedChange.resources.authorizationPortExact :=
+    executeLearnedActionFromProducedProposal_eq_executeLearnedAction _ _ _ _ _ _ _
+  unfold LearnedPostForgettingContractResources.targetAnalysis
+    LearnedPostForgettingContractResources.recomputedFragments
+    LearnedPostForgettingContractResources.actionEffect
+  rw [actionExact]
+  unfold learnedClosedPostForgettingExtendedChange
+    closeLearnedPostForgettingContractChangeFromAnalysis
+    closeLearnedPostForgettingContractChange
+  rfl
+
+/-- Build the checked successor in the fixed extended-contract fibre.  The
+subtype used below lets equality of complete analyses be consumed without
+silently transporting between unrelated dependent checker outputs. -/
+def buildLearnedExtendedCheckedUpdate
+    (analysis : IncrementalTargetAnalysis LearnedAlignedCurrentAgent)
+    (contractExact : analysis.nextContract = .extended) :
+    CheckedUpdate LearnedAlignedCurrentAgent .extended :=
+  Eq.mp (congrArg (CheckedUpdate LearnedAlignedCurrentAgent) contractExact)
+    (buildIncrementalCheckedUpdate analysis)
+
+theorem learnedClosedPostForgettingFullRecheck_successor_exact :
+    HEq learnedClosedPostForgettingExtendedChange.checked.next
+      learnedSuccessiveFullRecheckSuccess.checked.next := by
+  have analysisExact :
+      (⟨learnedClosedPostForgettingExtendedChange.resources.targetAnalysis,
+          rfl⟩ : { analysis : IncrementalTargetAnalysis
+            LearnedAlignedCurrentAgent // analysis.nextContract = .extended }) =
+        ⟨learnedReferenceSuccessiveAnalysis.target, rfl⟩ :=
+    Subtype.ext learnedClosedPostForgettingTargetAnalysis_exact
+  have rebuiltExact := congrArg
+    (fun item : { analysis : IncrementalTargetAnalysis
+        LearnedAlignedCurrentAgent // analysis.nextContract = .extended } =>
+      buildLearnedExtendedCheckedUpdate item.1 item.2)
+    analysisExact
+  have closedExact : learnedClosedPostForgettingExtendedChange.checked =
+      buildLearnedExtendedCheckedUpdate
+        learnedClosedPostForgettingExtendedChange.resources.targetAnalysis rfl :=
+    learnedClosedPostForgettingExtendedChange.checkedExact
+  have referenceExact : buildLearnedExtendedCheckedUpdate
+        learnedReferenceSuccessiveAnalysis.target rfl =
+      learnedSuccessiveIncrementalSuccess.checked := by
+    rfl
+  have incrementalExact : learnedClosedPostForgettingExtendedChange.checked =
+      learnedSuccessiveIncrementalSuccess.checked :=
+    closedExact.trans (rebuiltExact.trans referenceExact)
+  exact heq_of_eq ((congrArg CheckedUpdate.next incrementalExact).trans
+    learnedSuccessiveIncrementalAndFullSuccessor_exact)
+
+/-- Extract the exact justified change carried by the autonomous
+post-forgetting permission.  The reduction index cannot be replaced here:
+`permission` is formed for `learnedAlignedForgottenCurrentAgent`. -/
+def learnedPostForgettingJustificationFromLocalConditions
+    {source : LearnedSerializedConstitutiveUpdate}
+    (conditions : LearnedPostForgettingLocalConditionData
+      (.changeContract source)) :
+    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent
+      (forgotten := learnedAlignedForgottenCurrentAgent) .extended :=
+  match conditions.permission with
+  | .changeContract _ justification => justification
 
 /-- Translate the received successive-analysis result into the exact checked
-post-forgetting successor.  The accepted branch consumes the analysis value it
-receives; it has no argument for a canonical replacement or a prefabricated
-target certificate. -/
+post-forgetting successor.  The accepted branch consumes the local conditions
+returned by the autonomous post-forgetting checker, including the permission
+indexed by the exact reduced-memory occurrence.  It has no argument for a
+canonical replacement or a prefabricated target certificate. -/
 def closeReceivedLearnedPostForgettingAnalysis
+    (receipt : LearnedPostForgettingExecutionReceipt)
     (source : LearnedSerializedConstitutiveUpdate) :
-    Except LearnedRuntimeUpdateError (LearnedSuccessiveEngineAnalysis source) →
+    Except LearnedPostForgettingCheckError
+        (LearnedPostForgettingLocalConditionData (.changeContract source)) →
       Except LearnedPostForgettingCheckError
         (DependentCheckedUpdateResult LearnedAlignedCurrentAgent)
-  | .error problem => .error (.updateRefused problem)
-  | .ok analysis =>
-      .ok (dependentCheckedUpdateResult
-        (closeLearnedPostForgettingContractChangeFromAnalysis analysis).checked)
+  | .error problem => .error problem
+  | .ok conditions =>
+      match conditions with
+      | .changeContract _ analysis =>
+          .ok (dependentCheckedUpdateResult
+            (closeLearnedPostForgettingContractChange analysis receipt
+              (learnedPostForgettingJustificationFromLocalConditions
+                conditions)).checked)
 
 def checkLearnedPostForgettingRuntimeUpdate
     {contract : LearnedOperationalContract}
@@ -949,9 +1547,9 @@ def checkLearnedPostForgettingRuntimeUpdate
     Except LearnedPostForgettingCheckError
       (DependentCheckedUpdateResult current) :=
   match update with
-  | .changeContract source =>
-      closeReceivedLearnedPostForgettingAnalysis source
-        (analyzeLearnedSuccessiveUpdate source)
+  | .changeContract receipt source =>
+      closeReceivedLearnedPostForgettingAnalysis receipt source
+        (analyzeLearnedPostForgettingIncrementally (.changeContract source))
 
 def learnedPostForgettingDependentChecker :
     DependentIncrementalChecker learnedConstitutiveMetaContract where
@@ -968,19 +1566,28 @@ it avoids proving equality with, or rebuilding, a canonical analysis. -/
 theorem checkLearnedPostForgettingRuntimeUpdate_change_of_analysis
     {source : LearnedSerializedConstitutiveUpdate}
     {analysis : LearnedSuccessiveEngineAnalysis source}
+    (receipt : LearnedPostForgettingExecutionReceipt)
     (accepted : analyzeLearnedSuccessiveUpdate source = .ok analysis) :
     checkLearnedPostForgettingRuntimeUpdate
-        (LearnedPostForgettingRuntimeUpdate.changeContract source) =
+        (LearnedPostForgettingRuntimeUpdate.changeContract receipt source) =
       .ok (dependentCheckedUpdateResult
-        (closeLearnedPostForgettingContractChangeFromAnalysis analysis).checked) := by
-  exact congrArg (closeReceivedLearnedPostForgettingAnalysis source) accepted
+        (closeLearnedPostForgettingContractChangeFromAnalysis
+          analysis receipt).checked) := by
+  have postForgettingAccepted :
+      analyzeLearnedPostForgettingIncrementally (.changeContract source) =
+        .ok (.changeContract source analysis) := by
+    unfold analyzeLearnedPostForgettingIncrementally
+    exact liftLearnedPostForgettingIncrementalChange_of_ok accepted
+  rw [checkLearnedPostForgettingRuntimeUpdate, postForgettingAccepted]
+  rfl
 
 theorem learnedPostForgettingDependentChecker_change_exact
+    (receipt : LearnedPostForgettingExecutionReceipt)
     (source : LearnedSerializedConstitutiveUpdate) :
     learnedPostForgettingDependentChecker.check LearnedAlignedCurrentAgent
-        (LearnedPostForgettingRuntimeUpdate.changeContract source) =
+        (LearnedPostForgettingRuntimeUpdate.changeContract receipt source) =
       checkLearnedPostForgettingRuntimeUpdate
-        (LearnedPostForgettingRuntimeUpdate.changeContract source) := by
+        (LearnedPostForgettingRuntimeUpdate.changeContract receipt source) := by
   rfl
 
 def learnedPostForgettingInitialRuntime : CertifiedRuntime
@@ -991,7 +1598,8 @@ def learnedPostForgettingInitialRuntime : CertifiedRuntime
 def learnedPostForgettingExtendedRuntimeUpdate :
     learnedPostForgettingDependentChecker.Update
       learnedPostForgettingInitialRuntime.current :=
-  .changeContract learnedExtendedSerializedUpdate
+  .changeContract learnedPostForgettingExecutionReceipt
+    learnedExtendedSerializedUpdate
 
 theorem checkLearnedPostForgettingExtendedRuntimeUpdate_exact :
     checkLearnedPostForgettingRuntimeUpdate
@@ -1000,24 +1608,50 @@ theorem checkLearnedPostForgettingExtendedRuntimeUpdate_exact :
         learnedClosedPostForgettingExtendedChange.checked) := by
   dsimp only [learnedPostForgettingExtendedRuntimeUpdate]
   exact checkLearnedPostForgettingRuntimeUpdate_change_of_analysis
+    learnedPostForgettingExecutionReceipt
     analyzeLearnedSuccessiveUpdate_reference_exact
 
 theorem learnedPostForgettingDependentChecker_accepts_extended :
     learnedPostForgettingDependentChecker.check LearnedAlignedCurrentAgent
         (LearnedPostForgettingRuntimeUpdate.changeContract
+          learnedPostForgettingExecutionReceipt
           learnedExtendedSerializedUpdate) =
       .ok (dependentCheckedUpdateResult
         learnedClosedPostForgettingExtendedChange.checked) :=
-  (learnedPostForgettingDependentChecker_change_exact _).trans
+  (learnedPostForgettingDependentChecker_change_exact _ _).trans
     checkLearnedPostForgettingExtendedRuntimeUpdate_exact
 
-def learnedPostForgettingExtendedRuntime : CertifiedRuntime
-    learnedPostForgettingDependentChecker LearnedAlignedCurrentAgent :=
-  installAcceptedUpdate learnedPostForgettingInitialRuntime
+opaque learnedPostForgettingExtendedRuntimeSubmission :
+    AcceptedRuntimeSubmission learnedPostForgettingInitialRuntime
+    learnedPostForgettingExtendedRuntimeUpdate
+    (dependentCheckedUpdateResult
+      learnedClosedPostForgettingExtendedChange.checked)
+    learnedPostForgettingDependentChecker_accepts_extended :=
+  acceptedRuntimeSubmissionOfCheck learnedPostForgettingInitialRuntime
     learnedPostForgettingExtendedRuntimeUpdate
     (dependentCheckedUpdateResult
       learnedClosedPostForgettingExtendedChange.checked)
     learnedPostForgettingDependentChecker_accepts_extended
+
+def learnedPostForgettingExtendedRuntime : CertifiedRuntime
+    learnedPostForgettingDependentChecker LearnedAlignedCurrentAgent :=
+  learnedPostForgettingExtendedRuntimeSubmission.next
+
+theorem learnedPostForgettingRuntime_current_heq_of_eq
+    {source target : CertifiedRuntime learnedPostForgettingDependentChecker
+      LearnedAlignedCurrentAgent}
+    (runtimeExact : source = target) : HEq source.current target.current := by
+  cases runtimeExact
+  rfl
+
+theorem learnedPostForgettingExtendedRuntime_eq_installed :
+    learnedPostForgettingExtendedRuntime =
+      installAcceptedUpdate learnedPostForgettingInitialRuntime
+        learnedPostForgettingExtendedRuntimeUpdate
+        (dependentCheckedUpdateResult
+          learnedClosedPostForgettingExtendedChange.checked)
+        learnedPostForgettingDependentChecker_accepts_extended :=
+  learnedPostForgettingExtendedRuntimeSubmission.nextExact
 
 def learnedPostForgettingInitialRuntime_reachable :
     CertifiedRuntimeReachable learnedPostForgettingDependentChecker
@@ -1028,11 +1662,7 @@ theorem submitUpdate_postForgettingExtended_exact :
     submitUpdate learnedPostForgettingInitialRuntime
         learnedPostForgettingExtendedRuntimeUpdate =
       .ok learnedPostForgettingExtendedRuntime := by
-  exact submitUpdate_of_accepted learnedPostForgettingInitialRuntime
-    learnedPostForgettingExtendedRuntimeUpdate
-    (dependentCheckedUpdateResult
-      learnedClosedPostForgettingExtendedChange.checked)
-    learnedPostForgettingDependentChecker_accepts_extended
+  exact learnedPostForgettingExtendedRuntimeSubmission.submitted
 
 def learnedPostForgettingExtendedRuntime_reachable :
     CertifiedRuntimeReachable learnedPostForgettingDependentChecker
@@ -1053,9 +1683,17 @@ theorem learnedPostForgettingRuntime_starts_at_installedAlignedState :
 theorem learnedPostForgettingExtendedRuntime_successor_exact :
     HEq learnedPostForgettingExtendedRuntime.current
       learnedExtendedCertifiedRuntime.current :=
-  (by rfl : HEq learnedPostForgettingExtendedRuntime.current
-    learnedExtendedDependentResult.checked.next).trans
-      learnedExtendedCertifiedRuntime_current_exact.symm
+  (learnedPostForgettingRuntime_current_heq_of_eq
+      learnedPostForgettingExtendedRuntime_eq_installed).trans
+    ((by rfl : HEq
+      (installAcceptedUpdate learnedPostForgettingInitialRuntime
+        learnedPostForgettingExtendedRuntimeUpdate
+        (dependentCheckedUpdateResult
+          learnedClosedPostForgettingExtendedChange.checked)
+        learnedPostForgettingDependentChecker_accepts_extended).current
+      learnedClosedPostForgettingExtendedChange.checked.next).trans
+      (learnedClosedPostForgettingFullRecheck_successor_exact.trans
+        learnedExtendedCertifiedRuntime_current_exact.symm))
 
 def learnedPostForgettingExtendedRuntime_checkedHistory :
     EveryRuntimeStepSatisfies learnedPostForgettingExtendedRuntime.history :=
@@ -1070,10 +1708,11 @@ theorem learnedPostForgettingBadChange_rejected_without_successor :
     Not (Exists fun next =>
       submitUpdate learnedPostForgettingInitialRuntime
         (LearnedPostForgettingRuntimeUpdate.changeContract
+          learnedPostForgettingExecutionReceipt
           learnedAlignedSerializedUpdate) = .ok next) := by
   apply submitUpdate_rejected_cannot_install learnedPostForgettingInitialRuntime
     (LearnedPostForgettingRuntimeUpdate.changeContract
-      learnedAlignedSerializedUpdate)
+      learnedPostForgettingExecutionReceipt learnedAlignedSerializedUpdate)
     (.updateRefused .unexpectedTransition)
   rfl
 
@@ -1093,6 +1732,14 @@ structure LearnedPostForgettingOperationalClosure : Type 12 where
     independentLearnedReducedFutureContract.outcome
       learnedAlignedExecutedFutureForgetting.output
       [learnedAdmittedFutureRequest]
+  continuationNextMemoryConsumesReducedMemory : continuation.execution.nextMemory =
+    independentLearnedReducedFutureContract.next
+      learnedAlignedExecutedFutureForgetting.output
+      learnedAdmittedFutureRequest
+  receipt : LearnedPostForgettingExecutionReceipt
+  receiptExact : receipt = learnedPostForgettingExecutionReceipt
+  receiptOutcomeIsContinuationOutput : receipt.outcome = continuation.execution.outcome
+  receiptNextMemoryIsContinuationOutput : receipt.nextMemory = continuation.execution.nextMemory
   runtimeSource : CertifiedRuntime learnedPostForgettingDependentChecker
     LearnedAlignedCurrentAgent
   runtimeSourceExact : runtimeSource = learnedPostForgettingInitialRuntime
@@ -1101,15 +1748,45 @@ structure LearnedPostForgettingOperationalClosure : Type 12 where
     learnedPostForgettingExtendedJustification
   closedContractChangeExact : closedContractChange =
     learnedClosedPostForgettingExtendedChange
+  closedResourcesConsumeReceipt : closedContractChange.resources.receipt = receipt
   transportedIntentConsumed : closedContractChange.transportedIntent =
     learnedPostForgettingExtendedJustification.transportedPersistent
       .admittedIntent
   authorizationRechecked : closedContractChange.recheckedAuthorization =
     learnedPostForgettingExtendedJustification.rechecked
       .authorizationConsumption
+  reducedMemoryProduced :
+    learnedPostForgettingExtendedJustification.reducedMemory =
+      learnedAlignedExecutedFutureForgetting.output
+  reducedContinuationPreserved :
+    independentLearnedReducedFutureContract.Allow
+      learnedPostForgettingExtendedJustification.reducedMemory
+      learnedAdmittedFutureRequest
+  targetConsumesTransportedIntent :
+    LearnedProposalPreservation.admittedIntent
+      (LearnedActionWitness.preservation
+        (ProposalActionCertificateFragment.witness
+          closedContractChange.resources.targetAnalysis.recomputedCertificateFragments.proposalAction)) =
+      closedContractChange.resources.transportedIntent.down
+  targetConsumesRecheckedAuthorization :
+    closedContractChange.resources.targetAnalysis.recomputedCertificateFragments.authorization.witness =
+      closedContractChange.resources.authorizationAtTarget
+  targetSharesActionWithEffect :
+    closedContractChange.resources.targetAnalysis.recomputedCertificateFragments.effect.witness.action =
+      closedContractChange.resources.targetAnalysis.recomputedCertificateFragments.proposalAction.witness
+  targetActionConsumesReceipt :
+    closedContractChange.resources.targetAnalysis.recomputedCertificateFragments.proposalAction.witness.request =
+      publicAgentActionChannel.command closedContractChange.resources.receipt.producedProposal
+  resourcePhaseConsumesReducedMemory :
+    closedContractChange.resources.receipt.outcome =
+      independentLearnedReducedFutureContract.outcome
+        learnedPostForgettingExtendedJustification.reducedMemory
+        [learnedAdmittedFutureRequest]
   checkedUpdateProduced : closedContractChange.checked =
     buildIncrementalCheckedUpdate
-      learnedSuccessiveIncrementalSuccess.analysis.target
+      closedContractChange.resources.targetAnalysis
+  fullRecheckSuccessorExact : HEq closedContractChange.checked.next
+    learnedSuccessiveFullRecheckSuccess.checked.next
   runtimeCheckConsumesClosure :
     checkLearnedPostForgettingRuntimeUpdate
         learnedPostForgettingExtendedRuntimeUpdate =
@@ -1141,6 +1818,7 @@ structure LearnedPostForgettingOperationalClosure : Type 12 where
   refusedContractChangeHasNoSuccessor : Not (Exists fun next =>
     submitUpdate learnedPostForgettingInitialRuntime
       (LearnedPostForgettingRuntimeUpdate.changeContract
+        learnedPostForgettingExecutionReceipt
         learnedAlignedSerializedUpdate) = .ok next)
 
 def learnedPostForgettingOperationalClosure :
@@ -1153,13 +1831,45 @@ def learnedPostForgettingOperationalClosure :
     continuationExact := rfl
     continuationConsumesReducedMemory :=
       learnedInstalledPostForgettingContinuation_consumes_reducedMemory
+    continuationNextMemoryConsumesReducedMemory :=
+      learnedInstalledPostForgettingContinuation_nextMemory_consumes_reducedMemory
+    receipt := learnedPostForgettingExecutionReceipt
+    receiptExact := rfl
+    receiptOutcomeIsContinuationOutput :=
+      learnedPostForgettingExecutionReceipt_outcome_is_installed
+    receiptNextMemoryIsContinuationOutput :=
+      learnedPostForgettingExecutionReceipt_nextMemory_is_installed
     runtimeSource := learnedPostForgettingInitialRuntime
     runtimeSourceExact := rfl
     closedContractChange := learnedClosedPostForgettingExtendedChange
     closedContractChangeExact := rfl
+    closedResourcesConsumeReceipt := rfl
     transportedIntentConsumed := rfl
     authorizationRechecked := rfl
+    reducedMemoryProduced :=
+      LearnedPostForgettingContractResources.reducedMemory_is_executed
+        learnedClosedPostForgettingExtendedChange.resources
+    reducedContinuationPreserved :=
+      LearnedPostForgettingContractResources.preservedContinuation
+        learnedClosedPostForgettingExtendedChange.resources
+    targetConsumesTransportedIntent :=
+      LearnedPostForgettingContractResources.target_consumes_transportedIntent
+        learnedClosedPostForgettingExtendedChange.resources
+    targetConsumesRecheckedAuthorization :=
+      LearnedPostForgettingContractResources.target_consumes_recheckedAuthorization
+        learnedClosedPostForgettingExtendedChange.resources
+    targetSharesActionWithEffect :=
+      LearnedPostForgettingContractResources.target_shares_action_with_effect
+        learnedClosedPostForgettingExtendedChange.resources
+    targetActionConsumesReceipt :=
+      LearnedPostForgettingContractResources.target_action_consumes_receipt
+        learnedClosedPostForgettingExtendedChange.resources
+    resourcePhaseConsumesReducedMemory :=
+      LearnedPostForgettingContractResources.resourcePhase_consumes_reducedMemory
+        learnedClosedPostForgettingExtendedChange.resources
     checkedUpdateProduced := rfl
+    fullRecheckSuccessorExact :=
+      learnedClosedPostForgettingFullRecheck_successor_exact
     runtimeCheckConsumesClosure :=
       checkLearnedPostForgettingExtendedRuntimeUpdate_exact
     contractUpdate := learnedPostForgettingExtendedRuntimeUpdate
@@ -1227,13 +1937,47 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.submitLearnedPostForgettingContinuation
 #print axioms ConstitutiveSearch.NeuralAgent.submitLearnedPostForgettingContinuation_complete
 #print axioms ConstitutiveSearch.NeuralAgent.learnedInstalledPostForgettingContinuation_consumes_reducedMemory
+#print axioms ConstitutiveSearch.NeuralAgent.learnedInstalledPostForgettingContinuation_nextMemory_consumes_reducedMemory
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingExecutionReceipt
+#print axioms ConstitutiveSearch.NeuralAgent.executionReceiptOfInstalledPostForgettingContinuation
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingExecutionReceipt
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingExecutionReceipt_outcome_is_installed
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingExecutionReceipt_nextMemory_is_installed
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingExecutionReceipt_outcome_consumes_forgettingOutput
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingExecutionReceipt_nextMemory_consumes_forgettingOutput
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingExecutionReceipt.producedProposal
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingExecutionReceipt.producedProposal_exact
 #print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingRuntimeUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources
+#print axioms ConstitutiveSearch.NeuralAgent.executeLearnedPostForgettingContractResources
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.reducedMemory_is_executed
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.baseFragments
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.authorizationAtTarget
+#print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedExtendedOperationalTransition_unique
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedAuthorizationWitnessFromReceived
+#print axioms ConstitutiveSearch.NeuralAgent.learnedExtendedReceivedCausalAuthorizationPort_exact
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.preservationAtTarget
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.authorizationPortExact
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.action
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.actionEffect
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.effect
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.recomputedFragments
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.targetAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.ClosedLearnedPostForgettingContractChange
 #print axioms ConstitutiveSearch.NeuralAgent.closeLearnedPostForgettingContractChange
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingJustificationFromAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.closeLearnedPostForgettingContractChangeFromAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingExtendedJustification
 #print axioms ConstitutiveSearch.NeuralAgent.learnedClosedPostForgettingExtendedChange
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.target_consumes_transportedIntent
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.target_consumes_recheckedAuthorization
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.target_shares_action_with_effect
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.target_action_consumes_receipt
+#print axioms ConstitutiveSearch.NeuralAgent.LearnedPostForgettingContractResources.resourcePhase_consumes_reducedMemory
+#print axioms ConstitutiveSearch.NeuralAgent.learnedClosedPostForgettingTargetAnalysis_exact
+#print axioms ConstitutiveSearch.NeuralAgent.buildLearnedExtendedCheckedUpdate
+#print axioms ConstitutiveSearch.NeuralAgent.learnedClosedPostForgettingFullRecheck_successor_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingJustificationFromLocalConditions
 #print axioms ConstitutiveSearch.NeuralAgent.closeReceivedLearnedPostForgettingAnalysis
 #print axioms ConstitutiveSearch.NeuralAgent.checkLearnedPostForgettingRuntimeUpdate
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingDependentChecker
@@ -1241,6 +1985,9 @@ end ConstitutiveSearch.NeuralAgent
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingDependentChecker_change_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingDependentChecker_accepts_extended
 #print axioms ConstitutiveSearch.NeuralAgent.checkLearnedPostForgettingExtendedRuntimeUpdate_exact
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingExtendedRuntimeSubmission
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingRuntime_current_heq_of_eq
+#print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingExtendedRuntime_eq_installed
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingInitialRuntime_reachable
 #print axioms ConstitutiveSearch.NeuralAgent.submitUpdate_postForgettingExtended_exact
 #print axioms ConstitutiveSearch.NeuralAgent.learnedPostForgettingExtendedRuntime_reachable

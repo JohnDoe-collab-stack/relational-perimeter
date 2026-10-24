@@ -256,6 +256,48 @@ def executeLearnedAction
   .mk preservation causal authorization authorizationPortExact
     request rfl produced.1 produced.2 rfl
 
+/-- Execute an action from a proposal value materially produced by an earlier
+stage.  The equality only licenses that value for the exact target state; the
+request itself is computed from `producedProposal`, so the earlier production
+is a data dependency rather than a proof stored beside an independently
+constructed action. -/
+def executeLearnedActionFromProducedProposal
+    (state : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (producedProposal : Bool)
+    (producedProposalExact : producedProposal = state.system.proposal state.input)
+    (preservation : LearnedProposalPreservation state)
+    (causal : LearnedExecutedCausalWitness state)
+    (authorization : LearnedAuthorizationWitness state)
+    (authorizationPortExact :
+      causal.authorizationPort = authorization.authorizationPort) :
+    LearnedActionWitness state :=
+  let request := publicAgentActionChannel.command producedProposal
+  let produced := Agent.executeProducedInput state.memory request
+  .mk preservation causal authorization authorizationPortExact
+    request (congrArg publicAgentActionChannel.command producedProposalExact)
+    produced.1 produced.2 rfl
+
+/-- Once the earlier proposal has been proved exact for the target state, the
+materially fed action has the same value as the ordinary state-indexed action.
+This theorem does not construct either side: the left side still computes its
+request from `producedProposal`. -/
+theorem executeLearnedActionFromProducedProposal_eq_executeLearnedAction
+    (state : ReconfiguredExecutionState independentLearnedRequirementFamily)
+    (producedProposal : Bool)
+    (producedProposalExact : producedProposal = state.system.proposal state.input)
+    (preservation : LearnedProposalPreservation state)
+    (causal : LearnedExecutedCausalWitness state)
+    (authorization : LearnedAuthorizationWitness state)
+    (authorizationPortExact :
+      causal.authorizationPort = authorization.authorizationPort) :
+    executeLearnedActionFromProducedProposal state producedProposal
+        producedProposalExact preservation causal authorization
+        authorizationPortExact =
+      executeLearnedAction state preservation causal authorization
+        authorizationPortExact := by
+  cases producedProposalExact
+  rfl
+
 theorem LearnedActionWitness.request_required_exact
     {state : ReconfiguredExecutionState independentLearnedRequirementFamily}
     (action : LearnedActionWitness state) :
@@ -4584,6 +4626,8 @@ def decodeLearnedSuccessiveUpdate
                 .error .unsupportedStableNaming
 
 /- AXIOM_AUDIT_BEGIN -/
+#print axioms ConstitutiveSearch.NeuralAgent.executeLearnedActionFromProducedProposal
+#print axioms ConstitutiveSearch.NeuralAgent.executeLearnedActionFromProducedProposal_eq_executeLearnedAction
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedReconfigurationForState
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedProducedTargetEvidenceForState
 #print axioms ConstitutiveSearch.NeuralAgent.learnedAlignedCertifiedReconfigurationForState

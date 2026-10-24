@@ -181,7 +181,8 @@ theorem learned_post_forgetting_refused_future_remains_refused :
   learnedPostForgettingRefusedFuture_stays_refused
 
 def learned_post_forgetting_contract_change_is_justified :
-    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent .extended :=
+    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent
+      (forgotten := learnedAlignedForgottenCurrentAgent) .extended :=
   learnedJustifiedExtendedTransitionAfterForgetting
 
 def learned_post_forgetting_contract_change_is_authorized :
@@ -200,7 +201,8 @@ def learned_post_forgetting_authorization_is_rechecked :
   learnedPostForgettingRecheckedAuthorization
 
 theorem learned_post_forgetting_historical_return_is_refused :
-    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent .initial ->
+    JustifiedPostForgettingTransition LearnedAlignedCurrentAgent
+      (forgotten := learnedAlignedForgottenCurrentAgent) .initial ->
       False :=
   learnedPostForgettingReturnToInitial_refused
 

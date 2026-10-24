@@ -283,7 +283,13 @@ structure JustifiedPostForgettingTransition
     {constitution : ConstitutiveMetaContract}
     {currentContract : constitution.Contract}
     (current : CheckedAgent constitution currentContract)
+    (forgotten : ForgottenCurrentAgent current)
     (nextContract : constitution.Contract) : Type 6 where
+  /-- The exact reduced memory occurrence produced before the contract change.
+  It is retained as data, not merely mentioned by a proposition beside the
+  transition. -/
+  reducedMemory : current.certificate.futureRealization.ReducedMemory
+  reducedMemoryExact : reducedMemory = forgotten.memory
   transition : OperationalContractTransition constitution
     currentContract nextContract
   persistentSource : (obligation :
@@ -295,7 +301,9 @@ def JustifiedPostForgettingTransition.transportedPersistent
     {constitution : ConstitutiveMetaContract}
     {currentContract nextContract : constitution.Contract}
     {current : CheckedAgent constitution currentContract}
-    (justification : JustifiedPostForgettingTransition current nextContract)
+    {forgotten : ForgottenCurrentAgent current}
+    (justification : JustifiedPostForgettingTransition current forgotten
+      nextContract)
     (obligation : constitution.PersistentObligation
       currentContract nextContract) :
     constitution.TargetPersistentWitness currentContract nextContract
@@ -307,7 +315,9 @@ def JustifiedPostForgettingTransition.rechecked
     {constitution : ConstitutiveMetaContract}
     {currentContract nextContract : constitution.Contract}
     {current : CheckedAgent constitution currentContract}
-    (justification : JustifiedPostForgettingTransition current nextContract)
+    {forgotten : ForgottenCurrentAgent current}
+    (justification : JustifiedPostForgettingTransition current forgotten
+      nextContract)
     (obligation : constitution.RecheckObligation currentContract nextContract) :
     constitution.RecheckedWitness currentContract nextContract obligation :=
   justification.transition.recheck obligation
@@ -328,7 +338,8 @@ inductive PostForgettingPermission
       PostForgettingPermission current forgotten (.continueCurrent input)
   | changeContract
       (nextContract : constitution.Contract)
-      (justification : JustifiedPostForgettingTransition current nextContract) :
+      (justification : JustifiedPostForgettingTransition current forgotten
+        nextContract) :
       PostForgettingPermission current forgotten (.changeContract nextContract)
 
 /-- An admissibility decision after forgetting is explicitly positive or a
